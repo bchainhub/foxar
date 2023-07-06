@@ -5,7 +5,7 @@ use crate::{
     revm::primitives::AccountInfo,
     Address, U256,
 };
-use ethers::prelude::H256;
+use corebc::prelude::H256;
 use forge::revm::Database;
 pub use foundry_evm::executor::fork::database::ForkedDatabase;
 use foundry_evm::executor::{

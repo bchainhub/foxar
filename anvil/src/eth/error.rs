@@ -5,7 +5,7 @@ use anvil_rpc::{
     error::{ErrorCode, RpcError},
     response::ResponseResult,
 };
-use ethers::{
+use corebc::{
     abi::AbiDecode,
     providers::ProviderError,
     signers::WalletError,

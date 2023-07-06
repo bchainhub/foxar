@@ -1,4 +1,4 @@
-use ethers::{abi::Address, types::H160};
+use corebc::{abi::Address, types::H160};
 use forge::revm::primitives::SpecId;
 use foundry_evm::revm::precompile::Precompiles;
 use std::fmt;

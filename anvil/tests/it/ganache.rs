@@ -1,7 +1,7 @@
 //! tests against local ganache for local debug purposes
 #![allow(unused)]
 use crate::init_tracing;
-use ethers::{
+use corebc::{
     abi::Address,
     contract::{Contract, ContractFactory, ContractInstance},
     core::k256::SecretKey,
@@ -11,7 +11,7 @@ use ethers::{
     types::{BlockNumber, U256},
     utils::hex,
 };
-use ethers_solc::{project_util::TempProject, Artifact};
+use corebc_ylem::{project_util::TempProject, Artifact};
 use std::sync::Arc;
 
 // the mnemonic used to start the local ganache instance

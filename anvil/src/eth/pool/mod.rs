@@ -37,7 +37,7 @@ use crate::{
     mem::storage::MinedBlockOutcome,
 };
 use anvil_core::eth::transaction::PendingTransaction;
-use ethers::{
+use corebc::{
     prelude::TxpoolStatus,
     types::{TxHash, U64},
 };

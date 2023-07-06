@@ -1,7 +1,7 @@
 //! Support for "cheat codes" / bypass functions
 
 use anvil_core::eth::transaction::IMPERSONATED_SIGNATURE;
-use ethers::types::{Address, Signature};
+use corebc::types::{Address, Signature};
 use forge::hashbrown::HashSet;
 use parking_lot::RwLock;
 use std::sync::Arc;

@@ -6,7 +6,7 @@ use crate::{
     },
     types::{EvmMineOptions, Forking, Index},
 };
-use ethers_core::{
+use corebc_core::{
     abi::ethereum_types::H64,
     types::{
         transaction::eip712::TypedData, Address, BlockId, BlockNumber, Bytes, Filter,
@@ -27,7 +27,7 @@ pub mod utils;
 pub mod serde_helpers;
 
 #[cfg(feature = "serde")]
-use ethers_core::types::serde_helpers::*;
+use corebc_core::types::serde_helpers::*;
 
 #[cfg(feature = "serde")]
 use self::serde_helpers::*;

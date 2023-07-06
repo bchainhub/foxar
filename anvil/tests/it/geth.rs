@@ -1,7 +1,7 @@
 //! tests against local geth for local debug purposes
 
 use crate::abi::VENDING_MACHINE_CONTRACT;
-use ethers::{
+use corebc::{
     abi::Address,
     contract::{Contract, ContractFactory},
     prelude::{Middleware, TransactionRequest},
@@ -9,7 +9,7 @@ use ethers::{
     types::U256,
     utils::WEI_IN_ETHER,
 };
-use ethers_solc::{project_util::TempProject, Artifact};
+use corebc_ylem::{project_util::TempProject, Artifact};
 use futures::StreamExt;
 use std::sync::Arc;
 use tokio::time::timeout;

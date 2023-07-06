@@ -3,7 +3,7 @@
 use crate::eth::{backend::db::AsHashDB, error::BlockchainError};
 use anvil_core::eth::{state::StateOverride, trie::RefSecTrieDBMut};
 use bytes::Bytes;
-use ethers::{
+use corebc::{
     abi::ethereum_types::BigEndianHash,
     types::H256,
     utils::{rlp, rlp::RlpStream},
@@ -40,7 +40,7 @@ pub fn log_rlp_hash(logs: Vec<Log>) -> H256 {
     stream.finalize_unbounded_list();
     let out = stream.out().freeze();
 
-    let out = ethers::utils::keccak256(out);
+    let out = corebc::utils::keccak256(out);
     H256::from_slice(out.as_slice())
 }
 

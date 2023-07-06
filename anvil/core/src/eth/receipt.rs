@@ -1,5 +1,5 @@
 use crate::eth::utils::enveloped;
-use ethers_core::{
+use corebc_core::{
     types::{Address, Bloom, Bytes, H256, U256},
     utils::{
         rlp,
@@ -276,7 +276,7 @@ mod tests {
     fn encode_legacy_receipt() {
         use std::str::FromStr;
 
-        use ethers_core::{
+        use corebc_core::{
             types::{Bytes, H160, H256},
             utils::hex,
         };
@@ -319,7 +319,7 @@ mod tests {
     fn decode_legacy_receipt() {
         use std::str::FromStr;
 
-        use ethers_core::{
+        use corebc_core::{
             types::{Bytes, H160, H256},
             utils::hex,
         };

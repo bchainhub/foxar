@@ -7,7 +7,7 @@ use crate::{
 use anvil_server::ServerConfig;
 use clap::Parser;
 use core::fmt;
-use ethers::utils::WEI_IN_ETHER;
+use corebc::utils::WEI_IN_ETHER;
 use foundry_config::{Chain, Config};
 use futures::FutureExt;
 use std::{

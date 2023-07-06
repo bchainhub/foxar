@@ -3,7 +3,7 @@ use crate::eth::{
     error::BlockchainError,
 };
 use anvil_core::eth::transaction::TypedTransaction;
-use ethers::types::{H256, U256};
+use corebc::types::{H256, U256};
 use foundry_evm::revm::primitives::SpecId;
 use futures::StreamExt;
 use parking_lot::{Mutex, RwLock};

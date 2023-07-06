@@ -2,7 +2,7 @@
 
 use crate::abi::*;
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     middleware::SignerMiddleware,
     prelude::{BlockNumber, Filter, FilterKind, Middleware, Signer, H256},
     types::Log,

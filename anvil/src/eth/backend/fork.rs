@@ -2,7 +2,7 @@
 
 use crate::eth::{backend::mem::fork_db::ForkedDatabase, error::BlockchainError};
 use anvil_core::eth::{proof::AccountProof, transaction::EthTransactionRequest};
-use ethers::{
+use corebc::{
     prelude::BlockNumber,
     providers::{Middleware, ProviderError},
     types::{
@@ -183,8 +183,8 @@ impl ClientFork {
             }
         }
 
-        let tx = ethers::utils::serialize(request.as_ref());
-        let block_value = ethers::utils::serialize(&block);
+        let tx = corebc::utils::serialize(request.as_ref());
+        let block_value = corebc::utils::serialize(&block);
         let res: Bytes = self.provider().request("eth_call", [tx, block_value]).await?;
 
         if let BlockNumber::Number(num) = block {
@@ -211,8 +211,8 @@ impl ClientFork {
                 return Ok(res)
             }
         }
-        let tx = ethers::utils::serialize(request.as_ref());
-        let block_value = ethers::utils::serialize(&block);
+        let tx = corebc::utils::serialize(request.as_ref());
+        let block_value = corebc::utils::serialize(&block);
         let res = self.provider().request("eth_estimateGas", [tx, block_value]).await?;
 
         if let BlockNumber::Number(num) = block {
@@ -230,8 +230,8 @@ impl ClientFork {
         request: &EthTransactionRequest,
         block: Option<BlockNumber>,
     ) -> Result<AccessListWithGasUsed, ProviderError> {
-        let tx = ethers::utils::serialize(request);
-        let block = ethers::utils::serialize(&block.unwrap_or(BlockNumber::Latest));
+        let tx = corebc::utils::serialize(request);
+        let block = corebc::utils::serialize(&block.unwrap_or(BlockNumber::Latest));
         self.provider().request("eth_createAccessList", [tx, block]).await
     }
 

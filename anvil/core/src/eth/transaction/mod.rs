@@ -4,7 +4,7 @@ use crate::eth::{
     receipt::Log,
     utils::{enveloped, to_revm_access_list},
 };
-use ethers_core::{
+use corebc_core::{
     types::{
         transaction::eip2930::{AccessList, AccessListItem},
         Address, Bloom, Bytes, Signature, SignatureError, TxHash, H256, U256, U64,
@@ -21,7 +21,7 @@ use revm::{
 };
 use std::ops::Deref;
 
-/// compatibility with `ethers-rs` types
+/// compatibility with `corebc-rs` types
 mod ethers_compat;
 
 /// The signature used to bypass signing via the `eth_sendUnsignedTransaction` cheat RPC
@@ -1311,7 +1311,7 @@ impl TransactionInfo {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers_core::utils::hex;
+    use corebc_core::utils::hex;
 
     #[test]
     fn can_recover_sender() {
@@ -1559,7 +1559,7 @@ mod tests {
         );
     }
 
-    // <https://github.com/gakonst/ethers-rs/issues/1732>
+    // <https://github.com/gakonst/corebc-rs/issues/1732>
     #[test]
     fn test_recover_legacy_tx() {
         let raw_tx = "f9015482078b8505d21dba0083022ef1947a250d5630b4cf539739df2c5dacb4c659f2488d880c46549a521b13d8b8e47ff36ab50000000000000000000000000000000000000000000066ab5a608bd00a23f2fe000000000000000000000000000000000000000000000000000000000000008000000000000000000000000048c04ed5691981c42154c6167398f95e8f38a7ff00000000000000000000000000000000000000000000000000000000632ceac70000000000000000000000000000000000000000000000000000000000000002000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc20000000000000000000000006c6ee5e31d828de241282b9606c8e98ea48526e225a0c9077369501641a92ef7399ff81c21639ed4fd8fc69cb793cfa1dbfab342e10aa0615facb2f1bcf3274a354cfe384a38d0cc008a11c2dd23a69111bc6930ba27a8";

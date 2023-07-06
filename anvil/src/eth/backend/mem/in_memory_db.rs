@@ -8,7 +8,7 @@ use crate::{
     revm::primitives::AccountInfo,
     Address, U256,
 };
-use ethers::prelude::H256;
+use corebc::prelude::H256;
 use forge::utils::h160_to_b160;
 use tracing::{trace, warn};
 
@@ -119,7 +119,7 @@ mod tests {
         Address,
     };
     use bytes::Bytes;
-    use ethers::types::U256;
+    use corebc::types::U256;
     use forge::revm::primitives::{Bytecode, KECCAK_EMPTY, U256 as rU256};
     use foundry_evm::executor::{backend::MemDb, DatabaseRef};
     use std::{collections::BTreeMap, str::FromStr};

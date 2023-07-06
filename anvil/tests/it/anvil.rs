@@ -1,7 +1,7 @@
 //! tests for anvil specific logic
 
 use anvil::{spawn, NodeConfig};
-use ethers::{prelude::Middleware, types::Address};
+use corebc::{prelude::Middleware, types::Address};
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_can_change_mining_mode() {

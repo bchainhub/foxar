@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use ethers_core::types::{Address, Bytes, H256, U256};
+use corebc_core::types::{Address, Bytes, H256, U256};
 
 #[derive(Clone, Debug, PartialEq, Eq, Default)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]

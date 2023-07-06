@@ -1,5 +1,5 @@
+use corebc::types::BlockNumber;
 use ethereum_forkid::{ForkHash, ForkId};
-use ethers::types::BlockNumber;
 use foundry_evm::revm::primitives::SpecId;
 use std::str::FromStr;
 
@@ -179,8 +179,8 @@ impl<T: Into<BlockNumber>> From<T> for Hardfork {
 #[cfg(test)]
 mod tests {
     use crate::Hardfork;
+    use corebc::utils::hex;
     use crc::{Crc, CRC_32_ISO_HDLC};
-    use ethers::utils::hex;
 
     #[test]
     fn test_hardfork_blocks() {

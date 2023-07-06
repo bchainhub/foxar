@@ -1,5 +1,5 @@
 //! Utility functions for Ethereum adapted from https://github.dev/rust-blockchain/ethereum/blob/755dffaa4903fbec1269f50cde9863cf86269a14/src/util.rs
-use ethers_core::types::H256;
+use corebc_core::types::H256;
 
 pub use keccak_hasher::KeccakHasher;
 

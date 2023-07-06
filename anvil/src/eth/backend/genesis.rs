@@ -4,7 +4,7 @@ use crate::{
     eth::backend::db::{Db, MaybeHashDatabase},
     genesis::Genesis,
 };
-use ethers::{
+use corebc::{
     abi::ethereum_types::BigEndianHash,
     types::{Address, H256},
 };

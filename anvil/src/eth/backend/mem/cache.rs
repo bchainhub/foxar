@@ -1,5 +1,5 @@
 use crate::config::anvil_tmp_dir;
-use ethers::prelude::H256;
+use corebc::prelude::H256;
 use foundry_evm::executor::backend::snapshot::StateSnapshot;
 use std::{
     io,

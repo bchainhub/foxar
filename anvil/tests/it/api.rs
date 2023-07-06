@@ -5,7 +5,7 @@ use anvil::{
     spawn, NodeConfig, CHAIN_ID,
 };
 use anvil_core::eth::{state::AccountOverride, transaction::EthTransactionRequest};
-use ethers::{
+use corebc::{
     abi::{Address, Tokenizable},
     prelude::{builders::ContractCall, decode_function_data, Middleware, SignerMiddleware},
     signers::Signer,
