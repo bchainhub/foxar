@@ -23,7 +23,7 @@ cast = { path = "../cast" }
 ui = { path = "../ui" }
 
 # eth
-ethers = { workspace = true, features = ["rustls"] }
+corebc = { workspace = true, features = ["rustls"] }
 solang-parser.workspace = true
 
 # cli
@@ -92,8 +92,8 @@ globset = "0.4"
 
 [features]
 default = ["rustls"]
-rustls = ["ethers/rustls"]
-openssl = ["ethers/openssl"]
+rustls = ["corebc/rustls"]
+openssl = ["corebc/openssl"]
 
 # feature for integration tests that test external projects
 external-integration-tests = []
