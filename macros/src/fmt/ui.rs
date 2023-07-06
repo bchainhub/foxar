@@ -1,6 +1,6 @@
-//! Helper trait and functions to format ethers types.
+//! Helper trait and functions to format corebc types.
 
-use ethers_core::{
+use corebc_core::{
     types::*,
     utils::{hex, to_checksum},
 };
@@ -9,7 +9,7 @@ use serde::Deserialize;
 /// length of the name column for pretty formatting `{:>20}{value}`
 const NAME_COLUMN_LEN: usize = 20usize;
 
-/// Helper trait to format ethers types.
+/// Helper trait to format corebc types.
 ///
 /// # Examples
 ///

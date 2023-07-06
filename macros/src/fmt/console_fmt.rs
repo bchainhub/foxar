@@ -1,5 +1,5 @@
 use super::UIfmt;
-use ethers_core::types::{Address, Bytes, H256, I256, U256};
+use corebc_core::types::{Address, Bytes, H256, I256, U256};
 
 /// A format specifier.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
