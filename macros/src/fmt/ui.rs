@@ -222,7 +222,6 @@ sha3Uncles           {}
 size                 {}
 stateRoot            {}
 timestamp            {}
-withdrawalsRoot      {}
 totalDifficulty      {}{}",
         block.base_fee_per_gas.pretty(),
         block.difficulty.pretty(),
@@ -242,7 +241,6 @@ totalDifficulty      {}{}",
         block.size.pretty(),
         block.state_root.pretty(),
         block.timestamp.pretty(),
-        block.withdrawals_root.pretty(),
         block.total_difficulty.pretty(),
         block.other.pretty()
     )
