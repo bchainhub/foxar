@@ -1,6 +1,6 @@
 use std::{collections::BTreeMap, path::Path};
 
-use ethers_solc::{
+use corebc_ylem::{
     artifacts::{ast::NodeType, Node},
     ProjectCompileOutput,
 };

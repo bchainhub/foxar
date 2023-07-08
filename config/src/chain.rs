@@ -1,5 +1,5 @@
 use crate::U256;
-use ethers_core::types::{Chain as NamedChain, U64};
+use corebc_core::types::{Network as NamedChain, U64};
 use eyre::Result;
 use open_fastrlp::{Decodable, Encodable};
 use serde::{Deserialize, Deserializer, Serialize};
@@ -39,11 +39,6 @@ impl Chain {
     /// without eip1559
     pub fn is_legacy(&self) -> bool {
         self.named().map_or(false, |c| c.is_legacy())
-    }
-
-    /// Returns the corresponding etherscan URLs
-    pub fn etherscan_urls(&self) -> Option<(&'static str, &'static str)> {
-        self.named().ok().and_then(|c| c.etherscan_urls())
     }
 }
 

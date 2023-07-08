@@ -255,8 +255,8 @@ mod tests {
             w.rpc_storage_caching,
             StorageCachingConfig {
                 chains: CachedChains::Chains(vec![
-                    Chain::Named(ethers_core::types::Chain::Mainnet),
-                    Chain::Named(ethers_core::types::Chain::Optimism),
+                    Chain::Named(corebc_core::types::Network::Mainnet),
+                    Chain::Named(corebc_core::types::Network::Mainnet),
                     Chain::Id(999999)
                 ]),
                 endpoints: CachedEndpoints::All

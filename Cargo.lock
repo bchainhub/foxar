@@ -218,7 +218,7 @@ dependencies = [
  "hash-db",
  "hash256-std-hasher",
  "keccak-hasher",
- "open-fastrlp 0.1.4",
+ "open-fastrlp",
  "reference-trie",
  "revm",
  "serde",
@@ -1215,7 +1215,7 @@ dependencies = [
  "k256",
  "num_enum",
  "once_cell",
- "open-fastrlp 0.1.3",
+ "open-fastrlp",
  "rand 0.8.5",
  "rlp 0.5.2 (git+https://github.com/core-coin/core-common)",
  "serde",
@@ -2418,7 +2418,7 @@ dependencies = [
  "globset",
  "number_prefix",
  "once_cell",
- "open-fastrlp 0.1.4",
+ "open-fastrlp",
  "path-slash",
  "pretty_assertions",
  "regex",
@@ -4208,17 +4208,6 @@ dependencies = [
  "bytes",
  "ethereum-types",
  "open-fastrlp-derive",
-]
-
-[[package]]
-name = "open-fastrlp"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "786393f80485445794f6043fd3138854dd109cc6c4bd1a6383db304c9ce9b9ce"
-dependencies = [
- "arrayvec",
- "auto_impl",
- "bytes",
 ]
 
 [[package]]
