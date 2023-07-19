@@ -1,4 +1,4 @@
-use ethers_core::types::{H160, I256, U256};
+use corebc_core::types::{H176, I256, U256};
 use solang_parser::pt::*;
 use std::str::FromStr;
 
@@ -147,7 +147,7 @@ where
 
 impl AstEq for String {
     fn ast_eq(&self, other: &Self) -> bool {
-        match (H160::from_str(self), H160::from_str(other)) {
+        match (H176::from_str(self), H176::from_str(other)) {
             (Ok(left), Ok(right)) => left.eq(&right),
             _ => self == other,
         }

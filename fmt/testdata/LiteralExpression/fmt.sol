@@ -52,8 +52,7 @@ some words"; /* comment10 */
         hex"00112233" hex"44556677";
 
         // address literals
-        0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
-        // non checksummed address
-        0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+        ab596de697de4d9d44f6d1f2e613f4be84b905524c52;
+        ab36393ecaa2d3209cee16ce9b2360e327ed3c923346;
     }
 }
