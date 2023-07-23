@@ -15,7 +15,7 @@ use ethers::{
     solc::{info::ContractInfo, Project},
 };
 use foundry_common::ContractsByArtifact;
-use foundry_config::{Chain, Config};
+use foundry_config::{Network, Config};
 use semver::Version;
 
 /// Data struct to help `ScriptSequence` verify contracts on `etherscan`.
@@ -64,7 +64,7 @@ impl VerifyBundle {
     }
 
     /// Configures the chain and sets the etherscan key, if available
-    pub fn set_chain(&mut self, config: &Config, chain: Chain) {
+    pub fn set_chain(&mut self, config: &Config, chain: Network) {
         // If dealing with multiple chains, we need to be able to change inbetween the config
         // chain_id.
         self.etherscan.key = config.get_etherscan_api_key(Some(chain));

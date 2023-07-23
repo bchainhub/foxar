@@ -4,7 +4,7 @@
 use crate::cache::StorageCachingConfig;
 use corebc_core::types::{
     Address,
-    Network::{self, Mainnet},
+    Network::Mainnet,
     H176, H256, U256,
 };
 pub use corebc_ylem::artifacts::OptimizerDetails;
@@ -54,10 +54,10 @@ mod resolve;
 pub use resolve::UnresolvedEnvVarError;
 
 pub mod cache;
-use cache::{Cache, ChainCache};
+use cache::{Cache, NetworkCache};
 
-mod chain;
-pub use chain::Chain;
+mod network;
+pub use network::Network;
 
 pub mod fmt;
 pub use fmt::FormatterConfig;
@@ -249,8 +249,8 @@ pub struct Config {
     pub block_number: u64,
     /// pins the block number for the state fork
     pub fork_block_number: Option<u64>,
-    /// The chain id to use
-    pub chain_id: Option<Chain>,
+    /// The network id to use
+    pub network_id: Option<Network>,
     /// Block gas limit
     pub gas_limit: GasLimit,
     /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests.
@@ -307,7 +307,7 @@ pub struct Config {
     /// If set to true, changes compilation pipeline to go through the Yul intermediate
     /// representation.
     pub via_ir: bool,
-    /// RPC storage caching settings determines what chains and endpoints to cache
+    /// RPC storage caching settings determines what networks and endpoints to cache
     pub rpc_storage_caching: StorageCachingConfig,
     /// Disables storage caching entirely. This overrides any settings made in
     /// `rpc_storage_caching`
@@ -698,10 +698,10 @@ impl Config {
         self.auto_detect_solc
     }
 
-    /// Whether caching should be enabled for the given chain id
-    pub fn enable_caching(&self, endpoint: &str, chain_id: impl Into<u64>) -> bool {
+    /// Whether caching should be enabled for the given network id
+    pub fn enable_caching(&self, endpoint: &str, network_id: impl Into<u64>) -> bool {
         !self.no_storage_caching &&
-            self.rpc_storage_caching.enable_for_chain_id(chain_id.into()) &&
+            self.rpc_storage_caching.enable_for_network_id(network_id.into()) &&
             self.rpc_storage_caching.enable_for_endpoint(endpoint)
     }
 
@@ -874,7 +874,7 @@ impl Config {
 
         // we treat the `etherscan_api_key` as actual API key
         // if no chain provided, we assume mainnet
-        let chain = self.chain_id.unwrap_or(Chain::Named(Mainnet));
+        let chain = self.network_id.unwrap_or(Network::Named(Mainnet));
         let api_key = self.etherscan_api_key.as_ref()?;
         ResolvedEtherscanConfig::create(api_key, chain).map(Ok)
     }
@@ -917,7 +917,7 @@ impl Config {
 
         // etherscan fallback via API key
         if let Some(key) = self.etherscan_api_key.as_ref() {
-            let chain = chain.or(self.chain_id).unwrap_or_default();
+            let chain = chain.or(self.network_id).unwrap_or_default();
             return Ok(ResolvedEtherscanConfig::create(key, chain))
         }
 
@@ -925,7 +925,7 @@ impl Config {
     }
 
     /// Helper function to just get the API key
-    pub fn get_etherscan_api_key(&self, chain: Option<impl Into<Chain>>) -> Option<String> {
+    pub fn get_etherscan_api_key(&self, chain: Option<impl Into<Network>>) -> Option<String> {
         self.get_etherscan_config_with_chain(chain).ok().flatten().map(|c| c.key)
     }
 
@@ -1111,7 +1111,7 @@ impl Config {
     /// Returns the default config that uses dapptools style paths
     pub fn dapptools() -> Self {
         Config {
-            chain_id: Some(Chain::Id(99)),
+            network_id: Some(Network::Id(99)),
             block_timestamp: 0,
             block_number: 0,
             ..Config::default()
@@ -1262,9 +1262,9 @@ impl Config {
     pub fn foundry_rpc_cache_dir() -> Option<PathBuf> {
         Some(Self::foundry_cache_dir()?.join("rpc"))
     }
-    /// Returns the path to foundry chain's cache dir `~/.foundry/cache/rpc/<chain>`
-    pub fn foundry_chain_cache_dir(chain_id: impl Into<Chain>) -> Option<PathBuf> {
-        Some(Self::foundry_rpc_cache_dir()?.join(chain_id.into().to_string()))
+    /// Returns the path to foundry network's cache dir `~/.foundry/cache/rpc/<network>`
+    pub fn foundry_network_cache_dir(network_id: impl Into<Network>) -> Option<PathBuf> {
+        Some(Self::foundry_rpc_cache_dir()?.join(network_id.into().to_string()))
     }
 
     /// Returns the path to foundry's etherscan cache dir `~/.foundry/cache/etherscan`
@@ -1272,22 +1272,22 @@ impl Config {
         Some(Self::foundry_cache_dir()?.join("etherscan"))
     }
 
-    /// Returns the path to foundry's etherscan cache dir for `chain_id`
-    /// `~/.foundry/cache/etherscan/<chain>`
-    pub fn foundry_etherscan_chain_cache_dir(chain_id: impl Into<Chain>) -> Option<PathBuf> {
-        Some(Self::foundry_etherscan_cache_dir()?.join(chain_id.into().to_string()))
+    /// Returns the path to foundry's etherscan cache dir for `network_id`
+    /// `~/.foundry/cache/etherscan/<network>`
+    pub fn foundry_etherscan_network_cache_dir(network_id: impl Into<Network>) -> Option<PathBuf> {
+        Some(Self::foundry_etherscan_cache_dir()?.join(network_id.into().to_string()))
     }
 
-    /// Returns the path to the cache dir of the `block` on the `chain`
-    /// `~/.foundry/cache/rpc/<chain>/<block>
-    pub fn foundry_block_cache_dir(chain_id: impl Into<Chain>, block: u64) -> Option<PathBuf> {
-        Some(Self::foundry_chain_cache_dir(chain_id)?.join(format!("{block}")))
+    /// Returns the path to the cache dir of the `block` on the `network`
+    /// `~/.foundry/cache/rpc/<network>/<block>
+    pub fn foundry_block_cache_dir(network_id: impl Into<Network>, block: u64) -> Option<PathBuf> {
+        Some(Self::foundry_network_cache_dir(network_id)?.join(format!("{block}")))
     }
 
-    /// Returns the path to the cache file of the `block` on the `chain`
-    /// `~/.foundry/cache/rpc/<chain>/<block>/storage.json`
-    pub fn foundry_block_cache_file(chain_id: impl Into<Chain>, block: u64) -> Option<PathBuf> {
-        Some(Self::foundry_block_cache_dir(chain_id, block)?.join("storage.json"))
+    /// Returns the path to the cache file of the `block` on the `network`
+    /// `~/.foundry/cache/rpc/<network>/<block>/storage.json`
+    pub fn foundry_block_cache_file(network_id: impl Into<Network>, block: u64) -> Option<PathBuf> {
+        Some(Self::foundry_block_cache_dir(network_id, block)?.join("storage.json"))
     }
 
     #[doc = r#"Returns the path to `foundry`'s data directory inside the user's data directory
@@ -1343,21 +1343,21 @@ impl Config {
         Ok(())
     }
 
-    /// Clears the foundry cache for `chain`
-    pub fn clean_foundry_chain_cache(chain: Chain) -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::foundry_chain_cache_dir(chain) {
+    /// Clears the foundry cache for `network`
+    pub fn clean_foundry_network_cache(network: Network) -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foundry_network_cache_dir(network) {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
-            eyre::bail!("failed to get foundry_chain_cache_dir");
+            eyre::bail!("failed to get foundry_network_cache_dir");
         }
 
         Ok(())
     }
 
-    /// Clears the foundry cache for `chain` and `block`
-    pub fn clean_foundry_block_cache(chain: Chain, block: u64) -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::foundry_block_cache_dir(chain, block) {
+    /// Clears the foundry cache for `network` and `block`
+    pub fn clean_foundry_block_cache(network: Network, block: u64) -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foundry_block_cache_dir(network, block) {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
@@ -1379,13 +1379,13 @@ impl Config {
         Ok(())
     }
 
-    /// Clears the foundry etherscan cache for `chain`
-    pub fn clean_foundry_etherscan_chain_cache(chain: Chain) -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::foundry_etherscan_chain_cache_dir(chain) {
+    /// Clears the foundry etherscan cache for `network`
+    pub fn clean_foundry_etherscan_network_cache(network: Network) -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foundry_etherscan_network_cache_dir(network) {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
-            eyre::bail!("failed to get foundry_etherscan_cache_dir for chain: {}", chain);
+            eyre::bail!("failed to get foundry_etherscan_cache_dir for network: {}", network);
         }
 
         Ok(())
@@ -1394,14 +1394,14 @@ impl Config {
     /// List the data in the foundry cache
     pub fn list_foundry_cache() -> eyre::Result<Cache> {
         if let Some(cache_dir) = Config::foundry_rpc_cache_dir() {
-            let mut cache = Cache { chains: vec![] };
+            let mut cache = Cache { networks: vec![] };
             if !cache_dir.exists() {
                 return Ok(cache)
             }
             if let Ok(entries) = cache_dir.as_path().read_dir() {
                 for entry in entries.flatten().filter(|x| x.path().is_dir()) {
-                    match Chain::from_str(&entry.file_name().to_string_lossy()) {
-                        Ok(chain) => cache.chains.push(Self::list_foundry_chain_cache(chain)?),
+                    match Network::from_str(&entry.file_name().to_string_lossy()) {
+                        Ok(network) => cache.networks.push(Self::list_foundry_network_cache(network)?),
                         Err(_) => continue,
                     }
                 }
@@ -1414,35 +1414,35 @@ impl Config {
         }
     }
 
-    /// List the cached data for `chain`
-    pub fn list_foundry_chain_cache(chain: Chain) -> eyre::Result<ChainCache> {
-        let block_explorer_data_size = match Config::foundry_etherscan_chain_cache_dir(chain) {
+    /// List the cached data for `network`
+    pub fn list_foundry_network_cache(network: Network) -> eyre::Result<NetworkCache> {
+        let block_explorer_data_size = match Config::foundry_etherscan_network_cache_dir(network) {
             Some(cache_dir) => Self::get_cached_block_explorer_data(&cache_dir)?,
             None => {
-                warn!("failed to access foundry_etherscan_chain_cache_dir");
+                warn!("failed to access foundry_etherscan_network_cache_dir");
                 0
             }
         };
 
-        if let Some(cache_dir) = Config::foundry_chain_cache_dir(chain) {
+        if let Some(cache_dir) = Config::foundry_network_cache_dir(network) {
             let blocks = Self::get_cached_blocks(&cache_dir)?;
-            Ok(ChainCache {
-                name: chain.to_string(),
+            Ok(NetworkCache {
+                name: network.to_string(),
                 blocks,
                 block_explorer: block_explorer_data_size,
             })
         } else {
-            eyre::bail!("failed to get foundry_chain_cache_dir");
+            eyre::bail!("failed to get foundry_network_cache_dir");
         }
     }
 
-    //The path provided to this function should point to a cached chain folder
-    fn get_cached_blocks(chain_path: &Path) -> eyre::Result<Vec<(String, u64)>> {
+    //The path provided to this function should point to a cached network folder
+    fn get_cached_blocks(network_path: &Path) -> eyre::Result<Vec<(String, u64)>> {
         let mut blocks = vec![];
-        if !chain_path.exists() {
+        if !network_path.exists() {
             return Ok(blocks)
         }
-        for block in chain_path.read_dir()?.flatten().filter(|x| x.file_type().unwrap().is_dir()) {
+        for block in network_path.read_dir()?.flatten().filter(|x| x.file_type().unwrap().is_dir()) {
             let filepath = block.path().join("storage.json");
             blocks.push((
                 block.file_name().to_string_lossy().into_owned(),
@@ -1452,9 +1452,9 @@ impl Config {
         Ok(blocks)
     }
 
-    //The path provided to this function should point to the etherscan cache for a chain
-    fn get_cached_block_explorer_data(chain_path: &Path) -> eyre::Result<u64> {
-        if !chain_path.exists() {
+    //The path provided to this function should point to the etherscan cache for a network
+    fn get_cached_block_explorer_data(network_path: &Path) -> eyre::Result<u64> {
+        if !network_path.exists() {
             return Ok(0)
         }
 
@@ -1469,7 +1469,7 @@ impl Config {
             })
         }
 
-        dir_size_recursive(fs::read_dir(chain_path)?)
+        dir_size_recursive(fs::read_dir(network_path)?)
     }
 
     fn merge_toml_provider(
@@ -1761,7 +1761,7 @@ impl Default for Config {
             initial_balance: U256::from(0xffffffffffffffffffffffffu128),
             block_number: 1,
             fork_block_number: None,
-            chain_id: None,
+            network_id: None,
             gas_limit: i64::MAX.into(),
             code_size_limit: None,
             gas_price: None,
@@ -2477,7 +2477,7 @@ fn canonic(path: impl Into<PathBuf>) -> PathBuf {
 mod tests {
     use super::*;
     use crate::{
-        cache::{CachedChains, CachedEndpoints},
+        cache::{CachedNetworks, CachedEndpoints},
         endpoints::RpcEndpoint,
         fs_permissions::PathPermission,
     };
@@ -2909,7 +2909,7 @@ mod tests {
             assert_eq!(
                 with_key
                     .get_etherscan_config_with_chain(Some(
-                        corebc_core::types::Network::BinanceSmartChain
+                        corebc_core::types::Network::Devin
                     ))
                     .unwrap()
                     .unwrap()
@@ -3073,13 +3073,13 @@ mod tests {
 
             let mut config = Config::load();
 
-            let optimism = config.get_etherscan_api_key(Some(corebc_core::types::Chain::Optimism));
+            let optimism = config.get_etherscan_api_key(Some(corebc_core::types::Network::Devin));
             assert_eq!(optimism, Some("https://etherscan-optimism.com/".to_string()));
 
             config.etherscan_api_key = Some("mumbai".to_string());
 
             let mumbai =
-                config.get_etherscan_api_key(Some(corebc_core::types::Chain::PolygonMumbai));
+                config.get_etherscan_api_key(Some(corebc_core::types::Network::Devin));
             assert_eq!(mumbai, Some("https://etherscan-mumbai.com/".to_string()));
 
             Ok(())
@@ -3102,7 +3102,7 @@ mod tests {
             let config = Config::load();
 
             let mumbai = config
-                .get_etherscan_config_with_chain(Some(corebc_core::types::Chain::PolygonMumbai))
+                .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Devin))
                 .unwrap()
                 .unwrap();
             assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
@@ -3127,7 +3127,7 @@ mod tests {
             let config = Config::load();
 
             let mumbai = config
-                .get_etherscan_config_with_chain(Some(corebc_core::types::Chain::PolygonMumbai))
+                .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Devin))
                 .unwrap()
                 .unwrap();
             assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
@@ -3208,10 +3208,10 @@ mod tests {
                     verbosity: 3,
                     via_ir: true,
                     rpc_storage_caching: StorageCachingConfig {
-                        chains: CachedChains::Chains(vec![
-                            Chain::Named(corebc_core::types::Chain::Mainnet),
-                            Chain::Named(corebc_core::types::Chain::Optimism),
-                            Chain::Id(999999)
+                        networks: CachedNetworks::Networks(vec![
+                            Network::Named(corebc_core::types::Network::Mainnet),
+                            Network::Named(corebc_core::types::Network::Devin),
+                            Network::Id(999999)
                         ]),
                         endpoints: CachedEndpoints::All
                     },

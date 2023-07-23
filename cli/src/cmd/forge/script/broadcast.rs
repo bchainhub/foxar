@@ -442,7 +442,7 @@ impl ScriptArgs {
 
         // Config is used to initialize the sequence chain, so we need to change when handling a new
         // sequence. This makes sure we don't lose the original value.
-        let original_config_chain = config.chain_id;
+        let original_config_chain = config.network_id;
 
         // Peeking is used to check if the next rpc url is different. If so, it creates a
         // [`ScriptSequence`] from all the collected transactions up to this point.
@@ -504,7 +504,7 @@ impl ScriptArgs {
                 }
             }
 
-            config.chain_id = Some(provider_info.chain.into());
+            config.network_id = Some(provider_info.chain.into());
             let sequence = ScriptSequence::new(
                 new_sequence,
                 returns.clone(),
@@ -521,7 +521,7 @@ impl ScriptArgs {
         }
 
         // Restore previous config chain.
-        config.chain_id = original_config_chain;
+        config.network_id = original_config_chain;
 
         if !self.skip_simulation {
             // Present gas information on a per RPC basis.

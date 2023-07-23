@@ -9,14 +9,14 @@ use ethers_core::{
 use ethers_providers::Middleware;
 use eyre::{eyre, Result};
 use foundry_common::abi::{encode_args, get_func, get_func_etherscan};
-use foundry_config::Chain;
+use foundry_config::Network;
 use futures::future::join_all;
 
 use crate::strip_0x;
 
 pub struct TxBuilder<'a, M: Middleware> {
     to: Option<H160>,
-    chain: Chain,
+    chain: Network,
     tx: TypedTransaction,
     func: Option<Function>,
     etherscan_api_key: Option<String>,
@@ -50,7 +50,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         provider: &'a M,
         from: F,
         to: Option<T>,
-        chain: impl Into<Chain>,
+        chain: impl Into<Network>,
         legacy: bool,
     ) -> Result<TxBuilder<'a, M>> {
         let chain = chain.into();

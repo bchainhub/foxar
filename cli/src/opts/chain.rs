@@ -1,6 +1,6 @@
 use clap::builder::{PossibleValuesParser, TypedValueParser};
 use ethers::types::Chain as NamedChain;
-use foundry_config::Chain;
+use foundry_config::Network;
 use std::ffi::OsStr;
 use strum::VariantNames;
 
@@ -19,7 +19,7 @@ impl Default for ChainValueParser {
 }
 
 impl TypedValueParser for ChainValueParser {
-    type Value = Chain;
+    type Value = Network;
 
     fn parse_ref(
         &self,
@@ -30,7 +30,7 @@ impl TypedValueParser for ChainValueParser {
         let s =
             value.to_str().ok_or_else(|| clap::Error::new(clap::error::ErrorKind::InvalidUtf8))?;
         if let Ok(id) = s.parse() {
-            Ok(Chain::Id(id))
+            Ok(Network::Id(id))
         } else {
             // NamedChain::VARIANTS is a subset of all possible variants, since there are aliases:
             // mumbai instead of polygon-mumbai etc
@@ -39,7 +39,7 @@ impl TypedValueParser for ChainValueParser {
             // the error to the user
             s.parse()
                 .map_err(|_| self.inner.parse_ref(cmd, arg, value).unwrap_err())
-                .map(Chain::Named)
+                .map(Network::Named)
         }
     }
 }

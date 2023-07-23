@@ -1,7 +1,7 @@
 use ethers::prelude::{Http, Middleware, Provider, RetryClient, U256};
 use eyre::WrapErr;
 use foundry_common::{get_http_provider, RpcUrl};
-use foundry_config::Chain;
+use foundry_config::Network;
 use std::{
     collections::{hash_map::Entry, HashMap},
     ops::Deref,
@@ -60,7 +60,7 @@ impl ProviderInfo {
         let provider = Arc::new(get_http_provider(rpc));
         let chain = provider.get_chainid().await?.as_u64();
 
-        if let Chain::Named(chain) = Chain::from(chain) {
+        if let Network::Named(chain) = Network::from(chain) {
             is_legacy |= chain.is_legacy();
         };
 

@@ -9,7 +9,7 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile, Provider,
     },
-    Chain, Config,
+    Network, Config,
 };
 use serde::Serialize;
 use std::collections::HashMap;
@@ -188,7 +188,7 @@ pub struct EnvArgs {
     /// The chain ID.
     #[clap(long, alias = "chain", value_name = "CHAIN_ID")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub chain_id: Option<Chain>,
+    pub chain_id: Option<Network>,
 
     /// The gas price.
     #[clap(long, value_name = "GAS_PRICE")]
@@ -262,7 +262,7 @@ mod tests {
             ..Default::default()
         };
         let config = Config::from_provider(Config::figment().merge(args));
-        assert_eq!(config.chain_id, Some(ethers_core::types::Chain::Mainnet.into()));
+        assert_eq!(config.network_id, Some(ethers_core::types::Chain::Mainnet.into()));
 
         let env = EnvArgs::parse_from(["foundry-common", "--chain-id", "goerli"]);
         assert_eq!(env.chain_id, Some(ethers_core::types::Chain::Goerli.into()));

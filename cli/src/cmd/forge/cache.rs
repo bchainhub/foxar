@@ -8,7 +8,7 @@ use clap::{
 };
 use ethers::prelude::Chain;
 use eyre::Result;
-use foundry_config::{cache, Chain as FoundryConfigChain, Config};
+use foundry_config::{cache, Network as FoundryConfigChain, Config};
 use std::{ffi::OsStr, str::FromStr};
 use strum::VariantNames;
 
@@ -103,7 +103,7 @@ impl Cmd for LsArgs {
         for chain_or_all in chains {
             match chain_or_all {
                 ChainOrAll::Chain(chain) => {
-                    cache.chains.push(Config::list_foundry_chain_cache(chain.into())?)
+                    cache.networks.push(Config::list_foundry_network_cache(chain.into())?)
                 }
                 ChainOrAll::All => cache = Config::list_foundry_cache()?,
             }
@@ -140,11 +140,11 @@ fn clean_chain_cache(
 ) -> Result<()> {
     let chain = chain.into();
     if blocks.is_empty() {
-        Config::clean_foundry_etherscan_chain_cache(chain)?;
+        Config::clean_foundry_etherscan_network_cache(chain)?;
         if etherscan {
             return Ok(())
         }
-        Config::clean_foundry_chain_cache(chain)?;
+        Config::clean_foundry_network_cache(chain)?;
     } else {
         for block in blocks {
             Config::clean_foundry_block_cache(chain, block)?;

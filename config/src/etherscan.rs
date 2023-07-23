@@ -269,7 +269,7 @@ impl ResolvedEtherscanConfig {
                     None
                 }
             })
-            .and_then(Config::foundry_etherscan_chain_cache_dir);
+            .and_then(Config::foundry_etherscan_network_cache_dir);
 
         if let Some(ref cache_path) = cache {
             // we also create the `sources` sub dir here

@@ -91,8 +91,8 @@ impl ProviderBuilder {
     }
 
     /// Sets the chain of the node the provider will connect to
-    pub fn chain(mut self, chain: impl Into<foundry_config::Chain>) -> Self {
-        if let foundry_config::Chain::Named(chain) = chain.into() {
+    pub fn chain(mut self, chain: impl Into<foundry_config::Network>) -> Self {
+        if let foundry_config::Network::Named(chain) = chain.into() {
             self.chain = chain;
         }
         self
