@@ -8,8 +8,8 @@ use ethers_core::{
 };
 use ethers_providers::Middleware;
 use eyre::{eyre, Result};
-use foundry_common::abi::{encode_args, get_func, get_func_etherscan};
-use foundry_config::Chain;
+use foundry_common::abi::{encode_args, get_func, get_func_blockindex};
+use foundry_config::Network;
 use futures::future::join_all;
 
 use crate::strip_0x;
@@ -187,14 +187,11 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
                 .chain
                 .try_into()
                 .map_err(|_| FunctionSignatureError::UnknownChain(self.chain))?;
-            get_func_etherscan(
+            get_func_blockindex(
                 sig,
                 self.to.ok_or(FunctionSignatureError::MissingToAddress)?,
                 &args,
                 chain,
-                self.etherscan_api_key.as_ref().ok_or_else(|| {
-                    FunctionSignatureError::MissingEtherscan { sig: sig.to_string() }
-                })?,
             )
             .await?
         };

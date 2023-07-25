@@ -1,5 +1,5 @@
 //! wrappers for transactions
-use ethers_core::types::{BlockId, TransactionReceipt};
+use corebc_core::types::{BlockId, TransactionReceipt};
 use ethers_providers::Middleware;
 use eyre::Result;
 use serde::{Deserialize, Serialize};

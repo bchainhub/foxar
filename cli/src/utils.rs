@@ -95,8 +95,8 @@ pub fn parse_u256(s: &str) -> Result<U256> {
 /// Defaults to `http://localhost:8545` and `Mainnet`.
 pub fn get_provider(config: &Config) -> Result<foundry_common::RetryProvider> {
     let url = config.get_rpc_url_or_localhost_http()?;
-    let chain = config.chain_id.unwrap_or_default();
-    foundry_common::ProviderBuilder::new(url.as_ref()).chain(chain).build()
+    let chain = config.network_id.unwrap_or_default();
+    foundry_common::ProviderBuilder::new(url.as_ref()).network(chain).build()
 }
 
 pub async fn get_chain<M>(chain: Option<Chain>, provider: M) -> Result<Chain>
