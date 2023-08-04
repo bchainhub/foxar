@@ -7,7 +7,7 @@ use ethers::{
     utils::{format_units, to_checksum},
 };
 use eyre::Result;
-use foundry_config::{Chain, Config};
+use foundry_config::{Network, Config};
 use std::{
     ffi::OsStr,
     future::Future,
@@ -99,14 +99,14 @@ pub fn get_provider(config: &Config) -> Result<foundry_common::RetryProvider> {
     foundry_common::ProviderBuilder::new(url.as_ref()).network(chain).build()
 }
 
-pub async fn get_chain<M>(chain: Option<Chain>, provider: M) -> Result<Chain>
+pub async fn get_chain<M>(chain: Option<Network>, provider: M) -> Result<Network>
 where
     M: Middleware,
     M::Error: 'static,
 {
     match chain {
         Some(chain) => Ok(chain),
-        None => Ok(Chain::Id(provider.get_chainid().await?.as_u64())),
+        None => Ok(Network::Id(provider.get_chainid().await?.as_u64())),
     }
 }
 
@@ -202,7 +202,7 @@ pub fn enable_paint() {
 }
 
 /// Prints parts of the receipt to stdout
-pub fn print_receipt(chain: Chain, receipt: &TransactionReceipt) {
+pub fn print_receipt(chain: Network, receipt: &TransactionReceipt) {
     let contract_address = receipt
         .contract_address
         .map(|addr| format!("\nContract Address: {}", to_checksum(&addr, None)))

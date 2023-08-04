@@ -10,7 +10,7 @@ use ethers::{
     types::{BlockId, NameOrAddress},
 };
 use eyre::WrapErr;
-use foundry_config::{Chain, Config};
+use foundry_config::{Network, Config};
 use std::str::FromStr;
 
 /// CLI arguments for `cast access-list`.
@@ -63,7 +63,7 @@ impl AccessListArgs {
 
         let config = Config::from(&eth);
         let provider = utils::get_provider(&config)?;
-        let chain = utils::get_chain(config.chain_id, &provider).await?;
+        let chain = utils::get_chain(config.network_id, &provider).await?;
         let sender = eth.wallet.sender().await;
 
         access_list(&provider, sender, to, sig, args, data, tx, chain, block, to_json).await?;
@@ -80,7 +80,7 @@ async fn access_list<M: Middleware, F: Into<NameOrAddress>, T: Into<NameOrAddres
     args: Vec<String>,
     data: Option<String>,
     tx: TransactionOpts,
-    chain: Chain,
+    chain: Network,
     block: Option<BlockId>,
     to_json: bool,
 ) -> eyre::Result<()>

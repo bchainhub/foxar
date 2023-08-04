@@ -8,7 +8,7 @@ use ethers::{
     types::H160,
 };
 use foundry_common::compile;
-use foundry_config::{Chain, Config};
+use foundry_config::{Network, Config};
 use futures::{
     future::{join_all, Future},
     stream::{FuturesUnordered, Stream, StreamExt},
@@ -42,7 +42,7 @@ pub struct EtherscanIdentifier {
 
 impl EtherscanIdentifier {
     /// Creates a new Etherscan identifier with the given client
-    pub fn new(config: &Config, chain: Option<impl Into<Chain>>) -> eyre::Result<Self> {
+    pub fn new(config: &Config, chain: Option<impl Into<Network>>) -> eyre::Result<Self> {
         if let Some(config) = config.get_etherscan_config_with_chain(chain)? {
             trace!(target: "etherscanidentifier", chain=?config.chain, url=?config.api_url, "using etherscan identifier");
             Ok(Self {

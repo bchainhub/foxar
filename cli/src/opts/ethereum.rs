@@ -7,7 +7,7 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile,
     },
-    impl_figment_convert_cast, Chain, Config,
+    impl_figment_convert_cast, Network, Config,
 };
 use serde::Serialize;
 use std::borrow::Cow;
@@ -74,7 +74,7 @@ pub struct EtherscanOpts {
         value_parser = ChainValueParser::default(),
     )]
     #[serde(rename = "chain_id", skip_serializing_if = "Option::is_none")]
-    pub chain: Option<Chain>,
+    pub chain: Option<Network>,
 }
 
 impl_figment_convert_cast!(EtherscanOpts);

@@ -15,7 +15,7 @@ use foundry_cli_test_utils::{
     forgetest, forgetest_init,
     util::{pretty_err, read_string, OutputExt, TestCommand, TestProject},
 };
-use foundry_config::{parse_with_profile, BasicConfig, Chain, Config, SolidityErrorCode};
+use foundry_config::{parse_with_profile, BasicConfig, Network, Config, SolidityErrorCode};
 use semver::Version;
 use std::{
     env, fs,
@@ -51,7 +51,7 @@ forgetest!(
     #[ignore]
     can_cache_ls,
     |_: TestProject, mut cmd: TestCommand| {
-        let chain = Chain::Named(ethers::prelude::Chain::Mainnet);
+        let chain = Network::Named(ethers::prelude::Chain::Mainnet);
         let block1 = 100;
         let block2 = 101;
 
@@ -59,7 +59,7 @@ forgetest!(
         let block1_file = Config::foundry_block_cache_file(chain, block1).unwrap();
         let block2_cache_dir = Config::foundry_block_cache_dir(chain, block2).unwrap();
         let block2_file = Config::foundry_block_cache_file(chain, block2).unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_chain_cache_dir(chain).unwrap();
+        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(chain).unwrap();
         fs::create_dir_all(block1_cache_dir).unwrap();
         fs::write(block1_file, "{}").unwrap();
         fs::create_dir_all(block2_cache_dir).unwrap();
@@ -148,9 +148,9 @@ forgetest!(
     #[ignore]
     can_cache_clean_chain,
     |_: TestProject, mut cmd: TestCommand| {
-        let chain = Chain::Named(ethers::prelude::Chain::Mainnet);
-        let cache_dir = Config::foundry_chain_cache_dir(chain).unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_chain_cache_dir(chain).unwrap();
+        let chain = Network::Named(ethers::prelude::Chain::Mainnet);
+        let cache_dir = Config::foundry_network_cache_dir(chain).unwrap();
+        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(chain).unwrap();
         let path = cache_dir.as_path();
         let etherscan_path = etherscan_cache_dir.as_path();
         fs::create_dir_all(path).unwrap();
@@ -171,14 +171,14 @@ forgetest!(
     #[ignore]
     can_cache_clean_blocks,
     |_: TestProject, mut cmd: TestCommand| {
-        let chain = Chain::Named(ethers::prelude::Chain::Mainnet);
+        let chain = Network::Named(ethers::prelude::Chain::Mainnet);
         let block1 = 100;
         let block2 = 101;
         let block3 = 102;
         let block1_cache_dir = Config::foundry_block_cache_dir(chain, block1).unwrap();
         let block2_cache_dir = Config::foundry_block_cache_dir(chain, block2).unwrap();
         let block3_cache_dir = Config::foundry_block_cache_dir(chain, block3).unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_chain_cache_dir(chain).unwrap();
+        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(chain).unwrap();
         let block1_path = block1_cache_dir.as_path();
         let block2_path = block2_cache_dir.as_path();
         let block3_path = block3_cache_dir.as_path();
@@ -206,8 +206,8 @@ forgetest!(
     can_cache_clean_chain_etherscan,
     |_: TestProject, mut cmd: TestCommand| {
         let cache_dir =
-            Config::foundry_chain_cache_dir(Chain::Named(ethers::prelude::Chain::Mainnet)).unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_chain_cache_dir(Chain::Named(
+            Config::foundry_network_cache_dir(Network::Named(ethers::prelude::Chain::Mainnet)).unwrap();
+        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(Network::Named(
             ethers::prelude::Chain::Mainnet,
         ))
         .unwrap();

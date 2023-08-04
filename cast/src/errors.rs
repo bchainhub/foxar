@@ -1,6 +1,6 @@
 //! Errors for this crate
 
-use foundry_config::Chain;
+use foundry_config::Network;
 use std::fmt;
 
 /// An error thrown when resolving a function via signature failed
@@ -8,7 +8,7 @@ use std::fmt;
 pub enum FunctionSignatureError {
     MissingSignature,
     MissingEtherscan { sig: String },
-    UnknownChain(Chain),
+    UnknownChain(Network),
     MissingToAddress,
 }
 
