@@ -357,14 +357,14 @@ mod tests {
             console_log_format_1("%o", &b32)
         );
 
-        let addr = Address::from_str("0xdEADBEeF00000000000000000000000000000000").unwrap();
-        assert_eq!("0xdEADBEeF00000000000000000000000000000000", console_log_format_1("%s", &addr));
+        let addr = Address::from_str("ab36393ecaa2d3209cee16ce9b2360e327ed3c923346").unwrap();
+        assert_eq!("ab36393ecaa2d3209cee16ce9b2360e327ed3c923346", console_log_format_1("%s", &addr));
         assert_eq!("NaN", console_log_format_1("%d", &addr));
         assert_eq!("NaN", console_log_format_1("%i", &addr));
         assert_eq!("NaN", console_log_format_1("%e", &addr));
         assert_eq!("NaN", console_log_format_1("%x", &addr));
         assert_eq!(
-            "'0xdEADBEeF00000000000000000000000000000000'",
+            "'ab36393ecaa2d3209cee16ce9b2360e327ed3c923346'",
             console_log_format_1("%o", &addr)
         );
 
@@ -415,12 +415,12 @@ mod tests {
 
         let log3 = Log3 {
             p_0: String::from("foo %s %%s %s and %d foo %%"),
-            p_1: Address::from_str("0xdEADBEeF00000000000000000000000000000000").unwrap(),
+            p_1: Address::from_str("ab36393ecaa2d3209cee16ce9b2360e327ed3c923346").unwrap(),
             p_2: true,
             p_3: U256::from(21),
         };
         assert_eq!(
-            "foo 0xdEADBEeF00000000000000000000000000000000 %s true and 21 foo %",
+            "foo ab36393ecaa2d3209cee16ce9b2360e327ed3c923346 %s true and 21 foo %",
             logf3!(log3)
         );
     }
