@@ -1,5 +1,23 @@
 <img src=".github/logo.png" alt="Foundry logo" align="right" width="120" />
 
+## TODO
+
+- [ ] abi
+- [ ] anvil
+- [ ] binder
+- [ ] cast 
+- [ ] chisel
+- [ ] cli
+- [x] common
+- [ ] config - partly fixed
+- [ ] evm - in progress
+- [x] fmt
+- [ ] forge
+- [ ] foundryup
+- [x] macros
+- [ ] ui
+- [x] utils
+
 ## Foundry
 
 ![Github Actions][gha-badge] [![Telegram Chat][tg-badge]][tg-url] [![Telegram Support][tg-support-badge]][tg-support-url]
