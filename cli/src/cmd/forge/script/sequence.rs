@@ -82,7 +82,7 @@ impl ScriptSequence {
         broadcasted: bool,
         is_multi: bool,
     ) -> eyre::Result<Self> {
-        let chain = config.chain_id.unwrap_or_default().id();
+        let chain = config.network_id.unwrap_or_default().id();
 
         let (path, sensitive_path) = ScriptSequence::get_paths(
             &config.broadcast,

@@ -1,14 +1,14 @@
 //! ABI related helper functions
 
-use ethers_core::{
+use corebc_core::{
     abi::{
         token::{LenientTokenizer, StrictTokenizer, Tokenizer},
         Event, Function, HumanReadableParser, ParamType, RawLog, Token,
     },
-    types::{Address, Chain, I256, U256},
-    utils::{hex, to_checksum},
+    types::{Address, Network, I256, U256},
+    utils::hex,
 };
-use ethers_etherscan::{contract::ContractMetadata, errors::EtherscanError, Client};
+use corebc_blockindex::{contract::ContractMetadata, errors::BlockindexError, Client};
 use eyre::{ContextCompat, Result, WrapErr};
 use std::{future::Future, pin::Pin, str::FromStr};
 use yansi::Paint;
@@ -160,7 +160,7 @@ pub fn format_tokens(tokens: &[Token]) -> impl Iterator<Item = String> + '_ {
 /// Gets pretty print strings for tokens
 pub fn format_token(param: &Token) -> String {
     match param {
-        Token::Address(addr) => to_checksum(addr, None),
+        Token::Address(addr) => format!("{}", addr),
         Token::FixedBytes(bytes) => format!("0x{}", hex::encode(bytes)),
         Token::Bytes(bytes) => format!("0x{}", hex::encode(bytes)),
         Token::Int(num) => format!("{}", I256::from_raw(*num)),
@@ -303,17 +303,16 @@ pub fn get_indexed_event(mut event: Event, raw_log: &RawLog) -> Event {
 }
 
 /// Given a function name, address, and args, tries to parse it as a `Function` by fetching the
-/// abi from etherscan. If the address is a proxy, fetches the ABI of the implementation contract.
-pub async fn get_func_etherscan(
+/// abi from blockindex. If the address is a proxy, fetches the ABI of the implementation contract.
+pub async fn get_func_blockindex(
     function_name: &str,
     contract: Address,
     args: &[String],
-    chain: Chain,
-    etherscan_api_key: &str,
+    network: Network,
 ) -> Result<Function> {
-    let client = Client::new(chain, etherscan_api_key)?;
+    let client = Client::new(network)?;
     let source = find_source(client, contract).await?;
-    let metadata = source.items.first().wrap_err("etherscan returned empty metadata")?;
+    let metadata = source.items.first().wrap_err("blockindex returned empty metadata")?;
 
     let mut abi = metadata.abi()?;
     let funcs = abi.functions.remove(function_name).unwrap_or_default();
@@ -334,9 +333,9 @@ pub fn find_source(
     address: Address,
 ) -> Pin<Box<dyn Future<Output = Result<ContractMetadata>>>> {
     Box::pin(async move {
-        tracing::trace!("find etherscan source for: {:?}", address);
+        tracing::trace!("find blockindex source for: {:?}", address);
         let source = client.contract_source_code(address).await?;
-        let metadata = source.items.first().wrap_err("Etherscan returned no data")?;
+        let metadata = source.items.first().wrap_err("Blockindex returned no data")?;
         if metadata.proxy == 0 {
             Ok(source)
         } else {
@@ -347,7 +346,7 @@ pub fn find_source(
             match find_source(client, implementation).await {
                 impl_source @ Ok(_) => impl_source,
                 Err(e) => {
-                    let err = EtherscanError::ContractCodeNotVerified(address).to_string();
+                    let err = BlockindexError::ContractCodeNotVerified(address).to_string();
                     if e.to_string() == err {
                         tracing::error!("{}", err);
                         Ok(source)
@@ -363,7 +362,7 @@ pub fn find_source(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers_core::types::H256;
+    use corebc_core::types::H256;
 
     #[test]
     fn can_sanitize_token() {

@@ -3,7 +3,7 @@ use anvil_core::eth::transaction::{
     EIP1559Transaction, EIP1559TransactionRequest, EIP2930Transaction, EIP2930TransactionRequest,
     LegacyTransaction, LegacyTransactionRequest, TypedTransaction, TypedTransactionRequest,
 };
-use ethers::{
+use corebc::{
     core::k256::ecdsa::SigningKey,
     prelude::{Address, Wallet},
     signers::Signer as EthersSigner,

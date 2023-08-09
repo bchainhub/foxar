@@ -2,7 +2,7 @@
 
 use crate::{eth::macros::node_info, revm::Database};
 use bytes::Bytes;
-use ethers::types::Log;
+use corebc::types::Log;
 use forge::revm::primitives::{B160, B256};
 use foundry_evm::{
     call_inspectors,

@@ -10,7 +10,7 @@ use anvil_core::eth::{
 };
 use anvil_rpc::{error::RpcError, response::ResponseResult};
 use anvil_server::{PubSubContext, PubSubRpcHandler, RpcHandler};
-use ethers::types::FilteredParams;
+use corebc::types::FilteredParams;
 use tracing::trace;
 
 /// A `RpcHandler` that expects `EthRequest` rpc calls via http

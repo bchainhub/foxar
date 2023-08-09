@@ -42,7 +42,7 @@ use anvil_core::{
     types::{EvmMineOptions, Forking, Index, NodeEnvironment, NodeForkConfig, NodeInfo, Work},
 };
 use anvil_rpc::{error::RpcError, response::ResponseResult};
-use ethers::{
+use corebc::{
     abi::ethereum_types::H64,
     prelude::{DefaultFrame, TxpoolInspect},
     providers::ProviderError,
@@ -405,8 +405,8 @@ impl EthApi {
     /// Handler for ETH RPC call: `web3_sha3`
     pub fn sha3(&self, bytes: Bytes) -> Result<String> {
         node_info!("web3_sha3");
-        let hash = ethers::utils::keccak256(bytes.as_ref());
-        Ok(ethers::utils::hex::encode(&hash[..]))
+        let hash = corebc::utils::keccak256(bytes.as_ref());
+        Ok(corebc::utils::hex::encode(&hash[..]))
     }
 
     /// Returns protocol version encoded as a string (quotes are necessary).
@@ -2241,7 +2241,7 @@ impl EthApi {
         let BlockInfo { block, transactions, receipts: _ } =
             self.backend.pending_block(transactions).await;
 
-        let ethers_block = self.backend.convert_block(block.clone());
+        let corebc_block = self.backend.convert_block(block.clone());
 
         let mut block_transactions = Vec::with_capacity(block.transactions.len());
         let base_fee = self.backend.base_fee();
@@ -2260,7 +2260,7 @@ impl EthApi {
             block_transactions.push(tx);
         }
 
-        Some(ethers_block.into_full_block(block_transactions))
+        Some(corebc_block.into_full_block(block_transactions))
     }
 
     fn build_typed_tx_request(

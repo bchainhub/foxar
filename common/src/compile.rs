@@ -1,13 +1,13 @@
-//! Support for compiling [ethers::solc::Project]
+//! Support for compiling [corebc::ylem::Project]
 use crate::{glob::GlobMatcher, term, TestFunctionExt};
 use comfy_table::{presets::ASCII_MARKDOWN, *};
-use ethers_etherscan::contract::Metadata;
-use ethers_solc::{
+use corebc_blockindex::contract::Metadata;
+use corebc_ylem::{
     artifacts::{BytecodeObject, ContractBytecodeSome},
     remappings::Remapping,
     report::NoReporter,
     Artifact, ArtifactId, FileFilter, Graph, Project, ProjectCompileOutput, ProjectPathsConfig,
-    Solc, SolcConfig,
+    Ylem, YlemConfig,
 };
 use eyre::Result;
 use std::{
@@ -236,7 +236,7 @@ pub fn deployed_contract_size<T: Artifact>(artifact: &T) -> Option<usize> {
         BytecodeObject::Bytecode(bytes) => bytes.len(),
         BytecodeObject::Unlinked(unlinked) => {
             // we don't need to account for placeholders here, because library placeholders take up
-            // 40 characters: `__$<library hash>$__` which is the same as a 20byte address in hex.
+            // 44 characters: `____$<library hash>$____` which is the same as a 22byte address in hex.
             let mut size = unlinked.as_bytes().len();
             if unlinked.starts_with("0x") {
                 size -= 2;
@@ -284,8 +284,8 @@ pub fn compile_with_filter(
 /// compilation was successful or if there was a cache hit.
 /// Doesn't print anything to stdout, thus is "suppressed".
 pub fn suppress_compile(project: &Project) -> Result<ProjectCompileOutput> {
-    let output = ethers_solc::report::with_scoped(
-        &ethers_solc::report::Report::new(NoReporter::default()),
+    let output = corebc_ylem::report::with_scoped(
+        &corebc_ylem::report::Report::new(NoReporter::default()),
         || project.compile(),
     )?;
 
@@ -318,8 +318,8 @@ pub fn suppress_compile_sparse<F: FileFilter + 'static>(
     project: &Project,
     filter: F,
 ) -> Result<ProjectCompileOutput> {
-    let output = ethers_solc::report::with_scoped(
-        &ethers_solc::report::Report::new(NoReporter::default()),
+    let output = corebc_ylem::report::with_scoped(
+        &corebc_ylem::report::Report::new(NoReporter::default()),
         || project.compile_sparse(filter),
     )?;
 
@@ -332,15 +332,15 @@ pub fn suppress_compile_sparse<F: FileFilter + 'static>(
 
 /// Compile a set of files not necessarily included in the `project`'s source dir
 ///
-/// If `silent` no solc related output will be emitted to stdout
+/// If `silent` no ylem related output will be emitted to stdout
 pub fn compile_files(
     project: &Project,
     files: Vec<PathBuf>,
     silent: bool,
 ) -> Result<ProjectCompileOutput> {
     let output = if silent {
-        ethers_solc::report::with_scoped(
-            &ethers_solc::report::Report::new(NoReporter::default()),
+        corebc_ylem::report::with_scoped(
+            &corebc_ylem::report::Report::new(NoReporter::default()),
             || project.compile_files(files),
         )
     } else {
@@ -359,7 +359,7 @@ pub fn compile_files(
 
 /// Compiles target file path.
 ///
-/// If `silent` no solc related output will be emitted to stdout.
+/// If `silent` no ylem related output will be emitted to stdout.
 ///
 /// If `verify` and it's a standalone script, throw error. Only allowed for projects.
 ///
@@ -460,12 +460,12 @@ pub fn etherscan_project(metadata: &Metadata, target_path: impl AsRef<Path>) -> 
 
     let v = metadata.compiler_version()?;
     let v = format!("{}.{}.{}", v.major, v.minor, v.patch);
-    let solc = Solc::find_or_install_svm_version(v)?;
+    let ylem = Ylem::find_or_install_svm_version(v)?;
 
     Ok(Project::builder()
-        .solc_config(SolcConfig::builder().settings(settings).build())
+        .ylem_config(YlemConfig::builder().settings(settings).build())
         .paths(paths)
-        .solc(solc)
+        .ylem(ylem)
         .ephemeral()
         .no_artifacts()
         .build()?)

@@ -2,7 +2,7 @@
 
 use crate::{shutdown::Shutdown, tasks::block_listener::BlockListener, EthApi};
 use anvil_core::types::Forking;
-use ethers::{
+use corebc::{
     prelude::Middleware,
     providers::{JsonRpcClient, PubsubClient},
     types::{Block, H256},
@@ -52,7 +52,7 @@ impl TaskManager {
     ///
     /// ```
     /// use std::sync::Arc;
-    /// use ethers::providers::Provider;
+    /// use corebc::providers::Provider;
     /// use anvil::{NodeConfig, spawn};
     /// # async fn t() {
     /// let endpoint = "http://....";
@@ -106,7 +106,7 @@ impl TaskManager {
     /// block
     ///
     /// ```
-    /// use ethers::providers::Provider;
+    /// use corebc::providers::Provider;
     /// use anvil::{NodeConfig, spawn};
     /// # async fn t() {
     /// let (api, handle) = spawn(NodeConfig::default().with_eth_rpc_url(Some("http://...."))).await;

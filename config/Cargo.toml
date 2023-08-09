@@ -9,9 +9,9 @@ readme = "README.md"
 
 [dependencies]
 # eth
-ethers-core = { workspace = true }
-ethers-solc = { workspace = true, features = ["async", "svm-solc"] }
-ethers-etherscan = { workspace = true }
+corebc-core = { workspace = true }
+corebc-ylem = { workspace = true, features = ["async", "yvm-ylem"] }
+corebc-blockindex = { workspace = true }
 
 # formats
 Inflector = "0.11"
@@ -29,7 +29,7 @@ globset = "0.4"
 walkdir = "2"
 
 # encoding
-open-fastrlp = "0.1"
+open-fastrlp = { git = "https://github.com/Kuly14/open-fastrlp" }
 
 # misc
 eyre = "0.6"

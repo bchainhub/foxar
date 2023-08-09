@@ -12,7 +12,7 @@ use foundry_cli_test_utils::{
     util::{pretty_err, OutputExt, TestCommand, TestProject},
 };
 use foundry_config::{
-    cache::{CachedChains, CachedEndpoints, StorageCachingConfig},
+    cache::{CachedNetworks, CachedEndpoints, StorageCachingConfig},
     Config, FuzzConfig, InvariantConfig, OptimizerDetails, SolcReq,
 };
 use path_slash::PathBufExt;
@@ -71,7 +71,7 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         initial_balance: U256::from(0xffffffffffffffffffffffffu128),
         block_number: 10,
         fork_block_number: Some(200),
-        chain_id: Some(9999.into()),
+        network_id: Some(9999.into()),
         gas_limit: 99_000_000u64.into(),
         code_size_limit: Some(100000),
         gas_price: Some(999),
@@ -94,7 +94,7 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         deny_warnings: false,
         via_ir: true,
         rpc_storage_caching: StorageCachingConfig {
-            chains: CachedChains::None,
+            networks: CachedNetworks::None,
             endpoints: CachedEndpoints::Remote,
         },
         no_storage_caching: true,

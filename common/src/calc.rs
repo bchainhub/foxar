@@ -1,6 +1,6 @@
 //! commonly used calculations
 
-use ethers_core::types::U256;
+use corebc_core::types::U256;
 use std::ops::{Add, Div};
 
 /// Returns the mean of the slice

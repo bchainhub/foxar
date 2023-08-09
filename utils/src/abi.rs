@@ -1,7 +1,7 @@
-//! Convert a json abi into solidity inerface
+//! Convert a json abi into solidity interface
 
-use ethers_contract::InternalStructs;
-use ethers_core::{
+use corebc_contract::InternalStructs;
+use corebc_core::{
     abi,
     abi::{
         struct_def::{FieldType, StructFieldType},
@@ -21,7 +21,7 @@ use std::collections::BTreeMap;
 /// * ABI Encoder V2 is not supported yet
 /// * Kudos to [maxme/abi2solidity](https://github.com/maxme/abi2solidity) for the algorithm
 ///
-/// Note: This takes a raw representation of the json abi (`RawAbi`) because the `ethers::abi::Abi`
+/// Note: This takes a raw representation of the json abi (`RawAbi`) because the `corebc::abi::Abi`
 /// does not deserialize the internal type of nested params which is required in order to generate
 /// structs
 pub fn abi_to_solidity(contract_abi: &RawAbi, mut contract_name: &str) -> eyre::Result<String> {

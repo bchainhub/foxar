@@ -19,7 +19,7 @@ use ethers::{
 };
 use eyre::{eyre, Context};
 use foundry_common::abi::encode_args;
-use foundry_config::{Chain, Config, SolcReq};
+use foundry_config::{Network, Config, SolcReq};
 use foundry_utils::Retry;
 use futures::FutureExt;
 use once_cell::sync::Lazy;
@@ -263,7 +263,7 @@ impl EtherscanVerificationProvider {
     /// Create an etherscan client
     pub(crate) fn client(
         &self,
-        chain: Chain,
+        chain: Network,
         verifier_url: Option<&str>,
         etherscan_key: Option<&str>,
         config: &Config,

@@ -12,7 +12,6 @@ use crate::{
     visit::{Visitable, Visitor},
     FormatterConfig, InlineConfig, IntTypes, NumberUnderscore,
 };
-use ethers_core::{types::H160, utils::to_checksum};
 use foundry_config::fmt::{MultilineFuncHeaderStyle, SingleLineBlockStyle};
 use itertools::{Either, Itertools};
 use std::{fmt::Write, str::FromStr};
@@ -2025,12 +2024,6 @@ impl<'a, W: Write> Visitor for Formatter<'a, W> {
                 self.write_num_literal(*loc, val, None, exp, unit)?;
             }
             Expression::HexNumberLiteral(loc, val, unit) => {
-                // ref: https://docs.soliditylang.org/en/latest/types.html?highlight=address%20literal#address-literals
-                let val = if val.len() == 42 {
-                    to_checksum(&H160::from_str(val).expect(""), None)
-                } else {
-                    val.to_owned()
-                };
                 write_chunk!(self, loc.start(), loc.end(), "{val}")?;
                 self.write_unit(unit)?;
             }

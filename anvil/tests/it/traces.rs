@@ -1,6 +1,6 @@
 use crate::fork::fork_config;
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     contract::ContractInstance,
     prelude::{
         Action, ContractFactory, GethTrace, GethTraceFrame, Middleware, Signer, SignerMiddleware,
@@ -9,7 +9,7 @@ use ethers::{
     types::{ActionType, Address, GethDebugTracingCallOptions, Trace},
     utils::hex,
 };
-use ethers_solc::{project_util::TempProject, Artifact};
+use corebc_ylem::{project_util::TempProject, Artifact};
 use std::sync::Arc;
 
 #[tokio::test(flavor = "multi_thread")]

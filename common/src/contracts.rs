@@ -1,11 +1,11 @@
 //! commonly used contract types and functions
 
-use ethers_core::{
+use corebc_core::{
     abi::{Abi, Event, Function},
     types::{Address, H256},
     utils::hex,
 };
-use ethers_solc::{artifacts::ContractBytecodeSome, ArtifactId, ProjectPathsConfig};
+use corebc_ylem::{artifacts::ContractBytecodeSome, ArtifactId, ProjectPathsConfig};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
@@ -222,7 +222,7 @@ pub fn find_constructor_args(data: &[u8]) -> Option<&[u8]> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers_core::{abi, abi::ParamType};
+    use corebc_core::{abi, abi::ParamType};
 
     // <https://github.com/foundry-rs/foundry/issues/3053>
     #[test]

@@ -1,6 +1,6 @@
 //! Bindings for geth's `genesis.json` format
 use crate::revm::primitives::AccountInfo;
-use ethers::{
+use corebc::{
     signers::LocalWallet,
     types::{serde_helpers::*, Address, Bytes, H256, U256},
 };
@@ -223,7 +223,7 @@ pub struct CliqueConfig {
 /// serde support for `secretKey` in genesis
 
 pub mod secret_key {
-    use ethers::{core::k256::SecretKey, signers::LocalWallet, types::Bytes};
+    use corebc::{core::k256::SecretKey, signers::LocalWallet, types::Bytes};
     use serde::{
         de::{self},
         Deserialize, Deserializer, Serialize, Serializer,

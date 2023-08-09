@@ -1,7 +1,7 @@
 //! Subscription types
 
 use crate::eth::block::Header;
-use ethers_core::{
+use corebc_core::{
     rand::{distributions::Alphanumeric, thread_rng, Rng},
     types::{Filter, Log, TxHash},
     utils::hex,

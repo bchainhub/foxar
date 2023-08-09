@@ -2,7 +2,7 @@
 
 use crate::mem::Backend;
 use anvil_core::eth::{block::Block, receipt::TypedReceipt};
-use ethers::types::{Block as EthersBlock, TxHash, H256};
+use corebc::types::{Block as EthersBlock, TxHash, H256};
 use std::{fmt, sync::Arc};
 
 /// A type that can fetch data related to the ethereum storage.

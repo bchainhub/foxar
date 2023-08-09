@@ -1,5 +1,5 @@
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     prelude::{Middleware, SignerMiddleware},
     signers::Signer,
     types::{transaction::eip712::TypedData, Address, Chain, TransactionRequest},

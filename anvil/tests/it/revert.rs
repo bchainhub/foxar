@@ -1,12 +1,12 @@
 use crate::abi::VENDING_MACHINE_CONTRACT;
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     contract::{ContractFactory, ContractInstance},
     middleware::SignerMiddleware,
     types::U256,
     utils::WEI_IN_ETHER,
 };
-use ethers_solc::{project_util::TempProject, Artifact};
+use corebc_ylem::{project_util::TempProject, Artifact};
 use std::sync::Arc;
 
 #[tokio::test(flavor = "multi_thread")]

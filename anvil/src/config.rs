@@ -16,7 +16,7 @@ use crate::{
     FeeManager, Hardfork,
 };
 use anvil_server::ServerConfig;
-use ethers::{
+use corebc::{
     core::k256::ecdsa::SigningKey,
     prelude::{rand::thread_rng, Wallet, U256},
     providers::Middleware,
@@ -807,7 +807,7 @@ impl NodeConfig {
                         // but only if we're forking mainnet
                         let chain_id =
                             provider.get_chainid().await.expect("Failed to fetch network chain id");
-                        if chain_id == ethers::types::Chain::Mainnet.into() {
+                        if chain_id == corebc::types::Chain::Mainnet.into() {
                             let hardfork: Hardfork = fork_block_number.into();
                             env.cfg.spec_id = hardfork.into();
                             self.hardfork = Some(hardfork);

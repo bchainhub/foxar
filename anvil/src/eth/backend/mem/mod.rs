@@ -44,7 +44,7 @@ use anvil_core::{
     types::{Forking, Index},
 };
 use anvil_rpc::error::RpcError;
-use ethers::{
+use corebc::{
     abi::ethereum_types::BigEndianHash,
     prelude::{BlockNumber, GethTraceFrame, TxHash, H256, U256, U64},
     types::{
@@ -2110,7 +2110,7 @@ impl Backend {
 /// Get max nonce from transaction pool by address
 fn get_pool_transactions_nonce(
     pool_transactions: &[Arc<PoolTransaction>],
-    address: ethers::types::H160,
+    address: corebc::types::H160,
 ) -> Option<U256> {
     let highest_nonce_tx = pool_transactions
         .iter()

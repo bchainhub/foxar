@@ -41,7 +41,7 @@ impl InterfaceArgs {
         let InterfaceArgs { path_or_address, name, pragma, output: output_location, etherscan } =
             self;
         let config = Config::from(&etherscan);
-        let chain = config.chain_id.unwrap_or_default();
+        let chain = config.network_id.unwrap_or_default();
         let source = if Path::new(&path_or_address).exists() {
             AbiPath::Local { path: path_or_address, name }
         } else {

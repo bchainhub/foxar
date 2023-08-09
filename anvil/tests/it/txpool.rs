@@ -1,7 +1,7 @@
 //! txpool related tests
 
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     prelude::Middleware,
     types::{TransactionRequest, U256},
 };

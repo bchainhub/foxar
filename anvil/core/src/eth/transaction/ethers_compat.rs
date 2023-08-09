@@ -1,11 +1,11 @@
-//! ethers compatibility, this is mainly necessary so we can use all of `ethers` signers
+//! corebc compatibility, this is mainly necessary so we can use all of `corebc` signers
 
 use super::EthTransactionRequest;
 use crate::eth::transaction::{
     EIP1559TransactionRequest, EIP2930TransactionRequest, LegacyTransactionRequest,
     MaybeImpersonatedTransaction, TypedTransaction, TypedTransactionRequest,
 };
-use ethers_core::types::{
+use corebc_core::types::{
     transaction::eip2718::TypedTransaction as EthersTypedTransactionRequest, Address,
     Eip1559TransactionRequest as EthersEip1559TransactionRequest,
     Eip2930TransactionRequest as EthersEip2930TransactionRequest, NameOrAddress,

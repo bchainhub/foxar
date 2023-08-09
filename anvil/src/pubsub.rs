@@ -8,7 +8,7 @@ use anvil_core::eth::{
     subscription::{SubscriptionId, SubscriptionResult},
 };
 use anvil_rpc::{request::Version, response::ResponseResult};
-use ethers::{
+use corebc::{
     prelude::{Log as EthersLog, H256, H256 as TxHash, U64},
     types::FilteredParams,
 };

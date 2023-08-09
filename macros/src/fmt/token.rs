@@ -1,6 +1,6 @@
 //! Formatting helpers for [`Token`]s.
 
-use ethers_core::{abi::Token, types::I256, utils, utils::hex};
+use corebc_core::{abi::Token, types::I256, utils, utils::hex};
 use std::{fmt, fmt::Write};
 
 /// Wrapper that pretty formats a token

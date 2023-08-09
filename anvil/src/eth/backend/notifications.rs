@@ -1,7 +1,7 @@
 //! Notifications emitted from the backed
 
 use anvil_core::eth::block::Header;
-use ethers::types::H256;
+use corebc::types::H256;
 use futures::channel::mpsc::UnboundedReceiver;
 use std::sync::Arc;
 

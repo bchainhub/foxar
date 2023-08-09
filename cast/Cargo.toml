@@ -13,11 +13,11 @@ foundry-evm = { path = "./../evm" }
 foundry-config = { path = "./../config" }
 foundry-common = { path = "./../common" }
 
-ethers-etherscan = { workspace = true }
-ethers-contract = { workspace = true, features = ["abigen"] }
-ethers-core = { workspace = true }
-ethers-providers = { workspace = true }
-ethers-signers = { workspace = true }
+corebc-blockindex = { workspace = true }
+corebc-contract = { workspace = true, features = ["abigen"] }
+corebc-core = { workspace = true }
+corebc-providers = { workspace = true }
+corebc-signers = { workspace = true }
 futures = "0.3"
 eyre = "0.6"
 rustc-hex = "2"
@@ -40,6 +40,6 @@ thiserror = "1"
 
 [features]
 default = ["ledger", "trezor", "aws"]
-ledger = ["ethers-signers/ledger"]
-trezor = ["ethers-signers/trezor"]
-aws = ["ethers-signers/aws", "rusoto_core/rustls", "rusoto_kms/rustls"]
+ledger = ["corebc-signers/ledger"]
+trezor = ["corebc-signers/trezor"]
+aws = ["corebc-signers/aws", "rusoto_core/rustls", "rusoto_kms/rustls"]

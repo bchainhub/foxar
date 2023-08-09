@@ -1,4 +1,4 @@
-use ethers_core::types::{H256, U256, U64};
+use corebc_core::types::{H256, U256, U64};
 use revm::primitives::SpecId;
 
 #[cfg(feature = "serde")]
@@ -58,7 +58,7 @@ pub enum EvmMineOptions {
         #[cfg_attr(
             feature = "serde",
             serde(
-                deserialize_with = "ethers_core::types::serde_helpers::deserialize_stringified_u64_opt"
+                deserialize_with = "corebc_core::types::serde_helpers::deserialize_stringified_u64_opt"
             )
         )]
         timestamp: Option<u64>,
@@ -70,7 +70,7 @@ pub enum EvmMineOptions {
     #[cfg_attr(
         feature = "serde",
         serde(
-            deserialize_with = "ethers_core::types::serde_helpers::deserialize_stringified_u64_opt"
+            deserialize_with = "corebc_core::types::serde_helpers::deserialize_stringified_u64_opt"
         )
     )]
     Timestamp(Option<u64>),

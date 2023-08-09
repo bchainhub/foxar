@@ -1,6 +1,6 @@
 //! Commonly used traits
 
-use ethers_core::abi::Function;
+use corebc_core::abi::Function;
 
 /// Extension trait for matching tests
 #[auto_impl::auto_impl(&)]

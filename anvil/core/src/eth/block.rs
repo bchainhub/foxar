@@ -1,5 +1,5 @@
 use crate::eth::{receipt::TypedReceipt, transaction::TransactionInfo, trie};
-use ethers_core::{
+use corebc_core::{
     types::{Address, Bloom, Bytes, H256, H64, U256},
     utils::{
         keccak256, rlp,
@@ -324,7 +324,7 @@ impl From<Header> for PartialHeader {
 mod tests {
     use std::str::FromStr;
 
-    use ethers_core::{
+    use corebc_core::{
         types::H160,
         utils::{hex, hex::FromHex},
     };

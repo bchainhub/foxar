@@ -7,8 +7,8 @@ use crate::{
 use anvil_server::ServerConfig;
 use clap::Parser;
 use core::fmt;
-use ethers::utils::WEI_IN_ETHER;
-use foundry_config::{Chain, Config};
+use corebc::utils::WEI_IN_ETHER;
+use foundry_config::{Network, Config};
 use futures::FutureExt;
 use std::{
     future::Future,
@@ -361,7 +361,7 @@ pub struct AnvilEvmArgs {
         value_name = "CHAIN",
         requires = "fork_block_number"
     )]
-    pub fork_chain_id: Option<Chain>,
+    pub fork_chain_id: Option<Network>,
 
     /// Sets the number of assumed available compute units per second for this provider
     ///
@@ -437,7 +437,7 @@ pub struct AnvilEvmArgs {
 
     /// The chain ID.
     #[clap(long, alias = "chain", help_heading = "Environment config")]
-    pub chain_id: Option<Chain>,
+    pub chain_id: Option<Network>,
 
     /// Enable steps tracing used for debug calls returning geth-style traces
     #[clap(long, visible_alias = "tracing")]

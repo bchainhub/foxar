@@ -40,8 +40,8 @@ pub struct EtherscanConfigs {
 impl EtherscanConfigs {
     /// Creates a new list of etherscan configs
     pub fn new(configs: impl IntoIterator<Item = (impl Into<String>, EtherscanConfig)>) -> Self {
-        Self { configs: configs.into_iter().map(|(name, config)| (name.into(), config)).collect() }
-    }
+        Self { configs: configs.into_iter().map(|(name, config)| (name.into(), config)).collect()
+}     }
 
     /// Returns `true` if this type doesn't contain any configs
     pub fn is_empty(&self) -> bool {
@@ -98,8 +98,8 @@ impl ResolvedEtherscanConfigs {
         configs: impl IntoIterator<Item = (impl Into<String>, ResolvedEtherscanConfig)>,
     ) -> Self {
         Self {
-            configs: configs.into_iter().map(|(name, config)| (name.into(), Ok(config))).collect(),
-        }
+            configs: configs.into_iter().map(|(name, config)| (name.into(),
+Ok(config))).collect(),         }
     }
 
     /// Returns the first config that matches the chain
@@ -157,8 +157,8 @@ impl EtherscanConfig {
     ///
     /// # Errors
     ///
-    /// Returns an error if the type holds a reference to an env var and the env var is not set or
-    /// no chain or url is configured
+    /// Returns an error if the type holds a reference to an env var and the env var is not set
+or     /// no chain or url is configured
     pub fn resolve(
         self,
         alias: Option<&str>,
@@ -194,8 +194,8 @@ impl EtherscanConfig {
                 Ok(ResolvedEtherscanConfig { api_url, browser_url: None, key, chain: None })
             }
             (None, None) => {
-                let msg = alias.map(|a| format!(" for Etherscan config `{a}`")).unwrap_or_default();
-                Err(EtherscanConfigError::MissingUrlOrChain(msg))
+                let msg = alias.map(|a| format!(" for Etherscan config
+`{a}`")).unwrap_or_default();                 Err(EtherscanConfigError::MissingUrlOrChain(msg))
             }
         }
     }
@@ -255,21 +255,21 @@ impl ResolvedEtherscanConfig {
     /// `api_key` and cache
     pub fn into_client(
         self,
-    ) -> Result<ethers_etherscan::Client, ethers_etherscan::errors::EtherscanError> {
+    ) -> Result<corebc_blockindex::Client, corebc_blockindex::errors::EtherscanError> {
         let ResolvedEtherscanConfig { api_url, browser_url, key: api_key, chain } = self;
         let (mainnet_api, mainnet_url) =
-            ethers_core::types::Chain::Mainnet.etherscan_urls().expect("exist; qed");
+            corebc_core::types::Network::Mainnet.etherscan_urls().expect("exist; qed");
 
         let cache = chain
             .or_else(|| {
                 if api_url == mainnet_api {
                     // try to match against mainnet, which is usually the most common target
-                    Some(ethers_core::types::Chain::Mainnet.into())
+                    Some(corebc_core::types::Network::Mainnet.into())
                 } else {
                     None
                 }
             })
-            .and_then(Config::foundry_etherscan_chain_cache_dir);
+            .and_then(Config::foundry_etherscan_network_cache_dir);
 
         if let Some(ref cache_path) = cache {
             // we also create the `sources` sub dir here
@@ -278,7 +278,7 @@ impl ResolvedEtherscanConfig {
             }
         }
 
-        ethers_etherscan::Client::builder()
+        corebc_blockindex::Client::builder()
             .with_client(reqwest::Client::builder().user_agent(ETHERSCAN_USER_AGENT).build()?)
             .with_api_key(api_key)
             .with_api_url(api_url.as_str())?
@@ -295,8 +295,8 @@ impl ResolvedEtherscanConfig {
 /// Represents a single etherscan API key
 ///
 /// This type preserves the value as it's stored in the config. If the value is a reference to an
-/// env var, then the `EtherscanKey::Key` var will hold the reference (`${MAIN_NET}`) and _not_ the
-/// value of the env var itself.
+/// env var, then the `EtherscanKey::Key` var will hold the reference (`${MAIN_NET}`) and _not_
+the /// value of the env var itself.
 /// In other words, this type does not resolve env vars when it's being deserialized
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EtherscanApiKey {
@@ -377,7 +377,7 @@ impl fmt::Display for EtherscanApiKey {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers_core::types::Chain::Mainnet;
+    use corebc_core::types::Chain::Mainnet;
 
     #[test]
     fn can_create_client_via_chain() {

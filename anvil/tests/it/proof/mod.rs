@@ -1,7 +1,7 @@
 //! tests for `eth_getProof`
 
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     abi::ethereum_types::BigEndianHash,
     types::{Address, H256, U256},
 };
@@ -10,7 +10,7 @@ use anvil_core::eth::proof::{AccountProof, BasicAccount};
 
 use crate::proof::eip1186::verify_proof;
 use anvil_core::eth::trie::ExtensionLayout;
-use ethers::utils::{keccak256, rlp};
+use corebc::utils::{keccak256, rlp};
 use foundry_evm::revm::primitives::KECCAK_EMPTY;
 
 mod eip1186;

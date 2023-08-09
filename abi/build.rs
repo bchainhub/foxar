@@ -1,4 +1,4 @@
-use ethers_contract_abigen::MultiAbigen;
+use corebc_contract_abigen::MultiAbigen;
 
 /// Includes a JSON ABI as a string literal.
 macro_rules! include_json_abi {

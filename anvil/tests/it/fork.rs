@@ -3,7 +3,7 @@
 use crate::{abi::*, utils};
 use anvil::{eth::EthApi, spawn, NodeConfig, NodeHandle};
 use anvil_core::{eth::transaction::EthTransactionRequest, types::Forking};
-use ethers::{
+use corebc::{
     core::rand,
     prelude::{Bytes, LocalWallet, Middleware, SignerMiddleware},
     providers::{Http, Provider},

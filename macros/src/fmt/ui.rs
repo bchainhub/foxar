@@ -1,6 +1,6 @@
-//! Helper trait and functions to format ethers types.
+//! Helper trait and functions to format corebc types.
 
-use ethers_core::{
+use corebc_core::{
     types::*,
     utils::{hex, to_checksum},
 };
@@ -9,7 +9,7 @@ use serde::Deserialize;
 /// length of the name column for pretty formatting `{:>20}{value}`
 const NAME_COLUMN_LEN: usize = 20usize;
 
-/// Helper trait to format ethers types.
+/// Helper trait to format corebc types.
 ///
 /// # Examples
 ///
@@ -222,7 +222,6 @@ sha3Uncles           {}
 size                 {}
 stateRoot            {}
 timestamp            {}
-withdrawalsRoot      {}
 totalDifficulty      {}{}",
         block.base_fee_per_gas.pretty(),
         block.difficulty.pretty(),
@@ -242,7 +241,6 @@ totalDifficulty      {}{}",
         block.size.pretty(),
         block.state_root.pretty(),
         block.timestamp.pretty(),
-        block.withdrawals_root.pretty(),
         block.total_difficulty.pretty(),
         block.other.pretty()
     )
@@ -424,13 +422,13 @@ mod tests {
         {
         "blockHash": "0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae",
         "blockNumber": "0x1b4",
-        "from": "0x3b179DcfC5fAa677044c27dCe958e4BC0ad696A6",
+        "from": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
         "gas": "0x11cbbdc",
         "gasPrice": "0x0",
         "hash": "0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f",
         "input": "0xd294f093",
         "nonce": "0xa2",
-        "to": "0x4a16A42407AA491564643E1dfc1fd50af29794eF",
+        "to": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
         "transactionIndex": "0x0",
         "value": "0x0",
         "v": "0x38",
@@ -452,7 +450,7 @@ mod tests {
                    r#"
 blockHash            0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae
 blockNumber          436
-from                 0x3b179DcfC5fAa677044c27dCe958e4BC0ad696A6
+from                 ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
 gas                  18660316
 gasPrice             0
 hash                 0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f
@@ -460,7 +458,7 @@ input                0xd294f093
 nonce                162
 r                    0x6fca94073a0cf3381978662d46cf890602d3e9ccf6a31e4b69e8ecbd995e2bee
 s                    0x0e804161a2b56a37ca1f6f4c4b8bce926587afa0d9b1acc5165e6556c959d583
-to                   0x4a16A42407AA491564643E1dfc1fd50af29794eF
+to                   ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
 transactionIndex     0
 v                    56
 value                0
@@ -543,7 +541,7 @@ value                0".to_string();
     }
     #[test]
     fn test_pretty_tx_attr() {
-        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"0x0000000000000000000000000000000000000000","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","gasLimit":"0x6691b7","gasUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","gas":"0x15f90","gasPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
+        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","gasLimit":"0x6691b7","gasUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","gas":"0x15f90","gasPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
         let block: Block<Transaction> = serde_json::from_str(block).unwrap();
         assert_eq!(None, get_pretty_tx_attr(&block.transactions[0], ""));
         assert_eq!(
@@ -589,7 +587,7 @@ value                0".to_string();
         let json = serde_json::json!(
         {
             "baseFeePerGas": "0x7",
-            "miner": "0x0000000000000000000000000000000000000001",
+            "miner": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
             "number": "0x1b4",
             "hash": "0x0e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
             "parentHash": "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",

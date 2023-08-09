@@ -1,7 +1,7 @@
 //! tests for subscriptions
 
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     contract::abigen,
     middleware::SignerMiddleware,
     prelude::{Middleware, Ws},

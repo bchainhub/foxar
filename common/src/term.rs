@@ -1,8 +1,8 @@
 //! terminal utils
-use ethers_solc::{
+use corebc_ylem::{
     remappings::Remapping,
-    report::{self, BasicStdoutReporter, Reporter, SolcCompilerIoReporter},
-    CompilerInput, CompilerOutput, Solc,
+    report::{self, BasicStdoutReporter, Reporter, YlemCompilerIoReporter},
+    CompilerInput, CompilerOutput, Ylem,
 };
 use once_cell::sync::Lazy;
 use semver::Version;
@@ -100,9 +100,9 @@ impl Spinner {
 pub struct SpinnerReporter {
     /// the timeout in ms
     sender: Arc<Mutex<mpsc::Sender<SpinnerMsg>>>,
-    /// A reporter that logs solc compiler input and output to separate files if configured via env
+    /// A reporter that logs ylem compiler input and output to separate files if configured via env
     /// var
-    solc_io_report: SolcCompilerIoReporter,
+    ylem_io_report: YlemCompilerIoReporter,
 }
 impl SpinnerReporter {
     /// Spawns the [`Spinner`] on a new thread
@@ -141,7 +141,7 @@ impl SpinnerReporter {
         });
         SpinnerReporter {
             sender: Arc::new(Mutex::new(sender)),
-            solc_io_report: SolcCompilerIoReporter::from_default_env(),
+            ylem_io_report: YlemCompilerIoReporter::from_default_env(),
         }
     }
 
@@ -169,9 +169,9 @@ impl Drop for SpinnerReporter {
 }
 
 impl Reporter for SpinnerReporter {
-    fn on_solc_spawn(
+    fn on_ylem_spawn(
         &self,
-        _solc: &Solc,
+        _ylem: &Ylem,
         version: &Version,
         input: &CompilerInput,
         dirty_files: &[PathBuf],
@@ -183,35 +183,35 @@ impl Reporter for SpinnerReporter {
             version.minor,
             version.patch
         ));
-        self.solc_io_report.log_compiler_input(input, version);
+        self.ylem_io_report.log_compiler_input(input, version);
     }
 
-    fn on_solc_success(
+    fn on_ylem_success(
         &self,
-        _solc: &Solc,
+        _ylem: &Ylem,
         version: &Version,
         output: &CompilerOutput,
         duration: &Duration,
     ) {
-        self.solc_io_report.log_compiler_output(output, version);
+        self.ylem_io_report.log_compiler_output(output, version);
         self.send_msg(format!(
-            "Solc {}.{}.{} finished in {duration:.2?}",
+            "Ylem {}.{}.{} finished in {duration:.2?}",
             version.major, version.minor, version.patch
         ));
     }
 
-    /// Invoked before a new [`Solc`] bin is installed
-    fn on_solc_installation_start(&self, version: &Version) {
-        self.send_msg(format!("Installing solc version {version}"));
+    /// Invoked before a new [`Ylem`] bin is installed
+    fn on_ylem_installation_start(&self, version: &Version) {
+        self.send_msg(format!("Installing ylem version {version}"));
     }
 
-    /// Invoked before a new [`Solc`] bin was successfully installed
-    fn on_solc_installation_success(&self, version: &Version) {
-        self.send_msg(format!("Successfully installed solc {version}"));
+    /// Invoked before a new [`Ylem`] bin was successfully installed
+    fn on_ylem_installation_success(&self, version: &Version) {
+        self.send_msg(format!("Successfully installed ylem {version}"));
     }
 
-    fn on_solc_installation_error(&self, version: &Version, error: &str) {
-        self.send_msg(Paint::red(format!("Failed to install solc {version}: {error}")).to_string());
+    fn on_ylem_installation_error(&self, version: &Version, error: &str) {
+        self.send_msg(Paint::red(format!("Failed to install ylem {version}: {error}")).to_string());
     }
 
     fn on_unresolved_imports(&self, imports: &[(&Path, &Path)], remappings: &[Remapping]) {
@@ -220,7 +220,7 @@ impl Reporter for SpinnerReporter {
 }
 
 /// If the output medium is terminal, this calls `f` within the [`SpinnerReporter`] that displays a
-/// spinning cursor to display solc progress.
+/// spinning cursor to display ylem progress.
 ///
 /// If no terminal is available this falls back to common `println!` in [`BasicStdoutReporter`].
 pub fn with_spinner_reporter<T>(f: impl FnOnce() -> T) -> T {

@@ -37,9 +37,9 @@ foundry-cli = { path = "../cli" }
 foundry-common = { path = "../common" }
 forge-fmt = { path = "../fmt" }
 
-# ethers
-ethers = { workspace = true }
-ethers-solc = { workspace = true, features = ["project-util", "full"] }
+# corebc
+corebc = { workspace = true }
+corebc-ylem = { workspace = true, features = ["project-util", "full"] }
 
 # async
 tokio = { version = "1", features = ["full"] }

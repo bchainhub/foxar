@@ -5,7 +5,7 @@ use anvil_core::{
     eth::EthRequest,
     types::{NodeEnvironment, NodeForkConfig, NodeInfo},
 };
-use ethers::{
+use corebc::{
     abi::{ethereum_types::BigEndianHash, AbiDecode},
     prelude::{Middleware, SignerMiddleware},
     types::{

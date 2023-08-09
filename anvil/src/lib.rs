@@ -13,14 +13,14 @@ use crate::{
     shutdown::Signal,
     tasks::TaskManager,
 };
-use eth::backend::fork::ClientFork;
-use ethers::{
+use corebc::{
     core::k256::ecdsa::SigningKey,
     prelude::Wallet,
     providers::{Http, Provider, Ws},
     signers::Signer,
     types::{Address, U256},
 };
+use eth::backend::fork::ClientFork;
 use foundry_evm::revm;
 use futures::{FutureExt, TryFutureExt};
 use parking_lot::Mutex;
@@ -266,7 +266,7 @@ impl NodeHandle {
     }
 
     /// Connects to the ipc endpoint of the node, if spawned
-    pub async fn ipc_provider(&self) -> Option<Provider<ethers::providers::Ipc>> {
+    pub async fn ipc_provider(&self) -> Option<Provider<corebc::providers::Ipc>> {
         let ipc_path = self.config.get_ipc_path()?;
         tracing::trace!(target: "ipc", ?ipc_path, "connecting ipc provider");
         let provider = Provider::connect_ipc(&ipc_path).await.unwrap_or_else(|err| {

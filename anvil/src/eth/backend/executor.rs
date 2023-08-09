@@ -12,7 +12,7 @@ use anvil_core::eth::{
     transaction::{PendingTransaction, TransactionInfo, TypedTransaction},
     trie,
 };
-use ethers::{
+use corebc::{
     abi::ethereum_types::BloomInput,
     types::{Bloom, H256, U256},
     utils::rlp,

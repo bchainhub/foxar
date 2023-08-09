@@ -2,7 +2,7 @@
 
 use crate::{mem::state::trie_hash_db, revm::primitives::AccountInfo, U256};
 use anvil_core::eth::trie::KeccakHasher;
-use ethers::{
+use corebc::{
     prelude::{Address, Bytes},
     types::H256,
     utils::keccak256,

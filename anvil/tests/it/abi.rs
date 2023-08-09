@@ -1,6 +1,6 @@
 //! commonly used abigen generated types
 
-use ethers::{
+use corebc::{
     contract::{abigen, EthEvent},
     types::Address,
 };

@@ -1,6 +1,6 @@
 use crate::abi::*;
 use anvil::{spawn, Hardfork, NodeConfig};
-use ethers::{
+use corebc::{
     abi::ethereum_types::BigEndianHash,
     prelude::{
         signer::SignerMiddlewareError, BlockId, Middleware, Signer, SignerMiddleware,

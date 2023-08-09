@@ -1,7 +1,7 @@
 //! Gas related tests
 
 use anvil::{eth::fees::INITIAL_BASE_FEE, spawn, NodeConfig};
-use ethers::{
+use corebc::{
     prelude::Middleware,
     types::{
         transaction::eip2718::TypedTransaction, Address, BlockNumber, Eip1559TransactionRequest,

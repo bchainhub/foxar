@@ -1,9 +1,9 @@
 //! Commonly used helpers to construct `Provider`s
 
 use crate::{ALCHEMY_FREE_TIER_CUPS, REQUEST_TIMEOUT};
-use ethers_core::types::{Chain, U256};
-use ethers_middleware::gas_oracle::{GasCategory, GasOracle, Polygon};
-use ethers_providers::{
+use corebc_core::types::{Network, U256};
+use corebc_middleware::gas_oracle::{GasCategory, GasOracle, Polygon};
+use corebc_providers::{
     is_local_endpoint, Http, HttpRateLimitRetryPolicy, Middleware, Provider, RetryClient,
     RetryClientBuilder, DEFAULT_LOCAL_POLL_INTERVAL,
 };
@@ -46,7 +46,7 @@ pub fn try_get_http_provider(builder: impl Into<ProviderBuilder>) -> eyre::Resul
 pub struct ProviderBuilder {
     // Note: this is a result, so we can easily chain builder calls
     url: eyre::Result<Url>,
-    chain: Chain,
+    network: Network,
     max_retry: u32,
     timeout_retry: u32,
     initial_backoff: u64,
@@ -69,7 +69,7 @@ impl ProviderBuilder {
         let err = format!("Invalid provider url: {url_str}");
         Self {
             url: url.into_url().wrap_err(err),
-            chain: Chain::Mainnet,
+            network: Network::Mainnet,
             max_retry: 100,
             timeout_retry: 5,
             initial_backoff: 100,
@@ -90,10 +90,10 @@ impl ProviderBuilder {
         self
     }
 
-    /// Sets the chain of the node the provider will connect to
-    pub fn chain(mut self, chain: impl Into<foundry_config::Chain>) -> Self {
-        if let foundry_config::Chain::Named(chain) = chain.into() {
-            self.chain = chain;
+    /// Sets the network of the node the provider will connect to
+    pub fn network(mut self, network: impl Into<foundry_config::Network>) -> Self {
+        if let foundry_config::Network::Named(network) = network.into() {
+            self.network = network;
         }
         self
     }
@@ -131,12 +131,12 @@ impl ProviderBuilder {
         self.max_retry(100).initial_backoff(100)
     }
 
-    /// Same as [`Self:build()`] but also retrieves the `chainId` in order to derive an appropriate
+    /// Same as [`Self:build()`] but also retrieves the `networkId` in order to derive an appropriate
     /// interval
     pub async fn connect(self) -> eyre::Result<RetryProvider> {
         let mut provider = self.build()?;
-        if let Some(blocktime) = provider.get_chainid().await.ok().and_then(|id| {
-            Chain::try_from(id).ok().and_then(|chain| chain.average_blocktime_hint())
+        if let Some(blocktime) = provider.get_networkid().await.ok().and_then(|id| {
+            Network::try_from(id).ok().and_then(|network| network.average_blocktime_hint())
         }) {
             provider = provider.interval(blocktime / 2);
         }
@@ -147,7 +147,7 @@ impl ProviderBuilder {
     pub fn build(self) -> eyre::Result<RetryProvider> {
         let ProviderBuilder {
             url,
-            chain,
+            network,
             max_retry,
             timeout_retry,
             initial_backoff,
@@ -173,7 +173,7 @@ impl ProviderBuilder {
 
         if is_local {
             provider = provider.interval(DEFAULT_LOCAL_POLL_INTERVAL);
-        } else if let Some(blocktime) = chain.average_blocktime_hint() {
+        } else if let Some(blocktime) = network.average_blocktime_hint() {
             provider = provider.interval(blocktime / 2);
         }
         Ok(provider)
@@ -204,35 +204,16 @@ impl<'a> From<Cow<'a, str>> for ProviderBuilder {
     }
 }
 
-/// Estimates EIP1559 fees depending on the chain
+/// Estimates EIP1559 fees depending on the network
 ///
-/// Uses custom gas oracles for
-///   - polygon
 ///
-/// Fallback is the default [`Provider::estimate_eip1559_fees`] implementation
 pub async fn estimate_eip1559_fees<M: Middleware>(
     provider: &M,
-    chain: Option<u64>,
+    network: Option<u64>,
 ) -> eyre::Result<(U256, U256)>
 where
     M::Error: 'static,
 {
-    let chain = if let Some(chain) = chain {
-        chain
-    } else {
-        provider.get_chainid().await.wrap_err("Failed to get chain id")?.as_u64()
-    };
-
-    if let Ok(chain) = Chain::try_from(chain) {
-        // handle chains that deviate from `eth_feeHistory` and have their own oracle
-        match chain {
-            Chain::Polygon | Chain::PolygonMumbai => {
-                let estimator = Polygon::new(chain)?.category(GasCategory::Standard);
-                return Ok(estimator.estimate_eip1559_fees().await?)
-            }
-            _ => {}
-        }
-    }
     provider.estimate_eip1559_fees(None).await.wrap_err("Failed fetch EIP1559 fees")
 }
 

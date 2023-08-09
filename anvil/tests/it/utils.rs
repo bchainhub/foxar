@@ -1,4 +1,4 @@
-use ethers::{
+use corebc::{
     addressbook::contract,
     types::{Address, Chain},
 };
