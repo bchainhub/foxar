@@ -1,4 +1,4 @@
-use ethers::solc::ProjectCompileOutput;
+use corebc::ylem::ProjectCompileOutput;
 use foundry_config::{
     validate_profiles, Config, FuzzConfig, InlineConfig, InlineConfigError, InlineConfigParser,
     InvariantConfig, NatSpec,

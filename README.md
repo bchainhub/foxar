@@ -12,10 +12,10 @@
 - [ ] config - partly fixed
 - [ ] evm - in progress
 - [x] fmt
-- [ ] forge
+- [x] forge
 - [ ] foundryup
 - [x] macros
-- [ ] ui
+- [ ] ui - in progress
 - [x] utils
 
 ## Foundry

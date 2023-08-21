@@ -3,7 +3,7 @@ use crate::{
     trace::{CallTraceArena, RawOrDecodedCall, TraceKind},
 };
 use comfy_table::{presets::ASCII_MARKDOWN, *};
-use ethers::types::U256;
+use corebc::types::U256;
 use foundry_common::{calc, TestFunctionExt};
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, fmt::Display};
