@@ -6,7 +6,7 @@
 - [ ] anvil
 - [ ] binder
 - [ ] cast 
-- [ ] chisel
+- [ ] chisel in progress
 - [ ] cli
 - [x] common
 - [ ] config - partly fixed
@@ -15,7 +15,7 @@
 - [x] forge
 - [ ] foundryup
 - [x] macros
-- [ ] ui - in progress
+- [x] ui
 - [x] utils
 
 ## Foundry
