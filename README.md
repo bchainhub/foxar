@@ -6,8 +6,8 @@
 - [ ] anvil
 - [ ] binder
 - [ ] cast 
-- [ ] chisel in progress
-- [ ] cli
+- [x] chisel
+- [ ] cli - in progress
 - [x] common
 - [ ] config - partly fixed
 - [ ] evm - in progress
