@@ -6,16 +6,16 @@
 - [ ] anvil
 - [ ] binder
 - [ ] cast 
-- [ ] chisel
-- [ ] cli
+- [x] chisel
+- [ ] cli - in progress
 - [x] common
 - [ ] config - partly fixed
 - [ ] evm - in progress
 - [x] fmt
-- [ ] forge
+- [x] forge
 - [ ] foundryup
 - [x] macros
-- [ ] ui
+- [x] ui
 - [x] utils
 
 ## Foundry
