@@ -32,10 +32,10 @@ impl ChiselSession {
     ///
     /// A new instance of [ChiselSession]
     pub fn new(config: SessionSourceConfig) -> Result<Self> {
-        let solc = config.solc()?;
+        let ylem = config.ylem()?;
 
         // Return initialized ChiselSession with set solc version
-        Ok(Self { session_source: Some(SessionSource::new(solc, config)), id: None })
+        Ok(Self { session_source: Some(SessionSource::new(ylem, config)), id: None })
     }
 
     /// Render the full source code for the current session.

@@ -4,9 +4,9 @@
 //! the REPL contract's source code. It provides simple compilation, parsing, and
 //! execution helpers.
 
-use ethers_solc::{
+use corebc_ylem::{
     artifacts::{Source, Sources},
-    CompilerInput, CompilerOutput, EvmVersion, Solc,
+    CompilerInput, CompilerOutput, EvmVersion, Ylem,
 };
 use eyre::Result;
 use forge::executor::{opts::EvmOpts, Backend};
@@ -79,16 +79,16 @@ pub struct SessionSourceConfig {
 }
 
 impl SessionSourceConfig {
-    /// Returns the solc version to use
+    /// Returns the ylem version to use
     ///
-    /// Solc version precedence
+    /// Ylem version precedence
     /// - Foundry configuration / `--use` flag
     /// - Latest installed version via SVM
     /// - Default: Latest 0.8.19
-    pub(crate) fn solc(&self) -> Result<Solc> {
+    pub(crate) fn ylem(&self) -> Result<Ylem> {
         let solc_req = if let Some(solc_req) = self.foundry_config.solc.clone() {
             solc_req
-        } else if let Some(version) = Solc::installed_versions().into_iter().max() {
+        } else if let Some(version) = Ylem::installed_versions().into_iter().max() {
             SolcReq::Version(version.into())
         } else {
             if !self.foundry_config.offline {
@@ -100,41 +100,41 @@ impl SessionSourceConfig {
 
         match solc_req {
             SolcReq::Version(version) => {
-                // We now need to verify if the solc version provided is supported by the evm
+                // We now need to verify if the ylem version provided is supported by the evm
                 // version set. If not, we bail and ask the user to provide a newer version.
-                // 1. Do we need solc 0.8.18 or higher?
+                // 1. Do we need ylem 0.8.18 or higher?
                 let evm_version = self.foundry_config.evm_version;
                 let needs_post_merge_solc = evm_version >= EvmVersion::Paris;
                 // 2. Check if the version provided is less than 0.8.18 and bail,
-                // or leave it as-is if we don't need a post merge solc version or the version we
+                // or leave it as-is if we don't need a post merge ylem version or the version we
                 // have is good enough.
                 let v = if needs_post_merge_solc && version < Version::new(0, 8, 18) {
-                    eyre::bail!("solc {version} is not supported by the set evm version: {evm_version}. Please install and use a version of solc higher or equal to 0.8.18.
-You can also set the solc version in your foundry.toml.")
+                    eyre::bail!("ylem {version} is not supported by the set evm version: {evm_version}. Please install and use a version of ylem higher or equal to 0.8.18.
+You can also set the ylem version in your foundry.toml.")
                 } else {
                     version.to_string()
                 };
 
-                let mut solc = Solc::find_svm_installed_version(&v)?;
+                let mut ylem = Ylem::find_svm_installed_version(&v)?;
 
-                if solc.is_none() {
+                if ylem.is_none() {
                     if self.foundry_config.offline {
-                        eyre::bail!("can't install missing solc {version} in offline mode")
+                        eyre::bail!("can't install missing ylem {version} in offline mode")
                     }
                     println!(
                         "{}",
                         Paint::green(format!("Installing solidity version {version}..."))
                     );
-                    Solc::blocking_install(&version)?;
-                    solc = Solc::find_svm_installed_version(&v)?;
+                    Ylem::blocking_install(&version)?;
+                    ylem = Ylem::find_svm_installed_version(&v)?;
                 }
-                solc.ok_or_else(|| eyre::eyre!("Failed to install {version}"))
+                ylem.ok_or_else(|| eyre::eyre!("Failed to install {version}"))
             }
-            SolcReq::Local(solc) => {
-                if !solc.is_file() {
-                    eyre::bail!("`solc` {} does not exist", solc.display());
+            SolcReq::Local(ylem) => {
+                if !ylem.is_file() {
+                    eyre::bail!("`ylem` {} does not exist", ylem.display());
                 }
-                Ok(Solc::new(solc))
+                Ok(Ylem::new(ylem))
             }
         }
     }
@@ -150,7 +150,7 @@ pub struct SessionSource {
     /// The contract name
     pub contract_name: String,
     /// The solidity compiler version
-    pub solc: Solc,
+    pub ylem: Ylem,
     /// Global level solidity code
     ///
     /// Typically, global-level code is present between the contract definition and the first
@@ -173,24 +173,24 @@ impl SessionSource {
     ///
     /// # Panics
     ///
-    /// If no Solc binary is set, cannot be found or the `--version` command fails
+    /// If no Ylem binary is set, cannot be found or the `--version` command fails
     ///
     /// ### Takes
     ///
-    /// - An instance of [Solc]
+    /// - An instance of [Ylem]
     /// - An instance of [SessionSourceConfig]
     ///
     /// ### Returns
     ///
     /// A new instance of [SessionSource]
     #[track_caller]
-    pub fn new(solc: Solc, config: SessionSourceConfig) -> Self {
-        debug_assert!(solc.version().is_ok(), "{:?}", solc.version());
+    pub fn new(ylem: Ylem, config: SessionSourceConfig) -> Self {
+        debug_assert!(ylem.version().is_ok(), "{:?}", ylem.version());
 
         Self {
             file_name: PathBuf::from("ReplContract.sol".to_string()),
             contract_name: "REPL".to_string(),
-            solc,
+            ylem,
             config,
             global_code: Default::default(),
             top_level_code: Default::default(),
@@ -209,7 +209,7 @@ impl SessionSource {
         Self {
             file_name: self.file_name.clone(),
             contract_name: self.contract_name.clone(),
-            solc: self.solc.clone(),
+            ylem: self.ylem.clone(),
             global_code: self.global_code.clone(),
             top_level_code: self.top_level_code.clone(),
             run_code: self.run_code.clone(),
@@ -227,16 +227,16 @@ impl SessionSource {
     /// source code.
     pub fn clone_with_new_line(&self, mut content: String) -> Result<(SessionSource, bool)> {
         let new_source = self.shallow_clone();
-        if let Some(parsed) = parse_fragment(new_source.solc, new_source.config, &content)
+        if let Some(parsed) = parse_fragment(new_source.ylem, new_source.config, &content)
             .or_else(|| {
                 let new_source = self.shallow_clone();
                 content.push(';');
-                parse_fragment(new_source.solc, new_source.config, &content)
+                parse_fragment(new_source.ylem, new_source.config, &content)
             })
             .or_else(|| {
                 let new_source = self.shallow_clone();
                 content = content.trim_end().trim_end_matches(';').to_string();
-                parse_fragment(new_source.solc, new_source.config, &content)
+                parse_fragment(new_source.ylem, new_source.config, &content)
             })
         {
             let mut new_source = self.shallow_clone();
@@ -303,7 +303,7 @@ impl SessionSource {
         self
     }
 
-    /// Generates and ethers_solc::CompilerInput from the source
+    /// Generates and corebc_ylem::CompilerInput from the source
     ///
     /// ### Returns
     ///
@@ -401,7 +401,7 @@ impl SessionSource {
     /// Optionally, a [CompilerOutput] object that contains compilation artifacts.
     pub fn compile(&self) -> Result<CompilerOutput> {
         // Compile the contract
-        let compiled = self.solc.compile_exact(&self.compiler_input())?;
+        let compiled = self.ylem.compile_exact(&self.compiler_input())?;
 
         // Extract compiler errors
         let errors =
@@ -442,7 +442,7 @@ impl SessionSource {
     ///
     /// The [SessionSource] represented as a Forge Script contract.
     pub fn to_script_source(&self) -> String {
-        let Version { major, minor, patch, .. } = self.solc.version().unwrap();
+        let Version { major, minor, patch, .. } = self.ylem.version().unwrap();
         format!(
             r#"
 // SPDX-License-Identifier: UNLICENSED
@@ -470,7 +470,8 @@ contract {} is Script {{
     ///
     /// The [SessionSource] represented as a REPL contract.
     pub fn to_repl_source(&self) -> String {
-        let Version { major, minor, patch, .. } = self.solc.version().unwrap();
+        let Version { major, minor, patch, .. } = self.ylem.version().unwrap();
+        //TODO:error2215 - find a way to build ican address here - Cheats(address(uint176(uint256(sha3("hevm cheat code")))));
         format!(
             r#"
 // SPDX-License-Identifier: UNLICENSED
@@ -480,7 +481,7 @@ import {{Cheats}} from "forge-std/Vm.sol";
 {}
 
 contract {} {{
-    Cheats internal constant vm = Cheats(address(uint160(uint256(keccak256("hevm cheat code")))));
+    Cheats internal constant vm = Cheats(address(uint176(uint256(sha3("hevm cheat code")))));
     {}
   
     /// @notice REPL contract entry point
@@ -633,11 +634,11 @@ pub enum ParseTreeFragment {
 /// Parses a fragment of solidity code with solang_parser and assigns
 /// it a scope within the [SessionSource].
 pub fn parse_fragment(
-    solc: Solc,
+    ylem: Ylem,
     config: SessionSourceConfig,
     buffer: &str,
 ) -> Option<ParseTreeFragment> {
-    let mut base = SessionSource::new(solc, config);
+    let mut base = SessionSource::new(ylem, config);
 
     if base.clone().with_run_code(buffer).parse().is_ok() {
         return Some(ParseTreeFragment::Function)

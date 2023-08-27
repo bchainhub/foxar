@@ -1,13 +1,13 @@
 use chisel::session_source::{SessionSource, SessionSourceConfig};
 use criterion::{criterion_group, Criterion};
-use ethers_solc::Solc;
+use corebc_ylem::Ylem;
 use forge::executor::opts::EvmOpts;
 use foundry_config::Config;
 use once_cell::sync::Lazy;
 use std::hint::black_box;
 use tokio::runtime::Runtime;
 
-static SOLC: Lazy<Solc> = Lazy::new(|| Solc::find_or_install_svm_version("0.8.19").unwrap());
+static YLEM: Lazy<Ylem> = Lazy::new(|| Ylem::find_or_install_svm_version("0.8.19").unwrap());
 
 /// Benchmark for the `clone_with_new_line` function in [SessionSource]
 fn clone_with_new_line(c: &mut Criterion) {
@@ -67,7 +67,7 @@ fn inspect(c: &mut Criterion) {
 /// Helper function for getting an empty [SessionSource] with default configuration
 fn get_empty_session_source() -> SessionSource {
     SessionSource::new(
-        SOLC.clone(),
+        YLEM.clone(),
         SessionSourceConfig {
             foundry_config: Config::default(),
             evm_opts: EvmOpts::default(),
@@ -84,7 +84,7 @@ fn rt() -> Runtime {
 
 fn main() {
     // Install before benches if not present
-    let _ = Lazy::force(&SOLC);
+    let _ = Lazy::force(&YLEM);
 
     session_source_benches();
 

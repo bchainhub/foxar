@@ -3,7 +3,7 @@
 //! This module contains the `ChiselRunner` struct, which assists with deploying
 //! and calling the REPL contract on a in-memory REVM instance.
 
-use ethers::{
+use corebc::{
     prelude::{types::U256, Address},
     types::{Bytes, Log},
 };
@@ -16,7 +16,7 @@ use revm::interpreter::{return_ok, InstructionResult};
 use std::collections::BTreeMap;
 
 /// The function selector of the REPL contract's entrypoint, the `run()` function.
-static RUN_SELECTOR: [u8; 4] = [0xc0, 0x40, 0x62, 0x26];
+static RUN_SELECTOR: [u8; 4] = [0x3b, 0x21, 0xbc, 0x14];
 
 /// The Chisel Runner
 ///

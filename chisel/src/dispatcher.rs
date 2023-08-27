@@ -7,7 +7,7 @@ use crate::prelude::{
     ChiselCommand, ChiselResult, ChiselSession, CmdCategory, CmdDescriptor, SessionSourceConfig,
     SolidityHelper,
 };
-use ethers::{abi::ParamType, contract::Lazy, types::Address, utils::hex};
+use corebc::{abi::ParamType, contract::Lazy, types::Address, utils::hex};
 use forge::{
     decode::decode_console_logs,
     trace::{
@@ -34,12 +34,12 @@ pub static COMMAND_LEADER: char = '!';
 /// Chisel character
 pub static CHISEL_CHAR: &str = "⚒️";
 
-/// Matches Solidity comments
+/// Matches Ylem comments
 static COMMENT_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^\s*(?://.*\s*$)|(/*[\s\S]*?\*/\s*$)").unwrap());
 
-/// Matches Ethereum addresses
-static ADDRESS_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"0x[a-fA-F0-9]{40}").unwrap());
+/// Matches Core addresses
+static ADDRESS_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"[a-fA-F0-9]{44}").unwrap());
 
 /// Chisel input dispatcher
 #[derive(Debug)]
@@ -69,6 +69,7 @@ pub enum DispatchResult {
     FileIoError(Box<dyn Error>),
 }
 
+//TODO:error2215 - we need to replace it with blockindex when it will be ready 
 /// A response from the Etherscan API's `getabi` action
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EtherscanABIResponse {
@@ -510,6 +511,7 @@ impl ChiselDispatcher {
                     ))
                 }
 
+                //TODO:error2215 change to blockindex when it will be ready
                 let request_url = format!(
                     "https://api.etherscan.io/api?module=contract&action=getabi&address={}{}",
                     args[0],
@@ -537,7 +539,7 @@ impl ChiselDispatcher {
                         let json = response.json::<EtherscanABIResponse>().await.unwrap();
                         if json.status == "1" && json.result.is_some() {
                             let abi = json.result.unwrap();
-                            if let Ok(abi) = ethers::abi::Abi::load(abi.as_bytes()) {
+                            if let Ok(abi) = corebc::abi::Abi::load(abi.as_bytes()) {
                                 let mut interface = format!(
                                     "// Interface of {}\ninterface {} {{\n",
                                     args[0], args[1]
@@ -585,9 +587,9 @@ impl ChiselDispatcher {
                                             .collect::<Vec<_>>()
                                             .join(","),
                                         match func.state_mutability {
-                                            ethers::abi::StateMutability::Pure => " pure",
-                                            ethers::abi::StateMutability::View => " view",
-                                            ethers::abi::StateMutability::Payable => " payable",
+                                            corebc::abi::StateMutability::Pure => " pure",
+                                            corebc::abi::StateMutability::View => " view",
+                                            corebc::abi::StateMutability::Payable => " payable",
                                             _ => "",
                                         },
                                         if func.outputs.is_empty() {
@@ -834,20 +836,6 @@ impl ChiselDispatcher {
             source.with_run_code(input);
             return DispatchResult::Success(None)
         }
-
-        // If there is an address (or multiple addresses) in the input, ensure that they are
-        // encoded with a valid checksum per EIP-55.
-        let mut heap_input = input.to_string();
-        ADDRESS_RE.find_iter(input).for_each(|m| {
-            // Convert the match to a string slice
-            let match_str = m.as_str();
-            // We can always safely unwrap here due to the regex matching.
-            let addr: Address = match_str.parse().expect("Valid address regex");
-            // Replace all occurrences of the address with a checksummed version
-            heap_input = heap_input.replace(match_str, &ethers::utils::to_checksum(&addr, None));
-        });
-        // Replace the old input with the formatted input.
-        input = &heap_input;
 
         // Create new source with exact input appended and parse
         let (mut new_source, do_execute) = match source.clone_with_new_line(input.to_string()) {
