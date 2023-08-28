@@ -6,12 +6,12 @@ use crate::prelude::{
     ChiselDispatcher, ChiselResult, ChiselRunner, IntermediateOutput, SessionSource,
 };
 use core::fmt::Debug;
-use ethers::{
+use corebc::{
     abi::{ethabi, ParamType, Token},
     types::{Address, I256, U256},
     utils::hex,
 };
-use ethers_solc::Artifact;
+use corebc_ylem::Artifact;
 use eyre::{Result, WrapErr};
 use forge::{
     decode::decode_console_logs,
@@ -281,7 +281,7 @@ impl SessionSource {
 fn format_token(token: Token) -> String {
     match token {
         Token::Address(a) => {
-            format!("Type: {}\n└ Data: {}", Paint::red("address"), Paint::cyan(format!("0x{a:x}")))
+            format!("Type: {}\n└ Data: {}", Paint::red("address"), Paint::cyan(format!("{a:x}")))
         }
         Token::FixedBytes(b) => {
             format!(
@@ -310,7 +310,7 @@ fn format_token(token: Token) -> String {
             format!("Type: {}\n└ Value: {}", Paint::red("bool"), Paint::cyan(b))
         }
         Token::String(_) | Token::Bytes(_) => {
-            let hex = hex::encode(ethers::abi::encode(&[token.clone()]));
+            let hex = hex::encode(corebc::abi::encode(&[token.clone()]));
             let s = token.into_string();
             format!(
                 "Type: {}\n{}├ Hex (Memory):\n├─ Length ({}): {}\n├─ Contents ({}): {}\n├ Hex (Tuple Encoded):\n├─ Pointer ({}): {}\n├─ Length ({}): {}\n└─ Contents ({}): {}",
@@ -494,13 +494,8 @@ impl Type {
             pt::Expression::AddressLiteral(_, _) => Some(Self::Builtin(ParamType::Address)),
             pt::Expression::HexNumberLiteral(_, s, _) => {
                 match s.parse() {
-                    Ok(addr) => {
-                        let checksummed = ethers::utils::to_checksum(&addr, None);
-                        if *s == checksummed {
-                            Some(Self::Builtin(ParamType::Address))
-                        } else {
-                            Some(Self::Builtin(ParamType::Uint(256)))
-                        }
+                    Ok(addr::H176) => {
+                        Some(Self::Builtin(ParamType::Address))
                     },
                     _ => {
                         Some(Self::Builtin(ParamType::Uint(256)))
@@ -691,7 +686,7 @@ impl Type {
                         "abi" => match access {
                             "decode" => {
                                 // args = Some([Bytes(_), Tuple(args)])
-                                // unwrapping is safe because this is first compiled by solc so
+                                // unwrapping is safe because this is first compiled by ylem so
                                 // it is guaranteed to be a valid call
                                 let mut args = args.unwrap();
                                 let last = args.pop().unwrap();
@@ -1212,7 +1207,7 @@ impl<'a> Iterator for InstructionIter<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers_solc::{error::SolcError, Solc};
+    use corebc_ylem::{error::YlemIoError, Ylem};
     use once_cell::sync::Lazy;
     use std::sync::Mutex;
 
@@ -1482,20 +1477,20 @@ mod tests {
 
     #[track_caller]
     fn source() -> SessionSource {
-        // synchronize solc install
-        static PRE_INSTALL_SOLC_LOCK: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
+        // synchronize ylem install
+        static PRE_INSTALL_YLEM_LOCK: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false));
 
-        // on some CI targets installing results in weird malformed solc files, we try installing it
+        // on some CI targets installing results in weird malformed ylem files, we try installing it
         // multiple times
         for _ in 0..3 {
-            let mut is_preinstalled = PRE_INSTALL_SOLC_LOCK.lock().unwrap();
+            let mut is_preinstalled = PRE_INSTALL_YLEM_LOCK.lock().unwrap();
             if !*is_preinstalled {
-                let solc =
-                    Solc::find_or_install_svm_version("0.8.19").and_then(|solc| solc.version());
-                if solc.is_err() {
+                let ylem =
+                Ylem::find_or_install_yvm_version("1.1.0").and_then(|ylem| ylem.version());
+                if ylem.is_err() {
                     // try reinstalling
-                    let solc = Solc::blocking_install(&"0.8.19".parse().unwrap());
-                    if solc.map_err(SolcError::from).and_then(|solc| solc.version()).is_ok() {
+                    let ylem = Ylem::blocking_install(&"1.1.0".parse().unwrap());
+                    if ylem.map_err(YlemError::from).and_then(|ylem| ylem.version()).is_ok() {
                         *is_preinstalled = true;
                         break
                     }
@@ -1506,8 +1501,8 @@ mod tests {
             }
         }
 
-        let solc = Solc::find_or_install_svm_version("0.8.19").expect("could not install solc");
-        SessionSource::new(solc, Default::default())
+        let ylem = Ylem::find_or_install_yvm_version("1.1.0").expect("could not install ylem");
+        SessionSource::new(ylem, Default::default())
     }
 
     fn array(ty: ParamType) -> ParamType {

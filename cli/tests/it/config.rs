@@ -13,7 +13,7 @@ use foundry_cli_test_utils::{
 };
 use foundry_config::{
     cache::{CachedNetworks, CachedEndpoints, StorageCachingConfig},
-    Config, FuzzConfig, InvariantConfig, OptimizerDetails, SolcReq,
+    Config, FuzzConfig, InvariantConfig, OptimizerDetails, YlemReq,
 };
 use path_slash::PathBufExt;
 use std::{fs, path::PathBuf, str::FromStr};
@@ -36,7 +36,7 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         evm_version: EvmVersion::Byzantium,
         gas_reports: vec!["Contract".to_string()],
         gas_reports_ignore: vec![],
-        solc: Some(SolcReq::Local(PathBuf::from("custom-solc"))),
+        ylem: Some(YlemReq::Local(PathBuf::from("custom-solc"))),
         auto_detect_solc: false,
         auto_detect_remappings: true,
         offline: true,
@@ -269,7 +269,7 @@ contract Greeter {}
         .unwrap();
 
     // explicitly set to run with 0.8.10
-    let config = Config { solc: Some("0.8.10".into()), ..Default::default() };
+    let config = Config { ylem: Some("0.8.10".into()), ..Default::default() };
     prj.write_config(config);
 
     cmd.arg("build");
