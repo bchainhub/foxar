@@ -505,7 +505,7 @@ contract Greeter {
         .unwrap();
 
     // explicitly set to run with 0.8.10
-    let config = Config { solc: Some("0.8.10".into()), ..Default::default() };
+    let config = Config { ylem: Some("0.8.10".into()), ..Default::default() };
     prj.write_config(config);
 
     cmd.arg("build");
@@ -1558,7 +1558,7 @@ forgetest_init!(can_install_missing_deps_build, |prj: TestProject, mut cmd: Test
 // checks that extra output works
 forgetest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 0.8.17 for consistent output
-    let config = Config { solc: Some("0.8.17".into()), ..Default::default() };
+    let config = Config { ylem: Some("0.8.17".into()), ..Default::default() };
     prj.write_config(config);
 
     // only builds the single template contract `src/*`
@@ -1577,7 +1577,7 @@ forgetest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestComman
 
 forgetest_init!(can_build_skip_glob, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 0.8.17 for consistent output
-    let config = Config { solc: Some("0.8.17".into()), ..Default::default() };
+    let config = Config { ylem: Some("0.8.17".into()), ..Default::default() };
     prj.write_config(config);
     prj.inner()
         .add_test(

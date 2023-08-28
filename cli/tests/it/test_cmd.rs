@@ -271,7 +271,7 @@ contract ContractTest is DSTest {
             .unwrap();
 
         // pin version
-        let config = Config { solc: Some("0.8.10".into()), ..Default::default() };
+        let config = Config { ylem: Some("0.8.10".into()), ..Default::default() };
         prj.write_config(config);
 
         cmd.arg("test");
@@ -281,7 +281,7 @@ contract ContractTest is DSTest {
             ));
 
         // pin version
-        let config = Config { solc: Some("0.8.13".into()), ..Default::default() };
+        let config = Config { ylem: Some("0.8.13".into()), ..Default::default() };
         prj.write_config(config);
 
         cmd.unchecked_output()

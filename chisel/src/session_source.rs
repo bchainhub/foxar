@@ -11,7 +11,7 @@ use corebc_ylem::{
 use eyre::Result;
 use forge::executor::{opts::EvmOpts, Backend};
 use forge_fmt::solang_ext::SafeUnwrap;
-use foundry_config::{Config, SolcReq};
+use foundry_config::{Config, YlemReq};
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use solang_parser::pt;
@@ -83,39 +83,39 @@ impl SessionSourceConfig {
     ///
     /// Ylem version precedence
     /// - Foundry configuration / `--use` flag
-    /// - Latest installed version via SVM
-    /// - Default: Latest 0.8.19
+    /// - Latest installed version via YVM
+    /// - Default: Latest 1.1.0
     pub(crate) fn ylem(&self) -> Result<Ylem> {
-        let solc_req = if let Some(solc_req) = self.foundry_config.solc.clone() {
-            solc_req
+        let ylem_req = if let Some(ylem_req) = self.foundry_config.ylem.clone() {
+            ylem_req
         } else if let Some(version) = Ylem::installed_versions().into_iter().max() {
-            SolcReq::Version(version.into())
+            YlemReq::Version(version.into())
         } else {
             if !self.foundry_config.offline {
                 print!("{}", Paint::green("No solidity versions installed! "));
             }
             // use default
-            SolcReq::Version("0.8.19".parse().unwrap())
+            YlemReq::Version("1.1.0".parse().unwrap())
         };
 
-        match solc_req {
-            SolcReq::Version(version) => {
+        match ylem_req {
+            YlemReq::Version(version) => {
                 // We now need to verify if the ylem version provided is supported by the evm
                 // version set. If not, we bail and ask the user to provide a newer version.
                 // 1. Do we need ylem 0.8.18 or higher?
                 let evm_version = self.foundry_config.evm_version;
-                let needs_post_merge_solc = evm_version >= EvmVersion::Paris;
+                let needs_post_merge_ylem = evm_version >= EvmVersion::Paris;
                 // 2. Check if the version provided is less than 0.8.18 and bail,
                 // or leave it as-is if we don't need a post merge ylem version or the version we
                 // have is good enough.
-                let v = if needs_post_merge_solc && version < Version::new(0, 8, 18) {
+                let v = if needs_post_merge_ylem && version < Version::new(0, 8, 18) {
                     eyre::bail!("ylem {version} is not supported by the set evm version: {evm_version}. Please install and use a version of ylem higher or equal to 0.8.18.
 You can also set the ylem version in your foundry.toml.")
                 } else {
                     version.to_string()
                 };
 
-                let mut ylem = Ylem::find_svm_installed_version(&v)?;
+                let mut ylem = Ylem::find_yvm_installed_version(&v)?;
 
                 if ylem.is_none() {
                     if self.foundry_config.offline {
@@ -126,11 +126,11 @@ You can also set the ylem version in your foundry.toml.")
                         Paint::green(format!("Installing solidity version {version}..."))
                     );
                     Ylem::blocking_install(&version)?;
-                    ylem = Ylem::find_svm_installed_version(&v)?;
+                    ylem = Ylem::find_yvm_installed_version(&v)?;
                 }
                 ylem.ok_or_else(|| eyre::eyre!("Failed to install {version}"))
             }
-            SolcReq::Local(ylem) => {
+            YlemReq::Local(ylem) => {
                 if !ylem.is_file() {
                     eyre::bail!("`ylem` {} does not exist", ylem.display());
                 }

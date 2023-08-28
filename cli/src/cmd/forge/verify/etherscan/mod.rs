@@ -19,7 +19,7 @@ use ethers::{
 };
 use eyre::{eyre, Context};
 use foundry_common::abi::encode_args;
-use foundry_config::{Network, Config, SolcReq};
+use foundry_config::{Network, Config, YlemReq};
 use foundry_utils::Retry;
 use futures::FutureExt;
 use once_cell::sync::Lazy;
@@ -371,10 +371,10 @@ impl EtherscanVerificationProvider {
             return Ok(version.trim_start_matches('v').parse()?)
         }
 
-        if let Some(ref solc) = config.solc {
+        if let Some(ref solc) = config.ylem {
             match solc {
-                SolcReq::Version(version) => return Ok(version.to_owned()),
-                SolcReq::Local(solc) => {
+                YlemReq::Version(version) => return Ok(version.to_owned()),
+                YlemReq::Local(solc) => {
                     if solc.is_file() {
                         return Ok(Solc::new(solc).version()?)
                     }

@@ -973,7 +973,7 @@ contract Script0 is Script {
 // checks that skipping build
 forgetest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 0.8.17 for consistent output
-    let config = Config { solc: Some("0.8.17".into()), ..Default::default() };
+    let config = Config { ylem: Some("0.8.17".into()), ..Default::default() };
     prj.write_config(config);
 
     let script = prj

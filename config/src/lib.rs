@@ -182,7 +182,7 @@ pub struct Config {
     ///
     /// **Note** for backwards compatibility reasons this also accepts solc_version from the toml
     /// file, see [`BackwardsCompatProvider`]
-    pub solc: Option<SolcReq>,
+    pub ylem: Option<YlemReq>,
     /// whether to autodetect the solc compiler version to use
     pub auto_detect_solc: bool,
     /// Offline mode, if set, network access (downloading solc) is disallowed.
@@ -655,9 +655,9 @@ impl Config {
     ///
     /// If `solc` is [`SolcReq::Local`] then this will ensure that the path exists.
     fn ensure_solc(&self) -> Result<Option<Ylem>, YlemError> {
-        if let Some(ref solc) = self.solc {
+        if let Some(ref solc) = self.ylem {
             let solc = match solc {
-                SolcReq::Version(version) => {
+                YlemReq::Version(version) => {
                     let v = version.to_string();
                     let mut solc = Ylem::find_yvm_installed_version(&v)?;
                     if solc.is_none() {
@@ -671,7 +671,7 @@ impl Config {
                     }
                     solc
                 }
-                SolcReq::Local(solc) => {
+                YlemReq::Local(solc) => {
                     if !solc.is_file() {
                         return Err(YlemError::msg(format!(
                             "`ylem` {} does not exist",
@@ -692,7 +692,7 @@ impl Config {
     /// Returns `false` if `solc_version` is explicitly set, otherwise returns the value of
     /// `auto_detect_solc`
     pub fn is_auto_detect(&self) -> bool {
-        if self.solc.is_some() {
+        if self.ylem.is_some() {
             return false
         }
         self.auto_detect_solc
@@ -1736,7 +1736,7 @@ impl Default for Config {
             evm_version: CvmVersion::Istanbul,
             gas_reports: vec!["*".to_string()],
             gas_reports_ignore: vec![],
-            solc: None,
+            ylem: None,
             auto_detect_solc: true,
             offline: false,
             optimizer: true,
@@ -1881,21 +1881,21 @@ impl<'de> Deserialize<'de> for GasLimit {
 /// Variants for selecting the [`Solc`] instance
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum SolcReq {
-    /// Requires a specific solc version, that's either already installed (via `svm`) or will be
-    /// auto installed (via `svm`)
+pub enum YlemReq {
+    /// Requires a specific solc version, that's either already installed (via `yvm`) or will be
+    /// auto installed (via `yvm`)
     Version(Version),
     /// Path to an existing local solc installation
     Local(PathBuf),
 }
 
-impl<T: AsRef<str>> From<T> for SolcReq {
+impl<T: AsRef<str>> From<T> for YlemReq {
     fn from(s: T) -> Self {
         let s = s.as_ref();
         if let Ok(v) = Version::from_str(s) {
-            SolcReq::Version(v)
+            YlemReq::Version(v)
         } else {
-            SolcReq::Local(s.into())
+            YlemReq::Local(s.into())
         }
     }
 }
@@ -3378,7 +3378,7 @@ mod tests {
             )?;
 
             let config = Config::load();
-            assert_eq!(config.solc, Some(SolcReq::Version("0.8.12".parse().unwrap())));
+            assert_eq!(config.ylem, Some(YlemReq::Version("0.8.12".parse().unwrap())));
 
             jail.create_file(
                 "foundry.toml",
@@ -3389,7 +3389,7 @@ mod tests {
             )?;
 
             let config = Config::load();
-            assert_eq!(config.solc, Some(SolcReq::Version("0.8.12".parse().unwrap())));
+            assert_eq!(config.ylem, Some(YlemReq::Version("0.8.12".parse().unwrap())));
 
             jail.create_file(
                 "foundry.toml",
@@ -3400,11 +3400,11 @@ mod tests {
             )?;
 
             let config = Config::load();
-            assert_eq!(config.solc, Some(SolcReq::Local("path/to/local/solc".into())));
+            assert_eq!(config.ylem, Some(YlemReq::Local("path/to/local/solc".into())));
 
             jail.set_env("FOUNDRY_SOLC_VERSION", "0.6.6");
             let config = Config::load();
-            assert_eq!(config.solc, Some(SolcReq::Version("0.6.6".parse().unwrap())));
+            assert_eq!(config.ylem, Some(YlemReq::Version("0.6.6".parse().unwrap())));
             Ok(())
         });
     }

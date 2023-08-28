@@ -22,7 +22,7 @@ pub struct ChiselSession {
 
 // ChiselSession Common Associated Functions
 impl ChiselSession {
-    /// Create a new `ChiselSession` with a specified `solc` version and configuration.
+    /// Create a new `ChiselSession` with a specified `ylem` version and configuration.
     ///
     /// ### Takes
     ///
@@ -34,7 +34,7 @@ impl ChiselSession {
     pub fn new(config: SessionSourceConfig) -> Result<Self> {
         let ylem = config.ylem()?;
 
-        // Return initialized ChiselSession with set solc version
+        // Return initialized ChiselSession with set ylem version
         Ok(Self { session_source: Some(SessionSource::new(ylem, config)), id: None })
     }
 
