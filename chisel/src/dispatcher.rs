@@ -69,18 +69,18 @@ pub enum DispatchResult {
     FileIoError(Box<dyn Error>),
 }
 
-//TODO:error2215 - we need to replace it with blockindex when it will be ready 
+//todo:error2215 commented out (waiting for blockindex implementation)
 /// A response from the Etherscan API's `getabi` action
-#[derive(Debug, Serialize, Deserialize)]
-pub struct EtherscanABIResponse {
-    /// The status of the response
-    /// "1" = success | "0" = failure
-    pub status: String,
-    /// The message supplied by the API
-    pub message: String,
-    /// The result returned by the API. Will be `None` if the request failed.
-    pub result: Option<String>,
-}
+// #[derive(Debug, Serialize, Deserialize)]
+// pub struct EtherscanABIResponse {
+//     /// The status of the response
+//     /// "1" = success | "0" = failure
+//     pub status: String,
+//     /// The message supplied by the API
+//     pub message: String,
+//     /// The result returned by the API. Will be `None` if the request failed.
+//     pub result: Option<String>,
+// }
 
 /// Used to format ABI parameters into valid solidity function / error / event param syntax
 /// TODO: Smarter resolution of storage location, defaults to "memory" for all types
@@ -504,145 +504,146 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Session not present."))
                 }
             }
-            ChiselCommand::Fetch => {
-                if args.len() != 2 {
-                    return DispatchResult::CommandFailed(Self::make_error(
-                        "Incorrect number of arguments supplied. Expected: <address> <name>",
-                    ))
-                }
+            //todo:error2215 commented out (waiting for blockindex implementation)
+            // ChiselCommand::Fetch => {
+            //     if args.len() != 2 {
+            //         return DispatchResult::CommandFailed(Self::make_error(
+            //             "Incorrect number of arguments supplied. Expected: <address> <name>",
+            //         ))
+            //     }
 
-                //TODO:error2215 change to blockindex when it will be ready
-                let request_url = format!(
-                    "https://api.etherscan.io/api?module=contract&action=getabi&address={}{}",
-                    args[0],
-                    if let Some(api_key) = self
-                        .session
-                        .session_source
-                        .as_ref()
-                        .unwrap()
-                        .config
-                        .foundry_config
-                        .etherscan_api_key
-                        .as_ref()
-                    {
-                        format!("&apikey={api_key}")
-                    } else {
-                        String::default()
-                    }
-                );
+            //     //TODO:error2215 change to blockindex when it will be ready
+            //     let request_url = format!(
+            //         "https://api.etherscan.io/api?module=contract&action=getabi&address={}{}",
+            //         args[0],
+            //         if let Some(api_key) = self
+            //             .session
+            //             .session_source
+            //             .as_ref()
+            //             .unwrap()
+            //             .config
+            //             .foundry_config
+            //             .etherscan_api_key
+            //             .as_ref()
+            //         {
+            //             format!("&apikey={api_key}")
+            //         } else {
+            //             String::default()
+            //         }
+            //     );
 
-                // TODO: Not the cleanest method of building a solidity interface from
-                // the ABI, but does the trick. Might want to pull this logic elsewhere
-                // and/or refactor at some point.
-                match reqwest::get(&request_url).await {
-                    Ok(response) => {
-                        let json = response.json::<EtherscanABIResponse>().await.unwrap();
-                        if json.status == "1" && json.result.is_some() {
-                            let abi = json.result.unwrap();
-                            if let Ok(abi) = corebc::abi::Abi::load(abi.as_bytes()) {
-                                let mut interface = format!(
-                                    "// Interface of {}\ninterface {} {{\n",
-                                    args[0], args[1]
-                                );
+            //     // TODO: Not the cleanest method of building a solidity interface from
+            //     // the ABI, but does the trick. Might want to pull this logic elsewhere
+            //     // and/or refactor at some point.
+            //     match reqwest::get(&request_url).await {
+            //         Ok(response) => {
+            //             let json = response.json::<EtherscanABIResponse>().await.unwrap();
+            //             if json.status == "1" && json.result.is_some() {
+            //                 let abi = json.result.unwrap();
+            //                 if let Ok(abi) = corebc::abi::Abi::load(abi.as_bytes()) {
+            //                     let mut interface = format!(
+            //                         "// Interface of {}\ninterface {} {{\n",
+            //                         args[0], args[1]
+            //                     );
 
-                                // Add error definitions
-                                abi.errors().for_each(|err| {
-                                    interface.push_str(&format!(
-                                        "\terror {}({});\n",
-                                        err.name,
-                                        err.inputs
-                                            .iter()
-                                            .map(|input| format_param!(input))
-                                            .collect::<Vec<_>>()
-                                            .join(",")
-                                    ));
-                                });
-                                // Add event definitions
-                                abi.events().for_each(|event| {
-                                    interface.push_str(&format!(
-                                        "\tevent {}({});\n",
-                                        event.name,
-                                        event
-                                            .inputs
-                                            .iter()
-                                            .map(|input| {
-                                                let mut formatted = format!("{}", input.kind);
-                                                if input.indexed {
-                                                    formatted.push_str(" indexed");
-                                                }
-                                                formatted
-                                            })
-                                            .collect::<Vec<_>>()
-                                            .join(",")
-                                    ));
-                                });
-                                // Add function definitions
-                                abi.functions().for_each(|func| {
-                                    interface.push_str(&format!(
-                                        "\tfunction {}({}) external{}{};\n",
-                                        func.name,
-                                        func.inputs
-                                            .iter()
-                                            .map(|input| format_param!(input))
-                                            .collect::<Vec<_>>()
-                                            .join(","),
-                                        match func.state_mutability {
-                                            corebc::abi::StateMutability::Pure => " pure",
-                                            corebc::abi::StateMutability::View => " view",
-                                            corebc::abi::StateMutability::Payable => " payable",
-                                            _ => "",
-                                        },
-                                        if func.outputs.is_empty() {
-                                            String::default()
-                                        } else {
-                                            format!(
-                                                " returns ({})",
-                                                func.outputs
-                                                    .iter()
-                                                    .map(|output| format_param!(output))
-                                                    .collect::<Vec<_>>()
-                                                    .join(",")
-                                            )
-                                        }
-                                    ));
-                                });
-                                // Close interface definition
-                                interface.push('}');
+            //                     // Add error definitions
+            //                     abi.errors().for_each(|err| {
+            //                         interface.push_str(&format!(
+            //                             "\terror {}({});\n",
+            //                             err.name,
+            //                             err.inputs
+            //                                 .iter()
+            //                                 .map(|input| format_param!(input))
+            //                                 .collect::<Vec<_>>()
+            //                                 .join(",")
+            //                         ));
+            //                     });
+            //                     // Add event definitions
+            //                     abi.events().for_each(|event| {
+            //                         interface.push_str(&format!(
+            //                             "\tevent {}({});\n",
+            //                             event.name,
+            //                             event
+            //                                 .inputs
+            //                                 .iter()
+            //                                 .map(|input| {
+            //                                     let mut formatted = format!("{}", input.kind);
+            //                                     if input.indexed {
+            //                                         formatted.push_str(" indexed");
+            //                                     }
+            //                                     formatted
+            //                                 })
+            //                                 .collect::<Vec<_>>()
+            //                                 .join(",")
+            //                         ));
+            //                     });
+            //                     // Add function definitions
+            //                     abi.functions().for_each(|func| {
+            //                         interface.push_str(&format!(
+            //                             "\tfunction {}({}) external{}{};\n",
+            //                             func.name,
+            //                             func.inputs
+            //                                 .iter()
+            //                                 .map(|input| format_param!(input))
+            //                                 .collect::<Vec<_>>()
+            //                                 .join(","),
+            //                             match func.state_mutability {
+            //                                 corebc::abi::StateMutability::Pure => " pure",
+            //                                 corebc::abi::StateMutability::View => " view",
+            //                                 corebc::abi::StateMutability::Payable => " payable",
+            //                                 _ => "",
+            //                             },
+            //                             if func.outputs.is_empty() {
+            //                                 String::default()
+            //                             } else {
+            //                                 format!(
+            //                                     " returns ({})",
+            //                                     func.outputs
+            //                                         .iter()
+            //                                         .map(|output| format_param!(output))
+            //                                         .collect::<Vec<_>>()
+            //                                         .join(",")
+            //                                 )
+            //                             }
+            //                         ));
+            //                     });
+            //                     // Close interface definition
+            //                     interface.push('}');
 
-                                // Add the interface to the source outright - no need to verify
-                                // syntax via compilation and/or
-                                // parsing.
-                                self.session
-                                    .session_source
-                                    .as_mut()
-                                    .unwrap()
-                                    .with_global_code(&interface);
+            //                     // Add the interface to the source outright - no need to verify
+            //                     // syntax via compilation and/or
+            //                     // parsing.
+            //                     self.session
+            //                         .session_source
+            //                         .as_mut()
+            //                         .unwrap()
+            //                         .with_global_code(&interface);
 
-                                DispatchResult::CommandSuccess(Some(format!(
-                                    "Added {}'s interface to source as `{}`",
-                                    args[0], args[1]
-                                )))
-                            } else {
-                                DispatchResult::CommandFailed(Self::make_error(
-                                    "Contract is not verified!",
-                                ))
-                            }
-                        } else if let Some(error_msg) = json.result {
-                            DispatchResult::CommandFailed(Self::make_error(format!(
-                                "Could not fetch interface - \"{error_msg}\""
-                            )))
-                        } else {
-                            DispatchResult::CommandFailed(Self::make_error(format!(
-                                "Could not fetch interface - \"{}\"",
-                                json.message
-                            )))
-                        }
-                    }
-                    Err(e) => DispatchResult::CommandFailed(Self::make_error(format!(
-                        "Failed to communicate with Etherscan API: {e}"
-                    ))),
-                }
-            }
+            //                     DispatchResult::CommandSuccess(Some(format!(
+            //                         "Added {}'s interface to source as `{}`",
+            //                         args[0], args[1]
+            //                     )))
+            //                 } else {
+            //                     DispatchResult::CommandFailed(Self::make_error(
+            //                         "Contract is not verified!",
+            //                     ))
+            //                 }
+            //             } else if let Some(error_msg) = json.result {
+            //                 DispatchResult::CommandFailed(Self::make_error(format!(
+            //                     "Could not fetch interface - \"{error_msg}\""
+            //                 )))
+            //             } else {
+            //                 DispatchResult::CommandFailed(Self::make_error(format!(
+            //                     "Could not fetch interface - \"{}\"",
+            //                     json.message
+            //                 )))
+            //             }
+            //         }
+            //         Err(e) => DispatchResult::CommandFailed(Self::make_error(format!(
+            //             "Failed to communicate with Etherscan API: {e}"
+            //         ))),
+            //     }
+            // }
             ChiselCommand::Exec => {
                 if args.is_empty() {
                     return DispatchResult::CommandFailed(Self::make_error("No command supplied!"))
@@ -941,10 +942,11 @@ impl ChiselDispatcher {
         result: &mut ChiselResult,
         // known_contracts: &ContractsByArtifact,
     ) -> eyre::Result<CallTraceDecoder> {
-        let mut etherscan_identifier = EtherscanIdentifier::new(
-            &session_config.foundry_config,
-            session_config.evm_opts.get_remote_chain_id(),
-        )?;
+        //todo:error2215 commented out (waiting for blockindex implementation)
+        // let mut etherscan_identifier = EtherscanIdentifier::new(
+        //     &session_config.foundry_config,
+        //     session_config.evm_opts.get_remote_chain_id(),
+        // )?;
 
         let mut decoder =
             CallTraceDecoderBuilder::new().with_labels(result.labeled_addresses.clone()).build();
@@ -956,7 +958,8 @@ impl ChiselDispatcher {
 
         for (_, trace) in &mut result.traces {
             // decoder.identify(trace, &mut local_identifier);
-            decoder.identify(trace, &mut etherscan_identifier);
+            //todo:error2215 commented out (waiting for blockindex implementation)
+            // decoder.identify(trace, &mut etherscan_identifier);
         }
         Ok(decoder)
     }

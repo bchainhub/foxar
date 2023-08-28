@@ -46,7 +46,8 @@ pub enum ChiselCommand {
     Export,
     /// Fetch an interface of a verified contract on Etherscan
     /// Takes: <addr> <interface-name>
-    Fetch,
+    //todo:error2215 commented out (waiting for blockindex implementation)
+    // Fetch,
     /// Executes a shell command
     Exec,
     /// Display the raw value of a variable's stack allocation.
@@ -131,7 +132,8 @@ impl From<ChiselCommand> for CmdDescriptor {
             ChiselCommand::ListSessions => (&["list", "ls"], "List all cached sessions", CmdCategory::Session),
             ChiselCommand::ClearCache => (&["clearcache", "cc"], "Clear the chisel cache of all stored sessions", CmdCategory::Session),
             ChiselCommand::Export => (&["export", "ex"], "Export the current session source to a script file", CmdCategory::Session),
-            ChiselCommand::Fetch => (&["fetch <addr> <name>", "fe <addr> <name>"], "Fetch the interface of a verified contract on Etherscan", CmdCategory::Session),
+            //todo:error2215 commented out (waiting for blockindex implementation)
+            // ChiselCommand::Fetch => (&["fetch <addr> <name>", "fe <addr> <name>"], "Fetch the interface of a verified contract on Etherscan", CmdCategory::Session),
             // Environment
             ChiselCommand::Fork => (&["fork <url>", "f <url>"], "Fork an RPC for the current session. Supply 0 arguments to return to a local network", CmdCategory::Env),
             ChiselCommand::Traces => (&["traces", "t"], "Enable / disable traces for the current session", CmdCategory::Env),
