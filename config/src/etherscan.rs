@@ -1,7 +1,7 @@
 //! Support for multiple etherscan keys
 use crate::{
     resolve::{interpolate, UnresolvedEnvVarError, RE_PLACEHOLDER},
-    Chain, Config,
+    Network, Config,
 };
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{
@@ -21,11 +21,11 @@ pub enum EtherscanConfigError {
     #[error(transparent)]
     Unresolved(#[from] UnresolvedEnvVarError),
 
-    #[error("No known Etherscan API URL for config{0} with chain `{1}`. Please specify a `url`")]
-    UnknownChain(String, Chain),
+    #[error("No known Etherscan API URL for config{0} with network `{1}`. Please specify a `url`")]
+    UnknownNetwork(String, Network),
 
-    #[error("At least one of `url` or `chain` must be present{0}")]
-    MissingUrlOrChain(String),
+    #[error("At least one of `url` or `network` must be present{0}")]
+    MissingUrlOrNetwork(String),
 }
 
 /// Container type for Etherscan API keys and URLs.
@@ -48,9 +48,9 @@ impl EtherscanConfigs {
         self.configs.is_empty()
     }
 
-    /// Returns the first config that matches the chain
-    pub fn find_chain(&self, chain: Chain) -> Option<&EtherscanConfig> {
-        self.configs.values().find(|config| config.chain == Some(chain))
+    /// Returns the first config that matches the network
+    pub fn find_network(&self, network: Network) -> Option<&EtherscanConfig> {
+        self.configs.values().find(|config| config.network == Some(network))
     }
 
     /// Returns all (alias -> url) pairs
@@ -102,14 +102,14 @@ impl ResolvedEtherscanConfigs {
 Ok(config))).collect(),         }
     }
 
-    /// Returns the first config that matches the chain
-    pub fn find_chain(
+    /// Returns the first config that matches the network
+    pub fn find_network(
         self,
-        chain: Chain,
+        network: Network,
     ) -> Option<Result<ResolvedEtherscanConfig, EtherscanConfigError>> {
         for (_, config) in self.configs.into_iter() {
             match config {
-                Ok(c) if c.chain == Some(chain) => return Some(Ok(c)),
+                Ok(c) if c.network == Some(network) => return Some(Ok(c)),
                 Err(e) => return Some(Err(e)),
                 _ => continue,
             }
@@ -140,9 +140,9 @@ impl DerefMut for ResolvedEtherscanConfigs {
 /// Represents all info required to create an etherscan client
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct EtherscanConfig {
-    /// Chain name/id that can be used to derive the api url
+    /// Network name/id that can be used to derive the api url
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub chain: Option<Chain>,
+    pub network: Option<Network>,
     /// Etherscan API URL
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
@@ -158,44 +158,44 @@ impl EtherscanConfig {
     /// # Errors
     ///
     /// Returns an error if the type holds a reference to an env var and the env var is not setor
-    /// no chain or url is configured
+    /// no network or url is configured
     pub fn resolve(
         self,
         alias: Option<&str>,
     ) -> Result<ResolvedEtherscanConfig, EtherscanConfigError> {
-        let EtherscanConfig { chain, mut url, key } = self;
+        let EtherscanConfig { network: network, mut url, key } = self;
 
         if let Some(url) = &mut url {
             *url = interpolate(url)?;
         }
 
-        let (chain, alias) = match (chain, alias) {
+        let (network, alias) = match (network, alias) {
             // fill one with the other
-            (Some(chain), None) => (Some(chain), Some(chain.to_string())),
+            (Some(network), None) => (Some(network), Some(network.to_string())),
             (None, Some(alias)) => (alias.parse().ok(), Some(alias.into())),
             // leave as is
-            (Some(chain), Some(alias)) => (Some(chain), Some(alias.into())),
+            (Some(network), Some(alias)) => (Some(network), Some(alias.into())),
             (None, None) => (None, None),
         };
         let key = key.resolve()?;
 
-        match (chain, url) {
-            (Some(chain), Some(api_url)) => Ok(ResolvedEtherscanConfig {
+        match (network, url) {
+            (Some(network), Some(api_url)) => Ok(ResolvedEtherscanConfig {
                 api_url,
-                browser_url: chain.etherscan_urls().map(|(_, url)| url.to_string()),
+                browser_url: network.blockindex_urls().map(|(_, url)| url.to_string()),
                 key,
-                chain: Some(chain),
+                network: Some(network),
             }),
-            (Some(chain), None) => ResolvedEtherscanConfig::create(key, chain).ok_or_else(|| {
+            (Some(network), None) => ResolvedEtherscanConfig::create(key, network).ok_or_else(|| {
                 let msg = alias.map(|a| format!(" `{a}`")).unwrap_or_default();
-                EtherscanConfigError::UnknownChain(msg, chain)
+                EtherscanConfigError::UnknownNetwork(msg, network)
             }),
             (None, Some(api_url)) => {
-                Ok(ResolvedEtherscanConfig { api_url, browser_url: None, key, chain: None })
+                Ok(ResolvedEtherscanConfig { api_url, browser_url: None, key, network: None })
             }
             (None, None) => {
                 let msg = alias.map(|a| format!(" for Etherscan config
-`{a}`")).unwrap_or_default();                 Err(EtherscanConfigError::MissingUrlOrChain(msg))
+`{a}`")).unwrap_or_default();                 Err(EtherscanConfigError::MissingUrlOrNetwork(msg))
             }
         }
     }
@@ -212,42 +212,42 @@ pub struct ResolvedEtherscanConfig {
     pub browser_url: Option<String>,
     /// Resolved api key
     pub key: String,
-    /// The chain if set
+    /// The network if set
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub chain: Option<Chain>,
+    pub network: Option<Network>,
 }
 
 // === impl ResolvedEtherscanConfig ===
 
 impl ResolvedEtherscanConfig {
-    /// Creates a new instance using the api key and chain
-    pub fn create(api_key: impl Into<String>, chain: impl Into<Chain>) -> Option<Self> {
-        let chain = chain.into();
-        let (api_url, browser_url) = chain.etherscan_urls()?;
+    /// Creates a new instance using the api key and network
+    pub fn create(api_key: impl Into<String>, network: impl Into<Network>) -> Option<Self> {
+        let network = network.into();
+        let (api_url, browser_url) = network.blockindex_urls()?;
         Some(Self {
             api_url: api_url.to_string(),
             browser_url: Some(browser_url.to_string()),
             key: api_key.into(),
-            chain: Some(chain),
+            network: Some(network),
         })
     }
 
-    /// Sets the chain value and consumes the type
+    /// Sets the network value and consumes the type
     ///
     /// This is only used to set derive the appropriate Cache path for the etherscan client
-    pub fn with_chain(mut self, chain: impl Into<Chain>) -> Self {
-        self.set_chain(chain);
+    pub fn with_network(mut self, network: impl Into<Network>) -> Self {
+        self.set_network(network);
         self
     }
 
-    /// Sets the chain value
-    pub fn set_chain(&mut self, chain: impl Into<Chain>) -> &mut Self {
-        let chain = chain.into();
-        if let Some((api, browser)) = chain.etherscan_urls() {
+    /// Sets the network value
+    pub fn set_network(&mut self, network: impl Into<Network>) -> &mut Self {
+        let network = network.into();
+        if let Some((api, browser)) = network.blockindex_urls() {
             self.api_url = api.to_string();
             self.browser_url = Some(browser.to_string());
         }
-        self.chain = Some(chain);
+        self.network = Some(network);
         self
     }
 
@@ -255,12 +255,12 @@ impl ResolvedEtherscanConfig {
     /// `api_key` and cache
     pub fn into_client(
         self,
-    ) -> Result<corebc_blockindex::Client, corebc_blockindex::errors::EtherscanError> {
-        let ResolvedEtherscanConfig { api_url, browser_url, key: api_key, chain } = self;
+    ) -> Result<corebc_blockindex::Client, corebc_blockindex::errors::BlockindexError> {
+        let ResolvedEtherscanConfig { api_url, browser_url, key: api_key, network: network } = self;
         let (mainnet_api, mainnet_url) =
-            corebc_core::types::Network::Mainnet.etherscan_urls().expect("exist; qed");
+            corebc_core::types::Network::Mainnet.blockindex_urls().expect("exist; qed");
 
-        let cache = chain
+        let cache = network
             .or_else(|| {
                 if api_url == mainnet_api {
                     // try to match against mainnet, which is usually the most common target
@@ -280,14 +280,12 @@ impl ResolvedEtherscanConfig {
 
         corebc_blockindex::Client::builder()
             .with_client(reqwest::Client::builder().user_agent(ETHERSCAN_USER_AGENT).build()?)
-            .with_api_key(api_key)
             .with_api_url(api_url.as_str())?
             .with_url(
                 // the browser url is not used/required by the client so we can simply set the
                 // mainnet browser url here
                 browser_url.as_deref().unwrap_or(mainnet_url),
             )?
-            .with_cache(cache, Duration::from_secs(24 * 60 * 60))
             .build()
     }
 }
@@ -377,7 +375,7 @@ impl fmt::Display for EtherscanApiKey {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use corebc_core::types::Chain::Mainnet;
+    use corebc_core::types::Network::Mainnet;
 
     #[test]
     fn can_create_client_via_chain() {
@@ -385,7 +383,7 @@ mod tests {
         configs.insert(
             "mainnet".to_string(),
             EtherscanConfig {
-                chain: Some(Mainnet.into()),
+                network: Some(Mainnet.into()),
                 url: None,
                 key: EtherscanApiKey::Key("ABCDEFG".to_string()),
             },
@@ -397,12 +395,12 @@ mod tests {
     }
 
     #[test]
-    fn can_create_client_via_url_and_chain() {
+    fn can_create_client_via_url_and_network() {
         let mut configs = EtherscanConfigs::default();
         configs.insert(
             "mainnet".to_string(),
             EtherscanConfig {
-                chain: Some(Mainnet.into()),
+                network: Some(Mainnet.into()),
                 url: Some("https://api.etherscan.io/api".to_string()),
                 key: EtherscanApiKey::Key("ABCDEFG".to_string()),
             },
@@ -414,13 +412,13 @@ mod tests {
     }
 
     #[test]
-    fn can_create_client_via_url_and_chain_env_var() {
+    fn can_create_client_via_url_and_network_env_var() {
         let mut configs = EtherscanConfigs::default();
         let env = "_CONFIG_ETHERSCAN_API_KEY";
         configs.insert(
             "mainnet".to_string(),
             EtherscanConfig {
-                chain: Some(Mainnet.into()),
+                network: Some(Mainnet.into()),
                 url: Some("https://api.etherscan.io/api".to_string()),
                 key: EtherscanApiKey::Env(format!("${{{env}}}")),
             },

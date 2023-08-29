@@ -898,7 +898,7 @@ impl Config {
 
         // try to find by comparing chain IDs after resolving
         if let Some(res) =
-            chain.and_then(|chain| self.etherscan.clone().resolved().find_chain(chain))
+            chain.and_then(|chain| self.etherscan.clone().resolved().find_network(chain))
         {
             match (res, self.etherscan_api_key.as_ref()) {
                 (Ok(mut config), Some(key)) => {
@@ -3928,8 +3928,9 @@ mod tests {
                     show_unproved: None,
                     div_mod_with_slacks: None,
                     solvers: None,
-                    show_unsupported: None,
-                    show_proved_safe: None,
+                    //todo:error2215 check why this doesn't exist
+                    // show_unsupported: None,
+                    // show_proved_safe: None,
                 })
             );
 
@@ -3990,8 +3991,9 @@ mod tests {
                     show_unproved: None,
                     div_mod_with_slacks: None,
                     solvers: None,
-                    show_unsupported: None,
-                    show_proved_safe: None,
+                    //todo:error2215 check why this doesn't exist
+                    // show_unsupported: None,
+                    // show_proved_safe: None,
                 })
             );
 

@@ -460,7 +460,7 @@ pub fn etherscan_project(metadata: &Metadata, target_path: impl AsRef<Path>) -> 
 
     let v = metadata.compiler_version()?;
     let v = format!("{}.{}.{}", v.major, v.minor, v.patch);
-    let ylem = Ylem::find_or_install_svm_version(v)?;
+    let ylem = Ylem::find_or_install_yvm_version(v)?;
 
     Ok(Project::builder()
         .ylem_config(YlemConfig::builder().settings(settings).build())

@@ -44,7 +44,7 @@ impl EtherscanIdentifier {
     /// Creates a new Etherscan identifier with the given client
     pub fn new(config: &Config, chain: Option<impl Into<Network>>) -> eyre::Result<Self> {
         if let Some(config) = config.get_etherscan_config_with_chain(chain)? {
-            trace!(target: "etherscanidentifier", chain=?config.chain, url=?config.api_url, "using etherscan identifier");
+            trace!(target: "etherscanidentifier", chain=?config.network, url=?config.api_url, "using etherscan identifier");
             Ok(Self {
                 client: Some(Arc::new(config.into_client()?)),
                 invalid_api_key: Arc::new(Default::default()),

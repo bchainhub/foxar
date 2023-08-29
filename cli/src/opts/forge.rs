@@ -21,7 +21,7 @@ use crate::cmd::forge::{
     verify::{VerifyArgs, VerifyCheckArgs},
 };
 use clap::{Parser, Subcommand, ValueHint};
-use ethers::solc::{artifacts::output_selection::ContractOutputSelection, EvmVersion};
+use ethers::solc::{artifacts::output_selection::ContractOutputSelection, YlemVersion};
 use std::path::PathBuf;
 
 use serde::Serialize;
@@ -172,10 +172,10 @@ pub enum Subcommands {
 #[derive(Default, Debug, Clone, Parser, Serialize)]
 #[clap(next_help_heading = "Compiler options")]
 pub struct CompilerArgs {
-    /// The target EVM version.
+    /// The target YVM version.
     #[clap(long, value_name = "VERSION")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evm_version: Option<EvmVersion>,
+    pub yvm_version: Option<YlemVersion>,
 
     /// Activate the Solidity optimizer.
     #[clap(long)]
@@ -212,7 +212,7 @@ mod tests {
     fn can_parse_evm_version() {
         let args: CompilerArgs =
             CompilerArgs::parse_from(["foundry-cli", "--evm-version", "london"]);
-        assert_eq!(args.evm_version, Some(EvmVersion::London));
+        assert_eq!(args.yvm_version, Some(YlemVersion::London));
     }
 
     #[test]

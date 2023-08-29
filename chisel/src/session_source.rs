@@ -6,7 +6,7 @@
 
 use corebc_ylem::{
     artifacts::{Source, Sources},
-    CompilerInput, CompilerOutput, EvmVersion, Ylem,
+    CompilerInput, CompilerOutput, YlemVersion, Ylem,
 };
 use eyre::Result;
 use forge::executor::{opts::EvmOpts, Backend};
@@ -104,7 +104,7 @@ impl SessionSourceConfig {
                 // version set. If not, we bail and ask the user to provide a newer version.
                 // 1. Do we need ylem 0.8.18 or higher?
                 let evm_version = self.foundry_config.evm_version;
-                let needs_post_merge_ylem = evm_version >= EvmVersion::Paris;
+                let needs_post_merge_ylem = evm_version >= YlemVersion::Paris;
                 // 2. Check if the version provided is less than 0.8.18 and bail,
                 // or leave it as-is if we don't need a post merge ylem version or the version we
                 // have is good enough.

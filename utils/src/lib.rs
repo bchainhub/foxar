@@ -326,7 +326,7 @@ fn recurse_link<'a>(
                 *deployed_address
             } else {
                 // we need to deploy the library
-                let computed_address = corebc_core::utils::get_contract_address(sender, init_nonce + deployment.len(), network);
+                let computed_address = corebc_core::utils::get_contract_address(sender, init_nonce + deployment.len(), &network);
                 let library = format!("{file}:{key}:{}", hex::encode(computed_address));
 
                 // push the dependency into the library deployment vector
@@ -452,7 +452,7 @@ mod tests {
     use super::*;
     use corebc::{
         abi::Abi,
-        solc::{Project, ProjectPathsConfig},
+        ylem::{Project, ProjectPathsConfig},
         types::{Address, Bytes},
     };
     use foundry_common::ContractsByArtifact;
@@ -570,7 +570,7 @@ mod tests {
 
         // DAI:mainnet exists in corebc-addressbook (0x6b175474e89094c44da98b954eedeac495271d0f)
         assert_eq!(
-            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::::Mainnet)).ok(),
+            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Mainnet)).ok(),
             Some(NameOrAddress::Address(
                 Address::from_str("0x6b175474e89094c44da98b954eedeac495271d0f").unwrap()
             ))

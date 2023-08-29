@@ -2,7 +2,7 @@
 
 use super::*;
 use ethers::{
-    prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, SolcConfig},
+    prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, YlemConfig},
     solc::{artifacts::Libraries, Project, ProjectPathsConfig},
     types::{Address, U256},
 };
@@ -32,7 +32,7 @@ pub static LIBS_PROJECT: Lazy<Project> = Lazy::new(|| {
 
     let settings = Settings { libraries: Libraries::parse(&libs).unwrap(), ..Default::default() };
 
-    let solc_config = SolcConfig::builder().settings(settings).build();
+    let solc_config = YlemConfig::builder().settings(settings).build();
     Project::builder()
         .paths(paths)
         .ephemeral()

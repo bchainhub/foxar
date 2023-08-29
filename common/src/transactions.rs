@@ -1,6 +1,6 @@
 //! wrappers for transactions
 use corebc_core::types::{BlockId, TransactionReceipt};
-use ethers_providers::Middleware;
+use corebc_providers::Middleware;
 use eyre::Result;
 use serde::{Deserialize, Serialize};
 

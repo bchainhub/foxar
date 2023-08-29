@@ -275,7 +275,7 @@ impl EtherscanVerificationProvider {
         let base_url = etherscan_config
             .as_ref()
             .and_then(|c| c.browser_url.as_deref())
-            .or_else(|| chain.etherscan_urls().map(|urls| urls.1));
+            .or_else(|| chain.blockindex_urls().map(|urls| urls.1));
 
         let etherscan_key =
             etherscan_key.or_else(|| etherscan_config.as_ref().map(|c| c.key.as_str()));

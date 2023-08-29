@@ -7,7 +7,7 @@ use ethers::{
 };
 use forge::executor::opts::EvmOpts;
 use foundry_cli_test_utils::{
-    ethers_solc::{remappings::Remapping, EvmVersion},
+    ethers_solc::{remappings::Remapping, YlemVersion},
     forgetest, forgetest_init, pretty_eq,
     util::{pretty_err, OutputExt, TestCommand, TestProject},
 };
@@ -33,7 +33,7 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         cache_path: "test-cache".into(),
         broadcast: "broadcast".into(),
         force: true,
-        evm_version: EvmVersion::Byzantium,
+        evm_version: YlemVersion::Byzantium,
         gas_reports: vec!["Contract".to_string()],
         gas_reports_ignore: vec![],
         ylem: Some(YlemReq::Local(PathBuf::from("custom-solc"))),
