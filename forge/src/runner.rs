@@ -2,7 +2,7 @@ use crate::{
     result::{SuiteResult, TestKind, TestResult, TestSetup, TestStatus},
     TestFilter, TestOptions,
 };
-use ethers::{
+use corebc::{
     abi::{Abi, Function},
     types::{Address, Bytes, U256},
 };
