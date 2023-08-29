@@ -1,7 +1,7 @@
 //! test outcomes
 
 use crate::Address;
-use ethers::prelude::Log;
+use corebc::prelude::Log;
 use foundry_common::evm::Breakpoints;
 use foundry_evm::{
     coverage::HitMaps,
