@@ -1,7 +1,7 @@
 use std::path::Path;
 
 use chisel::session::ChiselSession;
-use ethers_solc::EvmVersion;
+use corebc_ylem::EvmVersion;
 use forge::executor::opts::EvmOpts;
 use foundry_config::Config;
 use serial_test::serial;
@@ -38,7 +38,7 @@ fn test_write_session() {
     let cache_dir = ChiselSession::cache_dir().unwrap();
     ChiselSession::create_cache_dir().unwrap();
 
-    // Force the solc version to be 0.8.19
+    // Force the ylem version to be 1.1.0
     let foundry_config = Config { evm_version: EvmVersion::London, ..Default::default() };
 
     // Create a new session
@@ -69,7 +69,7 @@ fn test_write_session_with_name() {
     let cache_dir = ChiselSession::cache_dir().unwrap();
     ChiselSession::create_cache_dir().unwrap();
 
-    // Force the solc version to be 0.8.19
+    // Force the ylem version to be 1.1.0
     let foundry_config = Config { evm_version: EvmVersion::London, ..Default::default() };
 
     // Create a new session
@@ -93,7 +93,7 @@ fn test_clear_cache() {
     // Create a session to validate clearing a non-empty cache directory
     let cache_dir = ChiselSession::cache_dir().unwrap();
 
-    // Force the solc version to be 0.8.19
+    // Force the ylem version to be 1.1.0
     let foundry_config = Config { evm_version: EvmVersion::London, ..Default::default() };
 
     ChiselSession::create_cache_dir().unwrap();
@@ -119,7 +119,7 @@ fn test_list_sessions() {
     ChiselSession::create_cache_dir().unwrap();
     ChiselSession::clear_cache().unwrap();
 
-    // Force the solc version to be 0.8.19
+    // Force the ylem version to be 1.1.0
     let foundry_config = Config { evm_version: EvmVersion::London, ..Default::default() };
 
     // Create a new session
@@ -146,7 +146,7 @@ fn test_load_cache() {
     ChiselSession::create_cache_dir().unwrap();
     ChiselSession::clear_cache().unwrap();
 
-    // Force the solc version to be 0.8.19
+    // Force the ylem version to be 1.1.0
     let foundry_config = Config { evm_version: EvmVersion::London, ..Default::default() };
 
     // Create a new session
@@ -177,7 +177,7 @@ fn test_write_same_session_multiple_times() {
     ChiselSession::create_cache_dir().unwrap();
     ChiselSession::clear_cache().unwrap();
 
-    // Force the solc version to be 0.8.19
+    // Force the ylem version to be 1.1.0
     let foundry_config = Config { evm_version: EvmVersion::London, ..Default::default() };
 
     // Create a new session
@@ -200,7 +200,7 @@ fn test_load_latest_cache() {
     ChiselSession::create_cache_dir().unwrap();
     ChiselSession::clear_cache().unwrap();
 
-    // Force the solc version to be 0.8.19
+    // Force the ylem version to be 1.1.0
     let foundry_config = Config { evm_version: EvmVersion::London, ..Default::default() };
 
     // Create sessions

@@ -157,8 +157,8 @@ impl EtherscanConfig {
     ///
     /// # Errors
     ///
-    /// Returns an error if the type holds a reference to an env var and the env var is not set
-or     /// no chain or url is configured
+    /// Returns an error if the type holds a reference to an env var and the env var is not setor
+    /// no chain or url is configured
     pub fn resolve(
         self,
         alias: Option<&str>,
@@ -295,8 +295,8 @@ impl ResolvedEtherscanConfig {
 /// Represents a single etherscan API key
 ///
 /// This type preserves the value as it's stored in the config. If the value is a reference to an
-/// env var, then the `EtherscanKey::Key` var will hold the reference (`${MAIN_NET}`) and _not_
-the /// value of the env var itself.
+/// env var, then the `EtherscanKey::Key` var will hold the reference (`${MAIN_NET}`) and _not_ the
+/// value of the env var itself.
 /// In other words, this type does not resolve env vars when it's being deserialized
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EtherscanApiKey {

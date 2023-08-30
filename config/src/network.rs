@@ -20,7 +20,7 @@ impl Network {
     /// The id of the network.
     pub const fn id(&self) -> u64 {
         match self {
-            Network::Named(network) => *network as u64,
+            Network::Named(network) => u64::from(*network),
             Network::Id(id) => *id,
         }
     }
@@ -79,7 +79,7 @@ impl From<U256> for Network {
 impl From<Network> for u64 {
     fn from(c: Network) -> Self {
         match c {
-            Network::Named(c) => c as u64,
+            Network::Named(c) => u64::from(c),
             Network::Id(id) => id,
         }
     }
