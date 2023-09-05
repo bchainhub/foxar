@@ -4,7 +4,7 @@ use cast::{
     trace::{identifier::SignaturesIdentifier, CallTraceDecoder, Traces},
 };
 use clap::Parser;
-use ethers::{
+use corebc::{
     abi::Address,
     prelude::{artifacts::ContractBytecodeSome, ArtifactId, Middleware},
     types::H160,
@@ -133,10 +133,10 @@ impl RunArgs {
                     // and gas limit 0 which causes reverts, so we skip it
                     if tx.from == ARBITRUM_SENDER {
                         update_progress!(pb, index);
-                        continue
+                        continue;
                     }
                     if tx.hash().eq(&tx_hash) {
-                        break
+                        break;
                     }
 
                     configure_tx_env(&mut env, &tx);
@@ -218,7 +218,7 @@ impl RunArgs {
 
             if let Some(addr) = iter.next() {
                 if let (Ok(address), Some(label)) = (Address::from_str(addr), iter.next()) {
-                    return Some((address, label.to_string()))
+                    return Some((address, label.to_string()));
                 }
             }
             None

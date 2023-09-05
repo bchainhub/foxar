@@ -1,12 +1,12 @@
 use crate::errors::FunctionSignatureError;
-use ethers_core::{
+use corebc_core::{
     abi::Function,
     types::{
         transaction::eip2718::TypedTransaction, Eip1559TransactionRequest, NameOrAddress,
         TransactionRequest, H160, U256,
     },
 };
-use ethers_providers::Middleware;
+use corebc_providers::Middleware;
 use eyre::{eyre, Result};
 use foundry_common::abi::{encode_args, get_func, get_func_blockindex};
 use foundry_config::Network;
@@ -29,9 +29,9 @@ pub type TxBuilderPeekOutput<'a> = (&'a TypedTransaction, &'a Option<Function>);
 /// Transaction builder
 /// ```
 /// async fn foo() -> eyre::Result<()> {
-///   use ethers_core::types::{Chain, U256};
+///   use corebc_core::types::{Chain, U256};
 ///   use cast::TxBuilder;
-///   let provider = ethers_providers::test_provider::MAINNET.provider();
+///   let provider = corebc_providers::test_provider::MAINNET.provider();
 ///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet, false).await?;
 ///   builder
 ///       .gas(Some(U256::from(1)));
@@ -171,7 +171,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         args: Vec<String>,
     ) -> Result<(Vec<u8>, Function)> {
         if sig.trim().is_empty() {
-            return Err(FunctionSignatureError::MissingSignature.into())
+            return Err(FunctionSignatureError::MissingSignature.into());
         }
 
         let args = resolve_name_args(&args, self.provider).await;
@@ -227,7 +227,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         value: Option<(&str, Vec<String>)>,
     ) -> Result<&mut TxBuilder<'a, M>> {
         if let Some((sig, args)) = value {
-            return self.set_args(sig, args).await
+            return self.set_args(sig, args).await;
         }
         Ok(self)
     }
@@ -271,10 +271,10 @@ async fn resolve_name_args<M: Middleware>(args: &[String], provider: &M) -> Vec<
 mod tests {
     use crate::TxBuilder;
     use async_trait::async_trait;
-    use ethers_core::types::{
+    use corebc_core::types::{
         transaction::eip2718::TypedTransaction, Address, Chain, NameOrAddress, H160, U256,
     };
-    use ethers_providers::{JsonRpcClient, Middleware, ProviderError};
+    use corebc_providers::{JsonRpcClient, Middleware, ProviderError};
     use serde::{de::DeserializeOwned, Serialize};
     use std::str::FromStr;
 

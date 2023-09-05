@@ -1,7 +1,7 @@
-use ethers_solc::{
+use corebc_ylem::{
     cache::SolFilesCache,
     project_util::{copy_dir, TempProject},
-    ArtifactOutput, ConfigurableArtifacts, PathStyle, ProjectPathsConfig, Solc,
+    ArtifactOutput, ConfigurableArtifacts, PathStyle, ProjectPathsConfig, Ylem,
 };
 use eyre::WrapErr;
 use foundry_config::Config;
@@ -191,9 +191,9 @@ pub fn setup_cast_project(test: TestProject) -> (TestProject, TestCommand) {
 fn install_commonly_used_solc() {
     let mut is_preinstalled = PRE_INSTALL_SOLC_LOCK.lock();
     if !*is_preinstalled {
-        let v0_8_18 = std::thread::spawn(|| Solc::blocking_install(&"0.8.18".parse().unwrap()));
-        let v0_8_19 = std::thread::spawn(|| Solc::blocking_install(&"0.8.19".parse().unwrap()));
-        let v0_8_20 = std::thread::spawn(|| Solc::blocking_install(&"0.8.20".parse().unwrap()));
+        let v0_8_18 = std::thread::spawn(|| Ylem::blocking_install(&"1.1.0".parse().unwrap()));
+        let v0_8_19 = std::thread::spawn(|| Ylem::blocking_install(&"1.1.0".parse().unwrap()));
+        let v0_8_20 = std::thread::spawn(|| Ylem::blocking_install(&"1.1.0".parse().unwrap()));
 
         let wait = |res: std::thread::JoinHandle<_>| -> Result<(), ()> {
             if let Err(err) = res.join().unwrap() {
@@ -819,7 +819,7 @@ pub fn tty_fixture_path(path: impl AsRef<Path>) -> PathBuf {
             path.with_extension(format!("tty.{ext}"))
         } else {
             path.with_extension("tty")
-        }
+        };
     }
     path.to_path_buf()
 }

@@ -1,7 +1,7 @@
 use cast::{Cast, SimpleCast};
 use clap::{CommandFactory, Parser};
 use clap_complete::generate;
-use ethers::{
+use corebc::{
     core::types::{BlockId, BlockNumber::Latest, H256},
     providers::Middleware,
     types::Address,

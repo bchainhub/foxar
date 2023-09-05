@@ -1,6 +1,6 @@
 //! Various helper functions
 
-use ethers::prelude::{Address, Chain, LocalWallet, Signer};
+use corebc::prelude::{Address, Chain, LocalWallet, Signer};
 
 /// Returns the current millis since unix epoch.
 ///
@@ -125,7 +125,7 @@ impl EnvExternalities {
 pub fn parse_deployed_address(out: &str) -> Option<String> {
     for line in out.lines() {
         if line.starts_with("Deployed to") {
-            return Some(line.trim_start_matches("Deployed to: ").to_string())
+            return Some(line.trim_start_matches("Deployed to: ").to_string());
         }
     }
     None
@@ -134,7 +134,7 @@ pub fn parse_deployed_address(out: &str) -> Option<String> {
 pub fn parse_verification_guid(out: &str) -> Option<String> {
     for line in out.lines() {
         if line.contains("GUID") {
-            return Some(line.replace("GUID:", "").replace('`', "").trim().to_string())
+            return Some(line.replace("GUID:", "").replace('`', "").trim().to_string());
         }
     }
     None

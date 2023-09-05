@@ -6,7 +6,7 @@ use crate::{
 use cast::Cast;
 use clap::Parser;
 use comfy_table::{presets::ASCII_MARKDOWN, Table};
-use ethers::{
+use corebc::{
     abi::ethabi::ethereum_types::BigEndianHash, etherscan::Client, prelude::*,
     solc::artifacts::StorageLayout,
 };
@@ -88,7 +88,7 @@ impl StorageArgs {
         if let Some(slot) = slot {
             let cast = Cast::new(provider);
             println!("{}", cast.storage(address, slot, block).await?);
-            return Ok(())
+            return Ok(());
         }
 
         // No slot was provided
@@ -112,7 +112,7 @@ impl StorageArgs {
             let artifact =
                 out.artifacts().find(|(_, artifact)| match_code(artifact).unwrap_or_default());
             if let Some((_, artifact)) = artifact {
-                return fetch_and_print_storage(provider, address, artifact, true).await
+                return fetch_and_print_storage(provider, address, artifact, true).await;
             }
         }
 
@@ -214,7 +214,7 @@ async fn fetch_storage_values(
 fn print_storage(layout: StorageLayout, values: Vec<String>, pretty: bool) -> Result<()> {
     if !pretty {
         println!("{}", serde_json::to_string_pretty(&serde_json::to_value(layout)?)?);
-        return Ok(())
+        return Ok(());
     }
 
     let mut table = Table::new();

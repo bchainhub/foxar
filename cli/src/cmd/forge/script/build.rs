@@ -1,6 +1,6 @@
 use super::*;
 use crate::cmd::get_cached_entry_by_name;
-use ethers::{
+use corebc::{
     prelude::{
         artifacts::Libraries, cache::SolFilesCache, ArtifactId, Graph, Project,
         ProjectCompileOutput,
@@ -132,7 +132,7 @@ impl ScriptArgs {
                     let mut seen = HashSet::new();
                     for (dep, bytes) in deps {
                         if !seen.insert(dep.clone()) {
-                            continue
+                            continue;
                         }
                         filtered.push((dep, bytes));
                     }
@@ -214,7 +214,7 @@ impl ScriptArgs {
                 self.verify,
                 filters,
             )?;
-            return Ok((project, output))
+            return Ok((project, output));
         }
 
         if !project.paths.has_input_files() {
@@ -236,7 +236,7 @@ impl ScriptArgs {
                 filters,
             )?;
             self.path = path.to_string_lossy().to_string();
-            return Ok((project, output))
+            return Ok((project, output));
         }
 
         // We received `contract_name`, and need to find its file path.

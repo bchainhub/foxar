@@ -2,7 +2,7 @@
 
 use crate::constants::*;
 use clap::CommandFactory;
-use ethers::{
+use corebc::{
     prelude::remappings::Remapping,
     solc::{
         artifacts::{BytecodeHash, Metadata},
@@ -11,7 +11,7 @@ use ethers::{
 };
 use foundry_cli::opts::forge::Opts;
 use foundry_cli_test_utils::{
-    ethers_solc::PathStyle,
+    corebc_ylem::PathStyle,
     forgetest, forgetest_init,
     util::{pretty_err, read_string, OutputExt, TestCommand, TestProject},
 };

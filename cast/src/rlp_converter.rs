@@ -1,4 +1,4 @@
-use ethers_core::utils::rlp::{Decodable, DecoderError, Encodable, Rlp, RlpStream};
+use corebc_core::utils::rlp::{Decodable, DecoderError, Encodable, Rlp, RlpStream};
 use serde_json::Value;
 use std::fmt::{Debug, Display, Formatter, Write};
 
@@ -31,7 +31,7 @@ impl Encodable for Item {
 impl Decodable for Item {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         if rlp.is_data() {
-            return Ok(Item::Data(Vec::from(rlp.data()?)))
+            return Ok(Item::Data(Vec::from(rlp.data()?)));
         }
         Ok(Item::Array(rlp.as_list()?))
     }
@@ -54,7 +54,7 @@ impl Item {
             Value::Object(_) => {
                 eyre::bail!("RLP input can not contain objects")
             }
-        }
+        };
     }
 }
 
@@ -91,7 +91,7 @@ impl Display for Item {
 #[cfg(test)]
 mod test {
     use crate::rlp_converter::Item;
-    use ethers_core::utils::{rlp, rlp::DecoderError};
+    use corebc_core::utils::{rlp, rlp::DecoderError};
     use serde_json::Result as JsonResult;
 
     // https://en.wikipedia.org/wiki/Set-theoretic_definition_of_natural_numbers

@@ -7,7 +7,7 @@ use crate::cmd::{
     Cmd, LoadConfig,
 };
 use clap::Parser;
-use ethers::solc::{Project, ProjectCompileOutput};
+use corebc::solc::{Project, ProjectCompileOutput};
 use foundry_common::{
     compile,
     compile::{ProjectCompiler, SkipBuildFilter},
@@ -89,8 +89,8 @@ impl Cmd for BuildArgs {
         let mut config = self.try_load_config_emit_warnings()?;
         let mut project = config.project()?;
 
-        if install::install_missing_dependencies(&mut config, self.args.silent) &&
-            config.auto_detect_remappings
+        if install::install_missing_dependencies(&mut config, self.args.silent)
+            && config.auto_detect_remappings
         {
             // need to re-configure here to also catch additional remappings
             config = self.load_config();

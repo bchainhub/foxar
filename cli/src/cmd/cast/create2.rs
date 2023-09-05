@@ -3,7 +3,7 @@
 use crate::cmd::Cmd;
 use cast::SimpleCast;
 use clap::Parser;
-use ethers::{
+use corebc::{
     core::rand::thread_rng,
     types::{Address, Bytes, H256, U256},
     utils::{get_create2_address_from_hash, keccak256},
@@ -170,7 +170,7 @@ impl Create2Args {
 
 #[cfg(test)]
 mod tests {
-    use ethers::{abi::AbiEncode, utils::get_create2_address};
+    use corebc::{abi::AbiEncode, utils::get_create2_address};
 
     use super::*;
 

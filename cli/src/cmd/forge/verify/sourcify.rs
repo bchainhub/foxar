@@ -2,7 +2,7 @@ use super::{VerifyArgs, VerifyCheckArgs};
 use crate::cmd::LoadConfig;
 use async_trait::async_trait;
 use cast::SimpleCast;
-use ethers::solc::ConfigurableContractArtifact;
+use corebc::solc::ConfigurableContractArtifact;
 
 use crate::cmd::forge::verify::provider::VerificationProvider;
 use foundry_common::fs;

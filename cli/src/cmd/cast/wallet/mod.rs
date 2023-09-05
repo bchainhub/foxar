@@ -8,7 +8,7 @@ use crate::{
 };
 use cast::SimpleCast;
 use clap::Parser;
-use ethers::{
+use corebc::{
     core::rand::thread_rng,
     signers::{LocalWallet, Signer},
     types::{transaction::eip712::TypedData, Address, Signature},

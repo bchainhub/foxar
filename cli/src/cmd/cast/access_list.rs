@@ -5,7 +5,7 @@ use crate::{
 };
 use cast::{Cast, TxBuilder};
 use clap::Parser;
-use ethers::{
+use corebc::{
     providers::Middleware,
     types::{BlockId, NameOrAddress},
 };

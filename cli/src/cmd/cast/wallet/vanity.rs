@@ -3,7 +3,7 @@
 use crate::cmd::Cmd;
 use cast::SimpleCast;
 use clap::{builder::TypedValueParser, Parser};
-use ethers::{
+use corebc::{
     core::{k256::ecdsa::SigningKey, rand::thread_rng},
     prelude::{LocalWallet, Signer},
     types::{H160, U256},
@@ -300,7 +300,7 @@ impl TypedValueParser for HexAddressValidator {
             return Err(clap::Error::raw(
                 clap::error::ErrorKind::InvalidValue,
                 "vanity patterns length exceeded. cannot be more than 40 characters",
-            ))
+            ));
         }
         let value = value.to_str().ok_or_else(|| {
             clap::Error::raw(clap::error::ErrorKind::InvalidUtf8, "address must be valid utf8")

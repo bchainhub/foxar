@@ -8,7 +8,7 @@ use crate::{
     utils::STATIC_FUZZ_SEED,
 };
 use clap::{builder::RangedU64ValueParser, Parser, ValueHint};
-use ethers::types::U256;
+use corebc::types::U256;
 use eyre::Context;
 use forge::result::TestKindReport;
 use once_cell::sync::Lazy;
@@ -173,12 +173,12 @@ impl SnapshotConfig {
     fn is_in_gas_range(&self, gas_used: u64) -> bool {
         if let Some(min) = self.min {
             if gas_used < min {
-                return false
+                return false;
             }
         }
         if let Some(max) = self.max {
             if gas_used > max {
-                return false
+                return false;
             }
         }
         true

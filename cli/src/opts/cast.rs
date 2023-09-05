@@ -9,7 +9,7 @@ use crate::{
     utils::parse_u256,
 };
 use clap::{Parser, Subcommand, ValueHint};
-use ethers::{
+use corebc::{
     abi::ethabi::ethereum_types::BigEndianHash,
     types::{serde_helpers::Numeric, Address, BlockId, NameOrAddress, H256, U256},
 };
@@ -869,7 +869,7 @@ pub fn parse_slot(s: &str) -> eyre::Result<H256> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers::types::BlockNumber;
+    use corebc::types::BlockNumber;
 
     #[test]
     fn parse_call_data() {

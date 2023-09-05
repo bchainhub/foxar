@@ -1,4 +1,4 @@
-use ethers_core::{
+use corebc_core::{
     abi::ethereum_types::FromStrRadixErrKind,
     types::{Sign, I256, U256},
     utils::ParseUnits,
@@ -205,7 +205,7 @@ impl Base {
 ///
 /// ```
 /// use cast::base::NumberWithBase;
-/// use ethers_core::types::U256;
+/// use corebc_core::types::U256;
 ///
 /// let number: NumberWithBase = U256::from(12345).into();
 /// assert_eq!(number.format(), "12345");
@@ -435,7 +435,7 @@ impl NumberWithBase {
             buf[i] = char::from_digit(m, radix).unwrap();
             x /= r;
             if x.is_zero() {
-                break
+                break;
             }
             i -= 1;
         }
@@ -480,7 +480,7 @@ pub trait ToBase {
     ///
     /// ```
     /// use cast::base::{Base, ToBase};
-    /// use ethers_core::types::U256;
+    /// use corebc_core::types::U256;
     ///
     /// // Any type that implements ToBase
     /// let number = U256::from(12345);

@@ -3,7 +3,7 @@ use crate::cmd::{
     forge::script::{multi::MultiChainSequence, verify::VerifyBundle},
     LoadConfig,
 };
-use ethers::{
+use corebc::{
     prelude::{Middleware, Signer},
     types::{transaction::eip2718::TypedTransaction, U256},
 };
@@ -78,7 +78,7 @@ impl ScriptArgs {
                     result,
                     verify,
                 )
-                .await
+                .await;
         }
 
         let known_contracts = flatten_contracts(&highlevel_known_contracts, true);
@@ -92,7 +92,7 @@ impl ScriptArgs {
                 project,
                 highlevel_known_contracts,
                 breakpoints,
-            )
+            );
         }
 
         if let Some((new_traces, updated_libraries, updated_contracts)) = self
@@ -162,7 +162,7 @@ impl ScriptArgs {
                 &flatten_contracts(&highlevel_known_contracts, true),
             )?;
 
-            return Ok(Some((new_traces, libraries, highlevel_known_contracts)))
+            return Ok(Some((new_traces, libraries, highlevel_known_contracts)));
         }
 
         // Add predeploy libraries to the list of broadcastable transactions.
@@ -209,7 +209,7 @@ impl ScriptArgs {
                     result.script_wallets,
                     verify,
                 )
-                .await
+                .await;
         }
         self.resume_single_deployment(
             script_config,

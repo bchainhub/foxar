@@ -10,7 +10,7 @@ use crate::{
     },
     opts::EtherscanOpts,
 };
-use ethers::{
+use corebc::{
     abi::Address,
     solc::{info::ContractInfo, Project},
 };
@@ -120,7 +120,7 @@ impl VerifyBundle {
                     show_standard_json_input: false,
                 };
 
-                return Some(verify)
+                return Some(verify);
             }
         }
         None

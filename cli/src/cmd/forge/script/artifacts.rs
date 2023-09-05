@@ -1,4 +1,4 @@
-use ethers::abi::Abi;
+use corebc::abi::Abi;
 
 /// Bundles info of an artifact
 pub struct ArtifactInfo<'a> {

@@ -1,4 +1,4 @@
-use ethers_core::utils::hex;
+use corebc_core::utils::hex;
 use itertools::Itertools;
 use once_cell::sync::Lazy;
 use solang_parser::pt::Parameter;
@@ -128,7 +128,7 @@ impl BufWriter {
 
         // There is nothing to write.
         if params.is_empty() || comments.is_empty() {
-            return Ok(())
+            return Ok(());
         }
 
         let heading = match &tag {

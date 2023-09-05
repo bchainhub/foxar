@@ -2,7 +2,7 @@ use crate::opts::error::PrivateKeyError;
 use async_trait::async_trait;
 use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
 use clap::Parser;
-use ethers::{
+use corebc::{
     signers::{
         coins_bip39::English, AwsSigner, AwsSignerError, HDPath as LedgerHDPath, Ledger,
         LedgerError, LocalWallet, MnemonicBuilder, Signer, Trezor, TrezorError, TrezorHDPath,
@@ -280,14 +280,14 @@ pub trait WalletTrait {
                         // SAFETY: at this point we know the user actually wanted to use an env var
                         // and most likely forgot the `$` anchor, so the
                         // `private_key` here is an unresolved env var
-                        return Err(PrivateKeyError::ExistsAsEnvVar(pk.to_string()))
+                        return Err(PrivateKeyError::ExistsAsEnvVar(pk.to_string()));
                     }
                     Ok(())
                 };
                 match err {
                     WalletError::HexError(err) => {
                         ensure_not_env(private_key)?;
-                        return Err(PrivateKeyError::InvalidHex(err).into())
+                        return Err(PrivateKeyError::InvalidHex(err).into());
                     }
                     WalletError::EcdsaError(_) => {
                         ensure_not_env(private_key)?;

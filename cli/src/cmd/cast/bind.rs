@@ -1,6 +1,6 @@
 use crate::opts::EtherscanOpts;
 use clap::{Parser, ValueHint};
-use ethers::prelude::{errors::EtherscanError, Abigen, Client, MultiAbigen};
+use corebc::prelude::{errors::EtherscanError, Abigen, Client, MultiAbigen};
 use eyre::Result;
 use foundry_config::Config;
 use std::path::{Path, PathBuf};

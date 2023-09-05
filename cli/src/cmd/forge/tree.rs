@@ -2,11 +2,11 @@
 
 use crate::cmd::Cmd;
 use clap::Parser;
-use ethers::solc::Graph;
+use corebc::solc::Graph;
 
 foundry_config::impl_figment_convert!(TreeArgs, opts);
 use crate::cmd::{forge::build::ProjectPathsArgs, LoadConfig};
-use ethers::solc::resolver::{Charset, TreeOptions};
+use corebc::solc::resolver::{Charset, TreeOptions};
 
 /// CLI arguments for `forge tree`.
 #[derive(Debug, Clone, Parser)]

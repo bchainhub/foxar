@@ -1,5 +1,5 @@
 use console::Emoji;
-use ethers::{
+use corebc::{
     abi::token::{LenientTokenizer, Tokenizer},
     prelude::TransactionReceipt,
     providers::Middleware,
@@ -403,7 +403,7 @@ impl<'a> Git<'a> {
                     output.status.code(),
                     stdout.trim(),
                     stderr.trim()
-                ))
+                ));
             }
         }
         Ok(())

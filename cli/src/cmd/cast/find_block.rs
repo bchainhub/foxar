@@ -3,7 +3,7 @@
 use crate::{opts::RpcOpts, utils};
 use cast::Cast;
 use clap::Parser;
-use ethers::prelude::*;
+use corebc::prelude::*;
 use eyre::Result;
 use foundry_config::Config;
 use futures::join;

@@ -5,7 +5,8 @@
 use crate::rlp_converter::Item;
 use base::{Base, NumberWithBase, ToBase};
 use chrono::NaiveDateTime;
-use ethers_core::{
+use corebc_blockindex::{errors::EtherscanError, Client};
+use corebc_core::{
     abi::{
         token::{LenientTokenizer, Tokenizer},
         Function, HumanReadableParser, ParamType, RawAbi, Token,
@@ -16,8 +17,7 @@ use ethers_core::{
         parse_units, rlp, Units,
     },
 };
-use ethers_etherscan::{errors::EtherscanError, Client};
-use ethers_providers::{Middleware, PendingTransaction};
+use corebc_providers::{Middleware, PendingTransaction};
 use evm_disassembler::{disassemble_bytes, disassemble_str, format_operations};
 use eyre::{Context, Result};
 use foundry_common::{abi::encode_args, fmt::*, TransactionReceiptWithRevertReason};
@@ -58,7 +58,7 @@ where
     ///
     /// ```
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
@@ -76,8 +76,8 @@ where
     ///
     /// ```no_run
     /// use cast::{Cast, TxBuilder};
-    /// use ethers_core::types::{Address, Chain};
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_core::types::{Address, Chain};
+    /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -146,8 +146,8 @@ where
     ///
     /// ```no_run
     /// use cast::{Cast, TxBuilder};
-    /// use ethers_core::types::{Address, Chain};
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_core::types::{Address, Chain};
+    /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -207,8 +207,8 @@ where
     ///
     /// ```no_run
     /// use cast::{Cast, TxBuilder};
-    /// use ethers_core::types::{Address, Chain, U256};
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_core::types::{Address, Chain, U256};
+    /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -249,7 +249,7 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
@@ -276,8 +276,8 @@ where
     ///
     /// ```no_run
     /// use cast::{Cast, TxBuilder};
-    /// use ethers_core::types::{Address, Chain, U256};
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_core::types::{Address, Chain, U256};
+    /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -310,7 +310,7 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
@@ -477,8 +477,8 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
-    /// use ethers_core::types::Address;
+    /// use corebc_providers::{Provider, Http};
+    /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -502,8 +502,8 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
-    /// use ethers_core::types::Address;
+    /// use corebc_providers::{Provider, Http};
+    /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -531,8 +531,8 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
-    /// use ethers_core::types::Address;
+    /// use corebc_providers::{Provider, Http};
+    /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -560,8 +560,8 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
-    /// use ethers_core::types::Address;
+    /// use corebc_providers::{Provider, Http};
+    /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -594,8 +594,8 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
-    /// use ethers_core::types::Address;
+    /// use corebc_providers::{Provider, Http};
+    /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -625,8 +625,8 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
-    /// use ethers_core::types::Address;
+    /// use corebc_providers::{Provider, Http};
+    /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -651,7 +651,7 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
@@ -690,7 +690,7 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
@@ -752,7 +752,7 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
+    /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
@@ -777,8 +777,8 @@ where
     ///
     /// ```no_run
     /// use cast::Cast;
-    /// use ethers_providers::{Provider, Http};
-    /// use ethers_core::types::{Address, H256};
+    /// use corebc_providers::{Provider, Http};
+    /// use corebc_core::types::{Address, H256};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -841,7 +841,7 @@ impl SimpleCast {
     ///
     /// ```
     /// # use cast::SimpleCast;
-    /// # use ethers_core::types::{I256, U256};
+    /// # use corebc_core::types::{I256, U256};
     /// assert_eq!(SimpleCast::max_int("uint256")?, format!("{}", U256::MAX));
     /// assert_eq!(SimpleCast::max_int("int256")?, format!("{}", I256::MAX));
     /// assert_eq!(SimpleCast::max_int("int32")?, format!("{}", i32::MAX));
@@ -857,7 +857,7 @@ impl SimpleCast {
     ///
     /// ```
     /// # use cast::SimpleCast;
-    /// # use ethers_core::types::{I256, U256};
+    /// # use corebc_core::types::{I256, U256};
     /// assert_eq!(SimpleCast::min_int("uint256")?, "0");
     /// assert_eq!(SimpleCast::min_int("int256")?, format!("{}", I256::MIN));
     /// assert_eq!(SimpleCast::min_int("int32")?, format!("{}", i32::MIN));
@@ -944,7 +944,7 @@ impl SimpleCast {
     /// Converts fixed point number into specified number of decimals
     /// ```
     /// use cast::SimpleCast as Cast;
-    /// use ethers_core::types::U256;
+    /// use corebc_core::types::U256;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::from_fixed_point("10", "0")?, "10");
@@ -971,7 +971,7 @@ impl SimpleCast {
     ///
     /// ```
     /// use cast::SimpleCast as Cast;
-    /// use ethers_core::types::U256;
+    /// use corebc_core::types::U256;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_fixed_point("10", "0")?, "10.");
@@ -1040,7 +1040,7 @@ impl SimpleCast {
     ///
     /// ```
     /// use cast::SimpleCast as Cast;
-    /// use ethers_core::types::Address;
+    /// use corebc_core::types::Address;
     /// use std::str::FromStr;
     ///
     /// # fn main() -> eyre::Result<()> {
@@ -1052,7 +1052,7 @@ impl SimpleCast {
     /// # }
     /// ```
     pub fn to_checksum_address(address: &Address) -> String {
-        ethers_core::utils::to_checksum(address, None)
+        corebc_core::utils::to_checksum(address, None)
     }
 
     /// Converts a number into uint256 hex string with 0x prefix
@@ -1128,13 +1128,13 @@ impl SimpleCast {
         let value = U256::from(LenientTokenizer::tokenize_uint(value)?);
 
         Ok(match unit {
-            "eth" | "ether" => ethers_core::utils::format_units(value, 18)?
+            "eth" | "ether" => corebc_core::utils::format_units(value, 18)?
                 .trim_end_matches(".000000000000000000")
                 .to_string(),
-            "gwei" | "nano" | "nanoether" => ethers_core::utils::format_units(value, 9)?
+            "gwei" | "nano" | "nanoether" => corebc_core::utils::format_units(value, 9)?
                 .trim_end_matches(".000000000")
                 .to_string(),
-            "wei" => ethers_core::utils::format_units(value, 0)?.trim_end_matches(".0").to_string(),
+            "wei" => corebc_core::utils::format_units(value, 0)?.trim_end_matches(".0").to_string(),
             _ => eyre::bail!("invalid unit: \"{}\"", unit),
         })
     }
@@ -1240,7 +1240,7 @@ impl SimpleCast {
     ///
     /// ```
     /// use cast::SimpleCast as Cast;
-    /// use ethers_core::types::{I256, U256};
+    /// use corebc_core::types::{I256, U256};
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_base("100", Some("10".to_string()), "16")?, "0x64");
@@ -1259,7 +1259,7 @@ impl SimpleCast {
         let base_in = Base::unwrap_or_detect(base_in, value)?;
         let base_out: Base = base_out.parse()?;
         if base_in == base_out {
-            return Ok(value.to_string())
+            return Ok(value.to_string());
         }
 
         let mut n = NumberWithBase::parse_int(value, Some(base_in.to_string()))?;
@@ -1329,13 +1329,13 @@ impl SimpleCast {
         let s = if let Some(stripped) = s.strip_prefix("000000000000000000000000") {
             stripped
         } else {
-            return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"))
+            return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"));
         };
 
         let lowercase_address_string = format!("0x{s}");
         let lowercase_address = Address::from_str(&lowercase_address_string)?;
 
-        Ok(ethers_core::utils::to_checksum(&lowercase_address, None))
+        Ok(corebc_core::utils::to_checksum(&lowercase_address, None))
     }
 
     /// Decodes abi-encoded hex input or output
@@ -1703,7 +1703,7 @@ impl SimpleCast {
     ///
     /// ```
     /// # use cast::SimpleCast as Cast;
-    /// # use ethers_core::types::Chain;
+    /// # use corebc_core::types::Chain;
     ///
     /// # async fn foo() -> eyre::Result<()> {
     ///     assert_eq!(
@@ -1732,7 +1732,7 @@ impl SimpleCast {
     ///
     /// ```
     /// # use cast::SimpleCast as Cast;
-    /// # use ethers_core::types::Chain;
+    /// # use corebc_core::types::Chain;
     /// # use std::path::PathBuf;
     ///
     /// # async fn expand() -> eyre::Result<()> {
@@ -1792,7 +1792,7 @@ impl SimpleCast {
         }
         if optimize == 0 {
             let selector = HumanReadableParser::parse_function(signature)?.short_signature();
-            return Ok((format!("0x{}", hex::encode(selector)), String::from(signature)))
+            return Ok((format!("0x{}", hex::encode(selector)), String::from(signature)));
         }
         let Some((name, params)) = signature.split_once('(') else {
             eyre::bail!("Invalid signature");
@@ -1814,7 +1814,7 @@ impl SimpleCast {
 
                     if selector.iter().take_while(|&&byte| byte == 0).count() == optimize {
                         found.store(true, Ordering::Relaxed);
-                        return Some((nonce, format!("0x{}", hex::encode(selector)), input))
+                        return Some((nonce, format!("0x{}", hex::encode(selector)), input));
                     }
 
                     nonce += nonce_step;

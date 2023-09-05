@@ -6,7 +6,7 @@ use clap::{
     builder::{PossibleValuesParser, TypedValueParser},
     Arg, Command, Parser, Subcommand,
 };
-use ethers::prelude::Chain;
+use corebc::prelude::Chain;
 use eyre::Result;
 use foundry_config::{cache, Config, Network as FoundryConfigChain};
 use std::{ffi::OsStr, str::FromStr};
@@ -142,7 +142,7 @@ fn clean_chain_cache(
     if blocks.is_empty() {
         Config::clean_foundry_etherscan_network_cache(chain)?;
         if etherscan {
-            return Ok(())
+            return Ok(());
         }
         Config::clean_foundry_network_cache(chain)?;
     } else {

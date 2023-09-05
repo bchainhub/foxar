@@ -3,7 +3,7 @@ use crate::{
     opts::forge::CompilerArgs,
 };
 use clap::{Parser, ValueHint};
-use ethers::solc::{
+use corebc::solc::{
     artifacts::RevertStrings, remappings::Remapping, utils::canonicalized, Project,
 };
 use foundry_config::{

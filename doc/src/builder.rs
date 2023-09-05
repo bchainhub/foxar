@@ -2,7 +2,7 @@ use crate::{
     document::DocumentContent, helpers::merge_toml_table, AsDoc, BufWriter, Document, ParseItem,
     ParseSource, Parser, Preprocessor,
 };
-use ethers_solc::utils::source_files_iter;
+use corebc_ylem::utils::source_files_iter;
 use forge_fmt::{FormatterConfig, Visitable};
 use foundry_config::DocConfig;
 use foundry_utils::glob::expand_globs;
@@ -96,7 +96,7 @@ impl DocBuilder {
 
         if sources.is_empty() {
             println!("No sources detected at {}", self.sources.display());
-            return Ok(())
+            return Ok(());
         }
 
         let documents = sources
@@ -335,7 +335,7 @@ impl DocBuilder {
         depth: usize,
     ) -> eyre::Result<()> {
         if files.is_empty() {
-            return Ok(())
+            return Ok(());
         }
 
         if let Some(path) = base_path {
