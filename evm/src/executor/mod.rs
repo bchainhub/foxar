@@ -5,7 +5,7 @@ use crate::{
     debug::DebugArena,
     decode,
     trace::CallTraceArena,
-    utils::{b160_to_h160, eval_to_instruction_result, h160_to_b160, halt_to_instruction_result},
+    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result},
     CALLER,
 };
 pub use abi::{
@@ -14,7 +14,7 @@ pub use abi::{
 };
 use backend::FuzzBackendWrapper;
 use bytes::Bytes;
-use ethers::{
+use corebc::{
     abi::{Abi, Contract, Detokenize, Function, Tokenize},
     prelude::{decode_function_data, encode_function_data, Address, U256},
     signers::LocalWallet,
@@ -30,7 +30,7 @@ pub use revm::{
     interpreter::{return_ok, CreateScheme, InstructionResult, Memory, Stack},
     primitives::{
         Account, BlockEnv, Bytecode, ExecutionResult, Output, ResultAndState, TransactTo, TxEnv,
-        B160, U256 as rU256,
+        B176, U256 as rU256,
     },
 };
 use std::collections::BTreeMap;
@@ -63,7 +63,7 @@ use crate::{
 pub use builder::ExecutorBuilder;
 
 /// A mapping of addresses to their changed state.
-pub type StateChangeset = HashMap<B160, Account>;
+pub type StateChangeset = HashMap<B176, Account>;
 
 pub const DEFAULT_CREATE2_DEPLOYER_CODE: &[u8] = &hex!("604580600e600039806000f350fe7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3");
 
@@ -147,7 +147,7 @@ impl Executor {
         trace!("deploying local create2 deployer");
         let create2_deployer_account = self
             .backend_mut()
-            .basic(h160_to_b160(DEFAULT_CREATE2_DEPLOYER))?
+            .basic(h176_to_b176(DEFAULT_CREATE2_DEPLOYER))?
             .ok_or(DatabaseError::MissingAccount(DEFAULT_CREATE2_DEPLOYER))?;
 
         // if the deployer is not currently deployed, deploy the default one
@@ -170,7 +170,7 @@ impl Executor {
     /// Set the balance of an account.
     pub fn set_balance(&mut self, address: Address, amount: U256) -> DatabaseResult<&mut Self> {
         trace!(?address, ?amount, "setting account balance");
-        let mut account = self.backend_mut().basic(h160_to_b160(address))?.unwrap_or_default();
+        let mut account = self.backend_mut().basic(h176_to_b176(address))?.unwrap_or_default();
         account.balance = amount.into();
 
         self.backend_mut().insert_account_info(address, account);
@@ -181,14 +181,14 @@ impl Executor {
     pub fn get_balance(&self, address: Address) -> DatabaseResult<U256> {
         Ok(self
             .backend()
-            .basic(h160_to_b160(address))?
+            .basic(h176_to_b176(address))?
             .map(|acc| acc.balance.into())
             .unwrap_or_default())
     }
 
     /// Set the nonce of an account.
     pub fn set_nonce(&mut self, address: Address, nonce: u64) -> DatabaseResult<&mut Self> {
-        let mut account = self.backend_mut().basic(h160_to_b160(address))?.unwrap_or_default();
+        let mut account = self.backend_mut().basic(h176_to_b176(address))?.unwrap_or_default();
         account.nonce = nonce;
 
         self.backend_mut().insert_account_info(address, account);
@@ -235,7 +235,7 @@ impl Executor {
         // record any changes made to the block's environment during setup
         self.env.block = res.env.block.clone();
         // and also the chainid, which can be set manually
-        self.env.cfg.chain_id = res.env.cfg.chain_id;
+        self.env.cfg.network = res.env.cfg.network.clone();
 
         match res.state_changeset.as_ref() {
             Some(changeset) => {
@@ -293,7 +293,7 @@ impl Executor {
         calldata: Bytes,
         value: U256,
     ) -> eyre::Result<RawCallResult> {
-        let env = self.build_test_env(from, TransactTo::Call(h160_to_b160(to)), calldata, value);
+        let env = self.build_test_env(from, TransactTo::Call(h176_to_b176(to)), calldata, value);
         let mut result = self.call_raw_with_env(env)?;
         self.commit(&mut result);
         Ok(result)
@@ -315,7 +315,7 @@ impl Executor {
         // execute the call
         let env = self.build_test_env(
             from,
-            TransactTo::Call(h160_to_b160(test_contract)),
+            TransactTo::Call(h176_to_b176(test_contract)),
             calldata,
             value,
         );
@@ -355,7 +355,7 @@ impl Executor {
         let mut inspector = self.inspector_config.stack();
         // Build VM
         let mut env =
-            self.build_test_env(from, TransactTo::Call(h160_to_b160(to)), calldata, value);
+            self.build_test_env(from, TransactTo::Call(h176_to_b176(to)), calldata, value);
         let mut db = FuzzBackendWrapper::new(self.backend());
         let result = db.inspect_ref(&mut env, &mut inspector)?;
 
@@ -481,12 +481,12 @@ impl Executor {
 
         // also mark this library as persistent, this will ensure that the state of the library is
         // persistent across fork swaps in forking mode
-        self.backend.add_persistent_account(b160_to_h160(address));
+        self.backend.add_persistent_account(b176_to_h176(address));
 
         trace!(address=?address, "deployed contract");
 
         Ok(DeployResult {
-            address: b160_to_h160(address),
+            address: b176_to_h176(address),
             gas_used,
             gas_refunded,
             logs,
@@ -554,7 +554,7 @@ impl Executor {
         // we only clone the test contract and cheatcode accounts, that's all we need to evaluate
         // success
         for addr in [address, CHEATCODE_ADDRESS] {
-            let acc = self.backend().basic(h160_to_b160(addr))?.unwrap_or_default();
+            let acc = self.backend().basic(h176_to_b176(addr))?.unwrap_or_default();
             backend.insert_account_info(addr, acc);
         }
 
@@ -601,7 +601,7 @@ impl Executor {
                 ..self.env.block.clone()
             },
             tx: TxEnv {
-                caller: h160_to_b160(caller),
+                caller: h176_to_b176(caller),
                 transact_to,
                 data,
                 value: value.into(),
@@ -640,7 +640,7 @@ pub enum EvmError {
     Execution(Box<ExecutionErr>),
     /// Error which occurred during ABI encoding/decoding
     #[error(transparent)]
-    AbiError(#[from] ethers::contract::AbiError),
+    AbiError(#[from] corebc::contract::AbiError),
     /// Error caused which occurred due to calling the skip() cheatcode.
     #[error("Skipped")]
     SkipError,

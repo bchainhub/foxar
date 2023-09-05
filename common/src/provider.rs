@@ -131,8 +131,8 @@ impl ProviderBuilder {
         self.max_retry(100).initial_backoff(100)
     }
 
-    /// Same as [`Self:build()`] but also retrieves the `networkId` in order to derive an appropriate
-    /// interval
+    /// Same as [`Self:build()`] but also retrieves the `networkId` in order to derive an
+    /// appropriate interval
     pub async fn connect(self) -> eyre::Result<RetryProvider> {
         let mut provider = self.build()?;
         if let Some(blocktime) = provider.get_networkid().await.ok().and_then(|id| {
@@ -205,8 +205,6 @@ impl<'a> From<Cow<'a, str>> for ProviderBuilder {
 }
 
 /// Estimates EIP1559 fees depending on the network
-///
-///
 pub async fn estimate_eip1559_fees<M: Middleware>(
     provider: &M,
     network: Option<u64>,

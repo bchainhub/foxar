@@ -4,11 +4,11 @@ use crate::{
     executor::{Executor, RawCallResult},
     trace::CallTraceArena,
 };
-use error::{FuzzError, ASSUME_MAGIC_RETURN_CODE};
-use ethers::{
+use corebc::{
     abi::{Abi, Function, Token},
-    types::{Address, Bytes, Log},
+    types::{Address, Bytes, Log, Network},
 };
+use error::{FuzzError, ASSUME_MAGIC_RETURN_CODE};
 use eyre::Result;
 use foundry_common::{calc, contracts::ContractsByAddress};
 use foundry_config::FuzzConfig;
@@ -87,14 +87,22 @@ impl<'a> FuzzedExecutor<'a> {
         };
 
         let mut weights = vec![];
+        let network = &Network::try_from(self.executor.env().cfg.network.as_u64()).unwrap();
+
         let dictionary_weight = self.config.dictionary.dictionary_weight.min(100);
         if self.config.dictionary.dictionary_weight < 100 {
-            weights.push((100 - dictionary_weight, fuzz_calldata(func.clone())));
+            weights.push((
+                100 - dictionary_weight,
+                fuzz_calldata(
+                    func.clone(),
+                    network,
+                ),
+            ));
         }
         if dictionary_weight > 0 {
             weights.push((
                 self.config.dictionary.dictionary_weight,
-                fuzz_calldata_from_state(func.clone(), state.clone()),
+                fuzz_calldata_from_state(func.clone(), state.clone(), network),
             ));
         }
 

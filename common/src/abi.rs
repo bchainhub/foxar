@@ -1,5 +1,6 @@
 //! ABI related helper functions
 
+use corebc_blockindex::{contract::ContractMetadata, errors::BlockindexError, Client};
 use corebc_core::{
     abi::{
         token::{LenientTokenizer, StrictTokenizer, Tokenizer},
@@ -8,7 +9,6 @@ use corebc_core::{
     types::{Address, Network, I256, U256},
     utils::hex,
 };
-use corebc_blockindex::{contract::ContractMetadata, errors::BlockindexError, Client};
 use eyre::{ContextCompat, Result, WrapErr};
 use std::{future::Future, pin::Pin, str::FromStr};
 use yansi::Paint;

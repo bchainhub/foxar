@@ -182,7 +182,8 @@ impl fmt::Display for Cache {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         for network in &self.networks {
             match NumberPrefix::decimal(
-                network.block_explorer as f32 + network.blocks.iter().map(|x| x.1).sum::<u64>() as f32,
+                network.block_explorer as f32 +
+                    network.blocks.iter().map(|x| x.1).sum::<u64>() as f32,
             ) {
                 NumberPrefix::Standalone(size) => {
                     writeln!(f, "-️ {} ({size:.1} B)", network.name)?;
@@ -245,7 +246,10 @@ mod tests {
 
         assert_eq!(
             w.rpc_storage_caching,
-            StorageCachingConfig { networks: CachedNetworks::All, endpoints: CachedEndpoints::Remote }
+            StorageCachingConfig {
+                networks: CachedNetworks::All,
+                endpoints: CachedEndpoints::Remote
+            }
         );
 
         let s = r#"rpc_storage_caching = { networks = [1, "devin", 999999], endpoints = "all"}"#;

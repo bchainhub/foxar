@@ -15,7 +15,7 @@ use ethers::{
     solc::{info::ContractInfo, Project},
 };
 use foundry_common::ContractsByArtifact;
-use foundry_config::{Network, Config};
+use foundry_config::{Config, Network};
 use semver::Version;
 
 /// Data struct to help `ScriptSequence` verify contracts on `etherscan`.

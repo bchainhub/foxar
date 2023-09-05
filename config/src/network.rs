@@ -143,9 +143,9 @@ impl<'de> Deserialize<'de> for Network {
             NetworkId::Named(s) => {
                 s.to_lowercase().parse().map(Network::Named).map_err(serde::de::Error::custom)
             }
-            NetworkId::Id(id) => {
-                Ok(NamedNetwork::try_from(id).map(Network::Named).unwrap_or_else(|_| Network::Id(id)))
-            }
+            NetworkId::Id(id) => Ok(NamedNetwork::try_from(id)
+                .map(Network::Named)
+                .unwrap_or_else(|_| Network::Id(id))),
         }
     }
 }

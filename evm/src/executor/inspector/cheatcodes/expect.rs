@@ -1,8 +1,8 @@
 use super::{bail, ensure, fmt_err, Cheatcodes, Result};
-use crate::{abi::HEVMCalls, executor::backend::DatabaseExt, utils::h160_to_b160};
-use ethers::{
+use crate::{abi::HEVMCalls, executor::backend::DatabaseExt, utils::h176_to_b176};
+use corebc::{
     abi::{AbiDecode, RawLog},
-    types::{Address, Bytes, H160, U256},
+    types::{Address, Bytes, H176, U256},
 };
 use foundry_utils::error::{ERROR_PREFIX, REVERT_PREFIX};
 use revm::{
@@ -22,7 +22,7 @@ static DUMMY_CALL_OUTPUT: [u8; 512] = [0u8; 512];
 
 /// Same reasoning as [DUMMY_CALL_OUTPUT], but for creates.
 static DUMMY_CREATE_ADDRESS: Address =
-    H160([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
+    H176([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
 
 #[derive(Clone, Debug, Default)]
 pub struct ExpectedRevert {
@@ -482,7 +482,7 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::MockCall0(inner) => {
             // TODO: Does this increase gas usage?
-            if let Err(err) = data.journaled_state.load_account(h160_to_b160(inner.0), data.db) {
+            if let Err(err) = data.journaled_state.load_account(h176_to_b176(inner.0), data.db) {
                 return Some(Err(err.into()))
             }
 
@@ -490,14 +490,14 @@ pub fn apply<DB: DatabaseExt>(
             // check Solidity might perform.
             let empty_bytecode = data
                 .journaled_state
-                .account(h160_to_b160(inner.0))
+                .account(h176_to_b176(inner.0))
                 .info
                 .code
                 .as_ref()
                 .map_or(true, Bytecode::is_empty);
             if empty_bytecode {
                 let code = Bytecode::new_raw(bytes::Bytes::from_static(&[0u8])).to_checked();
-                data.journaled_state.set_code(h160_to_b160(inner.0), code);
+                data.journaled_state.set_code(h176_to_b176(inner.0), code);
             }
             state.mocked_calls.entry(inner.0).or_default().insert(
                 MockCallDataContext { calldata: inner.1.clone(), value: None },
@@ -506,7 +506,7 @@ pub fn apply<DB: DatabaseExt>(
             Ok(Bytes::new())
         }
         HEVMCalls::MockCall1(inner) => {
-            if let Err(err) = data.journaled_state.load_account(h160_to_b160(inner.0), data.db) {
+            if let Err(err) = data.journaled_state.load_account(h176_to_b176(inner.0), data.db) {
                 return Some(Err(err.into()))
             }
 

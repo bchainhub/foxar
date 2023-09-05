@@ -9,7 +9,7 @@ use crate::{
     Address, U256,
 };
 use corebc::prelude::H256;
-use forge::utils::h160_to_b160;
+use forge::utils::h176_to_b176;
 use tracing::{trace, warn};
 
 // reexport for convenience
@@ -91,7 +91,7 @@ impl MaybeHashDatabase for MemDb {
     }
 
     fn maybe_account_db(&self, addr: Address) -> Option<(AsHashDB, H256)> {
-        if let Some(acc) = self.inner.accounts.get(&h160_to_b160(addr)) {
+        if let Some(acc) = self.inner.accounts.get(&h176_to_b176(addr)) {
             Some(storage_trie_db(&acc.storage))
         } else {
             Some(storage_trie_db(&Default::default()))

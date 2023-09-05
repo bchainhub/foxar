@@ -1,4 +1,4 @@
-use ethers::{
+use corebc::{
     types::Address,
     utils::{get_contract_address, get_create2_address},
 };
@@ -7,7 +7,7 @@ use revm::{
     primitives::{CreateScheme, SpecId},
 };
 
-use crate::utils::{b160_to_h160, ru256_to_u256};
+use crate::utils::{b176_to_h176, ru256_to_u256};
 
 /// Returns [InstructionResult::Continue] on an error, discarding the error.
 ///
@@ -25,12 +25,12 @@ macro_rules! try_or_continue {
 /// Get the address of a contract creation
 pub fn get_create_address(call: &CreateInputs, nonce: u64) -> Address {
     match call.scheme {
-        CreateScheme::Create => get_contract_address(b160_to_h160(call.caller), nonce),
+        CreateScheme::Create => get_contract_address(b176_to_h176(call.caller), nonce),
         CreateScheme::Create2 { salt } => {
             let salt = ru256_to_u256(salt);
             let mut salt_bytes = [0u8; 32];
             salt.to_big_endian(&mut salt_bytes);
-            get_create2_address(b160_to_h160(call.caller), salt_bytes, call.init_code.clone())
+            get_create2_address(b176_to_h176(call.caller), salt_bytes, call.init_code.clone())
         }
     }
 }

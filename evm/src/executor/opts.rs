@@ -1,15 +1,15 @@
 use crate::{
     executor::fork::CreateFork,
-    utils::{h160_to_b160, h256_to_b256, RuntimeOrHandle},
+    utils::{h176_to_b176, h256_to_b256, RuntimeOrHandle},
 };
-use ethers::{
+use corebc::{
     providers::{Middleware, Provider},
-    types::{Address, Block, Chain, TxHash, H256, U256},
+    types::{Address, Block, Network, TxHash, H256, U256},
 };
 use eyre::WrapErr;
 use foundry_common::{self, ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
 use foundry_config::Config;
-use revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256};
+use revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256, Network as REVMNetwork};
 use serde::{Deserialize, Deserializer, Serialize};
 
 use super::fork::environment;
@@ -81,7 +81,7 @@ impl EvmOpts {
             &provider,
             self.memory_limit,
             self.env.gas_price,
-            self.env.chain_id,
+            self.env.network_id,
             self.fork_block_number,
             self.sender,
         )
@@ -96,7 +96,7 @@ impl EvmOpts {
         revm::primitives::Env {
             block: BlockEnv {
                 number: rU256::from(self.env.block_number),
-                coinbase: h160_to_b160(self.env.block_coinbase),
+                coinbase: h176_to_b176(self.env.block_coinbase),
                 timestamp: rU256::from(self.env.block_timestamp),
                 difficulty: rU256::from(self.env.block_difficulty),
                 prevrandao: Some(h256_to_b256(self.env.block_prevrandao)),
@@ -104,7 +104,7 @@ impl EvmOpts {
                 gas_limit: self.gas_limit().into(),
             },
             cfg: CfgEnv {
-                chain_id: rU256::from(self.env.chain_id.unwrap_or(foundry_common::DEV_CHAIN_ID)),
+                network: REVMNetwork::from(self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID)),
                 spec_id: SpecId::MERGE,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
@@ -117,7 +117,7 @@ impl EvmOpts {
             tx: TxEnv {
                 gas_price: rU256::from(self.env.gas_price.unwrap_or_default()),
                 gas_limit: self.gas_limit().as_u64(),
-                caller: h160_to_b160(self.sender),
+                caller: h176_to_b176(self.sender),
                 ..Default::default()
             },
         }
@@ -138,7 +138,7 @@ impl EvmOpts {
     /// be at `~/.foundry/cache/mainnet/14435000/storage.json`
     pub fn get_fork(&self, config: &Config, env: revm::primitives::Env) -> Option<CreateFork> {
         let url = self.fork_url.clone()?;
-        let enable_caching = config.enable_caching(&url, env.cfg.chain_id.to::<u64>());
+        let enable_caching = config.enable_caching(&url, u64::from(env.cfg.network));
         Some(CreateFork { url, enable_caching, env, evm_opts: self.clone() })
     }
 
@@ -153,10 +153,10 @@ impl EvmOpts {
     ///   - the chain if `fork_url` is set and the endpoints returned its chain id successfully
     ///   - mainnet otherwise
     pub fn get_chain_id(&self) -> u64 {
-        if let Some(id) = self.env.chain_id {
+        if let Some(id) = self.env.network_id {
             return id
         }
-        self.get_remote_chain_id().map_or(Chain::Mainnet as u64, |id| id as u64)
+        self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), |id| id as u64)
     }
 
     /// Returns the available compute units per second, which will be
@@ -174,18 +174,18 @@ impl EvmOpts {
     }
 
     /// Returns the chain ID from the RPC, if any.
-    pub fn get_remote_chain_id(&self) -> Option<Chain> {
+    pub fn get_remote_chain_id(&self) -> Option<Network> {
         if let Some(ref url) = self.fork_url {
             if url.contains("mainnet") {
                 trace!(?url, "auto detected mainnet chain");
-                return Some(Chain::Mainnet)
+                return Some(Network::Mainnet)
             }
             trace!(?url, "retrieving chain via eth_chainId");
             let provider = Provider::try_from(url.as_str())
                 .unwrap_or_else(|_| panic!("Failed to establish provider to {url}"));
 
             if let Ok(id) = RuntimeOrHandle::new().block_on(provider.get_chainid()) {
-                return Chain::try_from(id.as_u64()).ok()
+                return Network::try_from(id.as_u64()).ok()
             }
         }
 
@@ -199,8 +199,8 @@ pub struct Env {
     #[serde(deserialize_with = "string_or_number")]
     pub gas_limit: u64,
 
-    /// the chainid opcode value
-    pub chain_id: Option<u64>,
+    /// the networkid opcode value
+    pub network_id: Option<u64>,
 
     /// the tx.gasprice value during EVM execution
     ///

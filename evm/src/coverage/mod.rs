@@ -2,7 +2,7 @@ pub mod analysis;
 pub mod anchors;
 
 use bytes::Bytes;
-use ethers::types::H256;
+use corebc::types::H256;
 use semver::Version;
 use std::{
     collections::{BTreeMap, HashMap},

@@ -1,7 +1,8 @@
 use super::state::EvmFuzzState;
-use ethers::{
+use corebc::{
     abi::{ParamType, Token, Tokenizable},
-    types::{Address, Bytes, I256, U256},
+    types::{Address, Bytes, Network, I256, U256, H160},
+    utils::to_ican,
 };
 use proptest::prelude::*;
 
@@ -11,12 +12,14 @@ pub const MAX_ARRAY_LEN: usize = 256;
 /// Given a parameter type, returns a strategy for generating values for that type.
 ///
 /// Works with ABI Encoder v2 tuples.
-pub fn fuzz_param(param: &ParamType) -> impl Strategy<Value = Token> {
+pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = Token> {
     match param {
         ParamType::Address => {
             // The key to making this work is the `boxed()` call which type erases everything
             // https://altsysrq.github.io/proptest-book/proptest/tutorial/transforming-strategies.html
-            any::<[u8; 20]>().prop_map(|x| Address::from_slice(&x).into_token()).boxed()
+            any::<[u8; 20]>()
+                .prop_map(move |x| to_ican(&H160::from_slice(&x[12..]), &network).into_token())
+                .boxed()
         }
         ParamType::Bytes => any::<Vec<u8>>().prop_map(|x| Bytes::from(x).into_token()).boxed(),
         ParamType::Int(n) => {
@@ -29,24 +32,29 @@ pub fn fuzz_param(param: &ParamType) -> impl Strategy<Value = Token> {
         ParamType::String => any::<Vec<u8>>()
             .prop_map(|x| Token::String(unsafe { std::str::from_utf8_unchecked(&x).to_string() }))
             .boxed(),
-        ParamType::Array(param) => proptest::collection::vec(fuzz_param(param), 0..MAX_ARRAY_LEN)
-            .prop_map(Token::Array)
-            .boxed(),
+        ParamType::Array(param) => {
+            proptest::collection::vec(fuzz_param(param, network), 0..MAX_ARRAY_LEN)
+                .prop_map(Token::Array)
+                .boxed()
+        }
         ParamType::FixedBytes(size) => (0..*size as u64)
             .map(|_| any::<u8>())
             .collect::<Vec<_>>()
             .prop_map(Token::FixedBytes)
             .boxed(),
-        ParamType::FixedArray(param, size) => {
-            std::iter::repeat_with(|| fuzz_param(param).prop_map(|param| param.into_token()))
-                .take(*size)
-                .collect::<Vec<_>>()
-                .prop_map(Token::FixedArray)
-                .boxed()
-        }
-        ParamType::Tuple(params) => {
-            params.iter().map(fuzz_param).collect::<Vec<_>>().prop_map(Token::Tuple).boxed()
-        }
+        ParamType::FixedArray(param, size) => std::iter::repeat_with(|| {
+            fuzz_param(param, network).prop_map(|param| param.into_token())
+        })
+        .take(*size)
+        .collect::<Vec<_>>()
+        .prop_map(Token::FixedArray)
+        .boxed(),
+        ParamType::Tuple(params) => params
+            .iter()
+            .map(|x| fuzz_param(x, network))
+            .collect::<Vec<_>>()
+            .prop_map(Token::Tuple)
+            .boxed(),
     }
 }
 
@@ -54,7 +62,7 @@ pub fn fuzz_param(param: &ParamType) -> impl Strategy<Value = Token> {
 /// fuzz state.
 ///
 /// Works with ABI Encoder v2 tuples.
-pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState) -> BoxedStrategy<Token> {
+pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState, network: &Network) -> BoxedStrategy<Token> {
     // These are to comply with lifetime requirements
     let state_len = arc_state.read().values().len();
 
@@ -66,8 +74,8 @@ pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState) -> Boxe
 
     // Convert the value based on the parameter type
     match param {
-        ParamType::Address => {
-            value.prop_map(move |value| Address::from_slice(&value[12..]).into_token()).boxed()
+        ParamType::Address => { 
+            value.prop_map(move |value| to_ican(&H160::from_slice(&value[12..]), network).into_token()).boxed()
         }
         ParamType::Bytes => value.prop_map(move |value| Bytes::from(value).into_token()).boxed(),
         ParamType::Int(n) => match n / 8 {
@@ -104,7 +112,7 @@ pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState) -> Boxe
             })
             .boxed(),
         ParamType::Array(param) => {
-            proptest::collection::vec(fuzz_param_from_state(param, arc_state), 0..MAX_ARRAY_LEN)
+            proptest::collection::vec(fuzz_param_from_state(param, arc_state, network), 0..MAX_ARRAY_LEN)
                 .prop_map(Token::Array)
                 .boxed()
         }
@@ -114,13 +122,13 @@ pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState) -> Boxe
         }
         ParamType::FixedArray(param, size) => {
             let fixed_size = *size;
-            proptest::collection::vec(fuzz_param_from_state(param, arc_state), fixed_size)
+            proptest::collection::vec(fuzz_param_from_state(param, arc_state, network), fixed_size)
                 .prop_map(Token::FixedArray)
                 .boxed()
         }
         ParamType::Tuple(params) => params
             .iter()
-            .map(|p| fuzz_param_from_state(p, arc_state.clone()))
+            .map(|p| fuzz_param_from_state(p, arc_state.clone(), network))
             .collect::<Vec<_>>()
             .prop_map(Token::Tuple)
             .boxed(),
@@ -130,7 +138,7 @@ pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState) -> Boxe
 #[cfg(test)]
 mod tests {
     use crate::fuzz::strategies::{build_initial_state, fuzz_calldata, fuzz_calldata_from_state};
-    use ethers::abi::HumanReadableParser;
+    use corebc::abi::HumanReadableParser;
     use foundry_config::FuzzDictionaryConfig;
     use revm::db::{CacheDB, EmptyDB};
 
@@ -143,8 +151,8 @@ mod tests {
         let state = build_initial_state(&db, &FuzzDictionaryConfig::default());
 
         let strat = proptest::strategy::Union::new_weighted(vec![
-            (60, fuzz_calldata(func.clone())),
-            (40, fuzz_calldata_from_state(func, state)),
+            (60, fuzz_calldata(func.clone(), &corebc::types::Network::Mainnet)),
+            (40, fuzz_calldata_from_state(func, state, &corebc::types::Network::Mainnet)),
         ]);
 
         let cfg = proptest::test_runner::Config { failure_persistence: None, ..Default::default() };

@@ -7,7 +7,7 @@ use crate::{
     },
     CallKind,
 };
-use ethers::{
+use corebc::{
     abi::{Abi, Function},
     types::{Action, Address, Call, CallResult, Create, CreateResult, Res, Suicide},
 };

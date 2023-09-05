@@ -8,7 +8,7 @@ use clap::{
 };
 use ethers::prelude::Chain;
 use eyre::Result;
-use foundry_config::{cache, Network as FoundryConfigChain, Config};
+use foundry_config::{cache, Config, Network as FoundryConfigChain};
 use std::{ffi::OsStr, str::FromStr};
 use strum::VariantNames;
 

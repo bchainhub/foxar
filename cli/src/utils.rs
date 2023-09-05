@@ -7,7 +7,7 @@ use ethers::{
     utils::{format_units, to_checksum},
 };
 use eyre::Result;
-use foundry_config::{Network, Config};
+use foundry_config::{Config, Network};
 use std::{
     ffi::OsStr,
     future::Future,

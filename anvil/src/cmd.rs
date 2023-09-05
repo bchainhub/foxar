@@ -8,7 +8,7 @@ use anvil_server::ServerConfig;
 use clap::Parser;
 use core::fmt;
 use corebc::utils::WEI_IN_ETHER;
-use foundry_config::{Network, Config};
+use foundry_config::{Config, Network};
 use futures::FutureExt;
 use std::{
     future::Future,

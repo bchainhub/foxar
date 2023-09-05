@@ -2,7 +2,7 @@ use bytes::Bytes;
 use revm::{
     inspectors::GasInspector,
     interpreter::{opcode, CallInputs, CreateInputs, Gas, InstructionResult, Interpreter},
-    primitives::B160,
+    primitives::B176,
     Database, EVMData, Inspector,
 };
 
@@ -100,7 +100,7 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
         &mut self,
         _data: &mut EVMData<'_, DB>,
         inputs: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
         println!(
             "CREATE CALL: caller:{:?}, scheme:{:?}, value:{:?}, init_code:{:?}, gas:{:?}",
             inputs.caller,
@@ -117,10 +117,10 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
         data: &mut EVMData<'_, DB>,
         inputs: &CreateInputs,
         ret: InstructionResult,
-        address: Option<B160>,
+        address: Option<B176>,
         remaining_gas: Gas,
         out: Bytes,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
         self.gas_inspector.create_end(data, inputs, ret, address, remaining_gas, out.clone());
         (ret, address, remaining_gas, out)
     }

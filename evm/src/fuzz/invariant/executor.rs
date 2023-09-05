@@ -15,12 +15,13 @@ use crate::{
         },
         FuzzCase, FuzzedCases,
     },
-    utils::{get_function, h160_to_b160},
+    utils::{get_function, h176_to_b176},
     CALLER,
 };
-use ethers::{
+use corebc::{
     abi::{Abi, Address, Detokenize, FixedBytes, Function, Tokenizable, TokenizableItem},
     prelude::U256,
+    types::Network,
 };
 use eyre::ContextCompat;
 use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
@@ -31,7 +32,7 @@ use proptest::{
     strategy::{BoxedStrategy, Strategy, ValueTree},
     test_runner::{TestCaseError, TestRunner},
 };
-use revm::{primitives::B160, DatabaseCommit};
+use revm::{primitives::B176, DatabaseCommit};
 use std::{cell::RefCell, collections::BTreeMap, sync::Arc};
 
 /// Alias for (Dictionary for fuzzing, initial contracts to fuzz and an InvariantStrategy).
@@ -257,12 +258,13 @@ impl<'a> InvariantExecutor<'a> {
         let targeted_contracts: FuzzRunIdentifiedContracts =
             Arc::new(Mutex::new(targeted_contracts));
 
-        // Creates the invariant strategy.
+        // Creates the invariant strategy.`
         let strat = invariant_strat(
             fuzz_state.clone(),
             targeted_senders,
             targeted_contracts.clone(),
             self.config.dictionary.dictionary_weight,
+            &self.executor.env().cfg.network,
         )
         .no_shrink()
         .boxed();
@@ -280,6 +282,7 @@ impl<'a> InvariantExecutor<'a> {
                     fuzz_state.clone(),
                     targeted_contracts.clone(),
                     target_contract_ref.clone(),
+                    &Network::try_from(self.executor.env().cfg.network_id).unwrap(),
                 ),
                 target_contract_ref,
             ));
@@ -344,7 +347,7 @@ impl<'a> InvariantExecutor<'a> {
                 .filter(|func| {
                     !matches!(
                         func.state_mutability,
-                        ethers::abi::StateMutability::Pure | ethers::abi::StateMutability::View
+                        corebc::abi::StateMutability::Pure | corebc::abi::StateMutability::View
                     )
                 })
                 .count() ==
@@ -521,7 +524,7 @@ impl<'a> InvariantExecutor<'a> {
 /// before inserting it into the dictionary. Otherwise, we flood the dictionary with
 /// randomly generated addresses.
 fn collect_data(
-    state_changeset: &mut HashMap<B160, revm::primitives::Account>,
+    state_changeset: &mut HashMap<B176, revm::primitives::Account>,
     sender: &Address,
     call_result: &RawCallResult,
     fuzz_state: EvmFuzzState,
@@ -530,7 +533,7 @@ fn collect_data(
     // Verify it has no code.
     let mut has_code = false;
     if let Some(Some(code)) =
-        state_changeset.get(&h160_to_b160(*sender)).map(|account| account.info.code.as_ref())
+        state_changeset.get(&h176_to_b176(*sender)).map(|account| account.info.code.as_ref())
     {
         has_code = !code.is_empty();
     }
@@ -538,14 +541,14 @@ fn collect_data(
     // We keep the nonce changes to apply later.
     let mut sender_changeset = None;
     if !has_code {
-        sender_changeset = state_changeset.remove(&h160_to_b160(*sender));
+        sender_changeset = state_changeset.remove(&h176_to_b176(*sender));
     }
 
     collect_state_from_call(&call_result.logs, &*state_changeset, fuzz_state, config);
 
     // Re-add changes
     if let Some(changed) = sender_changeset {
-        state_changeset.insert(h160_to_b160(*sender), changed);
+        state_changeset.insert(h176_to_b176(*sender), changed);
     }
 }
 

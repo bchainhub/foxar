@@ -10,7 +10,7 @@ use ethers::{
     types::{BlockId, NameOrAddress},
 };
 use eyre::WrapErr;
-use foundry_config::{Network, Config};
+use foundry_config::{Config, Network};
 use std::str::FromStr;
 
 /// CLI arguments for `cast access-list`.

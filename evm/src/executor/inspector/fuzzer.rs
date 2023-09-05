@@ -1,6 +1,6 @@
 use crate::{
     fuzz::{invariant::RandomCallGenerator, strategies::EvmFuzzState},
-    utils::{self, b160_to_h160, h160_to_b160},
+    utils::{self, b176_to_h176, h176_to_b176},
 };
 use bytes::Bytes;
 use revm::{
@@ -98,21 +98,21 @@ impl Fuzzer {
     fn override_call(&mut self, call: &mut CallInputs) {
         if let Some(ref mut call_generator) = self.call_generator {
             // We only override external calls which are not coming from the test contract.
-            if call.context.caller != h160_to_b160(call_generator.test_address) &&
+            if call.context.caller != h176_to_b176(call_generator.test_address) &&
                 call.context.scheme == CallScheme::Call &&
                 !call_generator.used
             {
                 // There's only a 30% chance that an override happens.
                 if let Some((sender, (contract, input))) = call_generator
-                    .next(b160_to_h160(call.context.caller), b160_to_h160(call.contract))
+                    .next(b176_to_h176(call.context.caller), b176_to_h176(call.contract))
                 {
                     call.input = input.0;
-                    call.context.caller = h160_to_b160(sender);
-                    call.contract = h160_to_b160(contract);
+                    call.context.caller = h176_to_b176(sender);
+                    call.contract = h176_to_b176(contract);
 
                     // TODO: in what scenarios can the following be problematic
-                    call.context.code_address = h160_to_b160(contract);
-                    call.context.address = h160_to_b160(contract);
+                    call.context.code_address = h176_to_b176(contract);
+                    call.context.address = h176_to_b176(contract);
 
                     call_generator.used = true;
                 }

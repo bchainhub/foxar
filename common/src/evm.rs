@@ -9,7 +9,7 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile, Provider,
     },
-    Network, Config,
+    Config, Network,
 };
 use serde::Serialize;
 use std::collections::HashMap;

@@ -1,10 +1,10 @@
-use ethers::core::rand::Rng;
+use corebc::core::rand::Rng;
 use proptest::{
     strategy::{NewTree, Strategy, ValueTree},
     test_runner::TestRunner,
 };
 
-use ethers::types::U256;
+use corebc::types::U256;
 
 /// Value tree for unsigned ints (up to uint256).
 /// This is very similar to [proptest::BinarySearch]

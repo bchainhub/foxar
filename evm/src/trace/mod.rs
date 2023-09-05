@@ -1,12 +1,11 @@
 use crate::{
     abi::CHEATCODE_ADDRESS, debug::Instruction, trace::identifier::LocalTraceIdentifier, CallKind,
 };
-pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
-use ethers::{
+use corebc::{
     abi::{ethereum_types::BigEndianHash, Address, RawLog},
-    core::utils::to_checksum,
     types::{Bytes, DefaultFrame, GethDebugTracingOptions, StructLog, H256, U256},
 };
+pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
 use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
 use hashbrown::HashMap;
 use node::CallTraceNode;
@@ -506,7 +505,7 @@ impl Default for CallTrace {
 
 impl fmt::Display for CallTrace {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let address = to_checksum(&self.address, None);
+        let address = &self.address;
         if self.created() {
             write!(
                 f,

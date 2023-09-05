@@ -1,10 +1,10 @@
-use ethers::{core::rand::Rng, prelude::Sign};
+use corebc::{core::rand::Rng, prelude::Sign};
 use proptest::{
     strategy::{NewTree, Strategy, ValueTree},
     test_runner::TestRunner,
 };
 
-use ethers::types::{I256, U256};
+use corebc::types::{I256, U256};
 
 /// Value tree for signed ints (up to int256).
 /// This is very similar to [proptest::BinarySearch]

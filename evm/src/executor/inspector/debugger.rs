@@ -5,11 +5,11 @@ use crate::{
         inspector::utils::{gas_used, get_create_address},
         CHEATCODE_ADDRESS,
     },
-    utils::b160_to_h160,
+    utils::b176_to_h176,
     CallKind,
 };
 use bytes::Bytes;
-use ethers::types::Address;
+use corebc::types::Address;
 use foundry_utils::error::SolError;
 use revm::{
     inspectors::GasInspector,
@@ -17,7 +17,7 @@ use revm::{
         opcode::{self, spec_opcode_gas},
         CallInputs, CreateInputs, Gas, InstructionResult, Interpreter, Memory,
     },
-    primitives::B160,
+    primitives::B176,
     EVMData, Inspector,
 };
 use std::{cell::RefCell, rc::Rc};
@@ -116,10 +116,10 @@ where
     ) -> (InstructionResult, Gas, Bytes) {
         self.enter(
             data.journaled_state.depth() as usize,
-            b160_to_h160(call.context.code_address),
+            b176_to_h176(call.context.code_address),
             call.context.scheme.into(),
         );
-        if CHEATCODE_ADDRESS == b160_to_h160(call.contract) {
+        if CHEATCODE_ADDRESS == b176_to_h176(call.contract) {
             self.arena.arena[self.head].steps.push(DebugStep {
                 memory: Memory::new(),
                 instruction: Instruction::Cheatcode(
@@ -150,7 +150,7 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
         // TODO: Does this increase gas cost?
         if let Err(err) = data.journaled_state.load_account(call.caller, data.db) {
             let gas = Gas::new(call.gas_limit);
@@ -172,10 +172,10 @@ where
         _: &mut EVMData<'_, DB>,
         _: &CreateInputs,
         status: InstructionResult,
-        address: Option<B160>,
+        address: Option<B176>,
         gas: Gas,
         retdata: Bytes,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
         self.exit();
 
         (status, address, gas, retdata)

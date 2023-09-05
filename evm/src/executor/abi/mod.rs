@@ -1,4 +1,4 @@
-use ethers::types::{Address, Selector, H160};
+use corebc::types::{Address, Selector, H176};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -11,8 +11,8 @@ pub use foundry_abi::{
 /// The cheatcode handler address (0x7109709ECfa91a80626fF3989D68f67F5b1DD12D).
 ///
 /// This is the same address as the one used in DappTools's HEVM.
-/// `address(bytes20(uint160(uint256(keccak256('hevm cheat code')))))`
-pub const CHEATCODE_ADDRESS: Address = H160([
+/// `address(bytes20(uint160(uint256(sha3('hevm cheat code')))))`
+pub const CHEATCODE_ADDRESS: Address = H176([
     0x71, 0x09, 0x70, 0x9E, 0xcf, 0xa9, 0x1a, 0x80, 0x62, 0x6f, 0xf3, 0x98, 0x9d, 0x68, 0xf6, 0x7f,
     0x5b, 0x1d, 0xd1, 0x2d,
 ]);
@@ -20,7 +20,7 @@ pub const CHEATCODE_ADDRESS: Address = H160([
 /// The Hardhat console address (0x000000000000000000636F6e736F6c652e6c6f67).
 ///
 /// See: https://github.com/nomiclabs/hardhat/blob/master/packages/hardhat-core/console.sol
-pub const HARDHAT_CONSOLE_ADDRESS: Address = H160([
+pub const HARDHAT_CONSOLE_ADDRESS: Address = H176([
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x65,
     0x2e, 0x6c, 0x6f, 0x67,
 ]);

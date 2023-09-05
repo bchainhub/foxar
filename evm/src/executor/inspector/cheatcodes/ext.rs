@@ -1,6 +1,6 @@
 use super::{bail, ensure, fmt_err, Cheatcodes, Result};
 use crate::{abi::HEVMCalls, executor::inspector::cheatcodes::util};
-use ethers::{
+use corebc::{
     abi::{self, AbiEncode, JsonAbi, ParamType, Token},
     prelude::artifacts::CompactContractBytecode,
     types::*,
@@ -211,11 +211,11 @@ fn value_to_token(value: &Value) -> Result<Token> {
             Err(fmt_err!("Unsupported value: {number:?}"))
         }
         Value::String(string) => {
-            if let Some(val) = string.strip_prefix("0x") {
-                // If it can decoded as an address, it's an address
-                if let Ok(addr) = H160::from_str(string) {
-                    Ok(Token::Address(addr))
-                } else if hex::decode(val).is_ok() {
+            // If it can decoded as an address, it's an address
+            if let Ok(addr) = H176::from_str(string) {
+                Ok(Token::Address(addr))
+            } else if let Some(val) = string.strip_prefix("0x") {
+                if hex::decode(val).is_ok() {
                     // if length == 32 bytes, then encode as Bytes32, else Bytes
                     Ok(if val.len() == 64 {
                         Token::FixedBytes(Vec::from_hex(val).unwrap())
@@ -565,7 +565,7 @@ pub fn apply(state: &mut Cheatcodes, call: &HEVMCalls) -> Option<Result> {
 mod tests {
     use super::*;
     use crate::executor::inspector::CheatsConfig;
-    use ethers::core::abi::AbiDecode;
+    use corebc::core::abi::AbiDecode;
     use std::{path::PathBuf, sync::Arc};
 
     fn cheats() -> Cheatcodes {

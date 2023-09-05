@@ -14,7 +14,7 @@ use forge::{
         db::{CacheDB, DbAccount},
         primitives::{Bytecode, B160, U256 as rU256},
     },
-    utils::{b160_to_h160, b256_to_h256, ru256_to_u256, u256_to_ru256},
+    utils::{b176_to_h176, b256_to_h256, ru256_to_u256, u256_to_ru256},
 };
 use foundry_evm::{
     executor::backend::DatabaseError,
@@ -33,7 +33,7 @@ pub fn log_rlp_hash(logs: Vec<Log>) -> H256 {
     for log in logs {
         let topics = log.topics.into_iter().map(b256_to_h256).collect::<Vec<_>>();
         stream.begin_list(3);
-        stream.append(&b160_to_h160(log.address));
+        stream.append(&b176_to_h176(log.address));
         stream.append_list(&topics);
         stream.append(&log.data);
     }

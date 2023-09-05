@@ -8,9 +8,9 @@ use crate::{
             DealRecord,
         },
     },
-    utils::{b160_to_h160, h160_to_b160, ru256_to_u256, u256_to_ru256},
+    utils::{b176_to_h176, h176_to_b176, ru256_to_u256, u256_to_ru256},
 };
-use ethers::{
+use corebc::{
     abi::{self, AbiEncode, RawLog, Token, Tokenizable, Tokenize},
     signers::{LocalWallet, Signer},
     types::{Address, Bytes, U256},
@@ -134,12 +134,13 @@ fn broadcast_key(
     private_key: U256,
     original_caller: Address,
     original_origin: Address,
-    chain_id: U256,
+    network_id: U256,
     depth: u64,
     single_call: bool,
 ) -> Result {
+    //TODO:error2215 implement Ed448 keys and ICAN Addresses?
     let key = super::util::parse_private_key(private_key)?;
-    let wallet = LocalWallet::from(key).with_chain_id(chain_id.as_u64());
+    let wallet = LocalWallet::from(key).with_chain_id(network_id.as_u64());
     let new_origin = wallet.address();
 
     let result = broadcast(state, new_origin, original_caller, original_origin, depth, single_call);
@@ -246,13 +247,13 @@ fn accesses(state: &mut Cheatcodes, address: Address) -> Bytes {
     if let Some(storage_accesses) = &mut state.accesses {
         let first_token =
             |x: Option<Vec<_>>| x.unwrap_or_default().into_tokens().into_iter().next().unwrap();
-        ethers::abi::encode(&[
+        corebc::abi::encode(&[
             first_token(storage_accesses.reads.remove(&address)),
             first_token(storage_accesses.writes.remove(&address)),
         ])
         .into()
     } else {
-        ethers::abi::encode(&[Token::Array(vec![]), Token::Array(vec![])]).into()
+        corebc::abi::encode(&[Token::Array(vec![]), Token::Array(vec![])]).into()
     }
 }
 
@@ -351,17 +352,17 @@ pub fn apply<DB: DatabaseExt>(
             Bytes::new()
         }
         HEVMCalls::Coinbase(inner) => {
-            data.env.block.coinbase = h160_to_b160(inner.0);
+            data.env.block.coinbase = h176_to_b176(inner.0);
             Bytes::new()
         }
         HEVMCalls::Store(inner) => {
             ensure!(!is_potential_precompile(inner.0), "Store cannot be used on precompile addresses (N < 10). Please use an address bigger than 10 instead");
-            data.journaled_state.load_account(h160_to_b160(inner.0), data.db)?;
+            data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
             // ensure the account is touched
-            data.journaled_state.touch(&h160_to_b160(inner.0));
+            data.journaled_state.touch(&h176_to_b176(inner.0));
 
             data.journaled_state.sstore(
-                h160_to_b160(inner.0),
+                h176_to_b176(inner.0),
                 u256_to_ru256(inner.1.into()),
                 u256_to_ru256(inner.2.into()),
                 data.db,
@@ -371,9 +372,9 @@ pub fn apply<DB: DatabaseExt>(
         HEVMCalls::Load(inner) => {
             ensure!(!is_potential_precompile(inner.0), "Load cannot be used on precompile addresses (N < 10). Please use an address bigger than 10 instead");
             // TODO: Does this increase gas usage?
-            data.journaled_state.load_account(h160_to_b160(inner.0), data.db)?;
+            data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
             let (val, _) = data.journaled_state.sload(
-                h160_to_b160(inner.0),
+                h176_to_b176(inner.0),
                 u256_to_ru256(inner.1.into()),
                 data.db,
             )?;
@@ -386,9 +387,9 @@ pub fn apply<DB: DatabaseExt>(
             let code = inner.1.clone();
             trace!(address=?inner.0, code=?hex::encode(&code), "etch cheatcode");
             // TODO: Does this increase gas usage?
-            data.journaled_state.load_account(h160_to_b160(inner.0), data.db)?;
+            data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
             data.journaled_state
-                .set_code(h160_to_b160(inner.0), Bytecode::new_raw(code.0).to_checked());
+                .set_code(h176_to_b176(inner.0), Bytecode::new_raw(code.0).to_checked());
             Bytes::new()
         }
         HEVMCalls::Deal(inner) => {
@@ -411,7 +412,7 @@ pub fn apply<DB: DatabaseExt>(
         HEVMCalls::Prank0(inner) => prank(
             state,
             caller,
-            b160_to_h160(data.env.tx.caller),
+            b176_to_h176(data.env.tx.caller),
             inner.0,
             None,
             data.journaled_state.depth(),
@@ -420,7 +421,7 @@ pub fn apply<DB: DatabaseExt>(
         HEVMCalls::Prank1(inner) => prank(
             state,
             caller,
-            b160_to_h160(data.env.tx.caller),
+            b176_to_h176(data.env.tx.caller),
             inner.0,
             Some(inner.1),
             data.journaled_state.depth(),
@@ -429,7 +430,7 @@ pub fn apply<DB: DatabaseExt>(
         HEVMCalls::StartPrank0(inner) => prank(
             state,
             caller,
-            b160_to_h160(data.env.tx.caller),
+            b176_to_h176(data.env.tx.caller),
             inner.0,
             None,
             data.journaled_state.depth(),
@@ -438,7 +439,7 @@ pub fn apply<DB: DatabaseExt>(
         HEVMCalls::StartPrank1(inner) => prank(
             state,
             caller,
-            b160_to_h160(data.env.tx.caller),
+            b176_to_h176(data.env.tx.caller),
             inner.0,
             Some(inner.1),
             data.journaled_state.depth(),
@@ -449,7 +450,7 @@ pub fn apply<DB: DatabaseExt>(
             state.prank = None;
             Bytes::new()
         }
-        HEVMCalls::ReadCallers(_) => read_callers(state, b160_to_h160(data.env.tx.caller)),
+        HEVMCalls::ReadCallers(_) => read_callers(state, b176_to_h176(data.env.tx.caller)),
         HEVMCalls::Record(_) => {
             start_record(state);
             Bytes::new()
@@ -505,7 +506,7 @@ pub fn apply<DB: DatabaseExt>(
         )??,
         HEVMCalls::GetNonce(inner) => {
             correct_sender_nonce(
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
@@ -513,15 +514,15 @@ pub fn apply<DB: DatabaseExt>(
 
             // TODO:  this is probably not a good long-term solution since it might mess up the gas
             // calculations
-            data.journaled_state.load_account(h160_to_b160(inner.0), data.db)?;
+            data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
 
             // we can safely unwrap because `load_account` insert inner.0 to DB.
-            let account = data.journaled_state.state().get(&h160_to_b160(inner.0)).unwrap();
+            let account = data.journaled_state.state().get(&h176_to_b176(inner.0)).unwrap();
             abi::encode(&[Token::Uint(account.info.nonce.into())]).into()
         }
         HEVMCalls::ChainId(inner) => {
             ensure!(inner.0 <= U256::from(u64::MAX), "Chain ID must be less than 2^64 - 1");
-            data.env.cfg.chain_id = inner.0.into();
+            data.env.cfg.network_id = inner.0.into();
             Bytes::new()
         }
         HEVMCalls::TxGasPrice(inner) => {
@@ -530,23 +531,23 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::Broadcast0(_) => {
             correct_sender_nonce(
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
             )?;
             broadcast(
                 state,
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 caller,
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 data.journaled_state.depth(),
                 true,
             )?
         }
         HEVMCalls::Broadcast1(inner) => {
             correct_sender_nonce(
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
@@ -555,14 +556,14 @@ pub fn apply<DB: DatabaseExt>(
                 state,
                 inner.0,
                 caller,
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 data.journaled_state.depth(),
                 true,
             )?
         }
         HEVMCalls::Broadcast2(inner) => {
             correct_sender_nonce(
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
@@ -571,31 +572,31 @@ pub fn apply<DB: DatabaseExt>(
                 state,
                 inner.0,
                 caller,
-                b160_to_h160(data.env.tx.caller),
-                data.env.cfg.chain_id.into(),
+                b176_to_h176(data.env.tx.caller),
+                data.env.cfg.network_id.into(),
                 data.journaled_state.depth(),
                 true,
             )?
         }
         HEVMCalls::StartBroadcast0(_) => {
             correct_sender_nonce(
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
             )?;
             broadcast(
                 state,
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 caller,
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 data.journaled_state.depth(),
                 false,
             )?
         }
         HEVMCalls::StartBroadcast1(inner) => {
             correct_sender_nonce(
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
@@ -604,14 +605,14 @@ pub fn apply<DB: DatabaseExt>(
                 state,
                 inner.0,
                 caller,
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 data.journaled_state.depth(),
                 false,
             )?
         }
         HEVMCalls::StartBroadcast2(inner) => {
             correct_sender_nonce(
-                b160_to_h160(data.env.tx.caller),
+                b176_to_h176(data.env.tx.caller),
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
@@ -620,8 +621,8 @@ pub fn apply<DB: DatabaseExt>(
                 state,
                 inner.0,
                 caller,
-                b160_to_h160(data.env.tx.caller),
-                data.env.cfg.chain_id.into(),
+                b176_to_h176(data.env.tx.caller),
+                data.env.cfg.network_id.into(),
                 data.journaled_state.depth(),
                 false,
             )?

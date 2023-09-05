@@ -6,7 +6,7 @@ use corebc::{
 };
 use forge::{
     revm::primitives::{Bytecode, Env, KECCAK_EMPTY, U256 as rU256},
-    utils::h160_to_b160,
+    utils::h176_to_b176,
 };
 use foundry_common::errors::FsPathError;
 use serde::{Deserialize, Serialize};
@@ -86,7 +86,7 @@ impl Genesis {
     /// Applies all settings to the given `env`
     pub fn apply(&self, env: &mut Env) {
         if let Some(chain_id) = self.chain_id() {
-            env.cfg.chain_id = rU256::from(chain_id);
+            env.cfg.network_id = rU256::from(chain_id);
         }
         if let Some(timestamp) = self.timestamp {
             env.block.timestamp = rU256::from(timestamp);
@@ -98,7 +98,7 @@ impl Genesis {
             env.block.number = rU256::from(number);
         }
         if let Some(coinbase) = self.coinbase {
-            env.block.coinbase = h160_to_b160(coinbase);
+            env.block.coinbase = h176_to_b176(coinbase);
         }
         env.block.difficulty = rU256::from(self.difficulty);
         env.block.gas_limit = rU256::from(self.gas_limit);

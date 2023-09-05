@@ -1,6 +1,6 @@
 use super::{Cheatcodes, Result};
 use crate::abi::hevm::{DirEntry, FsMetadata, HEVMCalls};
-use ethers::{
+use corebc::{
     abi::{self, AbiEncode, Token, Tokenize},
     types::Bytes,
 };

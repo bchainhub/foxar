@@ -36,7 +36,7 @@ use foundry_evm::{
     executor::fork::{BlockchainDb, BlockchainDbMeta, SharedBackend},
     revm,
     revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256},
-    utils::apply_chain_and_block_specific_env_changes,
+    utils::apply_network_and_block_specific_env_changes,
 };
 use parking_lot::RwLock;
 use serde_json::{json, to_writer, Value};
@@ -764,7 +764,7 @@ impl NodeConfig {
         let mut env = revm::primitives::Env {
             cfg: CfgEnv {
                 spec_id: self.get_hardfork().into(),
-                chain_id: rU256::from(self.get_chain_id()),
+                network_id: rU256::from(self.get_chain_id()),
                 limit_contract_code_size: self.code_size_limit,
                 // EIP-3607 rejects transactions from senders with deployed code.
                 // If EIP-3607 is enabled it can cause issues during fuzz/invariant tests if the
@@ -873,7 +873,7 @@ latest block number: {latest_block}"
                 };
 
                 // apply changes such as difficulty -> prevrandao
-                apply_chain_and_block_specific_env_changes(&mut env, &block);
+                apply_network_and_block_specific_env_changes(&mut env, &block);
 
                 // if not set explicitly we use the base fee of the latest block
                 if self.base_fee.is_none() {
@@ -914,7 +914,7 @@ latest block number: {latest_block}"
 
                     // need to update the dev signers and env with the chain id
                     self.set_chain_id(Some(chain_id));
-                    env.cfg.chain_id = rU256::from(chain_id);
+                    env.cfg.network_id = rU256::from(chain_id);
                     env.tx.chain_id = chain_id.into();
                     chain_id
                 };

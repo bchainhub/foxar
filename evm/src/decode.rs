@@ -3,7 +3,7 @@ use crate::{
     abi::ConsoleEvents::{self, *},
     executor::inspector::cheatcodes::util::MAGIC_SKIP_BYTES,
 };
-use ethers::{
+use corebc::{
     abi::{decode, AbiDecode, Contract as Abi, ParamType, RawLog, Token},
     contract::EthLogDecode,
     prelude::U256,
@@ -25,7 +25,7 @@ pub fn decode_console_logs(logs: &[Log]) -> Vec<String> {
 /// This function returns [None] if it is not a DSTest log or the result of a Hardhat
 /// `console.log`.
 pub fn decode_console_log(log: &Log) -> Option<String> {
-    // NOTE: We need to do this conversion because ethers-rs does not
+    // NOTE: We need to do this conversion because corebc-rs does not
     // support passing `Log`s
     let raw_log = RawLog { topics: log.topics.clone(), data: log.data.to_vec() };
     let decoded = match ConsoleEvents::decode_log(&raw_log).ok()? {
@@ -41,14 +41,14 @@ pub fn decode_console_log(log: &Log) -> Option<String> {
                 "{}: {}{}",
                 inner.key,
                 sign,
-                ethers::utils::format_units(val, inner.decimals.as_u32()).unwrap()
+                corebc::utils::format_units(val, inner.decimals.as_u32()).unwrap()
             )
         }
         LogNamedDecimalUintFilter(inner) => {
             format!(
                 "{}: {}",
                 inner.key,
-                ethers::utils::format_units(inner.val, inner.decimals.as_u32()).unwrap()
+                corebc::utils::format_units(inner.val, inner.decimals.as_u32()).unwrap()
             )
         }
         LogNamedIntFilter(inner) => format!("{}: {:?}", inner.key, inner.val),
@@ -82,8 +82,8 @@ pub fn decode_revert(
         eyre::bail!("Not enough error data to decode")
     }
     match err[..SELECTOR_LEN] {
-        // keccak(Panic(uint256))
-        [78, 72, 123, 113] => {
+        // sha3(Panic(uint256))
+        [75, 31, 44, 227] => {
             // ref: https://soliditydeveloper.com/solidity-0.8
             match err[err.len() - 1] {
                 1 => {
@@ -127,12 +127,12 @@ pub fn decode_revert(
                 }
             }
         }
-        // keccak(Error(string))
-        [8, 195, 121, 160] => {
+        // sha3(Error(string))
+        [78, 64, 28, 190] => {
             String::decode(&err[SELECTOR_LEN..]).map_err(|_| eyre::eyre!("Bad string decode"))
         }
-        // keccak(expectRevert(bytes))
-        [242, 141, 206, 179] => {
+        // sha3(expectRevert(bytes))
+        [227, 122, 180, 237] => {
             let err_data = &err[SELECTOR_LEN..];
             if err_data.len() > 64 {
                 let len = U256::from(&err_data[32..64]).as_usize();
@@ -149,8 +149,8 @@ pub fn decode_revert(
             }
             eyre::bail!("Non-native error and not string")
         }
-        // keccak(expectRevert(bytes4))
-        [195, 30, 176, 224] => {
+        // sha3(expectRevert(bytes4))
+        [78, 118, 20, 188] => {
             let err_data = &err[SELECTOR_LEN..];
             if err_data.len() == 32 {
                 let actual_err = &err_data[..SELECTOR_LEN];
@@ -280,7 +280,7 @@ pub fn decode_custom_error_args(err: &[u8], args: usize) -> Option<Token> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers::{
+    use corebc::{
         abi::{AbiEncode, Address},
         contract::EthError,
     };

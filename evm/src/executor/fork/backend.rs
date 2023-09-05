@@ -4,13 +4,13 @@ use crate::{
         backend::error::{DatabaseError, DatabaseResult},
         fork::{cache::FlushJsonBlockCacheDB, BlockchainDb},
     },
-    utils::{b160_to_h160, b256_to_h256, h160_to_b160, h256_to_b256, ru256_to_u256, u256_to_ru256},
+    utils::{b176_to_h176, b256_to_h256, h176_to_b176, h256_to_b256, ru256_to_u256, u256_to_ru256},
 };
-use ethers::{
+use corebc::{
     core::abi::ethereum_types::BigEndianHash,
     providers::Middleware,
     types::{Address, Block, BlockId, Bytes, Transaction, H256, U256},
-    utils::keccak256,
+    utils::sha3,
 };
 use foundry_common::NON_ARCHIVE_NODE_WARNING;
 use futures::{
@@ -21,7 +21,7 @@ use futures::{
 };
 use revm::{
     db::DatabaseRef,
-    primitives::{AccountInfo, Bytecode, B160, B256, KECCAK_EMPTY, U256 as rU256},
+    primitives::{AccountInfo, Bytecode, B176, B256, KECCAK_EMPTY, U256 as rU256},
 };
 use std::{
     collections::{hash_map::Entry, HashMap, VecDeque},
@@ -139,7 +139,7 @@ where
         match req {
             BackendRequest::Basic(addr, sender) => {
                 trace!(target: "backendhandler", "received request basic address={:?}", addr);
-                let acc = self.db.accounts().read().get(&h160_to_b160(addr)).cloned();
+                let acc = self.db.accounts().read().get(&h176_to_b176(addr)).cloned();
                 if let Some(basic) = acc {
                     let _ = sender.send(Ok(basic));
                 } else {
@@ -166,7 +166,7 @@ where
                     .db
                     .storage()
                     .read()
-                    .get(&h160_to_b160(addr))
+                    .get(&h176_to_b176(addr))
                     .and_then(|acc| acc.get(&u256_to_ru256(idx)).copied());
                 if let Some(value) = value {
                     let _ = sender.send(Ok(ru256_to_u256(value)));
@@ -343,7 +343,7 @@ where
 
                             // convert it to revm-style types
                             let (code, code_hash) = if !code.0.is_empty() {
-                                (Some(code.0.clone()), keccak256(&code).into())
+                                (Some(code.0.clone()), sha3(&code).into())
                             } else {
                                 (Some(bytes::Bytes::default()), KECCAK_EMPTY)
                             };
@@ -643,9 +643,9 @@ impl SharedBackend {
 impl DatabaseRef for SharedBackend {
     type Error = DatabaseError;
 
-    fn basic(&self, address: B160) -> Result<Option<AccountInfo>, Self::Error> {
+    fn basic(&self, address: B176) -> Result<Option<AccountInfo>, Self::Error> {
         trace!( target: "sharedbackend", "request basic {:?}", address);
-        self.do_get_basic(b160_to_h160(address)).map_err(|err| {
+        self.do_get_basic(b176_to_h176(address)).map_err(|err| {
             error!(target: "sharedbackend",  ?err, ?address,  "Failed to send/recv `basic`");
             if err.is_possibly_non_archive_node_error() {
                 error!(target: "sharedbackend", "{NON_ARCHIVE_NODE_WARNING}");
@@ -658,9 +658,9 @@ impl DatabaseRef for SharedBackend {
         Err(DatabaseError::MissingCode(b256_to_h256(hash)))
     }
 
-    fn storage(&self, address: B160, index: rU256) -> Result<rU256, Self::Error> {
+    fn storage(&self, address: B176, index: rU256) -> Result<rU256, Self::Error> {
         trace!( target: "sharedbackend", "request storage {:?} at {:?}", address, index);
-        match self.do_get_storage(b160_to_h160(address), index.into()).map_err(|err| {
+        match self.do_get_storage(b176_to_h176(address), index.into()).map_err(|err| {
             error!( target: "sharedbackend", ?err, ?address, ?index, "Failed to send/recv `storage`");
             if err.is_possibly_non_archive_node_error() {
                 error!(target: "sharedbackend", "{NON_ARCHIVE_NODE_WARNING}");
@@ -700,7 +700,7 @@ mod tests {
         opts::EvmOpts,
         Backend,
     };
-    use ethers::types::Chain;
+    use corebc::types::Network;
     use foundry_common::get_http_provider;
     use foundry_config::Config;
     use std::{collections::BTreeSet, path::PathBuf, sync::Arc};
@@ -719,7 +719,7 @@ mod tests {
         let backend = SharedBackend::spawn_backend(Arc::new(provider), db.clone(), None).await;
 
         // some rng contract from etherscan
-        let address: B160 = "63091244180ae240c87d1f528f5f269134cb07b3".parse().unwrap();
+        let address: B176 = "63091244180ae240c87d1f528f5f269134cb07b3".parse().unwrap();
 
         let idx = rU256::from(0u64);
         let value = backend.storage(address, idx).unwrap();
@@ -778,7 +778,7 @@ mod tests {
         let backend = Backend::spawn(Some(fork)).await;
 
         // some rng contract from etherscan
-        let address: B160 = "63091244180ae240c87d1f528f5f269134cb07b3".parse().unwrap();
+        let address: B176 = "63091244180ae240c87d1f528f5f269134cb07b3".parse().unwrap();
 
         let idx = rU256::from(0u64);
         let _value = backend.storage(address, idx);
@@ -796,7 +796,7 @@ mod tests {
 
         let db = BlockchainDb::new(
             meta,
-            Some(Config::foundry_block_cache_dir(Chain::Mainnet, block_num).unwrap()),
+            Some(Config::foundry_block_cache_dir(Network::Mainnet, block_num).unwrap()),
         );
         assert!(db.accounts().read().contains_key(&address));
         assert!(db.storage().read().contains_key(&address));

@@ -1,4 +1,4 @@
-use ethers::{
+use corebc::{
     abi::{ethereum_types::BigEndianHash, Address},
     types::{
         transaction::eip2930::{AccessList, AccessListItem},
@@ -11,7 +11,7 @@ use revm::{
     Database, EVMData, Inspector,
 };
 
-use crate::utils::{b160_to_h160, ru256_to_u256};
+use crate::utils::{b176_to_h176, ru256_to_u256};
 
 /// An inspector that collects touched accounts and storage slots.
 #[derive(Default, Debug)]
@@ -68,7 +68,7 @@ where
                 if let Ok(slot) = interpreter.stack().peek(0) {
                     let cur_contract = interpreter.contract.address;
                     self.access_list
-                        .entry(b160_to_h160(cur_contract))
+                        .entry(b176_to_h176(cur_contract))
                         .or_default()
                         .insert(H256::from_uint(&ru256_to_u256(slot)));
                 }

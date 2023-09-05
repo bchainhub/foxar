@@ -1,14 +1,14 @@
 use super::{AddressIdentity, TraceIdentifier};
 use crate::utils::RuntimeOrHandle;
-use ethers::{
+use corebc::{
     abi::Address,
-    etherscan,
-    etherscan::contract::{ContractMetadata, Metadata},
-    prelude::{artifacts::ContractBytecodeSome, errors::EtherscanError, ArtifactId},
+    blockindex,
+    blockindex::contract::{ContractMetadata, Metadata},
+    prelude::{artifacts::ContractBytecodeSome, errors::BlockindexError, ArtifactId},
     types::H160,
 };
 use foundry_common::compile;
-use foundry_config::{Network, Config};
+use foundry_config::{Config, Network};
 use futures::{
     future::{join_all, Future},
     stream::{FuturesUnordered, Stream, StreamExt},

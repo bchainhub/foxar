@@ -9,9 +9,9 @@ use crate::{
     trace::{node::CallTraceNode, utils},
     CALLER, TEST_CONTRACT_ADDRESS,
 };
-use ethers::{
+use corebc::{
     abi::{Abi, Address, Event, Function, Param, ParamType, Token},
-    types::{H160, H256},
+    types::{H176, H256},
 };
 use foundry_common::{abi::get_indexed_event, SELECTOR_LEN};
 use hashbrown::HashSet;
@@ -96,14 +96,14 @@ macro_rules! precompiles {
         use ParamType::*;
         [$(
             (
-                H160([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, $number]),
+                H176([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, $number]),
                 #[allow(deprecated)]
                 Function {
                     name: RustString::from(stringify!($name)),
                     inputs: vec![$(Param { name: RustString::from(stringify!($name_in)), kind: $in, internal_type: None, }),*],
                     outputs: vec![$(Param { name: RustString::from(stringify!($name_out)), kind: $out, internal_type: None, }),*],
                     constant: None,
-                    state_mutability: ethers::abi::StateMutability::Pure,
+                    state_mutability: corebc::abi::StateMutability::Pure,
                 },
             ),
         )+]

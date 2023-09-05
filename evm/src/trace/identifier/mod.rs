@@ -7,7 +7,7 @@ pub use etherscan::EtherscanIdentifier;
 mod signatures;
 pub use signatures::{SignaturesIdentifier, SingleSignaturesIdentifier};
 
-use ethers::{
+use corebc::{
     abi::{Abi, Address},
     prelude::ArtifactId,
 };

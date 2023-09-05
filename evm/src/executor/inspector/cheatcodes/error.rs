@@ -1,5 +1,5 @@
 use crate::executor::backend::{error::NoCheatcodeAccessError, DatabaseError};
-use ethers::{
+use corebc::{
     abi::AbiEncode, prelude::k256::ecdsa::signature::Error as SignatureError, types::Bytes,
 };
 use foundry_common::errors::FsPathError;
@@ -88,16 +88,16 @@ pub enum Error {
     UnresolvedEnvVar(#[from] UnresolvedEnvVarError),
 
     #[error(transparent)]
-    Abi(#[from] ethers::abi::Error),
+    Abi(#[from] corebc::abi::Error),
 
     #[error(transparent)]
-    Abi2(#[from] ethers::abi::AbiError),
+    Abi2(#[from] corebc::abi::AbiError),
 
     #[error(transparent)]
-    Wallet(#[from] ethers::signers::WalletError),
+    Wallet(#[from] corebc::signers::WalletError),
 
     #[error(transparent)]
-    EthersSignature(#[from] ethers::core::types::SignatureError),
+    CorebcSignature(#[from] corebc::core::types::SignatureError),
 
     #[error(transparent)]
     Json(#[from] serde_json::Error),

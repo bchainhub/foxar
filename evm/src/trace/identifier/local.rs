@@ -1,5 +1,5 @@
 use super::{AddressIdentity, TraceIdentifier};
-use ethers::{
+use corebc::{
     abi::{Abi, Address, Event},
     prelude::ArtifactId,
 };

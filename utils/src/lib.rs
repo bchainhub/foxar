@@ -134,7 +134,7 @@ pub fn link_with_nonce_or_address<T, U>(
     extra: &mut U,
     link_key_construction: impl Fn(String, String) -> (String, String, String),
     post_link: impl Fn(PostLinkInput<T, U>) -> eyre::Result<()>,
-    network: Network
+    network: Network,
 ) -> Result<()> {
     // create a mapping of fname => Vec<(fname, file, key)>,
     let link_tree: BTreeMap<String, ArtifactDependencies> = contracts
@@ -366,7 +366,10 @@ pub fn to_table(value: serde_json::Value) -> String {
 /// Resolves an input to [`NameOrAddress`]. The input could also be a contract/token name supported
 /// by
 /// [`corebc-addressbook`](https://github.com/gakonst/corebc-rs/tree/master/corebc-addressbook).
-pub fn resolve_addr<T: Into<NameOrAddress>>(to: T, network: Option<Network>) -> Result<NameOrAddress> {
+pub fn resolve_addr<T: Into<NameOrAddress>>(
+    to: T,
+    network: Option<Network>,
+) -> Result<NameOrAddress> {
     Ok(match to.into() {
         NameOrAddress::Address(addr) => NameOrAddress::Address(addr),
         NameOrAddress::Name(contract_or_ens) => {
@@ -585,9 +588,7 @@ mod tests {
         );
 
         // DAI:devin does not exist in addressbook
-        assert!(
-            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Devin)).is_err()
-        );
+        assert!(resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Devin)).is_err());
 
         // If not present in addressbook, gets resolved to an ENS name.
         assert_eq!(

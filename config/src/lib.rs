@@ -2,11 +2,7 @@
 #![deny(missing_docs, unsafe_code, unused_crate_dependencies)]
 
 use crate::cache::StorageCachingConfig;
-use corebc_core::types::{
-    Address,
-    Network::Mainnet,
-    H176, H256, U256,
-};
+use corebc_core::types::{Address, Network::Mainnet, H176, H256, U256};
 pub use corebc_ylem::artifacts::OptimizerDetails;
 use corebc_ylem::{
     artifacts::{
@@ -1401,7 +1397,9 @@ impl Config {
             if let Ok(entries) = cache_dir.as_path().read_dir() {
                 for entry in entries.flatten().filter(|x| x.path().is_dir()) {
                     match Network::from_str(&entry.file_name().to_string_lossy()) {
-                        Ok(network) => cache.networks.push(Self::list_foundry_network_cache(network)?),
+                        Ok(network) => {
+                            cache.networks.push(Self::list_foundry_network_cache(network)?)
+                        }
                         Err(_) => continue,
                     }
                 }
@@ -1442,7 +1440,8 @@ impl Config {
         if !network_path.exists() {
             return Ok(blocks)
         }
-        for block in network_path.read_dir()?.flatten().filter(|x| x.file_type().unwrap().is_dir()) {
+        for block in network_path.read_dir()?.flatten().filter(|x| x.file_type().unwrap().is_dir())
+        {
             let filepath = block.path().join("storage.json");
             blocks.push((
                 block.file_name().to_string_lossy().into_owned(),
@@ -2477,7 +2476,7 @@ fn canonic(path: impl Into<PathBuf>) -> PathBuf {
 mod tests {
     use super::*;
     use crate::{
-        cache::{CachedNetworks, CachedEndpoints},
+        cache::{CachedEndpoints, CachedNetworks},
         endpoints::RpcEndpoint,
         fs_permissions::PathPermission,
     };
@@ -2908,9 +2907,7 @@ mod tests {
 
             assert_eq!(
                 with_key
-                    .get_etherscan_config_with_chain(Some(
-                        corebc_core::types::Network::Devin
-                    ))
+                    .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Devin))
                     .unwrap()
                     .unwrap()
                     .key,
@@ -3078,8 +3075,7 @@ mod tests {
 
             config.etherscan_api_key = Some("mumbai".to_string());
 
-            let mumbai =
-                config.get_etherscan_api_key(Some(corebc_core::types::Network::Devin));
+            let mumbai = config.get_etherscan_api_key(Some(corebc_core::types::Network::Devin));
             assert_eq!(mumbai, Some("https://etherscan-mumbai.com/".to_string()));
 
             Ok(())

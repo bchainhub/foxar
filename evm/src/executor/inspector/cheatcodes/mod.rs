@@ -9,9 +9,9 @@ use crate::{
         backend::DatabaseExt, inspector::cheatcodes::env::RecordedLogs, CHEATCODE_ADDRESS,
         HARDHAT_CONSOLE_ADDRESS,
     },
-    utils::{b160_to_h160, b256_to_h256, h160_to_b160, ru256_to_u256},
+    utils::{b176_to_h176, b256_to_h256, h176_to_b176, ru256_to_u256},
 };
-use ethers::{
+use corebc::{
     abi::{AbiDecode, AbiEncode, RawLog},
     signers::LocalWallet,
     types::{
@@ -24,7 +24,7 @@ use foundry_utils::error::SolError;
 use itertools::Itertools;
 use revm::{
     interpreter::{opcode, CallInputs, CreateInputs, Gas, InstructionResult, Interpreter},
-    primitives::{BlockEnv, TransactTo, B160, B256},
+    primitives::{BlockEnv, TransactTo, B176, B256},
     EVMData, Inspector,
 };
 use serde_json::Value;
@@ -250,7 +250,7 @@ impl Cheatcodes {
         let created_address = get_create_address(inputs, old_nonce);
 
         if data.journaled_state.depth > 1 &&
-            !data.db.has_cheatcode_access(b160_to_h160(inputs.caller))
+            !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))
         {
             // we only grant cheat code access for new contracts if the caller also has
             // cheatcode access and the new contract is created in top most call
@@ -281,7 +281,7 @@ impl Cheatcodes {
         // This will prevent overflow issues in revm's [`JournaledState::journal_revert`] routine
         // which rolls back any transfers.
         while let Some(record) = self.eth_deals.pop() {
-            if let Some(acc) = data.journaled_state.state.get_mut(&h160_to_b160(record.address)) {
+            if let Some(acc) = data.journaled_state.state.get_mut(&h176_to_b176(record.address)) {
                 acc.info.balance = record.old_balance.into();
             }
         }
@@ -382,7 +382,7 @@ where
                     let key = try_or_continue!(interpreter.stack().peek(0));
                     storage_accesses
                         .reads
-                        .entry(b160_to_h160(interpreter.contract().address))
+                        .entry(b176_to_h176(interpreter.contract().address))
                         .or_insert_with(Vec::new)
                         .push(key.into());
                 }
@@ -392,12 +392,12 @@ where
                     // An SSTORE does an SLOAD internally
                     storage_accesses
                         .reads
-                        .entry(b160_to_h160(interpreter.contract().address))
+                        .entry(b176_to_h176(interpreter.contract().address))
                         .or_insert_with(Vec::new)
                         .push(key.into());
                     storage_accesses
                         .writes
-                        .entry(b160_to_h160(interpreter.contract().address))
+                        .entry(b176_to_h176(interpreter.contract().address))
                         .or_insert_with(Vec::new)
                         .push(key.into());
                 }
@@ -534,7 +534,7 @@ where
     fn log(
         &mut self,
         _: &mut EVMData<'_, DB>,
-        address: &B160,
+        address: &B176,
         topics: &[B256],
         data: &bytes::Bytes,
     ) {
@@ -545,14 +545,14 @@ where
                     topics: topics.iter().copied().map(b256_to_h256).collect_vec(),
                     data: data.to_vec(),
                 },
-                &b160_to_h160(*address),
+                &b176_to_h176(*address),
             );
         }
 
         // Stores this log if `recordLogs` has been called
         if let Some(storage_recorded_logs) = &mut self.recorded_logs {
             storage_recorded_logs.entries.push(Log {
-                emitter: b160_to_h160(*address),
+                emitter: b176_to_h176(*address),
                 inner: RawLog {
                     topics: topics.iter().copied().map(b256_to_h256).collect_vec(),
                     data: data.to_vec(),
@@ -567,18 +567,18 @@ where
         call: &mut CallInputs,
         is_static: bool,
     ) -> (InstructionResult, Gas, bytes::Bytes) {
-        if call.contract == h160_to_b160(CHEATCODE_ADDRESS) {
+        if call.contract == h176_to_b176(CHEATCODE_ADDRESS) {
             let gas = Gas::new(call.gas_limit);
-            match self.apply_cheatcode(data, b160_to_h160(call.context.caller), call) {
+            match self.apply_cheatcode(data, b176_to_h176(call.context.caller), call) {
                 Ok(retdata) => (InstructionResult::Return, gas, retdata.0),
                 Err(err) => (InstructionResult::Revert, gas, err.encode_error().0),
             }
-        } else if call.contract != h160_to_b160(HARDHAT_CONSOLE_ADDRESS) {
+        } else if call.contract != h176_to_b176(HARDHAT_CONSOLE_ADDRESS) {
             // Handle expected calls
 
             // Grab the different calldatas expected.
             if let Some(expected_calls_for_target) =
-                self.expected_calls.get_mut(&(b160_to_h160(call.contract)))
+                self.expected_calls.get_mut(&(b176_to_h176(call.contract)))
             {
                 // Match every partial/full calldata
                 for (calldata, (expected, actual_count)) in expected_calls_for_target.iter_mut() {
@@ -602,7 +602,7 @@ where
             }
 
             // Handle mocked calls
-            if let Some(mocks) = self.mocked_calls.get(&b160_to_h160(call.contract)) {
+            if let Some(mocks) = self.mocked_calls.get(&b176_to_h176(call.contract)) {
                 let ctx = MockCallDataContext {
                     calldata: call.input.clone().into(),
                     value: Some(call.transfer.value.into()),
@@ -629,19 +629,19 @@ where
             // Apply our prank
             if let Some(prank) = &self.prank {
                 if data.journaled_state.depth() >= prank.depth &&
-                    call.context.caller == h160_to_b160(prank.prank_caller)
+                    call.context.caller == h176_to_b176(prank.prank_caller)
                 {
                     let mut prank_applied = false;
                     // At the target depth we set `msg.sender`
                     if data.journaled_state.depth() == prank.depth {
-                        call.context.caller = h160_to_b160(prank.new_caller);
-                        call.transfer.source = h160_to_b160(prank.new_caller);
+                        call.context.caller = h176_to_b176(prank.new_caller);
+                        call.transfer.source = h176_to_b176(prank.new_caller);
                         prank_applied = true;
                     }
 
                     // At the target depth, or deeper, we set `tx.origin`
                     if let Some(new_origin) = prank.new_origin {
-                        data.env.tx.caller = h160_to_b160(new_origin);
+                        data.env.tx.caller = h176_to_b176(new_origin);
                         prank_applied = true;
                     }
 
@@ -661,15 +661,15 @@ where
                 // We do this because any subsequent contract calls *must* exist on chain and
                 // we only want to grab *this* call, not internal ones
                 if data.journaled_state.depth() == broadcast.depth &&
-                    call.context.caller == h160_to_b160(broadcast.original_caller)
+                    call.context.caller == h176_to_b176(broadcast.original_caller)
                 {
                     // At the target depth we set `msg.sender` & tx.origin.
                     // We are simulating the caller as being an EOA, so *both* must be set to the
                     // broadcast.origin.
-                    data.env.tx.caller = h160_to_b160(broadcast.new_origin);
+                    data.env.tx.caller = h176_to_b176(broadcast.new_origin);
 
-                    call.context.caller = h160_to_b160(broadcast.new_origin);
-                    call.transfer.source = h160_to_b160(broadcast.new_origin);
+                    call.context.caller = h176_to_b176(broadcast.new_origin);
+                    call.transfer.source = h176_to_b176(broadcast.new_origin);
                     // Add a `legacy` transaction to the VecDeque. We use a legacy transaction here
                     // because we only need the from, to, value, and data. We can later change this
                     // into 1559, in the cli package, relatively easily once we
@@ -677,7 +677,7 @@ where
                     if !is_static {
                         if let Err(err) = data
                             .journaled_state
-                            .load_account(h160_to_b160(broadcast.new_origin), data.db)
+                            .load_account(h176_to_b176(broadcast.new_origin), data.db)
                         {
                             return (
                                 InstructionResult::Revert,
@@ -691,14 +691,14 @@ where
                         let account = data
                             .journaled_state
                             .state()
-                            .get_mut(&h160_to_b160(broadcast.new_origin))
+                            .get_mut(&h176_to_b176(broadcast.new_origin))
                             .unwrap();
 
                         self.broadcastable_transactions.push_back(BroadcastableTransaction {
                             rpc: data.db.active_fork_url(),
                             transaction: TypedTransaction::Legacy(TransactionRequest {
                                 from: Some(broadcast.new_origin),
-                                to: Some(NameOrAddress::Address(b160_to_h160(call.contract))),
+                                to: Some(NameOrAddress::Address(b176_to_h176(call.contract))),
                                 value: Some(call.transfer.value.into()),
                                 data: Some(call.input.clone().into()),
                                 nonce: Some(account.info.nonce.into()),
@@ -741,8 +741,8 @@ where
         retdata: bytes::Bytes,
         _: bool,
     ) -> (InstructionResult, Gas, bytes::Bytes) {
-        if call.contract == h160_to_b160(CHEATCODE_ADDRESS) ||
-            call.contract == h160_to_b160(HARDHAT_CONSOLE_ADDRESS)
+        if call.contract == h176_to_b176(CHEATCODE_ADDRESS) ||
+            call.contract == h176_to_b176(HARDHAT_CONSOLE_ADDRESS)
         {
             return (status, remaining_gas, retdata)
         }
@@ -758,7 +758,7 @@ where
         // Clean up pranks
         if let Some(prank) = &self.prank {
             if data.journaled_state.depth() == prank.depth {
-                data.env.tx.caller = h160_to_b160(prank.prank_origin);
+                data.env.tx.caller = h176_to_b176(prank.prank_origin);
             }
             if prank.single_call {
                 std::mem::take(&mut self.prank);
@@ -768,7 +768,7 @@ where
         // Clean up broadcast
         if let Some(broadcast) = &self.broadcast {
             if data.journaled_state.depth() == broadcast.depth {
-                data.env.tx.caller = h160_to_b160(broadcast.original_origin);
+                data.env.tx.caller = h176_to_b176(broadcast.original_origin);
             }
 
             if broadcast.single_call {
@@ -934,7 +934,7 @@ where
                 call.contract != test_contract
             {
                 self.fork_revert_diagnostic =
-                    data.db.diagnose_revert(b160_to_h160(call.contract), &data.journaled_state);
+                    data.db.diagnose_revert(b176_to_h176(call.contract), &data.journaled_state);
             }
         }
 
@@ -945,23 +945,23 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B160>, Gas, bytes::Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, bytes::Bytes) {
         // allow cheatcodes from the address of the new contract
         self.allow_cheatcodes_on_create(data, call);
 
         // Apply our prank
         if let Some(prank) = &self.prank {
             if data.journaled_state.depth() >= prank.depth &&
-                call.caller == h160_to_b160(prank.prank_caller)
+                call.caller == h176_to_b176(prank.prank_caller)
             {
                 // At the target depth we set `msg.sender`
                 if data.journaled_state.depth() == prank.depth {
-                    call.caller = h160_to_b160(prank.new_caller);
+                    call.caller = h176_to_b176(prank.new_caller);
                 }
 
                 // At the target depth, or deeper, we set `tx.origin`
                 if let Some(new_origin) = prank.new_origin {
-                    data.env.tx.caller = h160_to_b160(new_origin);
+                    data.env.tx.caller = h176_to_b176(new_origin);
                 }
             }
         }
@@ -969,10 +969,10 @@ where
         // Apply our broadcast
         if let Some(broadcast) = &self.broadcast {
             if data.journaled_state.depth() >= broadcast.depth &&
-                call.caller == h160_to_b160(broadcast.original_caller)
+                call.caller == h176_to_b176(broadcast.original_caller)
             {
                 if let Err(err) =
-                    data.journaled_state.load_account(h160_to_b160(broadcast.new_origin), data.db)
+                    data.journaled_state.load_account(h176_to_b176(broadcast.new_origin), data.db)
                 {
                     return (
                         InstructionResult::Revert,
@@ -982,7 +982,7 @@ where
                     )
                 }
 
-                data.env.tx.caller = h160_to_b160(broadcast.new_origin);
+                data.env.tx.caller = h176_to_b176(broadcast.new_origin);
 
                 if data.journaled_state.depth() == broadcast.depth {
                     let (bytecode, to, nonce) = match process_create(
@@ -1032,14 +1032,14 @@ where
         data: &mut EVMData<'_, DB>,
         _: &CreateInputs,
         status: InstructionResult,
-        address: Option<B160>,
+        address: Option<B176>,
         remaining_gas: Gas,
         retdata: bytes::Bytes,
-    ) -> (InstructionResult, Option<B160>, Gas, bytes::Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, bytes::Bytes) {
         // Clean up pranks
         if let Some(prank) = &self.prank {
             if data.journaled_state.depth() == prank.depth {
-                data.env.tx.caller = h160_to_b160(prank.prank_origin);
+                data.env.tx.caller = h176_to_b176(prank.prank_origin);
             }
             if prank.single_call {
                 std::mem::take(&mut self.prank);
@@ -1049,7 +1049,7 @@ where
         // Clean up broadcasts
         if let Some(broadcast) = &self.broadcast {
             if data.journaled_state.depth() == broadcast.depth {
-                data.env.tx.caller = h160_to_b160(broadcast.original_origin);
+                data.env.tx.caller = h176_to_b176(broadcast.original_origin);
             }
 
             if broadcast.single_call {
@@ -1069,7 +1069,7 @@ where
                 ) {
                     Ok((address, retdata)) => (
                         InstructionResult::Return,
-                        address.map(h160_to_b160),
+                        address.map(h176_to_b176),
                         remaining_gas,
                         retdata.0,
                     ),

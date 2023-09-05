@@ -358,7 +358,10 @@ mod tests {
         );
 
         let addr = Address::from_str("ab36393ecaa2d3209cee16ce9b2360e327ed3c923346").unwrap();
-        assert_eq!("ab36393ecaa2d3209cee16ce9b2360e327ed3c923346", console_log_format_1("%s", &addr));
+        assert_eq!(
+            "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
+            console_log_format_1("%s", &addr)
+        );
         assert_eq!("NaN", console_log_format_1("%d", &addr));
         assert_eq!("NaN", console_log_format_1("%i", &addr));
         assert_eq!("NaN", console_log_format_1("%e", &addr));

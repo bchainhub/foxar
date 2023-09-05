@@ -16,7 +16,7 @@ impl fmt::Display for TokenDisplay<'_> {
 fn fmt_token(f: &mut fmt::Formatter, item: &Token) -> fmt::Result {
     match item {
         Token::Address(inner) => {
-            write!(f, "{}", utils::to_checksum(inner, None))
+            write!(f, "{}", inner)
         }
         // add 0x
         Token::Bytes(inner) => write!(f, "0x{}", hex::encode(inner)),
