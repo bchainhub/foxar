@@ -20,7 +20,7 @@ use corebc::{
 use forge::{
     revm::primitives::{EVMError, ExecutionResult},
     utils::{
-        b160_to_h160, eval_to_instruction_result, h160_to_b160, halt_to_instruction_result,
+        b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result,
         ru256_to_u256,
     },
 };
@@ -167,7 +167,7 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
                 transaction_index,
                 from: *transaction.pending_transaction.sender(),
                 to: transaction.pending_transaction.transaction.to().copied(),
-                contract_address: contract_address.map(b160_to_h160),
+                contract_address: contract_address.map(b176_to_h176),
                 logs,
                 logs_bloom: *receipt.logs_bloom(),
                 traces: CallTraceArena { arena: traces },
@@ -189,7 +189,7 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
 
         let partial_header = PartialHeader {
             parent_hash,
-            beneficiary: b160_to_h160(beneficiary),
+            beneficiary: b176_to_h176(beneficiary),
             state_root: self.db.maybe_state_root().unwrap_or_default(),
             receipts_root,
             logs_bloom: bloom,
@@ -234,7 +234,7 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
     fn next(&mut self) -> Option<Self::Item> {
         let transaction = self.pending.next()?;
         let sender = *transaction.pending_transaction.sender();
-        let account = match self.db.basic(h160_to_b160(sender)).map(|acc| acc.unwrap_or_default()) {
+        let account = match self.db.basic(h176_to_b176(sender)).map(|acc| acc.unwrap_or_default()) {
             Ok(account) => account,
             Err(err) => return Some(TransactionExecutionOutcome::DatabaseError(transaction, err)),
         };

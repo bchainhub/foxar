@@ -10,7 +10,7 @@ use crate::{
     opts::WalletSigner,
     update_progress,
 };
-use ethers::{
+use corebc::{
     prelude::{Provider, Signer, TxHash},
     providers::{JsonRpcClient, Middleware},
     utils::format_units,

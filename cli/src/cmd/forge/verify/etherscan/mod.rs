@@ -7,7 +7,7 @@ use crate::cmd::{
     read_constructor_args_file, retry::RETRY_CHECK_ON_VERIFY, LoadConfig,
 };
 use cast::SimpleCast;
-use ethers::{
+use corebc::{
     abi::Function,
     etherscan::{
         utils::lookup_compiler_version,
@@ -19,7 +19,7 @@ use ethers::{
 };
 use eyre::{eyre, Context};
 use foundry_common::abi::encode_args;
-use foundry_config::{Network, Config, YlemReq};
+use foundry_config::{Config, Network, YlemReq};
 use foundry_utils::Retry;
 use futures::FutureExt;
 use once_cell::sync::Lazy;
@@ -275,7 +275,7 @@ impl EtherscanVerificationProvider {
         let base_url = etherscan_config
             .as_ref()
             .and_then(|c| c.browser_url.as_deref())
-            .or_else(|| chain.etherscan_urls().map(|urls| urls.1));
+            .or_else(|| chain.blockindex_urls().map(|urls| urls.1));
 
         let etherscan_key =
             etherscan_key.or_else(|| etherscan_config.as_ref().map(|c| c.key.as_str()));

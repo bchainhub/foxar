@@ -5,15 +5,15 @@ use crate::{
         error::{DatabaseError, DatabaseResult},
         DatabaseExt,
     },
-    utils::{h160_to_b160, h256_to_u256_be, ru256_to_u256, u256_to_ru256},
+    utils::{h176_to_b176, h256_to_u256_be, ru256_to_u256, u256_to_ru256},
 };
 use bytes::{BufMut, Bytes, BytesMut};
-use ethers::{
+use corebc::{
     abi::{AbiEncode, Address, ParamType, Token},
     core::k256::elliptic_curve::Curve,
     prelude::{
         k256::{ecdsa::SigningKey, elliptic_curve::bigint::Encoding, Secp256k1},
-        LocalWallet, Signer, H160, *,
+        LocalWallet, Signer, H176, *,
     },
     signers::{
         coins_bip39::{
@@ -36,8 +36,9 @@ use std::{collections::VecDeque, str::FromStr};
 const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/60'/0'/0/";
 
 /// Address of the default CREATE2 deployer 0x4e59b44847b379578588920ca78fbf26c0b4956c
-pub const DEFAULT_CREATE2_DEPLOYER: H160 = H160([
-    78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149, 108,
+pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
+    0, 0, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149,
+    108,
 ]);
 
 pub const MAGIC_SKIP_BYTES: &[u8] = b"FOUNDRY::SKIP";
@@ -53,10 +54,10 @@ pub type BroadcastableTransactions = VecDeque<BroadcastableTransaction>;
 
 /// Configures the env for the transaction
 pub fn configure_tx_env(env: &mut revm::primitives::Env, tx: &Transaction) {
-    env.tx.caller = h160_to_b160(tx.from);
+    env.tx.caller = h176_to_b176(tx.from);
     env.tx.gas_limit = tx.gas.as_u64();
-    env.tx.gas_price = tx.gas_price.unwrap_or_default().into();
-    env.tx.gas_priority_fee = tx.max_priority_fee_per_gas.map(Into::into);
+    env.tx.gas_price = u256_to_ru256(tx.gas_price.unwrap_or_default());
+    env.tx.gas_priority_fee = tx.max_priority_fee_per_gas.map(u256_to_ru256);
     env.tx.nonce = Some(tx.nonce.as_u64());
     env.tx.access_list = tx
         .access_list
@@ -66,15 +67,15 @@ pub fn configure_tx_env(env: &mut revm::primitives::Env, tx: &Transaction) {
         .into_iter()
         .map(|item| {
             (
-                h160_to_b160(item.address),
+                h176_to_b176(item.address),
                 item.storage_keys.into_iter().map(h256_to_u256_be).map(u256_to_ru256).collect(),
             )
         })
         .collect();
-    env.tx.value = tx.value.into();
+    env.tx.value = u256_to_ru256(tx.value);
     env.tx.data = tx.input.0.clone();
     env.tx.transact_to =
-        tx.to.map(h160_to_b160).map(TransactTo::Call).unwrap_or_else(TransactTo::create)
+        tx.to.map(h176_to_b176).map(TransactTo::Call).unwrap_or_else(TransactTo::create)
 }
 
 /// Applies the given function `f` to the `revm::Account` belonging to the `addr`
@@ -89,22 +90,22 @@ pub fn with_journaled_account<F, R, DB: Database>(
 where
     F: FnMut(&mut Account) -> R,
 {
-    let addr = h160_to_b160(addr);
+    let addr = h176_to_b176(addr);
     journaled_state.load_account(addr, db)?;
     journaled_state.touch(&addr);
     let account = journaled_state.state.get_mut(&addr).expect("account loaded;");
     Ok(f(account))
 }
-
-fn addr(private_key: U256) -> Result {
+//TODO:error2215 change crypto
+fn addr(private_key: U256, network: &Network) -> Result {
     let key = parse_private_key(private_key)?;
-    let addr = utils::secret_key_to_address(&key);
+    let addr = utils::secret_key_to_address(&key, network);
     Ok(addr.encode().into())
 }
 
 fn sign(private_key: U256, digest: H256, chain_id: U256) -> Result {
     let key = parse_private_key(private_key)?;
-    let wallet = LocalWallet::from(key).with_chain_id(chain_id.as_u64());
+    let wallet = LocalWallet::from(key).with_network_id(chain_id.as_u64());
 
     // The `ecrecover` precompile does not use EIP-155
     let sig = wallet.sign_hash(digest)?;
@@ -185,7 +186,7 @@ fn derive_key_with_wordlist(mnemonic: &str, path: &str, index: u32, lang: &str) 
 
 fn remember_key(state: &mut Cheatcodes, private_key: U256, chain_id: U256) -> Result {
     let key = parse_private_key(private_key)?;
-    let wallet = LocalWallet::from(key).with_chain_id(chain_id.as_u64());
+    let wallet = LocalWallet::from(key).with_network_id(chain_id.as_u64());
     let address = wallet.address();
 
     state.script_wallets.push(wallet);
@@ -221,8 +222,12 @@ pub fn apply<DB: Database>(
     call: &HEVMCalls,
 ) -> Option<Result> {
     Some(match call {
-        HEVMCalls::Addr(inner) => addr(inner.0),
-        HEVMCalls::Sign(inner) => sign(inner.0, inner.1.into(), data.env.cfg.chain_id.into()),
+        HEVMCalls::Addr(inner) => {
+            addr(inner.0, &Network::try_from(data.env.cfg.network.as_u64()).unwrap())
+        }
+        HEVMCalls::Sign(inner) => {
+            sign(inner.0, inner.1.into(), ru256_to_u256(data.env.cfg.network.as_u256()))
+        }
         HEVMCalls::DeriveKey0(inner) => {
             derive_key::<English>(&inner.0, DEFAULT_DERIVATION_PATH_PREFIX, inner.1)
         }
@@ -233,7 +238,9 @@ pub fn apply<DB: Database>(
         HEVMCalls::DeriveKey3(inner) => {
             derive_key_with_wordlist(&inner.0, &inner.1, inner.2, &inner.3)
         }
-        HEVMCalls::RememberKey(inner) => remember_key(state, inner.0, data.env.cfg.chain_id.into()),
+        HEVMCalls::RememberKey(inner) => {
+            remember_key(state, inner.0, ru256_to_u256(data.env.cfg.network.as_u256()))
+        }
         HEVMCalls::Label(inner) => {
             state.labels.insert(inner.0, inner.1.clone());
             Ok(Default::default())
@@ -244,25 +251,25 @@ pub fn apply<DB: Database>(
                 .get(&inner.0)
                 .cloned()
                 .unwrap_or_else(|| format!("unlabeled:{:?}", inner.0));
-            Ok(ethers::abi::encode(&[Token::String(label)]).into())
+            Ok(corebc::abi::encode(&[Token::String(label)]).into())
         }
         HEVMCalls::ToString0(inner) => {
-            Ok(ethers::abi::encode(&[Token::String(inner.0.pretty())]).into())
+            Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ToString1(inner) => {
-            Ok(ethers::abi::encode(&[Token::String(inner.0.pretty())]).into())
+            Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ToString2(inner) => {
-            Ok(ethers::abi::encode(&[Token::String(inner.0.pretty())]).into())
+            Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ToString3(inner) => {
-            Ok(ethers::abi::encode(&[Token::String(inner.0.pretty())]).into())
+            Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ToString4(inner) => {
-            Ok(ethers::abi::encode(&[Token::String(inner.0.pretty())]).into())
+            Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ToString5(inner) => {
-            Ok(ethers::abi::encode(&[Token::String(inner.0.pretty())]).into())
+            Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ParseBytes(inner) => parse(&inner.0, &ParamType::Bytes),
         HEVMCalls::ParseAddress(inner) => parse(&inner.0, &ParamType::Address),
@@ -284,7 +291,7 @@ pub fn process_create<DB>(
 where
     DB: Database<Error = DatabaseError>,
 {
-    let broadcast_sender = h160_to_b160(broadcast_sender);
+    let broadcast_sender = h176_to_b176(broadcast_sender);
     match call.scheme {
         revm::primitives::CreateScheme::Create => {
             call.caller = broadcast_sender;
@@ -293,9 +300,9 @@ where
         }
         revm::primitives::CreateScheme::Create2 { salt } => {
             // Sanity checks for our CREATE2 deployer
-            data.journaled_state.load_account(h160_to_b160(DEFAULT_CREATE2_DEPLOYER), data.db)?;
+            data.journaled_state.load_account(h176_to_b176(DEFAULT_CREATE2_DEPLOYER), data.db)?;
 
-            let info = &data.journaled_state.account(h160_to_b160(DEFAULT_CREATE2_DEPLOYER)).info;
+            let info = &data.journaled_state.account(h176_to_b176(DEFAULT_CREATE2_DEPLOYER)).info;
             match &info.code {
                 Some(code) => {
                     if code.is_empty() {
@@ -312,7 +319,7 @@ where
                 }
             }
 
-            call.caller = h160_to_b160(DEFAULT_CREATE2_DEPLOYER);
+            call.caller = h176_to_b176(DEFAULT_CREATE2_DEPLOYER);
 
             // We have to increment the nonce of the user address, since this create2 will be done
             // by the create2_deployer
@@ -422,22 +429,22 @@ pub fn check_if_fixed_gas_limit<DB: DatabaseExt>(
     // time of the call, which should be rather close to configured gas limit.
     // TODO: Find a way to reliably make this determination. (for example by
     // generating it in the compilation or evm simulation process)
-    U256::from(data.env.tx.gas_limit) > data.env.block.gas_limit.into() &&
-        U256::from(call_gas_limit) <= data.env.block.gas_limit.into()
+    U256::from(data.env.tx.gas_limit) > ru256_to_u256(data.env.block.gas_limit) &&
+        U256::from(call_gas_limit) <= ru256_to_u256(data.env.block.gas_limit)
         // Transfers in forge scripts seem to be estimated at 2300 by revm leading to "Intrinsic
         // gas too low" failure when simulated on chain
         && call_gas_limit > 2300
 }
 
 /// Small utility function that checks if an address is a potential precompile.
-pub fn is_potential_precompile(address: H160) -> bool {
-    address < H160::from_low_u64_be(10) && address != H160::zero()
+pub fn is_potential_precompile(address: H176) -> bool {
+    address < H176::from_low_u64_be(10) && address != H176::zero()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers::abi::AbiDecode;
+    use corebc::abi::AbiDecode;
 
     #[test]
     fn test_uint_env() {

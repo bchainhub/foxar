@@ -7,7 +7,7 @@ use crate::{
     utils::{p_println, STATIC_FUZZ_SEED},
 };
 use clap::{Parser, ValueEnum};
-use ethers::{
+use corebc::{
     abi::Address,
     prelude::{
         artifacts::{Ast, CompactBytecode, CompactDeployedBytecode},

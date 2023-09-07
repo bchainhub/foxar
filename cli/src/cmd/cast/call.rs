@@ -5,7 +5,7 @@ use crate::{
 };
 use cast::{Cast, TxBuilder};
 use clap::Parser;
-use ethers::types::{BlockId, NameOrAddress, U256};
+use corebc::types::{BlockId, NameOrAddress, U256};
 use eyre::WrapErr;
 use foundry_config::Config;
 use std::str::FromStr;
@@ -123,7 +123,7 @@ impl CallArgs {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers::types::Address;
+    use corebc::types::Address;
 
     #[test]
     fn can_parse_call_data() {

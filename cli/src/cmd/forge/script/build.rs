@@ -1,6 +1,6 @@
 use super::*;
 use crate::cmd::get_cached_entry_by_name;
-use ethers::{
+use corebc::{
     prelude::{
         artifacts::Libraries, cache::SolFilesCache, ArtifactId, Graph, Project,
         ProjectCompileOutput,

@@ -1,12 +1,12 @@
 use crate::{
-    abi::CHEATCODE_ADDRESS, debug::Instruction, trace::identifier::LocalTraceIdentifier, CallKind,
+    abi::CHEATCODE_ADDRESS, debug::Instruction, trace::identifier::LocalTraceIdentifier,
+    utils::ru256_to_u256, CallKind,
 };
-pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
-use ethers::{
+use corebc::{
     abi::{ethereum_types::BigEndianHash, Address, RawLog},
-    core::utils::to_checksum,
     types::{Bytes, DefaultFrame, GethDebugTracingOptions, StructLog, H256, U256},
 };
+pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
 use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
 use hashbrown::HashMap;
 use node::CallTraceNode;
@@ -427,7 +427,7 @@ impl From<&CallTraceStep> for StructLog {
             } else {
                 None
             },
-            stack: Some(step.stack.data().iter().copied().map(|data| data.into()).collect()),
+            stack: Some(step.stack.data().iter().copied().map(ru256_to_u256).collect()),
             // Filled in `CallTraceArena::geth_trace` as a result of compounding all slot changes
             storage: None,
         }
@@ -506,7 +506,7 @@ impl Default for CallTrace {
 
 impl fmt::Display for CallTrace {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let address = to_checksum(&self.address, None);
+        let address = &self.address;
         if self.created() {
             write!(
                 f,
@@ -542,7 +542,7 @@ impl fmt::Display for CallTrace {
                 f,
                 "[{}] {}::{}{}({}) {}",
                 self.gas_cost,
-                color.paint(self.label.as_ref().unwrap_or(&address)),
+                color.paint(self.label.as_ref().unwrap_or(&address.to_string())),
                 color.paint(func),
                 if !self.value.is_zero() {
                     format!("{{value: {}}}", self.value)

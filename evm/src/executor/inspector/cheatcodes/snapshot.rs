@@ -1,6 +1,6 @@
 use super::Result;
 use crate::{abi::HEVMCalls, executor::backend::DatabaseExt};
-use ethers::abi::AbiEncode;
+use corebc::abi::AbiEncode;
 use revm::EVMData;
 
 /// Handles fork related cheatcodes

@@ -1,9 +1,6 @@
 //! Helper trait and functions to format corebc types.
 
-use corebc_core::{
-    types::*,
-    utils::{hex, to_checksum},
-};
+use corebc_core::{types::*, utils::hex};
 use serde::Deserialize;
 
 /// length of the name column for pretty formatting `{:>20}{value}`
@@ -47,7 +44,7 @@ impl UIfmt for I256 {
 
 impl UIfmt for Address {
     fn pretty(&self) -> String {
-        to_checksum(self, None)
+        self.to_string()
     }
 }
 

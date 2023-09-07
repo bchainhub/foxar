@@ -12,7 +12,6 @@ use eyre::{Result, WrapErr};
 use futures::future::BoxFuture;
 use std::{
     collections::{BTreeMap, HashMap},
-    env::VarError,
     fmt::Write,
     path::PathBuf,
     str::FromStr,
@@ -134,7 +133,7 @@ pub fn link_with_nonce_or_address<T, U>(
     extra: &mut U,
     link_key_construction: impl Fn(String, String) -> (String, String, String),
     post_link: impl Fn(PostLinkInput<T, U>) -> eyre::Result<()>,
-    network: Network
+    network: Network,
 ) -> Result<()> {
     // create a mapping of fname => Vec<(fname, file, key)>,
     let link_tree: BTreeMap<String, ArtifactDependencies> = contracts
@@ -326,7 +325,7 @@ fn recurse_link<'a>(
                 *deployed_address
             } else {
                 // we need to deploy the library
-                let computed_address = corebc_core::utils::get_contract_address(sender, init_nonce + deployment.len(), network);
+                let computed_address = corebc_core::utils::get_contract_address(sender, init_nonce + deployment.len(), &network);
                 let library = format!("{file}:{key}:{}", hex::encode(computed_address));
 
                 // push the dependency into the library deployment vector
@@ -366,7 +365,10 @@ pub fn to_table(value: serde_json::Value) -> String {
 /// Resolves an input to [`NameOrAddress`]. The input could also be a contract/token name supported
 /// by
 /// [`corebc-addressbook`](https://github.com/gakonst/corebc-rs/tree/master/corebc-addressbook).
-pub fn resolve_addr<T: Into<NameOrAddress>>(to: T, network: Option<Network>) -> Result<NameOrAddress> {
+pub fn resolve_addr<T: Into<NameOrAddress>>(
+    to: T,
+    network: Option<Network>,
+) -> Result<NameOrAddress> {
     Ok(match to.into() {
         NameOrAddress::Address(addr) => NameOrAddress::Address(addr),
         NameOrAddress::Name(contract_or_ens) => {
@@ -452,8 +454,8 @@ mod tests {
     use super::*;
     use corebc::{
         abi::Abi,
-        solc::{Project, ProjectPathsConfig},
         types::{Address, Bytes},
+        ylem::{Project, ProjectPathsConfig},
     };
     use foundry_common::ContractsByArtifact;
 
@@ -570,7 +572,7 @@ mod tests {
 
         // DAI:mainnet exists in corebc-addressbook (0x6b175474e89094c44da98b954eedeac495271d0f)
         assert_eq!(
-            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::::Mainnet)).ok(),
+            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Mainnet)).ok(),
             Some(NameOrAddress::Address(
                 Address::from_str("0x6b175474e89094c44da98b954eedeac495271d0f").unwrap()
             ))
@@ -585,9 +587,7 @@ mod tests {
         );
 
         // DAI:devin does not exist in addressbook
-        assert!(
-            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Devin)).is_err()
-        );
+        assert!(resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Devin)).is_err());
 
         // If not present in addressbook, gets resolved to an ENS name.
         assert_eq!(

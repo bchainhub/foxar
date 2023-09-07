@@ -9,5 +9,5 @@ pub mod script;
 pub use script::{ScriptOutcome, ScriptTester};
 
 // re-exports for convenience
-pub use ethers_solc;
+pub use corebc_ylem;
 pub use tempfile;

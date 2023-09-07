@@ -5,7 +5,7 @@ use crate::{
 };
 use cast::Cast;
 use clap::Parser;
-use ethers::{
+use corebc::{
     abi::{Address, Event, RawTopicFilter, Topic, TopicFilter},
     providers::Middleware,
     types::{BlockId, BlockNumber, Filter, FilterBlockOption, NameOrAddress, ValueOrArray, H256},
@@ -219,7 +219,7 @@ fn build_filter_topics(topics: Vec<String>) -> Result<TopicFilter, eyre::Error> 
 
 #[cfg(test)]
 mod tests {
-    use ethers::types::H160;
+    use corebc::types::H160;
 
     use super::*;
 

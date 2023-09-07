@@ -5,12 +5,12 @@ use crate::{
 };
 use cast::{Cast, TxBuilder};
 use clap::Parser;
-use ethers::{
+use corebc::{
     providers::Middleware,
     types::{BlockId, NameOrAddress},
 };
 use eyre::WrapErr;
-use foundry_config::{Network, Config};
+use foundry_config::{Config, Network};
 use std::str::FromStr;
 
 /// CLI arguments for `cast access-list`.

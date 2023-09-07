@@ -6,7 +6,7 @@ use crate::{
 use cast::Cast;
 use clap::Parser;
 use comfy_table::{presets::ASCII_MARKDOWN, Table};
-use ethers::{
+use corebc::{
     abi::ethabi::ethereum_types::BigEndianHash, etherscan::Client, prelude::*,
     solc::artifacts::StorageLayout,
 };

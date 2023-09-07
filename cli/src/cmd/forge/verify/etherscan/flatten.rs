@@ -1,5 +1,5 @@
 use super::{EtherscanSourceProvider, VerifyArgs};
-use ethers::{
+use corebc::{
     etherscan::verify::CodeFormat,
     solc::{
         artifacts::{BytecodeHash, Source},

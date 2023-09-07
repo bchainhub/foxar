@@ -4,7 +4,7 @@ use crate::{
     utils::FoundryPathExt,
 };
 use clap::Parser;
-use ethers::prelude::artifacts::output_selection::ContractOutputSelection;
+use corebc::prelude::artifacts::output_selection::ContractOutputSelection;
 use foundry_common::{
     compile,
     selectors::{import_selectors, SelectorImportData},

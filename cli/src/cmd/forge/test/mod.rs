@@ -8,7 +8,7 @@ use crate::{
 };
 use cast::fuzz::CounterExample;
 use clap::Parser;
-use ethers::types::U256;
+use corebc::types::U256;
 use forge::{
     decode::decode_console_logs,
     executor::inspector::CheatsConfig,

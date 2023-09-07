@@ -236,7 +236,8 @@ pub fn deployed_contract_size<T: Artifact>(artifact: &T) -> Option<usize> {
         BytecodeObject::Bytecode(bytes) => bytes.len(),
         BytecodeObject::Unlinked(unlinked) => {
             // we don't need to account for placeholders here, because library placeholders take up
-            // 44 characters: `____$<library hash>$____` which is the same as a 22byte address in hex.
+            // 44 characters: `____$<library hash>$____` which is the same as a 22byte address in
+            // hex.
             let mut size = unlinked.as_bytes().len();
             if unlinked.starts_with("0x") {
                 size -= 2;
@@ -460,7 +461,7 @@ pub fn etherscan_project(metadata: &Metadata, target_path: impl AsRef<Path>) -> 
 
     let v = metadata.compiler_version()?;
     let v = format!("{}.{}.{}", v.major, v.minor, v.patch);
-    let ylem = Ylem::find_or_install_svm_version(v)?;
+    let ylem = Ylem::find_or_install_yvm_version(v)?;
 
     Ok(Project::builder()
         .ylem_config(YlemConfig::builder().settings(settings).build())

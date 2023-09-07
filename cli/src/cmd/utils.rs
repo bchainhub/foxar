@@ -1,5 +1,5 @@
 use crate::suggestions;
-use ethers::{
+use corebc::{
     abi::Abi,
     core::types::Chain,
     solc::{
@@ -13,7 +13,7 @@ use ethers::{
 use eyre::WrapErr;
 use forge::executor::opts::EvmOpts;
 use foundry_common::{cli_warn, fs, TestFunctionExt};
-use foundry_config::{error::ExtractConfigError, figment::Figment, Network as ConfigChain, Config};
+use foundry_config::{error::ExtractConfigError, figment::Figment, Config, Network as ConfigChain};
 use std::{fmt::Write, path::PathBuf};
 use tracing::trace;
 use yansi::Paint;

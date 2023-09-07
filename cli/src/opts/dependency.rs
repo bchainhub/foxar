@@ -137,7 +137,7 @@ impl Dependency {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use ethers::solc::info::ContractInfo;
+    use corebc::solc::info::ContractInfo;
 
     #[test]
     fn parses_dependencies() {

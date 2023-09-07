@@ -3,7 +3,7 @@ use crate::cmd::{
     forge::script::{multi::MultiChainSequence, verify::VerifyBundle},
     LoadConfig,
 };
-use ethers::{
+use corebc::{
     prelude::{Middleware, Signer},
     types::{transaction::eip2718::TypedTransaction, U256},
 };

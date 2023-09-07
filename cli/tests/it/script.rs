@@ -2,7 +2,7 @@
 use crate::constants::TEMPLATE_CONTRACT;
 use anvil::{spawn, NodeConfig};
 use cast::SimpleCast;
-use ethers::abi::Address;
+use corebc::abi::Address;
 use foundry_cli_test_utils::{
     forgetest, forgetest_async, forgetest_init,
     util::{OutputExt, TestCommand, TestProject},

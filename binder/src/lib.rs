@@ -1,7 +1,7 @@
 //! Generate [ethers-rs]("https://github.com/gakonst/ethers-rs") bindings for solidity projects in a build script.
 
 use crate::utils::{GitReference, GitRemote};
-use ethers_contract::MultiAbigen;
+use corebc_contract::MultiAbigen;
 pub use foundry_config::Config;
 use std::{
     path::{Path, PathBuf},

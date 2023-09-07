@@ -2,7 +2,7 @@ use crate::{
     cmd::forge::script::sequence::ScriptSequence, init_progress, update_progress,
     utils::print_receipt,
 };
-use ethers::{
+use corebc::{
     prelude::{PendingTransaction, TxHash},
     providers::Middleware,
     types::TransactionReceipt,

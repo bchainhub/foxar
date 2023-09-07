@@ -4,9 +4,9 @@ use crate::fuzz::{
     strategies::fuzz_param,
     EvmFuzzState,
 };
-use ethers::{
+use corebc::{
     abi::{Abi, Function, ParamType},
-    types::{Address, Bytes},
+    types::{Address, Bytes, Network},
 };
 use parking_lot::RwLock;
 use proptest::prelude::*;
@@ -20,6 +20,7 @@ pub fn override_call_strat(
     fuzz_state: EvmFuzzState,
     contracts: FuzzRunIdentifiedContracts,
     target: Arc<RwLock<Address>>,
+    network: Network,
 ) -> SBoxedStrategy<(Address, Bytes)> {
     let contracts_ref = contracts.clone();
 
@@ -37,7 +38,7 @@ pub fn override_call_strat(
 
         let func = select_random_function(abi, functions);
         func.prop_flat_map(move |func| {
-            fuzz_contract_with_calldata(fuzz_state.clone(), target_address, func)
+            fuzz_contract_with_calldata(fuzz_state.clone(), target_address, func, &network)
         })
     })
     .sboxed()
@@ -58,10 +59,11 @@ pub fn invariant_strat(
     senders: SenderFilters,
     contracts: FuzzRunIdentifiedContracts,
     dictionary_weight: u32,
+    network: &Network,
 ) -> BoxedStrategy<Vec<BasicTxDetails>> {
     // We only want to seed the first value, since we want to generate the rest as we mutate the
     // state
-    vec![generate_call(fuzz_state, senders, contracts, dictionary_weight); 1].boxed()
+    vec![generate_call(fuzz_state, senders, contracts, dictionary_weight, *network); 1].boxed()
 }
 
 /// Strategy to generate a transaction where the `sender`, `target` and `calldata` are all generated
@@ -71,6 +73,7 @@ fn generate_call(
     senders: SenderFilters,
     contracts: FuzzRunIdentifiedContracts,
     dictionary_weight: u32,
+    network: Network,
 ) -> BoxedStrategy<BasicTxDetails> {
     let random_contract = select_random_contract(contracts);
     let senders = Rc::new(senders);
@@ -80,9 +83,13 @@ fn generate_call(
             let senders = senders.clone();
             let fuzz_state = fuzz_state.clone();
             func.prop_flat_map(move |func| {
-                let sender =
-                    select_random_sender(fuzz_state.clone(), senders.clone(), dictionary_weight);
-                (sender, fuzz_contract_with_calldata(fuzz_state.clone(), contract, func))
+                let sender = select_random_sender(
+                    fuzz_state.clone(),
+                    senders.clone(),
+                    dictionary_weight,
+                    &network,
+                );
+                (sender, fuzz_contract_with_calldata(fuzz_state.clone(), contract, func, &network))
             })
         })
         .boxed()
@@ -95,18 +102,19 @@ fn select_random_sender(
     fuzz_state: EvmFuzzState,
     senders: Rc<SenderFilters>,
     dictionary_weight: u32,
+    network: &Network,
 ) -> impl Strategy<Value = Address> {
     let senders_ref = senders.clone();
     let fuzz_strategy = proptest::strategy::Union::new_weighted(vec![
         (
             100 - dictionary_weight,
-            fuzz_param(&ParamType::Address)
+            fuzz_param(&ParamType::Address, *network)
                 .prop_map(move |addr| addr.into_address().unwrap())
                 .boxed(),
         ),
         (
             dictionary_weight,
-            fuzz_param_from_state(&ParamType::Address, fuzz_state)
+            fuzz_param_from_state(&ParamType::Address, fuzz_state, *network)
                 .prop_map(move |addr| addr.into_address().unwrap())
                 .boxed(),
         ),
@@ -147,12 +155,12 @@ fn select_random_function(
     targeted_functions: Vec<Function>,
 ) -> impl Strategy<Value = Function> {
     let selectors = any::<prop::sample::Selector>();
-    let possible_funcs: Vec<ethers::abi::Function> = abi
+    let possible_funcs: Vec<corebc::abi::Function> = abi
         .functions()
         .filter(|func| {
             !matches!(
                 func.state_mutability,
-                ethers::abi::StateMutability::Pure | ethers::abi::StateMutability::View
+                corebc::abi::StateMutability::Pure | corebc::abi::StateMutability::View
             )
         })
         .cloned()
@@ -179,12 +187,13 @@ pub fn fuzz_contract_with_calldata(
     fuzz_state: EvmFuzzState,
     contract: Address,
     func: Function,
+    network: &Network,
 ) -> impl Strategy<Value = (Address, Bytes)> {
     // We need to compose all the strategies generated for each parameter in all
     // possible combinations
     let strats = proptest::strategy::Union::new_weighted(vec![
-        (60, fuzz_calldata(func.clone())),
-        (40, fuzz_calldata_from_state(func, fuzz_state)),
+        (60, fuzz_calldata(func.clone(), network)),
+        (40, fuzz_calldata_from_state(func, fuzz_state, network)),
     ]);
 
     strats.prop_map(move |calldata| {

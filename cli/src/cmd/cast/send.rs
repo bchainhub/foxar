@@ -5,11 +5,11 @@ use crate::{
 };
 use cast::{Cast, TxBuilder};
 use clap::Parser;
-use ethers::{
+use corebc::{
     prelude::MiddlewareBuilder, providers::Middleware, signers::Signer, types::NameOrAddress,
 };
 use foundry_common::cli_warn;
-use foundry_config::{Network, Config};
+use foundry_config::{Config, Network};
 use std::str::FromStr;
 
 /// CLI arguments for `cast send`.

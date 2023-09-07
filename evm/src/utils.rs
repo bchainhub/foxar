@@ -1,12 +1,12 @@
-use ethers::{
+use corebc::{
     abi::{Abi, FixedBytes, Function},
-    solc::EvmVersion,
-    types::{Block, Chain, H256, U256},
+    types::{Block, H256, U256},
+    ylem::CvmVersion,
 };
 use eyre::ContextCompat;
 use revm::{
     interpreter::{opcode, opcode::spec_opcode_gas},
-    primitives::SpecId,
+    primitives::{Network as REVMNetwork, SpecId},
 };
 use std::collections::BTreeMap;
 
@@ -34,42 +34,42 @@ pub fn h256_to_u256_le(storage: H256) -> U256 {
     U256::from_little_endian(storage.as_bytes())
 }
 
-/// Small helper function to convert revm's [B160] into ethers's [H160].
+/// Small helper function to convert revm's [B176] into corebc's [H176].
 #[inline]
-pub fn b160_to_h160(b: revm::primitives::B160) -> ethers::types::H160 {
-    ethers::types::H160(b.0)
+pub fn b176_to_h176(b: revm::primitives::B176) -> corebc::types::H176 {
+    corebc::types::H176(b.0)
 }
 
-/// Small helper function to convert ethers's [H160] into revm's [B160].
+/// Small helper function to convert corebc's [H160] into revm's [B176].
 #[inline]
-pub fn h160_to_b160(h: ethers::types::H160) -> revm::primitives::B160 {
-    revm::primitives::B160(h.0)
+pub fn h176_to_b176(h: corebc::types::H176) -> revm::primitives::B176 {
+    revm::primitives::B176(h.0)
 }
 
-/// Small helper function to convert revm's [B256] into ethers's [H256].
+/// Small helper function to convert revm's [B256] into corebc's [H256].
 #[inline]
-pub fn b256_to_h256(b: revm::primitives::B256) -> ethers::types::H256 {
-    ethers::types::H256(b.0)
+pub fn b256_to_h256(b: revm::primitives::B256) -> corebc::types::H256 {
+    corebc::types::H256(b.0)
 }
 
-/// Small helper function to convert ether's [H256] into revm's [B256].
+/// Small helper function to convert corebc's [H256] into revm's [B256].
 #[inline]
-pub fn h256_to_b256(h: ethers::types::H256) -> revm::primitives::B256 {
+pub fn h256_to_b256(h: corebc::types::H256) -> revm::primitives::B256 {
     revm::primitives::B256(h.0)
 }
 
-/// Small helper function to convert ether's [U256] into revm's [U256].
+/// Small helper function to convert corebc's [U256] into revm's [U256].
 #[inline]
-pub fn u256_to_ru256(u: ethers::types::U256) -> revm::primitives::U256 {
+pub fn u256_to_ru256(u: corebc::types::U256) -> revm::primitives::U256 {
     let mut buffer = [0u8; 32];
     u.to_little_endian(buffer.as_mut_slice());
     revm::primitives::U256::from_le_bytes(buffer)
 }
 
-/// Small helper function to convert revm's [U256] into ethers's [U256].
+/// Small helper function to convert revm's [U256] into corebc's [U256].
 #[inline]
-pub fn ru256_to_u256(u: revm::primitives::U256) -> ethers::types::U256 {
-    ethers::types::U256::from_little_endian(&u.as_le_bytes())
+pub fn ru256_to_u256(u: revm::primitives::U256) -> corebc::types::U256 {
+    corebc::types::U256::from_little_endian(&u.as_le_bytes())
 }
 
 /// Small helper function to convert an Eval into an InstructionResult
@@ -136,57 +136,31 @@ pub fn halt_to_instruction_result(
     }
 }
 
-/// Converts an `EvmVersion` into a `SpecId`
-pub fn evm_spec(evm: &EvmVersion) -> SpecId {
+/// Converts an `CvmVersion` into a `SpecId`
+pub fn evm_spec(evm: &CvmVersion) -> SpecId {
     match evm {
-        EvmVersion::Istanbul => SpecId::ISTANBUL,
-        EvmVersion::Berlin => SpecId::BERLIN,
-        EvmVersion::London => SpecId::LONDON,
-        EvmVersion::Paris => SpecId::MERGE,
-        EvmVersion::Shanghai => SpecId::SHANGHAI,
+        CvmVersion::Istanbul => SpecId::ISTANBUL,
         _ => panic!("Unsupported EVM version"),
     }
 }
 
-/// Depending on the configured chain id and block number this should apply any specific changes
+//TODO:error remove evm specs?
+/// Depending on the configured network id and block number this should apply any specific changes
 ///
 /// This checks for:
 ///    - prevrandao mixhash after merge
-pub fn apply_chain_and_block_specific_env_changes<T>(
+pub fn apply_network_and_block_specific_env_changes<T>(
     env: &mut revm::primitives::Env,
     block: &Block<T>,
 ) {
-    if let Ok(chain) = Chain::try_from(ru256_to_u256(env.cfg.chain_id)) {
-        let block_number = block.number.unwrap_or_default();
-
-        match chain {
-            Chain::Mainnet => {
-                // after merge difficulty is supplanted with prevrandao EIP-4399
-                if block_number.as_u64() >= 15_537_351u64 {
-                    env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
-                }
-
-                return
+    let block_number = block.number.unwrap_or_default();
+    match env.cfg.network {
+        REVMNetwork::Mainnet | REVMNetwork::Devin | REVMNetwork::Private(_) => {
+            // after merge difficulty is supplanted with prevrandao EIP-4399
+            if block_number.as_u64() >= 15_537_351u64 {
+                env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
             }
-            Chain::Arbitrum |
-            Chain::ArbitrumGoerli |
-            Chain::ArbitrumNova |
-            Chain::ArbitrumTestnet => {
-                // on arbitrum `block.number` is the L1 block which is included in the
-                // `l1BlockNumber` field
-                if let Some(l1_block_number) = block.other.get("l1BlockNumber").cloned() {
-                    if let Ok(l1_block_number) = serde_json::from_value::<U256>(l1_block_number) {
-                        env.block.number = l1_block_number.into();
-                    }
-                }
-            }
-            _ => {}
         }
-    }
-
-    // if difficulty is `0` we assume it's past merge
-    if block.difficulty.is_zero() {
-        env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
     }
 }
 
@@ -255,7 +229,7 @@ pub fn get_function(
 }
 
 // TODO: Add this once solc is removed from this crate
-pub use ethers::solc::utils::RuntimeOrHandle;
+pub use corebc::ylem::utils::RuntimeOrHandle;
 
 /*
 use tokio::runtime::{Handle, Runtime};

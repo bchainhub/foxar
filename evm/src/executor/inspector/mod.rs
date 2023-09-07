@@ -27,7 +27,7 @@ pub use cheatcodes::{Cheatcodes, CheatsConfig, DEFAULT_CREATE2_DEPLOYER};
 mod chisel_state;
 pub use chisel_state::ChiselState;
 
-use ethers::types::U256;
+use corebc::types::U256;
 
 use revm::{inspectors::GasInspector, primitives::BlockEnv};
 

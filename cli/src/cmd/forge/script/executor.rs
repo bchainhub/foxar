@@ -8,7 +8,7 @@ use crate::cmd::{
     },
     needs_setup,
 };
-use ethers::{
+use corebc::{
     solc::artifacts::CompactContractBytecode,
     types::{transaction::eip2718::TypedTransaction, Address, U256},
 };

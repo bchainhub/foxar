@@ -2,7 +2,7 @@ use crate::opts::error::PrivateKeyError;
 use async_trait::async_trait;
 use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
 use clap::Parser;
-use ethers::{
+use corebc::{
     signers::{
         coins_bip39::English, AwsSigner, AwsSignerError, HDPath as LedgerHDPath, Ledger,
         LedgerError, LocalWallet, MnemonicBuilder, Signer, Trezor, TrezorError, TrezorHDPath,

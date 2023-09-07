@@ -3,7 +3,7 @@
 use crate::cmd::Cmd;
 use cast::SimpleCast;
 use clap::{builder::TypedValueParser, Parser};
-use ethers::{
+use corebc::{
     core::{k256::ecdsa::SigningKey, rand::thread_rng},
     prelude::{LocalWallet, Signer},
     types::{H160, U256},

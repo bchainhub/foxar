@@ -1,4 +1,4 @@
-use ethers_core::types::Address;
+use corebc_core::types::Address;
 
 use super::{Preprocessor, PreprocessorId};
 use crate::{Document, PreprocessorOutput};

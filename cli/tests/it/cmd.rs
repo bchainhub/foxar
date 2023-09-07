@@ -2,7 +2,7 @@
 
 use crate::constants::*;
 use clap::CommandFactory;
-use ethers::{
+use corebc::{
     prelude::remappings::Remapping,
     solc::{
         artifacts::{BytecodeHash, Metadata},
@@ -11,11 +11,11 @@ use ethers::{
 };
 use foundry_cli::opts::forge::Opts;
 use foundry_cli_test_utils::{
-    ethers_solc::PathStyle,
+    corebc_ylem::PathStyle,
     forgetest, forgetest_init,
     util::{pretty_err, read_string, OutputExt, TestCommand, TestProject},
 };
-use foundry_config::{parse_with_profile, BasicConfig, Network, Config, SolidityErrorCode};
+use foundry_config::{parse_with_profile, BasicConfig, Config, Network, SolidityErrorCode};
 use semver::Version;
 use std::{
     env, fs,
@@ -206,7 +206,8 @@ forgetest!(
     can_cache_clean_chain_etherscan,
     |_: TestProject, mut cmd: TestCommand| {
         let cache_dir =
-            Config::foundry_network_cache_dir(Network::Named(ethers::prelude::Chain::Mainnet)).unwrap();
+            Config::foundry_network_cache_dir(Network::Named(ethers::prelude::Chain::Mainnet))
+                .unwrap();
         let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(Network::Named(
             ethers::prelude::Chain::Mainnet,
         ))

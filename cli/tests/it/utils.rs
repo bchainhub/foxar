@@ -1,6 +1,6 @@
 //! Various helper functions
 
-use ethers::prelude::{Address, Chain, LocalWallet, Signer};
+use corebc::prelude::{Address, Chain, LocalWallet, Signer};
 
 /// Returns the current millis since unix epoch.
 ///

@@ -1,5 +1,5 @@
 use super::{EtherscanSourceProvider, VerifyArgs};
-use ethers::{
+use corebc::{
     etherscan::verify::CodeFormat, prelude::artifacts::StandardJsonCompilerInput, solc::Project,
 };
 use eyre::Context;

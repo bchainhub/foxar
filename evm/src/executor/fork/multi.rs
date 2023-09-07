@@ -7,7 +7,7 @@ use crate::{
     executor::fork::{BackendHandler, BlockchainDb, BlockchainDbMeta, CreateFork, SharedBackend},
     utils::ru256_to_u256,
 };
-use ethers::{
+use corebc::{
     abi::{AbiDecode, AbiEncode, AbiError},
     providers::{Http, Provider, RetryClient},
     types::{BlockId, BlockNumber},
@@ -498,7 +498,7 @@ async fn create_fork(
 
     // determine the cache path if caching is enabled
     let cache_path = if fork.enable_caching {
-        Config::foundry_block_cache_dir(ru256_to_u256(meta.cfg_env.chain_id).as_u64(), number)
+        Config::foundry_block_cache_dir(meta.cfg_env.network.as_u64(), number)
     } else {
         None
     };

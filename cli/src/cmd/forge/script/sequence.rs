@@ -7,7 +7,7 @@ use crate::cmd::forge::{
     },
     verify::provider::VerificationProviderType,
 };
-use ethers::{
+use corebc::{
     abi::Address,
     prelude::{artifacts::Libraries, ArtifactId, TransactionReceipt, TxHash},
     types::transaction::eip2718::TypedTransaction,

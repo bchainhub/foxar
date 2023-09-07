@@ -10,7 +10,7 @@ use crate::{
 };
 use cast::SimpleCast;
 use clap::{Parser, ValueHint};
-use ethers::{
+use corebc::{
     abi::{Abi, Constructor, Token},
     prelude::{artifacts::BytecodeObject, ContractFactory, Middleware, MiddlewareBuilder},
     solc::{info::ContractInfo, utils::canonicalized},

@@ -5,7 +5,7 @@ use crate::{
 };
 use cast::{Cast, TxBuilder};
 use clap::Parser;
-use ethers::types::{NameOrAddress, U256};
+use corebc::types::{NameOrAddress, U256};
 use eyre::Result;
 use foundry_config::{figment::Figment, Config};
 use std::str::FromStr;

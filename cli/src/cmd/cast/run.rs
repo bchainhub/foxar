@@ -4,7 +4,7 @@ use cast::{
     trace::{identifier::SignaturesIdentifier, CallTraceDecoder, Traces},
 };
 use clap::Parser;
-use ethers::{
+use corebc::{
     abi::Address,
     prelude::{artifacts::ContractBytecodeSome, ArtifactId, Middleware},
     types::H160,

@@ -8,8 +8,7 @@ use cast::{
     },
 };
 use clap::{Parser, ValueHint};
-use dialoguer::Confirm;
-use ethers::{
+use corebc::{
     abi::{Abi, Function, HumanReadableParser},
     prelude::{
         artifacts::{ContractBytecodeSome, Libraries},
@@ -23,6 +22,7 @@ use ethers::{
         TransactionRequest, U256,
     },
 };
+use dialoguer::Confirm;
 use eyre::{ContextCompat, WrapErr};
 use forge::{
     debug::DebugArena,

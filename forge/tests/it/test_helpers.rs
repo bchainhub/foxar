@@ -1,8 +1,8 @@
 #![allow(unused)]
 
 use super::*;
-use ethers::{
-    prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, SolcConfig},
+use corebc::{
+    prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, YlemConfig},
     solc::{artifacts::Libraries, Project, ProjectPathsConfig},
     types::{Address, U256},
 };
@@ -32,7 +32,7 @@ pub static LIBS_PROJECT: Lazy<Project> = Lazy::new(|| {
 
     let settings = Settings { libraries: Libraries::parse(&libs).unwrap(), ..Default::default() };
 
-    let solc_config = SolcConfig::builder().settings(settings).build();
+    let solc_config = YlemConfig::builder().settings(settings).build();
     Project::builder()
         .paths(paths)
         .ephemeral()
@@ -63,7 +63,7 @@ pub static COMPILED_WITH_LIBS: Lazy<ProjectCompileOutput> = Lazy::new(|| {
 pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         gas_limit: 18446744073709551615,
-        chain_id: None,
+        network_id: None,
         tx_origin: Config::DEFAULT_SENDER,
         block_number: 1,
         block_timestamp: 1,

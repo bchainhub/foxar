@@ -1,7 +1,7 @@
 use crate::utils::get_function;
-use ethers::{
+use corebc::{
     abi::{Abi, Address, FixedBytes, Function},
-    solc::ArtifactId,
+    ylem::ArtifactId,
 };
 use std::collections::BTreeMap;
 

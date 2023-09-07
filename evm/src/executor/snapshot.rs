@@ -1,6 +1,6 @@
 //! support for snapshotting different states
 
-use ethers::types::U256;
+use corebc::types::U256;
 use std::collections::HashMap;
 
 /// Represents all snapshots

@@ -3,7 +3,7 @@ use crate::{
     abi::HEVMCalls,
     executor::{backend::DatabaseExt, fork::CreateFork},
 };
-use ethers::{
+use corebc::{
     abi::AbiEncode,
     prelude::U256,
     types::{Bytes, H256},

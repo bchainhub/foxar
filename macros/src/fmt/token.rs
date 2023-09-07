@@ -1,6 +1,6 @@
 //! Formatting helpers for [`Token`]s.
 
-use corebc_core::{abi::Token, types::I256, utils, utils::hex};
+use corebc_core::{abi::Token, types::I256, utils::hex};
 use std::{fmt, fmt::Write};
 
 /// Wrapper that pretty formats a token
@@ -16,7 +16,7 @@ impl fmt::Display for TokenDisplay<'_> {
 fn fmt_token(f: &mut fmt::Formatter, item: &Token) -> fmt::Result {
     match item {
         Token::Address(inner) => {
-            write!(f, "{}", utils::to_checksum(inner, None))
+            write!(f, "{}", inner)
         }
         // add 0x
         Token::Bytes(inner) => write!(f, "0x{}", hex::encode(inner)),

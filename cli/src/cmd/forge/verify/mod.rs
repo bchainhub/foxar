@@ -9,7 +9,7 @@ use crate::{
     opts::EtherscanOpts,
 };
 use clap::{Parser, ValueHint};
-use ethers::{abi::Address, solc::info::ContractInfo};
+use corebc::{abi::Address, solc::info::ContractInfo};
 use foundry_config::{figment, impl_figment_convert, impl_figment_convert_cast, Config};
 use provider::VerificationProviderType;
 use reqwest::Url;

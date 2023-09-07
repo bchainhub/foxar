@@ -1,6 +1,6 @@
 use super::{CoverageItem, CoverageItemKind, ItemAnchor, SourceLocation};
 use crate::utils::ICPCMap;
-use ethers::prelude::{
+use corebc::prelude::{
     sourcemap::{SourceElement, SourceMap},
     Bytes,
 };

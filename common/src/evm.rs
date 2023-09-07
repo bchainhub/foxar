@@ -9,7 +9,7 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile, Provider,
     },
-    Network, Config,
+    Config, Network,
 };
 use serde::Serialize;
 use std::collections::HashMap;
@@ -272,7 +272,7 @@ mod tests {
     fn test_memory_limit() {
         let args = EvmArgs {
             env: EnvArgs {
-                network_id: Some(ethers_core::types::Chain::Mainnet.into()),
+                network_id: Some(corebc_core::types::Network::Mainnet.into()),
                 ..Default::default()
             },
             ..Default::default()

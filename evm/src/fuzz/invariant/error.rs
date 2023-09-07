@@ -6,7 +6,7 @@ use crate::{
     trace::{load_contracts, TraceKind, Traces},
     CALLER,
 };
-use ethers::{
+use corebc::{
     abi::Function,
     types::{Address, U256},
 };
@@ -27,7 +27,7 @@ pub struct InvariantFuzzError {
     /// Address of the invariant asserter.
     pub addr: Address,
     /// Function data for invariant check.
-    pub func: Option<ethers::prelude::Bytes>,
+    pub func: Option<corebc::prelude::Bytes>,
     /// Inner fuzzing Sequence coming from overriding calls.
     pub inner_sequence: Vec<Option<BasicTxDetails>>,
     /// Shrink the failed test case to the smallest sequence.

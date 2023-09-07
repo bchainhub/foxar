@@ -7,7 +7,7 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile,
     },
-    impl_figment_convert_cast, Network, Config,
+    impl_figment_convert_cast, Config, Network,
 };
 use serde::Serialize;
 use std::borrow::Cow;

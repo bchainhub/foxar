@@ -18,7 +18,7 @@ pub enum Network {
 
 impl Network {
     /// The id of the network.
-    pub const fn id(&self) -> u64 {
+    pub fn id(&self) -> u64 {
         match self {
             Network::Named(network) => u64::from(*network),
             Network::Id(id) => *id,
@@ -40,6 +40,11 @@ impl Network {
     /// without eip1559
     pub fn is_legacy(&self) -> bool {
         self.named().map_or(false, |c| c.is_legacy())
+    }
+
+    /// Returns the corresponding blockindex URLs
+    pub fn blockindex_urls(&self) -> Option<(&'static str, &'static str)> {
+        self.named().ok().and_then(|c| c.blockindex_urls())
     }
 }
 
@@ -138,9 +143,9 @@ impl<'de> Deserialize<'de> for Network {
             NetworkId::Named(s) => {
                 s.to_lowercase().parse().map(Network::Named).map_err(serde::de::Error::custom)
             }
-            NetworkId::Id(id) => {
-                Ok(NamedNetwork::try_from(id).map(Network::Named).unwrap_or_else(|_| Network::Id(id)))
-            }
+            NetworkId::Id(id) => Ok(NamedNetwork::try_from(id)
+                .map(Network::Named)
+                .unwrap_or_else(|_| Network::Id(id))),
         }
     }
 }

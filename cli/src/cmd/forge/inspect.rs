@@ -4,7 +4,7 @@ use crate::{
 };
 use clap::Parser;
 use comfy_table::{presets::ASCII_MARKDOWN, Table};
-use ethers::{
+use corebc::{
     prelude::{
         artifacts::output_selection::{
             BytecodeOutputSelection, ContractOutputSelection, DeployedBytecodeOutputSelection,

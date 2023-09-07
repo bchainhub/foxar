@@ -6,7 +6,7 @@ use crate::{
     trace::CallTraceArena,
 };
 use bytes::Bytes;
-use ethers::{
+use corebc::{
     signers::LocalWallet,
     types::{Address, Log},
 };
@@ -15,7 +15,7 @@ use revm::{
     interpreter::{
         return_revert, CallInputs, CreateInputs, Gas, InstructionResult, Interpreter, Memory, Stack,
     },
-    primitives::{B160, B256},
+    primitives::{B176, B256},
     EVMData, Inspector,
 };
 use std::{cell::RefCell, collections::BTreeMap, rc::Rc};
@@ -198,7 +198,7 @@ where
     fn log(
         &mut self,
         evm_data: &mut EVMData<'_, DB>,
-        address: &B160,
+        address: &B176,
         topics: &[B256],
         data: &Bytes,
     ) {
@@ -300,7 +300,7 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
         call_inspectors!(
             inspector,
             [
@@ -330,10 +330,10 @@ where
         data: &mut EVMData<'_, DB>,
         call: &CreateInputs,
         status: InstructionResult,
-        address: Option<B160>,
+        address: Option<B176>,
         remaining_gas: Gas,
         retdata: Bytes,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
         call_inspectors!(
             inspector,
             [
@@ -364,7 +364,7 @@ where
         (status, address, remaining_gas, retdata)
     }
 
-    fn selfdestruct(&mut self, contract: B160, target: B160) {
+    fn selfdestruct(&mut self, contract: B176, target: B176) {
         call_inspectors!(
             inspector,
             [

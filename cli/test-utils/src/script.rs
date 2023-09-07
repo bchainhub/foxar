@@ -1,5 +1,5 @@
 use crate::TestCommand;
-use ethers::{
+use corebc::{
     abi::Address,
     prelude::{Middleware, NameOrAddress, U256},
     utils::hex,

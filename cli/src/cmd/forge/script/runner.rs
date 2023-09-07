@@ -1,5 +1,5 @@
 use super::*;
-use ethers::types::{Address, Bytes, NameOrAddress, U256};
+use corebc::types::{Address, Bytes, NameOrAddress, U256};
 use forge::{
     executor::{CallResult, DeployResult, EvmError, ExecutionErr, Executor, RawCallResult},
     revm::interpreter::{return_ok, InstructionResult},

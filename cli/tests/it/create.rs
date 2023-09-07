@@ -5,7 +5,7 @@ use crate::{
     utils::{self, EnvExternalities},
 };
 use anvil::{spawn, NodeConfig};
-use ethers::{
+use corebc::{
     solc::{artifacts::BytecodeHash, remappings::Remapping},
     types::Address,
 };

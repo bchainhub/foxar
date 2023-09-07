@@ -8,7 +8,7 @@ use crate::{
     utils::STATIC_FUZZ_SEED,
 };
 use clap::{builder::RangedU64ValueParser, Parser, ValueHint};
-use ethers::types::U256;
+use corebc::types::U256;
 use eyre::Context;
 use forge::result::TestKindReport;
 use once_cell::sync::Lazy;

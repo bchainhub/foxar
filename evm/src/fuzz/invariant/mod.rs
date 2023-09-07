@@ -8,7 +8,7 @@ mod call_override;
 pub use call_override::{set_up_inner_replay, RandomCallGenerator};
 mod executor;
 use crate::executor::Executor;
-use ethers::{
+use corebc::{
     abi::{Abi, Function},
     types::{Address, Bytes, U256},
 };

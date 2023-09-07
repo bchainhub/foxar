@@ -3,7 +3,7 @@ use crate::cmd::{
     utils::{Cmd, LoadConfig},
 };
 use clap::{Parser, ValueHint};
-use ethers::contract::{Abigen, ContractFilter, ExcludeContracts, MultiAbigen, SelectContracts};
+use corebc::contract::{Abigen, ContractFilter, ExcludeContracts, MultiAbigen, SelectContracts};
 use foundry_common::{compile, fs::json_files};
 use foundry_config::impl_figment_convert;
 use std::{

@@ -1,4 +1,4 @@
-use ethers_core::utils::hex;
+use corebc_core::utils::hex;
 use itertools::Itertools;
 use once_cell::sync::Lazy;
 use solang_parser::pt::Parameter;

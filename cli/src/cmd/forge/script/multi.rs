@@ -4,7 +4,7 @@ use super::{
     verify::VerifyBundle,
     ScriptArgs,
 };
-use ethers::{
+use corebc::{
     prelude::{artifacts::Libraries, ArtifactId},
     signers::LocalWallet,
 };

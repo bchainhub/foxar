@@ -1,7 +1,7 @@
 use super::{WalletSigner, WalletTrait};
 use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
 use clap::Parser;
-use ethers::{
+use corebc::{
     prelude::{Middleware, Signer},
     signers::{AwsSigner, HDPath as LedgerHDPath, Ledger, LocalWallet, Trezor, TrezorHDPath},
     types::Address,

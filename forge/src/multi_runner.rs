@@ -2,8 +2,8 @@ use crate::{result::SuiteResult, ContractRunner, TestFilter, TestOptions};
 use corebc::{
     abi::Abi,
     prelude::{artifacts::CompactContractBytecode, ArtifactId, ArtifactOutput},
+    types::{Address, Bytes, Network, U256},
     ylem::{contracts::ArtifactContracts, Artifact, ProjectCompileOutput},
-    types::{Address, Bytes, U256, Network},
 };
 use eyre::Result;
 use foundry_common::{ContractsByArtifact, TestFunctionExt};
@@ -293,7 +293,7 @@ impl MultiContractRunnerBuilder {
                     .and_then(|bytes| known_contracts.insert(id.clone(), (abi, bytes.to_vec())));
                 Ok(())
             },
-            Network::from(env.cfg.chain_id),
+            Network::try_from(env.cfg.network.as_u64()).unwrap(),
         )?;
 
         let execution_info = known_contracts.flatten();

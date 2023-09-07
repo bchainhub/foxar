@@ -10,7 +10,7 @@ use corebc::{
 };
 use forge::{
     revm::primitives::{B160, B256, KECCAK_EMPTY, U256},
-    utils::b160_to_h160,
+    utils::b176_to_h176,
 };
 use foundry_evm::{
     executor::{
@@ -123,7 +123,7 @@ impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
         if let Some(acc) = self
             .genesis
             .as_ref()
-            .and_then(|genesis| genesis.alloc.accounts.get(&b160_to_h160(address)))
+            .and_then(|genesis| genesis.alloc.accounts.get(&b176_to_h176(address)))
         {
             let value =
                 acc.storage.get(&H256::from_uint(&index.into())).copied().unwrap_or_default();

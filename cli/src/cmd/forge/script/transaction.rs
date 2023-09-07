@@ -1,6 +1,6 @@
 use crate::cmd::forge::script::{artifacts::ArtifactInfo, ScriptResult};
 use cast::{executor::inspector::DEFAULT_CREATE2_DEPLOYER, trace::CallTraceDecoder, CallKind};
-use ethers::{
+use corebc::{
     abi,
     abi::Address,
     prelude::{NameOrAddress, H256 as TxHash},
@@ -276,7 +276,7 @@ impl TransactionWithMetadata {
 pub mod wrapper {
     pub use super::*;
 
-    use ethers::{
+    use corebc::{
         types::{Bloom, Bytes, Log, TransactionReceipt, H256, U256, U64},
         utils::to_checksum,
     };

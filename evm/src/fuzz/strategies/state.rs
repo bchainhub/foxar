@@ -2,12 +2,12 @@ use super::fuzz_param_from_state;
 use crate::{
     executor::StateChangeset,
     fuzz::invariant::{ArtifactFilters, FuzzRunIdentifiedContracts},
-    utils::{self, b160_to_h160, ru256_to_u256},
+    utils::{self, b176_to_h176, ru256_to_u256},
 };
 use bytes::Bytes;
-use ethers::{
+use corebc::{
     abi::Function,
-    types::{Address, Log, H256, U256},
+    types::{Address, Log, Network, H256, U256},
 };
 use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
 use foundry_config::FuzzDictionaryConfig;
@@ -61,11 +61,12 @@ impl FuzzDictionary {
 pub fn fuzz_calldata_from_state(
     func: Function,
     state: EvmFuzzState,
-) -> BoxedStrategy<ethers::types::Bytes> {
+    network: &Network,
+) -> BoxedStrategy<corebc::types::Bytes> {
     let strats = func
         .inputs
         .iter()
-        .map(|input| fuzz_param_from_state(&input.kind, state.clone()))
+        .map(|input| fuzz_param_from_state(&input.kind, state.clone(), *network))
         .collect::<Vec<_>>();
 
     strats
@@ -110,8 +111,8 @@ pub fn build_initial_state<DB: DatabaseRef>(
         if config.include_storage {
             // Insert storage
             for (slot, value) in &account.storage {
-                let slot = (*slot).into();
-                let value = (*value).into();
+                let slot = utils::ru256_to_u256(*slot);
+                let value = utils::ru256_to_u256(*value);
                 state.values_mut().insert(utils::u256_to_h256_be(slot).into());
                 state.values_mut().insert(utils::u256_to_h256_be(value).into());
                 // also add the value below and above the storage value to the dictionary.
@@ -149,13 +150,13 @@ pub fn collect_state_from_call(
 
     for (address, account) in state_changeset {
         // Insert basic account information
-        state.values_mut().insert(H256::from(b160_to_h160(*address)).into());
+        state.values_mut().insert(H256::from(b176_to_h176(*address)).into());
 
         if config.include_push_bytes && state.addresses.len() < config.max_fuzz_dictionary_addresses
         {
             // Insert push bytes
             if let Some(code) = &account.info.code {
-                if state.addresses_mut().insert(b160_to_h160(*address)) {
+                if state.addresses_mut().insert(b176_to_h176(*address)) {
                     for push_byte in collect_push_bytes(code.bytes().clone()) {
                         state.values_mut().insert(push_byte);
                     }
@@ -166,7 +167,7 @@ pub fn collect_state_from_call(
         if config.include_storage && state.state_values.len() < config.max_fuzz_dictionary_values {
             // Insert storage
             for (slot, value) in &account.storage {
-                let slot = (*slot).into();
+                let slot: U256 = utils::ru256_to_u256(*slot);
                 let value = ru256_to_u256(value.present_value());
                 state.values_mut().insert(utils::u256_to_h256_be(slot).into());
                 state.values_mut().insert(utils::u256_to_h256_be(value).into());
@@ -259,7 +260,7 @@ pub fn collect_created_contracts(
     let mut writable_targeted = targeted_contracts.lock();
 
     for (address, account) in state_changeset {
-        if !setup_contracts.contains_key(&b160_to_h160(*address)) {
+        if !setup_contracts.contains_key(&b176_to_h176(*address)) {
             if let (true, Some(code)) = (&account.is_touched, &account.info.code) {
                 if !code.is_empty() {
                     if let Some((artifact, (abi, _))) = project_contracts.find_by_code(code.bytes())
@@ -267,9 +268,9 @@ pub fn collect_created_contracts(
                         if let Some(functions) =
                             artifact_filters.get_targeted_functions(artifact, abi)?
                         {
-                            created_contracts.push(b160_to_h160(*address));
+                            created_contracts.push(b176_to_h176(*address));
                             writable_targeted.insert(
-                                b160_to_h160(*address),
+                                b176_to_h176(*address),
                                 (artifact.name.clone(), abi.clone(), functions),
                             );
                         }

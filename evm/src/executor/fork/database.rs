@@ -8,12 +8,12 @@ use crate::{
     },
     revm::db::CacheDB,
 };
-use ethers::{prelude::U256, types::BlockId};
+use corebc::{prelude::U256, types::BlockId};
 use hashbrown::HashMap as Map;
 use parking_lot::Mutex;
 use revm::{
     db::DatabaseRef,
-    primitives::{Account, AccountInfo, Bytecode, B160, B256, U256 as rU256},
+    primitives::{Account, AccountInfo, Bytecode, B176, B256, U256 as rU256},
     Database, DatabaseCommit,
 };
 use std::sync::Arc;
@@ -151,7 +151,7 @@ impl ForkedDatabase {
 impl Database for ForkedDatabase {
     type Error = DatabaseError;
 
-    fn basic(&mut self, address: B160) -> Result<Option<AccountInfo>, Self::Error> {
+    fn basic(&mut self, address: B176) -> Result<Option<AccountInfo>, Self::Error> {
         // Note: this will always return Some, since the `SharedBackend` will always load the
         // account, this differs from `<CacheDB as Database>::basic`, See also
         // [MemDb::ensure_loaded](crate::executor::backend::MemDb::ensure_loaded)
@@ -162,7 +162,7 @@ impl Database for ForkedDatabase {
         Database::code_by_hash(&mut self.cache_db, code_hash)
     }
 
-    fn storage(&mut self, address: B160, index: rU256) -> Result<rU256, Self::Error> {
+    fn storage(&mut self, address: B176, index: rU256) -> Result<rU256, Self::Error> {
         Database::storage(&mut self.cache_db, address, index)
     }
 
@@ -174,7 +174,7 @@ impl Database for ForkedDatabase {
 impl DatabaseRef for ForkedDatabase {
     type Error = DatabaseError;
 
-    fn basic(&self, address: B160) -> Result<Option<AccountInfo>, Self::Error> {
+    fn basic(&self, address: B176) -> Result<Option<AccountInfo>, Self::Error> {
         self.cache_db.basic(address)
     }
 
@@ -182,7 +182,7 @@ impl DatabaseRef for ForkedDatabase {
         self.cache_db.code_by_hash(code_hash)
     }
 
-    fn storage(&self, address: B160, index: rU256) -> Result<rU256, Self::Error> {
+    fn storage(&self, address: B176, index: rU256) -> Result<rU256, Self::Error> {
         DatabaseRef::storage(&self.cache_db, address, index)
     }
 
@@ -192,7 +192,7 @@ impl DatabaseRef for ForkedDatabase {
 }
 
 impl DatabaseCommit for ForkedDatabase {
-    fn commit(&mut self, changes: Map<B160, Account>) {
+    fn commit(&mut self, changes: Map<B176, Account>) {
         self.database_mut().commit(changes)
     }
 }
@@ -209,7 +209,7 @@ pub struct ForkDbSnapshot {
 // === impl DbSnapshot ===
 
 impl ForkDbSnapshot {
-    fn get_storage(&self, address: B160, index: rU256) -> Option<rU256> {
+    fn get_storage(&self, address: B176, index: rU256) -> Option<rU256> {
         self.local.accounts.get(&address).and_then(|account| account.storage.get(&index)).copied()
     }
 }
@@ -220,7 +220,7 @@ impl ForkDbSnapshot {
 impl DatabaseRef for ForkDbSnapshot {
     type Error = DatabaseError;
 
-    fn basic(&self, address: B160) -> Result<Option<AccountInfo>, Self::Error> {
+    fn basic(&self, address: B176) -> Result<Option<AccountInfo>, Self::Error> {
         match self.local.accounts.get(&address) {
             Some(account) => Ok(Some(account.info.clone())),
             None => {
@@ -238,7 +238,7 @@ impl DatabaseRef for ForkDbSnapshot {
         self.local.code_by_hash(code_hash)
     }
 
-    fn storage(&self, address: B160, index: rU256) -> Result<rU256, Self::Error> {
+    fn storage(&self, address: B176, index: rU256) -> Result<rU256, Self::Error> {
         match self.local.accounts.get(&address) {
             Some(account) => match account.storage.get(&index) {
                 Some(entry) => Ok(*entry),
@@ -285,7 +285,7 @@ mod tests {
         let backend = SharedBackend::spawn_backend(Arc::new(provider), db.clone(), None).await;
 
         let mut db = ForkedDatabase::new(backend, db);
-        let address = B160::random();
+        let address = B176::random();
 
         let info = Database::basic(&mut db, address).unwrap();
         assert!(info.is_some());
