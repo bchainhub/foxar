@@ -4,7 +4,7 @@ use super::{
 };
 use crate::{
     executor::{backend::Backend, inspector::CheatsConfig},
-    fuzz::{invariant::RandomCallGenerator, strategies::EvmFuzzState},
+    fuzz::{invariant::RandomCallGenerator, strategies::EvmFuzzState}, utils::ru256_to_u256,
 };
 use corebc::types::U256;
 use revm::primitives::{Env, SpecId};
@@ -29,7 +29,7 @@ impl ExecutorBuilder {
     #[must_use]
     pub fn with_cheatcodes(mut self, config: CheatsConfig) -> Self {
         self.inspector_config.cheatcodes =
-            Some(Cheatcodes::new(self.env.block.clone(), self.env.tx.gas_price.into(), config));
+            Some(Cheatcodes::new(self.env.block.clone(), ru256_to_u256(self.env.tx.gas_price), config));
         self
     }
 
@@ -92,7 +92,7 @@ impl ExecutorBuilder {
     #[must_use]
     pub fn with_config(mut self, env: Env) -> Self {
         self.inspector_config.block = env.block.clone();
-        self.inspector_config.gas_price = env.tx.gas_price.into();
+        self.inspector_config.gas_price = ru256_to_u256(env.tx.gas_price);
         self.env = env;
         self
     }
@@ -106,7 +106,7 @@ impl ExecutorBuilder {
 
     /// Builds the executor as configured.
     pub fn build(self, db: Backend) -> Executor {
-        let gas_limit = self.gas_limit.unwrap_or(self.env.block.gas_limit.into());
+        let gas_limit = self.gas_limit.unwrap_or(ru256_to_u256(self.env.block.gas_limit));
         Executor::new(db, self.env, self.inspector_config, gas_limit)
     }
 }

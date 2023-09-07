@@ -5,7 +5,7 @@ use corebc::{
     blockindex,
     blockindex::contract::{ContractMetadata, Metadata},
     prelude::{artifacts::ContractBytecodeSome, errors::BlockindexError, ArtifactId},
-    types::H160,
+    types::{H176},
 };
 use foundry_common::compile;
 use foundry_config::{Config, Network};
@@ -30,13 +30,13 @@ use tokio::time::{Duration, Interval};
 #[derive(Default)]
 pub struct EtherscanIdentifier {
     /// The Etherscan client
-    client: Option<Arc<etherscan::Client>>,
+    client: Option<Arc<blockindex::Client>>,
     /// Tracks whether the API key provides was marked as invalid
     ///
     /// After the first [EtherscanError::InvalidApiKey] this will get set to true, so we can
     /// prevent any further attempts
     invalid_api_key: Arc<AtomicBool>,
-    pub contracts: BTreeMap<H160, Metadata>,
+    pub contracts: BTreeMap<H176, Metadata>,
     pub sources: BTreeMap<u32, String>,
 }
 
@@ -68,9 +68,7 @@ impl EtherscanIdentifier {
         // TODO: Add caching so we dont double-fetch contracts.
         let contracts_iter = self
             .contracts
-            .iter()
-            // filter out vyper files
-            .filter(|(_, metadata)| !metadata.is_vyper());
+            .iter();
 
         let outputs_fut = contracts_iter
             .clone()
@@ -150,14 +148,14 @@ impl TraceIdentifier for EtherscanIdentifier {
 }
 
 type EtherscanFuture =
-    Pin<Box<dyn Future<Output = (Address, Result<ContractMetadata, EtherscanError>)>>>;
+    Pin<Box<dyn Future<Output = (Address, Result<ContractMetadata, BlockindexError>)>>>;
 
 /// A rate limit aware Etherscan client.
 ///
 /// Fetches information about multiple addresses concurrently, while respecting rate limits.
 pub struct EtherscanFetcher {
     /// The Etherscan client
-    client: Arc<etherscan::Client>,
+    client: Arc<blockindex::Client>,
     /// The time we wait if we hit the rate limit
     timeout: Duration,
     /// The interval we are currently waiting for before making a new request
@@ -174,7 +172,7 @@ pub struct EtherscanFetcher {
 
 impl EtherscanFetcher {
     pub fn new(
-        client: Arc<etherscan::Client>,
+        client: Arc<blockindex::Client>,
         timeout: Duration,
         concurrency: usize,
         invalid_api_key: Arc<AtomicBool>,
@@ -238,18 +236,12 @@ impl Stream for EtherscanFetcher {
                                 return Poll::Ready(Some((addr, item)))
                             }
                         }
-                        Err(EtherscanError::RateLimitExceeded) => {
+                        Err(BlockindexError::RateLimitExceeded) => {
                             warn!(target: "etherscanidentifier", "rate limit exceeded on attempt");
                             pin.backoff = Some(tokio::time::interval(pin.timeout));
                             pin.queue.push(addr);
                         }
-                        Err(EtherscanError::InvalidApiKey) => {
-                            warn!(target: "etherscanidentifier", "invalid api key");
-                            // mark key as invalid
-                            pin.invalid_api_key.store(true, Ordering::Relaxed);
-                            return Poll::Ready(None)
-                        }
-                        Err(EtherscanError::BlockedByCloudflare) => {
+                        Err(BlockindexError::BlockedByCloudflare) => {
                             warn!(target: "etherscanidentifier", "blocked by cloudflare");
                             // mark key as invalid
                             pin.invalid_api_key.store(true, Ordering::Relaxed);

@@ -38,7 +38,7 @@ once_cell = "1"
 # EVM
 bytes = "1"
 hashbrown = { version = "0.13", features = ["serde"] }
-revm = { git = "https://github.com/core-coin/ican-revm.git", default-features = false, features = [
+revm = { git = "https://github.com/core-coin/ican-revm.git", branch = "main", default-features = false, features = [
   "std",
   "serde",
   "memory_limit",

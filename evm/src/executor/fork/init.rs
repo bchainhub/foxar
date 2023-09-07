@@ -8,7 +8,7 @@ use corebc::{
 use eyre::WrapErr;
 use foundry_common::NON_ARCHIVE_NODE_WARNING;
 use futures::TryFutureExt;
-use revm::primitives::{BlockEnv, CfgEnv, Env, TxEnv};
+use revm::primitives::{BlockEnv, CfgEnv, Env, TxEnv, Network};
 
 /// Initializes a REVM block environment based on a forked
 /// ethereum provider.
@@ -60,8 +60,8 @@ where
 
     let mut env = Env {
         cfg: CfgEnv {
-            network_id: u256_to_ru256(
-                override_network_id.unwrap_or(rpc_network_id.as_u64()).into(),
+            network: Network::from(
+                override_network_id.unwrap_or(rpc_network_id.as_u64()),
             ),
             memory_limit,
             limit_contract_code_size: Some(usize::MAX),
@@ -73,17 +73,17 @@ where
         },
         block: BlockEnv {
             number: u256_to_ru256(block.number.expect("block number not found").as_u64().into()),
-            timestamp: block.timestamp.into(),
+            timestamp: u256_to_ru256(block.timestamp),
             coinbase: h176_to_b176(block.author.unwrap_or_default()),
-            difficulty: block.difficulty.into(),
+            difficulty: u256_to_ru256(block.difficulty),
             prevrandao: Some(block.mix_hash.map(h256_to_b256).unwrap_or_default()),
-            basefee: block.base_fee_per_gas.unwrap_or_default().into(),
-            gas_limit: block.gas_limit.into(),
+            basefee: u256_to_ru256(block.base_fee_per_gas.unwrap_or_default()),
+            gas_limit: u256_to_ru256(block.gas_limit),
         },
         tx: TxEnv {
             caller: h176_to_b176(origin),
-            gas_price: gas_price.map(U256::from).unwrap_or(fork_gas_price).into(),
-            chain_id: Some(override_network_id.unwrap_or(rpc_network_id.as_u64())),
+            gas_price: u256_to_ru256(gas_price.map(U256::from).unwrap_or(fork_gas_price)),
+            network_id: Some(override_network_id.unwrap_or(rpc_network_id.as_u64())),
             gas_limit: block.gas_limit.as_u64(),
             ..Default::default()
         },

@@ -552,7 +552,7 @@ impl Backend {
             bool private _failed;
          }
         */
-        let value = self.storage(h176_to_b176(address), U256::zero().into()).unwrap_or_default();
+        let value = self.storage(h176_to_b176(address), u256_to_ru256(U256::zero())).unwrap_or_default();
         value.as_le_bytes()[1] != 0
     }
 
@@ -586,7 +586,7 @@ impl Backend {
     /// See <https://github.com/dapphub/ds-test/blob/9310e879db8ba3ea6d5c6489a579118fd264a3f5/src/test.sol#L66-L72>
     pub fn is_global_failure(&self) -> bool {
         let index = U256::from(&b"failed"[..]);
-        self.storage(h176_to_b176(CHEATCODE_ADDRESS), index.into())
+        self.storage(h176_to_b176(CHEATCODE_ADDRESS), u256_to_ru256(index))
             .map(|value| value == revm::primitives::U256::from(1))
             .unwrap_or_default()
     }
@@ -707,7 +707,7 @@ impl Backend {
             }
             TransactTo::Create(CreateScheme::Create2 { salt }) => {
                 let code_hash = H256::from_slice(sha3(&env.tx.data).as_slice());
-                revm::primitives::create2_address(env.tx.caller, h256_to_b256(code_hash), salt)
+                revm::primitives::create2_address(env.tx.caller, h256_to_b256(code_hash), salt, &env.cfg.network)
             }
         };
         self.set_test_contract(b176_to_h176(test_contract));
@@ -1110,12 +1110,12 @@ impl DatabaseExt for Backend {
         self.roll_fork(Some(id), fork_block.as_u64().into(), env, journaled_state)?;
 
         // update the block's env accordingly
-        env.block.timestamp = block.timestamp.into();
+        env.block.timestamp = u256_to_ru256(block.timestamp);
         env.block.coinbase = h176_to_b176(block.author.unwrap_or_default());
-        env.block.difficulty = block.difficulty.into();
+        env.block.difficulty = u256_to_ru256(block.difficulty);
         env.block.prevrandao = block.mix_hash.map(h256_to_b256);
-        env.block.basefee = block.base_fee_per_gas.unwrap_or_default().into();
-        env.block.gas_limit = block.gas_limit.into();
+        env.block.basefee = u256_to_ru256(block.base_fee_per_gas.unwrap_or_default());
+        env.block.gas_limit = u256_to_ru256(block.gas_limit);
         env.block.number = u256_to_ru256(block.number.unwrap_or(fork_block).as_u64().into());
 
         // replay all transactions that came before

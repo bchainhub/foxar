@@ -264,7 +264,7 @@ impl<'a> InvariantExecutor<'a> {
             targeted_senders,
             targeted_contracts.clone(),
             self.config.dictionary.dictionary_weight,
-            &self.executor.env().cfg.network,
+            &Network::try_from(self.executor.env().cfg.network.as_u64()).unwrap(),
         )
         .no_shrink()
         .boxed();
@@ -282,7 +282,7 @@ impl<'a> InvariantExecutor<'a> {
                     fuzz_state.clone(),
                     targeted_contracts.clone(),
                     target_contract_ref.clone(),
-                    &Network::try_from(self.executor.env().cfg.network.as_u64()).unwrap(),
+                    Network::try_from(self.executor.env().cfg.network.as_u64()).unwrap(),
                 ),
                 target_contract_ref,
             ));

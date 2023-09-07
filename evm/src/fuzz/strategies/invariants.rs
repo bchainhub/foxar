@@ -20,7 +20,7 @@ pub fn override_call_strat(
     fuzz_state: EvmFuzzState,
     contracts: FuzzRunIdentifiedContracts,
     target: Arc<RwLock<Address>>,
-    network: &Network,
+    network: Network,
 ) -> SBoxedStrategy<(Address, Bytes)> {
     let contracts_ref = contracts.clone();
 
@@ -38,7 +38,7 @@ pub fn override_call_strat(
 
         let func = select_random_function(abi, functions);
         func.prop_flat_map(move |func| {
-            fuzz_contract_with_calldata(fuzz_state.clone(), target_address, func, network)
+            fuzz_contract_with_calldata(fuzz_state.clone(), target_address, func, &network)
         })
     })
     .sboxed()
@@ -63,7 +63,7 @@ pub fn invariant_strat(
 ) -> BoxedStrategy<Vec<BasicTxDetails>> {
     // We only want to seed the first value, since we want to generate the rest as we mutate the
     // state
-    vec![generate_call(fuzz_state, senders, contracts, dictionary_weight, network); 1].boxed()
+    vec![generate_call(fuzz_state, senders, contracts, dictionary_weight, *network); 1].boxed()
 }
 
 /// Strategy to generate a transaction where the `sender`, `target` and `calldata` are all generated
@@ -73,7 +73,7 @@ fn generate_call(
     senders: SenderFilters,
     contracts: FuzzRunIdentifiedContracts,
     dictionary_weight: u32,
-    network: &Network,
+    network: Network,
 ) -> BoxedStrategy<BasicTxDetails> {
     let random_contract = select_random_contract(contracts);
     let senders = Rc::new(senders);
@@ -87,9 +87,9 @@ fn generate_call(
                     fuzz_state.clone(),
                     senders.clone(),
                     dictionary_weight,
-                    network,
+                    &network,
                 );
-                (sender, fuzz_contract_with_calldata(fuzz_state.clone(), contract, func, network))
+                (sender, fuzz_contract_with_calldata(fuzz_state.clone(), contract, func, &network))
             })
         })
         .boxed()
@@ -114,7 +114,7 @@ fn select_random_sender(
         ),
         (
             dictionary_weight,
-            fuzz_param_from_state(&ParamType::Address, fuzz_state, network)
+            fuzz_param_from_state(&ParamType::Address, fuzz_state, *network)
                 .prop_map(move |addr| addr.into_address().unwrap())
                 .boxed(),
         ),

@@ -11,7 +11,7 @@ use crate::{
 use bytes::Bytes;
 use corebc::{
     abi::RawLog,
-    types::{Address, U256},
+    types::{Address, U256, Network},
 };
 use revm::{
     inspectors::GasInspector,
@@ -143,7 +143,7 @@ impl Tracer {
                     Some(JournalEntry::StorageChange { address, key, .. }),
                 ) => {
                     let value = data.journaled_state.state[address].storage[key].present_value();
-                    Some((ru256_to_u256(*key), value.into()))
+                    Some((ru256_to_u256(*key), ru256_to_u256(value)))
                 }
                 _ => None,
             };
@@ -217,7 +217,7 @@ where
             data.journaled_state.depth() as usize,
             b176_to_h176(to),
             inputs.input.to_vec(),
-            inputs.transfer.value.into(),
+            ru256_to_u256(inputs.transfer.value),
             inputs.context.scheme.into(),
             b176_to_h176(from),
         );
@@ -254,9 +254,9 @@ where
         let nonce = data.journaled_state.account(inputs.caller).info.nonce;
         self.start_trace(
             data.journaled_state.depth() as usize,
-            get_create_address(inputs, nonce),
+            get_create_address(inputs, nonce, &Network::try_from(data.env.cfg.network.as_u64()).unwrap()),
             inputs.init_code.to_vec(),
-            inputs.value.into(),
+            ru256_to_u256(inputs.value),
             inputs.scheme.into(),
             b176_to_h176(inputs.caller),
         );

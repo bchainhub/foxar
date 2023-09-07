@@ -351,7 +351,7 @@ where
                             // update the cache
                             let acc = AccountInfo {
                                 nonce: nonce.as_u64(),
-                                balance: balance.into(),
+                                balance: u256_to_ru256(balance),
                                 code: code.map(|bytes| Bytecode::new_raw(bytes).to_checked()),
                                 code_hash,
                             };
@@ -394,7 +394,7 @@ where
                                 .write()
                                 .entry(addr.into())
                                 .or_default()
-                                .insert(idx.into(), value.into());
+                                .insert(u256_to_ru256(idx), u256_to_ru256(value));
 
                             // notify all listeners
                             if let Some(listeners) = pin.storage_requests.remove(&(addr, idx)) {
@@ -660,14 +660,14 @@ impl DatabaseRef for SharedBackend {
 
     fn storage(&self, address: B176, index: rU256) -> Result<rU256, Self::Error> {
         trace!( target: "sharedbackend", "request storage {:?} at {:?}", address, index);
-        match self.do_get_storage(b176_to_h176(address), index.into()).map_err(|err| {
+        match self.do_get_storage(b176_to_h176(address), ru256_to_u256(index)).map_err(|err| {
             error!( target: "sharedbackend", ?err, ?address, ?index, "Failed to send/recv `storage`");
             if err.is_possibly_non_archive_node_error() {
                 error!(target: "sharedbackend", "{NON_ARCHIVE_NODE_WARNING}");
             }
           err
         }) {
-            Ok(val) => Ok(val.into()),
+            Ok(val) => Ok(u256_to_ru256(val)),
             Err(err) => Err(err),
         }
     }
@@ -676,7 +676,7 @@ impl DatabaseRef for SharedBackend {
         if number > rU256::from(u64::MAX) {
             return Ok(KECCAK_EMPTY)
         }
-        let number: U256 = number.into();
+        let number: U256 = ru256_to_u256(number);
         let number = number.as_u64();
         trace!( target: "sharedbackend", "request block hash for number {:?}", number);
         match self.do_get_block_hash(number).map_err(|err| {

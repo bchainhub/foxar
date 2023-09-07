@@ -66,7 +66,7 @@ pub fn fuzz_calldata_from_state(
     let strats = func
         .inputs
         .iter()
-        .map(|input| fuzz_param_from_state(&input.kind, state.clone(), network))
+        .map(|input| fuzz_param_from_state(&input.kind, state.clone(), *network))
         .collect::<Vec<_>>();
 
     strats
@@ -111,8 +111,8 @@ pub fn build_initial_state<DB: DatabaseRef>(
         if config.include_storage {
             // Insert storage
             for (slot, value) in &account.storage {
-                let slot = (*slot).into();
-                let value = (*value).into();
+                let slot = utils::ru256_to_u256(*slot);
+                let value = utils::ru256_to_u256(*value);
                 state.values_mut().insert(utils::u256_to_h256_be(slot).into());
                 state.values_mut().insert(utils::u256_to_h256_be(value).into());
                 // also add the value below and above the storage value to the dictionary.
@@ -167,7 +167,7 @@ pub fn collect_state_from_call(
         if config.include_storage && state.state_values.len() < config.max_fuzz_dictionary_values {
             // Insert storage
             for (slot, value) in &account.storage {
-                let slot = (*slot).into();
+                let slot: U256 = utils::ru256_to_u256(*slot);
                 let value = ru256_to_u256(value.present_value());
                 state.values_mut().insert(utils::u256_to_h256_be(slot).into());
                 state.values_mut().insert(utils::u256_to_h256_be(value).into());

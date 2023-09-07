@@ -1,5 +1,5 @@
 use crate::{
-    abi::CHEATCODE_ADDRESS, debug::Instruction, trace::identifier::LocalTraceIdentifier, CallKind,
+    abi::CHEATCODE_ADDRESS, debug::Instruction, trace::identifier::LocalTraceIdentifier, CallKind, utils::ru256_to_u256,
 };
 use corebc::{
     abi::{ethereum_types::BigEndianHash, Address, RawLog},
@@ -426,7 +426,7 @@ impl From<&CallTraceStep> for StructLog {
             } else {
                 None
             },
-            stack: Some(step.stack.data().iter().copied().map(|data| data.into()).collect()),
+            stack: Some(step.stack.data().iter().copied().map(|data| ru256_to_u256(data)).collect()),
             // Filled in `CallTraceArena::geth_trace` as a result of compounding all slot changes
             storage: None,
         }
@@ -541,7 +541,7 @@ impl fmt::Display for CallTrace {
                 f,
                 "[{}] {}::{}{}({}) {}",
                 self.gas_cost,
-                color.paint(self.label.as_ref().unwrap_or(&address)),
+                color.paint(self.label.as_ref().unwrap_or(&address.to_string())),
                 color.paint(func),
                 if !self.value.is_zero() {
                     format!("{{value: {}}}", self.value)

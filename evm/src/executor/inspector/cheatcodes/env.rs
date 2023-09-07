@@ -17,7 +17,7 @@ use corebc::{
 };
 use foundry_config::Config;
 use revm::{
-    primitives::{Bytecode, SpecId, B256, KECCAK_EMPTY},
+    primitives::{Bytecode, SpecId, B256, KECCAK_EMPTY, Network},
     Database, EVMData,
 };
 use std::collections::BTreeMap;
@@ -140,7 +140,7 @@ fn broadcast_key(
 ) -> Result {
     //TODO:error2215 implement Ed448 keys and ICAN Addresses?
     let key = super::util::parse_private_key(private_key)?;
-    let wallet = LocalWallet::from(key).with_chain_id(network_id.as_u64());
+    let wallet = LocalWallet::from(key).with_network_id(network_id.as_u64());
     let new_origin = wallet.address();
 
     let result = broadcast(state, new_origin, original_caller, original_origin, depth, single_call);
@@ -324,7 +324,7 @@ pub fn apply<DB: DatabaseExt>(
 ) -> Result<Option<Bytes>> {
     let result = match call {
         HEVMCalls::Warp(inner) => {
-            data.env.block.timestamp = inner.0.into();
+            data.env.block.timestamp = u256_to_ru256(inner.0);
             Bytes::new()
         }
         HEVMCalls::Difficulty(inner) => {
@@ -332,7 +332,7 @@ pub fn apply<DB: DatabaseExt>(
                 data.env.cfg.spec_id < SpecId::MERGE,
                 "Difficulty is not supported after the Paris hard fork. Please use vm.prevrandao instead. For more information, please see https://eips.ethereum.org/EIPS/eip-4399"
             );
-            data.env.block.difficulty = inner.0.into();
+            data.env.block.difficulty = u256_to_ru256(inner.0);
             Bytes::new()
         }
         HEVMCalls::Prevrandao(inner) => {
@@ -344,11 +344,11 @@ pub fn apply<DB: DatabaseExt>(
             Bytes::new()
         }
         HEVMCalls::Roll(inner) => {
-            data.env.block.number = inner.0.into();
+            data.env.block.number = u256_to_ru256(inner.0);
             Bytes::new()
         }
         HEVMCalls::Fee(inner) => {
-            data.env.block.basefee = inner.0.into();
+            data.env.block.basefee = u256_to_ru256(inner.0);
             Bytes::new()
         }
         HEVMCalls::Coinbase(inner) => {
@@ -400,12 +400,12 @@ pub fn apply<DB: DatabaseExt>(
                 // record the deal
                 let record = DealRecord {
                     address: who,
-                    old_balance: account.info.balance.into(),
+                    old_balance: ru256_to_u256(account.info.balance),
                     new_balance: value,
                 };
                 state.eth_deals.push(record);
 
-                account.info.balance = value.into();
+                account.info.balance = u256_to_ru256(value);
             })?;
             Bytes::new()
         }
@@ -522,11 +522,11 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::ChainId(inner) => {
             ensure!(inner.0 <= U256::from(u64::MAX), "Chain ID must be less than 2^64 - 1");
-            data.env.cfg.network_id = inner.0.into();
+            data.env.cfg.network = Network::from(inner.0.as_u64());
             Bytes::new()
         }
         HEVMCalls::TxGasPrice(inner) => {
-            data.env.tx.gas_price = inner.0.into();
+            data.env.tx.gas_price = u256_to_ru256(inner.0);
             Bytes::new()
         }
         HEVMCalls::Broadcast0(_) => {
@@ -573,7 +573,7 @@ pub fn apply<DB: DatabaseExt>(
                 inner.0,
                 caller,
                 b176_to_h176(data.env.tx.caller),
-                data.env.cfg.network_id.into(),
+                ru256_to_u256(data.env.cfg.network.as_u256()),
                 data.journaled_state.depth(),
                 true,
             )?
@@ -622,7 +622,7 @@ pub fn apply<DB: DatabaseExt>(
                 inner.0,
                 caller,
                 b176_to_h176(data.env.tx.caller),
-                data.env.cfg.network_id.into(),
+                ru256_to_u256(data.env.cfg.network.as_u256()),
                 data.journaled_state.depth(),
                 false,
             )?

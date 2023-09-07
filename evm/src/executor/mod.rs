@@ -5,7 +5,7 @@ use crate::{
     debug::DebugArena,
     decode,
     trace::CallTraceArena,
-    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result},
+    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result, u256_to_ru256, ru256_to_u256},
     CALLER,
 };
 pub use abi::{
@@ -171,7 +171,7 @@ impl Executor {
     pub fn set_balance(&mut self, address: Address, amount: U256) -> DatabaseResult<&mut Self> {
         trace!(?address, ?amount, "setting account balance");
         let mut account = self.backend_mut().basic(h176_to_b176(address))?.unwrap_or_default();
-        account.balance = amount.into();
+        account.balance = u256_to_ru256(amount).into();
 
         self.backend_mut().insert_account_info(address, account);
         Ok(self)
@@ -182,7 +182,7 @@ impl Executor {
         Ok(self
             .backend()
             .basic(h176_to_b176(address))?
-            .map(|acc| acc.balance.into())
+            .map(|acc| ru256_to_u256(acc.balance))
             .unwrap_or_default())
     }
 
@@ -597,14 +597,14 @@ impl Executor {
             // the cheatcode handler if it is enabled
             block: BlockEnv {
                 basefee: rU256::from(0),
-                gas_limit: self.gas_limit.into(),
+                gas_limit: u256_to_ru256(self.gas_limit),
                 ..self.env.block.clone()
             },
             tx: TxEnv {
                 caller: h176_to_b176(caller),
                 transact_to,
                 data,
-                value: value.into(),
+                value: u256_to_ru256(value),
                 // As above, we set the gas price to 0.
                 gas_price: rU256::from(0),
                 gas_priority_fee: None,

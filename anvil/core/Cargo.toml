@@ -7,7 +7,7 @@ license = "MIT OR Apache-2.0"
 [dependencies]
 # foundry internal
 foundry-evm = { path = "../../evm" }
-revm = { git = "https://github.com/core-coin/ican-revm.git", default-features = false, features = ["std", "serde", "memory_limit"] }
+revm = { git = "https://github.com/core-coin/ican-revm.git", default-features = false, features = ["std", "serde", "memory_limit"], branch = "main" }
 
 corebc-core = { workspace = true }
 serde = { version = "1", features = ["derive"], optional = true }

@@ -9,14 +9,14 @@ use crate::{
         backend::DatabaseExt, inspector::cheatcodes::env::RecordedLogs, CHEATCODE_ADDRESS,
         HARDHAT_CONSOLE_ADDRESS,
     },
-    utils::{b176_to_h176, b256_to_h256, h176_to_b176, ru256_to_u256},
+    utils::{b176_to_h176, b256_to_h256, h176_to_b176, ru256_to_u256, u256_to_ru256},
 };
 use corebc::{
     abi::{AbiDecode, AbiEncode, RawLog},
     signers::LocalWallet,
     types::{
         transaction::eip2718::TypedTransaction, Address, Bytes, NameOrAddress, TransactionRequest,
-        U256,
+        U256, Network
     },
 };
 use foundry_common::evm::Breakpoints;
@@ -247,7 +247,7 @@ impl Cheatcodes {
             .get(&inputs.caller)
             .map(|acc| acc.info.nonce)
             .unwrap_or_default();
-        let created_address = get_create_address(inputs, old_nonce);
+        let created_address = get_create_address(inputs, old_nonce, &Network::try_from(data.env.cfg.network.as_u64()).unwrap());
 
         if data.journaled_state.depth > 1 &&
             !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))
@@ -282,7 +282,7 @@ impl Cheatcodes {
         // which rolls back any transfers.
         while let Some(record) = self.eth_deals.pop() {
             if let Some(acc) = data.journaled_state.state.get_mut(&h176_to_b176(record.address)) {
-                acc.info.balance = record.old_balance.into();
+                acc.info.balance = u256_to_ru256(record.old_balance);
             }
         }
     }
@@ -304,7 +304,7 @@ where
             data.env.block = block;
         }
         if let Some(gas_price) = self.gas_price.take() {
-            data.env.tx.gas_price = gas_price.into();
+            data.env.tx.gas_price = u256_to_ru256(gas_price);
         }
 
         InstructionResult::Continue
@@ -384,7 +384,7 @@ where
                         .reads
                         .entry(b176_to_h176(interpreter.contract().address))
                         .or_insert_with(Vec::new)
-                        .push(key.into());
+                        .push(ru256_to_u256(key));
                 }
                 opcode::SSTORE => {
                     let key = try_or_continue!(interpreter.stack().peek(0));
@@ -394,12 +394,12 @@ where
                         .reads
                         .entry(b176_to_h176(interpreter.contract().address))
                         .or_insert_with(Vec::new)
-                        .push(key.into());
+                        .push(ru256_to_u256(key));
                     storage_accesses
                         .writes
                         .entry(b176_to_h176(interpreter.contract().address))
                         .or_insert_with(Vec::new)
-                        .push(key.into());
+                        .push(ru256_to_u256(key));
                 }
                 _ => (),
             }
@@ -590,7 +590,7 @@ where
                         // The value matches, if provided
                         expected
                             .value
-                            .map_or(true, |value| value == call.transfer.value.into()) &&
+                            .map_or(true, |value| value == ru256_to_u256(call.transfer.value)) &&
                         // The gas matches, if provided
                         expected.gas.map_or(true, |gas| gas == call.gas_limit) &&
                         // The minimum gas matches, if provided
@@ -605,7 +605,7 @@ where
             if let Some(mocks) = self.mocked_calls.get(&b176_to_h176(call.contract)) {
                 let ctx = MockCallDataContext {
                     calldata: call.input.clone().into(),
-                    value: Some(call.transfer.value.into()),
+                    value: Some(ru256_to_u256(call.transfer.value)),
                 };
                 if let Some(mock_retdata) = mocks.get(&ctx) {
                     return (
@@ -616,7 +616,7 @@ where
                 } else if let Some((_, mock_retdata)) = mocks.iter().find(|(mock, _)| {
                     mock.calldata.len() <= call.input.len() &&
                         *mock.calldata == call.input[..mock.calldata.len()] &&
-                        mock.value.map_or(true, |value| value == call.transfer.value.into())
+                        mock.value.map_or(true, |value| value == ru256_to_u256(call.transfer.value))
                 }) {
                     return (
                         mock_retdata.ret_type,
@@ -699,7 +699,7 @@ where
                             transaction: TypedTransaction::Legacy(TransactionRequest {
                                 from: Some(broadcast.new_origin),
                                 to: Some(NameOrAddress::Address(b176_to_h176(call.contract))),
-                                value: Some(call.transfer.value.into()),
+                                value: Some(ru256_to_u256(call.transfer.value)),
                                 data: Some(call.input.clone().into()),
                                 nonce: Some(account.info.nonce.into()),
                                 gas: if is_fixed_gas_limit {
@@ -1009,7 +1009,7 @@ where
                         transaction: TypedTransaction::Legacy(TransactionRequest {
                             from: Some(broadcast.new_origin),
                             to,
-                            value: Some(call.value.into()),
+                            value: Some(ru256_to_u256(call.value)),
                             data: Some(bytecode.into()),
                             nonce: Some(nonce.into()),
                             gas: if is_fixed_gas_limit {

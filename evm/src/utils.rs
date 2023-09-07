@@ -1,12 +1,12 @@
 use corebc::{
     abi::{Abi, FixedBytes, Function},
     types::{Block, Network, H256, U256},
-    ylem::EvmVersion,
+    ylem::CvmVersion,
 };
 use eyre::ContextCompat;
 use revm::{
     interpreter::{opcode, opcode::spec_opcode_gas},
-    primitives::SpecId,
+    primitives::{SpecId, Network as REVMNetwork},
 };
 use std::collections::BTreeMap;
 
@@ -36,13 +36,13 @@ pub fn h256_to_u256_le(storage: H256) -> U256 {
 
 /// Small helper function to convert revm's [B176] into corebc's [H176].
 #[inline]
-pub fn b176_to_h176(b: revm::primitives::B176) -> corebc::types::B176 {
-    corebc::types::B176(b.0)
+pub fn b176_to_h176(b: revm::primitives::B176) -> corebc::types::H176 {
+    corebc::types::H176(b.0)
 }
 
 /// Small helper function to convert corebc's [H160] into revm's [B176].
 #[inline]
-pub fn h176_to_b176(h: corebc::types::B176) -> revm::primitives::B176 {
+pub fn h176_to_b176(h: corebc::types::H176) -> revm::primitives::B176 {
     revm::primitives::B176(h.0)
 }
 
@@ -136,14 +136,10 @@ pub fn halt_to_instruction_result(
     }
 }
 
-/// Converts an `EvmVersion` into a `SpecId`
-pub fn evm_spec(evm: &EvmVersion) -> SpecId {
+/// Converts an `CvmVersion` into a `SpecId`
+pub fn evm_spec(evm: &CvmVersion) -> SpecId {
     match evm {
-        EvmVersion::Istanbul => SpecId::ISTANBUL,
-        EvmVersion::Berlin => SpecId::BERLIN,
-        EvmVersion::London => SpecId::LONDON,
-        EvmVersion::Paris => SpecId::MERGE,
-        EvmVersion::Shanghai => SpecId::SHANGHAI,
+        CvmVersion::Istanbul => SpecId::ISTANBUL,
         _ => panic!("Unsupported EVM version"),
     }
 }
@@ -158,16 +154,15 @@ pub fn apply_network_and_block_specific_env_changes<T>(
     block: &Block<T>,
 ) {
         let block_number = block.number.unwrap_or_default();
-        let mainnet_u64 = u64::from(Network::Mainnet)
-        match env.cfg.network.as_u64() {
-            mainnet_u64 => {
+        match env.cfg.network {
+            REVMNetwork::Mainnet | REVMNetwork::Devin | REVMNetwork::Private(_) => {
                 // after merge difficulty is supplanted with prevrandao EIP-4399
                 if block_number.as_u64() >= 15_537_351u64 {
                     env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
                 }
 
                 return
-            }
+            }, 
             _ => {}
         }
 

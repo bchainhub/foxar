@@ -1,6 +1,6 @@
 use crate::{
     executor::fork::CreateFork,
-    utils::{h176_to_b176, h256_to_b256, RuntimeOrHandle},
+    utils::{h176_to_b176, h256_to_b256, RuntimeOrHandle, u256_to_ru256},
 };
 use corebc::{
     providers::{Middleware, Provider},
@@ -101,7 +101,7 @@ impl EvmOpts {
                 difficulty: rU256::from(self.env.block_difficulty),
                 prevrandao: Some(h256_to_b256(self.env.block_prevrandao)),
                 basefee: rU256::from(self.env.block_base_fee_per_gas),
-                gas_limit: self.gas_limit().into(),
+                gas_limit: u256_to_ru256(self.gas_limit()),
             },
             cfg: CfgEnv {
                 network: REVMNetwork::from(self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID)),
@@ -138,7 +138,7 @@ impl EvmOpts {
     /// be at `~/.foundry/cache/mainnet/14435000/storage.json`
     pub fn get_fork(&self, config: &Config, env: revm::primitives::Env) -> Option<CreateFork> {
         let url = self.fork_url.clone()?;
-        let enable_caching = config.enable_caching(&url, u64::from(env.cfg.network));
+        let enable_caching = config.enable_caching(&url, env.cfg.network.as_u64());
         Some(CreateFork { url, enable_caching, env, evm_opts: self.clone() })
     }
 
@@ -156,7 +156,7 @@ impl EvmOpts {
         if let Some(id) = self.env.network_id {
             return id
         }
-        self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), |id| id as u64)
+        self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), |id| u64::from(id))
     }
 
     /// Returns the available compute units per second, which will be
@@ -184,7 +184,7 @@ impl EvmOpts {
             let provider = Provider::try_from(url.as_str())
                 .unwrap_or_else(|_| panic!("Failed to establish provider to {url}"));
 
-            if let Ok(id) = RuntimeOrHandle::new().block_on(provider.get_chainid()) {
+            if let Ok(id) = RuntimeOrHandle::new().block_on(provider.get_networkid()) {
                 return Network::try_from(id.as_u64()).ok()
             }
         }

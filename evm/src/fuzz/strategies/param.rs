@@ -1,7 +1,7 @@
 use super::state::EvmFuzzState;
 use corebc::{
     abi::{ParamType, Token, Tokenizable},
-    types::{Address, Bytes, Network, I256, U256, H160},
+    types::{Bytes, Network, I256, U256, H160},
     utils::to_ican,
 };
 use proptest::prelude::*;
@@ -62,7 +62,7 @@ pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = 
 /// fuzz state.
 ///
 /// Works with ABI Encoder v2 tuples.
-pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState, network: &Network) -> BoxedStrategy<Token> {
+pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState, network: Network) -> BoxedStrategy<Token> {
     // These are to comply with lifetime requirements
     let state_len = arc_state.read().values().len();
 
@@ -75,7 +75,7 @@ pub fn fuzz_param_from_state(param: &ParamType, arc_state: EvmFuzzState, network
     // Convert the value based on the parameter type
     match param {
         ParamType::Address => { 
-            value.prop_map(move |value| to_ican(&H160::from_slice(&value[12..]), network).into_token()).boxed()
+            value.prop_map(move |value| to_ican(&H160::from_slice(&value[12..]), &network).into_token()).boxed()
         }
         ParamType::Bytes => value.prop_map(move |value| Bytes::from(value).into_token()).boxed(),
         ParamType::Int(n) => match n / 8 {

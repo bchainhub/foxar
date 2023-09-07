@@ -5,11 +5,11 @@ use crate::{
         inspector::utils::{gas_used, get_create_address},
         CHEATCODE_ADDRESS,
     },
-    utils::b176_to_h176,
+    utils::{b176_to_h176, ru256_to_u256},
     CallKind,
 };
 use bytes::Bytes;
-use corebc::types::Address;
+use corebc::types::{Address, Network};
 use foundry_utils::error::SolError;
 use revm::{
     inspectors::GasInspector,
@@ -98,7 +98,7 @@ where
 
         self.arena.arena[self.head].steps.push(DebugStep {
             pc,
-            stack: interpreter.stack().data().iter().copied().map(|d| d.into()).collect(),
+            stack: interpreter.stack().data().iter().copied().map(|d| ru256_to_u256(d)).collect(),
             memory: interpreter.memory.clone(),
             instruction: Instruction::OpCode(op),
             push_bytes,
@@ -160,7 +160,7 @@ where
         let nonce = data.journaled_state.account(call.caller).info.nonce;
         self.enter(
             data.journaled_state.depth() as usize,
-            get_create_address(call, nonce),
+            get_create_address(call, nonce,  &Network::try_from(data.env.cfg.network.as_u64()).unwrap()),
             CallKind::Create,
         );
 

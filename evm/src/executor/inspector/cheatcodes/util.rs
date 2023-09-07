@@ -37,7 +37,7 @@ const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/60'/0'/0/";
 
 /// Address of the default CREATE2 deployer 0x4e59b44847b379578588920ca78fbf26c0b4956c
 pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
-    78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149, 108,
+    0, 0, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149, 108,
 ]);
 
 pub const MAGIC_SKIP_BYTES: &[u8] = b"FOUNDRY::SKIP";
@@ -55,8 +55,8 @@ pub type BroadcastableTransactions = VecDeque<BroadcastableTransaction>;
 pub fn configure_tx_env(env: &mut revm::primitives::Env, tx: &Transaction) {
     env.tx.caller = h176_to_b176(tx.from);
     env.tx.gas_limit = tx.gas.as_u64();
-    env.tx.gas_price = tx.gas_price.unwrap_or_default().into();
-    env.tx.gas_priority_fee = tx.max_priority_fee_per_gas.map(Into::into);
+    env.tx.gas_price = u256_to_ru256(tx.gas_price.unwrap_or_default());
+    env.tx.gas_priority_fee = tx.max_priority_fee_per_gas.map(u256_to_ru256);
     env.tx.nonce = Some(tx.nonce.as_u64());
     env.tx.access_list = tx
         .access_list
@@ -71,7 +71,7 @@ pub fn configure_tx_env(env: &mut revm::primitives::Env, tx: &Transaction) {
             )
         })
         .collect();
-    env.tx.value = tx.value.into();
+    env.tx.value = u256_to_ru256(tx.value);
     env.tx.data = tx.input.0.clone();
     env.tx.transact_to =
         tx.to.map(h176_to_b176).map(TransactTo::Call).unwrap_or_else(TransactTo::create)
@@ -104,7 +104,7 @@ fn addr(private_key: U256, network: &Network) -> Result {
 
 fn sign(private_key: U256, digest: H256, chain_id: U256) -> Result {
     let key = parse_private_key(private_key)?;
-    let wallet = LocalWallet::from(key).with_chain_id(chain_id.as_u64());
+    let wallet = LocalWallet::from(key).with_network_id(chain_id.as_u64());
 
     // The `ecrecover` precompile does not use EIP-155
     let sig = wallet.sign_hash(digest)?;
@@ -185,7 +185,7 @@ fn derive_key_with_wordlist(mnemonic: &str, path: &str, index: u32, lang: &str) 
 
 fn remember_key(state: &mut Cheatcodes, private_key: U256, chain_id: U256) -> Result {
     let key = parse_private_key(private_key)?;
-    let wallet = LocalWallet::from(key).with_chain_id(chain_id.as_u64());
+    let wallet = LocalWallet::from(key).with_network_id(chain_id.as_u64());
     let address = wallet.address();
 
     state.script_wallets.push(wallet);
@@ -221,8 +221,8 @@ pub fn apply<DB: Database>(
     call: &HEVMCalls,
 ) -> Option<Result> {
     Some(match call {
-        HEVMCalls::Addr(inner) => addr(inner.0, data.env.cfg.network_id.into()),
-        HEVMCalls::Sign(inner) => sign(inner.0, inner.1.into(), data.env.cfg.network_id.into()),
+        HEVMCalls::Addr(inner) => addr(inner.0, &Network::try_from(data.env.cfg.network.as_u64()).unwrap()),
+        HEVMCalls::Sign(inner) => sign(inner.0, inner.1.into(),ru256_to_u256(data.env.cfg.network.as_u256())),
         HEVMCalls::DeriveKey0(inner) => {
             derive_key::<English>(&inner.0, DEFAULT_DERIVATION_PATH_PREFIX, inner.1)
         }
@@ -234,7 +234,7 @@ pub fn apply<DB: Database>(
             derive_key_with_wordlist(&inner.0, &inner.1, inner.2, &inner.3)
         }
         HEVMCalls::RememberKey(inner) => {
-            remember_key(state, inner.0, data.env.cfg.network_id.into())
+            remember_key(state, inner.0, ru256_to_u256(data.env.cfg.network.as_u256()))
         }
         HEVMCalls::Label(inner) => {
             state.labels.insert(inner.0, inner.1.clone());
@@ -424,16 +424,16 @@ pub fn check_if_fixed_gas_limit<DB: DatabaseExt>(
     // time of the call, which should be rather close to configured gas limit.
     // TODO: Find a way to reliably make this determination. (for example by
     // generating it in the compilation or evm simulation process)
-    U256::from(data.env.tx.gas_limit) > data.env.block.gas_limit.into() &&
-        U256::from(call_gas_limit) <= data.env.block.gas_limit.into()
+    U256::from(data.env.tx.gas_limit) > ru256_to_u256(data.env.block.gas_limit) &&
+        U256::from(call_gas_limit) <= ru256_to_u256(data.env.block.gas_limit)
         // Transfers in forge scripts seem to be estimated at 2300 by revm leading to "Intrinsic
         // gas too low" failure when simulated on chain
         && call_gas_limit > 2300
 }
 
 /// Small utility function that checks if an address is a potential precompile.
-pub fn is_potential_precompile(address: H160) -> bool {
-    address < H160::from_low_u64_be(10) && address != H160::zero()
+pub fn is_potential_precompile(address: H176) -> bool {
+    address < H176::from_low_u64_be(10) && address != H176::zero()
 }
 
 #[cfg(test)]
