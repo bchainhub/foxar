@@ -12,7 +12,6 @@ use eyre::{Result, WrapErr};
 use futures::future::BoxFuture;
 use std::{
     collections::{BTreeMap, HashMap},
-    env::VarError,
     fmt::Write,
     path::PathBuf,
     str::FromStr,
