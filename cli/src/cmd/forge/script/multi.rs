@@ -152,7 +152,7 @@ impl ScriptArgs {
                 join_all(futs).await.into_iter().filter(|res| res.is_err()).collect::<Vec<_>>();
 
             if !errors.is_empty() {
-                return Err(eyre::eyre!("{errors:?}"));
+                return Err(eyre::eyre!("{errors:?}"))
             }
         }
 
@@ -172,7 +172,7 @@ impl ScriptArgs {
                 {
                     Ok(_) => {
                         if self.verify {
-                            return sequence.verify_contracts(config, verify.clone()).await;
+                            return sequence.verify_contracts(config, verify.clone()).await
                         }
                         Ok(())
                     }
@@ -185,7 +185,7 @@ impl ScriptArgs {
             join_all(futs).await.into_iter().filter(|res| res.is_err()).collect::<Vec<_>>();
 
         if !errors.is_empty() {
-            return Err(eyre::eyre!("{errors:?}"));
+            return Err(eyre::eyre!("{errors:?}"))
         }
 
         Ok(())

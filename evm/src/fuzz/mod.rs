@@ -91,13 +91,7 @@ impl<'a> FuzzedExecutor<'a> {
 
         let dictionary_weight = self.config.dictionary.dictionary_weight.min(100);
         if self.config.dictionary.dictionary_weight < 100 {
-            weights.push((
-                100 - dictionary_weight,
-                fuzz_calldata(
-                    func.clone(),
-                    network,
-                ),
-            ));
+            weights.push((100 - dictionary_weight, fuzz_calldata(func.clone(), network)));
         }
         if dictionary_weight > 0 {
             weights.push((

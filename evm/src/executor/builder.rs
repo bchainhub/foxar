@@ -4,7 +4,8 @@ use super::{
 };
 use crate::{
     executor::{backend::Backend, inspector::CheatsConfig},
-    fuzz::{invariant::RandomCallGenerator, strategies::EvmFuzzState}, utils::ru256_to_u256,
+    fuzz::{invariant::RandomCallGenerator, strategies::EvmFuzzState},
+    utils::ru256_to_u256,
 };
 use corebc::types::U256;
 use revm::primitives::{Env, SpecId};
@@ -28,8 +29,11 @@ impl ExecutorBuilder {
     /// Enables cheatcodes on the executor.
     #[must_use]
     pub fn with_cheatcodes(mut self, config: CheatsConfig) -> Self {
-        self.inspector_config.cheatcodes =
-            Some(Cheatcodes::new(self.env.block.clone(), ru256_to_u256(self.env.tx.gas_price), config));
+        self.inspector_config.cheatcodes = Some(Cheatcodes::new(
+            self.env.block.clone(),
+            ru256_to_u256(self.env.tx.gas_price),
+            config,
+        ));
         self
     }
 

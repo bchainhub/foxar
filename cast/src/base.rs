@@ -435,7 +435,7 @@ impl NumberWithBase {
             buf[i] = char::from_digit(m, radix).unwrap();
             x /= r;
             if x.is_zero() {
-                break;
+                break
             }
             i -= 1;
         }

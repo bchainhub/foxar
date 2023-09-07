@@ -6,7 +6,7 @@
 
 use corebc_ylem::{
     artifacts::{Source, Sources},
-    CompilerInput, CompilerOutput, YlemVersion, Ylem,
+    CompilerInput, CompilerOutput, Ylem, YlemVersion,
 };
 use eyre::Result;
 use forge::executor::{opts::EvmOpts, Backend};
@@ -471,7 +471,8 @@ contract {} is Script {{
     /// The [SessionSource] represented as a REPL contract.
     pub fn to_repl_source(&self) -> String {
         let Version { major, minor, patch, .. } = self.ylem.version().unwrap();
-        //TODO:error2215 - find a way to build ican address here - Cheats(address(uint176(uint256(sha3("hevm cheat code")))));
+        //TODO:error2215 - find a way to build ican address here -
+        // Cheats(address(uint176(uint256(sha3("hevm cheat code")))));
         format!(
             r#"
 // SPDX-License-Identifier: UNLICENSED

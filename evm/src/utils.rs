@@ -6,7 +6,7 @@ use corebc::{
 use eyre::ContextCompat;
 use revm::{
     interpreter::{opcode, opcode::spec_opcode_gas},
-    primitives::{SpecId, Network as REVMNetwork},
+    primitives::{Network as REVMNetwork, SpecId},
 };
 use std::collections::BTreeMap;
 
@@ -153,17 +153,17 @@ pub fn apply_network_and_block_specific_env_changes<T>(
     env: &mut revm::primitives::Env,
     block: &Block<T>,
 ) {
-        let block_number = block.number.unwrap_or_default();
-        match env.cfg.network {
-            REVMNetwork::Mainnet | REVMNetwork::Devin | REVMNetwork::Private(_) => {
-                // after merge difficulty is supplanted with prevrandao EIP-4399
-                if block_number.as_u64() >= 15_537_351u64 {
-                    env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
-                }
+    let block_number = block.number.unwrap_or_default();
+    match env.cfg.network {
+        REVMNetwork::Mainnet | REVMNetwork::Devin | REVMNetwork::Private(_) => {
+            // after merge difficulty is supplanted with prevrandao EIP-4399
+            if block_number.as_u64() >= 15_537_351u64 {
+                env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
+            }
 
-                return
-            }, 
-            _ => {}
+            return
+        }
+        _ => {}
         _ => {}
     }
 

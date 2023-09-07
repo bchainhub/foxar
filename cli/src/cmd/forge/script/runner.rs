@@ -336,9 +336,9 @@ impl ScriptRunner {
                 self.executor.env_mut().tx.gas_limit = mid_gas_limit;
                 let res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
                 match res.exit_reason {
-                    InstructionResult::Revert
-                    | InstructionResult::OutOfGas
-                    | InstructionResult::OutOfFund => {
+                    InstructionResult::Revert |
+                    InstructionResult::OutOfGas |
+                    InstructionResult::OutOfFund => {
                         lowest_gas_limit = mid_gas_limit;
                     }
                     _ => {
@@ -346,13 +346,13 @@ impl ScriptRunner {
                         // if last two successful estimations only vary by 10%, we consider this to
                         // sufficiently accurate
                         const ACCURACY: u64 = 10;
-                        if (last_highest_gas_limit - highest_gas_limit) * ACCURACY
-                            / last_highest_gas_limit
-                            < 1
+                        if (last_highest_gas_limit - highest_gas_limit) * ACCURACY /
+                            last_highest_gas_limit <
+                            1
                         {
                             // update the gas
                             gas_used = highest_gas_limit;
-                            break;
+                            break
                         }
                         last_highest_gas_limit = highest_gas_limit;
                     }

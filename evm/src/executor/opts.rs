@@ -1,6 +1,6 @@
 use crate::{
     executor::fork::CreateFork,
-    utils::{h176_to_b176, h256_to_b256, RuntimeOrHandle, u256_to_ru256},
+    utils::{h176_to_b176, h256_to_b256, u256_to_ru256, RuntimeOrHandle},
 };
 use corebc::{
     providers::{Middleware, Provider},
@@ -9,7 +9,7 @@ use corebc::{
 use eyre::WrapErr;
 use foundry_common::{self, ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
 use foundry_config::Config;
-use revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256, Network as REVMNetwork};
+use revm::primitives::{BlockEnv, CfgEnv, Network as REVMNetwork, SpecId, TxEnv, U256 as rU256};
 use serde::{Deserialize, Deserializer, Serialize};
 
 use super::fork::environment;
@@ -104,7 +104,9 @@ impl EvmOpts {
                 gas_limit: u256_to_ru256(self.gas_limit()),
             },
             cfg: CfgEnv {
-                network: REVMNetwork::from(self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID)),
+                network: REVMNetwork::from(
+                    self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID),
+                ),
                 spec_id: SpecId::MERGE,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
@@ -156,7 +158,7 @@ impl EvmOpts {
         if let Some(id) = self.env.network_id {
             return id
         }
-        self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), |id| u64::from(id))
+        self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), u64::from)
     }
 
     /// Returns the available compute units per second, which will be

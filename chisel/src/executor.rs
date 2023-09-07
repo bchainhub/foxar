@@ -1486,7 +1486,7 @@ mod tests {
             let mut is_preinstalled = PRE_INSTALL_YLEM_LOCK.lock().unwrap();
             if !*is_preinstalled {
                 let ylem =
-                Ylem::find_or_install_yvm_version("1.1.0").and_then(|ylem| ylem.version());
+                    Ylem::find_or_install_yvm_version("1.1.0").and_then(|ylem| ylem.version());
                 if ylem.is_err() {
                     // try reinstalling
                     let ylem = Ylem::blocking_install(&"1.1.0".parse().unwrap());

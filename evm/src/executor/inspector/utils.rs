@@ -30,7 +30,12 @@ pub fn get_create_address(call: &CreateInputs, nonce: u64, network: &Network) ->
             let salt = ru256_to_u256(salt);
             let mut salt_bytes = [0u8; 32];
             salt.to_big_endian(&mut salt_bytes);
-            get_create2_address(b176_to_h176(call.caller), salt_bytes, call.init_code.clone(), *network)
+            get_create2_address(
+                b176_to_h176(call.caller),
+                salt_bytes,
+                call.init_code.clone(),
+                *network,
+            )
         }
     }
 }

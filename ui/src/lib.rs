@@ -1,3 +1,4 @@
+use corebc::{types::Address, ylem::artifacts::ContractBytecodeSome};
 use crossterm::{
     event::{
         self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEvent, KeyModifiers,
@@ -6,7 +7,6 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use corebc::{ylem::artifacts::ContractBytecodeSome, types::Address};
 use eyre::Result;
 use forge::{
     debug::{DebugStep, Instruction},

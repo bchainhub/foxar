@@ -241,9 +241,9 @@ impl ScriptArgs {
 
                 // Chains which use `eth_estimateGas` are being sent sequentially and require their
                 // gas to be re-estimated right before broadcasting.
-                if !is_fixed_gas_limit
-                    && (has_different_gas_calc(provider.get_chainid().await?.as_u64())
-                        || self.skip_simulation)
+                if !is_fixed_gas_limit &&
+                    (has_different_gas_calc(provider.get_chainid().await?.as_u64()) ||
+                        self.skip_simulation)
                 {
                     self.estimate_gas(&mut tx, &provider).await?;
                 }
@@ -345,7 +345,7 @@ impl ScriptArgs {
         self.send_transactions(deployment_sequence, &rpc, &result.script_wallets).await?;
 
         if self.verify {
-            return deployment_sequence.verify_contracts(&script_config.config, verify).await;
+            return deployment_sequence.verify_contracts(&script_config.config, verify).await
         }
         Ok(())
     }
@@ -377,7 +377,7 @@ impl ScriptArgs {
                     &mut script_config.config,
                     returns,
                 )
-                .await;
+                .await
         } else if self.broadcast {
             eyre::bail!("No onchain transactions generated in script");
         }
@@ -500,7 +500,7 @@ impl ScriptArgs {
             // transactions.
             if let Some(next_tx) = txes_iter.peek() {
                 if next_tx.rpc == Some(tx_rpc) {
-                    continue;
+                    continue
                 }
             }
 
@@ -605,9 +605,9 @@ impl ScriptArgs {
             provider
                 .estimate_gas(tx, None)
                 .await
-                .wrap_err_with(|| format!("Failed to estimate gas for tx: {:?}", tx.sighash()))?
-                * self.gas_estimate_multiplier
-                / 100,
+                .wrap_err_with(|| format!("Failed to estimate gas for tx: {:?}", tx.sighash()))? *
+                self.gas_estimate_multiplier /
+                100,
         );
         Ok(())
     }

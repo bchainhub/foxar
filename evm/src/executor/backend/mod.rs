@@ -552,7 +552,8 @@ impl Backend {
             bool private _failed;
          }
         */
-        let value = self.storage(h176_to_b176(address), u256_to_ru256(U256::zero())).unwrap_or_default();
+        let value =
+            self.storage(h176_to_b176(address), u256_to_ru256(U256::zero())).unwrap_or_default();
         value.as_le_bytes()[1] != 0
     }
 
@@ -707,7 +708,12 @@ impl Backend {
             }
             TransactTo::Create(CreateScheme::Create2 { salt }) => {
                 let code_hash = H256::from_slice(sha3(&env.tx.data).as_slice());
-                revm::primitives::create2_address(env.tx.caller, h256_to_b256(code_hash), salt, &env.cfg.network)
+                revm::primitives::create2_address(
+                    env.tx.caller,
+                    h256_to_b256(code_hash),
+                    salt,
+                    &env.cfg.network,
+                )
             }
         };
         self.set_test_contract(b176_to_h176(test_contract));

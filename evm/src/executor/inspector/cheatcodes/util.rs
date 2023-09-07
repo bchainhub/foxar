@@ -37,7 +37,8 @@ const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/60'/0'/0/";
 
 /// Address of the default CREATE2 deployer 0x4e59b44847b379578588920ca78fbf26c0b4956c
 pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
-    0, 0, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149, 108,
+    0, 0, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149,
+    108,
 ]);
 
 pub const MAGIC_SKIP_BYTES: &[u8] = b"FOUNDRY::SKIP";
@@ -221,8 +222,12 @@ pub fn apply<DB: Database>(
     call: &HEVMCalls,
 ) -> Option<Result> {
     Some(match call {
-        HEVMCalls::Addr(inner) => addr(inner.0, &Network::try_from(data.env.cfg.network.as_u64()).unwrap()),
-        HEVMCalls::Sign(inner) => sign(inner.0, inner.1.into(),ru256_to_u256(data.env.cfg.network.as_u256())),
+        HEVMCalls::Addr(inner) => {
+            addr(inner.0, &Network::try_from(data.env.cfg.network.as_u64()).unwrap())
+        }
+        HEVMCalls::Sign(inner) => {
+            sign(inner.0, inner.1.into(), ru256_to_u256(data.env.cfg.network.as_u256()))
+        }
         HEVMCalls::DeriveKey0(inner) => {
             derive_key::<English>(&inner.0, DEFAULT_DERIVATION_PATH_PREFIX, inner.1)
         }

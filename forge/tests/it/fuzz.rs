@@ -24,10 +24,10 @@ async fn test_fuzz() {
     for (_, SuiteResult { test_results, .. }) in suite_result {
         for (test_name, result) in test_results {
             match test_name.as_str() {
-                "testPositive(uint256)"
-                | "testPositive(int256)"
-                | "testSuccessfulFuzz(uint128,uint128)"
-                | "testToStringFuzz(bytes32)" => assert!(
+                "testPositive(uint256)" |
+                "testPositive(int256)" |
+                "testSuccessfulFuzz(uint128,uint128)" |
+                "testToStringFuzz(bytes32)" => assert!(
                     result.status == TestStatus::Success,
                     "Test {} did not pass as expected.\nReason: {:?}\nLogs:\n{}",
                     test_name,

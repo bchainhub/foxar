@@ -455,8 +455,8 @@ mod tests {
     use super::*;
     use corebc::{
         abi::Abi,
-        ylem::{Project, ProjectPathsConfig},
         types::{Address, Bytes},
+        ylem::{Project, ProjectPathsConfig},
     };
     use foundry_common::ContractsByArtifact;
 

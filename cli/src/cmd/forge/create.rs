@@ -200,8 +200,8 @@ impl CreateArgs {
                     e
                 }
             })?;
-        let is_legacy = self.tx.legacy
-            || Chain::try_from(chain).map(|x| Chain::is_legacy(&x)).unwrap_or_default();
+        let is_legacy = self.tx.legacy ||
+            Chain::try_from(chain).map(|x| Chain::is_legacy(&x)).unwrap_or_default();
         let mut deployer = if is_legacy { deployer.legacy() } else { deployer };
 
         // set tx value if specified
@@ -290,7 +290,7 @@ impl CreateArgs {
         };
 
         if !self.verify {
-            return Ok(());
+            return Ok(())
         }
 
         println!("Starting contract verification...");

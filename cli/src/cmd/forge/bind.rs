@@ -97,13 +97,13 @@ impl BindArgs {
     /// Returns the filter to use for `MultiAbigen`
     fn get_filter(&self) -> ContractFilter {
         if self.select_all {
-            return ContractFilter::All;
+            return ContractFilter::All
         }
         if !self.select.is_empty() {
-            return SelectContracts::default().extend_regex(self.select.clone()).into();
+            return SelectContracts::default().extend_regex(self.select.clone()).into()
         }
         if !self.skip.is_empty() {
-            return ExcludeContracts::default().extend_regex(self.skip.clone()).into();
+            return ExcludeContracts::default().extend_regex(self.skip.clone()).into()
         }
         // This excludes all Test/Script and forge-std contracts
         ExcludeContracts::default()
@@ -197,7 +197,7 @@ impl Cmd for BindArgs {
 
         if !self.overwrite && self.bindings_exist(&artifacts) {
             println!("Bindings found. Checking for consistency.");
-            return self.check_existing_bindings(&artifacts);
+            return self.check_existing_bindings(&artifacts)
         }
 
         if self.overwrite && self.bindings_exist(&artifacts) {

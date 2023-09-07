@@ -31,7 +31,7 @@ impl Encodable for Item {
 impl Decodable for Item {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         if rlp.is_data() {
-            return Ok(Item::Data(Vec::from(rlp.data()?)));
+            return Ok(Item::Data(Vec::from(rlp.data()?)))
         }
         Ok(Item::Array(rlp.as_list()?))
     }
@@ -54,7 +54,7 @@ impl Item {
             Value::Object(_) => {
                 eyre::bail!("RLP input can not contain objects")
             }
-        };
+        }
     }
 }
 

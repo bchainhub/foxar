@@ -403,7 +403,7 @@ impl<'a> Git<'a> {
                     output.status.code(),
                     stdout.trim(),
                     stderr.trim()
-                ));
+                ))
             }
         }
         Ok(())

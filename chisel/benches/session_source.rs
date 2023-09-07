@@ -1,6 +1,6 @@
 use chisel::session_source::{SessionSource, SessionSourceConfig};
-use criterion::{criterion_group, Criterion};
 use corebc_ylem::Ylem;
+use criterion::{criterion_group, Criterion};
 use forge::executor::opts::EvmOpts;
 use foundry_config::Config;
 use once_cell::sync::Lazy;

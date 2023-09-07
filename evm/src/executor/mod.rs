@@ -5,7 +5,10 @@ use crate::{
     debug::DebugArena,
     decode,
     trace::CallTraceArena,
-    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result, u256_to_ru256, ru256_to_u256},
+    utils::{
+        b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result,
+        ru256_to_u256, u256_to_ru256,
+    },
     CALLER,
 };
 pub use abi::{
@@ -171,7 +174,7 @@ impl Executor {
     pub fn set_balance(&mut self, address: Address, amount: U256) -> DatabaseResult<&mut Self> {
         trace!(?address, ?amount, "setting account balance");
         let mut account = self.backend_mut().basic(h176_to_b176(address))?.unwrap_or_default();
-        account.balance = u256_to_ru256(amount).into();
+        account.balance = u256_to_ru256(amount);
 
         self.backend_mut().insert_account_info(address, account);
         Ok(self)
@@ -235,7 +238,7 @@ impl Executor {
         // record any changes made to the block's environment during setup
         self.env.block = res.env.block.clone();
         // and also the chainid, which can be set manually
-        self.env.cfg.network = res.env.cfg.network.clone();
+        self.env.cfg.network = res.env.cfg.network;
 
         match res.state_changeset.as_ref() {
             Some(changeset) => {

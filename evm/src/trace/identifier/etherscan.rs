@@ -5,7 +5,7 @@ use corebc::{
     blockindex,
     blockindex::contract::{ContractMetadata, Metadata},
     prelude::{artifacts::ContractBytecodeSome, errors::BlockindexError, ArtifactId},
-    types::{H176},
+    types::H176,
 };
 use foundry_common::compile;
 use foundry_config::{Config, Network};
@@ -66,9 +66,7 @@ impl EtherscanIdentifier {
         let mut sources = BTreeMap::new();
 
         // TODO: Add caching so we dont double-fetch contracts.
-        let contracts_iter = self
-            .contracts
-            .iter();
+        let contracts_iter = self.contracts.iter();
 
         let outputs_fut = contracts_iter
             .clone()

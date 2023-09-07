@@ -98,7 +98,7 @@ where
 
         self.arena.arena[self.head].steps.push(DebugStep {
             pc,
-            stack: interpreter.stack().data().iter().copied().map(|d| ru256_to_u256(d)).collect(),
+            stack: interpreter.stack().data().iter().copied().map(ru256_to_u256).collect(),
             memory: interpreter.memory.clone(),
             instruction: Instruction::OpCode(op),
             push_bytes,
@@ -160,7 +160,11 @@ where
         let nonce = data.journaled_state.account(call.caller).info.nonce;
         self.enter(
             data.journaled_state.depth() as usize,
-            get_create_address(call, nonce,  &Network::try_from(data.env.cfg.network.as_u64()).unwrap()),
+            get_create_address(
+                call,
+                nonce,
+                &Network::try_from(data.env.cfg.network.as_u64()).unwrap(),
+            ),
             CallKind::Create,
         );
 

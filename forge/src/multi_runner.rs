@@ -2,8 +2,8 @@ use crate::{result::SuiteResult, ContractRunner, TestFilter, TestOptions};
 use corebc::{
     abi::Abi,
     prelude::{artifacts::CompactContractBytecode, ArtifactId, ArtifactOutput},
+    types::{Address, Bytes, Network, U256},
     ylem::{contracts::ArtifactContracts, Artifact, ProjectCompileOutput},
-    types::{Address, Bytes, U256, Network},
 };
 use eyre::Result;
 use foundry_common::{ContractsByArtifact, TestFunctionExt};

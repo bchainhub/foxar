@@ -8,7 +8,7 @@ use corebc::{
 use eyre::WrapErr;
 use foundry_common::NON_ARCHIVE_NODE_WARNING;
 use futures::TryFutureExt;
-use revm::primitives::{BlockEnv, CfgEnv, Env, TxEnv, Network};
+use revm::primitives::{BlockEnv, CfgEnv, Env, Network, TxEnv};
 
 /// Initializes a REVM block environment based on a forked
 /// ethereum provider.
@@ -60,9 +60,7 @@ where
 
     let mut env = Env {
         cfg: CfgEnv {
-            network: Network::from(
-                override_network_id.unwrap_or(rpc_network_id.as_u64()),
-            ),
+            network: Network::from(override_network_id.unwrap_or(rpc_network_id.as_u64())),
             memory_limit,
             limit_contract_code_size: Some(usize::MAX),
             // EIP-3607 rejects transactions from senders with deployed code.

@@ -7,7 +7,7 @@ use crate::{
 use bytes::Bytes;
 use corebc::{
     abi::Function,
-    types::{Address, Log, H256, U256, Network},
+    types::{Address, Log, Network, H256, U256},
 };
 use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
 use foundry_config::FuzzDictionaryConfig;

@@ -157,7 +157,7 @@ pub mod filter {
             let test_name = test_name.as_ref();
             if let Some(ref exclude) = self.exclude_tests {
                 if exclude.is_match(test_name) {
-                    return false;
+                    return false
                 }
             }
             self.test_regex.is_match(test_name)
@@ -171,7 +171,7 @@ pub mod filter {
             let path = path.as_ref();
             if let Some(ref exclude) = self.exclude_paths {
                 if exclude.is_match(path) {
-                    return false;
+                    return false
                 }
             }
             self.path_regex.is_match(path)

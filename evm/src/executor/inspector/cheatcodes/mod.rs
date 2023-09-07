@@ -15,8 +15,8 @@ use corebc::{
     abi::{AbiDecode, AbiEncode, RawLog},
     signers::LocalWallet,
     types::{
-        transaction::eip2718::TypedTransaction, Address, Bytes, NameOrAddress, TransactionRequest,
-        U256, Network
+        transaction::eip2718::TypedTransaction, Address, Bytes, NameOrAddress, Network,
+        TransactionRequest, U256,
     },
 };
 use foundry_common::evm::Breakpoints;
@@ -247,7 +247,11 @@ impl Cheatcodes {
             .get(&inputs.caller)
             .map(|acc| acc.info.nonce)
             .unwrap_or_default();
-        let created_address = get_create_address(inputs, old_nonce, &Network::try_from(data.env.cfg.network.as_u64()).unwrap());
+        let created_address = get_create_address(
+            inputs,
+            old_nonce,
+            &Network::try_from(data.env.cfg.network.as_u64()).unwrap(),
+        );
 
         if data.journaled_state.depth > 1 &&
             !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))
@@ -616,7 +620,8 @@ where
                 } else if let Some((_, mock_retdata)) = mocks.iter().find(|(mock, _)| {
                     mock.calldata.len() <= call.input.len() &&
                         *mock.calldata == call.input[..mock.calldata.len()] &&
-                        mock.value.map_or(true, |value| value == ru256_to_u256(call.transfer.value))
+                        mock.value
+                            .map_or(true, |value| value == ru256_to_u256(call.transfer.value))
                 }) {
                     return (
                         mock_retdata.ret_type,

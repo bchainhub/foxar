@@ -1,7 +1,7 @@
 //! Support for multiple etherscan keys
 use crate::{
     resolve::{interpolate, UnresolvedEnvVarError, RE_PLACEHOLDER},
-    Network, Config,
+    Config, Network,
 };
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{
@@ -40,8 +40,8 @@ pub struct EtherscanConfigs {
 impl EtherscanConfigs {
     /// Creates a new list of etherscan configs
     pub fn new(configs: impl IntoIterator<Item = (impl Into<String>, EtherscanConfig)>) -> Self {
-        Self { configs: configs.into_iter().map(|(name, config)| (name.into(), config)).collect()
-}     }
+        Self { configs: configs.into_iter().map(|(name, config)| (name.into(), config)).collect() }
+    }
 
     /// Returns `true` if this type doesn't contain any configs
     pub fn is_empty(&self) -> bool {
@@ -98,8 +98,8 @@ impl ResolvedEtherscanConfigs {
         configs: impl IntoIterator<Item = (impl Into<String>, ResolvedEtherscanConfig)>,
     ) -> Self {
         Self {
-            configs: configs.into_iter().map(|(name, config)| (name.into(),
-Ok(config))).collect(),         }
+            configs: configs.into_iter().map(|(name, config)| (name.into(), Ok(config))).collect(),
+        }
     }
 
     /// Returns the first config that matches the network
@@ -186,16 +186,25 @@ impl EtherscanConfig {
                 key,
                 network: Some(network),
             }),
-            (Some(network), None) => ResolvedEtherscanConfig::create(key, network).ok_or_else(|| {
-                let msg = alias.map(|a| format!(" `{a}`")).unwrap_or_default();
-                EtherscanConfigError::UnknownNetwork(msg, network)
-            }),
+            (Some(network), None) => {
+                ResolvedEtherscanConfig::create(key, network).ok_or_else(|| {
+                    let msg = alias.map(|a| format!(" `{a}`")).unwrap_or_default();
+                    EtherscanConfigError::UnknownNetwork(msg, network)
+                })
+            }
             (None, Some(api_url)) => {
                 Ok(ResolvedEtherscanConfig { api_url, browser_url: None, key, network: None })
             }
             (None, None) => {
-                let msg = alias.map(|a| format!(" for Etherscan config
-`{a}`")).unwrap_or_default();                 Err(EtherscanConfigError::MissingUrlOrNetwork(msg))
+                let msg = alias
+                    .map(|a| {
+                        format!(
+                            " for Etherscan config
+`{a}`"
+                        )
+                    })
+                    .unwrap_or_default();
+                Err(EtherscanConfigError::MissingUrlOrNetwork(msg))
             }
         }
     }
