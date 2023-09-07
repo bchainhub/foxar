@@ -1,6 +1,6 @@
 use corebc::{
     abi::{Abi, FixedBytes, Function},
-    types::{Block, Network, H256, U256},
+    types::{Block, H256, U256},
     ylem::CvmVersion,
 };
 use eyre::ContextCompat;
@@ -164,7 +164,8 @@ pub fn apply_network_and_block_specific_env_changes<T>(
                 return
             }, 
             _ => {}
-        }
+        _ => {}
+    }
 
     // if difficulty is `0` we assume it's past merge
     if block.difficulty.is_zero() {
