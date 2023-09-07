@@ -14,7 +14,7 @@ use crate::{
 };
 use foundry_config::fmt::{MultilineFuncHeaderStyle, SingleLineBlockStyle};
 use itertools::{Either, Itertools};
-use std::{fmt::Write, str::FromStr};
+use std::{fmt::Write};
 use thiserror::Error;
 
 type Result<T, E = FormatterError> = std::result::Result<T, E>;

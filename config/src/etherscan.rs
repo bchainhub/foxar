@@ -8,7 +8,6 @@ use std::{
     collections::BTreeMap,
     fmt,
     ops::{Deref, DerefMut},
-    time::Duration,
 };
 use tracing::warn;
 
@@ -163,7 +162,7 @@ impl EtherscanConfig {
         self,
         alias: Option<&str>,
     ) -> Result<ResolvedEtherscanConfig, EtherscanConfigError> {
-        let EtherscanConfig { network: network, mut url, key } = self;
+        let EtherscanConfig { network, mut url, key } = self;
 
         if let Some(url) = &mut url {
             *url = interpolate(url)?;
@@ -261,11 +260,10 @@ impl ResolvedEtherscanConfig {
     }
 
     /// Returns the corresponding `ethers_etherscan::Client`, configured with the `api_url`,
-    /// `api_key` and cache
     pub fn into_client(
         self,
     ) -> Result<corebc_blockindex::Client, corebc_blockindex::errors::BlockindexError> {
-        let ResolvedEtherscanConfig { api_url, browser_url, key: api_key, network: network } = self;
+        let ResolvedEtherscanConfig { api_url, browser_url, key: _ , network } = self;
         let (mainnet_api, mainnet_url) =
             corebc_core::types::Network::Mainnet.blockindex_urls().expect("exist; qed");
 

@@ -1,6 +1,6 @@
 //! Formatting helpers for [`Token`]s.
 
-use corebc_core::{abi::Token, types::I256, utils, utils::hex};
+use corebc_core::{abi::Token, types::I256, utils::hex};
 use std::{fmt, fmt::Write};
 
 /// Wrapper that pretty formats a token

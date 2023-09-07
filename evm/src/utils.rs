@@ -163,13 +163,6 @@ pub fn apply_network_and_block_specific_env_changes<T>(
 
             return
         }
-        _ => {}
-        _ => {}
-    }
-
-    // if difficulty is `0` we assume it's past merge
-    if block.difficulty.is_zero() {
-        env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
     }
 }
 

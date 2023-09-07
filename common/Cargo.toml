@@ -16,7 +16,6 @@ foundry-macros = { path = "../macros" }
 corebc-core = { workspace = true }
 corebc-ylem = { workspace = true }
 corebc-providers = { workspace = true }
-corebc-middleware = { workspace = true }
 corebc-blockindex = { workspace = true, features = ["corebc-ylem"] }
 
 # io

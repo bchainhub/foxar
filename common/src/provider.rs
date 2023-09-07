@@ -2,7 +2,6 @@
 
 use crate::{ALCHEMY_FREE_TIER_CUPS, REQUEST_TIMEOUT};
 use corebc_core::types::{Network, U256};
-use corebc_middleware::gas_oracle::{GasCategory, GasOracle};
 use corebc_providers::{
     is_local_endpoint, Http, HttpRateLimitRetryPolicy, Middleware, Provider, RetryClient,
     RetryClientBuilder, DEFAULT_LOCAL_POLL_INTERVAL,
