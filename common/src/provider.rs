@@ -206,7 +206,7 @@ impl<'a> From<Cow<'a, str>> for ProviderBuilder {
 /// Estimates EIP1559 fees depending on the network
 pub async fn estimate_eip1559_fees<M: Middleware>(
     provider: &M,
-    network: Option<u64>,
+    _network: Option<u64>,
 ) -> eyre::Result<(U256, U256)>
 where
     M::Error: 'static,

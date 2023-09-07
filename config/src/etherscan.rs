@@ -263,7 +263,7 @@ impl ResolvedEtherscanConfig {
     pub fn into_client(
         self,
     ) -> Result<corebc_blockindex::Client, corebc_blockindex::errors::BlockindexError> {
-        let ResolvedEtherscanConfig { api_url, browser_url, key: _ , network } = self;
+        let ResolvedEtherscanConfig { api_url, browser_url, key: _, network } = self;
         let (mainnet_api, mainnet_url) =
             corebc_core::types::Network::Mainnet.blockindex_urls().expect("exist; qed");
 

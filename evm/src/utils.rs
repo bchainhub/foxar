@@ -160,8 +160,6 @@ pub fn apply_network_and_block_specific_env_changes<T>(
             if block_number.as_u64() >= 15_537_351u64 {
                 env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
             }
-
-            return
         }
     }
 }

@@ -2,21 +2,21 @@
 
 ## TODO
 
-- [x] abi -> Compiles with warnings
+- [x] abi -> Compiles
 - [ ] anvil
 - [ ] binder
 - [ ] cast 
 - [x] chisel -> Doesn't compile but that is because of other crates
 - [ ] cli - in progress
-- [x] common -> Compiles with warnings
+- [x] common -> Compiles
 - [ ] config - partly fixed
-- [ ] evm - in progress
-- [x] fmt -> Compiles with warnings
+- [x] evm -> Compiles
+- [x] fmt -> Compiles
 - [x] forge -> Doesn't compile but that is because of other crates
 - [ ] foundryup
-- [x] macros -> Compiles with warnings
-- [x] ui -> Doesn't compile but that is because of other crates
-- [x] utils -> Compiles with warnings
+- [x] macros -> Compiles
+- [x] ui -> Compiles
+- [x] utils -> Compiles
 
 ## Foundry
 

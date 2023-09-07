@@ -293,7 +293,7 @@ impl MultiContractRunnerBuilder {
                     .and_then(|bytes| known_contracts.insert(id.clone(), (abi, bytes.to_vec())));
                 Ok(())
             },
-            Network::from(env.cfg.chain_id),
+            Network::try_from(env.cfg.network.as_u64()).unwrap(),
         )?;
 
         let execution_info = known_contracts.flatten();
