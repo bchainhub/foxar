@@ -2,8 +2,7 @@ use crate::errors::FunctionSignatureError;
 use corebc_core::{
     abi::Function,
     types::{
-        transaction::eip2718::TypedTransaction,
-        /* Eip1559TransactionRequest, */ NameOrAddress, TransactionRequest, H176, U256,
+        transaction::eip2718::TypedTransaction, NameOrAddress, TransactionRequest, H176, U256,
     },
 };
 use corebc_providers::Middleware;
@@ -29,10 +28,10 @@ pub type TxBuilderPeekOutput<'a> = (&'a TypedTransaction, &'a Option<Function>);
 /// Transaction builder
 /// ```
 /// async fn foo() -> eyre::Result<()> {
-///   use corebc_core::types::{Chain, U256};
+///   use corebc_core::types::{Network, U256};
 ///   use cast::TxBuilder;
 ///   let provider = corebc_providers::test_provider::MAINNET.provider();
-///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet, false).await?;
+///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet, false).await?;
 ///   builder
 ///       .gas(Some(U256::from(1)));
 ///   let (tx, _) = builder.build();
@@ -50,9 +49,9 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         provider: &'a M,
         from: F,
         to: Option<T>,
-        netowrk: impl Into<Network>,
+        network: impl Into<Network>,
     ) -> Result<TxBuilder<'a, M>> {
-        let network = netowrk.into();
+        let network = network.into();
         let from_addr = resolve_ens(provider, from).await?;
 
         let mut tx: TypedTransaction =
@@ -268,7 +267,7 @@ mod tests {
     use crate::TxBuilder;
     use async_trait::async_trait;
     use corebc_core::types::{
-        transaction::eip2718::TypedTransaction, Address, Chain, NameOrAddress, H160, U256,
+        transaction::eip2718::TypedTransaction, Address, NameOrAddress, Network, H160, U256,
     };
     use corebc_providers::{JsonRpcClient, Middleware, ProviderError};
     use serde::{de::DeserializeOwned, Serialize};
@@ -306,8 +305,8 @@ mod tests {
 
         async fn resolve_name(&self, ens_name: &str) -> Result<Address, Self::Error> {
             match ens_name {
-                "a.eth" => Ok(H176::from_str(ADDR_1).unwrap()),
-                "b.eth" => Ok(H176::from_str(ADDR_2).unwrap()),
+                "a.eth" => Ok(corebc_core::types::H176::from_str(ADDR_1).unwrap()),
+                "b.eth" => Ok(corebc_core::types::H176::from_str(ADDR_2).unwrap()),
                 _ => unreachable!("don't know how to resolve {ens_name}"),
             }
         }
@@ -318,7 +317,7 @@ mod tests {
         let provider = MyProvider {};
 
         // CORETOOD: REMOVE ENS
-        let builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet).await?;
+        let builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet).await?;
         // don't check anything other than the tx type - the rest is covered in the non-legacy case
         let (tx, _) = builder.build();
         match tx {
@@ -335,7 +334,7 @@ mod tests {
         let provider = MyProvider {};
         let mut builder =
         // CORETODO: Remove ens for addresses
-            TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet).await.unwrap();
+            TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet).await.unwrap();
         builder.args(Some(("what_a_day(int)", vec![String::from("31337")]))).await?;
         let (_, function_maybe) = builder.build();
 

@@ -9,7 +9,7 @@ use corebc_blockindex::Client;
 use corebc_core::{
     abi::{
         token::{LenientTokenizer, Tokenizer},
-        Function, HumanReadableParser, ParamType, RawAbi, Token,
+        Function, HumanReadableParser, ParamType, /*RawAbi, */ Token,
     },
     types::{Network, *},
     utils::{
