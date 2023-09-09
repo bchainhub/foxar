@@ -4,8 +4,8 @@
 
 - [x] abi -> Compiles
 - [ ] anvil
-- [ ] binder
-- [ ] cast 
+- [x] binder -> Compiles with warnings
+- [x] cast  -> Compiles with warnings
 - [x] chisel -> Doesn't compile but that is because of other crates
 - [ ] cli - in progress
 - [x] common -> Compiles
