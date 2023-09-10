@@ -2,8 +2,7 @@ use crate::errors::FunctionSignatureError;
 use corebc_core::{
     abi::Function,
     types::{
-        transaction::eip2718::TypedTransaction, Eip1559TransactionRequest, NameOrAddress,
-        TransactionRequest, H160, U256,
+        transaction::eip2718::TypedTransaction, NameOrAddress, TransactionRequest, H176, U256,
     },
 };
 use corebc_providers::Middleware;
@@ -15,7 +14,7 @@ use futures::future::join_all;
 use crate::strip_0x;
 
 pub struct TxBuilder<'a, M: Middleware> {
-    to: Option<H160>,
+    to: Option<H176>,
     chain: Network,
     tx: TypedTransaction,
     func: Option<Function>,
@@ -29,10 +28,10 @@ pub type TxBuilderPeekOutput<'a> = (&'a TypedTransaction, &'a Option<Function>);
 /// Transaction builder
 /// ```
 /// async fn foo() -> eyre::Result<()> {
-///   use corebc_core::types::{Chain, U256};
+///   use corebc_core::types::{Network, U256};
 ///   use cast::TxBuilder;
 ///   let provider = corebc_providers::test_provider::MAINNET.provider();
-///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet, false).await?;
+///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet, false).await?;
 ///   builder
 ///       .gas(Some(U256::from(1)));
 ///   let (tx, _) = builder.build();
@@ -50,28 +49,24 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         provider: &'a M,
         from: F,
         to: Option<T>,
-        chain: impl Into<Network>,
-        legacy: bool,
+        network: impl Into<Network>,
     ) -> Result<TxBuilder<'a, M>> {
-        let chain = chain.into();
+        let network = network.into();
         let from_addr = resolve_ens(provider, from).await?;
 
-        let mut tx: TypedTransaction = if chain.is_legacy() || legacy {
-            TransactionRequest::new().from(from_addr).chain_id(chain.id()).into()
-        } else {
-            Eip1559TransactionRequest::new().from(from_addr).chain_id(chain.id()).into()
-        };
+        let mut tx: TypedTransaction =
+            TransactionRequest::new().from(from_addr).network_id(network.id()).into();
 
         let to_addr = if let Some(to) = to {
             let addr =
-                resolve_ens(provider, foundry_utils::resolve_addr(to, chain.try_into().ok())?)
+                resolve_ens(provider, foundry_utils::resolve_addr(to, network.try_into().ok())?)
                     .await?;
             tx.set_to(addr);
             Some(addr)
         } else {
             None
         };
-        Ok(Self { to: to_addr, chain, tx, func: None, etherscan_api_key: None, provider })
+        Ok(Self { to: to_addr, chain: network, tx, func: None, etherscan_api_key: None, provider })
     }
 
     /// Set gas for tx
@@ -171,7 +166,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         args: Vec<String>,
     ) -> Result<(Vec<u8>, Function)> {
         if sig.trim().is_empty() {
-            return Err(FunctionSignatureError::MissingSignature.into())
+            return Err(FunctionSignatureError::MissingSignature.into());
         }
 
         let args = resolve_name_args(&args, self.provider).await;
@@ -227,7 +222,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         value: Option<(&str, Vec<String>)>,
     ) -> Result<&mut TxBuilder<'a, M>> {
         if let Some((sig, args)) = value {
-            return self.set_args(sig, args).await
+            return self.set_args(sig, args).await;
         }
         Ok(self)
     }
@@ -243,12 +238,12 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
     }
 }
 
-async fn resolve_ens<M: Middleware, T: Into<NameOrAddress>>(provider: &M, addr: T) -> Result<H160> {
+async fn resolve_ens<M: Middleware, T: Into<NameOrAddress>>(provider: &M, addr: T) -> Result<H176> {
     let from_addr = match addr.into() {
         NameOrAddress::Name(ref ens_name) => provider.resolve_name(ens_name).await,
         NameOrAddress::Address(addr) => Ok(addr),
     }
-    .map_err(|x| eyre!("Failed to resolve ENS name: {x}"))?;
+    .map_err(|_| eyre!("ENS IS NOT SUPPORTED"))?;
     Ok(from_addr)
 }
 
@@ -272,14 +267,14 @@ mod tests {
     use crate::TxBuilder;
     use async_trait::async_trait;
     use corebc_core::types::{
-        transaction::eip2718::TypedTransaction, Address, Chain, NameOrAddress, H160, U256,
+        transaction::eip2718::TypedTransaction, Address, NameOrAddress, Network, H160, U256,
     };
     use corebc_providers::{JsonRpcClient, Middleware, ProviderError};
     use serde::{de::DeserializeOwned, Serialize};
     use std::str::FromStr;
 
-    const ADDR_1: &str = "0000000000000000000000000000000000000001";
-    const ADDR_2: &str = "0000000000000000000000000000000000000002";
+    const ADDR_1: &str = "00000000000000000000000000000000000000000001";
+    const ADDR_2: &str = "00000000000000000000000000000000000000000002";
 
     #[derive(Debug)]
     struct MyProvider {}
@@ -310,36 +305,19 @@ mod tests {
 
         async fn resolve_name(&self, ens_name: &str) -> Result<Address, Self::Error> {
             match ens_name {
-                "a.eth" => Ok(H160::from_str(ADDR_1).unwrap()),
-                "b.eth" => Ok(H160::from_str(ADDR_2).unwrap()),
+                "a.eth" => Ok(corebc_core::types::H176::from_str(ADDR_1).unwrap()),
+                "b.eth" => Ok(corebc_core::types::H176::from_str(ADDR_2).unwrap()),
                 _ => unreachable!("don't know how to resolve {ens_name}"),
             }
         }
-    }
-    #[tokio::test(flavor = "multi_thread")]
-    async fn builder_new_non_legacy() -> eyre::Result<()> {
-        let provider = MyProvider {};
-        let builder =
-            TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet, false).await?;
-        let (tx, args) = builder.build();
-        assert_eq!(*tx.from().unwrap(), H160::from_str(ADDR_1).unwrap());
-        assert_eq!(*tx.to().unwrap(), NameOrAddress::Address(H160::from_str(ADDR_2).unwrap()));
-        assert_eq!(args, None);
-
-        match tx {
-            TypedTransaction::Eip1559(_) => {}
-            _ => {
-                panic!("Wrong tx type");
-            }
-        }
-        Ok(())
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn builder_new_legacy() -> eyre::Result<()> {
         let provider = MyProvider {};
-        let builder =
-            TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet, true).await?;
+
+        // CORETOOD: REMOVE ENS
+        let builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet).await?;
         // don't check anything other than the tx type - the rest is covered in the non-legacy case
         let (tx, _) = builder.build();
         match tx {
@@ -352,32 +330,11 @@ mod tests {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-    async fn builder_fields() -> eyre::Result<()> {
-        let provider = MyProvider {};
-        let mut builder =
-            TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet, false).await.unwrap();
-        builder
-            .gas(Some(U256::from(12u32)))
-            .gas_price(Some(U256::from(34u32)))
-            .value(Some(U256::from(56u32)))
-            .nonce(Some(U256::from(78u32)));
-
-        builder.etherscan_api_key(Some(String::from("what a lovely day"))); // not testing for this :-/
-        let (tx, _) = builder.build();
-
-        assert_eq!(tx.gas().unwrap().as_u32(), 12);
-        assert_eq!(tx.gas_price().unwrap().as_u32(), 34);
-        assert_eq!(tx.value().unwrap().as_u32(), 56);
-        assert_eq!(tx.nonce().unwrap().as_u32(), 78);
-        assert_eq!(tx.chain_id().unwrap().as_u32(), 1);
-        Ok(())
-    }
-
-    #[tokio::test(flavor = "multi_thread")]
     async fn builder_args() -> eyre::Result<()> {
         let provider = MyProvider {};
         let mut builder =
-            TxBuilder::new(&provider, "a.eth", Some("b.eth"), Chain::Mainnet, false).await.unwrap();
+        // CORETODO: Remove ens for addresses
+            TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet).await.unwrap();
         builder.args(Some(("what_a_day(int)", vec![String::from("31337")]))).await?;
         let (_, function_maybe) = builder.build();
 

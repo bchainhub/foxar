@@ -5,16 +5,16 @@
 use crate::rlp_converter::Item;
 use base::{Base, NumberWithBase, ToBase};
 use chrono::NaiveDateTime;
-use corebc_blockindex::{errors::EtherscanError, Client};
+use corebc_blockindex::Client;
 use corebc_core::{
     abi::{
         token::{LenientTokenizer, Tokenizer},
-        Function, HumanReadableParser, ParamType, RawAbi, Token,
+        Function, HumanReadableParser, ParamType, /*RawAbi, */ Token,
     },
-    types::{Chain, *},
+    types::{Network, *},
     utils::{
-        format_bytes32_string, format_units, get_contract_address, keccak256, parse_bytes32_string,
-        parse_units, rlp, Units,
+        format_bytes32_string, format_units, get_contract_address, parse_bytes32_string,
+        parse_units, rlp, sha3, Units,
     },
 };
 use corebc_providers::{Middleware, PendingTransaction};
@@ -462,7 +462,7 @@ where
     }
 
     pub async fn chain_id(&self) -> Result<U256> {
-        Ok(self.provider.get_chainid().await?)
+        Ok(self.provider.get_networkid().await?)
     }
 
     pub async fn block_number(&self) -> Result<U64> {
@@ -523,7 +523,7 @@ where
         let slot =
             H256::from_str("0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc")?;
         let value = self.provider.get_storage_at(who, slot, block).await?;
-        let addr: H160 = value.into();
+        let addr: H176 = value.into();
         Ok(format!("{addr:?}"))
     }
 
@@ -552,7 +552,7 @@ where
         let slot =
             H256::from_str("0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103")?;
         let value = self.provider.get_storage_at(who, slot, block).await?;
-        let addr: H160 = value.into();
+        let addr: H176 = value.into();
         Ok(format!("{addr:?}"))
     }
 
@@ -580,6 +580,7 @@ where
         &self,
         address: T,
         nonce: Option<U256>,
+        network: &Network,
     ) -> Result<Address> {
         let unpacked = if let Some(n) = nonce {
             n
@@ -587,7 +588,7 @@ where
             self.provider.get_transaction_count(address.into(), None).await?
         };
 
-        Ok(get_contract_address(address, unpacked))
+        Ok(get_contract_address(address, unpacked, network))
     }
 
     /// # Example
@@ -829,7 +830,7 @@ pub struct InterfaceSource {
 // In case of etherscan, ABI is fetched from the address on the chain
 pub enum AbiPath {
     Local { path: String, name: Option<String> },
-    Etherscan { address: Address, chain: Chain, api_key: String },
+    Etherscan { address: Address, chain: Network, api_key: String },
 }
 
 pub struct SimpleCast;
@@ -1259,7 +1260,7 @@ impl SimpleCast {
         let base_in = Base::unwrap_or_detect(base_in, value)?;
         let base_out: Base = base_out.parse()?;
         if base_in == base_out {
-            return Ok(value.to_string())
+            return Ok(value.to_string());
         }
 
         let mut n = NumberWithBase::parse_int(value, Some(base_in.to_string()))?;
@@ -1329,7 +1330,7 @@ impl SimpleCast {
         let s = if let Some(stripped) = s.strip_prefix("000000000000000000000000") {
             stripped
         } else {
-            return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"))
+            return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"));
         };
 
         let lowercase_address_string = format!("0x{s}");
@@ -1498,58 +1499,60 @@ impl SimpleCast {
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn generate_interface(address_or_path: AbiPath) -> Result<Vec<InterfaceSource>> {
-        let (contract_abis, contract_names): (Vec<RawAbi>, Vec<String>) = match address_or_path {
-            AbiPath::Local { path, name } => {
-                let file = std::fs::read_to_string(path).wrap_err("unable to read abi file")?;
-                let mut json: serde_json::Value = serde_json::from_str(&file)?;
-                let json = if !json["abi"].is_null() { json["abi"].take() } else { json };
-                let abi: RawAbi =
-                    serde_json::from_value(json).wrap_err("unable to parse json ABI from file")?;
+    // BLOCKINDEX TODO: Uncomment
+    // pub async fn generate_interface(address_or_path: AbiPath) -> Result<Vec<InterfaceSource>> {
+    //     let (contract_abis, contract_names): (Vec<RawAbi>, Vec<String>) = match address_or_path {
+    //         AbiPath::Local { path, name } => {
+    //             let file = std::fs::read_to_string(path).wrap_err("unable to read abi file")?;
+    //             let mut json: serde_json::Value = serde_json::from_str(&file)?;
+    //             let json = if !json["abi"].is_null() { json["abi"].take() } else { json };
+    //             let abi: RawAbi =
+    //                 serde_json::from_value(json).wrap_err("unable to parse json ABI from file")?;
 
-                (vec![abi], vec![name.unwrap_or_else(|| "Interface".to_owned())])
-            }
-            AbiPath::Etherscan { address, chain, api_key } => {
-                let client = Client::new(chain, api_key)?;
+    //             (vec![abi], vec![name.unwrap_or_else(|| "Interface".to_owned())])
+    //         }
+    //         AbiPath::Etherscan { address, chain, api_key } => {
+    //             // BLOCKINDEX TODO: Uncomment api_key
+    //             let client = Client::new(chain /*  , api_key*/)?;
 
-                // get the source
-                let source = match client.contract_source_code(address).await {
-                    Ok(source) => source,
-                    Err(EtherscanError::InvalidApiKey) => {
-                        eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may be using an API key for another Etherscan API chain (e.g. Etherscan API key for Polygonscan).")
-                    }
-                    Err(EtherscanError::ContractCodeNotVerified(address)) => {
-                        eyre::bail!("Contract source code at {:?} on {} not verified. Maybe you have selected the wrong chain?", address, chain)
-                    }
-                    Err(err) => {
-                        eyre::bail!(err)
-                    }
-                };
+    //             // get the source
+    //             let source = match client.contract_source_code(address).await {
+    //                 Ok(source) => source,
+    //                 Err(EtherscanError::InvalidApiKey) => {
+    //                     eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may be using an API key for another Etherscan API chain (e.g. Etherscan API key for Polygonscan).")
+    //                 }
+    //                 Err(EtherscanError::ContractCodeNotVerified(address)) => {
+    //                     eyre::bail!("Contract source code at {:?} on {} not verified. Maybe you have selected the wrong chain?", address, chain)
+    //                 }
+    //                 Err(err) => {
+    //                     eyre::bail!(err)
+    //                 }
+    //             };
 
-                let names = source
-                    .items
-                    .iter()
-                    .map(|item| item.contract_name.clone())
-                    .collect::<Vec<String>>();
+    //             let names = source
+    //                 .items
+    //                 .iter()
+    //                 .map(|item| item.contract_name.clone())
+    //                 .collect::<Vec<String>>();
 
-                let abis = source.raw_abis()?;
+    //             let abis = source.raw_abis()?;
 
-                (abis, names)
-            }
-        };
-        contract_abis
-            .iter()
-            .zip(contract_names)
-            .map(|(contract_abi, name)| {
-                let source = foundry_utils::abi::abi_to_solidity(contract_abi, &name)?;
-                Ok(InterfaceSource { name, source })
-            })
-            .collect::<Result<Vec<InterfaceSource>>>()
-    }
+    //             (abis, names)
+    //         }
+    //     };
+    //     contract_abis
+    //         .iter()
+    //         .zip(contract_names)
+    //         .map(|(contract_abi, name)| {
+    //             let source = foundry_utils::abi::abi_to_solidity(contract_abi, &name)?;
+    //             Ok(InterfaceSource { name, source })
+    //         })
+    //         .collect::<Result<Vec<InterfaceSource>>>()
+    // }
 
     /// Prints the slot number for the specified mapping type and input data
     /// Uses abi_encode to pad the data to 32 bytes.
-    /// For value types v, slot number of v is keccak256(concat(h(v) , p)) where h is the padding
+    /// For value types v, slot number of v is sha3(concat(h(v) , p)) where h is the padding
     /// function and p is slot number of the mapping.
     ///
     /// # Example
@@ -1567,7 +1570,7 @@ impl SimpleCast {
     pub fn index(from_type: &str, from_value: &str, slot_number: &str) -> Result<String> {
         let sig = format!("x({from_type},uint256)");
         let encoded = Self::abi_encode(&sig, &[from_value, slot_number])?;
-        let location: String = Self::keccak(&encoded)?;
+        let location: String = Self::sha(&encoded)?;
         Ok(location)
     }
 
@@ -1598,10 +1601,10 @@ impl SimpleCast {
             labels.reverse();
 
             for label in labels {
-                let mut label_hash = keccak256(label.as_bytes());
+                let mut label_hash = sha3(label.as_bytes());
                 node.append(&mut label_hash.to_vec());
 
-                label_hash = keccak256(node.as_slice());
+                label_hash = sha3(node.as_slice());
                 node = label_hash.to_vec();
             }
         }
@@ -1610,7 +1613,7 @@ impl SimpleCast {
         Ok(format!("0x{namehash}"))
     }
 
-    /// Keccak-256 hashes arbitrary data
+    /// sha3-256 hashes arbitrary data
     ///
     /// # Example
     ///
@@ -1618,20 +1621,20 @@ impl SimpleCast {
     /// use cast::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
-    ///     assert_eq!(Cast::keccak("foo")?, "0x41b1a0649752af1b28b3dc29a1556eee781e4a4c3a1f7f53f90fa834de098c4d");
-    ///     assert_eq!(Cast::keccak("123abc")?, "0xb1f1c74a1ba56f07a892ea1110a39349d40f66ca01d245e704621033cb7046a4");
-    ///     assert_eq!(Cast::keccak("0x12")?, "0x5fa2358263196dbbf23d1ca7a509451f7a2f64c15837bfbb81298b1e3e24e4fa");
-    ///     assert_eq!(Cast::keccak("12")?, "0x7f8b6b088b6d74c2852fc86c796dca07b44eed6fb3daf5e6b59f7c364db14528");
+    ///     assert_eq!(Cast::sha("foo")?, "0x41b1a0649752af1b28b3dc29a1556eee781e4a4c3a1f7f53f90fa834de098c4d");
+    ///     assert_eq!(Cast::sha("123abc")?, "0xb1f1c74a1ba56f07a892ea1110a39349d40f66ca01d245e704621033cb7046a4");
+    ///     assert_eq!(Cast::sha("0x12")?, "0x5fa2358263196dbbf23d1ca7a509451f7a2f64c15837bfbb81298b1e3e24e4fa");
+    ///     assert_eq!(Cast::sha("12")?, "0x7f8b6b088b6d74c2852fc86c796dca07b44eed6fb3daf5e6b59f7c364db14528");
     ///
     ///     Ok(())
     /// }
     /// ```
-    pub fn keccak(data: &str) -> Result<String> {
+    pub fn sha(data: &str) -> Result<String> {
         let hash = match data.as_bytes() {
             // 0x prefix => read as hex data
-            [b'0', b'x', rest @ ..] => keccak256(hex::decode(rest)?),
+            [b'0', b'x', rest @ ..] => sha3(hex::decode(rest)?),
             // No 0x prefix => read as text
-            _ => keccak256(data),
+            _ => sha3(data),
         };
 
         Ok(format!("{:?}", H256(hash)))
@@ -1716,11 +1719,12 @@ impl SimpleCast {
     /// # }
     /// ```
     pub async fn etherscan_source(
-        chain: Chain,
+        chain: Network,
         contract_address: String,
-        etherscan_api_key: String,
+        _etherscan_api_key: String,
     ) -> Result<String> {
-        let client = Client::new(chain, etherscan_api_key)?;
+        // BLOCKINDEX TODO
+        let client = Client::new(chain /* , etherscan_api_key*/)?;
         let metadata = client.contract_source_code(contract_address.parse()?).await?;
         Ok(metadata.source_code())
     }
@@ -1741,12 +1745,13 @@ impl SimpleCast {
     /// # }
     /// ```
     pub async fn expand_etherscan_source_to_directory(
-        chain: Chain,
+        chain: Network,
         contract_address: String,
-        etherscan_api_key: String,
+        _etherscan_api_key: String,
         output_directory: PathBuf,
     ) -> eyre::Result<()> {
-        let client = Client::new(chain, etherscan_api_key)?;
+        // BLOCKINDEX TODO
+        let client = Client::new(chain /* , etherscan_api_key*/)?;
         let meta = client.contract_source_code(contract_address.parse()?).await?;
         let source_tree = meta.source_tree();
         source_tree.write_to(&output_directory)?;
@@ -1792,7 +1797,7 @@ impl SimpleCast {
         }
         if optimize == 0 {
             let selector = HumanReadableParser::parse_function(signature)?.short_signature();
-            return Ok((format!("0x{}", hex::encode(selector)), String::from(signature)))
+            return Ok((format!("0x{}", hex::encode(selector)), String::from(signature)));
         }
         let Some((name, params)) = signature.split_once('(') else {
             eyre::bail!("Invalid signature");
@@ -1809,12 +1814,12 @@ impl SimpleCast {
                 let mut nonce = nonce_start;
                 while nonce < u32::MAX && !found.load(Ordering::Relaxed) {
                     let input = format!("{}{}({}", name, nonce, params);
-                    let hash = keccak256(input.as_bytes());
+                    let hash = sha3(input.as_bytes());
                     let selector = &hash[..4];
 
                     if selector.iter().take_while(|&&byte| byte == 0).count() == optimize {
                         found.store(true, Ordering::Relaxed);
-                        return Some((nonce, format!("0x{}", hex::encode(selector)), input))
+                        return Some((nonce, format!("0x{}", hex::encode(selector)), input));
                     }
 
                     nonce += nonce_step;
