@@ -90,8 +90,8 @@ impl SendTxArgs {
         } = self;
         let config = Config::from(&eth);
         let provider = utils::get_provider(&config)?;
-        let chain = utils::get_chain(config.network_id, &provider).await?;
-        let api_key = config.get_etherscan_api_key(Some(chain));
+        let network = utils::get_network(config.network_id, &provider).await?;
+        // let api_key = config.get_etherscan_api_key(Some(network));
         let mut sig = sig.unwrap_or_default();
 
         let code = if let Some(SendTxSubcommands::Create {
@@ -114,17 +114,17 @@ impl SendTxArgs {
         if unlocked {
             // only check current chain id if it was specified in the config
             if let Some(config_chain) = config.network_id {
-                let current_chain_id = provider.get_chainid().await?.as_u64();
-                let config_chain_id = config_chain.id();
+                let current_network_id = provider.get_networkid().await?.as_u64();
+                let config_network_id = config_chain.id();
                 // switch chain if current chain id is not the same as the one specified in the
                 // config
-                if config_chain_id != current_chain_id {
+                if config_network_id != current_network_id {
                     cli_warn!("Switching to chain {}", config_chain);
                     provider
                         .request(
                             "wallet_switchEthereumChain",
                             [serde_json::json!({
-                                "chainId": format!("0x{:x}", config_chain_id),
+                                "chainId": format!("0x{:x}", config_network_id),
                             })],
                         )
                         .await?;
@@ -142,8 +142,8 @@ impl SendTxArgs {
                 code,
                 (sig, args),
                 tx,
-                chain,
-                api_key,
+                network,
+                // api_key,
                 cast_async,
                 confirmations,
                 to_json,
@@ -155,7 +155,7 @@ impl SendTxArgs {
         // enough information to sign and we must bail.
         } else {
             // Retrieve the signer, and bail if it can't be constructed.
-            let signer = eth.wallet.signer(chain.id()).await?;
+            let signer = eth.wallet.signer(network.id()).await?;
             let from = signer.address();
 
             // prevent misconfigured hwlib from sending a transaction that defies
@@ -185,8 +185,8 @@ corresponds to the sender, or let foundry automatically detect it by not specify
                 code,
                 (sig, args),
                 tx,
-                chain,
-                api_key,
+                network,
+                // api_key,
                 cast_async,
                 confirmations,
                 to_json,
@@ -205,7 +205,7 @@ async fn cast_send<M: Middleware, F: Into<NameOrAddress>, T: Into<NameOrAddress>
     args: (String, Vec<String>),
     tx: TransactionOpts,
     chain: Network,
-    etherscan_api_key: Option<String>,
+    // etherscan_api_key: Option<String>,
     cast_async: bool,
     confs: usize,
     to_json: bool,
@@ -215,9 +215,9 @@ where
 {
     let (sig, params) = args;
     let params = if !sig.is_empty() { Some((&sig[..], params)) } else { None };
-    let mut builder = TxBuilder::new(&provider, from, to, chain, tx.legacy).await?;
+    let mut builder = TxBuilder::new(&provider, from, to, chain).await?;
     builder
-        .etherscan_api_key(etherscan_api_key)
+        // .etherscan_api_key(etherscan_api_key)
         .gas(tx.gas_limit)
         .gas_price(tx.gas_price)
         .priority_gas_price(tx.priority_gas_price)

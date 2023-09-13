@@ -179,7 +179,7 @@ where
             let mut s =
                 vec![format!("gas used: {}", access_list.gas_used), "access list:".to_string()];
             for al in access_list.access_list.0 {
-                s.push(format!("- address: {}", SimpleCast::to_checksum_address(&al.address)));
+                s.push(format!("- address: {}", al.address.to_string()));
                 if !al.storage_keys.is_empty() {
                     s.push("  keys:".to_string());
                     for key in al.storage_keys {
@@ -830,7 +830,7 @@ pub struct InterfaceSource {
 // In case of etherscan, ABI is fetched from the address on the chain
 pub enum AbiPath {
     Local { path: String, name: Option<String> },
-    Etherscan { address: Address, chain: Network, api_key: String },
+    Etherscan { address: Address, network: Network, /* api_key: String */ },
 }
 
 pub struct SimpleCast;
@@ -1032,28 +1032,6 @@ impl SimpleCast {
             out.push_str(s.strip_prefix("0x").unwrap_or(s))
         }
         format!("0x{out}")
-    }
-
-    /// Converts an Ethereum address to its checksum format
-    /// according to [EIP-55](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md)
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// use cast::SimpleCast as Cast;
-    /// use corebc_core::types::Address;
-    /// use std::str::FromStr;
-    ///
-    /// # fn main() -> eyre::Result<()> {
-    /// let addr = Address::from_str("0xb7e390864a90b7b923c9f9310c6f98aafe43f707")?;
-    /// let addr = Cast::to_checksum_address(&addr);
-    /// assert_eq!(addr, "0xB7e390864a90b7b923C9f9310C6F98aafE43F707");
-    ///
-    /// # Ok(())
-    /// # }
-    /// ```
-    pub fn to_checksum_address(address: &Address) -> String {
-        corebc_core::utils::to_checksum(address, None)
     }
 
     /// Converts a number into uint256 hex string with 0x prefix

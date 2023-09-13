@@ -40,7 +40,7 @@ impl VerificationProvider for SourcifyVerificationProvider {
                     println!(
                         "\nSubmitting verification for [{}] {:?}.",
                         args.contract.name,
-                        SimpleCast::to_checksum_address(&args.address)
+                        args.address.to_string(),
                     );
                     let response = client
                         .post(args.verifier.verifier_url.as_deref().unwrap_or(SOURCIFY_URL))

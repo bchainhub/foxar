@@ -69,7 +69,7 @@ impl VerificationProvider for EtherscanVerificationProvider {
             println!(
                 "\nContract [{}] {:?} is already verified. Skipping verification.",
                 verify_args.contract_name,
-                SimpleCast::to_checksum_address(&verify_args.address)
+                verify_args.address.to_string(),
             );
 
             return Ok(())
@@ -80,7 +80,7 @@ impl VerificationProvider for EtherscanVerificationProvider {
         let retry: Retry = args.retry.into();
         let resp = retry.run_async(|| {
             async {
-                println!("\nSubmitting verification for [{}] {:?}.", verify_args.contract_name, SimpleCast::to_checksum_address(&verify_args.address));
+                println!("\nSubmitting verification for [{}] {:?}.", verify_args.contract_name, verify_args.address.to_string());
                 let resp = etherscan
                     .submit_contract_verification(&verify_args)
                     .await

@@ -99,14 +99,14 @@ pub fn get_provider(config: &Config) -> Result<foundry_common::RetryProvider> {
     foundry_common::ProviderBuilder::new(url.as_ref()).network(chain).build()
 }
 
-pub async fn get_chain<M>(chain: Option<Network>, provider: M) -> Result<Network>
+pub async fn get_network<M>(network: Option<Network>, provider: M) -> Result<Network>
 where
     M: Middleware,
     M::Error: 'static,
 {
-    match chain {
-        Some(chain) => Ok(chain),
-        None => Ok(Network::Id(provider.get_chainid().await?.as_u64())),
+    match network {
+        Some(network) => Ok(network),
+        None => Ok(Network::Id(provider.get_networkid().await?.as_u64())),
     }
 }
 

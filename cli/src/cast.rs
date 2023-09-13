@@ -103,7 +103,7 @@ async fn main() -> eyre::Result<()> {
         }
         Subcommands::ToCheckSumAddress { address } => {
             let value = stdin::unwrap_line(address)?;
-            println!("{}", SimpleCast::to_checksum_address(&value));
+            println!("{}", value.to_string());
         }
         Subcommands::ToUint256 { value } => {
             let value = stdin::unwrap_line(value)?;
@@ -274,7 +274,7 @@ async fn main() -> eyre::Result<()> {
 
             let address: Address = stdin::unwrap_line(address)?.parse()?;
             let computed = Cast::new(&provider).compute_address(address, nonce).await?;
-            println!("Computed Address: {}", SimpleCast::to_checksum_address(&computed));
+            println!("Computed Address: {}", computed.to_string());
         }
         Subcommands::Disassemble { bytecode } => {
             println!("{}", SimpleCast::disassemble(&bytecode)?);
@@ -432,7 +432,7 @@ async fn main() -> eyre::Result<()> {
                     "forward lookup verification failed. got {name}, expected {who}"
                 );
             }
-            println!("{}", SimpleCast::to_checksum_address(&address));
+            println!("{}", address.to_string());
         }
 
         // Misc

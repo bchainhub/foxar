@@ -18,7 +18,7 @@ use itertools::Itertools;
 
 use std::str::FromStr;
 
-/// CLI arguments for `cast access-list`.
+/// CLI arguments for `cast logs`.
 #[derive(Debug, Parser)]
 pub struct LogsArgs {
     #[clap(flatten)]

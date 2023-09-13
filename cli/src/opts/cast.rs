@@ -283,9 +283,9 @@ pub enum Subcommands {
         #[clap(value_name = "BASE")]
         base_out: Option<String>,
     },
-    /// Create an access list for a transaction.
-    #[clap(visible_aliases = &["ac", "acl"])]
-    AccessList(AccessListArgs),
+    // /// Create an access list for a transaction.
+    // #[clap(visible_aliases = &["ac", "acl"])]
+    // AccessList(AccessListArgs),
     /// Get logs by signature or topic.
     #[clap(visible_alias = "l")]
     Logs(LogsArgs),
