@@ -2,8 +2,9 @@ use crate::eth::{receipt::TypedReceipt, transaction::TransactionInfo, trie};
 use corebc_core::{
     types::{Address, Bloom, Bytes, H256, H64, U256},
     utils::{
-        keccak256, rlp,
+        rlp,
         rlp::{Decodable, DecoderError, Encodable, Rlp, RlpStream},
+        sha3,
     },
 };
 
@@ -48,7 +49,7 @@ impl Block {
         T: Into<Transaction>,
     {
         let transactions: Vec<_> = transactions.into_iter().map(Into::into).collect();
-        let ommers_hash = H256::from_slice(keccak256(&rlp::encode_list(&ommers)[..]).as_slice());
+        let ommers_hash = H256::from_slice(sha3(&rlp::encode_list(&ommers)[..]).as_slice());
         let transactions_root =
             trie::ordered_trie_root(transactions.iter().map(|r| rlp::encode(r).freeze()));
 
@@ -124,7 +125,7 @@ impl Header {
     }
 
     pub fn hash(&self) -> H256 {
-        H256::from_slice(keccak256(&rlp::encode(self)).as_slice())
+        H256::from_slice(sha3(&rlp::encode(self)).as_slice())
     }
 
     /// Returns the rlp length of the Header body, _not including_ trailing EIP155 fields or the
