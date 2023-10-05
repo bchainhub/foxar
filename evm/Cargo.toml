@@ -43,7 +43,7 @@ revm = { git = "https://github.com/core-coin/ican-revm.git", branch = "main", de
   "serde",
   "memory_limit",
   "optional_eip3607",
-  "optional_block_gas_limit",
+  "optional_block_energy_limit",
 ] }
 # Fuzzer
 proptest = "1"
