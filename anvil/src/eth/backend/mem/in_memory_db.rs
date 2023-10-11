@@ -120,7 +120,7 @@ mod tests {
     };
     use bytes::Bytes;
     use corebc::types::U256;
-    use forge::revm::primitives::{Bytecode, KECCAK_EMPTY, U256 as rU256};
+    use forge::revm::primitives::{Bytecode, SHA3_EMPTY, U256 as rU256};
     use foundry_evm::executor::{backend::MemDb, DatabaseRef};
     use std::{collections::BTreeMap, str::FromStr};
 
@@ -140,7 +140,7 @@ mod tests {
             test_addr,
             AccountInfo {
                 balance: rU256::from(123456),
-                code_hash: KECCAK_EMPTY,
+                code_hash: SHA3_EMPTY,
                 code: Some(contract_code.clone()),
                 nonce: 1234,
             },
@@ -183,7 +183,7 @@ mod tests {
             test_addr,
             AccountInfo {
                 balance: rU256::from(123456),
-                code_hash: KECCAK_EMPTY,
+                code_hash: SHA3_EMPTY,
                 code: Some(contract_code.clone()),
                 nonce: 1234,
             },

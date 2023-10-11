@@ -5,7 +5,7 @@ use corebc::{
     types::{serde_helpers::*, Address, Bytes, H256, U256},
 };
 use forge::{
-    revm::primitives::{Bytecode, Env, KECCAK_EMPTY, U256 as rU256},
+    revm::primitives::{Bytecode, Env, SHA3_EMPTY, U256 as rU256},
     utils::h176_to_b176,
 };
 use foundry_common::errors::FsPathError;
@@ -146,7 +146,7 @@ impl From<GenesisAccount> for AccountInfo {
         AccountInfo {
             balance: balance.into(),
             nonce: nonce.unwrap_or_default(),
-            code_hash: code.as_ref().map(|code| code.hash()).unwrap_or(KECCAK_EMPTY),
+            code_hash: code.as_ref().map(|code| code.hash()).unwrap_or(SHA3_EMPTY),
             code,
         }
     }

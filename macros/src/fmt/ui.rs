@@ -122,28 +122,24 @@ blockHash               {}
 blockNumber             {}
 contractAddress         {}
 cumulativeGasUsed       {}
-effectiveGasPrice       {}
 gasUsed                 {}
 logs                    {}
 logsBloom               {}
 root                    {}
 status                  {}
 transactionHash         {}
-transactionIndex        {}
-type                    {}",
+transactionIndex        {}",
             self.block_hash.pretty(),
             self.block_number.pretty(),
             self.contract_address.pretty(),
-            self.cumulative_gas_used.pretty(),
-            self.effective_gas_price.pretty(),
-            self.gas_used.pretty(),
+            self.cumulative_energy_used.pretty(),
+            self.energy_used.pretty(),
             serde_json::to_string(&self.logs).unwrap(),
             self.logs_bloom.pretty(),
             self.root.pretty(),
             self.status.pretty(),
             self.transaction_hash.pretty(),
             self.transaction_index.pretty(),
-            self.transaction_type.pretty()
         )
     }
 }
@@ -201,7 +197,6 @@ transactions:        {}",
 fn pretty_block_basics<T>(block: &Block<T>) -> String {
     format!(
         "
-baseFeePerGas        {}
 difficulty           {}
 extraData            {}
 gasLimit             {}
@@ -219,12 +214,11 @@ sha3Uncles           {}
 size                 {}
 stateRoot            {}
 timestamp            {}
-totalDifficulty      {}{}",
-        block.base_fee_per_gas.pretty(),
+totalDifficulty      {}",
         block.difficulty.pretty(),
         block.extra_data.pretty(),
-        block.gas_limit.pretty(),
-        block.gas_used.pretty(),
+        block.energy_limit.pretty(),
+        block.energy_used.pretty(),
         block.hash.pretty(),
         block.logs_bloom.pretty(),
         block.author.pretty(),
@@ -239,26 +233,7 @@ totalDifficulty      {}{}",
         block.state_root.pretty(),
         block.timestamp.pretty(),
         block.total_difficulty.pretty(),
-        block.other.pretty()
     )
-}
-
-impl UIfmt for OtherFields {
-    fn pretty(&self) -> String {
-        let mut s = String::with_capacity(self.len() * 30);
-        if !self.is_empty() {
-            s.push('\n');
-        }
-        for (key, value) in self.iter() {
-            let val = EthValue::from(value.clone()).pretty();
-            let offset = NAME_COLUMN_LEN.saturating_sub(key.len());
-            s.push_str(key);
-            s.extend(std::iter::repeat(' ').take(offset + 1));
-            s.push_str(&val);
-            s.push('\n');
-        }
-        s
-    }
 }
 
 /// Various numerical ethereum types used for pretty printing
@@ -308,12 +283,12 @@ s                    {}
 to                   {}
 transactionIndex     {}
 v                    {}
-value                {}{}",
+value                {}",
             self.block_hash.pretty(),
             self.block_number.pretty(),
             self.from.pretty(),
-            self.gas.pretty(),
-            self.gas_price.pretty(),
+            self.energy.pretty(),
+            self.energy_price.pretty(),
             self.hash.pretty(),
             self.input.pretty(),
             self.nonce.pretty(),
@@ -323,7 +298,6 @@ value                {}{}",
             self.transaction_index.pretty(),
             self.v.pretty(),
             self.value.pretty(),
-            self.other.pretty()
         )
     }
 }
@@ -341,8 +315,8 @@ pub fn get_pretty_tx_attr(transaction: &Transaction, attr: &str) -> Option<Strin
         "blockHash" | "block_hash" => Some(transaction.block_hash.pretty()),
         "blockNumber" | "block_number" => Some(transaction.block_number.pretty()),
         "from" => Some(transaction.from.pretty()),
-        "gas" => Some(transaction.gas.pretty()),
-        "gasPrice" | "gas_price" => Some(transaction.gas_price.pretty()),
+        "gas" => Some(transaction.energy.pretty()),
+        "gasPrice" | "gas_price" => Some(transaction.energy_price.pretty()),
         "hash" => Some(transaction.hash.pretty()),
         "input" => Some(transaction.input.pretty()),
         "nonce" => Some(transaction.nonce.pretty()),
@@ -352,23 +326,17 @@ pub fn get_pretty_tx_attr(transaction: &Transaction, attr: &str) -> Option<Strin
         "transactionIndex" | "transaction_index" => Some(transaction.transaction_index.pretty()),
         "v" => Some(transaction.v.pretty()),
         "value" => Some(transaction.value.pretty()),
-        other => {
-            if let Some(value) = transaction.other.get(other) {
-                return Some(value.to_string().trim_matches('"').to_string())
-            }
-            None
-        }
+        _ => None,
     }
 }
 
 /// Returns the `UiFmt::pretty()` formatted attribute of the given block
 pub fn get_pretty_block_attr<TX>(block: &Block<TX>, attr: &str) -> Option<String> {
     match attr {
-        "baseFeePerGas" | "base_fee_per_gas" => Some(block.base_fee_per_gas.pretty()),
         "difficulty" => Some(block.difficulty.pretty()),
         "extraData" | "extra_data" => Some(block.extra_data.pretty()),
-        "gasLimit" | "gas_limit" => Some(block.gas_limit.pretty()),
-        "gasUsed" | "gas_used" => Some(block.gas_used.pretty()),
+        "energyLimit" | "gas_limit" => Some(block.energy_limit.pretty()),
+        "energyUsed" | "gas_used" => Some(block.energy_used.pretty()),
         "hash" => Some(block.hash.pretty()),
         "logsBloom" | "logs_bloom" => Some(block.logs_bloom.pretty()),
         "miner" | "author" => Some(block.author.pretty()),
@@ -383,13 +351,7 @@ pub fn get_pretty_block_attr<TX>(block: &Block<TX>, attr: &str) -> Option<String
         "stateRoot" | "state_root" => Some(block.state_root.pretty()),
         "timestamp" => Some(block.timestamp.pretty()),
         "totalDifficulty" | "total_difficult" => Some(block.total_difficulty.pretty()),
-        other => {
-            if let Some(value) = block.other.get(other) {
-                let val = EthValue::from(value.clone());
-                return Some(val.pretty())
-            }
-            None
-        }
+        _ => None,
     }
 }
 

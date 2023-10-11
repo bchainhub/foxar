@@ -49,8 +49,8 @@ use corebc::{
     prelude::{BlockNumber, GethTraceFrame, TxHash, H256, U256, U64},
     types::{
         transaction::eip2930::AccessList, Address, Block as EthersBlock, BlockId, Bytes,
-        DefaultFrame, Filter, FilteredParams, GethDebugTracingOptions, GethTrace, Log, OtherFields,
-        Trace, Transaction, TransactionReceipt, H160,
+        DefaultFrame, Filter, FilteredParams, GethDebugTracingOptions, GethTrace, Log, Network,
+        OtherFields, Trace, Transaction, TransactionReceipt, H160,
     },
     utils::{get_contract_address, hex, keccak256, rlp},
 };
@@ -73,7 +73,7 @@ use foundry_evm::{
     revm,
     revm::{
         db::CacheDB,
-        primitives::{Account, CreateScheme, Env, Output, SpecId, TransactTo, TxEnv, KECCAK_EMPTY},
+        primitives::{Account, CreateScheme, Env, Output, SpecId, TransactTo, TxEnv, SHA3_EMPTY},
     },
     utils::u256_to_h256_be,
 };
@@ -365,12 +365,10 @@ impl Backend {
                 env.block = BlockEnv {
                     number: rU256::from(fork_block_number),
                     timestamp: fork_block.timestamp.into(),
-                    gas_limit: fork_block.gas_limit.into(),
+                    energy_limit: fork_block.gas_limit.into(),
                     difficulty: fork_block.difficulty.into(),
-                    prevrandao: fork_block.mix_hash.map(h256_to_b256),
                     // Keep previous `coinbase` and `basefee` value
                     coinbase: env.block.coinbase,
-                    basefee: env.block.basefee,
                 };
 
                 self.time.reset(ru256_to_u256(env.block.timestamp).as_u64());
@@ -708,15 +706,15 @@ impl Backend {
         let state = result_and_state.state;
         let state: hashbrown::HashMap<H160, Account> =
             state.into_iter().map(|kv| (kv.0.into(), kv.1)).collect();
-        let (exit_reason, gas_used, out, logs) = match result_and_state.result {
-            ExecutionResult::Success { reason, gas_used, logs, output, .. } => {
-                (eval_to_instruction_result(reason), gas_used, Some(output), Some(logs))
+        let (exit_reason, energy_used, out, logs) = match result_and_state.result {
+            ExecutionResult::Success { reason, energy_used, logs, output, .. } => {
+                (eval_to_instruction_result(reason), energy_used, Some(output), Some(logs))
             }
-            ExecutionResult::Revert { gas_used, output } => {
-                (InstructionResult::Revert, gas_used, Some(Output::Call(output)), None)
+            ExecutionResult::Revert { energy_used, output } => {
+                (InstructionResult::Revert, energy_used, Some(Output::Call(output)), None)
             }
-            ExecutionResult::Halt { reason, gas_used } => {
-                (halt_to_instruction_result(reason), gas_used, None, None)
+            ExecutionResult::Halt { reason, energy_used } => {
+                (halt_to_instruction_result(reason), energy_used, None, None)
             }
         };
 
@@ -998,7 +996,7 @@ impl Backend {
         fee_details: FeeDetails,
         block_env: BlockEnv,
     ) -> Env {
-        let EthTransactionRequest { from, to, gas, value, data, nonce, access_list, .. } = request;
+        let EthTransactionRequest { from, to, gas, value, data, nonce, .. } = request;
 
         let FeeDetails { gas_price, max_fee_per_gas, max_priority_fee_per_gas } = fee_details;
 
@@ -1018,18 +1016,16 @@ impl Backend {
 
         env.tx = TxEnv {
             caller: caller.into(),
-            gas_limit: gas_limit.as_u64(),
-            gas_price: gas_price.into(),
-            gas_priority_fee: max_priority_fee_per_gas.map(u256_to_ru256),
+            energy_limit: gas_limit.as_u64(),
+            energy_price: gas_price.into(),
             transact_to: match to {
                 Some(addr) => TransactTo::Call(addr.into()),
                 None => TransactTo::Create(CreateScheme::Create),
             },
             value: value.unwrap_or_default().into(),
             data: data.unwrap_or_default().to_vec().into(),
-            chain_id: None,
+            network_id: None,
             nonce: nonce.map(|n| n.as_u64()),
-            access_list: to_revm_access_list(access_list.unwrap_or_default()),
         };
 
         if env.block.basefee == revm::primitives::U256::ZERO {
@@ -1065,14 +1061,14 @@ impl Backend {
         let state: hashbrown::HashMap<H160, Account> =
             state.into_iter().map(|kv| (kv.0.into(), kv.1)).collect();
         let (exit_reason, gas_used, out) = match result_and_state.result {
-            ExecutionResult::Success { reason, gas_used, output, .. } => {
-                (eval_to_instruction_result(reason), gas_used, Some(output))
+            ExecutionResult::Success { reason, energy_used, output, .. } => {
+                (eval_to_instruction_result(reason), energy_used, Some(output))
             }
-            ExecutionResult::Revert { gas_used, output } => {
-                (InstructionResult::Revert, gas_used, Some(Output::Call(output)))
+            ExecutionResult::Revert { energy_used, output } => {
+                (InstructionResult::Revert, energy_used, Some(Output::Call(output)))
             }
-            ExecutionResult::Halt { reason, gas_used } => {
-                (halt_to_instruction_result(reason), gas_used, None)
+            ExecutionResult::Halt { reason, energy_used } => {
+                (halt_to_instruction_result(reason), energy_used, None)
             }
         };
         inspector.print_logs();
@@ -1098,14 +1094,14 @@ impl Backend {
                     Err(e) => return Err(e.into()),
                 };
             let (exit_reason, gas_used, out, ) = match result_and_state.result {
-                ExecutionResult::Success { reason, gas_used, output, .. } => {
-                    (eval_to_instruction_result(reason), gas_used, Some(output), )
+                ExecutionResult::Success { reason, energy_used, output, .. } => {
+                    (eval_to_instruction_result(reason), energy_used, Some(output), )
                 },
-                ExecutionResult::Revert { gas_used, output} => {
-                    (InstructionResult::Revert, gas_used, Some(Output::Call(output)))
+                ExecutionResult::Revert { energy_used, output} => {
+                    (InstructionResult::Revert, energy_used, Some(Output::Call(output)))
                 },
-                ExecutionResult::Halt { reason, gas_used } => {
-                    (halt_to_instruction_result(reason), gas_used, None)
+                ExecutionResult::Halt { reason, energy_used} => {
+                    (halt_to_instruction_result(reason), energy_used, None)
                 },
             };
             let res = inspector.tracer.unwrap_or_default().traces.geth_trace(gas_used.into(), opts);
@@ -1130,7 +1126,16 @@ impl Backend {
             to
         } else {
             let nonce = state.basic(from.into())?.unwrap_or_default().nonce;
-            get_contract_address(from, nonce)
+            if let Some(network_id) = request.network_id {
+                let network = match network_id {
+                    1 => Network::Mainnet,
+                    3 => Network::Devin,
+                    other => Network::Private(other),
+                };
+                get_contract_address(from, nonce, &network)
+            } else {
+                get_contract_address(from, nonce, &Network::Mainnet)
+            }
         };
 
         let mut tracer = AccessListTracer::new(
@@ -1148,14 +1153,14 @@ impl Backend {
             Err(e) => return Err(e.into()),
         };
         let (exit_reason, gas_used, out) = match result_and_state.result {
-            ExecutionResult::Success { reason, gas_used, output, .. } => {
-                (eval_to_instruction_result(reason), gas_used, Some(output))
+            ExecutionResult::Success { reason, energy_used, output, .. } => {
+                (eval_to_instruction_result(reason), energy_used, Some(output))
             }
-            ExecutionResult::Revert { gas_used, output } => {
-                (InstructionResult::Revert, gas_used, Some(Output::Call(output)))
+            ExecutionResult::Revert { energy_used, output } => {
+                (InstructionResult::Revert, energy_used, Some(Output::Call(output)))
             }
-            ExecutionResult::Halt { reason, gas_used } => {
-                (halt_to_instruction_result(reason), gas_used, None)
+            ExecutionResult::Halt { reason, energy_used } => {
+                (halt_to_instruction_result(reason), energy_used, None)
             }
         };
         let access_list = tracer.access_list();
@@ -1485,8 +1490,8 @@ impl Backend {
             transactions_root,
             receipts_root,
             number: Some(number.as_u64().into()),
-            gas_used,
-            gas_limit,
+            energy_used,
+            energy_limit,
             extra_data,
             logs_bloom: Some(logs_bloom),
             timestamp: timestamp.into(),
@@ -1498,8 +1503,6 @@ impl Backend {
             size: Some(size),
             mix_hash: Some(mix_hash),
             nonce: Some(nonce),
-            base_fee_per_gas,
-            other: Default::default(),
             ..Default::default()
         }
     }
@@ -1571,9 +1574,7 @@ impl Backend {
                             coinbase: block.header.beneficiary.into(),
                             timestamp: rU256::from(block.header.timestamp),
                             difficulty: block.header.difficulty.into(),
-                            prevrandao: Some(block.header.mix_hash.into()),
-                            basefee: block.header.base_fee_per_gas.unwrap_or_default().into(),
-                            gas_limit: block.header.gas_limit.into(),
+                            energy_limit: block.header.gas_limit.into(),
                         };
                         f(state, block)
                     })
@@ -1598,9 +1599,7 @@ impl Backend {
                         coinbase: block.header.beneficiary.into(),
                         timestamp: rU256::from(block.header.timestamp),
                         difficulty: block.header.difficulty.into(),
-                        prevrandao: Some(block.header.mix_hash).map(Into::into),
-                        basefee: block.header.base_fee_per_gas.unwrap_or_default().into(),
-                        gas_limit: block.header.gas_limit.into(),
+                        energy_limit: block.header.gas_limit.into(),
                     };
                     return Ok(f(Box::new(state), block))
                 }
@@ -1673,8 +1672,8 @@ impl Backend {
     {
         trace!(target: "backend", "get code for {:?}", address);
         let account = state.basic(address.into())?.unwrap_or_default();
-        if account.code_hash == KECCAK_EMPTY {
-            // if the code hash is `KECCAK_EMPTY`, we check no further
+        if account.code_hash == SHA3_EMPTY {
+            // if the code hash is `SHA3_EMPTY`, we check no further
             return Ok(Default::default())
         }
         let code = if let Some(code) = account.code {
@@ -1884,8 +1883,8 @@ impl Backend {
             block_number: Some(block.header.number.as_u64().into()),
             from: info.from,
             to: info.to,
-            cumulative_gas_used,
-            gas_used: Some(gas_used),
+            cumulative_energy_used,
+            energy_used: Some(gas_used),
             contract_address: info.contract_address,
             logs: {
                 let mut pre_receipts_log_index = None;
@@ -1916,9 +1915,6 @@ impl Backend {
             status: Some(status_code.into()),
             root: None,
             logs_bloom,
-            transaction_type: transaction_type.map(Into::into),
-            effective_gas_price: Some(effective_gas_price),
-            other: OtherFields::default(),
         };
 
         Some(MinedTransactionReceipt { inner, out: info.out })

@@ -7,7 +7,7 @@ use corebc::{
     types::H256,
     utils::keccak256,
 };
-use forge::revm::primitives::{B160, B256, KECCAK_EMPTY, U256 as rU256};
+use forge::revm::primitives::{B160, B256, SHA3_EMPTY, U256 as rU256};
 use foundry_common::errors::FsPathError;
 use foundry_evm::{
     executor::{
@@ -103,7 +103,7 @@ pub trait Db:
     fn set_code(&mut self, address: Address, code: Bytes) -> DatabaseResult<()> {
         let mut info = self.basic(address.into())?.unwrap_or_default();
         let code_hash = if code.as_ref().is_empty() {
-            KECCAK_EMPTY
+            SHA3_EMPTY
         } else {
             B256::from_slice(&keccak256(code.as_ref())[..])
         };
@@ -137,7 +137,7 @@ pub trait Db:
                 addr,
                 AccountInfo {
                     balance: account.balance.into(),
-                    code_hash: KECCAK_EMPTY, // will be set automatically
+                    code_hash: SHA3_EMPTY, // will be set automatically
                     code: if account.code.0.is_empty() {
                         None
                     } else {

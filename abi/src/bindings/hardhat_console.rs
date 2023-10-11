@@ -11803,1528 +11803,1909 @@ pub mod hardhat_console {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::corebc_core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <Log23Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log23Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log23(decoded));
             }
-            if let Ok(decoded)
-                = <Log87Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log87Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log87(decoded));
             }
-            if let Ok(decoded)
-                = <Log24Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log24Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log24(decoded));
             }
-            if let Ok(decoded)
-                = <Log88Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log88Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log88(decoded));
             }
-            if let Ok(decoded)
-                = <Log89Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log89Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log89(decoded));
             }
-            if let Ok(decoded)
-                = <Log90Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log90Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log90(decoded));
             }
-            if let Ok(decoded)
-                = <Log91Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log91Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log91(decoded));
             }
-            if let Ok(decoded)
-                = <Log25Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log25Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log25(decoded));
             }
-            if let Ok(decoded)
-                = <Log92Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log92Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log92(decoded));
             }
-            if let Ok(decoded)
-                = <Log93Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log93Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log93(decoded));
             }
-            if let Ok(decoded)
-                = <Log94Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log94Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log94(decoded));
             }
-            if let Ok(decoded)
-                = <Log95Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log95Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log95(decoded));
             }
-            if let Ok(decoded)
-                = <Log96Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log96Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log96(decoded));
             }
-            if let Ok(decoded)
-                = <Log26Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log26Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log26(decoded));
             }
-            if let Ok(decoded)
-                = <Log97Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log97Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log97(decoded));
             }
-            if let Ok(decoded)
-                = <Log98Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log98Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log98(decoded));
             }
-            if let Ok(decoded)
-                = <Log99Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log99Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log99(decoded));
             }
-            if let Ok(decoded)
-                = <Log100Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log100Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log100(decoded));
             }
-            if let Ok(decoded)
-                = <Log101Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log101Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log101(decoded));
             }
-            if let Ok(decoded)
-                = <Log102Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log102Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log102(decoded));
             }
-            if let Ok(decoded)
-                = <Log27Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log27Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log27(decoded));
             }
-            if let Ok(decoded)
-                = <Log28Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log28Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log28(decoded));
             }
-            if let Ok(decoded)
-                = <Log103Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log103Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log103(decoded));
             }
-            if let Ok(decoded)
-                = <Log29Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log29Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log29(decoded));
             }
-            if let Ok(decoded)
-                = <Log104Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log104Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log104(decoded));
             }
-            if let Ok(decoded)
-                = <Log105Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log105Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log105(decoded));
             }
-            if let Ok(decoded)
-                = <Log106Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log106Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log106(decoded));
             }
-            if let Ok(decoded)
-                = <Log107Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log107Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log107(decoded));
             }
-            if let Ok(decoded)
-                = <Log108Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log108Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log108(decoded));
             }
-            if let Ok(decoded)
-                = <Log109Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log109Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log109(decoded));
             }
-            if let Ok(decoded)
-                = <Log110Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log110Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log110(decoded));
             }
-            if let Ok(decoded)
-                = <Log111Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log111Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log111(decoded));
             }
-            if let Ok(decoded)
-                = <Log30Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log30Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log30(decoded));
             }
-            if let Ok(decoded)
-                = <Log31Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log31Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log31(decoded));
             }
-            if let Ok(decoded)
-                = <Log112Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log112Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log112(decoded));
             }
-            if let Ok(decoded)
-                = <Log113Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log113Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log113(decoded));
             }
-            if let Ok(decoded)
-                = <Log114Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log114Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log114(decoded));
             }
-            if let Ok(decoded)
-                = <Log115Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log115Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log115(decoded));
             }
-            if let Ok(decoded)
-                = <Log116Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log116Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log116(decoded));
             }
-            if let Ok(decoded)
-                = <Log32Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log32Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log32(decoded));
             }
-            if let Ok(decoded)
-                = <Log6Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log6Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log6(decoded));
             }
-            if let Ok(decoded)
-                = <Log117Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log117Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log117(decoded));
             }
-            if let Ok(decoded)
-                = <Log118Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log118Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log118(decoded));
             }
-            if let Ok(decoded)
-                = <Log119Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log119Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log119(decoded));
             }
-            if let Ok(decoded)
-                = <Log120Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log120Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log120(decoded));
             }
-            if let Ok(decoded)
-                = <Log33Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log33Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log33(decoded));
             }
-            if let Ok(decoded)
-                = <Log121Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log121Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log121(decoded));
             }
-            if let Ok(decoded)
-                = <Log34Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log34Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log34(decoded));
             }
-            if let Ok(decoded)
-                = <Log122Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log122Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log122(decoded));
             }
-            if let Ok(decoded)
-                = <Log35Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log35Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log35(decoded));
             }
-            if let Ok(decoded)
-                = <Log123Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log123Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log123(decoded));
             }
-            if let Ok(decoded)
-                = <Log124Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log124Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log124(decoded));
             }
-            if let Ok(decoded)
-                = <Log125Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log125Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log125(decoded));
             }
-            if let Ok(decoded)
-                = <Log126Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log126Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log126(decoded));
             }
-            if let Ok(decoded)
-                = <Log127Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log127Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log127(decoded));
             }
-            if let Ok(decoded)
-                = <Log128Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log128Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log128(decoded));
             }
-            if let Ok(decoded)
-                = <Log129Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log129Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log129(decoded));
             }
-            if let Ok(decoded)
-                = <Log36Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log36Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log36(decoded));
             }
-            if let Ok(decoded)
-                = <Log130Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log130Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log130(decoded));
             }
-            if let Ok(decoded)
-                = <Log131Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log131Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log131(decoded));
             }
-            if let Ok(decoded)
-                = <Log132Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log132Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log132(decoded));
             }
-            if let Ok(decoded)
-                = <Log7Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log7Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log7(decoded));
             }
-            if let Ok(decoded)
-                = <Log133Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log133Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log133(decoded));
             }
-            if let Ok(decoded)
-                = <Log134Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log134Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log134(decoded));
             }
-            if let Ok(decoded)
-                = <Log135Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log135Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log135(decoded));
             }
-            if let Ok(decoded)
-                = <Log136Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log136Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log136(decoded));
             }
-            if let Ok(decoded)
-                = <Log1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log1(decoded));
             }
-            if let Ok(decoded)
-                = <Log137Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log137Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log137(decoded));
             }
-            if let Ok(decoded)
-                = <Log37Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log37Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log37(decoded));
             }
-            if let Ok(decoded)
-                = <Log138Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log138Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log138(decoded));
             }
-            if let Ok(decoded)
-                = <Log139Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log139Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log139(decoded));
             }
-            if let Ok(decoded)
-                = <Log8Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log8Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log8(decoded));
             }
-            if let Ok(decoded)
-                = <Log2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log2(decoded));
             }
-            if let Ok(decoded)
-                = <Log140Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log140Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log140(decoded));
             }
-            if let Ok(decoded)
-                = <Log141Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log141Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log141(decoded));
             }
-            if let Ok(decoded)
-                = <Log38Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log38Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log38(decoded));
             }
-            if let Ok(decoded)
-                = <Log142Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log142Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log142(decoded));
             }
-            if let Ok(decoded)
-                = <Log143Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log143Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log143(decoded));
             }
-            if let Ok(decoded)
-                = <Log39Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log39Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log39(decoded));
             }
-            if let Ok(decoded)
-                = <Log144Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log144Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log144(decoded));
             }
-            if let Ok(decoded)
-                = <Log40Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log40Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log40(decoded));
             }
-            if let Ok(decoded)
-                = <Log145Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log145Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log145(decoded));
             }
-            if let Ok(decoded)
-                = <Log146Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log146Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log146(decoded));
             }
-            if let Ok(decoded)
-                = <Log9Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log9Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log9(decoded));
             }
-            if let Ok(decoded)
-                = <Log147Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log147Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log147(decoded));
             }
-            if let Ok(decoded)
-                = <Log148Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log148Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log148(decoded));
             }
-            if let Ok(decoded)
-                = <Log149Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log149Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log149(decoded));
             }
-            if let Ok(decoded)
-                = <Log150Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log150Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log150(decoded));
             }
-            if let Ok(decoded)
-                = <Log151Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log151Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log151(decoded));
             }
-            if let Ok(decoded)
-                = <Log152Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log152Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log152(decoded));
             }
-            if let Ok(decoded)
-                = <Log153Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log153Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log153(decoded));
             }
-            if let Ok(decoded)
-                = <Log3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log3(decoded));
             }
-            if let Ok(decoded)
-                = <Log154Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log154Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log154(decoded));
             }
-            if let Ok(decoded)
-                = <Log155Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log155Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log155(decoded));
             }
-            if let Ok(decoded)
-                = <Log156Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log156Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log156(decoded));
             }
-            if let Ok(decoded)
-                = <Log157Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log157Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log157(decoded));
             }
-            if let Ok(decoded)
-                = <Log158Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log158Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log158(decoded));
             }
-            if let Ok(decoded)
-                = <Log159Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log159Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log159(decoded));
             }
-            if let Ok(decoded)
-                = <Log160Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log160Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log160(decoded));
             }
-            if let Ok(decoded)
-                = <Log161Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log161Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log161(decoded));
             }
-            if let Ok(decoded)
-                = <Log41Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log41Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log41(decoded));
             }
-            if let Ok(decoded)
-                = <Log162Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log162Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log162(decoded));
             }
-            if let Ok(decoded)
-                = <Log163Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log163Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log163(decoded));
             }
-            if let Ok(decoded)
-                = <Log164Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log164Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log164(decoded));
             }
-            if let Ok(decoded)
-                = <Log165Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log165Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log165(decoded));
             }
-            if let Ok(decoded)
-                = <Log10Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log10Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log10(decoded));
             }
-            if let Ok(decoded)
-                = <Log166Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log166Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log166(decoded));
             }
-            if let Ok(decoded)
-                = <Log42Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log42Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log42(decoded));
             }
-            if let Ok(decoded)
-                = <Log167Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log167Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log167(decoded));
             }
-            if let Ok(decoded)
-                = <Log43Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log43Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log43(decoded));
             }
-            if let Ok(decoded)
-                = <Log168Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log168Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log168(decoded));
             }
-            if let Ok(decoded)
-                = <Log169Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log169Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log169(decoded));
             }
-            if let Ok(decoded)
-                = <Log0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log0(decoded));
             }
-            if let Ok(decoded)
-                = <Log170Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log170Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log170(decoded));
             }
-            if let Ok(decoded)
-                = <Log171Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log171Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log171(decoded));
             }
-            if let Ok(decoded)
-                = <Log172Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log172Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log172(decoded));
             }
-            if let Ok(decoded)
-                = <Log173Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log173Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log173(decoded));
             }
-            if let Ok(decoded)
-                = <Log44Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log44Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log44(decoded));
             }
-            if let Ok(decoded)
-                = <Log45Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log45Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log45(decoded));
             }
-            if let Ok(decoded)
-                = <Log174Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log174Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log174(decoded));
             }
-            if let Ok(decoded)
-                = <Log175Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log175Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log175(decoded));
             }
-            if let Ok(decoded)
-                = <Log46Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log46Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log46(decoded));
             }
-            if let Ok(decoded)
-                = <Log176Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log176Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log176(decoded));
             }
-            if let Ok(decoded)
-                = <Log177Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log177Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log177(decoded));
             }
-            if let Ok(decoded)
-                = <Log178Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log178Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log178(decoded));
             }
-            if let Ok(decoded)
-                = <Log47Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log47Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log47(decoded));
             }
-            if let Ok(decoded)
-                = <Log179Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log179Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log179(decoded));
             }
-            if let Ok(decoded)
-                = <Log180Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log180Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log180(decoded));
             }
-            if let Ok(decoded)
-                = <Log181Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log181Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log181(decoded));
             }
-            if let Ok(decoded)
-                = <Log182Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log182Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log182(decoded));
             }
-            if let Ok(decoded)
-                = <Log183Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log183Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log183(decoded));
             }
-            if let Ok(decoded)
-                = <Log184Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log184Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log184(decoded));
             }
-            if let Ok(decoded)
-                = <Log185Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log185Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log185(decoded));
             }
-            if let Ok(decoded)
-                = <Log186Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log186Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log186(decoded));
             }
-            if let Ok(decoded)
-                = <Log187Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log187Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log187(decoded));
             }
-            if let Ok(decoded)
-                = <Log188Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log188Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log188(decoded));
             }
-            if let Ok(decoded)
-                = <Log48Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log48Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log48(decoded));
             }
-            if let Ok(decoded)
-                = <Log189Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log189Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log189(decoded));
             }
-            if let Ok(decoded)
-                = <Log190Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log190Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log190(decoded));
             }
-            if let Ok(decoded)
-                = <Log191Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log191Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log191(decoded));
             }
-            if let Ok(decoded)
-                = <Log49Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log49Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log49(decoded));
             }
-            if let Ok(decoded)
-                = <Log192Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log192Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log192(decoded));
             }
-            if let Ok(decoded)
-                = <Log11Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log11Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log11(decoded));
             }
-            if let Ok(decoded)
-                = <Log193Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log193Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log193(decoded));
             }
-            if let Ok(decoded)
-                = <Log194Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log194Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log194(decoded));
             }
-            if let Ok(decoded)
-                = <Log195Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log195Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log195(decoded));
             }
-            if let Ok(decoded)
-                = <Log196Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log196Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log196(decoded));
             }
-            if let Ok(decoded)
-                = <Log50Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log50Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log50(decoded));
             }
-            if let Ok(decoded)
-                = <Log51Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log51Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log51(decoded));
             }
-            if let Ok(decoded)
-                = <Log197Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log197Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log197(decoded));
             }
-            if let Ok(decoded)
-                = <Log198Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log198Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log198(decoded));
             }
-            if let Ok(decoded)
-                = <Log12Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log12Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log12(decoded));
             }
-            if let Ok(decoded)
-                = <Log199Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log199Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log199(decoded));
             }
-            if let Ok(decoded)
-                = <Log200Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log200Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log200(decoded));
             }
-            if let Ok(decoded)
-                = <Log201Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log201Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log201(decoded));
             }
-            if let Ok(decoded)
-                = <Log202Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log202Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log202(decoded));
             }
-            if let Ok(decoded)
-                = <Log203Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log203Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log203(decoded));
             }
-            if let Ok(decoded)
-                = <Log204Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log204Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log204(decoded));
             }
-            if let Ok(decoded)
-                = <Log205Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log205Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log205(decoded));
             }
-            if let Ok(decoded)
-                = <Log206Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log206Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log206(decoded));
             }
-            if let Ok(decoded)
-                = <Log207Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log207Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log207(decoded));
             }
-            if let Ok(decoded)
-                = <Log208Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log208Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log208(decoded));
             }
-            if let Ok(decoded)
-                = <Log209Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log209Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log209(decoded));
             }
-            if let Ok(decoded)
-                = <Log210Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log210Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log210(decoded));
             }
-            if let Ok(decoded)
-                = <Log52Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log52Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log52(decoded));
             }
-            if let Ok(decoded)
-                = <Log211Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log211Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log211(decoded));
             }
-            if let Ok(decoded)
-                = <Log212Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log212Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log212(decoded));
             }
-            if let Ok(decoded)
-                = <Log213Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log213Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log213(decoded));
             }
-            if let Ok(decoded)
-                = <Log13Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log13Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log13(decoded));
             }
-            if let Ok(decoded)
-                = <Log14Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log14Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log14(decoded));
             }
-            if let Ok(decoded)
-                = <Log214Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log214Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log214(decoded));
             }
-            if let Ok(decoded)
-                = <Log215Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log215Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log215(decoded));
             }
-            if let Ok(decoded)
-                = <Log216Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log216Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log216(decoded));
             }
-            if let Ok(decoded)
-                = <Log53Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log53Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log53(decoded));
             }
-            if let Ok(decoded)
-                = <Log54Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log54Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log54(decoded));
             }
-            if let Ok(decoded)
-                = <Log217Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log217Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log217(decoded));
             }
-            if let Ok(decoded)
-                = <Log218Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log218Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log218(decoded));
             }
-            if let Ok(decoded)
-                = <Log219Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log219Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log219(decoded));
             }
-            if let Ok(decoded)
-                = <Log220Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log220Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log220(decoded));
             }
-            if let Ok(decoded)
-                = <Log221Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log221Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log221(decoded));
             }
-            if let Ok(decoded)
-                = <Log222Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log222Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log222(decoded));
             }
-            if let Ok(decoded)
-                = <Log223Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log223Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log223(decoded));
             }
-            if let Ok(decoded)
-                = <Log224Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log224Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log224(decoded));
             }
-            if let Ok(decoded)
-                = <Log225Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log225Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log225(decoded));
             }
-            if let Ok(decoded)
-                = <Log226Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log226Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log226(decoded));
             }
-            if let Ok(decoded)
-                = <Log227Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log227Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log227(decoded));
             }
-            if let Ok(decoded)
-                = <Log15Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log15Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log15(decoded));
             }
-            if let Ok(decoded)
-                = <Log55Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log55Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log55(decoded));
             }
-            if let Ok(decoded)
-                = <Log16Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log16Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log16(decoded));
             }
-            if let Ok(decoded)
-                = <Log228Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log228Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log228(decoded));
             }
-            if let Ok(decoded)
-                = <Log56Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log56Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log56(decoded));
             }
-            if let Ok(decoded)
-                = <Log229Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log229Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log229(decoded));
             }
-            if let Ok(decoded)
-                = <Log230Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log230Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log230(decoded));
             }
-            if let Ok(decoded)
-                = <Log231Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log231Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log231(decoded));
             }
-            if let Ok(decoded)
-                = <Log232Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log232Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log232(decoded));
             }
-            if let Ok(decoded)
-                = <Log233Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log233Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log233(decoded));
             }
-            if let Ok(decoded)
-                = <Log234Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log234Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log234(decoded));
             }
-            if let Ok(decoded)
-                = <Log235Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log235Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log235(decoded));
             }
-            if let Ok(decoded)
-                = <Log236Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log236Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log236(decoded));
             }
-            if let Ok(decoded)
-                = <Log237Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log237Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log237(decoded));
             }
-            if let Ok(decoded)
-                = <Log238Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log238Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log238(decoded));
             }
-            if let Ok(decoded)
-                = <Log239Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log239Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log239(decoded));
             }
-            if let Ok(decoded)
-                = <Log240Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log240Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log240(decoded));
             }
-            if let Ok(decoded)
-                = <Log241Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log241Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log241(decoded));
             }
-            if let Ok(decoded)
-                = <Log17Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log17Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log17(decoded));
             }
-            if let Ok(decoded)
-                = <Log242Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log242Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log242(decoded));
             }
-            if let Ok(decoded)
-                = <Log243Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log243Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log243(decoded));
             }
-            if let Ok(decoded)
-                = <Log244Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log244Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log244(decoded));
             }
-            if let Ok(decoded)
-                = <Log245Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log245Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log245(decoded));
             }
-            if let Ok(decoded)
-                = <Log246Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log246Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log246(decoded));
             }
-            if let Ok(decoded)
-                = <Log57Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log57Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log57(decoded));
             }
-            if let Ok(decoded)
-                = <Log247Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log247Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log247(decoded));
             }
-            if let Ok(decoded)
-                = <Log248Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log248Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log248(decoded));
             }
-            if let Ok(decoded)
-                = <Log249Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log249Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log249(decoded));
             }
-            if let Ok(decoded)
-                = <Log58Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log58Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log58(decoded));
             }
-            if let Ok(decoded)
-                = <Log59Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log59Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log59(decoded));
             }
-            if let Ok(decoded)
-                = <Log250Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log250Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log250(decoded));
             }
-            if let Ok(decoded)
-                = <Log251Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log251Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log251(decoded));
             }
-            if let Ok(decoded)
-                = <Log252Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log252Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log252(decoded));
             }
-            if let Ok(decoded)
-                = <Log253Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log253Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log253(decoded));
             }
-            if let Ok(decoded)
-                = <Log60Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log60Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log60(decoded));
             }
-            if let Ok(decoded)
-                = <Log254Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log254Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log254(decoded));
             }
-            if let Ok(decoded)
-                = <Log61Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log61Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log61(decoded));
             }
-            if let Ok(decoded)
-                = <Log255Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log255Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log255(decoded));
             }
-            if let Ok(decoded)
-                = <Log256Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log256Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log256(decoded));
             }
-            if let Ok(decoded)
-                = <Log257Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log257Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log257(decoded));
             }
-            if let Ok(decoded)
-                = <Log258Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log258Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log258(decoded));
             }
-            if let Ok(decoded)
-                = <Log259Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log259Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log259(decoded));
             }
-            if let Ok(decoded)
-                = <Log260Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log260Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log260(decoded));
             }
-            if let Ok(decoded)
-                = <Log261Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log261Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log261(decoded));
             }
-            if let Ok(decoded)
-                = <Log262Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log262Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log262(decoded));
             }
-            if let Ok(decoded)
-                = <Log62Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log62Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log62(decoded));
             }
-            if let Ok(decoded)
-                = <Log263Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log263Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log263(decoded));
             }
-            if let Ok(decoded)
-                = <Log264Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log264Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log264(decoded));
             }
-            if let Ok(decoded)
-                = <Log265Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log265Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log265(decoded));
             }
-            if let Ok(decoded)
-                = <Log266Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log266Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log266(decoded));
             }
-            if let Ok(decoded)
-                = <Log267Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log267Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log267(decoded));
             }
-            if let Ok(decoded)
-                = <Log268Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log268Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log268(decoded));
             }
-            if let Ok(decoded)
-                = <Log269Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log269Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log269(decoded));
             }
-            if let Ok(decoded)
-                = <Log270Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log270Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log270(decoded));
             }
-            if let Ok(decoded)
-                = <Log271Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log271Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log271(decoded));
             }
-            if let Ok(decoded)
-                = <Log272Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log272Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log272(decoded));
             }
-            if let Ok(decoded)
-                = <Log273Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log273Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log273(decoded));
             }
-            if let Ok(decoded)
-                = <Log274Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log274Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log274(decoded));
             }
-            if let Ok(decoded)
-                = <Log275Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log275Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log275(decoded));
             }
-            if let Ok(decoded)
-                = <Log276Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log276Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log276(decoded));
             }
-            if let Ok(decoded)
-                = <Log277Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log277Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log277(decoded));
             }
-            if let Ok(decoded)
-                = <Log63Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log63Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log63(decoded));
             }
-            if let Ok(decoded)
-                = <Log64Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log64Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log64(decoded));
             }
-            if let Ok(decoded)
-                = <Log65Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log65Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log65(decoded));
             }
-            if let Ok(decoded)
-                = <Log278Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log278Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log278(decoded));
             }
-            if let Ok(decoded)
-                = <Log279Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log279Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log279(decoded));
             }
-            if let Ok(decoded)
-                = <Log280Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log280Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log280(decoded));
             }
-            if let Ok(decoded)
-                = <Log18Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log18Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log18(decoded));
             }
-            if let Ok(decoded)
-                = <Log66Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log66Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log66(decoded));
             }
-            if let Ok(decoded)
-                = <Log281Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log281Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log281(decoded));
             }
-            if let Ok(decoded)
-                = <Log282Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log282Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log282(decoded));
             }
-            if let Ok(decoded)
-                = <Log283Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log283Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log283(decoded));
             }
-            if let Ok(decoded)
-                = <Log284Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log284Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log284(decoded));
             }
-            if let Ok(decoded)
-                = <Log285Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log285Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log285(decoded));
             }
-            if let Ok(decoded)
-                = <Log67Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log67Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log67(decoded));
             }
-            if let Ok(decoded)
-                = <Log286Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log286Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log286(decoded));
             }
-            if let Ok(decoded)
-                = <Log287Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log287Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log287(decoded));
             }
-            if let Ok(decoded)
-                = <Log288Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log288Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log288(decoded));
             }
-            if let Ok(decoded)
-                = <Log289Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log289Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log289(decoded));
             }
-            if let Ok(decoded)
-                = <Log290Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log290Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log290(decoded));
             }
-            if let Ok(decoded)
-                = <Log291Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log291Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log291(decoded));
             }
-            if let Ok(decoded)
-                = <Log292Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log292Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log292(decoded));
             }
-            if let Ok(decoded)
-                = <Log19Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log19Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log19(decoded));
             }
-            if let Ok(decoded)
-                = <Log68Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log68Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log68(decoded));
             }
-            if let Ok(decoded)
-                = <Log293Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log293Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log293(decoded));
             }
-            if let Ok(decoded)
-                = <Log294Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log294Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log294(decoded));
             }
-            if let Ok(decoded)
-                = <Log295Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log295Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log295(decoded));
             }
-            if let Ok(decoded)
-                = <Log296Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log296Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log296(decoded));
             }
-            if let Ok(decoded)
-                = <Log297Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log297Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log297(decoded));
             }
-            if let Ok(decoded)
-                = <Log69Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log69Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log69(decoded));
             }
-            if let Ok(decoded)
-                = <Log70Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log70Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log70(decoded));
             }
-            if let Ok(decoded)
-                = <Log71Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log71Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log71(decoded));
             }
-            if let Ok(decoded)
-                = <Log72Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log72Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log72(decoded));
             }
-            if let Ok(decoded)
-                = <Log298Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log298Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log298(decoded));
             }
-            if let Ok(decoded)
-                = <Log299Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log299Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log299(decoded));
             }
-            if let Ok(decoded)
-                = <Log300Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log300Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log300(decoded));
             }
-            if let Ok(decoded)
-                = <Log301Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log301Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log301(decoded));
             }
-            if let Ok(decoded)
-                = <Log302Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log302Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log302(decoded));
             }
-            if let Ok(decoded)
-                = <Log73Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log73Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log73(decoded));
             }
-            if let Ok(decoded)
-                = <Log303Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log303Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log303(decoded));
             }
-            if let Ok(decoded)
-                = <Log304Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log304Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log304(decoded));
             }
-            if let Ok(decoded)
-                = <Log74Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log74Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log74(decoded));
             }
-            if let Ok(decoded)
-                = <Log75Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log75Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log75(decoded));
             }
-            if let Ok(decoded)
-                = <Log305Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log305Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log305(decoded));
             }
-            if let Ok(decoded)
-                = <Log306Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log306Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log306(decoded));
             }
-            if let Ok(decoded)
-                = <Log307Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log307Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log307(decoded));
             }
-            if let Ok(decoded)
-                = <Log308Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log308Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log308(decoded));
             }
-            if let Ok(decoded)
-                = <Log309Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log309Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log309(decoded));
             }
-            if let Ok(decoded)
-                = <Log20Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log20Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log20(decoded));
             }
-            if let Ok(decoded)
-                = <Log76Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log76Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log76(decoded));
             }
-            if let Ok(decoded)
-                = <Log310Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log310Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log310(decoded));
             }
-            if let Ok(decoded)
-                = <Log311Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log311Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log311(decoded));
             }
-            if let Ok(decoded)
-                = <Log312Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log312Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log312(decoded));
             }
-            if let Ok(decoded)
-                = <Log313Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log313Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log313(decoded));
             }
-            if let Ok(decoded)
-                = <Log314Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log314Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log314(decoded));
             }
-            if let Ok(decoded)
-                = <Log77Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log77Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log77(decoded));
             }
-            if let Ok(decoded)
-                = <Log315Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log315Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log315(decoded));
             }
-            if let Ok(decoded)
-                = <Log316Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log316Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log316(decoded));
             }
-            if let Ok(decoded)
-                = <Log317Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log317Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log317(decoded));
             }
-            if let Ok(decoded)
-                = <Log78Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log78Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log78(decoded));
             }
-            if let Ok(decoded)
-                = <Log318Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log318Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log318(decoded));
             }
-            if let Ok(decoded)
-                = <Log79Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log79Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log79(decoded));
             }
-            if let Ok(decoded)
-                = <Log319Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log319Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log319(decoded));
             }
-            if let Ok(decoded)
-                = <Log320Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log320Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log320(decoded));
             }
-            if let Ok(decoded)
-                = <Log321Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log321Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log321(decoded));
             }
-            if let Ok(decoded)
-                = <Log322Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log322Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log322(decoded));
             }
-            if let Ok(decoded)
-                = <Log323Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log323Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log323(decoded));
             }
-            if let Ok(decoded)
-                = <Log324Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log324Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log324(decoded));
             }
-            if let Ok(decoded)
-                = <Log80Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log80Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log80(decoded));
             }
-            if let Ok(decoded)
-                = <Log325Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log325Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log325(decoded));
             }
-            if let Ok(decoded)
-                = <Log326Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log326Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log326(decoded));
             }
-            if let Ok(decoded)
-                = <Log81Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log81Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log81(decoded));
             }
-            if let Ok(decoded)
-                = <Log327Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log327Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log327(decoded));
             }
-            if let Ok(decoded)
-                = <Log328Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log328Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log328(decoded));
             }
-            if let Ok(decoded)
-                = <Log329Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log329Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log329(decoded));
             }
-            if let Ok(decoded)
-                = <Log330Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log330Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log330(decoded));
             }
-            if let Ok(decoded)
-                = <Log331Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log331Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log331(decoded));
             }
-            if let Ok(decoded)
-                = <Log82Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log82Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log82(decoded));
             }
-            if let Ok(decoded)
-                = <Log83Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log83Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log83(decoded));
             }
-            if let Ok(decoded)
-                = <Log84Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log84Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log84(decoded));
             }
-            if let Ok(decoded)
-                = <Log332Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log332Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log332(decoded));
             }
-            if let Ok(decoded)
-                = <Log333Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log333Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log333(decoded));
             }
-            if let Ok(decoded)
-                = <Log334Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log334Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log334(decoded));
             }
-            if let Ok(decoded)
-                = <Log21Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log21Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log21(decoded));
             }
-            if let Ok(decoded)
-                = <Log335Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log335Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log335(decoded));
             }
-            if let Ok(decoded)
-                = <Log336Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log336Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log336(decoded));
             }
-            if let Ok(decoded)
-                = <Log4Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log4Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log4(decoded));
             }
-            if let Ok(decoded)
-                = <Log337Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log337Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log337(decoded));
             }
-            if let Ok(decoded)
-                = <Log338Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log338Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log338(decoded));
             }
-            if let Ok(decoded)
-                = <Log339Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log339Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log339(decoded));
             }
-            if let Ok(decoded)
-                = <Log85Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log85Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log85(decoded));
             }
-            if let Ok(decoded)
-                = <Log340Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log340Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log340(decoded));
             }
-            if let Ok(decoded)
-                = <Log86Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log86Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log86(decoded));
             }
-            if let Ok(decoded)
-                = <Log341Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log341Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log341(decoded));
             }
-            if let Ok(decoded)
-                = <Log342Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log342Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log342(decoded));
             }
-            if let Ok(decoded)
-                = <Log5Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log5Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log5(decoded));
             }
-            if let Ok(decoded)
-                = <Log22Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Log22Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Log22(decoded));
             }
-            if let Ok(decoded)
-                = <LogAddressCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogAddressCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogAddress(decoded));
             }
-            if let Ok(decoded)
-                = <LogBoolCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBoolCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBool(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytesCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytesCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes1(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes10Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes10Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes10(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes11Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes11Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes11(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes12Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes12Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes12(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes13Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes13Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes13(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes14Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes14Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes14(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes15Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes15Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes15(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes16Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes16Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes16(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes17Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes17Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes17(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes18Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes18Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes18(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes19Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes19Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes19(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes2(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes20Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes20Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes20(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes21Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes21Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes21(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes22Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes22Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes22(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes23Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes23Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes23(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes24Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes24Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes24(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes25Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes25Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes25(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes26Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes26Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes26(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes27Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes27Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes27(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes28Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes28Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes28(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes29Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes29Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes29(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes3(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes30Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes30Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes30(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes31Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes31Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes31(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes32Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes32Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes32(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes4Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes4Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes4(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes5Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes5Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes5(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes6Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes6Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes6(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes7Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes7Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes7(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes8Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes8Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes8(decoded));
             }
-            if let Ok(decoded)
-                = <LogBytes9Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogBytes9Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogBytes9(decoded));
             }
-            if let Ok(decoded)
-                = <LogIntCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogIntCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogInt(decoded));
             }
-            if let Ok(decoded)
-                = <LogStringCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogStringCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogString(decoded));
             }
-            if let Ok(decoded)
-                = <LogUintCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LogUintCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::LogUint(decoded));
             }
             Err(::corebc_core::abi::Error::InvalidData.into())

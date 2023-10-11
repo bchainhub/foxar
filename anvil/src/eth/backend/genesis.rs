@@ -9,7 +9,7 @@ use corebc::{
     types::{Address, H256},
 };
 use forge::{
-    revm::primitives::{B160, B256, KECCAK_EMPTY, U256},
+    revm::primitives::{B160, B256, SHA3_EMPTY, U256},
     utils::b176_to_h176,
 };
 use foundry_evm::{
@@ -49,7 +49,7 @@ impl GenesisConfig {
         self.accounts.iter().copied().map(|address| {
             let info = AccountInfo {
                 balance: self.balance,
-                code_hash: KECCAK_EMPTY,
+                code_hash: SHA3_EMPTY,
                 // we set this to empty so `Database::code_by_hash` doesn't get called
                 code: Some(Default::default()),
                 nonce: 0,
