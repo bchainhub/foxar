@@ -17,7 +17,7 @@ use corebc::{
 };
 use foundry_config::Config;
 use revm::{
-    primitives::{Bytecode, Network, SpecId, B256, KECCAK_EMPTY},
+    primitives::{Bytecode, Network, SpecId, B256, SHA3_EMPTY},
     Database, EVMData,
 };
 use std::collections::BTreeMap;
@@ -498,7 +498,7 @@ pub fn apply<DB: DatabaseExt>(
                 // Per EIP-161, EOA nonces start at 0, but contract nonces
                 // start at 1. Comparing by code_hash instead of code
                 // to avoid hitting the case where account's code is None.
-                let empty = account.info.code_hash == KECCAK_EMPTY;
+                let empty = account.info.code_hash == SHA3_EMPTY;
                 let nonce = if empty { 0 } else { 1 };
                 account.info.nonce = nonce;
                 Ok(Bytes::new())
@@ -633,13 +633,13 @@ pub fn apply<DB: DatabaseExt>(
             Bytes::new()
         }
         HEVMCalls::PauseGasMetering(_) => {
-            if state.gas_metering.is_none() {
-                state.gas_metering = Some(None);
+            if state.energy_metering.is_none() {
+                state.energy_metering = Some(None);
             }
             Bytes::new()
         }
         HEVMCalls::ResumeGasMetering(_) => {
-            state.gas_metering = None;
+            state.energy_metering = None;
             Bytes::new()
         }
         _ => return Ok(None),

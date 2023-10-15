@@ -2,7 +2,7 @@ use super::{VerifyArgs, VerifyCheckArgs};
 use crate::cmd::LoadConfig;
 use async_trait::async_trait;
 use cast::SimpleCast;
-use corebc::solc::ConfigurableContractArtifact;
+use corebc::ylem::ConfigurableContractArtifact;
 
 use crate::cmd::forge::verify::provider::VerificationProvider;
 use foundry_common::fs;
@@ -82,7 +82,7 @@ impl VerificationProvider for SourcifyVerificationProvider {
                         "{}check-by-addresses?addresses={}&chainIds={}",
                         args.verifier.verifier_url.as_deref().unwrap_or(SOURCIFY_URL),
                         args.id,
-                        args.etherscan.chain.unwrap_or_default().id(),
+                        args.etherscan.network.unwrap_or_default().id(),
                     );
 
                     let response = reqwest::get(url).await?;
@@ -161,7 +161,7 @@ metadata output can be enabled via `extra_output = ["metadata"]` in `foundry.tom
 
         let req = SourcifyVerifyRequest {
             address: format!("{:?}", args.address),
-            chain: args.etherscan.chain.unwrap_or_default().id().to_string(),
+            chain: args.etherscan.network.unwrap_or_default().id().to_string(),
             files,
             chosen_contract: None,
         };

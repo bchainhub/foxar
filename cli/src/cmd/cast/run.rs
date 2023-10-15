@@ -171,7 +171,7 @@ impl RunArgs {
                 trace!(tx=?tx.hash,to=?to, "executing call transaction");
                 let RawCallResult {
                     reverted,
-                    gas_used: gas,
+                    energy_used: gas,
                     traces,
                     debug: run_debug,
                     exit_reason: _,
@@ -187,14 +187,14 @@ impl RunArgs {
             } else {
                 trace!(tx=?tx.hash, "executing create transaction");
                 match executor.deploy_with_env(env, None) {
-                    Ok(DeployResult { gas_used, traces, debug: run_debug, .. }) => RunResult {
+                    Ok(DeployResult { energy_used: gas_used, traces, debug: run_debug, .. }) => RunResult {
                         success: true,
                         traces: vec![(TraceKind::Execution, traces.unwrap_or_default())],
                         debug: run_debug.unwrap_or_default(),
                         gas_used,
                     },
                     Err(EvmError::Execution(inner)) => {
-                        let ExecutionErr { reverted, gas_used, traces, debug: run_debug, .. } =
+                        let ExecutionErr { reverted, energy_used: gas_used, traces, debug: run_debug, .. } =
                             *inner;
                         RunResult {
                             success: !reverted,

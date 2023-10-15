@@ -9,7 +9,7 @@ use crate::cmd::{
     needs_setup,
 };
 use corebc::{
-    solc::artifacts::CompactContractBytecode,
+    ylem::artifacts::CompactContractBytecode,
     types::{transaction::eip2718::TypedTransaction, Address, U256},
 };
 use forge::{
@@ -39,7 +39,7 @@ impl ScriptArgs {
         script_config: &mut ScriptConfig,
         contract: CompactContractBytecode,
         sender: Address,
-        predeploy_libraries: &[ethers::types::Bytes],
+        predeploy_libraries: &[corebc::types::Bytes],
     ) -> eyre::Result<ScriptResult> {
         trace!(target: "script", "start executing script");
 
@@ -309,7 +309,7 @@ impl ScriptArgs {
         let mut builder = ExecutorBuilder::default()
             .with_config(env)
             .with_spec(evm_spec(&script_config.config.evm_version))
-            .with_gas_limit(script_config.evm_opts.gas_limit())
+            .with_gas_limit(script_config.evm_opts.energy_limit())
             // We need it enabled to decode contract names: local or external.
             .set_tracing(true);
 

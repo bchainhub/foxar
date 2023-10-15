@@ -4,7 +4,7 @@ use crate::constants::*;
 use clap::CommandFactory;
 use corebc::{
     prelude::remappings::Remapping,
-    solc::{
+    ylem::{
         artifacts::{BytecodeHash, Metadata},
         ConfigurableContractArtifact,
     },

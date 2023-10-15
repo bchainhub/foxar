@@ -131,7 +131,7 @@ impl VerifyArgs {
     pub async fn run(mut self) -> eyre::Result<()> {
         let config = self.load_config_emit_warnings();
         let chain = config.network_id.unwrap_or_default();
-        self.etherscan.chain = Some(chain);
+        self.etherscan.network = Some(chain);
         self.etherscan.key = config.get_etherscan_config_with_chain(Some(chain))?.map(|c| c.key);
 
         if self.show_standard_json_input {
@@ -196,7 +196,7 @@ impl_figment_convert_cast!(VerifyCheckArgs);
 impl VerifyCheckArgs {
     /// Run the verify command to submit the contract's source code for verification on etherscan
     pub async fn run(self) -> eyre::Result<()> {
-        println!("Checking verification status on {}", self.etherscan.chain.unwrap_or_default());
+        println!("Checking verification status on {}", self.etherscan.network.unwrap_or_default());
         self.verifier.verifier.client(&self.etherscan.key)?.check(self).await
     }
 }

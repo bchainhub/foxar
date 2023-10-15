@@ -402,7 +402,7 @@ where
         Cast::block_field_as_num(self, block, "timestamp".to_string()).await
     }
 
-    pub async fn chain(&self) -> Result<&str> {
+    pub async fn network(&self) -> Result<&str> {
         let genesis_hash = Cast::block(
             self,
             0,
@@ -461,7 +461,7 @@ where
         })
     }
 
-    pub async fn chain_id(&self) -> Result<U256> {
+    pub async fn network_id(&self) -> Result<U256> {
         Ok(self.provider.get_networkid().await?)
     }
 

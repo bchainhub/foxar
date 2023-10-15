@@ -1,11 +1,8 @@
 use super::{multi::MultiChainSequence, providers::ProvidersManager, sequence::ScriptSequence, *};
 use crate::{
-    cmd::{
-        forge::script::{
+    cmd::forge::script::{
             receipts::clear_pendings, transaction::TransactionWithMetadata, verify::VerifyBundle,
         },
-        has_batch_support, has_different_gas_calc,
-    },
     init_progress,
     opts::WalletSigner,
     update_progress,
@@ -16,7 +13,7 @@ use corebc::{
     utils::format_units,
 };
 use eyre::{bail, ContextCompat, Result, WrapErr};
-use foundry_common::{estimate_eip1559_fees, shell, try_get_http_provider, RetryProvider};
+use foundry_common::{shell, try_get_http_provider, RetryProvider};
 use futures::StreamExt;
 use std::{cmp::min, collections::HashSet, ops::Mul, sync::Arc};
 use tracing::trace;
@@ -40,8 +37,8 @@ impl ScriptArgs {
                 .map(|(_, tx)| *tx.from().expect("No sender for onchain transaction!"))
                 .collect();
 
-            let (send_kind, chain) = if self.unlocked {
-                let chain = provider.get_chainid().await?;
+            let (send_kind, network) = if self.unlocked {
+                let network = provider.get_networkid().await?;
                 let mut senders = HashSet::from([self
                     .evm_opts
                     .sender
@@ -53,34 +50,27 @@ impl ScriptArgs {
                         .iter()
                         .filter_map(|(_, tx)| tx.from().copied()),
                 );
-                (SendTransactionsKind::Unlocked(senders), chain.as_u64())
+                (SendTransactionsKind::Unlocked(senders), network.as_u64())
             } else {
                 let local_wallets = self
                     .wallets
                     .find_all(provider.clone(), required_addresses, script_wallets)
                     .await?;
-                let chain = local_wallets.values().last().wrap_err("Error accessing local wallet when trying to send onchain transaction, did you set a private key, mnemonic or keystore?")?.chain_id();
-                (SendTransactionsKind::Raw(local_wallets), chain)
+                let network = local_wallets.values().last().wrap_err("Error accessing local wallet when trying to send onchain transaction, did you set a private key, mnemonic or keystore?")?.network_id();
+                (SendTransactionsKind::Raw(local_wallets), network)
             };
 
             // We only wait for a transaction receipt before sending the next transaction, if there
             // is more than one signer. There would be no way of assuring their order
             // otherwise. Or if the chain does not support batched transactions (eg. Arbitrum).
             let sequential_broadcast =
-                send_kind.signers_count() != 1 || self.slow || !has_batch_support(chain);
+                send_kind.signers_count() != 1 || self.slow;
 
             // Make a one-time gas price estimation
             let (gas_price, eip1559_fees) = {
                 match deployment_sequence.transactions.front().unwrap().typed_tx() {
                     TypedTransaction::Legacy(_) | TypedTransaction::Eip2930(_) => {
                         (provider.get_gas_price().await.ok(), None)
-                    }
-                    TypedTransaction::Eip1559(_) => {
-                        let fees = estimate_eip1559_fees(&provider, Some(chain))
-                            .await
-                            .wrap_err("Failed to estimate EIP1559 fees. This chain might not support EIP1559, try adding --legacy to your command.")?;
-
-                        (None, Some(fees))
                     }
                 }
             };
@@ -100,7 +90,7 @@ impl ScriptArgs {
 
                     let mut tx = tx.clone();
 
-                    tx.set_chain_id(chain);
+                    tx.set_network_id(network);
 
                     if let Some(gas_price) = self.with_gas_price {
                         tx.set_gas_price(gas_price);
@@ -241,9 +231,7 @@ impl ScriptArgs {
 
                 // Chains which use `eth_estimateGas` are being sent sequentially and require their
                 // gas to be re-estimated right before broadcasting.
-                if !is_fixed_gas_limit &&
-                    (has_different_gas_calc(provider.get_chainid().await?.as_u64()) ||
-                        self.skip_simulation)
+                if !is_fixed_gas_limit && self.skip_simulation
                 {
                     self.estimate_gas(&mut tx, &provider).await?;
                 }
@@ -463,33 +451,10 @@ impl ScriptArgs {
 
             // Handles chain specific requirements.
             tx.change_type(provider_info.is_legacy);
-            tx.transaction.set_chain_id(provider_info.chain);
+            tx.transaction.set_network_id(provider_info.network);
 
             if !self.skip_simulation {
                 let typed_tx = tx.typed_tx_mut();
-
-                if has_different_gas_calc(provider_info.chain) {
-                    trace!("estimating with different gas calculation");
-                    let gas = *typed_tx.gas().expect("gas is set by simulation.");
-
-                    // We are trying to show the user an estimation of the total gas usage.
-                    //
-                    // However, some transactions might depend on previous ones. For
-                    // example, tx1 might deploy a contract that tx2 uses. That
-                    // will result in the following `estimate_gas` call to fail,
-                    // since tx1 hasn't been broadcasted yet.
-                    //
-                    // Not exiting here will not be a problem when actually broadcasting, because
-                    // for chains where `has_different_gas_calc` returns true,
-                    // we await each transaction before broadcasting the next
-                    // one.
-                    if let Err(err) = self.estimate_gas(typed_tx, &provider_info.provider).await {
-                        trace!("gas estimation failed: {err}");
-
-                        // Restore gas value, since `estimate_gas` will remove it.
-                        typed_tx.set_gas(gas);
-                    }
-                }
 
                 let total_gas = total_gas_per_rpc.entry(tx_rpc.clone()).or_insert(U256::zero());
                 *total_gas += *typed_tx.gas().expect("gas is set");
@@ -504,7 +469,7 @@ impl ScriptArgs {
                 }
             }
 
-            config.network_id = Some(provider_info.chain.into());
+            config.network_id = Some(provider_info.network.into());
             let sequence = ScriptSequence::new(
                 new_sequence,
                 returns.clone(),
@@ -537,7 +502,7 @@ impl ScriptArgs {
                 };
 
                 shell::println("\n==========================")?;
-                shell::println(format!("\nChain {}", provider_info.chain))?;
+                shell::println(format!("\nChain {}", provider_info.network))?;
 
                 shell::println(format!(
                     "\nEstimated gas price: {} gwei",
@@ -568,17 +533,6 @@ impl ScriptArgs {
         mut legacy_or_1559: TypedTransaction,
     ) -> Result<TxHash> {
         tracing::debug!("sending transaction: {:?}", legacy_or_1559);
-
-        // Chains which use `eth_estimateGas` are being sent sequentially and require their gas
-        // to be re-estimated right before broadcasting.
-        if has_different_gas_calc(signer.chain_id()) || self.skip_simulation {
-            // if already set, some RPC endpoints might simply return the gas value that is
-            // already set in the request and omit the estimate altogether, so
-            // we remove it here
-            let _ = legacy_or_1559.gas_mut().take();
-
-            self.estimate_gas(&mut legacy_or_1559, &provider).await?;
-        }
 
         // Signing manually so we skip `fill_transaction` and its `eth_createAccessList`
         // request.

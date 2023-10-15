@@ -110,7 +110,7 @@ pub async fn clear_pendings(
 
     // print all receipts
     for receipt in receipts {
-        print_receipt(deployment_sequence.chain.into(), &receipt);
+        print_receipt(deployment_sequence.network.into(), &receipt);
         deployment_sequence.add_receipt(receipt);
     }
 

@@ -17,7 +17,7 @@ use corebc::{
     types::{transaction::eip2718::TypedTransaction, Chain},
 };
 use eyre::Context;
-use foundry_common::{abi::parse_tokens, compile, estimate_eip1559_fees};
+use foundry_common::{abi::parse_tokens, compile};
 use rustc_hex::ToHex;
 use serde_json::json;
 use std::{path::PathBuf, sync::Arc};
@@ -159,7 +159,7 @@ impl CreateArgs {
             num_of_optimizations: None,
             etherscan: EtherscanOpts {
                 key: self.eth.etherscan.key.clone(),
-                chain: Some(chain.into()),
+                network: Some(chain.into()),
             },
             flatten: false,
             force: false,
@@ -219,15 +219,6 @@ impl CreateArgs {
         // set gas price if specified
         if let Some(gas_price) = self.tx.gas_price {
             deployer.tx.set_gas_price(gas_price);
-        } else if !is_legacy {
-            // estimate EIP1559 fees
-            let (max_fee, max_priority_fee) = estimate_eip1559_fees(&provider, Some(chain))
-                .await
-                .wrap_err("Failed to estimate EIP1559 fees. This chain might not support EIP1559, try adding --legacy to your command.")?;
-            deployer.tx.set_gas_price(max_fee);
-            if priority_fee.is_none() {
-                priority_fee = Some(max_priority_fee);
-            }
         }
 
         // set gas limit if specified
@@ -304,7 +295,7 @@ impl CreateArgs {
             constructor_args,
             constructor_args_path: None,
             num_of_optimizations,
-            etherscan: EtherscanOpts { key: self.eth.etherscan.key, chain: Some(chain.into()) },
+            etherscan: EtherscanOpts { key: self.eth.etherscan.key, network: Some(chain.into()) },
             flatten: false,
             force: false,
             watch: true,

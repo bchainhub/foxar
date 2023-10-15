@@ -41,7 +41,7 @@ impl Cmd for FlattenArgs {
             ignored_error_codes: vec![],
             deny_warnings: false,
             no_auto_detect: false,
-            use_solc: None,
+            use_ylem: None,
             offline: false,
             force: false,
             libraries: vec![],

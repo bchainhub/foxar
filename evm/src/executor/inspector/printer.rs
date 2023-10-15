@@ -1,14 +1,14 @@
 use bytes::Bytes;
 use revm::{
-    inspectors::GasInspector,
-    interpreter::{opcode, CallInputs, CreateInputs, Gas, InstructionResult, Interpreter},
+    inspectors::EnergyInspector,
+    interpreter::{opcode, CallInputs, CreateInputs, Energy, InstructionResult, Interpreter},
     primitives::B176,
     Database, EVMData, Inspector,
 };
 
 #[derive(Clone, Default)]
 pub struct TracePrinter {
-    gas_inspector: GasInspector,
+    energy_inspector: EnergyInspector,
 }
 
 impl<DB: Database> Inspector<DB> for TracePrinter {
@@ -18,7 +18,7 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
         data: &mut EVMData<'_, DB>,
         is_static: bool,
     ) -> InstructionResult {
-        self.gas_inspector.initialize_interp(interp, data, is_static);
+        self.energy_inspector.initialize_interp(interp, data, is_static);
         InstructionResult::Continue
     }
 
@@ -33,24 +33,24 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
         let opcode = interp.current_opcode();
         let opcode_str = opcode::OPCODE_JUMPMAP[opcode as usize];
 
-        let gas_remaining = self.gas_inspector.gas_remaining();
+        let energy_remaining = self.energy_inspector.energy_remaining();
 
         println!(
-            "depth:{}, PC:{}, gas:{:#x}({}), OPCODE: {:?}({:?})  refund:{:#x}({}) Stack:{:?}, Data size:{}, Data: 0x{}",
+            "depth:{}, PC:{}, energy:{:#x}({}), OPCODE: {:?}({:?})  refund:{:#x}({}) Stack:{:?}, Data size:{}, Data: 0x{}",
             data.journaled_state.depth(),
             interp.program_counter(),
-            gas_remaining,
-            gas_remaining,
+            energy_remaining,
+            energy_remaining,
             opcode_str.unwrap(),
             opcode,
-            interp.gas.refunded(),
-            interp.gas.refunded(),
+            interp.energy.refunded(),
+            interp.energy.refunded(),
             interp.stack.data(),
             interp.memory.data().len(),
             hex::encode(interp.memory.data()),
         );
 
-        self.gas_inspector.step(interp, data, is_static);
+        self.energy_inspector.step(interp, data, is_static);
 
         InstructionResult::Continue
     }
@@ -62,7 +62,7 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
         is_static: bool,
         eval: InstructionResult,
     ) -> InstructionResult {
-        self.gas_inspector.step_end(interp, data, is_static, eval);
+        self.energy_inspector.step_end(interp, data, is_static, eval);
         InstructionResult::Continue
     }
 
@@ -71,7 +71,7 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
         _data: &mut EVMData<'_, DB>,
         inputs: &mut CallInputs,
         is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         println!(
             "SM CALL:   {:?},context:{:?}, is_static:{:?}, transfer:{:?}, input_size:{:?}",
             inputs.contract,
@@ -80,36 +80,36 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
             inputs.transfer,
             inputs.input.len(),
         );
-        (InstructionResult::Continue, Gas::new(0), Bytes::new())
+        (InstructionResult::Continue, Energy::new(0), Bytes::new())
     }
 
     fn call_end(
         &mut self,
         data: &mut EVMData<'_, DB>,
         inputs: &CallInputs,
-        remaining_gas: Gas,
+        remaining_energy: Energy,
         ret: InstructionResult,
         out: Bytes,
         is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
-        self.gas_inspector.call_end(data, inputs, remaining_gas, ret, out.clone(), is_static);
-        (ret, remaining_gas, out)
+    ) -> (InstructionResult, Energy, Bytes) {
+        self.energy_inspector.call_end(data, inputs, remaining_energy, ret, out.clone(), is_static);
+        (ret, remaining_energy, out)
     }
 
     fn create(
         &mut self,
         _data: &mut EVMData<'_, DB>,
         inputs: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         println!(
-            "CREATE CALL: caller:{:?}, scheme:{:?}, value:{:?}, init_code:{:?}, gas:{:?}",
+            "CREATE CALL: caller:{:?}, scheme:{:?}, value:{:?}, init_code:{:?}, energy:{:?}",
             inputs.caller,
             inputs.scheme,
             inputs.value,
             hex::encode(&inputs.init_code),
-            inputs.gas_limit
+            inputs.energy_limit
         );
-        (InstructionResult::Continue, None, Gas::new(0), Bytes::new())
+        (InstructionResult::Continue, None, Energy::new(0), Bytes::new())
     }
 
     fn create_end(
@@ -118,10 +118,10 @@ impl<DB: Database> Inspector<DB> for TracePrinter {
         inputs: &CreateInputs,
         ret: InstructionResult,
         address: Option<B176>,
-        remaining_gas: Gas,
+        remaining_energy: Energy,
         out: Bytes,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
-        self.gas_inspector.create_end(data, inputs, ret, address, remaining_gas, out.clone());
-        (ret, address, remaining_gas, out)
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
+        self.energy_inspector.create_end(data, inputs, ret, address, remaining_energy, out.clone());
+        (ret, address, remaining_energy, out)
     }
 }

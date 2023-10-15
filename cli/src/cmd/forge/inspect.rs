@@ -12,7 +12,7 @@ use corebc::{
         },
         info::ContractInfo,
     },
-    solc::{
+    ylem::{
         artifacts::{LosslessAbi, StorageLayout},
         utils::canonicalize,
     },

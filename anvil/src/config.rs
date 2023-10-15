@@ -36,7 +36,6 @@ use foundry_evm::{
     executor::fork::{BlockchainDb, BlockchainDbMeta, SharedBackend},
     revm,
     revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256},
-    utils::apply_network_and_block_specific_env_changes,
 };
 use parking_lot::RwLock;
 use serde_json::{json, to_writer, Value};
@@ -871,9 +870,6 @@ latest block number: {latest_block}"
                     coinbase: env.block.coinbase,
                     basefee: env.block.basefee,
                 };
-
-                // apply changes such as difficulty -> prevrandao
-                apply_network_and_block_specific_env_changes(&mut env, &block);
 
                 // if not set explicitly we use the base fee of the latest block
                 if self.base_fee.is_none() {

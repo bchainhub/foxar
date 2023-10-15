@@ -1,6 +1,6 @@
 //! Various helper functions
 
-use corebc::prelude::{Address, Chain, LocalWallet, Signer};
+use corebc::prelude::{Address, Network, LocalWallet, Signer};
 
 /// Returns the current millis since unix epoch.
 ///
@@ -12,12 +12,11 @@ pub fn millis_since_epoch() -> u128 {
         .as_millis()
 }
 
-pub fn etherscan_key(chain: Chain) -> Option<String> {
+pub fn etherscan_key(chain: Network) -> Option<String> {
     match chain {
-        Chain::Fantom | Chain::FantomTestnet => {
+        Network::Devin => {
             std::env::var("FTMSCAN_API_KEY").or_else(|_| std::env::var("FANTOMSCAN_API_KEY")).ok()
         }
-        Chain::OptimismKovan => std::env::var("OP_KOVAN_API_KEY").ok(),
         _ => std::env::var("ETHERSCAN_API_KEY").ok(),
     }
 }
@@ -34,7 +33,7 @@ pub fn network_private_key(chain: &str) -> Option<String> {
 
 /// Represents external input required for executing verification requests
 pub struct EnvExternalities {
-    pub chain: Chain,
+    pub chain: Network,
     pub rpc: String,
     pub pk: String,
     pub etherscan: String,
@@ -50,60 +49,60 @@ impl EnvExternalities {
 
     pub fn goerli() -> Option<Self> {
         Some(Self {
-            chain: Chain::Goerli,
+            chain: Network::Devin,
             rpc: network_rpc_key("goerli")?,
             pk: network_private_key("goerli")?,
-            etherscan: etherscan_key(Chain::Goerli)?,
+            etherscan: etherscan_key(Network::Devin)?,
             verifier: "etherscan".to_string(),
         })
     }
 
     pub fn ftm_testnet() -> Option<Self> {
         Some(Self {
-            chain: Chain::FantomTestnet,
+            chain: Network::Devin,
             rpc: network_rpc_key("ftm_testnet")?,
             pk: network_private_key("ftm_testnet")?,
-            etherscan: etherscan_key(Chain::FantomTestnet)?,
+            etherscan: etherscan_key(Network::Devin)?,
             verifier: "etherscan".to_string(),
         })
     }
 
     pub fn optimism_kovan() -> Option<Self> {
         Some(Self {
-            chain: Chain::OptimismKovan,
+            chain: Network::Devin,
             rpc: network_rpc_key("op_kovan")?,
             pk: network_private_key("op_kovan")?,
-            etherscan: etherscan_key(Chain::OptimismKovan)?,
+            etherscan: etherscan_key(Network::Devin)?,
             verifier: "etherscan".to_string(),
         })
     }
 
     pub fn arbitrum_goerli() -> Option<Self> {
         Some(Self {
-            chain: Chain::ArbitrumGoerli,
+            chain: Network::Devin,
             rpc: network_rpc_key("arbitrum-goerli")?,
             pk: network_private_key("arbitrum-goerli")?,
-            etherscan: etherscan_key(Chain::ArbitrumGoerli)?,
+            etherscan: etherscan_key(Network::Devin)?,
             verifier: "blockscout".to_string(),
         })
     }
 
     pub fn mumbai() -> Option<Self> {
         Some(Self {
-            chain: Chain::PolygonMumbai,
+            chain: Network::Devin,
             rpc: network_rpc_key("mumbai")?,
             pk: network_private_key("mumbai")?,
-            etherscan: etherscan_key(Chain::PolygonMumbai)?,
+            etherscan: etherscan_key(Network::Devin)?,
             verifier: "etherscan".to_string(),
         })
     }
 
     pub fn sepolia() -> Option<Self> {
         Some(Self {
-            chain: Chain::Sepolia,
+            chain: Network::Devin,
             rpc: network_rpc_key("sepolia")?,
             pk: network_private_key("sepolia")?,
-            etherscan: etherscan_key(Chain::Sepolia)?,
+            etherscan: etherscan_key(Network::Devin)?,
             verifier: "etherscan".to_string(),
         })
     }

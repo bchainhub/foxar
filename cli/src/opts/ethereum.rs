@@ -1,4 +1,4 @@
-use super::{ChainValueParser, Wallet, WalletSigner};
+use super::{NetworkValueParser, Wallet, WalletSigner};
 use clap::Parser;
 use eyre::Result;
 use foundry_config::{
@@ -61,20 +61,20 @@ impl RpcOpts {
 #[derive(Clone, Debug, Default, Parser, Serialize)]
 pub struct EtherscanOpts {
     /// The Etherscan (or equivalent) API key
-    #[clap(short = 'e', long = "etherscan-api-key", alias = "api-key", env = "ETHERSCAN_API_KEY")]
-    #[serde(rename = "etherscan_api_key", skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    // #[clap(short = 'e', long = "etherscan-api-key", alias = "api-key", env = "ETHERSCAN_API_KEY")]
+    // #[serde(rename = "etherscan_api_key", skip_serializing_if = "Option::is_none")]
+    // pub key: Option<String>,
 
-    /// The chain name or EIP-155 chain ID
+    /// The network name or EIP-155 network ID
     #[clap(
         short,
         long,
-        alias = "chain-id",
-        env = "CHAIN",
-        value_parser = ChainValueParser::default(),
+        alias = "network-id",
+        env = "NETWORK",
+        value_parser = NetworkValueParser::default(),
     )]
-    #[serde(rename = "chain_id", skip_serializing_if = "Option::is_none")]
-    pub chain: Option<Network>,
+    #[serde(rename = "network_id", skip_serializing_if = "Option::is_none")]
+    pub network: Option<Network>,
 }
 
 impl_figment_convert_cast!(EtherscanOpts);
@@ -93,7 +93,7 @@ impl EtherscanOpts {
     pub fn key<'a>(&'a self, config: Option<&'a Config>) -> Option<Cow<'a, str>> {
         match (self.key.as_deref(), config) {
             (Some(key), _) => Some(Cow::Borrowed(key)),
-            (None, Some(config)) => config.get_etherscan_api_key(self.chain).map(Cow::Owned),
+            (None, Some(config)) => config.get_etherscan_api_key(self.network).map(Cow::Owned),
             (None, None) => None,
         }
     }
@@ -120,7 +120,7 @@ impl_figment_convert_cast!(EthereumOpts);
 
 impl EthereumOpts {
     pub async fn signer(&self) -> Result<WalletSigner> {
-        self.wallet.signer(self.etherscan.chain.unwrap_or_default().id()).await
+        self.wallet.signer(self.etherscan.network.unwrap_or_default().id()).await
     }
 }
 

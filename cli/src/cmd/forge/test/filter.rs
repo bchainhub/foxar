@@ -1,6 +1,6 @@
 use crate::utils::FoundryPathExt;
 use clap::Parser;
-use corebc::solc::{FileFilter, ProjectPathsConfig};
+use corebc::ylem::{FileFilter, ProjectPathsConfig};
 use forge::TestFilter;
 use foundry_common::glob::GlobMatcher;
 use foundry_config::Config;

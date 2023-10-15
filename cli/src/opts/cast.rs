@@ -334,15 +334,15 @@ pub enum Subcommands {
         args: Vec<String>,
     },
 
-    /// Get the symbolic name of the current chain.
-    Chain {
+    /// Get the symbolic name of the current network.
+    Network {
         #[clap(flatten)]
         rpc: RpcOpts,
     },
 
-    /// Get the Ethereum chain ID.
-    #[clap(visible_aliases = &["ci", "cid"])]
-    ChainId {
+    /// Get the Core network ID.
+    #[clap(visible_aliases = &["ni", "nid"])]
+    NetworkId {
         #[clap(flatten)]
         rpc: RpcOpts,
     },
@@ -682,9 +682,9 @@ pub enum Subcommands {
         event_string: Option<String>,
     },
 
-    /// Hash arbitrary data using Keccak-256.
+    /// Hash arbitrary data using SHA3.
     #[clap(visible_alias = "k")]
-    Keccak {
+    Sha3 {
         /// The data to hash.
         data: Option<String>,
     },

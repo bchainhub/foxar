@@ -5,7 +5,7 @@ use crate::{
     utils::{p_println, Git},
 };
 use clap::{Parser, ValueHint};
-use corebc::solc::remappings::Remapping;
+use corebc::ylem::remappings::Remapping;
 use foundry_common::fs;
 use foundry_config::Config;
 use std::path::{Path, PathBuf};

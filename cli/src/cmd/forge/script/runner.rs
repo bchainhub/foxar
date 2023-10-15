@@ -104,7 +104,7 @@ impl ScriptRunner {
                     labels,
                     logs: setup_logs,
                     debug,
-                    gas_used,
+                    energy_used: gas_used,
                     transactions,
                     script_wallets,
                     ..
@@ -130,7 +130,7 @@ impl ScriptRunner {
                         labels,
                         logs: setup_logs,
                         debug,
-                        gas_used,
+                        energy_used: gas_used,
                         transactions,
                         script_wallets,
                         ..
@@ -215,11 +215,11 @@ impl ScriptRunner {
                 value.unwrap_or(U256::zero()),
                 None,
             ) {
-                Ok(DeployResult { address, gas_used, logs, traces, debug, .. }) => {
+                Ok(DeployResult { address, energy_used: gas_used, logs, traces, debug, .. }) => {
                     (address, gas_used, logs, traces, debug)
                 }
                 Err(EvmError::Execution(err)) => {
-                    let ExecutionErr { reason, traces, gas_used, logs, debug, .. } = *err;
+                    let ExecutionErr { reason, traces, energy_used: gas_used, logs, debug, .. } = *err;
                     println!("{}", Paint::red(format!("\nFailed with `{reason}`:\n")));
 
                     (Address::zero(), gas_used, logs, traces, debug)
@@ -265,7 +265,7 @@ impl ScriptRunner {
         commit: bool,
     ) -> eyre::Result<ScriptResult> {
         let mut res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
-        let mut gas_used = res.gas_used;
+        let mut gas_used = res.energy_used;
 
         // We should only need to calculate realistic gas costs when preparing to broadcast
         // something. This happens during the onchain simulation stage, where we commit each
@@ -323,7 +323,7 @@ impl ScriptRunner {
         calldata: &Bytes,
         value: U256,
     ) -> eyre::Result<u64> {
-        let mut gas_used = res.gas_used;
+        let mut gas_used = res.energy_used;
         if matches!(res.exit_reason, return_ok!()) {
             // store the current gas limit and reset it later
             let init_gas_limit = self.executor.env_mut().tx.gas_limit;

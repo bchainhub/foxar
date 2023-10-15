@@ -319,7 +319,7 @@ impl<'a> ContractRunner<'a> {
         {
             Ok(CallResult {
                 reverted,
-                gas_used: gas,
+                energy_used: gas,
                 stipend,
                 logs: execution_logs,
                 traces: execution_trace,
@@ -341,7 +341,7 @@ impl<'a> ContractRunner<'a> {
                 (
                     err.reverted,
                     Some(err.reason),
-                    err.gas_used,
+                    err.energy_used,
                     err.stipend,
                     None,
                     err.state_changeset,

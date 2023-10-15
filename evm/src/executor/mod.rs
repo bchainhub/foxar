@@ -88,10 +88,10 @@ pub struct Executor {
     backend: Backend,
     env: Env,
     inspector_config: InspectorStackConfig,
-    /// The gas limit for calls and deployments. This is different from the gas limit imposed by
+    /// The energy limit for calls and deployments. This is different from the energy limit imposed by
     /// the passed in environment, as those limits are used by the EVM for certain opcodes like
-    /// `gaslimit`.
-    gas_limit: U256,
+    /// `energylimit`.
+    energy_limit: U256,
 }
 
 // === impl Executor ===
@@ -101,7 +101,7 @@ impl Executor {
         mut backend: Backend,
         env: Env,
         inspector_config: InspectorStackConfig,
-        gas_limit: U256,
+        energy_limit: U256,
     ) -> Self {
         // Need to create a non-empty contract on the cheatcodes address so `extcodesize` checks
         // does not fail
@@ -113,7 +113,7 @@ impl Executor {
             },
         );
 
-        Executor { backend, env, inspector_config, gas_limit }
+        Executor { backend, env, inspector_config, energy_limit }
     }
 
     /// Returns a reference to the Env
@@ -213,8 +213,8 @@ impl Executor {
         self
     }
 
-    pub fn set_gas_limit(&mut self, gas_limit: U256) -> &mut Self {
-        self.gas_limit = gas_limit;
+    pub fn set_energy_limit(&mut self, energy_limit: U256) -> &mut Self {
+        self.energy_limit = energy_limit;
         self
     }
 
@@ -252,8 +252,8 @@ impl Executor {
                         reverted: res.reverted,
                         reason: "execution error".to_owned(),
                         traces: res.traces,
-                        gas_used: res.gas_used,
-                        gas_refunded: res.gas_refunded,
+                        energy_used: res.energy_used,
+                        energy_refunded: res.energy_refunded,
                         stipend: res.stipend,
                         logs: res.logs,
                         debug: res.debug,
@@ -425,8 +425,8 @@ impl Executor {
         let RawCallResult {
             exit_reason,
             out,
-            gas_used,
-            gas_refunded,
+            energy_used: energy_used,
+            energy_refunded: energy_refunded,
             logs,
             labels,
             traces,
@@ -450,8 +450,8 @@ impl Executor {
                         reverted: true,
                         reason: "Deployment succeeded, but no address was returned. This is a bug, please report it".to_string(),
                         traces,
-                        gas_used,
-                        gas_refunded: 0,
+                        energy_used: energy_used,
+                        energy_refunded: 0,
                         stipend: 0,
                         logs,
                         debug,
@@ -469,8 +469,8 @@ impl Executor {
                     reverted: true,
                     reason,
                     traces,
-                    gas_used,
-                    gas_refunded,
+                    energy_used: energy_used,
+                    energy_refunded: energy_refunded,
                     stipend: 0,
                     logs,
                     debug,
@@ -490,8 +490,8 @@ impl Executor {
 
         Ok(DeployResult {
             address: b176_to_h176(address),
-            gas_used,
-            gas_refunded,
+            energy_used: energy_used,
+            energy_refunded: energy_refunded,
             logs,
             traces,
             debug,
@@ -566,7 +566,7 @@ impl Executor {
         // cheatcode address which are both read when call `"failed()(bool)"` in the next step
         backend.commit(state_changeset);
         let executor =
-            Executor::new(backend, self.env.clone(), self.inspector_config.clone(), self.gas_limit);
+            Executor::new(backend, self.env.clone(), self.inspector_config.clone(), self.energy_limit);
 
         let mut success = !reverted;
         if success {
@@ -584,7 +584,7 @@ impl Executor {
 
     /// Creates the environment to use when executing a transaction in a test context
     ///
-    /// If using a backend with cheatcodes, `tx.gas_price` and `block.number` will be overwritten by
+    /// If using a backend with cheatcodes, `tx.energy_price` and `block.number` will be overwritten by
     /// the cheatcode state inbetween calls.
     fn build_test_env(
         &self,
@@ -595,12 +595,11 @@ impl Executor {
     ) -> Env {
         Env {
             cfg: self.env.cfg.clone(),
-            // We always set the gas price to 0 so we can execute the transaction regardless of
-            // network conditions - the actual gas price is kept in `self.block` and is applied by
+            // We always set the energy price to 0 so we can execute the transaction regardless of
+            // network conditions - the actual energy price is kept in `self.block` and is applied by
             // the cheatcode handler if it is enabled
             block: BlockEnv {
-                basefee: rU256::from(0),
-                gas_limit: u256_to_ru256(self.gas_limit),
+                energy_limit: u256_to_ru256(self.energy_limit),
                 ..self.env.block.clone()
             },
             tx: TxEnv {
@@ -608,10 +607,9 @@ impl Executor {
                 transact_to,
                 data,
                 value: u256_to_ru256(value),
-                // As above, we set the gas price to 0.
-                gas_price: rU256::from(0),
-                gas_priority_fee: None,
-                gas_limit: self.gas_limit.as_u64(),
+                // As above, we set the energy price to 0.
+                energy_price: rU256::from(0),
+                energy_limit: self.energy_limit.as_u64(),
                 ..self.env.tx.clone()
             },
         }
@@ -620,12 +618,12 @@ impl Executor {
 
 /// Represents the context after an execution error occurred.
 #[derive(thiserror::Error, Debug)]
-#[error("Execution reverted: {reason} (gas: {gas_used})")]
+#[error("Execution reverted: {reason} (energy: {energy_used})")]
 pub struct ExecutionErr {
     pub reverted: bool,
     pub reason: String,
-    pub gas_used: u64,
-    pub gas_refunded: u64,
+    pub energy_used: u64,
+    pub energy_refunded: u64,
     pub stipend: u64,
     pub logs: Vec<Log>,
     pub traces: Option<CallTraceArena>,
@@ -657,10 +655,10 @@ pub enum EvmError {
 pub struct DeployResult {
     /// The address of the deployed contract
     pub address: Address,
-    /// The gas cost of the deployment
-    pub gas_used: u64,
-    /// The refunded gas
-    pub gas_refunded: u64,
+    /// The energy cost of the deployment
+    pub energy_used: u64,
+    /// The refunded energy
+    pub energy_refunded: u64,
     /// The logs emitted during the deployment
     pub logs: Vec<Log>,
     /// The traces of the deployment
@@ -679,11 +677,11 @@ pub struct CallResult<D: Detokenize> {
     pub reverted: bool,
     /// The decoded result of the call
     pub result: D,
-    /// The gas used for the call
-    pub gas_used: u64,
-    /// The refunded gas for the call
-    pub gas_refunded: u64,
-    /// The initial gas stipend for the transaction
+    /// The energy used for the call
+    pub energy_used: u64,
+    /// The refunded energy for the call
+    pub energy_refunded: u64,
+    /// The initial energy stipend for the transaction
     pub stipend: u64,
     /// The logs emitted during the call
     pub logs: Vec<Log>,
@@ -719,11 +717,11 @@ pub struct RawCallResult {
     pub reverted: bool,
     /// The raw result of the call
     pub result: Bytes,
-    /// The gas used for the call
-    pub gas_used: u64,
-    /// Refunded gas
-    pub gas_refunded: u64,
-    /// The initial gas stipend for the transaction
+    /// The energy used for the call
+    pub energy_used: u64,
+    /// Refunded energy
+    pub energy_refunded: u64,
+    /// The initial energy stipend for the transaction
     pub stipend: u64,
     /// The logs emitted during the call
     pub logs: Vec<Log>,
@@ -760,8 +758,8 @@ impl Default for RawCallResult {
             exit_reason: InstructionResult::Continue,
             reverted: false,
             result: Bytes::new(),
-            gas_used: 0,
-            gas_refunded: 0,
+            energy_used: 0,
+            energy_refunded: 0,
             stipend: 0,
             logs: Vec::new(),
             labels: BTreeMap::new(),
@@ -779,7 +777,7 @@ impl Default for RawCallResult {
     }
 }
 
-/// Calculates the initial gas stipend for a transaction
+/// Calculates the initial energy stipend for a transaction
 fn calc_stipend(calldata: &[u8], spec: SpecId) -> u64 {
     let non_zero_data_cost = if SpecId::enabled(spec, SpecId::ISTANBUL) { 16 } else { 68 };
     calldata.iter().fold(21000, |sum, byte| sum + if *byte == 0 { 4 } else { non_zero_data_cost })
@@ -792,16 +790,16 @@ fn convert_executed_result(
     result: ResultAndState,
 ) -> eyre::Result<RawCallResult> {
     let ResultAndState { result: exec_result, state: state_changeset } = result;
-    let (exit_reason, gas_refunded, gas_used, out) = match exec_result {
-        ExecutionResult::Success { reason, gas_used, gas_refunded, output, .. } => {
-            (eval_to_instruction_result(reason), gas_refunded, gas_used, Some(output))
+    let (exit_reason, energy_refunded, energy_used, out) = match exec_result {
+        ExecutionResult::Success { reason, energy_used, energy_refunded, output, .. } => {
+            (eval_to_instruction_result(reason), energy_refunded, energy_used, Some(output))
         }
-        ExecutionResult::Revert { gas_used, output } => {
-            // Need to fetch the unused gas
-            (InstructionResult::Revert, 0_u64, gas_used, Some(Output::Call(output)))
+        ExecutionResult::Revert { energy_used, output } => {
+            // Need to fetch the unused energy
+            (InstructionResult::Revert, 0_u64, energy_used, Some(Output::Call(output)))
         }
-        ExecutionResult::Halt { reason, gas_used } => {
-            (halt_to_instruction_result(reason), 0_u64, gas_used, None)
+        ExecutionResult::Halt { reason, energy_used } => {
+            (halt_to_instruction_result(reason), 0_u64, energy_used, None)
         }
     };
     let stipend = calc_stipend(&env.tx.data, env.cfg.spec_id);
@@ -815,7 +813,7 @@ fn convert_executed_result(
         logs,
         labels,
         traces,
-        gas,
+        energy,
         coverage,
         debug,
         cheatcodes,
@@ -823,7 +821,7 @@ fn convert_executed_result(
         chisel_state,
     } = inspector.collect_inspector_states();
 
-    let gas_refunded = gas.unwrap_or(gas_refunded);
+    let energy_refunded = energy.unwrap_or(energy_refunded);
     let transactions = match cheatcodes.as_ref() {
         Some(cheats) if !cheats.broadcastable_transactions.is_empty() => {
             Some(cheats.broadcastable_transactions.clone())
@@ -835,8 +833,8 @@ fn convert_executed_result(
         exit_reason,
         reverted: !matches!(exit_reason, return_ok!()),
         result,
-        gas_used,
-        gas_refunded,
+        energy_used: energy_used,
+        energy_refunded: energy_refunded,
         stipend,
         logs: logs.to_vec(),
         labels,
@@ -862,8 +860,8 @@ fn convert_call_result<D: Detokenize>(
         result,
         exit_reason: status,
         reverted,
-        gas_used,
-        gas_refunded,
+        energy_used: energy_used,
+        energy_refunded: energy_refunded,
         stipend,
         logs,
         labels,
@@ -889,8 +887,8 @@ fn convert_call_result<D: Detokenize>(
             Ok(CallResult {
                 reverted,
                 result,
-                gas_used,
-                gas_refunded,
+                energy_used: energy_used,
+                energy_refunded: energy_refunded,
                 stipend,
                 logs,
                 labels,
@@ -914,8 +912,8 @@ fn convert_call_result<D: Detokenize>(
             Err(EvmError::Execution(Box::new(ExecutionErr {
                 reverted,
                 reason,
-                gas_used,
-                gas_refunded,
+                energy_used: energy_used,
+                energy_refunded: energy_refunded,
                 stipend,
                 logs,
                 traces,

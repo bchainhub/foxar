@@ -5,7 +5,7 @@ use corebc::{
         artifacts::Libraries, cache::SolFilesCache, ArtifactId, Graph, Project,
         ProjectCompileOutput,
     },
-    solc::{
+    ylem::{
         artifacts::{CompactContractBytecode, ContractBytecode, ContractBytecodeSome},
         contracts::ArtifactContracts,
         info::ContractInfo,
@@ -110,6 +110,10 @@ impl ScriptArgs {
             }
         }
 
+        let network = self.evm_opts.env.network_id.unwrap_or({
+            eyre::bail!("Network is not provided. Please specify the network with `--network {{network_id}}`")
+        });
+
         foundry_utils::link_with_nonce_or_address(
             contracts.clone(),
             &mut highlevel_known_contracts,
@@ -169,6 +173,7 @@ impl ScriptArgs {
                 highlevel_known_contracts.insert(id, tc.unwrap());
                 Ok(())
             },
+            network
         )?;
 
         let target = extra_info
@@ -328,7 +333,7 @@ struct ExtraLinkingInfo<'a> {
     no_target_name: bool,
     target_fname: String,
     contract: &'a mut CompactContractBytecode,
-    dependencies: &'a mut Vec<(String, ethers::types::Bytes)>,
+    dependencies: &'a mut Vec<(String, corebc::types::Bytes)>,
     matched: bool,
     target_id: Option<ArtifactId>,
 }
@@ -340,6 +345,6 @@ pub struct BuildOutput {
     pub known_contracts: ArtifactContracts,
     pub highlevel_known_contracts: ArtifactContracts<ContractBytecodeSome>,
     pub libraries: Libraries,
-    pub predeploy_libraries: Vec<ethers::types::Bytes>,
+    pub predeploy_libraries: Vec<corebc::types::Bytes>,
     pub sources: BTreeMap<u32, String>,
 }

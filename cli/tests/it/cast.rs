@@ -6,7 +6,7 @@ use foundry_cli_test_utils::{
     casttest,
     util::{OutputExt, TestCommand, TestProject},
 };
-use foundry_utils::rpc::next_http_rpc_endpoint;
+use foundry_utils::rpc::http_rpc_endpoint;
 use std::{io::Write, path::PathBuf};
 
 // tests `--help` is printed to std out
@@ -26,7 +26,7 @@ casttest!(print_cast_subcommand_help, |_: TestProject, mut cmd: TestCommand| {
 
 // tests that the `cast block` command works correctly
 casttest!(latest_block, |_: TestProject, mut cmd: TestCommand| {
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
 
     // Call `cast find-block`
     cmd.args(["block", "latest", "--rpc-url", eth_rpc_url.as_str()]);
@@ -44,7 +44,7 @@ casttest!(latest_block, |_: TestProject, mut cmd: TestCommand| {
 casttest!(finds_block, |_: TestProject, mut cmd: TestCommand| {
     // Construct args
     let timestamp = "1647843609".to_string();
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
 
     // Call `cast find-block`
     cmd.args(["find-block", "--rpc-url", eth_rpc_url.as_str(), &timestamp]);
@@ -147,7 +147,7 @@ casttest!(cast_wallet_sign_typed_data_file, |_: TestProject, mut cmd: TestComman
 
 // tests that `cast estimate` is working correctly.
 casttest!(estimate_function_gas, |_: TestProject, mut cmd: TestCommand| {
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
     cmd.args([
         "estimate",
         "vitalik.eth",
@@ -164,7 +164,7 @@ casttest!(estimate_function_gas, |_: TestProject, mut cmd: TestCommand| {
 
 // tests that `cast estimate --create` is working correctly.
 casttest!(estimate_contract_deploy_gas, |_: TestProject, mut cmd: TestCommand| {
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
     // sample contract code bytecode. Wouldn't run but is valid bytecode that the estimate method
     // accepts and could be deployed.
     cmd.args([
@@ -246,7 +246,7 @@ casttest!(cast_rlp, |_: TestProject, mut cmd: TestCommand| {
 
 // test for cast_rpc without arguments
 casttest!(cast_rpc_no_args, |_: TestProject, mut cmd: TestCommand| {
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
 
     // Call `cast rpc eth_chainId`
     cmd.args(["rpc", "--rpc-url", eth_rpc_url.as_str(), "eth_chainId"]);
@@ -256,7 +256,7 @@ casttest!(cast_rpc_no_args, |_: TestProject, mut cmd: TestCommand| {
 
 // test for cast_rpc with arguments
 casttest!(cast_rpc_with_args, |_: TestProject, mut cmd: TestCommand| {
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
 
     // Call `cast rpc eth_getBlockByNumber 0x123 false`
     cmd.args(["rpc", "--rpc-url", eth_rpc_url.as_str(), "eth_getBlockByNumber", "0x123", "false"]);
@@ -266,7 +266,7 @@ casttest!(cast_rpc_with_args, |_: TestProject, mut cmd: TestCommand| {
 
 // test for cast_rpc with raw params
 casttest!(cast_rpc_raw_params, |_: TestProject, mut cmd: TestCommand| {
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
 
     // Call `cast rpc eth_getBlockByNumber --raw '["0x123", false]'`
     cmd.args([
@@ -283,7 +283,7 @@ casttest!(cast_rpc_raw_params, |_: TestProject, mut cmd: TestCommand| {
 
 // test for cast_rpc with direct params
 casttest!(cast_rpc_raw_params_stdin, |_: TestProject, mut cmd: TestCommand| {
-    let eth_rpc_url = next_http_rpc_endpoint();
+    let eth_rpc_url = http_rpc_endpoint();
 
     // Call `echo "\n[\n\"0x123\",\nfalse\n]\n" | cast rpc  eth_getBlockByNumber --raw
     cmd.args(["rpc", "--rpc-url", eth_rpc_url.as_str(), "eth_getBlockByNumber", "--raw"]).stdin(
@@ -305,7 +305,7 @@ casttest!(calldata_array, |_: TestProject, mut cmd: TestCommand| {
 
 // <https://github.com/foundry-rs/foundry/issues/2705>
 casttest!(cast_run_succeeds, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = next_http_rpc_endpoint();
+    let rpc = http_rpc_endpoint();
     cmd.args([
         "run",
         "-v",
@@ -349,7 +349,7 @@ casttest!(cast_to_base, |_: TestProject, mut cmd: TestCommand| {
 
 // tests that revert reason is only present if transaction has reverted.
 casttest!(cast_receipt_revert_reason, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = next_http_rpc_endpoint();
+    let rpc = http_rpc_endpoint();
 
     // <https://etherscan.io/tx/0x44f2aaa351460c074f2cb1e5a9e28cbc7d83f33e425101d2de14331c7b7ec31e>
     cmd.cast_fuse().args([
@@ -384,7 +384,7 @@ casttest!(parse_bytes32_address, |_: TestProject, mut cmd: TestCommand| {
 });
 
 casttest!(cast_access_list, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = next_http_rpc_endpoint();
+    let rpc = http_rpc_endpoint();
     cmd.args([
         "access-list",
         "0xbb2b8038a1640196fbe3e38816f3e67cba72d940",
@@ -403,7 +403,7 @@ casttest!(cast_access_list, |_: TestProject, mut cmd: TestCommand| {
 });
 
 casttest!(cast_logs_topics, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = next_http_rpc_endpoint();
+    let rpc = http_rpc_endpoint();
     cmd.args([
         "logs",
         "--rpc-url",
@@ -422,7 +422,7 @@ casttest!(cast_logs_topics, |_: TestProject, mut cmd: TestCommand| {
 });
 
 casttest!(cast_logs_topic_2, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = next_http_rpc_endpoint();
+    let rpc = http_rpc_endpoint();
     cmd.args([
         "logs",
         "--rpc-url",
@@ -443,7 +443,7 @@ casttest!(cast_logs_topic_2, |_: TestProject, mut cmd: TestCommand| {
 });
 
 casttest!(cast_logs_sig, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = next_http_rpc_endpoint();
+    let rpc = http_rpc_endpoint();
     cmd.args([
         "logs",
         "--rpc-url",
@@ -462,7 +462,7 @@ casttest!(cast_logs_sig, |_: TestProject, mut cmd: TestCommand| {
 });
 
 casttest!(cast_logs_sig_2, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = next_http_rpc_endpoint();
+    let rpc = http_rpc_endpoint();
     cmd.args([
         "logs",
         "--rpc-url",

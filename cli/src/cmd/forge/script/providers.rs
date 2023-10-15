@@ -43,7 +43,7 @@ impl Deref for ProvidersManager {
 #[derive(Debug)]
 pub struct ProviderInfo {
     pub provider: Arc<Provider<RetryClient<Http>>>,
-    pub chain: u64,
+    pub network: u64,
     pub gas_price: GasPrice,
     pub is_legacy: bool,
 }
@@ -58,10 +58,10 @@ pub enum GasPrice {
 impl ProviderInfo {
     pub async fn new(rpc: &str, mut is_legacy: bool) -> eyre::Result<ProviderInfo> {
         let provider = Arc::new(get_http_provider(rpc));
-        let chain = provider.get_chainid().await?.as_u64();
+        let network = provider.get_networkid().await?.as_u64();
 
-        if let Network::Named(chain) = Network::from(chain) {
-            is_legacy |= chain.is_legacy();
+        if let Network::Named(network) = Network::from(network) {
+            is_legacy |= network.is_legacy();
         };
 
         let gas_price = if is_legacy {
@@ -74,7 +74,7 @@ impl ProviderInfo {
             )
         };
 
-        Ok(ProviderInfo { provider, chain, gas_price, is_legacy })
+        Ok(ProviderInfo { provider, network, gas_price, is_legacy })
     }
 
     /// Returns the gas price to use

@@ -95,7 +95,7 @@ impl MultiChainSequence {
     /// Loads the sequences for the multi chain deployment.
     pub fn load(log_folder: &Path, sig: &str, target: &ArtifactId) -> eyre::Result<Self> {
         let path = MultiChainSequence::get_path(&log_folder.join("multi"), sig, target, true)?;
-        ethers::solc::utils::read_json_file(path).wrap_err("Multi-chain deployment not found.")
+        corebc::ylem::utils::read_json_file(path).wrap_err("Multi-chain deployment not found.")
     }
 
     /// Saves the transactions as file if it's a standalone deployment.

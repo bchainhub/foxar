@@ -137,11 +137,11 @@ impl<'a> FuzzedExecutor<'a> {
                 if first_case.is_none() {
                     first_case.replace(FuzzCase {
                         calldata,
-                        gas: call.gas_used,
+                        gas: call.energy_used,
                         stipend: call.stipend,
                     });
                 }
-                gas_by_case.borrow_mut().push((call.gas_used, call.stipend));
+                gas_by_case.borrow_mut().push((call.energy_used, call.stipend));
 
                 traces.replace(call.traces);
 

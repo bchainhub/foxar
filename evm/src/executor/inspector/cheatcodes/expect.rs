@@ -199,9 +199,9 @@ pub struct ExpectedCallData {
     /// The expected value sent in the call
     pub value: Option<U256>,
     /// The expected gas supplied to the call
-    pub gas: Option<u64>,
+    pub energy: Option<u64>,
     /// The expected *minimum* gas supplied to the call
-    pub min_gas: Option<u64>,
+    pub min_energy: Option<u64>,
     /// The number of times the call is expected to be made.
     /// If the type of call is `NonCount`, this is the lower bound for the number of calls
     /// that must be seen.
@@ -298,7 +298,7 @@ fn expect_call(
                 "Counted expected calls can only bet set once."
             );
             expecteds
-                .insert(calldata, (ExpectedCallData { value, gas, min_gas, count, call_type }, 0));
+                .insert(calldata, (ExpectedCallData { value, energy: gas, min_energy: min_gas, count, call_type }, 0));
             Ok(Bytes::new())
         }
         ExpectedCallType::NonCount => {
@@ -316,7 +316,7 @@ fn expect_call(
                 // If it does not exist, then create it.
                 expecteds.insert(
                     calldata,
-                    (ExpectedCallData { value, gas, min_gas, count, call_type }, 0),
+                    (ExpectedCallData { value, energy: gas, min_energy: min_gas, count, call_type }, 0),
                 );
             }
             Ok(Bytes::new())

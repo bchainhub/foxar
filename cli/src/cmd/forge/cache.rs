@@ -6,9 +6,9 @@ use clap::{
     builder::{PossibleValuesParser, TypedValueParser},
     Arg, Command, Parser, Subcommand,
 };
-use corebc::prelude::Chain;
+use corebc::prelude::Network;
 use eyre::Result;
-use foundry_config::{cache, Config, Network as FoundryConfigChain};
+use foundry_config::{cache, Config, Network as FoundryConfigNetwork};
 use std::{ffi::OsStr, str::FromStr};
 use strum::VariantNames;
 
@@ -32,15 +32,15 @@ pub enum CacheSubcommands {
 #[derive(Debug, Parser)]
 #[clap(group = clap::ArgGroup::new("etherscan-blocks").multiple(false))]
 pub struct CleanArgs {
-    /// The chains to clean the cache for.
+    /// The networks to clean the cache for.
     ///
-    /// Can also be "all" to clean all chains.
+    /// Can also be "all" to clean all networks.
     #[clap(
-        env = "CHAIN",
+        env = "NETWORK",
         default_value = "all",
-        value_parser = ChainOrAllValueParser::default(),
+        value_parser = NetworkOrAllValueParser::default(),
     )]
-    chains: Vec<ChainOrAll>,
+    networks: Vec<NetworkOrAll>,
 
     /// The blocks to clean the cache for.
     #[clap(
@@ -62,12 +62,12 @@ impl Cmd for CleanArgs {
     type Output = ();
 
     fn run(self) -> Result<Self::Output> {
-        let CleanArgs { chains, blocks, etherscan } = self;
+        let CleanArgs { networks, blocks, etherscan } = self;
 
-        for chain_or_all in chains {
-            match chain_or_all {
-                ChainOrAll::Chain(chain) => clean_chain_cache(chain, blocks.to_vec(), etherscan)?,
-                ChainOrAll::All => {
+        for network_or_all in networks {
+            match network_or_all {
+                NetworkOrAll::Network(network) => clean_network_cache(network, blocks.to_vec(), etherscan)?,
+                NetworkOrAll::All => {
                     if etherscan {
                         Config::clean_foundry_etherscan_cache()?;
                     } else {
@@ -83,29 +83,29 @@ impl Cmd for CleanArgs {
 
 #[derive(Debug, Parser)]
 pub struct LsArgs {
-    /// The chains to list the cache for.
+    /// The networks to list the cache for.
     ///
-    /// Can also be "all" to list all chains.
+    /// Can also be "all" to list all networks.
     #[clap(
-        env = "CHAIN",
+        env = "NETWORK",
         default_value = "all",
-        value_parser = ChainOrAllValueParser::default(),
+        value_parser = NetworkOrAllValueParser::default(),
     )]
-    chains: Vec<ChainOrAll>,
+    networks: Vec<NetworkOrAll>,
 }
 
 impl Cmd for LsArgs {
     type Output = ();
 
     fn run(self) -> Result<Self::Output> {
-        let LsArgs { chains } = self;
+        let LsArgs { networks } = self;
         let mut cache = Cache::default();
-        for chain_or_all in chains {
-            match chain_or_all {
-                ChainOrAll::Chain(chain) => {
-                    cache.networks.push(Config::list_foundry_network_cache(chain.into())?)
+        for network_or_all in networks {
+            match network_or_all {
+                NetworkOrAll::Network(network) => {
+                    cache.networks.push(Config::list_foundry_network_cache(network.into())?)
                 }
-                ChainOrAll::All => cache = Config::list_foundry_cache()?,
+                NetworkOrAll::All => cache = Config::list_foundry_cache()?,
             }
         }
         print!("{cache}");
@@ -114,40 +114,40 @@ impl Cmd for LsArgs {
 }
 
 #[derive(Debug, Clone)]
-pub enum ChainOrAll {
-    Chain(Chain),
+pub enum NetworkOrAll {
+    Network(Network),
     All,
 }
 
-impl FromStr for ChainOrAll {
+impl FromStr for NetworkOrAll {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let Ok(chain) = ethers::prelude::Chain::from_str(s) {
-            Ok(ChainOrAll::Chain(chain))
+        if let Ok(network) = ethers::prelude::Network::from_str(s) {
+            Ok(NetworkOrAll::Network(network))
         } else if s == "all" {
-            Ok(ChainOrAll::All)
+            Ok(NetworkOrAll::All)
         } else {
-            Err(format!("Expected known chain or all, found: {s}"))
+            Err(format!("Expected known network or all, found: {s}"))
         }
     }
 }
 
-fn clean_chain_cache(
-    chain: impl Into<FoundryConfigChain>,
+fn clean_network_cache(
+    network: impl Into<FoundryConfigNetwork>,
     blocks: Vec<u64>,
     etherscan: bool,
 ) -> Result<()> {
-    let chain = chain.into();
+    let network = network.into();
     if blocks.is_empty() {
-        Config::clean_foundry_etherscan_network_cache(chain)?;
+        Config::clean_foundry_etherscan_network_cache(network)?;
         if etherscan {
             return Ok(())
         }
-        Config::clean_foundry_network_cache(chain)?;
+        Config::clean_foundry_network_cache(network)?;
     } else {
         for block in blocks {
-            Config::clean_foundry_block_cache(chain, block)?;
+            Config::clean_foundry_block_cache(network, block)?;
         }
     }
     Ok(())
@@ -155,18 +155,18 @@ fn clean_chain_cache(
 
 /// The value parser for `ChainOrAll`
 #[derive(Clone, Debug)]
-pub struct ChainOrAllValueParser {
+pub struct NetworkOrAllValueParser {
     inner: PossibleValuesParser,
 }
 
-impl Default for ChainOrAllValueParser {
+impl Default for NetworkOrAllValueParser {
     fn default() -> Self {
-        ChainOrAllValueParser { inner: possible_chains() }
+        NetworkOrAllValueParser { inner: possible_chains() }
     }
 }
 
-impl TypedValueParser for ChainOrAllValueParser {
-    type Value = ChainOrAll;
+impl TypedValueParser for NetworkOrAllValueParser {
+    type Value = NetworkOrAll;
 
     fn parse_ref(
         &self,
@@ -174,7 +174,7 @@ impl TypedValueParser for ChainOrAllValueParser {
         arg: Option<&Arg>,
         value: &OsStr,
     ) -> Result<Self::Value, clap::Error> {
-        self.inner.parse_ref(cmd, arg, value)?.parse::<ChainOrAll>().map_err(|_| {
+        self.inner.parse_ref(cmd, arg, value)?.parse::<NetworkOrAll>().map_err(|_| {
             clap::Error::raw(
                 clap::error::ErrorKind::InvalidValue,
                 "chain argument did not match any possible chain variant",
@@ -184,7 +184,7 @@ impl TypedValueParser for ChainOrAllValueParser {
 }
 
 fn possible_chains() -> PossibleValuesParser {
-    Some(&"all").into_iter().chain(Chain::VARIANTS).into()
+    Some([&"all", Network::Mainnet, Network::Devin]).into_iter().into()
 }
 
 #[cfg(test)]

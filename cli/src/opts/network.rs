@@ -1,24 +1,23 @@
 use clap::builder::{PossibleValuesParser, TypedValueParser};
-use corebc::types::Chain as NamedChain;
+use corebc::types::Network as NamedNetwork;
 use foundry_config::Network;
 use std::ffi::OsStr;
-use strum::VariantNames;
 
-/// Custom Clap value parser for [`Chain`]s.
+/// Custom Clap value parser for [`Network`]s.
 ///
-/// Displays all possible chains when an invalid chain is provided.
+/// Displays all possible networks when an invalid network is provided.
 #[derive(Clone, Debug)]
-pub struct ChainValueParser {
+pub struct NetworkValueParser {
     pub inner: PossibleValuesParser,
 }
 
-impl Default for ChainValueParser {
+impl Default for NetworkValueParser {
     fn default() -> Self {
-        Self { inner: PossibleValuesParser::from(NamedChain::VARIANTS) }
+        Self { inner: PossibleValuesParser::from(NamedNetwork::Mainnet) }
     }
 }
 
-impl TypedValueParser for ChainValueParser {
+impl TypedValueParser for NetworkValueParser {
     type Value = Network;
 
     fn parse_ref(
@@ -32,10 +31,10 @@ impl TypedValueParser for ChainValueParser {
         if let Ok(id) = s.parse() {
             Ok(Network::Id(id))
         } else {
-            // NamedChain::VARIANTS is a subset of all possible variants, since there are aliases:
+            // NamedNetwork::VARIANTS is a subset of all possible variants, since there are aliases:
             // mumbai instead of polygon-mumbai etc
             //
-            // Parse first as NamedChain, if it fails parse with NamedChain::VARIANTS for displaying
+            // Parse first as NamedNetwork, if it fails parse with NamedNetwork::VARIANTS for displaying
             // the error to the user
             s.parse()
                 .map_err(|_| self.inner.parse_ref(cmd, arg, value).unwrap_err())

@@ -6,7 +6,7 @@ use crate::{
 };
 use anvil::{spawn, NodeConfig};
 use corebc::{
-    solc::{artifacts::BytecodeHash, remappings::Remapping},
+    ylem::{artifacts::BytecodeHash, remappings::Remapping},
     types::Address,
 };
 use foundry_cli_test_utils::{

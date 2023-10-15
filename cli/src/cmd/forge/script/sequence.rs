@@ -42,7 +42,7 @@ pub struct ScriptSequence {
     pub sensitive_path: PathBuf,
     pub returns: HashMap<String, NestedValue>,
     pub timestamp: u64,
-    pub chain: u64,
+    pub network: u64,
     /// If `True`, the sequence belongs to a `MultiChainSequence` and won't save to disk as usual.
     pub multi: bool,
     pub commit: Option<String>,
@@ -107,7 +107,7 @@ impl ScriptSequence {
                 .expect("Wrong system time.")
                 .as_secs(),
             libraries: vec![],
-            chain,
+            network: chain,
             multi: is_multi,
             commit,
         })
@@ -118,7 +118,7 @@ impl ScriptSequence {
         config: &Config,
         sig: &str,
         target: &ArtifactId,
-        chain_id: u64,
+        network_id: u64,
         broadcasted: bool,
     ) -> eyre::Result<Self> {
         let (path, sensitive_path) = ScriptSequence::get_paths(
@@ -126,16 +126,16 @@ impl ScriptSequence {
             &config.cache_path,
             sig,
             target,
-            chain_id,
+            network_id,
             broadcasted,
         )?;
 
-        let mut script_sequence: Self = ethers::solc::utils::read_json_file(&path)
-            .wrap_err(format!("Deployment not found for chain `{chain_id}`."))?;
+        let mut script_sequence: Self = corebc::ylem::utils::read_json_file(&path)
+            .wrap_err(format!("Deployment not found for network `{network_id}`."))?;
 
         let sensitive_script_sequence: SensitiveScriptSequence =
-            ethers::solc::utils::read_json_file(&sensitive_path).wrap_err(format!(
-                "Deployment's sensitive details not found for chain `{chain_id}`."
+        corebc::ylem::utils::read_json_file(&sensitive_path).wrap_err(format!(
+                "Deployment's sensitive details not found for network `{network_id}`."
             ))?;
 
         script_sequence
@@ -267,9 +267,9 @@ impl ScriptSequence {
         config: &Config,
         mut verify: VerifyBundle,
     ) -> eyre::Result<()> {
-        trace!(target: "script", "verifying {} contracts [{}]", verify.known_contracts.len(), self.chain);
+        trace!(target: "script", "verifying {} contracts [{}]", verify.known_contracts.len(), self.network);
 
-        verify.set_chain(config, self.chain.into());
+        verify.set_network(config, self.network.into());
 
         if verify.etherscan.key.is_some() ||
             verify.verifier.verifier != VerificationProviderType::Etherscan

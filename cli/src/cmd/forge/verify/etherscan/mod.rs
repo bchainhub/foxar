@@ -9,13 +9,13 @@ use crate::cmd::{
 use cast::SimpleCast;
 use corebc::{
     abi::Function,
-    etherscan::{
+    blockindex::{
         utils::lookup_compiler_version,
         verify::{CodeFormat, VerifyContract},
         Client,
     },
-    prelude::errors::EtherscanError,
-    solc::{artifacts::CompactContract, cache::CacheEntry, Project, Solc},
+    prelude::errors::BlockindexError,
+    ylem::{artifacts::CompactContract, cache::CacheEntry, Project, Ylem},
 };
 use eyre::{eyre, Context};
 use foundry_common::abi::encode_args;
@@ -146,7 +146,7 @@ impl VerificationProvider for EtherscanVerificationProvider {
     async fn check(&self, args: VerifyCheckArgs) -> eyre::Result<()> {
         let config = args.try_load_config_emit_warnings()?;
         let etherscan = self.client(
-            args.etherscan.chain.unwrap_or_default(),
+            args.etherscan.network.unwrap_or_default(),
             args.verifier.verifier_url.as_deref(),
             args.etherscan.key.as_deref(),
             &config,
@@ -232,7 +232,7 @@ impl EtherscanVerificationProvider {
     ) -> eyre::Result<(Client, VerifyContract)> {
         let config = args.try_load_config_emit_warnings()?;
         let etherscan = self.client(
-            args.etherscan.chain.unwrap_or_default(),
+            args.etherscan.network.unwrap_or_default(),
             args.verifier.verifier_url.as_deref(),
             args.etherscan.key.as_deref(),
             &config,
@@ -497,7 +497,7 @@ mod tests {
         let etherscan = EtherscanVerificationProvider::default();
         let client = etherscan
             .client(
-                args.etherscan.chain.unwrap_or_default(),
+                args.etherscan.network.unwrap_or_default(),
                 args.verifier.verifier_url.as_deref(),
                 args.etherscan.key.as_deref(),
                 &config,
@@ -524,7 +524,7 @@ mod tests {
         let etherscan = EtherscanVerificationProvider::default();
         let client = etherscan
             .client(
-                args.etherscan.chain.unwrap_or_default(),
+                args.etherscan.network.unwrap_or_default(),
                 args.verifier.verifier_url.as_deref(),
                 args.etherscan.key.as_deref(),
                 &config,

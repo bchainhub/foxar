@@ -80,7 +80,7 @@ impl EvmOpts {
         environment(
             &provider,
             self.memory_limit,
-            self.env.gas_price,
+            self.env.energy_price,
             self.env.network_id,
             self.fork_block_number,
             self.sender,
@@ -99,26 +99,23 @@ impl EvmOpts {
                 coinbase: h176_to_b176(self.env.block_coinbase),
                 timestamp: rU256::from(self.env.block_timestamp),
                 difficulty: rU256::from(self.env.block_difficulty),
-                prevrandao: Some(h256_to_b256(self.env.block_prevrandao)),
-                basefee: rU256::from(self.env.block_base_fee_per_gas),
-                gas_limit: u256_to_ru256(self.gas_limit()),
+                energy_limit: u256_to_ru256(self.energy_limit()),
             },
             cfg: CfgEnv {
                 network: REVMNetwork::from(
                     self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID),
                 ),
-                spec_id: SpecId::MERGE,
+                spec_id: SpecId::ISTANBUL,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
                 // EIP-3607 rejects transactions from senders with deployed code.
                 // If EIP-3607 is enabled it can cause issues during fuzz/invariant tests if the
                 // caller is a contract. So we disable the check by default.
-                disable_eip3607: true,
                 ..Default::default()
             },
             tx: TxEnv {
-                gas_price: rU256::from(self.env.gas_price.unwrap_or_default()),
-                gas_limit: self.gas_limit().as_u64(),
+                energy_price: rU256::from(self.env.energy_price.unwrap_or_default()),
+                energy_limit: self.energy_limit().as_u64(),
                 caller: h176_to_b176(self.sender),
                 ..Default::default()
             },
@@ -144,9 +141,9 @@ impl EvmOpts {
         Some(CreateFork { url, enable_caching, env, evm_opts: self.clone() })
     }
 
-    /// Returns the gas limit to use
-    pub fn gas_limit(&self) -> U256 {
-        self.env.block_gas_limit.unwrap_or(self.env.gas_limit).into()
+    /// Returns the energy limit to use
+    pub fn energy_limit(&self) -> U256 {
+        self.env.block_energy_limit.unwrap_or(self.env.energy_limit).into()
     }
 
     /// Returns the configured chain id, which will be
@@ -197,22 +194,19 @@ impl EvmOpts {
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Env {
-    /// the block gas limit
+    /// the block energy limit
     #[serde(deserialize_with = "string_or_number")]
-    pub gas_limit: u64,
+    pub energy_limit: u64,
 
     /// the networkid opcode value
     pub network_id: Option<u64>,
 
-    /// the tx.gasprice value during EVM execution
+    /// the tx.energyprice value during EVM execution
     ///
-    /// This is an Option, so we can determine in fork mode whether to use the config's gas price
-    /// (if set by user) or the remote client's gas price.
+    /// This is an Option, so we can determine in fork mode whether to use the config's energy price
+    /// (if set by user) or the remote client's energy price.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub gas_price: Option<u64>,
-
-    /// the base fee in a block
-    pub block_base_fee_per_gas: u64,
+    pub energy_price: Option<u64>,
 
     /// the tx.origin value during EVM execution
     pub tx_origin: Address,
@@ -229,16 +223,13 @@ pub struct Env {
     /// the block.difficulty value during EVM execution
     pub block_difficulty: u64,
 
-    /// Previous block beacon chain random value. Before merge this field is used for mix_hash
-    pub block_prevrandao: H256,
-
-    /// the block.gaslimit value during EVM execution
+    /// the block.energylimit value during EVM execution
     #[serde(
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "string_or_number_opt"
     )]
-    pub block_gas_limit: Option<u64>,
+    pub block_energy_limit: Option<u64>,
 
     /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -247,7 +238,7 @@ pub struct Env {
 
 #[derive(Deserialize)]
 #[serde(untagged)]
-enum Gas {
+enum Energy {
     Number(u64),
     Text(String),
 }
@@ -257,9 +248,9 @@ where
     D: Deserializer<'de>,
 {
     use serde::de::Error;
-    match Gas::deserialize(deserializer)? {
-        Gas::Number(num) => Ok(num),
-        Gas::Text(s) => s.parse().map_err(D::Error::custom),
+    match Energy::deserialize(deserializer)? {
+        Energy::Number(num) => Ok(num),
+        Energy::Text(s) => s.parse().map_err(D::Error::custom),
     }
 }
 
@@ -269,10 +260,10 @@ where
 {
     use serde::de::Error;
 
-    match Option::<Gas>::deserialize(deserializer)? {
-        Some(gas) => match gas {
-            Gas::Number(num) => Ok(Some(num)),
-            Gas::Text(s) => s.parse().map(Some).map_err(D::Error::custom),
+    match Option::<Energy>::deserialize(deserializer)? {
+        Some(energy) => match energy {
+            Energy::Number(num) => Ok(Some(num)),
+            Energy::Text(s) => s.parse().map(Some).map_err(D::Error::custom),
         },
         _ => Ok(None),
     }
