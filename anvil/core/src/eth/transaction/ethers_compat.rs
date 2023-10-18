@@ -5,9 +5,15 @@ use crate::eth::transaction::{
     LegacyTransactionRequest, MaybeImpersonatedTransaction, TypedTransaction,
     TypedTransactionRequest,
 };
+// use corebc_core::types::{
+//     Address, NameOrAddress, Transaction as EthersTransaction,
+//     TransactionRequest as EthersLegacyTransactionRequest, TransactionRequest, H256, U256, U64,
+// };
+
 use corebc_core::types::{
-    Address, NameOrAddress, Transaction as EthersTransaction,
-    TransactionRequest as EthersLegacyTransactionRequest, TransactionRequest, H256, U256, U64,
+    transaction::eip2718::TypedTransaction as EthersTypedTransactionRequest, Address,
+    NameOrAddress, Transaction as EthersTransaction,
+    TransactionRequest as EthersLegacyTransactionRequest, TransactionRequest, H256,
 };
 
 impl From<TypedTransactionRequest> for EthersTypedTransactionRequest {
@@ -53,7 +59,7 @@ fn to_ethers_transaction_with_hash_and_sender(
             from,
             to: None,
             value: t.value,
-            energy_price: Some(t.gas_price),
+            energy_price: t.gas_price,
             energy: t.gas_limit,
             input: t.input.clone(),
             network_id: t.network_id().map(Into::into),

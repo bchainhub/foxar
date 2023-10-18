@@ -7,6 +7,7 @@ use corebc_core::{
     },
 };
 use foundry_evm::utils::{b256_to_h256, h256_to_b256};
+use revm::primitives::B256;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "fastrlp", derive(open_fastrlp::RlpEncodable, open_fastrlp::RlpDecodable))]
@@ -22,7 +23,7 @@ impl From<revm::primitives::Log> for Log {
         let revm::primitives::Log { address, topics, data } = log;
         Log {
             address: address.into(),
-            topics: topics.into_iter().map(b256_to_h256).collect(),
+            topics: topics.into_iter().map(|num| H256(num.0)).collect(),
             data: data.into(),
         }
     }
@@ -33,7 +34,7 @@ impl From<Log> for revm::primitives::Log {
         let Log { address, topics, data } = log;
         revm::primitives::Log {
             address: address.into(),
-            topics: topics.into_iter().map(h256_to_b256).collect(),
+            topics: topics.into_iter().map(|num| B256(num.0)).collect(),
             data: data.0,
         }
     }

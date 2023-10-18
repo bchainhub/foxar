@@ -1,12 +1,11 @@
 //! Return types for `eth_getProof`
 
-use crate::eth::trie::SHA_NULL_RLP;
+use crate::eth::trie::SHA3_NULL_RLP;
 use corebc_core::{
     types::{H256, U256},
     utils::rlp,
 };
 use foundry_evm::revm::primitives::SHA3_EMPTY;
-use revm::primitives::SHA3_EMPTY;
 // reexport for convenience
 pub use corebc_core::types::{EIP1186ProofResponse as AccountProof, StorageProof};
 
@@ -29,8 +28,8 @@ impl Default for BasicAccount {
         BasicAccount {
             balance: 0.into(),
             nonce: 0.into(),
-            code_hash: SHA_EMPTY.into(),
-            storage_root: KECCAK_NULL_RLP,
+            code_hash: SHA3_EMPTY.into(),
+            storage_root: SHA3_NULL_RLP,
         }
     }
 }

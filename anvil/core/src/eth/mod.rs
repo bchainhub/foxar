@@ -10,7 +10,7 @@ use corebc_core::{
     abi::ethereum_types::H64,
     types::{
         transaction::eip712::TypedData, Address, BlockId, BlockNumber, Bytes, Filter,
-        GethDebugTracingOptions, TxHash, H256, U256,
+        GoCoreDebugTracingOptions, TxHash, H256, U256,
     },
 };
 
@@ -263,7 +263,7 @@ pub enum EthRequest {
     #[cfg_attr(feature = "serde", serde(rename = "debug_traceTransaction"))]
     DebugTraceTransaction(
         H256,
-        #[cfg_attr(feature = "serde", serde(default))] GethDebugTracingOptions,
+        #[cfg_attr(feature = "serde", serde(default))] GoCoreDebugTracingOptions,
     ),
 
     /// geth's `debug_traceCall`  endpoint
@@ -271,7 +271,7 @@ pub enum EthRequest {
     DebugTraceCall(
         EthTransactionRequest,
         #[cfg_attr(feature = "serde", serde(default))] Option<BlockId>,
-        #[cfg_attr(feature = "serde", serde(default))] GethDebugTracingOptions,
+        #[cfg_attr(feature = "serde", serde(default))] GoCoreDebugTracingOptions,
     ),
 
     /// Trace transaction endpoint for parity's `trace_transaction`
