@@ -251,6 +251,7 @@ impl PartialOrd for MockCallDataContext {
     }
 }
 
+#[allow(clippy::single_range_in_vec_init)]
 fn expect_safe_memory(state: &mut Cheatcodes, start: u64, end: u64, depth: u64) -> Result {
     ensure!(start < end, "Invalid memory range: [{start}:{end}]");
     // #[allow(clippy::single_range_in_vec_init)]

@@ -23,7 +23,7 @@ use foundry_common::evm::Breakpoints;
 use foundry_utils::error::SolError;
 use itertools::Itertools;
 use revm::{
-    interpreter::{opcode, CallInputs, CreateInputs, Gas, InstructionResult, Interpreter},
+    interpreter::{opcode, CallInputs, CreateInputs, Energy, InstructionResult, Interpreter},
     primitives::{BlockEnv, TransactTo, B176, B256},
     EVMData, Inspector,
 };
@@ -172,16 +172,16 @@ pub struct Cheatcodes {
 
     /// Holds the stored gas info for when we pause gas metering. It is an `Option<Option<..>>`
     /// because the `call` callback in an `Inspector` doesn't get access to
-    /// the `revm::Interpreter` which holds the `revm::Gas` struct that
+    /// the `revm::Interpreter` which holds the `revm::Energy` struct that
     /// we need to copy. So we convert it to a `Some(None)` in `apply_cheatcode`, and once we have
     /// the interpreter, we copy the gas struct. Then each time there is an execution of an
     /// operation, we reset the gas.
-    pub gas_metering: Option<Option<revm::interpreter::Gas>>,
+    pub gas_metering: Option<Option<revm::interpreter::Energy>>,
 
     /// Holds stored gas info for when we pause gas metering, and we're entering/inside
     /// CREATE / CREATE2 frames. This is needed to make gas meter pausing work correctly when
     /// paused and creating new contracts.
-    pub gas_metering_create: Option<Option<revm::interpreter::Gas>>,
+    pub gas_metering_create: Option<Option<revm::interpreter::Energy>>,
     /// current program counter
     pub pc: usize,
     /// Breakpoints supplied by the `vm.breakpoint("<char>")` cheatcode
@@ -308,7 +308,7 @@ where
             data.env.block = block;
         }
         if let Some(gas_price) = self.gas_price.take() {
-            data.env.tx.gas_price = u256_to_ru256(gas_price);
+            data.env.tx.energy_price = u256_to_ru256(gas_price);
         }
 
         InstructionResult::Continue
@@ -326,7 +326,7 @@ where
         match self.gas_metering {
             Some(None) => {
                 // need to store gas metering
-                self.gas_metering = Some(Some(interpreter.gas));
+                self.gas_metering = Some(Some(interpreter.energy));
             }
             Some(Some(gas)) => {
                 match interpreter.contract.bytecode.bytecode()[interpreter.program_counter()] {
@@ -344,7 +344,7 @@ where
                         // could just do this there instead.
                         match self.gas_metering_create {
                             None | Some(None) => {
-                                interpreter.gas = revm::interpreter::Gas::new(0);
+                                interpreter.energy = revm::interpreter::Energy::new(0);
                             }
                             Some(Some(gas)) => {
                                 // If this was CREATE frame, set correct gas limit. This is needed
@@ -354,11 +354,11 @@ where
                                 //
                                 // If we however set gas limit to the limit of outer frame, it would
                                 // cause a panic after erasing gas cost post-create. Reason for this
-                                // is pre-create REVM records `gas_limit - (gas_limit / 64)` as gas
-                                // used, and erases costs by `remaining` gas post-create.
-                                // gas used ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/instructions/host.rs#L254-L258
+                                // is pre-create REVM records `energy_limit - (gas_limit / 64)` as
+                                // gas used, and erases costs by
+                                // `remaining` gas post-create. gas used ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/instructions/host.rs#L254-L258
                                 // post-create erase ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/instructions/host.rs#L279
-                                interpreter.gas = revm::interpreter::Gas::new(gas.limit());
+                                interpreter.energy = revm::interpreter::Energy::new(gas.limit());
 
                                 // reset CREATE gas metering because we're about to exit its frame
                                 self.gas_metering_create = None
@@ -368,11 +368,11 @@ where
                     _ => {
                         // if just starting with CREATE opcodes, record its inner frame gas
                         if let Some(None) = self.gas_metering_create {
-                            self.gas_metering_create = Some(Some(interpreter.gas))
+                            self.gas_metering_create = Some(Some(interpreter.energy))
                         }
 
                         // dont monitor gas changes, keep it constant
-                        interpreter.gas = gas;
+                        interpreter.energy = gas;
                     }
                 }
             }
@@ -570,9 +570,9 @@ where
         data: &mut EVMData<'_, DB>,
         call: &mut CallInputs,
         is_static: bool,
-    ) -> (InstructionResult, Gas, bytes::Bytes) {
+    ) -> (InstructionResult, Energy, bytes::Bytes) {
         if call.contract == h176_to_b176(CHEATCODE_ADDRESS) {
-            let gas = Gas::new(call.gas_limit);
+            let gas = Energy::new(call.energy_limit);
             match self.apply_cheatcode(data, b176_to_h176(call.context.caller), call) {
                 Ok(retdata) => (InstructionResult::Return, gas, retdata.0),
                 Err(err) => (InstructionResult::Revert, gas, err.encode_error().0),
@@ -596,9 +596,9 @@ where
                             .value
                             .map_or(true, |value| value == ru256_to_u256(call.transfer.value)) &&
                         // The gas matches, if provided
-                        expected.gas.map_or(true, |gas| gas == call.gas_limit) &&
+                        expected.gas.map_or(true, |gas| gas == call.energy_limit) &&
                         // The minimum gas matches, if provided
-                        expected.min_gas.map_or(true, |min_gas| min_gas <= call.gas_limit)
+                        expected.min_gas.map_or(true, |min_gas| min_gas <= call.energy_limit)
                     {
                         *actual_count += 1;
                     }
@@ -614,7 +614,7 @@ where
                 if let Some(mock_retdata) = mocks.get(&ctx) {
                     return (
                         mock_retdata.ret_type,
-                        Gas::new(call.gas_limit),
+                        Energy::new(call.energy_limit),
                         mock_retdata.data.clone().0,
                     )
                 } else if let Some((_, mock_retdata)) = mocks.iter().find(|(mock, _)| {
@@ -625,7 +625,7 @@ where
                 }) {
                     return (
                         mock_retdata.ret_type,
-                        Gas::new(call.gas_limit),
+                        Energy::new(call.energy_limit),
                         mock_retdata.data.0.clone(),
                     )
                 }
@@ -686,12 +686,13 @@ where
                         {
                             return (
                                 InstructionResult::Revert,
-                                Gas::new(call.gas_limit),
+                                Energy::new(call.energy_limit),
                                 err.encode_string().0,
                             )
                         }
 
-                        let is_fixed_gas_limit = check_if_fixed_gas_limit(data, call.gas_limit);
+                        let is_fixed_energy_limit =
+                            check_if_fixed_gas_limit(data, call.energy_limit);
 
                         let account = data
                             .journaled_state
@@ -707,8 +708,8 @@ where
                                 value: Some(ru256_to_u256(call.transfer.value)),
                                 data: Some(call.input.clone().into()),
                                 nonce: Some(account.info.nonce.into()),
-                                gas: if is_fixed_gas_limit {
-                                    Some(call.gas_limit.into())
+                                energy: if is_fixed_energy_limit {
+                                    Some(call.energy_limit.into())
                                 } else {
                                     None
                                 },
@@ -721,7 +722,7 @@ where
                     } else if broadcast.single_call {
                         return (
                             InstructionResult::Revert,
-                            Gas::new(0),
+                            Energy::new(0),
                             "Staticcalls are not allowed after vm.broadcast. Either remove it, or use vm.startBroadcast instead."
                             .to_string()
                             .encode()
@@ -731,9 +732,9 @@ where
                 }
             }
 
-            (InstructionResult::Continue, Gas::new(call.gas_limit), bytes::Bytes::new())
+            (InstructionResult::Continue, Energy::new(call.energy_limit), bytes::Bytes::new())
         } else {
-            (InstructionResult::Continue, Gas::new(call.gas_limit), bytes::Bytes::new())
+            (InstructionResult::Continue, Energy::new(call.energy_limit), bytes::Bytes::new())
         }
     }
 
@@ -741,11 +742,11 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &CallInputs,
-        remaining_gas: Gas,
+        remaining_gas: Energy,
         status: InstructionResult,
         retdata: bytes::Bytes,
         _: bool,
-    ) -> (InstructionResult, Gas, bytes::Bytes) {
+    ) -> (InstructionResult, Energy, bytes::Bytes) {
         if call.contract == h176_to_b176(CHEATCODE_ADDRESS) ||
             call.contract == h176_to_b176(HARDHAT_CONSOLE_ADDRESS)
         {
@@ -950,7 +951,7 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B176>, Gas, bytes::Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, bytes::Bytes) {
         // allow cheatcodes from the address of the new contract
         self.allow_cheatcodes_on_create(data, call);
 
@@ -982,7 +983,7 @@ where
                     return (
                         InstructionResult::Revert,
                         None,
-                        Gas::new(call.gas_limit),
+                        Energy::new(call.energy_limit),
                         err.encode_string().0,
                     )
                 }
@@ -1001,13 +1002,13 @@ where
                             return (
                                 InstructionResult::Revert,
                                 None,
-                                Gas::new(call.gas_limit),
+                                Energy::new(call.energy_limit),
                                 err.encode_string().0,
                             )
                         }
                     };
 
-                    let is_fixed_gas_limit = check_if_fixed_gas_limit(data, call.gas_limit);
+                    let is_fixed_energy_limit = check_if_fixed_gas_limit(data, call.energy_limit);
 
                     self.broadcastable_transactions.push_back(BroadcastableTransaction {
                         rpc: data.db.active_fork_url(),
@@ -1017,8 +1018,8 @@ where
                             value: Some(ru256_to_u256(call.value)),
                             data: Some(bytecode.into()),
                             nonce: Some(nonce.into()),
-                            gas: if is_fixed_gas_limit {
-                                Some(call.gas_limit.into())
+                            energy: if is_fixed_energy_limit {
+                                Some(call.energy_limit.into())
                             } else {
                                 None
                             },
@@ -1029,7 +1030,7 @@ where
             }
         }
 
-        (InstructionResult::Continue, None, Gas::new(call.gas_limit), bytes::Bytes::new())
+        (InstructionResult::Continue, None, Energy::new(call.energy_limit), bytes::Bytes::new())
     }
 
     fn create_end(
@@ -1038,9 +1039,9 @@ where
         _: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        remaining_gas: Gas,
+        remaining_gas: Energy,
         retdata: bytes::Bytes,
-    ) -> (InstructionResult, Option<B176>, Gas, bytes::Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, bytes::Bytes) {
         // Clean up pranks
         if let Some(prank) = &self.prank {
             if data.journaled_state.depth() == prank.depth {

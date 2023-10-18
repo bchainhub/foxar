@@ -1,10 +1,10 @@
 use crate::{
     executor::fork::CreateFork,
-    utils::{h176_to_b176, h256_to_b256, u256_to_ru256, RuntimeOrHandle},
+    utils::{h176_to_b176, u256_to_ru256, RuntimeOrHandle},
 };
 use corebc::{
     providers::{Middleware, Provider},
-    types::{Address, Block, Network, TxHash, H256, U256},
+    types::{Address, Block, Network, TxHash, U256},
 };
 use eyre::WrapErr;
 use foundry_common::{self, ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
@@ -99,26 +99,20 @@ impl EvmOpts {
                 coinbase: h176_to_b176(self.env.block_coinbase),
                 timestamp: rU256::from(self.env.block_timestamp),
                 difficulty: rU256::from(self.env.block_difficulty),
-                prevrandao: Some(h256_to_b256(self.env.block_prevrandao)),
-                basefee: rU256::from(self.env.block_base_fee_per_gas),
-                gas_limit: u256_to_ru256(self.gas_limit()),
+                energy_limit: u256_to_ru256(self.gas_limit()),
             },
             cfg: CfgEnv {
                 network: REVMNetwork::from(
                     self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID),
                 ),
-                spec_id: SpecId::MERGE,
+                spec_id: SpecId::LATEST,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
-                // EIP-3607 rejects transactions from senders with deployed code.
-                // If EIP-3607 is enabled it can cause issues during fuzz/invariant tests if the
-                // caller is a contract. So we disable the check by default.
-                disable_eip3607: true,
                 ..Default::default()
             },
             tx: TxEnv {
-                gas_price: rU256::from(self.env.gas_price.unwrap_or_default()),
-                gas_limit: self.gas_limit().as_u64(),
+                energy_price: rU256::from(self.env.gas_price.unwrap_or_default()),
+                energy_limit: self.gas_limit().as_u64(),
                 caller: h176_to_b176(self.sender),
                 ..Default::default()
             },
@@ -211,9 +205,6 @@ pub struct Env {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gas_price: Option<u64>,
 
-    /// the base fee in a block
-    pub block_base_fee_per_gas: u64,
-
     /// the tx.origin value during EVM execution
     pub tx_origin: Address,
 
@@ -228,9 +219,6 @@ pub struct Env {
 
     /// the block.difficulty value during EVM execution
     pub block_difficulty: u64,
-
-    /// Previous block beacon chain random value. Before merge this field is used for mix_hash
-    pub block_prevrandao: H256,
 
     /// the block.gaslimit value during EVM execution
     #[serde(

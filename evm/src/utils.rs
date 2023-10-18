@@ -5,7 +5,7 @@ use corebc::{
 };
 use eyre::ContextCompat;
 use revm::{
-    interpreter::{opcode, opcode::spec_opcode_gas},
+    interpreter::{opcode, opcode::spec_opcode_energy},
     primitives::{Network as REVMNetwork, SpecId},
 };
 use std::collections::BTreeMap;
@@ -88,7 +88,7 @@ pub fn halt_to_instruction_result(
     halt: revm::primitives::Halt,
 ) -> revm::interpreter::InstructionResult {
     match halt {
-        revm::primitives::Halt::OutOfGas(_) => revm::interpreter::InstructionResult::OutOfGas,
+        revm::primitives::Halt::OutOfEnergy(_) => revm::interpreter::InstructionResult::OutOfEnergy,
         revm::primitives::Halt::OpcodeNotFound => {
             revm::interpreter::InstructionResult::OpcodeNotFound
         }
@@ -144,23 +144,15 @@ pub fn evm_spec(evm: &CvmVersion) -> SpecId {
     }
 }
 
-//TODO:error remove evm specs?
 /// Depending on the configured network id and block number this should apply any specific changes
-///
-/// This checks for:
-///    - prevrandao mixhash after merge
+/// CORE: No changes necessary
 pub fn apply_network_and_block_specific_env_changes<T>(
     env: &mut revm::primitives::Env,
-    block: &Block<T>,
+    _block: &Block<T>,
 ) {
-    let block_number = block.number.unwrap_or_default();
+    // let block_number = block.number.unwrap_or_default();
     match env.cfg.network {
-        REVMNetwork::Mainnet | REVMNetwork::Devin | REVMNetwork::Private(_) => {
-            // after merge difficulty is supplanted with prevrandao EIP-4399
-            if block_number.as_u64() >= 15_537_351u64 {
-                env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
-            }
-        }
+        REVMNetwork::Mainnet | REVMNetwork::Devin | REVMNetwork::Private(_) => {}
     }
 }
 
@@ -169,7 +161,7 @@ pub type PCICMap = BTreeMap<usize, usize>;
 
 /// Builds a mapping from program counters to instruction counters.
 pub fn build_pc_ic_map(spec: SpecId, code: &[u8]) -> PCICMap {
-    let opcode_infos = spec_opcode_gas(spec);
+    let opcode_infos = spec_opcode_energy(spec);
     let mut pc_ic_map: PCICMap = BTreeMap::new();
 
     let mut i = 0;
@@ -195,7 +187,7 @@ pub type ICPCMap = BTreeMap<usize, usize>;
 
 /// Builds a mapping from instruction counters to program counters.
 pub fn build_ic_pc_map(spec: SpecId, code: &[u8]) -> ICPCMap {
-    let opcode_infos = spec_opcode_gas(spec);
+    let opcode_infos = spec_opcode_energy(spec);
     let mut ic_pc_map: ICPCMap = ICPCMap::new();
 
     let mut i = 0;

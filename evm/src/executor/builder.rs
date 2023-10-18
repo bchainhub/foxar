@@ -31,7 +31,7 @@ impl ExecutorBuilder {
     pub fn with_cheatcodes(mut self, config: CheatsConfig) -> Self {
         self.inspector_config.cheatcodes = Some(Cheatcodes::new(
             self.env.block.clone(),
-            ru256_to_u256(self.env.tx.gas_price),
+            ru256_to_u256(self.env.tx.energy_price),
             config,
         ));
         self
@@ -96,7 +96,7 @@ impl ExecutorBuilder {
     #[must_use]
     pub fn with_config(mut self, env: Env) -> Self {
         self.inspector_config.block = env.block.clone();
-        self.inspector_config.gas_price = ru256_to_u256(env.tx.gas_price);
+        self.inspector_config.gas_price = ru256_to_u256(env.tx.energy_price);
         self.env = env;
         self
     }
@@ -110,7 +110,7 @@ impl ExecutorBuilder {
 
     /// Builds the executor as configured.
     pub fn build(self, db: Backend) -> Executor {
-        let gas_limit = self.gas_limit.unwrap_or(ru256_to_u256(self.env.block.gas_limit));
-        Executor::new(db, self.env, self.inspector_config, gas_limit)
+        let energy_limit = self.gas_limit.unwrap_or(ru256_to_u256(self.env.block.energy_limit));
+        Executor::new(db, self.env, self.inspector_config, energy_limit)
     }
 }

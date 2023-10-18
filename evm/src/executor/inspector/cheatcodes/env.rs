@@ -17,7 +17,7 @@ use corebc::{
 };
 use foundry_config::Config;
 use revm::{
-    primitives::{Bytecode, Network, SpecId, B256, KECCAK_EMPTY},
+    primitives::{Bytecode, Network, SHA3_EMPTY},
     Database, EVMData,
 };
 use std::collections::BTreeMap;
@@ -328,29 +328,17 @@ pub fn apply<DB: DatabaseExt>(
             Bytes::new()
         }
         HEVMCalls::Difficulty(inner) => {
-            ensure!(
-                data.env.cfg.spec_id < SpecId::MERGE,
-                "Difficulty is not supported after the Paris hard fork. Please use vm.prevrandao instead. For more information, please see https://eips.ethereum.org/EIPS/eip-4399"
-            );
             data.env.block.difficulty = u256_to_ru256(inner.0);
-            Bytes::new()
-        }
-        HEVMCalls::Prevrandao(inner) => {
-            ensure!(
-                data.env.cfg.spec_id >= SpecId::MERGE,
-                "Prevrandao is not supported before the Paris hard fork. Please use vm.difficulty instead. For more information, please see https://eips.ethereum.org/EIPS/eip-4399"
-            );
-            data.env.block.prevrandao = Some(B256::from(inner.0));
             Bytes::new()
         }
         HEVMCalls::Roll(inner) => {
             data.env.block.number = u256_to_ru256(inner.0);
             Bytes::new()
         }
-        HEVMCalls::Fee(inner) => {
-            data.env.block.basefee = u256_to_ru256(inner.0);
-            Bytes::new()
-        }
+        // HEVMCalls::Fee(inner) => {
+        //     data.env.block.basefee = u256_to_ru256(inner.0);
+        //     Bytes::new()
+        // }
         HEVMCalls::Coinbase(inner) => {
             data.env.block.coinbase = h176_to_b176(inner.0);
             Bytes::new()
@@ -498,7 +486,7 @@ pub fn apply<DB: DatabaseExt>(
                 // Per EIP-161, EOA nonces start at 0, but contract nonces
                 // start at 1. Comparing by code_hash instead of code
                 // to avoid hitting the case where account's code is None.
-                let empty = account.info.code_hash == KECCAK_EMPTY;
+                let empty = account.info.code_hash == SHA3_EMPTY;
                 let nonce = if empty { 0 } else { 1 };
                 account.info.nonce = nonce;
                 Ok(Bytes::new())
@@ -526,7 +514,7 @@ pub fn apply<DB: DatabaseExt>(
             Bytes::new()
         }
         HEVMCalls::TxGasPrice(inner) => {
-            data.env.tx.gas_price = u256_to_ru256(inner.0);
+            data.env.tx.energy_price = u256_to_ru256(inner.0);
             Bytes::new()
         }
         HEVMCalls::Broadcast0(_) => {

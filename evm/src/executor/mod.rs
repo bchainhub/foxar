@@ -599,8 +599,7 @@ impl Executor {
             // network conditions - the actual gas price is kept in `self.block` and is applied by
             // the cheatcode handler if it is enabled
             block: BlockEnv {
-                basefee: rU256::from(0),
-                gas_limit: u256_to_ru256(self.gas_limit),
+                energy_limit: u256_to_ru256(self.gas_limit),
                 ..self.env.block.clone()
             },
             tx: TxEnv {
@@ -609,9 +608,8 @@ impl Executor {
                 data,
                 value: u256_to_ru256(value),
                 // As above, we set the gas price to 0.
-                gas_price: rU256::from(0),
-                gas_priority_fee: None,
-                gas_limit: self.gas_limit.as_u64(),
+                energy_price: rU256::from(0),
+                energy_limit: self.gas_limit.as_u64(),
                 ..self.env.tx.clone()
             },
         }
@@ -793,15 +791,15 @@ fn convert_executed_result(
 ) -> eyre::Result<RawCallResult> {
     let ResultAndState { result: exec_result, state: state_changeset } = result;
     let (exit_reason, gas_refunded, gas_used, out) = match exec_result {
-        ExecutionResult::Success { reason, gas_used, gas_refunded, output, .. } => {
-            (eval_to_instruction_result(reason), gas_refunded, gas_used, Some(output))
+        ExecutionResult::Success { reason, energy_used, energy_refunded, output, .. } => {
+            (eval_to_instruction_result(reason), energy_refunded, energy_used, Some(output))
         }
-        ExecutionResult::Revert { gas_used, output } => {
+        ExecutionResult::Revert { energy_used, output } => {
             // Need to fetch the unused gas
-            (InstructionResult::Revert, 0_u64, gas_used, Some(Output::Call(output)))
+            (InstructionResult::Revert, 0_u64, energy_used, Some(Output::Call(output)))
         }
-        ExecutionResult::Halt { reason, gas_used } => {
-            (halt_to_instruction_result(reason), 0_u64, gas_used, None)
+        ExecutionResult::Halt { reason, energy_used } => {
+            (halt_to_instruction_result(reason), 0_u64, energy_used, None)
         }
     };
     let stipend = calc_stipend(&env.tx.data, env.cfg.spec_id);
