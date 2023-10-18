@@ -65,6 +65,7 @@ ctrlc = { version = "3", optional = true }
 fdlimit = { version = "0.2", optional = true }
 clap_complete_fig = "4"
 ethereum-forkid = "0.12"
+revm = { git = "https://github.com/core-coin/ican-revm.git", default-features = false, features = ["std", "serde", "memory_limit"], branch = "main" }
 
 
 [dev-dependencies]

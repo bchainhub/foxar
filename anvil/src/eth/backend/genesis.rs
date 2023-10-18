@@ -17,7 +17,10 @@ use foundry_evm::{
         backend::{snapshot::StateSnapshot, DatabaseError, DatabaseResult},
         DatabaseRef,
     },
-    revm::primitives::{AccountInfo, Bytecode},
+    revm::{
+        precompile::B176,
+        primitives::{AccountInfo, Bytecode},
+    },
 };
 use parking_lot::Mutex;
 use std::{collections::HashMap, sync::Arc};
@@ -105,7 +108,7 @@ pub(crate) struct AtGenesisStateDb<'a> {
 
 impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
     type Error = DatabaseError;
-    fn basic(&self, address: B160) -> DatabaseResult<Option<AccountInfo>> {
+    fn basic(&self, address: B176) -> DatabaseResult<Option<AccountInfo>> {
         if let Some(acc) = self.accounts.get(&address.into()).cloned() {
             return Ok(Some(acc))
         }
@@ -119,7 +122,7 @@ impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
         self.db.code_by_hash(code_hash)
     }
 
-    fn storage(&self, address: B160, index: U256) -> DatabaseResult<U256> {
+    fn storage(&self, address: B176, index: U256) -> DatabaseResult<U256> {
         if let Some(acc) = self
             .genesis
             .as_ref()

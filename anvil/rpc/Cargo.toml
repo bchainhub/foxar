@@ -8,6 +8,7 @@ description = "RPC support"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0" }
+revm = { git = "https://github.com/core-coin/ican-revm.git", default-features = false, features = ["std", "serde", "memory_limit"], branch = "main" }
 
 [dev-dependencies]
 rand = "0.8"

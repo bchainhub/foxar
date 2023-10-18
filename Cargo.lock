@@ -195,6 +195,7 @@ dependencies = [
  "memory-db",
  "parking_lot",
  "pretty_assertions",
+ "revm 3.0.0 (git+https://github.com/core-coin/ican-revm.git?branch=main)",
  "serde",
  "serde_json",
  "tempfile",
@@ -232,6 +233,7 @@ name = "anvil-rpc"
 version = "0.1.0"
 dependencies = [
  "rand 0.8.5",
+ "revm 3.0.0 (git+https://github.com/core-coin/ican-revm.git?branch=main)",
  "serde",
  "serde_json",
 ]

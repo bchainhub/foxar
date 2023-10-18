@@ -1,4 +1,4 @@
-use corebc::{abi::Address, types::H160};
+use corebc::{abi::Address, types::H176};
 use forge::revm::primitives::SpecId;
 use foundry_evm::revm::precompile::Precompiles;
 use std::fmt;
@@ -7,7 +7,7 @@ pub fn get_precompiles_for(spec_id: SpecId) -> Vec<Address> {
     Precompiles::new(to_precompile_id(spec_id))
         .addresses()
         .into_iter()
-        .map(|item| H160::from_slice(item))
+        .map(|item| H176::from_slice(item))
         .collect()
 }
 
