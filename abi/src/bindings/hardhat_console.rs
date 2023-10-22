@@ -7,14 +7,16 @@ pub use hardhat_console::*;
     clippy::upper_case_acronyms,
     clippy::type_complexity,
     dead_code,
-    non_camel_case_types,
+    non_camel_case_types
 )]
 pub mod hardhat_console {
     #[rustfmt::skip]
     const __ABI: &str = "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"p2\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p3\",\"type\":\"uint256\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"p1\",\"type\":\"bool\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"p1\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"p3\",\"type\":\"bool\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p2\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"p1\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"p2\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p3\",\"type\":\"string\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"p1\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"p2\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"p3\",\"type\":\"address\"}],\"name\":\"log\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"p0\",\"type\":\"address\"}],\"name\":\"logAddress\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"p0\",\"type\":\"bool\"}],\"name\":\"logBool\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"p0\",\"type\":\"bytes\"}],\"name\":\"logBytes\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes1\",\"name\":\"p0\",\"type\":\"bytes1\"}],\"name\":\"logBytes1\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes10\",\"name\":\"p0\",\"type\":\"bytes10\"}],\"name\":\"logBytes10\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes11\",\"name\":\"p0\",\"type\":\"bytes11\"}],\"name\":\"logBytes11\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes12\",\"name\":\"p0\",\"type\":\"bytes12\"}],\"name\":\"logBytes12\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes13\",\"name\":\"p0\",\"type\":\"bytes13\"}],\"name\":\"logBytes13\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes14\",\"name\":\"p0\",\"type\":\"bytes14\"}],\"name\":\"logBytes14\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes15\",\"name\":\"p0\",\"type\":\"bytes15\"}],\"name\":\"logBytes15\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes16\",\"name\":\"p0\",\"type\":\"bytes16\"}],\"name\":\"logBytes16\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes17\",\"name\":\"p0\",\"type\":\"bytes17\"}],\"name\":\"logBytes17\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes18\",\"name\":\"p0\",\"type\":\"bytes18\"}],\"name\":\"logBytes18\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes19\",\"name\":\"p0\",\"type\":\"bytes19\"}],\"name\":\"logBytes19\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes2\",\"name\":\"p0\",\"type\":\"bytes2\"}],\"name\":\"logBytes2\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes20\",\"name\":\"p0\",\"type\":\"bytes20\"}],\"name\":\"logBytes20\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes21\",\"name\":\"p0\",\"type\":\"bytes21\"}],\"name\":\"logBytes21\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes22\",\"name\":\"p0\",\"type\":\"bytes22\"}],\"name\":\"logBytes22\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes23\",\"name\":\"p0\",\"type\":\"bytes23\"}],\"name\":\"logBytes23\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes24\",\"name\":\"p0\",\"type\":\"bytes24\"}],\"name\":\"logBytes24\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes25\",\"name\":\"p0\",\"type\":\"bytes25\"}],\"name\":\"logBytes25\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes26\",\"name\":\"p0\",\"type\":\"bytes26\"}],\"name\":\"logBytes26\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes27\",\"name\":\"p0\",\"type\":\"bytes27\"}],\"name\":\"logBytes27\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes28\",\"name\":\"p0\",\"type\":\"bytes28\"}],\"name\":\"logBytes28\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes29\",\"name\":\"p0\",\"type\":\"bytes29\"}],\"name\":\"logBytes29\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes3\",\"name\":\"p0\",\"type\":\"bytes3\"}],\"name\":\"logBytes3\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes30\",\"name\":\"p0\",\"type\":\"bytes30\"}],\"name\":\"logBytes30\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes31\",\"name\":\"p0\",\"type\":\"bytes31\"}],\"name\":\"logBytes31\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"p0\",\"type\":\"bytes32\"}],\"name\":\"logBytes32\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"p0\",\"type\":\"bytes4\"}],\"name\":\"logBytes4\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes5\",\"name\":\"p0\",\"type\":\"bytes5\"}],\"name\":\"logBytes5\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes6\",\"name\":\"p0\",\"type\":\"bytes6\"}],\"name\":\"logBytes6\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes7\",\"name\":\"p0\",\"type\":\"bytes7\"}],\"name\":\"logBytes7\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes8\",\"name\":\"p0\",\"type\":\"bytes8\"}],\"name\":\"logBytes8\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes9\",\"name\":\"p0\",\"type\":\"bytes9\"}],\"name\":\"logBytes9\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"p0\",\"type\":\"int256\"}],\"name\":\"logInt\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"}],\"name\":\"logString\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"p0\",\"type\":\"uint256\"}],\"name\":\"logUint\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"p0\",\"type\":\"int256\"}],\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"log\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"p0\",\"type\":\"string\"},{\"internalType\":\"int256\",\"name\":\"p1\",\"type\":\"int256\"}],\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\",\"name\":\"log\"}]";
     ///The parsed JSON ABI of the contract.
-    pub static HARDHATCONSOLE_ABI: ::corebc_contract::Lazy<::corebc_core::abi::Abi> = ::corebc_contract::Lazy::new(||
-    ::corebc_core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid"));
+    pub static HARDHATCONSOLE_ABI: ::corebc_contract::Lazy<::corebc_core::abi::Abi> =
+        ::corebc_contract::Lazy::new(|| {
+            ::corebc_core::utils::__serde_json::from_str(__ABI).expect("ABI is always valid")
+        });
     pub struct HardhatConsole<M>(::corebc_contract::Contract<M>);
     impl<M> ::core::clone::Clone for HardhatConsole<M> {
         fn clone(&self) -> Self {
@@ -44,13 +46,11 @@ pub mod hardhat_console {
             address: T,
             client: ::std::sync::Arc<M>,
         ) -> Self {
-            Self(
-                ::corebc_contract::Contract::new(
-                    address.into(),
-                    HARDHATCONSOLE_ABI.clone(),
-                    client,
-                ),
-            )
+            Self(::corebc_contract::Contract::new(
+                address.into(),
+                HARDHATCONSOLE_ABI.clone(),
+                client,
+            ))
         }
         ///Calls the contract's `log` (0xf5518d02) function
         pub fn log_23(
@@ -893,10 +893,7 @@ pub mod hardhat_console {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `log` (0x045ceb4e) function
-        pub fn log_2(
-            &self,
-            p_0: bool,
-        ) -> ::corebc_contract::builders::ContractCall<M, ()> {
+        pub fn log_2(&self, p_0: bool) -> ::corebc_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([4, 92, 235, 78], p_0)
                 .expect("method not found (this should never happen)")
@@ -4059,10 +4056,7 @@ pub mod hardhat_console {
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `logBool` (0xff703bae) function
-        pub fn log_bool(
-            &self,
-            p_0: bool,
-        ) -> ::corebc_contract::builders::ContractCall<M, ()> {
+        pub fn log_bool(&self, p_0: bool) -> ::corebc_contract::builders::ContractCall<M, ()> {
             self.0
                 .method_hash([255, 112, 59, 174], p_0)
                 .expect("method not found (this should never happen)")
@@ -4392,8 +4386,7 @@ pub mod hardhat_console {
                 .expect("method not found (this should never happen)")
         }
     }
-    impl<M: ::corebc_providers::Middleware> From<::corebc_contract::Contract<M>>
-    for HardhatConsole<M> {
+    impl<M: ::corebc_providers::Middleware> From<::corebc_contract::Contract<M>> for HardhatConsole<M> {
         fn from(contract: ::corebc_contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -4408,7 +4401,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,string)")]
     pub struct Log23Call {
@@ -4426,7 +4419,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,uint256,address)")]
     pub struct Log87Call {
@@ -4445,7 +4438,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,address)")]
     pub struct Log24Call {
@@ -4463,7 +4456,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,address,string)")]
     pub struct Log88Call {
@@ -4482,7 +4475,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,bool,string)")]
     pub struct Log89Call {
@@ -4501,7 +4494,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,address,uint256)")]
     pub struct Log90Call {
@@ -4520,7 +4513,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,bool,uint256)")]
     pub struct Log91Call {
@@ -4539,7 +4532,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,address)")]
     pub struct Log25Call {
@@ -4557,7 +4550,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,address,bool)")]
     pub struct Log92Call {
@@ -4576,7 +4569,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,uint256,string)")]
     pub struct Log93Call {
@@ -4595,7 +4588,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,uint256,uint256)")]
     pub struct Log94Call {
@@ -4614,7 +4607,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,address,uint256)")]
     pub struct Log95Call {
@@ -4633,7 +4626,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,uint256,uint256)")]
     pub struct Log96Call {
@@ -4652,7 +4645,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,uint256)")]
     pub struct Log26Call {
@@ -4670,7 +4663,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,address,address)")]
     pub struct Log97Call {
@@ -4689,7 +4682,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,address,bool)")]
     pub struct Log98Call {
@@ -4708,7 +4701,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,address,bool)")]
     pub struct Log99Call {
@@ -4727,7 +4720,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,uint256,bool)")]
     pub struct Log100Call {
@@ -4746,7 +4739,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,address,uint256)")]
     pub struct Log101Call {
@@ -4765,7 +4758,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,uint256,address)")]
     pub struct Log102Call {
@@ -4784,7 +4777,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,address)")]
     pub struct Log27Call {
@@ -4802,7 +4795,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,uint256)")]
     pub struct Log28Call {
@@ -4820,7 +4813,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,address,string)")]
     pub struct Log103Call {
@@ -4839,7 +4832,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,uint256)")]
     pub struct Log29Call {
@@ -4857,7 +4850,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,uint256,address)")]
     pub struct Log104Call {
@@ -4876,7 +4869,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,address,uint256)")]
     pub struct Log105Call {
@@ -4895,7 +4888,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,uint256,address)")]
     pub struct Log106Call {
@@ -4914,7 +4907,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,string,uint256)")]
     pub struct Log107Call {
@@ -4933,7 +4926,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,uint256,address)")]
     pub struct Log108Call {
@@ -4952,7 +4945,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,address,bool)")]
     pub struct Log109Call {
@@ -4971,7 +4964,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,bool,uint256)")]
     pub struct Log110Call {
@@ -4990,7 +4983,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,string,string)")]
     pub struct Log111Call {
@@ -5009,7 +5002,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,uint256)")]
     pub struct Log30Call {
@@ -5027,7 +5020,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,bool)")]
     pub struct Log31Call {
@@ -5045,7 +5038,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,uint256,uint256)")]
     pub struct Log112Call {
@@ -5064,7 +5057,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,string,address)")]
     pub struct Log113Call {
@@ -5083,7 +5076,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,uint256,string)")]
     pub struct Log114Call {
@@ -5102,7 +5095,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,address,string)")]
     pub struct Log115Call {
@@ -5121,7 +5114,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,bool,address)")]
     pub struct Log116Call {
@@ -5140,7 +5133,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,address)")]
     pub struct Log32Call {
@@ -5158,7 +5151,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool)")]
     pub struct Log6Call {
@@ -5175,7 +5168,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,address,address)")]
     pub struct Log117Call {
@@ -5194,7 +5187,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,address,string)")]
     pub struct Log118Call {
@@ -5213,7 +5206,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,uint256,uint256)")]
     pub struct Log119Call {
@@ -5232,7 +5225,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,string,bool)")]
     pub struct Log120Call {
@@ -5251,7 +5244,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,uint256)")]
     pub struct Log33Call {
@@ -5269,7 +5262,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,bool,address)")]
     pub struct Log121Call {
@@ -5288,7 +5281,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,bool)")]
     pub struct Log34Call {
@@ -5306,7 +5299,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,uint256,address)")]
     pub struct Log122Call {
@@ -5325,7 +5318,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,string)")]
     pub struct Log35Call {
@@ -5343,7 +5336,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,string,string)")]
     pub struct Log123Call {
@@ -5362,7 +5355,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,string,string)")]
     pub struct Log124Call {
@@ -5381,7 +5374,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,bool,address)")]
     pub struct Log125Call {
@@ -5400,7 +5393,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,bool,uint256)")]
     pub struct Log126Call {
@@ -5419,7 +5412,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,string,string)")]
     pub struct Log127Call {
@@ -5438,7 +5431,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,address,address)")]
     pub struct Log128Call {
@@ -5457,7 +5450,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,string,uint256)")]
     pub struct Log129Call {
@@ -5476,7 +5469,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,string)")]
     pub struct Log36Call {
@@ -5494,7 +5487,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,address,address)")]
     pub struct Log130Call {
@@ -5513,7 +5506,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,string,string)")]
     pub struct Log131Call {
@@ -5532,7 +5525,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,uint256,uint256)")]
     pub struct Log132Call {
@@ -5551,7 +5544,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool)")]
     pub struct Log7Call {
@@ -5568,7 +5561,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,bool,string)")]
     pub struct Log133Call {
@@ -5587,7 +5580,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,address,address)")]
     pub struct Log134Call {
@@ -5606,7 +5599,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,string,bool)")]
     pub struct Log135Call {
@@ -5625,7 +5618,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,string,uint256)")]
     pub struct Log136Call {
@@ -5644,7 +5637,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address)")]
     pub struct Log1Call {
@@ -5660,7 +5653,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,bool,bool)")]
     pub struct Log137Call {
@@ -5679,7 +5672,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,string)")]
     pub struct Log37Call {
@@ -5697,7 +5690,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,address,string)")]
     pub struct Log138Call {
@@ -5716,7 +5709,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,address,string)")]
     pub struct Log139Call {
@@ -5735,7 +5728,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address)")]
     pub struct Log8Call {
@@ -5752,7 +5745,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool)")]
     pub struct Log2Call {
@@ -5768,7 +5761,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,address,address)")]
     pub struct Log140Call {
@@ -5787,7 +5780,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,uint256,uint256)")]
     pub struct Log141Call {
@@ -5806,7 +5799,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,address)")]
     pub struct Log38Call {
@@ -5824,7 +5817,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,bool,bool)")]
     pub struct Log142Call {
@@ -5843,7 +5836,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,string,bool)")]
     pub struct Log143Call {
@@ -5862,7 +5855,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,uint256)")]
     pub struct Log39Call {
@@ -5880,7 +5873,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,uint256,uint256)")]
     pub struct Log144Call {
@@ -5899,7 +5892,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,uint256)")]
     pub struct Log40Call {
@@ -5917,7 +5910,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,uint256,uint256)")]
     pub struct Log145Call {
@@ -5936,7 +5929,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,bool,uint256)")]
     pub struct Log146Call {
@@ -5955,7 +5948,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256)")]
     pub struct Log9Call {
@@ -5972,7 +5965,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,uint256,address)")]
     pub struct Log147Call {
@@ -5991,7 +5984,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,bool,bool)")]
     pub struct Log148Call {
@@ -6010,7 +6003,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,bool,bool)")]
     pub struct Log149Call {
@@ -6029,7 +6022,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,string,string)")]
     pub struct Log150Call {
@@ -6048,7 +6041,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,bool,uint256)")]
     pub struct Log151Call {
@@ -6067,7 +6060,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,string,bool)")]
     pub struct Log152Call {
@@ -6086,7 +6079,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,bool,bool)")]
     pub struct Log153Call {
@@ -6105,7 +6098,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string)")]
     pub struct Log3Call {
@@ -6121,7 +6114,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,string,address)")]
     pub struct Log154Call {
@@ -6140,7 +6133,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,address,address)")]
     pub struct Log155Call {
@@ -6159,7 +6152,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,uint256,string)")]
     pub struct Log156Call {
@@ -6178,7 +6171,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,address,bool)")]
     pub struct Log157Call {
@@ -6197,7 +6190,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,address,uint256)")]
     pub struct Log158Call {
@@ -6216,7 +6209,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,address,bool)")]
     pub struct Log159Call {
@@ -6235,7 +6228,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,string,uint256)")]
     pub struct Log160Call {
@@ -6254,7 +6247,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,string,string)")]
     pub struct Log161Call {
@@ -6273,7 +6266,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,bool)")]
     pub struct Log41Call {
@@ -6291,7 +6284,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,address,address)")]
     pub struct Log162Call {
@@ -6310,7 +6303,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,bool,string)")]
     pub struct Log163Call {
@@ -6329,7 +6322,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,uint256,string)")]
     pub struct Log164Call {
@@ -6348,7 +6341,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,bool,string)")]
     pub struct Log165Call {
@@ -6367,7 +6360,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string)")]
     pub struct Log10Call {
@@ -6384,7 +6377,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,address,uint256)")]
     pub struct Log166Call {
@@ -6403,7 +6396,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,bool)")]
     pub struct Log42Call {
@@ -6421,7 +6414,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,address,uint256)")]
     pub struct Log167Call {
@@ -6440,7 +6433,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,bool)")]
     pub struct Log43Call {
@@ -6458,7 +6451,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,string,bool)")]
     pub struct Log168Call {
@@ -6477,7 +6470,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,bool,uint256)")]
     pub struct Log169Call {
@@ -6496,7 +6489,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log()")]
     pub struct Log0Call;
@@ -6510,7 +6503,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,uint256,string)")]
     pub struct Log170Call {
@@ -6529,7 +6522,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,bool,address)")]
     pub struct Log171Call {
@@ -6548,7 +6541,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,uint256,address)")]
     pub struct Log172Call {
@@ -6567,7 +6560,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,address,address)")]
     pub struct Log173Call {
@@ -6586,7 +6579,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,uint256)")]
     pub struct Log44Call {
@@ -6604,7 +6597,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,string)")]
     pub struct Log45Call {
@@ -6622,7 +6615,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,uint256,string)")]
     pub struct Log174Call {
@@ -6641,7 +6634,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,uint256,string)")]
     pub struct Log175Call {
@@ -6660,7 +6653,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,uint256)")]
     pub struct Log46Call {
@@ -6678,7 +6671,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,string,string)")]
     pub struct Log176Call {
@@ -6697,7 +6690,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,bool,uint256)")]
     pub struct Log177Call {
@@ -6716,7 +6709,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,string,address)")]
     pub struct Log178Call {
@@ -6735,7 +6728,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,address)")]
     pub struct Log47Call {
@@ -6753,7 +6746,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,address,bool)")]
     pub struct Log179Call {
@@ -6772,7 +6765,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,string,string)")]
     pub struct Log180Call {
@@ -6791,7 +6784,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,address,uint256)")]
     pub struct Log181Call {
@@ -6810,7 +6803,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,uint256,string)")]
     pub struct Log182Call {
@@ -6829,7 +6822,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,string,uint256)")]
     pub struct Log183Call {
@@ -6848,7 +6841,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,bool,string)")]
     pub struct Log184Call {
@@ -6867,7 +6860,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,address,address)")]
     pub struct Log185Call {
@@ -6886,7 +6879,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,string,bool)")]
     pub struct Log186Call {
@@ -6905,7 +6898,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,bool,bool)")]
     pub struct Log187Call {
@@ -6924,7 +6917,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,uint256,bool)")]
     pub struct Log188Call {
@@ -6943,7 +6936,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,uint256)")]
     pub struct Log48Call {
@@ -6961,7 +6954,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,address,address)")]
     pub struct Log189Call {
@@ -6980,7 +6973,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,uint256,bool)")]
     pub struct Log190Call {
@@ -6999,7 +6992,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,uint256,address)")]
     pub struct Log191Call {
@@ -7018,7 +7011,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,string)")]
     pub struct Log49Call {
@@ -7036,7 +7029,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,uint256,address)")]
     pub struct Log192Call {
@@ -7055,7 +7048,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string)")]
     pub struct Log11Call {
@@ -7072,7 +7065,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,uint256,uint256)")]
     pub struct Log193Call {
@@ -7091,7 +7084,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,address,address)")]
     pub struct Log194Call {
@@ -7110,7 +7103,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,address,address)")]
     pub struct Log195Call {
@@ -7129,7 +7122,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,uint256,bool)")]
     pub struct Log196Call {
@@ -7148,7 +7141,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,bool)")]
     pub struct Log50Call {
@@ -7166,7 +7159,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,uint256)")]
     pub struct Log51Call {
@@ -7184,7 +7177,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,string,string)")]
     pub struct Log197Call {
@@ -7203,7 +7196,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,uint256,bool)")]
     pub struct Log198Call {
@@ -7222,7 +7215,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address)")]
     pub struct Log12Call {
@@ -7239,7 +7232,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,bool,address)")]
     pub struct Log199Call {
@@ -7258,7 +7251,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,string,uint256)")]
     pub struct Log200Call {
@@ -7277,7 +7270,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,bool,bool)")]
     pub struct Log201Call {
@@ -7296,7 +7289,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,uint256,bool)")]
     pub struct Log202Call {
@@ -7315,7 +7308,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,address,string)")]
     pub struct Log203Call {
@@ -7334,7 +7327,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,string,string)")]
     pub struct Log204Call {
@@ -7353,7 +7346,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,string,address)")]
     pub struct Log205Call {
@@ -7372,7 +7365,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,bool,uint256)")]
     pub struct Log206Call {
@@ -7391,7 +7384,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,address,bool)")]
     pub struct Log207Call {
@@ -7410,7 +7403,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,string,bool)")]
     pub struct Log208Call {
@@ -7429,7 +7422,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,string,address)")]
     pub struct Log209Call {
@@ -7448,7 +7441,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,bool,address)")]
     pub struct Log210Call {
@@ -7467,7 +7460,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,string)")]
     pub struct Log52Call {
@@ -7485,7 +7478,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,address,uint256)")]
     pub struct Log211Call {
@@ -7504,7 +7497,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,uint256,string)")]
     pub struct Log212Call {
@@ -7523,7 +7516,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,bool,uint256)")]
     pub struct Log213Call {
@@ -7542,7 +7535,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string)")]
     pub struct Log13Call {
@@ -7559,7 +7552,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool)")]
     pub struct Log14Call {
@@ -7576,7 +7569,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,uint256,bool)")]
     pub struct Log214Call {
@@ -7595,7 +7588,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,bool,bool)")]
     pub struct Log215Call {
@@ -7614,7 +7607,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,string,bool)")]
     pub struct Log216Call {
@@ -7633,7 +7626,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,address)")]
     pub struct Log53Call {
@@ -7651,7 +7644,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,address)")]
     pub struct Log54Call {
@@ -7669,7 +7662,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,string,uint256)")]
     pub struct Log217Call {
@@ -7688,7 +7681,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,uint256,uint256)")]
     pub struct Log218Call {
@@ -7707,7 +7700,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,string,address)")]
     pub struct Log219Call {
@@ -7726,7 +7719,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,address,uint256)")]
     pub struct Log220Call {
@@ -7745,7 +7738,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,string,bool)")]
     pub struct Log221Call {
@@ -7764,7 +7757,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,uint256,string)")]
     pub struct Log222Call {
@@ -7783,7 +7776,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,bool,uint256)")]
     pub struct Log223Call {
@@ -7802,7 +7795,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,address,string)")]
     pub struct Log224Call {
@@ -7821,7 +7814,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,string,uint256)")]
     pub struct Log225Call {
@@ -7840,7 +7833,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,address,bool)")]
     pub struct Log226Call {
@@ -7859,7 +7852,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,uint256,uint256)")]
     pub struct Log227Call {
@@ -7878,7 +7871,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256)")]
     pub struct Log15Call {
@@ -7895,7 +7888,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,bool)")]
     pub struct Log55Call {
@@ -7913,7 +7906,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address)")]
     pub struct Log16Call {
@@ -7930,7 +7923,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,uint256,string)")]
     pub struct Log228Call {
@@ -7949,7 +7942,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,string)")]
     pub struct Log56Call {
@@ -7967,7 +7960,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,string,string)")]
     pub struct Log229Call {
@@ -7986,7 +7979,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,uint256,address)")]
     pub struct Log230Call {
@@ -8005,7 +7998,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,address,uint256)")]
     pub struct Log231Call {
@@ -8024,7 +8017,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,bool,bool)")]
     pub struct Log232Call {
@@ -8043,7 +8036,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,uint256,bool)")]
     pub struct Log233Call {
@@ -8062,7 +8055,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,bool,address)")]
     pub struct Log234Call {
@@ -8081,7 +8074,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,bool,uint256)")]
     pub struct Log235Call {
@@ -8100,7 +8093,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,uint256,address)")]
     pub struct Log236Call {
@@ -8119,7 +8112,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,bool,uint256)")]
     pub struct Log237Call {
@@ -8138,7 +8131,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,uint256,string)")]
     pub struct Log238Call {
@@ -8157,7 +8150,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,string,uint256)")]
     pub struct Log239Call {
@@ -8176,7 +8169,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,address,uint256)")]
     pub struct Log240Call {
@@ -8195,7 +8188,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,string,address)")]
     pub struct Log241Call {
@@ -8214,7 +8207,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string)")]
     pub struct Log17Call {
@@ -8231,7 +8224,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,address,bool)")]
     pub struct Log242Call {
@@ -8250,7 +8243,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,bool,string)")]
     pub struct Log243Call {
@@ -8269,7 +8262,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,bool,string)")]
     pub struct Log244Call {
@@ -8288,7 +8281,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,uint256,bool)")]
     pub struct Log245Call {
@@ -8307,7 +8300,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,string,uint256)")]
     pub struct Log246Call {
@@ -8326,7 +8319,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,address)")]
     pub struct Log57Call {
@@ -8344,7 +8337,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,uint256,address)")]
     pub struct Log247Call {
@@ -8363,7 +8356,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,address,uint256)")]
     pub struct Log248Call {
@@ -8382,7 +8375,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,address,bool)")]
     pub struct Log249Call {
@@ -8401,7 +8394,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,address)")]
     pub struct Log58Call {
@@ -8419,7 +8412,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,address)")]
     pub struct Log59Call {
@@ -8437,7 +8430,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,string,address)")]
     pub struct Log250Call {
@@ -8456,7 +8449,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,bool,address)")]
     pub struct Log251Call {
@@ -8475,7 +8468,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,bool,address)")]
     pub struct Log252Call {
@@ -8494,7 +8487,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,uint256,bool)")]
     pub struct Log253Call {
@@ -8513,7 +8506,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,bool)")]
     pub struct Log60Call {
@@ -8531,7 +8524,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,address,string)")]
     pub struct Log254Call {
@@ -8550,7 +8543,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,uint256)")]
     pub struct Log61Call {
@@ -8568,7 +8561,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,string,address)")]
     pub struct Log255Call {
@@ -8587,7 +8580,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,bool,string)")]
     pub struct Log256Call {
@@ -8606,7 +8599,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,bool,address)")]
     pub struct Log257Call {
@@ -8625,7 +8618,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,address,string)")]
     pub struct Log258Call {
@@ -8644,7 +8637,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,string,address)")]
     pub struct Log259Call {
@@ -8663,7 +8656,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,address,string)")]
     pub struct Log260Call {
@@ -8682,7 +8675,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,address,bool)")]
     pub struct Log261Call {
@@ -8701,7 +8694,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,address,address)")]
     pub struct Log262Call {
@@ -8720,7 +8713,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,string)")]
     pub struct Log62Call {
@@ -8738,7 +8731,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,bool,address)")]
     pub struct Log263Call {
@@ -8757,7 +8750,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,bool,string)")]
     pub struct Log264Call {
@@ -8776,7 +8769,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,address,uint256)")]
     pub struct Log265Call {
@@ -8795,7 +8788,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,address,bool)")]
     pub struct Log266Call {
@@ -8814,7 +8807,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,string,string)")]
     pub struct Log267Call {
@@ -8833,7 +8826,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,address,uint256)")]
     pub struct Log268Call {
@@ -8852,7 +8845,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,uint256,uint256)")]
     pub struct Log269Call {
@@ -8871,7 +8864,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,string,string)")]
     pub struct Log270Call {
@@ -8890,7 +8883,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,bool,string)")]
     pub struct Log271Call {
@@ -8909,7 +8902,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,string,address)")]
     pub struct Log272Call {
@@ -8928,7 +8921,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,bool,bool)")]
     pub struct Log273Call {
@@ -8947,7 +8940,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,bool,string)")]
     pub struct Log274Call {
@@ -8966,7 +8959,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,address,string)")]
     pub struct Log275Call {
@@ -8985,7 +8978,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,bool,address)")]
     pub struct Log276Call {
@@ -9004,7 +8997,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,string,uint256)")]
     pub struct Log277Call {
@@ -9023,7 +9016,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,string)")]
     pub struct Log63Call {
@@ -9041,7 +9034,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,bool)")]
     pub struct Log64Call {
@@ -9059,7 +9052,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,string)")]
     pub struct Log65Call {
@@ -9077,7 +9070,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,string,bool)")]
     pub struct Log278Call {
@@ -9096,7 +9089,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,address,bool)")]
     pub struct Log279Call {
@@ -9115,7 +9108,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,address,bool)")]
     pub struct Log280Call {
@@ -9134,7 +9127,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256)")]
     pub struct Log18Call {
@@ -9151,7 +9144,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,uint256)")]
     pub struct Log66Call {
@@ -9169,7 +9162,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,bool,bool)")]
     pub struct Log281Call {
@@ -9188,7 +9181,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,uint256,string)")]
     pub struct Log282Call {
@@ -9207,7 +9200,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,string,bool)")]
     pub struct Log283Call {
@@ -9226,7 +9219,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,bool,bool)")]
     pub struct Log284Call {
@@ -9245,7 +9238,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,bool,string)")]
     pub struct Log285Call {
@@ -9264,7 +9257,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,address)")]
     pub struct Log67Call {
@@ -9282,7 +9275,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,uint256,uint256)")]
     pub struct Log286Call {
@@ -9301,7 +9294,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,uint256,bool)")]
     pub struct Log287Call {
@@ -9320,7 +9313,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,string,uint256)")]
     pub struct Log288Call {
@@ -9339,7 +9332,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,address,bool)")]
     pub struct Log289Call {
@@ -9358,7 +9351,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,string,uint256)")]
     pub struct Log290Call {
@@ -9377,7 +9370,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,bool,address)")]
     pub struct Log291Call {
@@ -9396,7 +9389,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,uint256,bool)")]
     pub struct Log292Call {
@@ -9415,7 +9408,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool)")]
     pub struct Log19Call {
@@ -9432,7 +9425,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,string)")]
     pub struct Log68Call {
@@ -9450,7 +9443,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,uint256,bool)")]
     pub struct Log293Call {
@@ -9469,7 +9462,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,uint256,bool)")]
     pub struct Log294Call {
@@ -9488,7 +9481,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,bool,string)")]
     pub struct Log295Call {
@@ -9507,7 +9500,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,string,uint256)")]
     pub struct Log296Call {
@@ -9526,7 +9519,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,uint256,uint256)")]
     pub struct Log297Call {
@@ -9545,7 +9538,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,bool)")]
     pub struct Log69Call {
@@ -9563,7 +9556,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,uint256)")]
     pub struct Log70Call {
@@ -9581,7 +9574,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,uint256)")]
     pub struct Log71Call {
@@ -9599,7 +9592,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,bool)")]
     pub struct Log72Call {
@@ -9617,7 +9610,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,bool,bool)")]
     pub struct Log298Call {
@@ -9636,7 +9629,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,string,bool)")]
     pub struct Log299Call {
@@ -9655,7 +9648,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,uint256,address)")]
     pub struct Log300Call {
@@ -9674,7 +9667,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,bool,bool)")]
     pub struct Log301Call {
@@ -9693,7 +9686,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,bool,uint256)")]
     pub struct Log302Call {
@@ -9712,7 +9705,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,bool)")]
     pub struct Log73Call {
@@ -9730,7 +9723,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,uint256,string,bool)")]
     pub struct Log303Call {
@@ -9749,7 +9742,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,bool,address)")]
     pub struct Log304Call {
@@ -9768,7 +9761,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,uint256)")]
     pub struct Log74Call {
@@ -9786,7 +9779,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,address)")]
     pub struct Log75Call {
@@ -9804,7 +9797,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,bool,string)")]
     pub struct Log305Call {
@@ -9823,7 +9816,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,string,address)")]
     pub struct Log306Call {
@@ -9842,7 +9835,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,uint256,bool)")]
     pub struct Log307Call {
@@ -9861,7 +9854,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,bool,uint256)")]
     pub struct Log308Call {
@@ -9880,7 +9873,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,address,string)")]
     pub struct Log309Call {
@@ -9899,7 +9892,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address)")]
     pub struct Log20Call {
@@ -9916,7 +9909,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,bool)")]
     pub struct Log76Call {
@@ -9934,7 +9927,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,string,bool,bool)")]
     pub struct Log310Call {
@@ -9953,7 +9946,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,uint256,string)")]
     pub struct Log311Call {
@@ -9972,7 +9965,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,bool,string)")]
     pub struct Log312Call {
@@ -9991,7 +9984,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,uint256,string)")]
     pub struct Log313Call {
@@ -10010,7 +10003,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,string,string)")]
     pub struct Log314Call {
@@ -10029,7 +10022,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,string)")]
     pub struct Log77Call {
@@ -10047,7 +10040,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,bool,string)")]
     pub struct Log315Call {
@@ -10066,7 +10059,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,string,address)")]
     pub struct Log316Call {
@@ -10085,7 +10078,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,bool,address)")]
     pub struct Log317Call {
@@ -10104,7 +10097,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,string)")]
     pub struct Log78Call {
@@ -10122,7 +10115,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,uint256,address)")]
     pub struct Log318Call {
@@ -10141,7 +10134,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,bool,string)")]
     pub struct Log79Call {
@@ -10159,7 +10152,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,address,string,bool)")]
     pub struct Log319Call {
@@ -10178,7 +10171,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,bool,bool)")]
     pub struct Log320Call {
@@ -10197,7 +10190,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,string,uint256)")]
     pub struct Log321Call {
@@ -10216,7 +10209,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,uint256,bool,uint256)")]
     pub struct Log322Call {
@@ -10235,7 +10228,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,string,bool)")]
     pub struct Log323Call {
@@ -10254,7 +10247,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,string,address,uint256)")]
     pub struct Log324Call {
@@ -10273,7 +10266,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,bool)")]
     pub struct Log80Call {
@@ -10291,7 +10284,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,address,string)")]
     pub struct Log325Call {
@@ -10310,7 +10303,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,bool,uint256)")]
     pub struct Log326Call {
@@ -10329,7 +10322,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,bool)")]
     pub struct Log81Call {
@@ -10347,7 +10340,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,string,bool)")]
     pub struct Log327Call {
@@ -10366,7 +10359,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,address,address)")]
     pub struct Log328Call {
@@ -10385,7 +10378,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,string,uint256)")]
     pub struct Log329Call {
@@ -10404,7 +10397,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,bool,string,address)")]
     pub struct Log330Call {
@@ -10423,7 +10416,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,address,bool,address)")]
     pub struct Log331Call {
@@ -10442,7 +10435,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,address)")]
     pub struct Log82Call {
@@ -10460,7 +10453,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,bool,address)")]
     pub struct Log83Call {
@@ -10478,7 +10471,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,bool)")]
     pub struct Log84Call {
@@ -10496,7 +10489,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,string,uint256,uint256)")]
     pub struct Log332Call {
@@ -10515,7 +10508,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,address,address)")]
     pub struct Log333Call {
@@ -10534,7 +10527,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,string,string)")]
     pub struct Log334Call {
@@ -10553,7 +10546,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256)")]
     pub struct Log21Call {
@@ -10570,7 +10563,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,address,string)")]
     pub struct Log335Call {
@@ -10589,7 +10582,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,address,string)")]
     pub struct Log336Call {
@@ -10608,7 +10601,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256)")]
     pub struct Log4Call {
@@ -10624,7 +10617,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,uint256,uint256)")]
     pub struct Log337Call {
@@ -10643,7 +10636,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,bool,string,address)")]
     pub struct Log338Call {
@@ -10662,7 +10655,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(uint256,uint256,uint256,address)")]
     pub struct Log339Call {
@@ -10681,7 +10674,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,string,string)")]
     pub struct Log85Call {
@@ -10699,7 +10692,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,uint256,bool)")]
     pub struct Log340Call {
@@ -10718,7 +10711,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,address,address)")]
     pub struct Log86Call {
@@ -10736,7 +10729,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(address,address,uint256,string)")]
     pub struct Log341Call {
@@ -10755,7 +10748,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(bool,uint256,string,address)")]
     pub struct Log342Call {
@@ -10774,7 +10767,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(int256)")]
     pub struct Log5Call {
@@ -10790,7 +10783,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "log", abi = "log(string,int256)")]
     pub struct Log22Call {
@@ -10807,7 +10800,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logAddress", abi = "logAddress(address)")]
     pub struct LogAddressCall {
@@ -10823,7 +10816,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBool", abi = "logBool(bool)")]
     pub struct LogBoolCall {
@@ -10839,7 +10832,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes", abi = "logBytes(bytes)")]
     pub struct LogBytesCall {
@@ -10855,7 +10848,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes1", abi = "logBytes1(bytes1)")]
     pub struct LogBytes1Call {
@@ -10871,7 +10864,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes10", abi = "logBytes10(bytes10)")]
     pub struct LogBytes10Call {
@@ -10887,7 +10880,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes11", abi = "logBytes11(bytes11)")]
     pub struct LogBytes11Call {
@@ -10903,7 +10896,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes12", abi = "logBytes12(bytes12)")]
     pub struct LogBytes12Call {
@@ -10919,7 +10912,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes13", abi = "logBytes13(bytes13)")]
     pub struct LogBytes13Call {
@@ -10935,7 +10928,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes14", abi = "logBytes14(bytes14)")]
     pub struct LogBytes14Call {
@@ -10951,7 +10944,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes15", abi = "logBytes15(bytes15)")]
     pub struct LogBytes15Call {
@@ -10967,7 +10960,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes16", abi = "logBytes16(bytes16)")]
     pub struct LogBytes16Call {
@@ -10983,7 +10976,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes17", abi = "logBytes17(bytes17)")]
     pub struct LogBytes17Call {
@@ -10999,7 +10992,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes18", abi = "logBytes18(bytes18)")]
     pub struct LogBytes18Call {
@@ -11015,7 +11008,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes19", abi = "logBytes19(bytes19)")]
     pub struct LogBytes19Call {
@@ -11031,7 +11024,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes2", abi = "logBytes2(bytes2)")]
     pub struct LogBytes2Call {
@@ -11047,7 +11040,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes20", abi = "logBytes20(bytes20)")]
     pub struct LogBytes20Call {
@@ -11063,7 +11056,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes21", abi = "logBytes21(bytes21)")]
     pub struct LogBytes21Call {
@@ -11079,7 +11072,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes22", abi = "logBytes22(bytes22)")]
     pub struct LogBytes22Call {
@@ -11095,7 +11088,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes23", abi = "logBytes23(bytes23)")]
     pub struct LogBytes23Call {
@@ -11111,7 +11104,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes24", abi = "logBytes24(bytes24)")]
     pub struct LogBytes24Call {
@@ -11127,7 +11120,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes25", abi = "logBytes25(bytes25)")]
     pub struct LogBytes25Call {
@@ -11143,7 +11136,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes26", abi = "logBytes26(bytes26)")]
     pub struct LogBytes26Call {
@@ -11159,7 +11152,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes27", abi = "logBytes27(bytes27)")]
     pub struct LogBytes27Call {
@@ -11175,7 +11168,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes28", abi = "logBytes28(bytes28)")]
     pub struct LogBytes28Call {
@@ -11191,7 +11184,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes29", abi = "logBytes29(bytes29)")]
     pub struct LogBytes29Call {
@@ -11207,7 +11200,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes3", abi = "logBytes3(bytes3)")]
     pub struct LogBytes3Call {
@@ -11223,7 +11216,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes30", abi = "logBytes30(bytes30)")]
     pub struct LogBytes30Call {
@@ -11239,7 +11232,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes31", abi = "logBytes31(bytes31)")]
     pub struct LogBytes31Call {
@@ -11255,7 +11248,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes32", abi = "logBytes32(bytes32)")]
     pub struct LogBytes32Call {
@@ -11271,7 +11264,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes4", abi = "logBytes4(bytes4)")]
     pub struct LogBytes4Call {
@@ -11287,7 +11280,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes5", abi = "logBytes5(bytes5)")]
     pub struct LogBytes5Call {
@@ -11303,7 +11296,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes6", abi = "logBytes6(bytes6)")]
     pub struct LogBytes6Call {
@@ -11319,7 +11312,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes7", abi = "logBytes7(bytes7)")]
     pub struct LogBytes7Call {
@@ -11335,7 +11328,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes8", abi = "logBytes8(bytes8)")]
     pub struct LogBytes8Call {
@@ -11351,7 +11344,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logBytes9", abi = "logBytes9(bytes9)")]
     pub struct LogBytes9Call {
@@ -11367,7 +11360,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logInt", abi = "logInt(int256)")]
     pub struct LogIntCall {
@@ -11383,7 +11376,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logString", abi = "logString(string)")]
     pub struct LogStringCall {
@@ -11399,7 +11392,7 @@ pub mod hardhat_console {
         Debug,
         PartialEq,
         Eq,
-        Hash
+        Hash,
     )]
     #[ethcall(name = "logUint", abi = "logUint(uint256)")]
     pub struct LogUintCall {
@@ -11407,13 +11400,7 @@ pub mod hardhat_console {
     }
     ///Container type for all of the contract's call
     #[derive(
-        Clone,
-        ::corebc_contract::EthAbiType,
-        foundry_macros::ConsoleFmt,
-        Debug,
-        PartialEq,
-        Eq,
-        Hash
+        Clone, ::corebc_contract::EthAbiType, foundry_macros::ConsoleFmt, Debug, PartialEq, Eq, Hash,
     )]
     pub enum HardhatConsoleCalls {
         Log23(Log23Call),
@@ -11803,1909 +11790,1147 @@ pub mod hardhat_console {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::corebc_core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded) = <Log23Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log23Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log23(decoded));
             }
-            if let Ok(decoded) = <Log87Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log87Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log87(decoded));
             }
-            if let Ok(decoded) = <Log24Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log24Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log24(decoded));
             }
-            if let Ok(decoded) = <Log88Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log88Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log88(decoded));
             }
-            if let Ok(decoded) = <Log89Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log89Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log89(decoded));
             }
-            if let Ok(decoded) = <Log90Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log90Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log90(decoded));
             }
-            if let Ok(decoded) = <Log91Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log91Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log91(decoded));
             }
-            if let Ok(decoded) = <Log25Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log25Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log25(decoded));
             }
-            if let Ok(decoded) = <Log92Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log92Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log92(decoded));
             }
-            if let Ok(decoded) = <Log93Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log93Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log93(decoded));
             }
-            if let Ok(decoded) = <Log94Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log94Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log94(decoded));
             }
-            if let Ok(decoded) = <Log95Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log95Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log95(decoded));
             }
-            if let Ok(decoded) = <Log96Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log96Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log96(decoded));
             }
-            if let Ok(decoded) = <Log26Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log26Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log26(decoded));
             }
-            if let Ok(decoded) = <Log97Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log97Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log97(decoded));
             }
-            if let Ok(decoded) = <Log98Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log98Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log98(decoded));
             }
-            if let Ok(decoded) = <Log99Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log99Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log99(decoded));
             }
-            if let Ok(decoded) = <Log100Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log100Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log100(decoded));
             }
-            if let Ok(decoded) = <Log101Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log101Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log101(decoded));
             }
-            if let Ok(decoded) = <Log102Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log102Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log102(decoded));
             }
-            if let Ok(decoded) = <Log27Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log27Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log27(decoded));
             }
-            if let Ok(decoded) = <Log28Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log28Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log28(decoded));
             }
-            if let Ok(decoded) = <Log103Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log103Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log103(decoded));
             }
-            if let Ok(decoded) = <Log29Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log29Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log29(decoded));
             }
-            if let Ok(decoded) = <Log104Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log104Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log104(decoded));
             }
-            if let Ok(decoded) = <Log105Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log105Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log105(decoded));
             }
-            if let Ok(decoded) = <Log106Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log106Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log106(decoded));
             }
-            if let Ok(decoded) = <Log107Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log107Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log107(decoded));
             }
-            if let Ok(decoded) = <Log108Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log108Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log108(decoded));
             }
-            if let Ok(decoded) = <Log109Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log109Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log109(decoded));
             }
-            if let Ok(decoded) = <Log110Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log110Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log110(decoded));
             }
-            if let Ok(decoded) = <Log111Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log111Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log111(decoded));
             }
-            if let Ok(decoded) = <Log30Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log30Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log30(decoded));
             }
-            if let Ok(decoded) = <Log31Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log31Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log31(decoded));
             }
-            if let Ok(decoded) = <Log112Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log112Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log112(decoded));
             }
-            if let Ok(decoded) = <Log113Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log113Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log113(decoded));
             }
-            if let Ok(decoded) = <Log114Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log114Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log114(decoded));
             }
-            if let Ok(decoded) = <Log115Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log115Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log115(decoded));
             }
-            if let Ok(decoded) = <Log116Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log116Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log116(decoded));
             }
-            if let Ok(decoded) = <Log32Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log32Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log32(decoded));
             }
-            if let Ok(decoded) = <Log6Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log6Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log6(decoded));
             }
-            if let Ok(decoded) = <Log117Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log117Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log117(decoded));
             }
-            if let Ok(decoded) = <Log118Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log118Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log118(decoded));
             }
-            if let Ok(decoded) = <Log119Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log119Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log119(decoded));
             }
-            if let Ok(decoded) = <Log120Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log120Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log120(decoded));
             }
-            if let Ok(decoded) = <Log33Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log33Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log33(decoded));
             }
-            if let Ok(decoded) = <Log121Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log121Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log121(decoded));
             }
-            if let Ok(decoded) = <Log34Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log34Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log34(decoded));
             }
-            if let Ok(decoded) = <Log122Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log122Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log122(decoded));
             }
-            if let Ok(decoded) = <Log35Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log35Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log35(decoded));
             }
-            if let Ok(decoded) = <Log123Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log123Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log123(decoded));
             }
-            if let Ok(decoded) = <Log124Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log124Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log124(decoded));
             }
-            if let Ok(decoded) = <Log125Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log125Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log125(decoded));
             }
-            if let Ok(decoded) = <Log126Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log126Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log126(decoded));
             }
-            if let Ok(decoded) = <Log127Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log127Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log127(decoded));
             }
-            if let Ok(decoded) = <Log128Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log128Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log128(decoded));
             }
-            if let Ok(decoded) = <Log129Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log129Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log129(decoded));
             }
-            if let Ok(decoded) = <Log36Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log36Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log36(decoded));
             }
-            if let Ok(decoded) = <Log130Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log130Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log130(decoded));
             }
-            if let Ok(decoded) = <Log131Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log131Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log131(decoded));
             }
-            if let Ok(decoded) = <Log132Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log132Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log132(decoded));
             }
-            if let Ok(decoded) = <Log7Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log7Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log7(decoded));
             }
-            if let Ok(decoded) = <Log133Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log133Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log133(decoded));
             }
-            if let Ok(decoded) = <Log134Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log134Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log134(decoded));
             }
-            if let Ok(decoded) = <Log135Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log135Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log135(decoded));
             }
-            if let Ok(decoded) = <Log136Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log136Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log136(decoded));
             }
-            if let Ok(decoded) = <Log1Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log1(decoded));
             }
-            if let Ok(decoded) = <Log137Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log137Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log137(decoded));
             }
-            if let Ok(decoded) = <Log37Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log37Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log37(decoded));
             }
-            if let Ok(decoded) = <Log138Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log138Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log138(decoded));
             }
-            if let Ok(decoded) = <Log139Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log139Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log139(decoded));
             }
-            if let Ok(decoded) = <Log8Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log8Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log8(decoded));
             }
-            if let Ok(decoded) = <Log2Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log2(decoded));
             }
-            if let Ok(decoded) = <Log140Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log140Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log140(decoded));
             }
-            if let Ok(decoded) = <Log141Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log141Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log141(decoded));
             }
-            if let Ok(decoded) = <Log38Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log38Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log38(decoded));
             }
-            if let Ok(decoded) = <Log142Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log142Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log142(decoded));
             }
-            if let Ok(decoded) = <Log143Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log143Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log143(decoded));
             }
-            if let Ok(decoded) = <Log39Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log39Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log39(decoded));
             }
-            if let Ok(decoded) = <Log144Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log144Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log144(decoded));
             }
-            if let Ok(decoded) = <Log40Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log40Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log40(decoded));
             }
-            if let Ok(decoded) = <Log145Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log145Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log145(decoded));
             }
-            if let Ok(decoded) = <Log146Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log146Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log146(decoded));
             }
-            if let Ok(decoded) = <Log9Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log9Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log9(decoded));
             }
-            if let Ok(decoded) = <Log147Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log147Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log147(decoded));
             }
-            if let Ok(decoded) = <Log148Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log148Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log148(decoded));
             }
-            if let Ok(decoded) = <Log149Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log149Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log149(decoded));
             }
-            if let Ok(decoded) = <Log150Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log150Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log150(decoded));
             }
-            if let Ok(decoded) = <Log151Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log151Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log151(decoded));
             }
-            if let Ok(decoded) = <Log152Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log152Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log152(decoded));
             }
-            if let Ok(decoded) = <Log153Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log153Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log153(decoded));
             }
-            if let Ok(decoded) = <Log3Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log3(decoded));
             }
-            if let Ok(decoded) = <Log154Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log154Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log154(decoded));
             }
-            if let Ok(decoded) = <Log155Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log155Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log155(decoded));
             }
-            if let Ok(decoded) = <Log156Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log156Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log156(decoded));
             }
-            if let Ok(decoded) = <Log157Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log157Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log157(decoded));
             }
-            if let Ok(decoded) = <Log158Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log158Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log158(decoded));
             }
-            if let Ok(decoded) = <Log159Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log159Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log159(decoded));
             }
-            if let Ok(decoded) = <Log160Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log160Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log160(decoded));
             }
-            if let Ok(decoded) = <Log161Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log161Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log161(decoded));
             }
-            if let Ok(decoded) = <Log41Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log41Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log41(decoded));
             }
-            if let Ok(decoded) = <Log162Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log162Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log162(decoded));
             }
-            if let Ok(decoded) = <Log163Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log163Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log163(decoded));
             }
-            if let Ok(decoded) = <Log164Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log164Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log164(decoded));
             }
-            if let Ok(decoded) = <Log165Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log165Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log165(decoded));
             }
-            if let Ok(decoded) = <Log10Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log10Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log10(decoded));
             }
-            if let Ok(decoded) = <Log166Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log166Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log166(decoded));
             }
-            if let Ok(decoded) = <Log42Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log42Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log42(decoded));
             }
-            if let Ok(decoded) = <Log167Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log167Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log167(decoded));
             }
-            if let Ok(decoded) = <Log43Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log43Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log43(decoded));
             }
-            if let Ok(decoded) = <Log168Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log168Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log168(decoded));
             }
-            if let Ok(decoded) = <Log169Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log169Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log169(decoded));
             }
-            if let Ok(decoded) = <Log0Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log0(decoded));
             }
-            if let Ok(decoded) = <Log170Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log170Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log170(decoded));
             }
-            if let Ok(decoded) = <Log171Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log171Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log171(decoded));
             }
-            if let Ok(decoded) = <Log172Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log172Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log172(decoded));
             }
-            if let Ok(decoded) = <Log173Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log173Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log173(decoded));
             }
-            if let Ok(decoded) = <Log44Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log44Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log44(decoded));
             }
-            if let Ok(decoded) = <Log45Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log45Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log45(decoded));
             }
-            if let Ok(decoded) = <Log174Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log174Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log174(decoded));
             }
-            if let Ok(decoded) = <Log175Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log175Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log175(decoded));
             }
-            if let Ok(decoded) = <Log46Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log46Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log46(decoded));
             }
-            if let Ok(decoded) = <Log176Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log176Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log176(decoded));
             }
-            if let Ok(decoded) = <Log177Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log177Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log177(decoded));
             }
-            if let Ok(decoded) = <Log178Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log178Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log178(decoded));
             }
-            if let Ok(decoded) = <Log47Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log47Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log47(decoded));
             }
-            if let Ok(decoded) = <Log179Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log179Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log179(decoded));
             }
-            if let Ok(decoded) = <Log180Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log180Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log180(decoded));
             }
-            if let Ok(decoded) = <Log181Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log181Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log181(decoded));
             }
-            if let Ok(decoded) = <Log182Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log182Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log182(decoded));
             }
-            if let Ok(decoded) = <Log183Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log183Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log183(decoded));
             }
-            if let Ok(decoded) = <Log184Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log184Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log184(decoded));
             }
-            if let Ok(decoded) = <Log185Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log185Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log185(decoded));
             }
-            if let Ok(decoded) = <Log186Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log186Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log186(decoded));
             }
-            if let Ok(decoded) = <Log187Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log187Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log187(decoded));
             }
-            if let Ok(decoded) = <Log188Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log188Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log188(decoded));
             }
-            if let Ok(decoded) = <Log48Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log48Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log48(decoded));
             }
-            if let Ok(decoded) = <Log189Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log189Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log189(decoded));
             }
-            if let Ok(decoded) = <Log190Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log190Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log190(decoded));
             }
-            if let Ok(decoded) = <Log191Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log191Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log191(decoded));
             }
-            if let Ok(decoded) = <Log49Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log49Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log49(decoded));
             }
-            if let Ok(decoded) = <Log192Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log192Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log192(decoded));
             }
-            if let Ok(decoded) = <Log11Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log11Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log11(decoded));
             }
-            if let Ok(decoded) = <Log193Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log193Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log193(decoded));
             }
-            if let Ok(decoded) = <Log194Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log194Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log194(decoded));
             }
-            if let Ok(decoded) = <Log195Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log195Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log195(decoded));
             }
-            if let Ok(decoded) = <Log196Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log196Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log196(decoded));
             }
-            if let Ok(decoded) = <Log50Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log50Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log50(decoded));
             }
-            if let Ok(decoded) = <Log51Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log51Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log51(decoded));
             }
-            if let Ok(decoded) = <Log197Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log197Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log197(decoded));
             }
-            if let Ok(decoded) = <Log198Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log198Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log198(decoded));
             }
-            if let Ok(decoded) = <Log12Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log12Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log12(decoded));
             }
-            if let Ok(decoded) = <Log199Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log199Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log199(decoded));
             }
-            if let Ok(decoded) = <Log200Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log200Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log200(decoded));
             }
-            if let Ok(decoded) = <Log201Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log201Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log201(decoded));
             }
-            if let Ok(decoded) = <Log202Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log202Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log202(decoded));
             }
-            if let Ok(decoded) = <Log203Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log203Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log203(decoded));
             }
-            if let Ok(decoded) = <Log204Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log204Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log204(decoded));
             }
-            if let Ok(decoded) = <Log205Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log205Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log205(decoded));
             }
-            if let Ok(decoded) = <Log206Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log206Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log206(decoded));
             }
-            if let Ok(decoded) = <Log207Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log207Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log207(decoded));
             }
-            if let Ok(decoded) = <Log208Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log208Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log208(decoded));
             }
-            if let Ok(decoded) = <Log209Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log209Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log209(decoded));
             }
-            if let Ok(decoded) = <Log210Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log210Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log210(decoded));
             }
-            if let Ok(decoded) = <Log52Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log52Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log52(decoded));
             }
-            if let Ok(decoded) = <Log211Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log211Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log211(decoded));
             }
-            if let Ok(decoded) = <Log212Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log212Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log212(decoded));
             }
-            if let Ok(decoded) = <Log213Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log213Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log213(decoded));
             }
-            if let Ok(decoded) = <Log13Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log13Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log13(decoded));
             }
-            if let Ok(decoded) = <Log14Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log14Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log14(decoded));
             }
-            if let Ok(decoded) = <Log214Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log214Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log214(decoded));
             }
-            if let Ok(decoded) = <Log215Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log215Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log215(decoded));
             }
-            if let Ok(decoded) = <Log216Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log216Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log216(decoded));
             }
-            if let Ok(decoded) = <Log53Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log53Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log53(decoded));
             }
-            if let Ok(decoded) = <Log54Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log54Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log54(decoded));
             }
-            if let Ok(decoded) = <Log217Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log217Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log217(decoded));
             }
-            if let Ok(decoded) = <Log218Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log218Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log218(decoded));
             }
-            if let Ok(decoded) = <Log219Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log219Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log219(decoded));
             }
-            if let Ok(decoded) = <Log220Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log220Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log220(decoded));
             }
-            if let Ok(decoded) = <Log221Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log221Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log221(decoded));
             }
-            if let Ok(decoded) = <Log222Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log222Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log222(decoded));
             }
-            if let Ok(decoded) = <Log223Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log223Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log223(decoded));
             }
-            if let Ok(decoded) = <Log224Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log224Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log224(decoded));
             }
-            if let Ok(decoded) = <Log225Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log225Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log225(decoded));
             }
-            if let Ok(decoded) = <Log226Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log226Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log226(decoded));
             }
-            if let Ok(decoded) = <Log227Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log227Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log227(decoded));
             }
-            if let Ok(decoded) = <Log15Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log15Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log15(decoded));
             }
-            if let Ok(decoded) = <Log55Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log55Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log55(decoded));
             }
-            if let Ok(decoded) = <Log16Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log16Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log16(decoded));
             }
-            if let Ok(decoded) = <Log228Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log228Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log228(decoded));
             }
-            if let Ok(decoded) = <Log56Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log56Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log56(decoded));
             }
-            if let Ok(decoded) = <Log229Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log229Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log229(decoded));
             }
-            if let Ok(decoded) = <Log230Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log230Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log230(decoded));
             }
-            if let Ok(decoded) = <Log231Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log231Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log231(decoded));
             }
-            if let Ok(decoded) = <Log232Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log232Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log232(decoded));
             }
-            if let Ok(decoded) = <Log233Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log233Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log233(decoded));
             }
-            if let Ok(decoded) = <Log234Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log234Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log234(decoded));
             }
-            if let Ok(decoded) = <Log235Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log235Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log235(decoded));
             }
-            if let Ok(decoded) = <Log236Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log236Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log236(decoded));
             }
-            if let Ok(decoded) = <Log237Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log237Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log237(decoded));
             }
-            if let Ok(decoded) = <Log238Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log238Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log238(decoded));
             }
-            if let Ok(decoded) = <Log239Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log239Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log239(decoded));
             }
-            if let Ok(decoded) = <Log240Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log240Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log240(decoded));
             }
-            if let Ok(decoded) = <Log241Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log241Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log241(decoded));
             }
-            if let Ok(decoded) = <Log17Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log17Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log17(decoded));
             }
-            if let Ok(decoded) = <Log242Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log242Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log242(decoded));
             }
-            if let Ok(decoded) = <Log243Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log243Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log243(decoded));
             }
-            if let Ok(decoded) = <Log244Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log244Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log244(decoded));
             }
-            if let Ok(decoded) = <Log245Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log245Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log245(decoded));
             }
-            if let Ok(decoded) = <Log246Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log246Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log246(decoded));
             }
-            if let Ok(decoded) = <Log57Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log57Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log57(decoded));
             }
-            if let Ok(decoded) = <Log247Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log247Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log247(decoded));
             }
-            if let Ok(decoded) = <Log248Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log248Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log248(decoded));
             }
-            if let Ok(decoded) = <Log249Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log249Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log249(decoded));
             }
-            if let Ok(decoded) = <Log58Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log58Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log58(decoded));
             }
-            if let Ok(decoded) = <Log59Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log59Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log59(decoded));
             }
-            if let Ok(decoded) = <Log250Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log250Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log250(decoded));
             }
-            if let Ok(decoded) = <Log251Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log251Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log251(decoded));
             }
-            if let Ok(decoded) = <Log252Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log252Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log252(decoded));
             }
-            if let Ok(decoded) = <Log253Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log253Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log253(decoded));
             }
-            if let Ok(decoded) = <Log60Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log60Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log60(decoded));
             }
-            if let Ok(decoded) = <Log254Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log254Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log254(decoded));
             }
-            if let Ok(decoded) = <Log61Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log61Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log61(decoded));
             }
-            if let Ok(decoded) = <Log255Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log255Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log255(decoded));
             }
-            if let Ok(decoded) = <Log256Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log256Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log256(decoded));
             }
-            if let Ok(decoded) = <Log257Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log257Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log257(decoded));
             }
-            if let Ok(decoded) = <Log258Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log258Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log258(decoded));
             }
-            if let Ok(decoded) = <Log259Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log259Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log259(decoded));
             }
-            if let Ok(decoded) = <Log260Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log260Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log260(decoded));
             }
-            if let Ok(decoded) = <Log261Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log261Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log261(decoded));
             }
-            if let Ok(decoded) = <Log262Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log262Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log262(decoded));
             }
-            if let Ok(decoded) = <Log62Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log62Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log62(decoded));
             }
-            if let Ok(decoded) = <Log263Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log263Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log263(decoded));
             }
-            if let Ok(decoded) = <Log264Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log264Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log264(decoded));
             }
-            if let Ok(decoded) = <Log265Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log265Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log265(decoded));
             }
-            if let Ok(decoded) = <Log266Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log266Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log266(decoded));
             }
-            if let Ok(decoded) = <Log267Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log267Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log267(decoded));
             }
-            if let Ok(decoded) = <Log268Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log268Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log268(decoded));
             }
-            if let Ok(decoded) = <Log269Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log269Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log269(decoded));
             }
-            if let Ok(decoded) = <Log270Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log270Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log270(decoded));
             }
-            if let Ok(decoded) = <Log271Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log271Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log271(decoded));
             }
-            if let Ok(decoded) = <Log272Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log272Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log272(decoded));
             }
-            if let Ok(decoded) = <Log273Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log273Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log273(decoded));
             }
-            if let Ok(decoded) = <Log274Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log274Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log274(decoded));
             }
-            if let Ok(decoded) = <Log275Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log275Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log275(decoded));
             }
-            if let Ok(decoded) = <Log276Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log276Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log276(decoded));
             }
-            if let Ok(decoded) = <Log277Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log277Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log277(decoded));
             }
-            if let Ok(decoded) = <Log63Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log63Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log63(decoded));
             }
-            if let Ok(decoded) = <Log64Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log64Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log64(decoded));
             }
-            if let Ok(decoded) = <Log65Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log65Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log65(decoded));
             }
-            if let Ok(decoded) = <Log278Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log278Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log278(decoded));
             }
-            if let Ok(decoded) = <Log279Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log279Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log279(decoded));
             }
-            if let Ok(decoded) = <Log280Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log280Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log280(decoded));
             }
-            if let Ok(decoded) = <Log18Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log18Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log18(decoded));
             }
-            if let Ok(decoded) = <Log66Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log66Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log66(decoded));
             }
-            if let Ok(decoded) = <Log281Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log281Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log281(decoded));
             }
-            if let Ok(decoded) = <Log282Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log282Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log282(decoded));
             }
-            if let Ok(decoded) = <Log283Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log283Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log283(decoded));
             }
-            if let Ok(decoded) = <Log284Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log284Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log284(decoded));
             }
-            if let Ok(decoded) = <Log285Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log285Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log285(decoded));
             }
-            if let Ok(decoded) = <Log67Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log67Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log67(decoded));
             }
-            if let Ok(decoded) = <Log286Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log286Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log286(decoded));
             }
-            if let Ok(decoded) = <Log287Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log287Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log287(decoded));
             }
-            if let Ok(decoded) = <Log288Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log288Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log288(decoded));
             }
-            if let Ok(decoded) = <Log289Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log289Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log289(decoded));
             }
-            if let Ok(decoded) = <Log290Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log290Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log290(decoded));
             }
-            if let Ok(decoded) = <Log291Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log291Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log291(decoded));
             }
-            if let Ok(decoded) = <Log292Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log292Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log292(decoded));
             }
-            if let Ok(decoded) = <Log19Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log19Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log19(decoded));
             }
-            if let Ok(decoded) = <Log68Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log68Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log68(decoded));
             }
-            if let Ok(decoded) = <Log293Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log293Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log293(decoded));
             }
-            if let Ok(decoded) = <Log294Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log294Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log294(decoded));
             }
-            if let Ok(decoded) = <Log295Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log295Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log295(decoded));
             }
-            if let Ok(decoded) = <Log296Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log296Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log296(decoded));
             }
-            if let Ok(decoded) = <Log297Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log297Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log297(decoded));
             }
-            if let Ok(decoded) = <Log69Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log69Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log69(decoded));
             }
-            if let Ok(decoded) = <Log70Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log70Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log70(decoded));
             }
-            if let Ok(decoded) = <Log71Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log71Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log71(decoded));
             }
-            if let Ok(decoded) = <Log72Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log72Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log72(decoded));
             }
-            if let Ok(decoded) = <Log298Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log298Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log298(decoded));
             }
-            if let Ok(decoded) = <Log299Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log299Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log299(decoded));
             }
-            if let Ok(decoded) = <Log300Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log300Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log300(decoded));
             }
-            if let Ok(decoded) = <Log301Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log301Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log301(decoded));
             }
-            if let Ok(decoded) = <Log302Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log302Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log302(decoded));
             }
-            if let Ok(decoded) = <Log73Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log73Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log73(decoded));
             }
-            if let Ok(decoded) = <Log303Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log303Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log303(decoded));
             }
-            if let Ok(decoded) = <Log304Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log304Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log304(decoded));
             }
-            if let Ok(decoded) = <Log74Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log74Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log74(decoded));
             }
-            if let Ok(decoded) = <Log75Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log75Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log75(decoded));
             }
-            if let Ok(decoded) = <Log305Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log305Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log305(decoded));
             }
-            if let Ok(decoded) = <Log306Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log306Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log306(decoded));
             }
-            if let Ok(decoded) = <Log307Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log307Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log307(decoded));
             }
-            if let Ok(decoded) = <Log308Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log308Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log308(decoded));
             }
-            if let Ok(decoded) = <Log309Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log309Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log309(decoded));
             }
-            if let Ok(decoded) = <Log20Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log20Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log20(decoded));
             }
-            if let Ok(decoded) = <Log76Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log76Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log76(decoded));
             }
-            if let Ok(decoded) = <Log310Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log310Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log310(decoded));
             }
-            if let Ok(decoded) = <Log311Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log311Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log311(decoded));
             }
-            if let Ok(decoded) = <Log312Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log312Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log312(decoded));
             }
-            if let Ok(decoded) = <Log313Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log313Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log313(decoded));
             }
-            if let Ok(decoded) = <Log314Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log314Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log314(decoded));
             }
-            if let Ok(decoded) = <Log77Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log77Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log77(decoded));
             }
-            if let Ok(decoded) = <Log315Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log315Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log315(decoded));
             }
-            if let Ok(decoded) = <Log316Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log316Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log316(decoded));
             }
-            if let Ok(decoded) = <Log317Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log317Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log317(decoded));
             }
-            if let Ok(decoded) = <Log78Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log78Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log78(decoded));
             }
-            if let Ok(decoded) = <Log318Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log318Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log318(decoded));
             }
-            if let Ok(decoded) = <Log79Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log79Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log79(decoded));
             }
-            if let Ok(decoded) = <Log319Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log319Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log319(decoded));
             }
-            if let Ok(decoded) = <Log320Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log320Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log320(decoded));
             }
-            if let Ok(decoded) = <Log321Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log321Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log321(decoded));
             }
-            if let Ok(decoded) = <Log322Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log322Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log322(decoded));
             }
-            if let Ok(decoded) = <Log323Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log323Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log323(decoded));
             }
-            if let Ok(decoded) = <Log324Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log324Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log324(decoded));
             }
-            if let Ok(decoded) = <Log80Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log80Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log80(decoded));
             }
-            if let Ok(decoded) = <Log325Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log325Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log325(decoded));
             }
-            if let Ok(decoded) = <Log326Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log326Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log326(decoded));
             }
-            if let Ok(decoded) = <Log81Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log81Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log81(decoded));
             }
-            if let Ok(decoded) = <Log327Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log327Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log327(decoded));
             }
-            if let Ok(decoded) = <Log328Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log328Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log328(decoded));
             }
-            if let Ok(decoded) = <Log329Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log329Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log329(decoded));
             }
-            if let Ok(decoded) = <Log330Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log330Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log330(decoded));
             }
-            if let Ok(decoded) = <Log331Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log331Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log331(decoded));
             }
-            if let Ok(decoded) = <Log82Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log82Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log82(decoded));
             }
-            if let Ok(decoded) = <Log83Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log83Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log83(decoded));
             }
-            if let Ok(decoded) = <Log84Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log84Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log84(decoded));
             }
-            if let Ok(decoded) = <Log332Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log332Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log332(decoded));
             }
-            if let Ok(decoded) = <Log333Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log333Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log333(decoded));
             }
-            if let Ok(decoded) = <Log334Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log334Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log334(decoded));
             }
-            if let Ok(decoded) = <Log21Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log21Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log21(decoded));
             }
-            if let Ok(decoded) = <Log335Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log335Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log335(decoded));
             }
-            if let Ok(decoded) = <Log336Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log336Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log336(decoded));
             }
-            if let Ok(decoded) = <Log4Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log4Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log4(decoded));
             }
-            if let Ok(decoded) = <Log337Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log337Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log337(decoded));
             }
-            if let Ok(decoded) = <Log338Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log338Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log338(decoded));
             }
-            if let Ok(decoded) = <Log339Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log339Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log339(decoded));
             }
-            if let Ok(decoded) = <Log85Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log85Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log85(decoded));
             }
-            if let Ok(decoded) = <Log340Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log340Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log340(decoded));
             }
-            if let Ok(decoded) = <Log86Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log86Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log86(decoded));
             }
-            if let Ok(decoded) = <Log341Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log341Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log341(decoded));
             }
-            if let Ok(decoded) = <Log342Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log342Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log342(decoded));
             }
-            if let Ok(decoded) = <Log5Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log5Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log5(decoded));
             }
-            if let Ok(decoded) = <Log22Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <Log22Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::Log22(decoded));
             }
-            if let Ok(decoded) = <LogAddressCall as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogAddressCall as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogAddress(decoded));
             }
-            if let Ok(decoded) = <LogBoolCall as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBoolCall as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBool(decoded));
             }
-            if let Ok(decoded) = <LogBytesCall as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytesCall as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes(decoded));
             }
-            if let Ok(decoded) = <LogBytes1Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes1(decoded));
             }
-            if let Ok(decoded) = <LogBytes10Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes10Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes10(decoded));
             }
-            if let Ok(decoded) = <LogBytes11Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes11Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes11(decoded));
             }
-            if let Ok(decoded) = <LogBytes12Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes12Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes12(decoded));
             }
-            if let Ok(decoded) = <LogBytes13Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes13Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes13(decoded));
             }
-            if let Ok(decoded) = <LogBytes14Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes14Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes14(decoded));
             }
-            if let Ok(decoded) = <LogBytes15Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes15Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes15(decoded));
             }
-            if let Ok(decoded) = <LogBytes16Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes16Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes16(decoded));
             }
-            if let Ok(decoded) = <LogBytes17Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes17Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes17(decoded));
             }
-            if let Ok(decoded) = <LogBytes18Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes18Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes18(decoded));
             }
-            if let Ok(decoded) = <LogBytes19Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes19Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes19(decoded));
             }
-            if let Ok(decoded) = <LogBytes2Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes2(decoded));
             }
-            if let Ok(decoded) = <LogBytes20Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes20Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes20(decoded));
             }
-            if let Ok(decoded) = <LogBytes21Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes21Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes21(decoded));
             }
-            if let Ok(decoded) = <LogBytes22Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes22Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes22(decoded));
             }
-            if let Ok(decoded) = <LogBytes23Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes23Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes23(decoded));
             }
-            if let Ok(decoded) = <LogBytes24Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes24Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes24(decoded));
             }
-            if let Ok(decoded) = <LogBytes25Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes25Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes25(decoded));
             }
-            if let Ok(decoded) = <LogBytes26Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes26Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes26(decoded));
             }
-            if let Ok(decoded) = <LogBytes27Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes27Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes27(decoded));
             }
-            if let Ok(decoded) = <LogBytes28Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes28Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes28(decoded));
             }
-            if let Ok(decoded) = <LogBytes29Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes29Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes29(decoded));
             }
-            if let Ok(decoded) = <LogBytes3Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes3(decoded));
             }
-            if let Ok(decoded) = <LogBytes30Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes30Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes30(decoded));
             }
-            if let Ok(decoded) = <LogBytes31Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes31Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes31(decoded));
             }
-            if let Ok(decoded) = <LogBytes32Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes32Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes32(decoded));
             }
-            if let Ok(decoded) = <LogBytes4Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes4Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes4(decoded));
             }
-            if let Ok(decoded) = <LogBytes5Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes5Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes5(decoded));
             }
-            if let Ok(decoded) = <LogBytes6Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes6Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes6(decoded));
             }
-            if let Ok(decoded) = <LogBytes7Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes7Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes7(decoded));
             }
-            if let Ok(decoded) = <LogBytes8Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes8Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes8(decoded));
             }
-            if let Ok(decoded) = <LogBytes9Call as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogBytes9Call as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogBytes9(decoded));
             }
-            if let Ok(decoded) = <LogIntCall as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogIntCall as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogInt(decoded));
             }
-            if let Ok(decoded) = <LogStringCall as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogStringCall as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogString(decoded));
             }
-            if let Ok(decoded) = <LogUintCall as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
+            if let Ok(decoded) = <LogUintCall as ::corebc_core::abi::AbiDecode>::decode(data) {
                 return Ok(Self::LogUint(decoded));
             }
             Err(::corebc_core::abi::Error::InvalidData.into())
@@ -14057,111 +13282,43 @@ pub mod hardhat_console {
                 Self::Log342(element) => ::corebc_core::abi::AbiEncode::encode(element),
                 Self::Log5(element) => ::corebc_core::abi::AbiEncode::encode(element),
                 Self::Log22(element) => ::corebc_core::abi::AbiEncode::encode(element),
-                Self::LogAddress(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
+                Self::LogAddress(element) => ::corebc_core::abi::AbiEncode::encode(element),
                 Self::LogBool(element) => ::corebc_core::abi::AbiEncode::encode(element),
                 Self::LogBytes(element) => ::corebc_core::abi::AbiEncode::encode(element),
-                Self::LogBytes1(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes10(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes11(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes12(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes13(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes14(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes15(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes16(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes17(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes18(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes19(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes2(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes20(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes21(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes22(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes23(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes24(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes25(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes26(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes27(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes28(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes29(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes3(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes30(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes31(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes32(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes4(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes5(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes6(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes7(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes8(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
-                Self::LogBytes9(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
+                Self::LogBytes1(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes10(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes11(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes12(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes13(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes14(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes15(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes16(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes17(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes18(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes19(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes2(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes20(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes21(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes22(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes23(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes24(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes25(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes26(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes27(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes28(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes29(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes3(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes30(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes31(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes32(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes4(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes5(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes6(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes7(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes8(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::LogBytes9(element) => ::corebc_core::abi::AbiEncode::encode(element),
                 Self::LogInt(element) => ::corebc_core::abi::AbiEncode::encode(element),
-                Self::LogString(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
+                Self::LogString(element) => ::corebc_core::abi::AbiEncode::encode(element),
                 Self::LogUint(element) => ::corebc_core::abi::AbiEncode::encode(element),
             }
         }

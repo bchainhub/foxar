@@ -80,7 +80,7 @@ impl CommentWithMetadata {
     ) -> Self {
         let src_before = &src[..comment.loc().start()];
         if src_before.is_empty() {
-            return Self::new(comment, CommentPosition::Prefix, false, 0);
+            return Self::new(comment, CommentPosition::Prefix, false, 0)
         }
 
         let mut lines_before = src_before.lines().rev();
@@ -95,7 +95,7 @@ impl CommentWithMetadata {
                 CommentPosition::Prefix,
                 last_line.unwrap_or_default().trim_start().is_empty(),
                 indent_len,
-            );
+            )
         }
 
         let code_end = src_before
@@ -247,7 +247,7 @@ impl Comments {
             .map(|(idx, _)| idx)
             .unwrap_or_else(|| comments.len());
         if pos == 0 {
-            return Vec::new();
+            return Vec::new()
         }
         comments.rotate_left(pos);
         comments.split_off(comments.len() - pos).into()
@@ -402,7 +402,7 @@ impl<'a> Iterator for NonCommentChars<'a> {
     fn next(&mut self) -> Option<Self::Item> {
         for (state, _, ch) in self.0.by_ref() {
             if state == CommentState::None {
-                return Some(ch);
+                return Some(ch)
             }
         }
         None

@@ -61,12 +61,12 @@ impl<'a> fmt::Debug for HexDisplay<'a> {
 
 pub fn to_precompile_id(spec_id: SpecId) -> forge::revm::precompile::SpecId {
     match spec_id {
-        SpecId::FRONTIER
-        | SpecId::FRONTIER_THAWING
-        | SpecId::HOMESTEAD
-        | SpecId::DAO_FORK
-        | SpecId::TANGERINE
-        | SpecId::SPURIOUS_DRAGON => forge::revm::precompile::SpecId::HOMESTEAD,
+        SpecId::FRONTIER |
+        SpecId::FRONTIER_THAWING |
+        SpecId::HOMESTEAD |
+        SpecId::DAO_FORK |
+        SpecId::TANGERINE |
+        SpecId::SPURIOUS_DRAGON => forge::revm::precompile::SpecId::HOMESTEAD,
         SpecId::BYZANTIUM | SpecId::CONSTANTINOPLE | SpecId::PETERSBURG => {
             forge::revm::precompile::SpecId::BYZANTIUM
         }

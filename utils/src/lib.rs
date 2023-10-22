@@ -209,7 +209,7 @@ pub fn link_with_nonce_or_address<T, U>(
                 BytecodeObject::Bytecode(ref bytes) => {
                     if bytes.as_ref().is_empty() {
                         // abstract, skip
-                        continue;
+                        continue
                     }
                 }
             }

@@ -111,14 +111,14 @@ impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
     type Error = DatabaseError;
     fn basic(&self, address: foundry_evm::executor::B176) -> DatabaseResult<Option<AccountInfo>> {
         if let Some(acc) = self.accounts.get(&address.into()).cloned() {
-            return Ok(Some(acc));
+            return Ok(Some(acc))
         }
         self.db.basic(address)
     }
 
     fn code_by_hash(&self, code_hash: B256) -> DatabaseResult<Bytecode> {
         if let Some((_, acc)) = self.accounts.iter().find(|(_, acc)| acc.code_hash == code_hash) {
-            return Ok(acc.code.clone().unwrap_or_default());
+            return Ok(acc.code.clone().unwrap_or_default())
         }
         self.db.code_by_hash(code_hash)
     }
@@ -134,7 +134,7 @@ impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
                 .get(&H256::from_uint(&index.to_ethers_u256()))
                 .copied()
                 .unwrap_or_default();
-            return Ok(value.into_uint().to_ruint());
+            return Ok(value.into_uint().to_ruint())
         }
         self.db.storage(address, index)
     }

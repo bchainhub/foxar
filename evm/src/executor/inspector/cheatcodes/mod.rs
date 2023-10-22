@@ -869,7 +869,7 @@ where
                                     )
                                     .encode()
                                     .into(),
-                                )
+                                );
                             }
                         }
                         // If the cheatcode was called without a `count` argument,
@@ -895,7 +895,7 @@ where
                                     )
                                     .encode()
                                     .into(),
-                                )
+                                );
                             }
                         }
                     }
@@ -914,7 +914,7 @@ where
                         .to_string()
                         .encode()
                         .into(),
-                )
+                );
             }
         }
 
