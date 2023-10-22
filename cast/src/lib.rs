@@ -9,7 +9,7 @@ use corebc_blockindex::Client;
 use corebc_core::{
     abi::{
         token::{LenientTokenizer, Tokenizer},
-        Function, HumanReadableParser, ParamType, /*RawAbi, */ Token,
+        Function, HumanReadableParser, ParamType, /* RawAbi, */ Token,
     },
     types::{Network, *},
     utils::{
@@ -140,59 +140,6 @@ where
         })
     }
 
-    /// Generates an access list for the specified transaction
-    ///
-    /// # Example
-    ///
-    /// ```no_run
-    /// use cast::{Cast, TxBuilder};
-    /// use corebc_core::types::{Address, Chain};
-    /// use corebc_providers::{Provider, Http};
-    /// use std::{str::FromStr, convert::TryFrom};
-    ///
-    /// # async fn foo() -> eyre::Result<()> {
-    /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let to = Address::from_str("0xB3C95ff08316fb2F2e3E52Ee82F8e7b605Aa1304")?;
-    /// let sig = "greeting(uint256)(string)";
-    /// let args = vec!["5".to_owned()];
-    /// let mut builder = TxBuilder::new(&provider, Address::zero(), Some(to), Chain::Mainnet, false).await?;
-    /// builder
-    ///     .set_args(sig, args).await?;
-    /// let builder_output = builder.peek();
-    /// let cast = Cast::new(&provider);
-    /// let access_list = cast.access_list(builder_output, None, false).await?;
-    /// println!("{}", access_list);
-    /// # Ok(())
-    /// # }
-    /// ```
-    pub async fn access_list(
-        &self,
-        builder_output: TxBuilderPeekOutput<'_>,
-        block: Option<BlockId>,
-        to_json: bool,
-    ) -> Result<String> {
-        let (tx, _) = builder_output;
-        let access_list = self.provider.create_access_list(tx, block).await?;
-        let res = if to_json {
-            serde_json::to_string(&access_list)?
-        } else {
-            let mut s =
-                vec![format!("gas used: {}", access_list.gas_used), "access list:".to_string()];
-            for al in access_list.access_list.0 {
-                s.push(format!("- address: {}", SimpleCast::to_checksum_address(&al.address)));
-                if !al.storage_keys.is_empty() {
-                    s.push("  keys:".to_string());
-                    for key in al.storage_keys {
-                        s.push(format!("    {key:?}"));
-                    }
-                }
-            }
-            s.join("\n")
-        };
-
-        Ok(res)
-    }
-
     pub async fn balance<T: Into<NameOrAddress> + Send + Sync>(
         &self,
         who: T,
@@ -301,7 +248,7 @@ where
     pub async fn estimate(&self, builder_output: TxBuilderPeekOutput<'_>) -> Result<U256> {
         let (tx, _) = builder_output;
 
-        let res = self.provider.estimate_gas(tx, None).await?;
+        let res = self.provider.estimate_energy(tx, None).await?;
 
         Ok::<_, eyre::Error>(res)
     }
@@ -470,7 +417,7 @@ where
     }
 
     pub async fn gas_price(&self) -> Result<U256> {
-        Ok(self.provider.get_gas_price().await?)
+        Ok(self.provider.get_energy_price().await?)
     }
 
     /// # Example
@@ -1260,7 +1207,7 @@ impl SimpleCast {
         let base_in = Base::unwrap_or_detect(base_in, value)?;
         let base_out: Base = base_out.parse()?;
         if base_in == base_out {
-            return Ok(value.to_string());
+            return Ok(value.to_string())
         }
 
         let mut n = NumberWithBase::parse_int(value, Some(base_in.to_string()))?;
@@ -1330,7 +1277,7 @@ impl SimpleCast {
         let s = if let Some(stripped) = s.strip_prefix("000000000000000000000000") {
             stripped
         } else {
-            return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"));
+            return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"))
         };
 
         let lowercase_address_string = format!("0x{s}");
@@ -1519,11 +1466,12 @@ impl SimpleCast {
     //             let source = match client.contract_source_code(address).await {
     //                 Ok(source) => source,
     //                 Err(EtherscanError::InvalidApiKey) => {
-    //                     eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may be using an API key for another Etherscan API chain (e.g. Etherscan API key for Polygonscan).")
-    //                 }
+    //                     eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may
+    // be using an API key for another Etherscan API chain (e.g. Etherscan API key for
+    // Polygonscan).")                 }
     //                 Err(EtherscanError::ContractCodeNotVerified(address)) => {
-    //                     eyre::bail!("Contract source code at {:?} on {} not verified. Maybe you have selected the wrong chain?", address, chain)
-    //                 }
+    //                     eyre::bail!("Contract source code at {:?} on {} not verified. Maybe you
+    // have selected the wrong chain?", address, chain)                 }
     //                 Err(err) => {
     //                     eyre::bail!(err)
     //                 }
@@ -1724,7 +1672,7 @@ impl SimpleCast {
         _etherscan_api_key: String,
     ) -> Result<String> {
         // BLOCKINDEX TODO
-        let client = Client::new(chain /* , etherscan_api_key*/)?;
+        let client = Client::new(chain /* , etherscan_api_key */)?;
         let metadata = client.contract_source_code(contract_address.parse()?).await?;
         Ok(metadata.source_code())
     }
@@ -1751,7 +1699,7 @@ impl SimpleCast {
         output_directory: PathBuf,
     ) -> eyre::Result<()> {
         // BLOCKINDEX TODO
-        let client = Client::new(chain /* , etherscan_api_key*/)?;
+        let client = Client::new(chain /* , etherscan_api_key */)?;
         let meta = client.contract_source_code(contract_address.parse()?).await?;
         let source_tree = meta.source_tree();
         source_tree.write_to(&output_directory)?;
@@ -1797,7 +1745,7 @@ impl SimpleCast {
         }
         if optimize == 0 {
             let selector = HumanReadableParser::parse_function(signature)?.short_signature();
-            return Ok((format!("0x{}", hex::encode(selector)), String::from(signature)));
+            return Ok((format!("0x{}", hex::encode(selector)), String::from(signature)))
         }
         let Some((name, params)) = signature.split_once('(') else {
             eyre::bail!("Invalid signature");
@@ -1819,7 +1767,7 @@ impl SimpleCast {
 
                     if selector.iter().take_while(|&&byte| byte == 0).count() == optimize {
                         found.store(true, Ordering::Relaxed);
-                        return Some((nonce, format!("0x{}", hex::encode(selector)), input));
+                        return Some((nonce, format!("0x{}", hex::encode(selector)), input))
                     }
 
                     nonce += nonce_step;
