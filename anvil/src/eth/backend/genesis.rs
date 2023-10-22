@@ -22,6 +22,7 @@ use foundry_evm::{
         primitives::{AccountInfo, Bytecode},
     },
 };
+use foundry_utils::types::{ToEthersU256, ToRuint};
 use parking_lot::Mutex;
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::RwLockWriteGuard;
@@ -108,29 +109,32 @@ pub(crate) struct AtGenesisStateDb<'a> {
 
 impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
     type Error = DatabaseError;
-    fn basic(&self, address: B176) -> DatabaseResult<Option<AccountInfo>> {
+    fn basic(&self, address: foundry_evm::executor::B176) -> DatabaseResult<Option<AccountInfo>> {
         if let Some(acc) = self.accounts.get(&address.into()).cloned() {
-            return Ok(Some(acc))
+            return Ok(Some(acc));
         }
         self.db.basic(address)
     }
 
     fn code_by_hash(&self, code_hash: B256) -> DatabaseResult<Bytecode> {
         if let Some((_, acc)) = self.accounts.iter().find(|(_, acc)| acc.code_hash == code_hash) {
-            return Ok(acc.code.clone().unwrap_or_default())
+            return Ok(acc.code.clone().unwrap_or_default());
         }
         self.db.code_by_hash(code_hash)
     }
 
-    fn storage(&self, address: B176, index: U256) -> DatabaseResult<U256> {
+    fn storage(&self, address: foundry_evm::executor::B176, index: U256) -> DatabaseResult<U256> {
         if let Some(acc) = self
             .genesis
             .as_ref()
             .and_then(|genesis| genesis.alloc.accounts.get(&b176_to_h176(address)))
         {
-            let value =
-                acc.storage.get(&H256::from_uint(&index.into())).copied().unwrap_or_default();
-            return Ok(value.into_uint().into())
+            let value = acc
+                .storage
+                .get(&H256::from_uint(&index.to_ethers_u256()))
+                .copied()
+                .unwrap_or_default();
+            return Ok(value.into_uint().to_ruint());
         }
         self.db.storage(address, index)
     }

@@ -23,6 +23,7 @@ pub mod abi;
 pub mod error;
 pub mod glob;
 pub mod rpc;
+pub mod types;
 
 #[derive(Debug)]
 pub struct PostLinkInput<'a, T, U> {
@@ -208,7 +209,7 @@ pub fn link_with_nonce_or_address<T, U>(
                 BytecodeObject::Bytecode(ref bytes) => {
                     if bytes.as_ref().is_empty() {
                         // abstract, skip
-                        continue
+                        continue;
                     }
                 }
             }

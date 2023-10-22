@@ -5,9 +5,9 @@ use anvil_core::eth::trie::KeccakHasher;
 use corebc::{
     prelude::{Address, Bytes},
     types::H256,
-    utils::keccak256,
+    utils::sha3,
 };
-use forge::revm::primitives::{B160, B256, SHA3_EMPTY, U256 as rU256};
+use forge::revm::primitives::{B256, SHA3_EMPTY, U256 as rU256};
 use foundry_common::errors::FsPathError;
 use foundry_evm::{
     executor::{
@@ -21,7 +21,9 @@ use foundry_evm::{
     },
     HashMap,
 };
+use foundry_utils::types::ToRuint;
 use hash_db::HashDB;
+use revm::primitives::B176;
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, fmt, path::Path};
 
@@ -94,7 +96,7 @@ pub trait Db:
     /// Sets the balance of the given address
     fn set_balance(&mut self, address: Address, balance: U256) -> DatabaseResult<()> {
         let mut info = self.basic(address.into())?.unwrap_or_default();
-        info.balance = balance.into();
+        info.balance = balance.to_ruint();
         self.insert_account(address, info);
         Ok(())
     }
@@ -105,7 +107,7 @@ pub trait Db:
         let code_hash = if code.as_ref().is_empty() {
             SHA3_EMPTY
         } else {
-            B256::from_slice(&keccak256(code.as_ref())[..])
+            B256::from_slice(&sha3(code.as_ref())[..])
         };
         info.code_hash = code_hash;
         info.code = Some(Bytecode::new_raw(code.0).to_checked());
@@ -136,7 +138,7 @@ pub trait Db:
             self.insert_account(
                 addr,
                 AccountInfo {
-                    balance: account.balance.into(),
+                    balance: account.balance.to_ruint(),
                     code_hash: SHA3_EMPTY, // will be set automatically
                     code: if account.code.0.is_empty() {
                         None
@@ -181,11 +183,11 @@ impl<T: DatabaseRef<Error = DatabaseError> + Send + Sync + Clone + fmt::Debug> D
     }
 
     fn set_storage_at(&mut self, address: Address, slot: U256, val: U256) -> DatabaseResult<()> {
-        self.insert_account_storage(address.into(), slot.into(), val.into())
+        self.insert_account_storage(address.into(), slot.to_ruint(), val.to_ruint())
     }
 
     fn insert_block_hash(&mut self, number: U256, hash: H256) {
-        self.block_hashes.insert(number.into(), hash.into());
+        self.block_hashes.insert(number.to_ruint(), hash.into());
     }
 
     fn dump_state(&self) -> DatabaseResult<Option<SerializableState>> {
@@ -261,7 +263,7 @@ impl StateDb {
 
 impl DatabaseRef for StateDb {
     type Error = DatabaseError;
-    fn basic(&self, address: B160) -> DatabaseResult<Option<AccountInfo>> {
+    fn basic(&self, address: B176) -> DatabaseResult<Option<AccountInfo>> {
         self.0.basic(address)
     }
 
@@ -269,7 +271,7 @@ impl DatabaseRef for StateDb {
         self.0.code_by_hash(code_hash)
     }
 
-    fn storage(&self, address: B160, index: rU256) -> DatabaseResult<rU256> {
+    fn storage(&self, address: B176, index: rU256) -> DatabaseResult<rU256> {
         self.0.storage(address, index)
     }
 

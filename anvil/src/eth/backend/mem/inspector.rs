@@ -10,17 +10,18 @@ use foundry_evm::{
     executor::inspector::{LogCollector, Tracer},
     revm,
     revm::{
-        inspectors::GasInspector,
-        interpreter::{CallInputs, CreateInputs, Gas, InstructionResult, Interpreter},
+        inspectors::EnergyInspector,
+        interpreter::{CallInputs, CreateInputs, Energy, InstructionResult, Interpreter},
         EVMData,
     },
 };
+use revm::primitives::B176;
 use std::{cell::RefCell, rc::Rc};
 
 /// The [`revm::Inspector`] used when transacting in the evm
 #[derive(Debug, Clone, Default)]
 pub struct Inspector {
-    pub gas: Option<Rc<RefCell<GasInspector>>>,
+    pub gas: Option<Rc<RefCell<EnergyInspector>>>,
     pub tracer: Option<Tracer>,
     /// collects all `console.sol` logs
     pub logs: LogCollector,
@@ -48,7 +49,7 @@ impl Inspector {
         if self.tracer.is_none() {
             self = self.with_tracing()
         }
-        let gas_inspector = Rc::new(RefCell::new(GasInspector::default()));
+        let gas_inspector = Rc::new(RefCell::new(EnergyInspector::default()));
         self.gas = Some(gas_inspector.clone());
         self.tracer = self.tracer.map(|tracer| tracer.with_steps_recording(gas_inspector));
 
@@ -90,7 +91,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
     fn log(
         &mut self,
         evm_data: &mut EVMData<'_, DB>,
-        address: &B160,
+        address: &B176,
         topics: &[B256],
         data: &Bytes,
     ) {
@@ -129,7 +130,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
         data: &mut EVMData<'_, DB>,
         call: &mut CallInputs,
         is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [
@@ -142,18 +143,18 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
             }
         );
 
-        (InstructionResult::Continue, Gas::new(call.gas_limit), Bytes::new())
+        (InstructionResult::Continue, Energy::new(call.energy_limit), Bytes::new())
     }
 
     fn call_end(
         &mut self,
         data: &mut EVMData<'_, DB>,
         inputs: &CallInputs,
-        remaining_gas: Gas,
+        remaining_gas: Energy,
         ret: InstructionResult,
         out: Bytes,
         is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
@@ -168,7 +169,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
@@ -177,7 +178,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
             }
         );
 
-        (InstructionResult::Continue, None, Gas::new(call.gas_limit), Bytes::new())
+        (InstructionResult::Continue, None, Energy::new(call.energy_limit), Bytes::new())
     }
 
     fn create_end(
@@ -185,10 +186,10 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
         data: &mut EVMData<'_, DB>,
         inputs: &CreateInputs,
         status: InstructionResult,
-        address: Option<B160>,
-        gas: Gas,
+        address: Option<B176>,
+        gas: Energy,
         retdata: Bytes,
-    ) -> (InstructionResult, Option<B160>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],

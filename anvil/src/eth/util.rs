@@ -61,23 +61,15 @@ impl<'a> fmt::Debug for HexDisplay<'a> {
 
 pub fn to_precompile_id(spec_id: SpecId) -> forge::revm::precompile::SpecId {
     match spec_id {
-        SpecId::FRONTIER |
-        SpecId::FRONTIER_THAWING |
-        SpecId::HOMESTEAD |
-        SpecId::DAO_FORK |
-        SpecId::TANGERINE |
-        SpecId::SPURIOUS_DRAGON => forge::revm::precompile::SpecId::HOMESTEAD,
+        SpecId::FRONTIER
+        | SpecId::FRONTIER_THAWING
+        | SpecId::HOMESTEAD
+        | SpecId::DAO_FORK
+        | SpecId::TANGERINE
+        | SpecId::SPURIOUS_DRAGON => forge::revm::precompile::SpecId::HOMESTEAD,
         SpecId::BYZANTIUM | SpecId::CONSTANTINOPLE | SpecId::PETERSBURG => {
             forge::revm::precompile::SpecId::BYZANTIUM
         }
-        SpecId::ISTANBUL | SpecId::MUIR_GLACIER => forge::revm::precompile::SpecId::ISTANBUL,
-        SpecId::BERLIN |
-        SpecId::LONDON |
-        SpecId::ARROW_GLACIER |
-        SpecId::GRAY_GLACIER |
-        SpecId::MERGE |
-        SpecId::SHANGHAI |
-        SpecId::CANCUN |
-        SpecId::LATEST => forge::revm::precompile::SpecId::BERLIN,
+        SpecId::ISTANBUL | SpecId::LATEST => forge::revm::precompile::SpecId::ISTANBUL,
     }
 }
