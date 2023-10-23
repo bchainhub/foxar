@@ -8,10 +8,10 @@ use crate::{
             validate::TransactionValidator,
         },
         error::{
-            decode_revert_reason, BlockchainError, FeeHistoryError, InvalidTransactionError,
-            Result, ToRpcResponseResult,
+            decode_revert_reason, BlockchainError, InvalidTransactionError, Result,
+            ToRpcResponseResult,
         },
-        fees::{FeeDetails, FeeHistoryCache},
+        fees::FeeDetails,
         macros::node_info,
         miner::FixedBlockTimeMiner,
         pool::{
@@ -47,8 +47,8 @@ use corebc::{
     prelude::{DefaultFrame, TxpoolInspect},
     providers::ProviderError,
     types::{
-        transaction::eip712::TypedData, Address, Block, BlockId, BlockNumber, Bytes, FeeHistory,
-        Filter, FilteredParams, GoCoreDebugTracingOptions, GoCoreTrace, Log, Trace, Transaction,
+        transaction::eip712::TypedData, Address, Block, BlockId, BlockNumber, Bytes, Filter,
+        FilteredParams, GoCoreDebugTracingOptions, GoCoreTrace, Log, Trace, Transaction,
         TransactionReceipt, TxHash, TxpoolContent, TxpoolInspectSummary, TxpoolStatus, H256, U256,
         U64,
     },
@@ -85,10 +85,6 @@ pub struct EthApi {
     is_mining: bool,
     /// available signers
     signers: Arc<Vec<Box<dyn Signer>>>,
-    /// data required for `eth_feeHistory`
-    fee_history_cache: FeeHistoryCache,
-    /// max number of items kept in fee cache
-    fee_history_limit: u64,
     /// access to the actual miner
     ///
     /// This access is required in order to adjust miner settings based on requests received from
@@ -113,8 +109,6 @@ impl EthApi {
         pool: Arc<Pool>,
         backend: Arc<backend::mem::Backend>,
         signers: Arc<Vec<Box<dyn Signer>>>,
-        fee_history_cache: FeeHistoryCache,
-        fee_history_limit: u64,
         miner: Miner,
         logger: LoggingManager,
         filters: Filters,
@@ -125,8 +119,6 @@ impl EthApi {
             backend,
             is_mining: true,
             signers,
-            fee_history_cache,
-            fee_history_limit,
             miner,
             logger,
             filters,

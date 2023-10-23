@@ -3,7 +3,7 @@
 use crate::{eth::macros::node_info, revm::Database};
 use bytes::Bytes;
 use corebc::types::Log;
-use forge::revm::primitives::{B160, B256};
+use forge::revm::primitives::{B176, B256};
 use foundry_evm::{
     call_inspectors,
     decode::decode_console_logs,
@@ -15,7 +15,6 @@ use foundry_evm::{
         EVMData,
     },
 };
-use revm::primitives::B176;
 use std::{cell::RefCell, rc::Rc};
 
 /// The [`revm::Inspector`] used when transacting in the evm

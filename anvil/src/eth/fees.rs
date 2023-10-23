@@ -20,9 +20,6 @@ use tracing::trace;
 /// Maximum number of entries in the fee history cache
 pub const MAX_FEE_HISTORY_CACHE_SIZE: u64 = 2048u64;
 
-/// Initial base fee for EIP-1559 blocks.
-pub const INITIAL_BASE_FEE: u64 = 1_000_000_000;
-
 /// Initial default gas price for the first block
 pub const INITIAL_GAS_PRICE: u64 = 1_875_000_000;
 
@@ -40,6 +37,7 @@ pub fn default_elasticity() -> f64 {
 #[derive(Debug, Clone)]
 pub struct FeeManager {
     /// Hardfork identifier
+    #[allow(dead_code)]
     spec_id: SpecId,
     /// The base price to use Pre London
     ///
@@ -84,6 +82,7 @@ pub struct FeeHistoryService {
     /// number of items to consider
     fee_history_limit: u64,
     // current fee info
+    #[allow(dead_code)]
     fees: FeeManager,
     /// a type that can fetch ethereum-storage data
     storage_info: StorageInfo,
@@ -266,12 +265,8 @@ impl FeeDetails {
 
     /// Creates a new instance from the request's gas related values
     pub fn new(request_gas_price: Option<U256>) -> Result<FeeDetails, BlockchainError> {
-        match request_gas_price {
-            gas_price => {
-                // Legacy request, all default to gas price.
-                Ok(FeeDetails { gas_price })
-            }
-        }
+        let gas_price = request_gas_price;
+        Ok(FeeDetails { gas_price })
     }
 }
 

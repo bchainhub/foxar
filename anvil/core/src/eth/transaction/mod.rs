@@ -9,10 +9,8 @@ use corebc_core::{
         sha3,
     },
 };
-use foundry_evm::{
-    trace::CallTraceArena,
-    utils::{b256_to_h256, h256_to_b256, u256_to_ru256},
-};
+use foundry_evm::trace::CallTraceArena;
+use foundry_utils::types::ToRuint;
 use revm::{
     interpreter::InstructionResult,
     primitives::{CreateScheme, TransactTo, TxEnv},
@@ -412,7 +410,6 @@ impl TypedTransaction {
     pub fn as_legacy(&self) -> Option<&LegacyTransaction> {
         match self {
             TypedTransaction::Legacy(tx) => Some(tx),
-            _ => None,
         }
     }
 
@@ -484,9 +481,7 @@ impl Encodable for TypedTransaction {
 
 impl Decodable for TypedTransaction {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
-        let data = rlp.data()?;
-        let first = *data.first().ok_or(DecoderError::Custom("empty slice"))?;
-        return Ok(TypedTransaction::Legacy(rlp.as_val()?))
+        Ok(TypedTransaction::Legacy(rlp.as_val()?))
     }
 }
 
@@ -551,12 +546,11 @@ impl LegacyTransaction {
     /// > If you do, then the v of the signature MUST be set to {0,1} + CHAIN_ID * 2 + 35 where
     /// > {0,1} is the parity of the y value of the curve point for which r is the x-value in the
     /// > secp256k1 signing process.
-    pub fn meets_eip155(&self, chain_id: u64) -> bool {
-        todo!("CORE TODO GET NETWORK ID SOMEHOW");
-        let double_chain_id = chain_id.saturating_mul(2);
-        let v = self.signature.v;
-        v == double_chain_id + 35 || v == double_chain_id + 36;
-        todo!("Stuff with chain id")
+    pub fn meets_eip155(&self, _chain_id: u64) -> bool {
+        todo!("CORETODO GET NETWORK ID SOMEHOW");
+        // let double_chain_id = chain_id.saturating_mul(2);
+        // let v = self.signature.v;
+        // v == double_chain_id + 35 || v == double_chain_id + 36;
     }
 }
 
@@ -674,8 +668,8 @@ impl PendingTransaction {
                     data: input.0.clone(),
                     network_id,
                     nonce: Some(nonce.as_u64()),
-                    value: u256_to_ru256(*value),
-                    energy_price: u256_to_ru256(*gas_price),
+                    value: (*value).to_ruint(),
+                    energy_price: (*gas_price).to_ruint(),
                     energy_limit: gas_limit.as_u64(),
                 }
             }

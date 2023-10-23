@@ -36,7 +36,7 @@ use anvil_core::{
         state::StateOverride,
         transaction::{
             EthTransactionRequest, MaybeImpersonatedTransaction, PendingTransaction,
-            TransactionInfo, TypedTransaction,
+            TransactionInfo,
         },
         trie::RefTrieDB,
     },
@@ -48,10 +48,9 @@ use corebc::{
     prelude::{BlockNumber, GoCoreTraceFrame, TxHash, H256, U256, U64},
     types::{
         Address, Block as EthersBlock, BlockId, Bytes, DefaultFrame, Filter, FilteredParams,
-        GoCoreDebugTracingOptions, GoCoreTrace, Log, Network, Trace, Transaction,
-        TransactionReceipt, H160, H176,
+        GoCoreDebugTracingOptions, GoCoreTrace, Log, Trace, Transaction, TransactionReceipt, H176,
     },
-    utils::{get_contract_address, hex, rlp, sha3},
+    utils::{hex, rlp, sha3},
 };
 use flate2::{read::GzDecoder, write::GzEncoder, Compression};
 use forge::{
@@ -60,10 +59,7 @@ use forge::{
         interpreter::return_ok,
         primitives::{BlockEnv, ExecutionResult},
     },
-    utils::{
-        eval_to_instruction_result, h256_to_b256, halt_to_instruction_result, ru256_to_u256,
-        u256_to_ru256,
-    },
+    utils::{eval_to_instruction_result, halt_to_instruction_result},
 };
 use foundry_evm::{
     decode::{decode_custom_error_args, decode_revert},
@@ -768,7 +764,7 @@ impl Backend {
             let BlockInfo { block, transactions, receipts } = block;
 
             let header = block.header.clone();
-            let block_number: U64 = ru256_to_u256(env.block.number).as_u64().into();
+            let block_number: U64 = env.block.number.to_ethers_u256().as_u64().into();
 
             trace!(
                 target: "backend",
@@ -902,7 +898,7 @@ impl Backend {
         overrides: Option<StateOverride>,
     ) -> Result<(InstructionResult, Option<Output>, u64, State), BlockchainError> {
         self.with_database_at(block_request, |state, block| {
-            let block_number = ru256_to_u256(block.number).as_u64();
+            let block_number = block.number.to_ethers_u256().as_u64();
             let (exit, out, gas, state) = match overrides {
                 None => self.call_with_state(state, request, fee_details, block),
                 Some(overrides) => {
@@ -1359,7 +1355,6 @@ impl Backend {
             size: Some(size),
             mix_hash: Some(mix_hash),
             nonce: Some(nonce),
-            ..Default::default()
         }
     }
 
@@ -1481,7 +1476,7 @@ impl Backend {
 
             warn!(target: "backend", "Not historic state found for block={}", block_number);
             return Err(BlockchainError::BlockOutOfRange(
-                ru256_to_u256(self.env.read().block.number).as_u64(),
+                self.env.read().block.number.to_ethers_u256().as_u64(),
                 block_number.as_u64(),
             ))
         }
@@ -1500,7 +1495,7 @@ impl Backend {
         self.with_database_at(block_request, |db, _| {
             trace!(target: "backend", "get storage for {:?} at {:?}", address, index);
             let val = db.storage(address.into(), index.to_ruint())?;
-            Ok(u256_to_h256_be(ru256_to_u256(val)))
+            Ok(u256_to_h256_be(val.to_ethers_u256()))
         })
         .await?
     }
@@ -1715,14 +1710,6 @@ impl Backend {
 
         let mut cumulative_receipts = receipts;
         cumulative_receipts.truncate(index + 1);
-
-        let transaction = block.transactions[index].clone();
-
-        let transaction_type = transaction.transaction.r#type();
-
-        let effective_gas_price = match transaction.transaction {
-            TypedTransaction::Legacy(t) => t.gas_price,
-        };
 
         let inner = TransactionReceipt {
             transaction_hash: info.transaction_hash,

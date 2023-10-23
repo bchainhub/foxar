@@ -266,9 +266,7 @@ impl NodeArgs {
                  _ = &mut sigterm => {
                     trace!("received sigterm signal, shutting down");
                 },
-                _ = &mut on_shutdown =>{
-
-                }
+                _ = &mut on_shutdown => {}
                 _ = &mut state_dumper =>{}
             }
 

@@ -7,7 +7,7 @@ use crate::{
             mem::fork_db::ForkedDatabase,
             time::duration_since_unix_epoch,
         },
-        fees::{INITIAL_BASE_FEE, INITIAL_GAS_PRICE},
+        fees::INITIAL_GAS_PRICE,
         pool::transactions::TransactionOrder,
     },
     genesis::Genesis,
@@ -27,7 +27,6 @@ use corebc::{
     types::BlockNumber,
     utils::{format_core, hex, to_checksum, WEI_IN_CORE},
 };
-use forge::utils::{h256_to_b256, u256_to_ru256};
 use foundry_common::{
     ProviderBuilder, ALCHEMY_FREE_TIER_CUPS, NON_ARCHIVE_NODE_WARNING, REQUEST_TIMEOUT,
 };
@@ -35,9 +34,10 @@ use foundry_config::Config;
 use foundry_evm::{
     executor::fork::{BlockchainDb, BlockchainDbMeta, SharedBackend},
     revm,
-    revm::primitives::{BlockEnv, CfgEnv, Network, SpecId, TxEnv, U256 as rU256},
+    revm::primitives::{BlockEnv, CfgEnv, Network, TxEnv, U256 as rU256},
     utils::apply_network_and_block_specific_env_changes,
 };
+use foundry_utils::types::ToRuint;
 use parking_lot::RwLock;
 use serde_json::{json, to_writer, Value};
 use std::{
@@ -738,7 +738,7 @@ impl NodeConfig {
                 disable_block_energy_limit: self.disable_block_gas_limit,
                 ..Default::default()
             },
-            block: BlockEnv { energy_limit: u256_to_ru256(self.gas_limit), ..Default::default() },
+            block: BlockEnv { energy_limit: self.gas_limit.to_ruint(), ..Default::default() },
             tx: TxEnv { network_id: self.get_network_id().into(), ..Default::default() },
         };
         let fees = FeeManager::new(env.cfg.spec_id, self.get_gas_price());
@@ -819,13 +819,13 @@ latest block number: {latest_block}"
                 let gas_limit = if block.energy_limit.is_zero() {
                     env.block.energy_limit
                 } else {
-                    u256_to_ru256(block.energy_limit)
+                    block.energy_limit.to_ruint()
                 };
 
                 env.block = BlockEnv {
                     number: rU256::from(fork_block_number),
-                    timestamp: u256_to_ru256(block.timestamp),
-                    difficulty: u256_to_ru256(block.difficulty),
+                    timestamp: block.timestamp.to_ruint(),
+                    difficulty: block.difficulty.to_ruint(),
                     // ensures prevrandao is set
                     energy_limit: gas_limit,
                     // Keep previous `coinbase` and `basefee` value
@@ -912,7 +912,7 @@ latest block number: {latest_block}"
 
         let genesis = GenesisConfig {
             timestamp: self.get_genesis_timestamp(),
-            balance: u256_to_ru256(self.genesis_balance),
+            balance: self.genesis_balance.to_ruint(),
             accounts: self.genesis_accounts.iter().map(|acc| acc.address()).collect(),
             fork_genesis_account_infos: Arc::new(Default::default()),
             genesis_init: self.genesis.clone(),

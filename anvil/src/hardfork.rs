@@ -1,5 +1,4 @@
 use corebc::types::BlockNumber;
-use ethereum_forkid::{ForkHash, ForkId};
 use foundry_evm::revm::primitives::SpecId;
 use std::str::FromStr;
 
@@ -21,9 +20,10 @@ pub enum Hardfork {
 impl Hardfork {
     /// Get the first block number of the hardfork.
     pub fn fork_block(&self) -> u64 {
-        match *self {
-            _ => 0,
-        }
+        // match *self {
+        //     _ => 0,
+        // }
+        0
     }
 }
 

@@ -8,7 +8,7 @@ use crate::{
 };
 use anvil_core::eth::{
     block::{Block, BlockInfo, Header, PartialHeader},
-    receipt::{EIP1559Receipt, EIP2930Receipt, EIP658Receipt, Log, TypedReceipt},
+    receipt::{EIP658Receipt, Log, TypedReceipt},
     transaction::{PendingTransaction, TransactionInfo, TypedTransaction},
     trie,
 };
@@ -19,17 +19,14 @@ use corebc::{
 };
 use forge::{
     revm::primitives::{EVMError, ExecutionResult},
-    utils::{
-        b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result,
-        ru256_to_u256,
-    },
+    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result},
 };
 use foundry_evm::{
     executor::backend::DatabaseError,
     revm,
     revm::{
         interpreter::InstructionResult,
-        primitives::{BlockEnv, CfgEnv, Env, Output, SpecId},
+        primitives::{BlockEnv, CfgEnv, Env, Output},
     },
     trace::{node::CallTraceNode, CallTraceArena},
 };
@@ -113,7 +110,7 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
         let block_number = self.block_env.number;
         let difficulty = self.block_env.difficulty;
         let beneficiary = self.block_env.coinbase;
-        let timestamp = ru256_to_u256(self.block_env.timestamp).as_u64();
+        let timestamp = self.block_env.timestamp.to_ethers_u256().as_u64();
 
         for tx in self.into_iter() {
             let tx = match tx {

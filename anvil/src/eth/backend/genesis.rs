@@ -9,7 +9,7 @@ use corebc::{
     types::{Address, H256},
 };
 use forge::{
-    revm::primitives::{B160, B256, SHA3_EMPTY, U256},
+    revm::primitives::{B256, SHA3_EMPTY, U256},
     utils::b176_to_h176,
 };
 use foundry_evm::{
@@ -17,10 +17,7 @@ use foundry_evm::{
         backend::{snapshot::StateSnapshot, DatabaseError, DatabaseResult},
         DatabaseRef,
     },
-    revm::{
-        precompile::B176,
-        primitives::{AccountInfo, Bytecode},
-    },
+    revm::primitives::{AccountInfo, Bytecode},
 };
 use foundry_utils::types::{ToEthersU256, ToRuint};
 use parking_lot::Mutex;

@@ -2,7 +2,7 @@
 use crate::revm::primitives::AccountInfo;
 use corebc::{
     signers::LocalWallet,
-    types::{serde_helpers::*, Address, Bytes, Network, H256, U256},
+    types::{serde_helpers::*, Address, Bytes, H256, U256},
 };
 use forge::{
     revm::primitives::{Bytecode, Env, SHA3_EMPTY, U256 as rU256},

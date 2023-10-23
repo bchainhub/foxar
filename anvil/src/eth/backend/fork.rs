@@ -6,8 +6,8 @@ use corebc::{
     prelude::BlockNumber,
     providers::{Middleware, ProviderError},
     types::{
-        Address, Block, BlockId, Bytes, FeeHistory, Filter, GoCoreDebugTracingOptions, GoCoreTrace,
-        Log, Trace, Transaction, TransactionReceipt, TxHash, H256, U256,
+        Address, Block, BlockId, Bytes, Filter, GoCoreDebugTracingOptions, GoCoreTrace, Log, Trace,
+        Transaction, TransactionReceipt, TxHash, H256, U256,
     },
 };
 use foundry_common::{ProviderBuilder, RetryProvider};

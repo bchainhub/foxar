@@ -217,6 +217,7 @@ dependencies = [
  "bytes",
  "corebc-core",
  "foundry-evm",
+ "foundry-utils",
  "hash-db",
  "hash256-std-hasher",
  "keccak-hasher",

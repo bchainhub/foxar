@@ -351,7 +351,6 @@ mod tests {
             extra_data: Default::default(),
             mix_hash: Default::default(),
             nonce: H64::from_low_u64_be(99u64),
-            base_fee_per_gas: None,
         };
 
         let mut encoded = vec![];
@@ -393,7 +392,6 @@ mod tests {
             extra_data: hex::decode("7788").unwrap().into(),
             mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
-            base_fee_per_gas: None,
         };
         header.encode(&mut data);
         assert_eq!(hex::encode(&data), hex::encode(expected));
@@ -422,7 +420,6 @@ mod tests {
             extra_data: hex::decode("42").unwrap().into(),
             mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
-            base_fee_per_gas: Some(0x036b.into()),
         };
         assert_eq!(header.hash(), expected_hash);
     }
@@ -448,7 +445,6 @@ mod tests {
             extra_data: hex::decode("7788").unwrap().into(),
             mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
-            base_fee_per_gas: None,
         };
         let header = <Header as open_fastrlp::Decodable>::decode(&mut data.as_slice()).unwrap();
         assert_eq!(header, expected);
