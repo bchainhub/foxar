@@ -20,7 +20,7 @@ pub struct ExecutorBuilder {
     env: Env,
     /// The configuration used to build an [InspectorStack].
     inspector_config: InspectorStackConfig,
-    gas_limit: Option<U256>,
+    energy_limit: Option<U256>,
 }
 
 // === impl ExecutorBuilder ===
@@ -83,20 +83,20 @@ impl ExecutorBuilder {
         self
     }
 
-    /// Sets the executor gas limit.
+    /// Sets the executor energy limit.
     ///
-    /// See [Executor::gas_limit] for more info on why you might want to set this.
+    /// See [Executor::energy_limit] for more info on why you might want to set this.
     #[must_use]
-    pub fn with_gas_limit(mut self, gas_limit: U256) -> Self {
-        self.gas_limit = Some(gas_limit);
+    pub fn with_energy_limit(mut self, energy_limit: U256) -> Self {
+        self.energy_limit = Some(energy_limit);
         self
     }
 
-    /// Configure the execution environment (gas limit, chain spec, ...)
+    /// Configure the execution environment (energy limit, chain spec, ...)
     #[must_use]
     pub fn with_config(mut self, env: Env) -> Self {
         self.inspector_config.block = env.block.clone();
-        self.inspector_config.gas_price = ru256_to_u256(env.tx.energy_price);
+        self.inspector_config.energy_price = ru256_to_u256(env.tx.energy_price);
         self.env = env;
         self
     }
@@ -110,7 +110,7 @@ impl ExecutorBuilder {
 
     /// Builds the executor as configured.
     pub fn build(self, db: Backend) -> Executor {
-        let energy_limit = self.gas_limit.unwrap_or(ru256_to_u256(self.env.block.energy_limit));
+        let energy_limit = self.energy_limit.unwrap_or(ru256_to_u256(self.env.block.energy_limit));
         Executor::new(db, self.env, self.inspector_config, energy_limit)
     }
 }

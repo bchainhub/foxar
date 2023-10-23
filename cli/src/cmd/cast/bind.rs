@@ -86,8 +86,9 @@ impl BindArgs {
         let source = match client.contract_source_code(address).await {
             Ok(source) => source,
             // Err(BlockindexError::InvalidApiKey) => {
-            //     eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may be using an API key for another Etherscan API chain (e.g. Etherscan API key for Polygonscan).")
-            // }
+            //     eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may be
+            // using an API key for another Etherscan API chain (e.g. Etherscan API key for
+            // Polygonscan).") }
             Err(BlockindexError::ContractCodeNotVerified(address)) => {
                 eyre::bail!("Contract source code at {:?} on {} not verified. Maybe you have selected the wrong chain?", address, chain)
             }

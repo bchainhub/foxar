@@ -36,12 +36,12 @@ pub(crate) const VERSION_MESSAGE: &str = concat!(
     ")"
 );
 
-/// Deterministic fuzzer seed used for gas snapshots and coverage reports.
+/// Deterministic fuzzer seed used for energy snapshots and coverage reports.
 ///
 /// The sha3 hash of "foundry rulez"
 pub static STATIC_FUZZ_SEED: [u8; 32] = [
     0x57, 0x37, 0xab, 0x3c, 0x8a, 0x12, 0x17, 0xc0, 0x91, 0xcb, 0xde, 0x7f, 0xe4, 0x10, 0xec, 0xbf,
-    0xc9, 0x73, 0x29, 0x02, 0x46, 0xd5, 0x23, 0x02, 0xba, 0xe9, 0x14, 0xfc, 0x31, 0xca, 0x0e, 0x36
+    0xc9, 0x73, 0x29, 0x02, 0x46, 0xd5, 0x23, 0x02, 0xba, 0xe9, 0x14, 0xfc, 0x31, 0xca, 0x0e, 0x36,
 ];
 
 /// Useful extensions to [`std::path::Path`].
@@ -208,20 +208,8 @@ pub fn print_receipt(chain: Network, receipt: &TransactionReceipt) {
         .map(|addr| format!("\nContract Address: {}", addr))
         .unwrap_or_default();
 
-    let gas_used = receipt.gas_used.unwrap_or_default();
-    let gas_price = receipt.effective_gas_price.unwrap_or_default();
-
-    let gas_details = if gas_price.is_zero() {
-        format!("Gas Used: {gas_used}")
-    } else {
-        let paid = format_units(gas_used.mul(gas_price), 18).unwrap_or_else(|_| "N/A".into());
-        let gas_price = format_units(gas_price, 9).unwrap_or_else(|_| "N/A".into());
-        format!(
-            "Paid: {} ETH ({gas_used} gas * {} gwei)",
-            paid.trim_end_matches('0'),
-            gas_price.trim_end_matches('0').trim_end_matches('.')
-        )
-    };
+    let energy_used = receipt.energy_used.unwrap_or_default();
+    let energy_details = format!("Gas Used: {energy_used}");
 
     let check = if receipt.status.unwrap_or_default().is_zero() {
         Emoji("❌ ", " [Failed] ")
@@ -236,7 +224,7 @@ pub fn print_receipt(chain: Network, receipt: &TransactionReceipt) {
         hex::encode(receipt.transaction_hash.as_bytes()),
         contract_address,
         receipt.block_number.unwrap_or_default(),
-        gas_details
+        energy_details
     );
 }
 

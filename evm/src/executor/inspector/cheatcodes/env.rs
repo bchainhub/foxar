@@ -359,7 +359,7 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::Load(inner) => {
             ensure!(!is_potential_precompile(inner.0), "Load cannot be used on precompile addresses (N < 10). Please use an address bigger than 10 instead");
-            // TODO: Does this increase gas usage?
+            // TODO: Does this increase energy usage?
             data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
             let (val, _) = data.journaled_state.sload(
                 h176_to_b176(inner.0),
@@ -374,7 +374,7 @@ pub fn apply<DB: DatabaseExt>(
             ensure!(!is_potential_precompile(inner.0), "Etch cannot be used on precompile addresses (N < 10). Please use an address bigger than 10 instead");
             let code = inner.1.clone();
             trace!(address=?inner.0, code=?hex::encode(&code), "etch cheatcode");
-            // TODO: Does this increase gas usage?
+            // TODO: Does this increase energy usage?
             data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
             data.journaled_state
                 .set_code(h176_to_b176(inner.0), Bytecode::new_raw(code.0).to_checked());
@@ -500,8 +500,8 @@ pub fn apply<DB: DatabaseExt>(
                 state,
             )?;
 
-            // TODO:  this is probably not a good long-term solution since it might mess up the gas
-            // calculations
+            // TODO:  this is probably not a good long-term solution since it might mess up the
+            // energy calculations
             data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
 
             // we can safely unwrap because `load_account` insert inner.0 to DB.

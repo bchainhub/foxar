@@ -831,9 +831,6 @@ latest block number: {latest_block}"
                     coinbase: env.block.coinbase,
                 };
 
-                // apply changes such as difficulty -> prevrandao
-                apply_network_and_block_specific_env_changes(&mut env, &block);
-
                 // use remote gas price
                 if self.gas_price.is_none() {
                     if let Ok(gas_price) = provider.get_energy_price().await {

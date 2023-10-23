@@ -1,7 +1,9 @@
 use self::{
     env::Broadcast,
     expect::{handle_expect_emit, handle_expect_revert, ExpectedCallType},
-    util::{check_if_fixed_gas_limit, process_create, BroadcastableTransactions, MAGIC_SKIP_BYTES},
+    util::{
+        check_if_fixed_energy_limit, process_create, BroadcastableTransactions, MAGIC_SKIP_BYTES,
+    },
 };
 use crate::{
     abi::HEVMCalls,
@@ -105,8 +107,8 @@ pub struct Cheatcodes {
 
     /// The energy price
     ///
-    /// Used in the cheatcode handler to overwrite the energy price separately from the energy price
-    /// in the execution environment.
+    /// Used in the cheatcode handler to overwrite the energy price separately from the energy
+    /// price in the execution environment.
     pub energy_price: Option<U256>,
 
     /// Address labels
@@ -170,9 +172,9 @@ pub struct Cheatcodes {
     /// Records all eth deals
     pub eth_deals: Vec<DealRecord>,
 
-    /// Holds the stored energy info for when we pause energy metering. It is an `Option<Option<..>>`
-    /// because the `call` callback in an `Inspector` doesn't get access to
-    /// the `revm::Interpreter` which holds the `revm::Energy` struct that
+    /// Holds the stored energy info for when we pause energy metering. It is an
+    /// `Option<Option<..>>` because the `call` callback in an `Inspector` doesn't get access
+    /// to the `revm::Interpreter` which holds the `revm::Energy` struct that
     /// the `revm::Interpreter` which holds the `revm::Energy` struct that
     /// we need to copy. So we convert it to a `Some(None)` in `apply_cheatcode`, and once we have
     /// the interpreter, we copy the energy struct. Then each time there is an execution of an
@@ -303,8 +305,8 @@ where
         data: &mut EVMData<'_, DB>,
         _: bool,
     ) -> InstructionResult {
-        // When the first interpreter is initialized we've circumvented the balance and energy checks,
-        // so we apply our actual block data with the correct fees and all.
+        // When the first interpreter is initialized we've circumvented the balance and energy
+        // checks, so we apply our actual block data with the correct fees and all.
         if let Some(block) = self.block.take() {
             data.env.block = block;
         }
@@ -337,9 +339,9 @@ where
                         self.energy_metering_create = Some(None)
                     }
                     opcode::STOP | opcode::RETURN | opcode::SELFDESTRUCT | opcode::REVERT => {
-                        // If we are ending current execution frame, we want to just fully reset energy
-                        // otherwise weird things with returning energy from a call happen
-                        // ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/evm_impl.rs#L190
+                        // If we are ending current execution frame, we want to just fully reset
+                        // energy otherwise weird things with returning
+                        // energy from a call happen ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/evm_impl.rs#L190
                         //
                         // It would be nice if we had access to the interpreter in `call_end`, as we
                         // could just do this there instead.
@@ -348,20 +350,24 @@ where
                                 interpreter.energy = revm::interpreter::Energy::new(0);
                             }
                             Some(Some(energy)) => {
-                                // If this was CREATE frame, set correct energy limit. This is needed
-                                // because CREATE opcodes deduct additional energy for code storage,
-                                // and deducted amount is compared to energy limit. If we set this to
-                                // 0, the CREATE would fail with out of energy.
+                                // If this was CREATE frame, set correct energy limit. This is
+                                // needed because CREATE opcodes
+                                // deduct additional energy for code storage,
+                                // and deducted amount is compared to energy limit. If we set this
+                                // to 0, the CREATE would fail with
+                                // out of energy.
                                 //
-                                // If we however set energy limit to the limit of outer frame, it would
-                                // cause a panic after erasing energy cost post-create. Reason for this
-                                // is pre-create REVM records `energy_limit - (energy_limit / 64)` as energy
-                                // used, and erases costs by `remaining` energy post-create.
-                                // energy used ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/instructions/host.rs#L254-L258
+                                // If we however set energy limit to the limit of outer frame, it
+                                // would cause a panic after erasing
+                                // energy cost post-create. Reason for this
+                                // is pre-create REVM records `energy_limit - (energy_limit / 64)`
+                                // as energy used, and erases costs
+                                // by `remaining` energy post-create. energy used ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/instructions/host.rs#L254-L258
                                 // post-create erase ref: https://github.com/bluealloy/revm/blob/2cb991091d32330cfe085320891737186947ce5a/crates/revm/src/instructions/host.rs#L279
                                 interpreter.energy = revm::interpreter::Energy::new(energy.limit());
 
-                                // reset CREATE energy metering because we're about to exit its frame
+                                // reset CREATE energy metering because we're about to exit its
+                                // frame
                                 self.energy_metering_create = None
                             }
                         }
@@ -693,7 +699,7 @@ where
                         }
 
                         let is_fixed_energy_limit =
-                            check_if_fixed_gas_limit(data, call.energy_limit);
+                            check_if_fixed_energy_limit(data, call.energy_limit);
 
                         let account = data
                             .journaled_state
@@ -1009,7 +1015,8 @@ where
                         }
                     };
 
-                    let is_fixed_energy_limit = check_if_fixed_gas_limit(data, call.energy_limit);
+                    let is_fixed_energy_limit =
+                        check_if_fixed_energy_limit(data, call.energy_limit);
 
                     self.broadcastable_transactions.push_back(BroadcastableTransaction {
                         rpc: data.db.active_fork_url(),

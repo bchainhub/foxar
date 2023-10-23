@@ -33,7 +33,7 @@ pub type TxBuilderPeekOutput<'a> = (&'a TypedTransaction, &'a Option<Function>);
 ///   let provider = corebc_providers::test_provider::MAINNET.provider();
 ///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet, false).await?;
 ///   builder
-///       .gas(Some(U256::from(1)));
+///       .energy(Some(U256::from(1)));
 ///   let (tx, _) = builder.build();
 ///   Ok(())
 /// }
@@ -69,30 +69,30 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         Ok(Self { to: to_addr, chain: network, tx, func: None, etherscan_api_key: None, provider })
     }
 
-    /// Set gas for tx
-    pub fn set_gas(&mut self, v: U256) -> &mut Self {
+    /// Set energy for tx
+    pub fn set_energy(&mut self, v: U256) -> &mut Self {
         self.tx.set_energy(v);
         self
     }
 
-    /// Set gas for tx, if `v` is not None
-    pub fn gas(&mut self, v: Option<U256>) -> &mut Self {
+    /// Set energy for tx, if `v` is not None
+    pub fn energy(&mut self, v: Option<U256>) -> &mut Self {
         if let Some(value) = v {
-            self.set_gas(value);
+            self.set_energy(value);
         }
         self
     }
 
-    /// Set gas price
-    pub fn set_gas_price(&mut self, v: U256) -> &mut Self {
+    /// Set energy price
+    pub fn set_energy_price(&mut self, v: U256) -> &mut Self {
         self.tx.set_energy_price(v);
         self
     }
 
-    /// Set gas price, if `v` is not None
-    pub fn gas_price(&mut self, v: Option<U256>) -> &mut Self {
+    /// Set energy price, if `v` is not None
+    pub fn energy_price(&mut self, v: Option<U256>) -> &mut Self {
         if let Some(value) = v {
-            self.set_gas_price(value);
+            self.set_energy_price(value);
         }
         self
     }

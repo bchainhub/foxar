@@ -1,6 +1,4 @@
-use crate::utils::{
-    h176_to_b176, h256_to_b256, u256_to_ru256,
-};
+use crate::utils::{h176_to_b176, h256_to_b256, u256_to_ru256};
 use corebc::{
     providers::Middleware,
     types::{Address, Block, TxHash, U256},
@@ -15,7 +13,7 @@ use revm::primitives::{BlockEnv, CfgEnv, Env, Network, TxEnv};
 pub async fn environment<M: Middleware>(
     provider: &M,
     memory_limit: u64,
-    gas_price: Option<u64>,
+    energy_price: Option<u64>,
     override_network_id: Option<u64>,
     pin_block: Option<u64>,
     origin: Address,
@@ -28,7 +26,7 @@ where
     } else {
         provider.get_block_number().await.wrap_err("Failed to get latest block number")?.as_u64()
     };
-    let (fork_gas_price, rpc_network_id, block) = tokio::try_join!(
+    let (fork_energy_price, rpc_network_id, block) = tokio::try_join!(
         provider
             .get_energy_price()
             .map_err(|err| { eyre::Error::new(err).wrap_err("Failed to get energy price") }),
@@ -74,7 +72,7 @@ where
         },
         tx: TxEnv {
             caller: h176_to_b176(origin),
-            energy_price: u256_to_ru256(gas_price.map(U256::from).unwrap_or(fork_gas_price)),
+            energy_price: u256_to_ru256(energy_price.map(U256::from).unwrap_or(fork_energy_price)),
             network_id: Some(override_network_id.unwrap_or(rpc_network_id.as_u64())),
             energy_limit: block.energy_limit.as_u64(),
             ..Default::default()

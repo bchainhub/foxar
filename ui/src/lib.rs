@@ -734,7 +734,7 @@ impl Tui {
                 } else {
                     "END".to_string()
                 },
-                debug_steps[current_step].total_gas_used,
+                debug_steps[current_step].total_energy_used,
             ))
             .borders(Borders::ALL);
         let mut text_output: Vec<Spans> = Vec::new();

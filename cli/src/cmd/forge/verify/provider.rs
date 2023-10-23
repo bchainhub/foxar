@@ -63,8 +63,8 @@ pub enum VerificationProviderType {
 }
 
 impl VerificationProviderType {
-    /// Returns the corresponding `VerificationProvider` for the key
-    pub fn client(&self, key: &Option<String>) -> eyre::Result<Box<dyn VerificationProvider>> {
+    /// Returns the corresponding `VerificationProvider`
+    pub fn client(&self) -> eyre::Result<Box<dyn VerificationProvider>> {
         match self {
             VerificationProviderType::Etherscan => {
                 Ok(Box::<EtherscanVerificationProvider>::default())

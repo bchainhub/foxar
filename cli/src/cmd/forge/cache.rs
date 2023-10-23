@@ -35,11 +35,7 @@ pub struct CleanArgs {
     /// The networks to clean the cache for.
     ///
     /// Can also be "all" to clean all networks.
-    #[clap(
-        env = "NETWORK",
-        default_value = "all",
-        value_parser = NetworkOrAllValueParser::default(),
-    )]
+    #[clap(env = "NETWORK", default_value = "all")]
     networks: Vec<NetworkOrAll>,
 
     /// The blocks to clean the cache for.
@@ -66,7 +62,9 @@ impl Cmd for CleanArgs {
 
         for network_or_all in networks {
             match network_or_all {
-                NetworkOrAll::Network(network) => clean_network_cache(network, blocks.to_vec(), etherscan)?,
+                NetworkOrAll::Network(network) => {
+                    clean_network_cache(network, blocks.to_vec(), etherscan)?
+                }
                 NetworkOrAll::All => {
                     if etherscan {
                         Config::clean_foundry_etherscan_cache()?;
@@ -86,11 +84,7 @@ pub struct LsArgs {
     /// The networks to list the cache for.
     ///
     /// Can also be "all" to list all networks.
-    #[clap(
-        env = "NETWORK",
-        default_value = "all",
-        value_parser = NetworkOrAllValueParser::default(),
-    )]
+    #[clap(env = "NETWORK", default_value = "all")]
     networks: Vec<NetworkOrAll>,
 }
 
@@ -123,7 +117,7 @@ impl FromStr for NetworkOrAll {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let Ok(network) = ethers::prelude::Network::from_str(s) {
+        if let Ok(network) = corebc::prelude::Network::from_str(s) {
             Ok(NetworkOrAll::Network(network))
         } else if s == "all" {
             Ok(NetworkOrAll::All)
@@ -152,41 +146,6 @@ fn clean_network_cache(
     }
     Ok(())
 }
-
-/// The value parser for `ChainOrAll`
-#[derive(Clone, Debug)]
-pub struct NetworkOrAllValueParser {
-    inner: PossibleValuesParser,
-}
-
-impl Default for NetworkOrAllValueParser {
-    fn default() -> Self {
-        NetworkOrAllValueParser { inner: possible_chains() }
-    }
-}
-
-impl TypedValueParser for NetworkOrAllValueParser {
-    type Value = NetworkOrAll;
-
-    fn parse_ref(
-        &self,
-        cmd: &Command,
-        arg: Option<&Arg>,
-        value: &OsStr,
-    ) -> Result<Self::Value, clap::Error> {
-        self.inner.parse_ref(cmd, arg, value)?.parse::<NetworkOrAll>().map_err(|_| {
-            clap::Error::raw(
-                clap::error::ErrorKind::InvalidValue,
-                "chain argument did not match any possible chain variant",
-            )
-        })
-    }
-}
-
-fn possible_chains() -> PossibleValuesParser {
-    Some([&"all", Network::Mainnet, Network::Devin]).into_iter().into()
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

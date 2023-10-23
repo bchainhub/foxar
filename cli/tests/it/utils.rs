@@ -1,6 +1,6 @@
 //! Various helper functions
 
-use corebc::prelude::{Address, Network, LocalWallet, Signer};
+use corebc::prelude::{Address, LocalWallet, Network, Signer};
 
 /// Returns the current millis since unix epoch.
 ///

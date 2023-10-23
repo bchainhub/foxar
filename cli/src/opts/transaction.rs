@@ -5,27 +5,18 @@ use serde::Serialize;
 #[derive(Parser, Debug, Clone, Serialize)]
 #[clap(next_help_heading = "Transaction options")]
 pub struct TransactionOpts {
-    /// Gas limit for the transaction.
-    #[clap(long, env = "ETH_GAS_LIMIT", value_parser = parse_u256)]
-    pub gas_limit: Option<U256>,
+    /// Energy limit for the transaction.
+    #[clap(long, env = "ETH_ENERGY_LIMIT", value_parser = parse_u256)]
+    pub energy_limit: Option<U256>,
 
-    /// Gas price for legacy transactions, or max fee per gas for EIP1559 transactions.
+    /// Energy price for legacy transactions
     #[clap(
         long,
         env = "ETH_GAS_PRICE",
         value_parser = parse_ether_value,
         value_name = "PRICE"
     )]
-    pub gas_price: Option<U256>,
-
-    /// Max priority fee per gas for EIP1559 transactions.
-    #[clap(
-        long,
-        env = "ETH_PRIORITY_GAS_PRICE",
-        value_parser = parse_ether_value,
-        value_name = "PRICE"
-    )]
-    pub priority_gas_price: Option<U256>,
+    pub energy_price: Option<U256>,
 
     /// Ether to send in the transaction, either specified in wei, or as a string with a unit type.
     ///
@@ -38,10 +29,4 @@ pub struct TransactionOpts {
     /// Nonce for the transaction.
     #[clap(long, value_parser = parse_u256)]
     pub nonce: Option<U256>,
-
-    /// Send a legacy transaction instead of an EIP1559 transaction.
-    ///
-    /// This is automatically enabled for common networks without EIP1559.
-    #[clap(long)]
-    pub legacy: bool,
 }

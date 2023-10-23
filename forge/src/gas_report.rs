@@ -74,7 +74,7 @@ impl GasReport {
 
                 match &trace.data {
                     RawOrDecodedCall::Raw(bytes) if trace.created() => {
-                        contract_report.gas = trace.gas_cost.into();
+                        contract_report.gas = trace.energy_cost.into();
                         contract_report.size = bytes.len().into();
                     }
                     // TODO: More robust test contract filtering
@@ -87,7 +87,7 @@ impl GasReport {
                             .or_default()
                             .entry(sig.clone())
                             .or_default();
-                        function_report.calls.push(trace.gas_cost.into());
+                        function_report.calls.push(trace.energy_cost.into());
                     }
                     _ => (),
                 }

@@ -6,8 +6,8 @@ use crate::{
 };
 use anvil::{spawn, NodeConfig};
 use corebc::{
-    ylem::{artifacts::BytecodeHash, remappings::Remapping},
     types::Address,
+    ylem::{artifacts::BytecodeHash, remappings::Remapping},
 };
 use foundry_cli_test_utils::{
     forgetest, forgetest_async,

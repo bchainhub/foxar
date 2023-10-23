@@ -47,7 +47,7 @@ impl InterfaceArgs {
         } else {
             // let api_key = config.get_etherscan_api_key(Some(network)).unwrap_or_default();
             let network = network.named()?;
-            AbiPath::Etherscan { network: network, /* api_key , */ address: path_or_address.parse()? }
+            AbiPath::Etherscan { network, /* api_key , */ address: path_or_address.parse()? }
         };
         let interfaces = SimpleCast::generate_interface(source).await?;
 

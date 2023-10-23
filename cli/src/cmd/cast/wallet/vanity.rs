@@ -6,8 +6,8 @@ use clap::{builder::TypedValueParser, Parser};
 use corebc::{
     core::{k256::ecdsa::SigningKey, rand::thread_rng},
     prelude::{LocalWallet, Signer},
-    types::{H160, U256, Network},
-    utils::{get_contract_h160_address, secret_key_to_h160_address, to_ican},
+    types::{Network, H160, U256},
+    utils::{get_contract_address, get_contract_h160_address, secret_key_to_h160_address, to_ican},
 };
 use rayon::iter::{self, ParallelIterator};
 use regex::Regex;
@@ -39,14 +39,15 @@ pub struct VanityArgs {
     pub nonce: Option<u64>,
 
     /// Network to use for address prefix validation.
-    network: Network,          
+    #[clap(short, long)]
+    network: Option<Network>,
 }
 
 impl Cmd for VanityArgs {
     type Output = LocalWallet;
 
     fn run(self) -> eyre::Result<Self::Output> {
-        let Self { starts_with, ends_with, nonce , network} = self;
+        let Self { starts_with, ends_with, nonce, network } = self;
         let mut left_exact_hex = None;
         let mut left_regex = None;
         let mut right_exact_hex = None;
@@ -119,21 +120,18 @@ impl Cmd for VanityArgs {
         .expect("failed to generate vanity wallet");
 
         println!(
-            "Successfully found vanity address in {} seconds.{}{}\nAddress: {}\nPrivate Key: 0x{}",
+            "Successfully found vanity address in {} seconds.{}",
             timer.elapsed().as_secs(),
             if nonce.is_some() { "\nContract address: " } else { "" },
-            if nonce.is_some() {
-                to_ican(&get_contract_h160_address(
-                    wallet.address(),
-                    nonce.unwrap(),
-                ), &network)
-            } else {
-                "".to_string()
-            },
+        );
+        if nonce.is_some() {
+            print!("{}", get_contract_address(wallet.address(), nonce.unwrap(), &network.unwrap()));
+        }
+        println!(
+            "Address: {}\nPrivate Key: 0x{}",
             wallet.address(),
             hex::encode(wallet.signer().to_bytes()),
         );
-
         Ok(wallet)
     }
 }

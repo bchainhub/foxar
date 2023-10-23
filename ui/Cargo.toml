@@ -11,7 +11,7 @@ keywords = ["ethereum", "web3", "evm", "debugger"]
 forge = { path = "../forge" }
 foundry-common = { path = "../common" }
 
-corebc = { workspace = true }
+corebc = { workspace = true, branch = "main"  }
 
 crossterm = "0.26"
 eyre = "0.6"

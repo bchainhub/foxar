@@ -11,7 +11,7 @@ use clap::Parser;
 use corebc::{
     core::rand::thread_rng,
     signers::{LocalWallet, Signer},
-    types::{transaction::eip712::TypedData, Address, Signature, Network},
+    types::{transaction::eip712::TypedData, Address, Network, Signature},
 };
 use eyre::Context;
 
@@ -37,7 +37,8 @@ pub enum WalletSubcommands {
         unsafe_password: Option<String>,
 
         /// Network to use for address prefix validation.
-        network: Network,        
+        #[clap(short, long)]
+        network: Option<Network>,
     },
 
     /// Generate a vanity address.
@@ -123,13 +124,18 @@ impl WalletSubcommands {
                         rpassword::prompt_password("Enter secret: ")?
                     };
 
-                    let (wallet, uuid) =
-                        LocalWallet::new_keystore(&path, &mut rng, password, None, &network)?;
+                    let (wallet, uuid) = LocalWallet::new_keystore(
+                        &path,
+                        &mut rng,
+                        password,
+                        None,
+                        network.unwrap(),
+                    )?;
 
                     println!("Created new encrypted keystore file: {}", path.join(uuid).display());
                     println!("Address: {}", wallet.address());
                 } else {
-                    let wallet = LocalWallet::new(&mut rng, &network);
+                    let wallet = LocalWallet::new(&mut rng, network.unwrap());
                     println!("Successfully created new keypair.");
                     println!("Address:     {}", wallet.address());
                     println!("Private key: 0x{}", hex::encode(wallet.signer().to_bytes()));

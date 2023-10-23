@@ -5,7 +5,7 @@ use cast::SimpleCast;
 use clap::Parser;
 use corebc::{
     core::rand::thread_rng,
-    types::{Address, Bytes, H256, U256, Network},
+    types::{Address, Bytes, Network, H256, U256},
     utils::{get_create2_h160_address_from_hash, sha3, to_ican},
 };
 use eyre::{Result, WrapErr};
@@ -55,7 +55,8 @@ pub struct Create2Args {
     init_code_hash: Option<String>,
 
     /// Network to use for address prefix validation.
-    network: Network,  
+    #[clap(short, long)]
+    network: Option<Network>,
 }
 
 #[allow(dead_code)]
@@ -82,7 +83,7 @@ impl Create2Args {
             deployer,
             init_code,
             init_code_hash,
-            network
+            network,
         } = self;
 
         let mut regexs = vec![];
@@ -143,9 +144,8 @@ impl Create2Args {
                 let salt = H256::random_using(&mut thread_rng());
                 let salt = Bytes::from(salt.to_fixed_bytes());
 
-                let h160 = get_create2_h160_address_from_hash(deployer,
-                    salt.clone(),
-                    init_code_hash);
+                let h160 =
+                    get_create2_h160_address_from_hash(deployer, salt.clone(), init_code_hash);
 
                 (salt, h160)
             })
@@ -157,7 +157,7 @@ impl Create2Args {
             .unwrap();
 
         let salt = U256::from(salt.to_vec().as_slice());
-        let address = to_ican(&addr, &network);
+        let address = to_ican(&addr, &network.unwrap());
 
         println!(
             "Successfully found contract address in {} seconds.\nAddress: {}\nSalt: {}",

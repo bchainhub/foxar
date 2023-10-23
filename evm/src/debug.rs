@@ -124,8 +124,8 @@ pub struct DebugStep {
     /// Note: To map this step onto source code using a source map, you must convert the program
     /// counter to an instruction counter.
     pub pc: usize,
-    /// Cumulative gas usage
-    pub total_gas_used: u64,
+    /// Cumulative energy usage
+    pub total_energy_used: u64,
 }
 
 impl Default for DebugStep {
@@ -136,7 +136,7 @@ impl Default for DebugStep {
             instruction: Instruction::OpCode(revm::interpreter::opcode::INVALID),
             push_bytes: None,
             pc: 0,
-            total_gas_used: 0,
+            total_energy_used: 0,
         }
     }
 }

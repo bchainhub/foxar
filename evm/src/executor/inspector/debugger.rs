@@ -2,7 +2,7 @@ use crate::{
     debug::{DebugArena, DebugNode, DebugStep, Instruction},
     executor::{
         backend::DatabaseExt,
-        inspector::utils::{gas_used, get_create_address},
+        inspector::utils::{energy_used, get_create_address},
         CHEATCODE_ADDRESS,
     },
     utils::{b176_to_h176, ru256_to_u256},
@@ -32,16 +32,16 @@ pub struct Debugger {
     /// The current execution address.
     pub context: Address,
 
-    gas_inspector: Rc<RefCell<EnergyInspector>>,
+    energy_inspector: Rc<RefCell<EnergyInspector>>,
 }
 
 impl Debugger {
-    pub fn new(gas_inspector: Rc<RefCell<EnergyInspector>>) -> Self {
+    pub fn new(energy_inspector: Rc<RefCell<EnergyInspector>>) -> Self {
         Self {
             arena: Default::default(),
             head: Default::default(),
             context: Default::default(),
-            gas_inspector,
+            energy_inspector,
         }
     }
 
@@ -90,12 +90,12 @@ where
             }
         };
 
-        let total_gas_used = gas_used(
+        let total_energy_used = energy_used(
             data.env.cfg.spec_id,
             interpreter
                 .energy
                 .limit()
-                .saturating_sub(self.gas_inspector.borrow().energy_remaining()),
+                .saturating_sub(self.energy_inspector.borrow().energy_remaining()),
             interpreter.energy.refunded() as u64,
         );
 
@@ -105,7 +105,7 @@ where
             memory: interpreter.memory.clone(),
             instruction: Instruction::OpCode(op),
             push_bytes,
-            total_gas_used,
+            total_energy_used,
         });
 
         InstructionResult::Continue
@@ -139,14 +139,14 @@ where
         &mut self,
         _: &mut EVMData<'_, DB>,
         _: &CallInputs,
-        gas: Energy,
+        energy: Energy,
         status: InstructionResult,
         retdata: Bytes,
         _: bool,
     ) -> (InstructionResult, Energy, Bytes) {
         self.exit();
 
-        (status, gas, retdata)
+        (status, energy, retdata)
     }
 
     fn create(
@@ -154,10 +154,10 @@ where
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
     ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
-        // TODO: Does this increase gas cost?
+        // TODO: Does this increase energy cost?
         if let Err(err) = data.journaled_state.load_account(call.caller, data.db) {
-            let gas = Energy::new(call.energy_limit);
-            return (InstructionResult::Revert, None, gas, err.encode_string().0)
+            let energy = Energy::new(call.energy_limit);
+            return (InstructionResult::Revert, None, energy, err.encode_string().0)
         }
 
         let nonce = data.journaled_state.account(call.caller).info.nonce;
@@ -180,11 +180,11 @@ where
         _: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        gas: Energy,
+        energy: Energy,
         retdata: Bytes,
     ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         self.exit();
 
-        (status, address, gas, retdata)
+        (status, address, energy, retdata)
     }
 }

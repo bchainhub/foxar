@@ -5,11 +5,11 @@
 use crate::rlp_converter::Item;
 use base::{Base, NumberWithBase, ToBase};
 use chrono::NaiveDateTime;
-use corebc_blockindex::Client;
+use corebc_blockindex::{errors::BlockindexError, Client};
 use corebc_core::{
     abi::{
         token::{LenientTokenizer, Tokenizer},
-        Function, HumanReadableParser, ParamType, /* RawAbi, */ Token,
+        Function, HumanReadableParser, ParamType, RawAbi, /* RawAbi, */ Token,
     },
     types::{Network, *},
     utils::{
@@ -416,7 +416,7 @@ where
         Ok(self.provider.get_block_number().await?)
     }
 
-    pub async fn gas_price(&self) -> Result<U256> {
+    pub async fn energy_price(&self) -> Result<U256> {
         Ok(self.provider.get_energy_price().await?)
     }
 
@@ -777,7 +777,7 @@ pub struct InterfaceSource {
 // In case of etherscan, ABI is fetched from the address on the chain
 pub enum AbiPath {
     Local { path: String, name: Option<String> },
-    Etherscan { address: Address, network: Network, /* api_key: String */ },
+    Etherscan { address: Address, network: Network /* api_key: String */ },
 }
 
 pub struct SimpleCast;
@@ -1424,57 +1424,58 @@ impl SimpleCast {
     /// # Ok(())
     /// # }
     /// ```
-    // BLOCKINDEX TODO: Uncomment
-    // pub async fn generate_interface(address_or_path: AbiPath) -> Result<Vec<InterfaceSource>> {
-    //     let (contract_abis, contract_names): (Vec<RawAbi>, Vec<String>) = match address_or_path {
-    //         AbiPath::Local { path, name } => {
-    //             let file = std::fs::read_to_string(path).wrap_err("unable to read abi file")?;
-    //             let mut json: serde_json::Value = serde_json::from_str(&file)?;
-    //             let json = if !json["abi"].is_null() { json["abi"].take() } else { json };
-    //             let abi: RawAbi =
-    //                 serde_json::from_value(json).wrap_err("unable to parse json ABI from file")?;
+    // todo::error2215 - fix functionality
+    pub async fn generate_interface(address_or_path: AbiPath) -> Result<Vec<InterfaceSource>> {
+        let (contract_abis, contract_names): (Vec<RawAbi>, Vec<String>) = match address_or_path {
+            AbiPath::Local { path, name } => {
+                let file = std::fs::read_to_string(path).wrap_err("unable to read abi file")?;
+                let mut json: serde_json::Value = serde_json::from_str(&file)?;
+                let json = if !json["abi"].is_null() { json["abi"].take() } else { json };
+                let abi: RawAbi =
+                    serde_json::from_value(json).wrap_err("unable to parse json ABI from file")?;
 
-    //             (vec![abi], vec![name.unwrap_or_else(|| "Interface".to_owned())])
-    //         }
-    //         AbiPath::Etherscan { address, chain, api_key } => {
-    //             // BLOCKINDEX TODO: Uncomment api_key
-    //             let client = Client::new(chain /*  , api_key*/)?;
+                (vec![abi], vec![name.unwrap_or_else(|| "Interface".to_owned())])
+            }
+            AbiPath::Etherscan { address, network } => {
+                // BLOCKINDEX TODO: Uncomment api_key
+                let client = Client::new(network /* , api_key */)?;
 
-    //             // get the source
-    //             let source = match client.contract_source_code(address).await {
-    //                 Ok(source) => source,
-    //                 Err(EtherscanError::InvalidApiKey) => {
-    //                     eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may
-    // be using an API key for another Etherscan API chain (e.g. Etherscan API key for
-    // Polygonscan).")                 }
-    //                 Err(EtherscanError::ContractCodeNotVerified(address)) => {
-    //                     eyre::bail!("Contract source code at {:?} on {} not verified. Maybe you
-    // have selected the wrong chain?", address, chain)                 }
-    //                 Err(err) => {
-    //                     eyre::bail!(err)
-    //                 }
-    //             };
+                // get the source
+                let source = match client.contract_source_code(address).await {
+                    Ok(source) => source,
+                    Err(BlockindexError::ContractCodeNotVerified(address)) => {
+                        eyre::bail!(
+                            "Contract source code at {:?} on {} not verified. Maybe you
+    have selected the wrong network?",
+                            address,
+                            network
+                        )
+                    }
+                    Err(err) => {
+                        eyre::bail!(err)
+                    }
+                };
 
-    //             let names = source
-    //                 .items
-    //                 .iter()
-    //                 .map(|item| item.contract_name.clone())
-    //                 .collect::<Vec<String>>();
+                let names = source
+                    .items
+                    .iter()
+                    .map(|item| item.contract_name.clone())
+                    .collect::<Vec<String>>();
 
-    //             let abis = source.raw_abis()?;
+                let abis = source.raw_abis()?;
 
-    //             (abis, names)
-    //         }
-    //     };
-    //     contract_abis
-    //         .iter()
-    //         .zip(contract_names)
-    //         .map(|(contract_abi, name)| {
-    //             let source = foundry_utils::abi::abi_to_solidity(contract_abi, &name)?;
-    //             Ok(InterfaceSource { name, source })
-    //         })
-    //         .collect::<Result<Vec<InterfaceSource>>>()
-    // }
+                (abis, names)
+            }
+        };
+        contract_abis
+            .iter()
+            .zip(contract_names)
+            .map(|(contract_abi, name)| {
+                let source = foundry_utils::abi::abi_to_solidity(contract_abi, &name)?;
+                Ok(InterfaceSource { name, source })
+            })
+            .collect::<Result<Vec<InterfaceSource>>>()
+    }
 
     /// Prints the slot number for the specified mapping type and input data
     /// Uses abi_encode to pad the data to 32 bytes.

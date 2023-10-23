@@ -16,11 +16,11 @@ use corebc::{
     },
     providers::{Http, Middleware},
     signers::LocalWallet,
-    ylem::contracts::ArtifactContracts,
     types::{
-        transaction::eip2718::TypedTransaction, Address, Network, Log, NameOrAddress,
+        transaction::eip2718::TypedTransaction, Address, Log, NameOrAddress, Network,
         TransactionRequest, U256,
     },
+    ylem::contracts::ArtifactContracts,
 };
 use dialoguer::Confirm;
 use eyre::{ContextCompat, WrapErr};
@@ -123,9 +123,9 @@ pub struct ScriptArgs {
     #[clap(long)]
     pub skip_simulation: bool,
 
-    /// Relative percentage to multiply gas estimates by.
+    /// Relative percentage to multiply energy estimates by.
     #[clap(long, short, default_value = "130")]
-    pub gas_estimate_multiplier: u64,
+    pub energy_estimate_multiplier: u64,
 
     #[clap(flatten)]
     pub opts: BuildArgs,
@@ -171,7 +171,6 @@ pub struct ScriptArgs {
     // /// The Etherscan (or equivalent) API key
     // #[clap(long, env = "ETHERSCAN_API_KEY", value_name = "KEY")]
     // pub etherscan_api_key: Option<String>,
-
     /// Verifies all the contracts found in the receipts of a script, if any.
     #[clap(long)]
     pub verify: bool,
@@ -183,14 +182,14 @@ pub struct ScriptArgs {
     #[clap(long)]
     pub json: bool,
 
-    /// Gas price for legacy transactions, or max fee per gas for EIP1559 transactions.
+    /// Energy price for legacy transactions, or max fee per energy for EIP1559 transactions.
     #[clap(
         long,
-        env = "ETH_GAS_PRICE",
+        env = "ETH_ENERGY_PRICE",
         value_parser = parse_ether_value,
         value_name = "PRICE",
     )]
-    pub with_gas_price: Option<U256>,
+    pub with_energy_price: Option<U256>,
 
     #[clap(flatten)]
     pub retry: RetryArgs,
@@ -230,7 +229,7 @@ impl ScriptArgs {
         for (_, trace) in &mut result.traces {
             decoder.identify(trace, &mut local_identifier);
             // if should_use_etherscan_traces {
-                decoder.identify(trace, &mut etherscan_identifier);
+            decoder.identify(trace, &mut etherscan_identifier);
             // }
         }
         Ok(decoder)
@@ -307,7 +306,7 @@ impl ScriptArgs {
         }
 
         if script_config.evm_opts.fork_url.is_none() {
-            shell::println(format!("Gas used: {}", result.gas_used))?;
+            shell::println(format!("Energy used: {}", result.energy_used))?;
         }
 
         if result.success && !result.returned.is_empty() {
@@ -362,7 +361,7 @@ impl ScriptArgs {
         let returns = self.get_returns(script_config, &result.returned)?;
 
         let console_logs = decode_console_logs(&result.logs);
-        let output = JsonResult { logs: console_logs, gas_used: result.gas_used, returns };
+        let output = JsonResult { logs: console_logs, energy_used: result.energy_used, returns };
         let j = serde_json::to_string(&output)?;
         shell::println(j)?;
 
@@ -619,12 +618,6 @@ impl Provider for ScriptArgs {
 
     fn data(&self) -> Result<Map<Profile, Dict>, figment::Error> {
         let mut dict = Dict::default();
-        if let Some(ref etherscan_api_key) = self.etherscan_api_key {
-            dict.insert(
-                "etherscan_api_key".to_string(),
-                figment::value::Value::from(etherscan_api_key.to_string()),
-            );
-        }
         Ok(Map::from([(Config::selected_profile(), dict)]))
     }
 }
@@ -634,7 +627,7 @@ pub struct ScriptResult {
     pub logs: Vec<Log>,
     pub traces: Traces,
     pub debug: Option<Vec<DebugArena>>,
-    pub gas_used: u64,
+    pub energy_used: u64,
     pub labeled_addresses: BTreeMap<Address, String>,
     pub transactions: Option<BroadcastableTransactions>,
     pub returned: bytes::Bytes,
@@ -645,7 +638,7 @@ pub struct ScriptResult {
 #[derive(Serialize, Deserialize)]
 pub struct JsonResult {
     pub logs: Vec<String>,
-    pub gas_used: u64,
+    pub energy_used: u64,
     pub returns: HashMap<String, NestedValue>,
 }
 
@@ -710,46 +703,6 @@ impl ScriptConfig {
     /// Returns the script target contract
     fn target_contract(&self) -> &ArtifactId {
         self.target_contract.as_ref().expect("should exist after building")
-    }
-
-    /// Checks if the RPCs used point to chains that support EIP-3855.
-    /// If not, warns the user.
-    async fn check_shanghai_support(&self) -> eyre::Result<()> {
-        let chain_ids = self.total_rpcs.iter().map(|rpc| async move {
-            if let Ok(provider) = corebc::providers::Provider::<Http>::try_from(rpc) {
-                match provider.get_networkid().await {
-                    Ok(chain_id) => match TryInto::<Network>::try_into(chain_id) {
-                        Ok(chain) => return Some((SHANGHAI_ENABLED_NETWORKS.contains(&chain), chain)),
-                        Err(_) => return None,
-                    },
-                    Err(_) => return None,
-                }
-            }
-            None
-        });
-
-        let chain_ids: Vec<_> = future::join_all(chain_ids).await.into_iter().flatten().collect();
-
-        let chain_id_unsupported = chain_ids.iter().any(|(supported, _)| !supported);
-
-        // At least one chain ID is unsupported, therefore we print the message.
-        if chain_id_unsupported {
-            let msg = format!(
-                r#"
-EIP-3855 is not supported in one or more of the RPCs used.
-Unsupported Chain IDs: {}.
-Contracts deployed with a Solidity version equal or higher than 0.8.20 might not work properly.
-For more information, please see https://eips.ethereum.org/EIPS/eip-3855"#,
-                chain_ids
-                    .iter()
-                    .filter(|(supported, _)| !supported)
-                    .map(|(_, chain)| format!("{}", *chain as u64))
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            );
-            shell::println(Paint::yellow(msg))?;
-        }
-        Ok(())
     }
 }
 

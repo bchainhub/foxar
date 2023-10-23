@@ -88,9 +88,9 @@ pub struct Executor {
     backend: Backend,
     env: Env,
     inspector_config: InspectorStackConfig,
-    /// The energy limit for calls and deployments. This is different from the energy limit imposed by
-    /// the passed in environment, as those limits are used by the EVM for certain opcodes like
-    /// `energylimit`.
+    /// The energy limit for calls and deployments. This is different from the energy limit imposed
+    /// by the passed in environment, as those limits are used by the EVM for certain opcodes
+    /// like `energylimit`.
     energy_limit: U256,
 }
 
@@ -469,8 +469,8 @@ impl Executor {
                     reverted: true,
                     reason,
                     traces,
-                    energy_used: energy_used,
-                    energy_refunded: energy_refunded,
+                    energy_used,
+                    energy_refunded,
                     stipend: 0,
                     logs,
                     debug,
@@ -490,8 +490,8 @@ impl Executor {
 
         Ok(DeployResult {
             address: b176_to_h176(address),
-            energy_used: energy_used,
-            energy_refunded: energy_refunded,
+            energy_used,
+            energy_refunded,
             logs,
             traces,
             debug,
@@ -565,8 +565,12 @@ impl Executor {
         // for the contract's `failed` variable and the `globalFailure` flag in the state of the
         // cheatcode address which are both read when call `"failed()(bool)"` in the next step
         backend.commit(state_changeset);
-        let executor =
-            Executor::new(backend, self.env.clone(), self.inspector_config.clone(), self.energy_limit);
+        let executor = Executor::new(
+            backend,
+            self.env.clone(),
+            self.inspector_config.clone(),
+            self.energy_limit,
+        );
 
         let mut success = !reverted;
         if success {
@@ -584,8 +588,8 @@ impl Executor {
 
     /// Creates the environment to use when executing a transaction in a test context
     ///
-    /// If using a backend with cheatcodes, `tx.energy_price` and `block.number` will be overwritten by
-    /// the cheatcode state inbetween calls.
+    /// If using a backend with cheatcodes, `tx.energy_price` and `block.number` will be overwritten
+    /// by the cheatcode state inbetween calls.
     fn build_test_env(
         &self,
         caller: Address,
@@ -596,8 +600,8 @@ impl Executor {
         Env {
             cfg: self.env.cfg.clone(),
             // We always set the energy price to 0 so we can execute the transaction regardless of
-            // network conditions - the actual energy price is kept in `self.block` and is applied by
-            // the cheatcode handler if it is enabled
+            // network conditions - the actual energy price is kept in `self.block` and is applied
+            // by the cheatcode handler if it is enabled
             block: BlockEnv {
                 energy_limit: u256_to_ru256(self.energy_limit),
                 ..self.env.block.clone()
@@ -833,8 +837,8 @@ fn convert_executed_result(
         exit_reason,
         reverted: !matches!(exit_reason, return_ok!()),
         result,
-        energy_used: energy_used,
-        energy_refunded: energy_refunded,
+        energy_used,
+        energy_refunded,
         stipend,
         logs: logs.to_vec(),
         labels,
@@ -887,8 +891,8 @@ fn convert_call_result<D: Detokenize>(
             Ok(CallResult {
                 reverted,
                 result,
-                energy_used: energy_used,
-                energy_refunded: energy_refunded,
+                energy_used,
+                energy_refunded,
                 stipend,
                 logs,
                 labels,
@@ -912,8 +916,8 @@ fn convert_call_result<D: Detokenize>(
             Err(EvmError::Execution(Box::new(ExecutionErr {
                 reverted,
                 reason,
-                energy_used: energy_used,
-                energy_refunded: energy_refunded,
+                energy_used,
+                energy_refunded,
                 stipend,
                 logs,
                 traces,

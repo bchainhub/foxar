@@ -16,8 +16,8 @@ foundry-config = { path = "../config" }
 foundry-utils = { path = "../utils" }
 
 # corebc
-corebc-ylem = { workspace = true, features = ["async"] }
-corebc-core = { workspace = true }
+corebc-ylem = { workspace = true, features = ["async"], branch = "main"  }
+corebc-core = { workspace = true, branch = "main"  }
 
 # cli
 clap = { version = "4", features = ["derive", "env", "unicode", "wrap_help"] }

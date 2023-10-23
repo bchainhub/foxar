@@ -41,7 +41,7 @@ pub struct TransactionWithMetadata {
     pub rpc: Option<RpcUrl>,
     pub transaction: TypedTransaction,
     pub additional_contracts: Vec<AdditionalContract>,
-    pub is_fixed_gas_limit: bool,
+    pub is_fixed_energy_limit: bool,
 }
 
 fn default_string() -> Option<String> {
@@ -68,9 +68,9 @@ impl TransactionWithMetadata {
         local_contracts: &BTreeMap<Address, ArtifactInfo>,
         decoder: &CallTraceDecoder,
         additional_contracts: Vec<AdditionalContract>,
-        is_fixed_gas_limit: bool,
+        is_fixed_energy_limit: bool,
     ) -> eyre::Result<Self> {
-        let mut metadata = Self { transaction, rpc, is_fixed_gas_limit, ..Default::default() };
+        let mut metadata = Self { transaction, rpc, is_fixed_energy_limit, ..Default::default() };
 
         // Specify if any contract was directly created with this transaction
         if let Some(NameOrAddress::Address(to)) = metadata.transaction.to().cloned() {
@@ -251,14 +251,6 @@ impl TransactionWithMetadata {
         self.transaction = tx;
     }
 
-    pub fn change_type(&mut self, is_legacy: bool) {
-        self.transaction = if is_legacy {
-            TypedTransaction::Legacy(self.transaction.clone().into())
-        } else {
-            TypedTransaction::Eip1559(self.transaction.clone().into())
-        };
-    }
-
     pub fn typed_tx(&self) -> &TypedTransaction {
         &self.transaction
     }
@@ -414,14 +406,14 @@ pub mod wrapper {
         // The address of the receiver. `None` when its a contract creation transaction.
         #[serde(serialize_with = "serialize_opt_addr")]
         pub to: Option<Address>,
-        /// Cumulative gas used within the block after this was executed.
-        #[serde(rename = "cumulativeGasUsed")]
-        pub cumulative_gas_used: U256,
-        /// Gas used by this transaction alone.
+        /// Cumulative energy used within the block after this was executed.
+        #[serde(rename = "cumulativeEnergyUsed")]
+        pub cumulative_energy_used: U256,
+        /// Energy used by this transaction alone.
         ///
-        /// Gas used is `None` if the the client is running in light client mode.
-        #[serde(rename = "gasUsed")]
-        pub gas_used: Option<U256>,
+        /// Energy used is `None` if the the client is running in light client mode.
+        #[serde(rename = "energyUsed")]
+        pub energy_used: Option<U256>,
         /// Contract address created, or `None` if not a deployment.
         #[serde(rename = "contractAddress", serialize_with = "serialize_opt_addr")]
         pub contract_address: Option<Address>,
@@ -436,14 +428,6 @@ pub mod wrapper {
         /// Logs bloom
         #[serde(rename = "logsBloom")]
         pub logs_bloom: Bloom,
-        /// Transaction type, Some(1) for AccessList transaction, None for Legacy
-        #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
-        pub transaction_type: Option<U64>,
-        /// The price paid post-execution by the transaction (i.e. base fee + priority fee).
-        /// Both fields in 1559-style transactions are *maximums* (max fee + max priority fee), the
-        /// amount that's actually paid by users can only be determined post-execution
-        #[serde(rename = "effectiveGasPrice", default, skip_serializing_if = "Option::is_none")]
-        pub effective_gas_price: Option<U256>,
     }
     impl From<TransactionReceipt> for WrappedTransactionReceipt {
         fn from(receipt: TransactionReceipt) -> Self {
@@ -454,15 +438,13 @@ pub mod wrapper {
                 block_number: receipt.block_number,
                 from: receipt.from,
                 to: receipt.to,
-                cumulative_gas_used: receipt.cumulative_gas_used,
-                gas_used: receipt.gas_used,
+                cumulative_energy_used: receipt.cumulative_energy_used,
+                energy_used: receipt.energy_used,
                 contract_address: receipt.contract_address,
                 logs: receipt.logs,
                 status: receipt.status,
                 root: receipt.root,
                 logs_bloom: receipt.logs_bloom,
-                transaction_type: receipt.transaction_type,
-                effective_gas_price: receipt.effective_gas_price,
             }
         }
     }

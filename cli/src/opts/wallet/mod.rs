@@ -3,14 +3,10 @@ use async_trait::async_trait;
 use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
 use clap::Parser;
 use corebc::{
-    signers::{
-        coins_bip39::English,
-        LocalWallet, MnemonicBuilder, Signer,
-        WalletError,
-    },
+    signers::{coins_bip39::English, LocalWallet, MnemonicBuilder, Signer, WalletError},
     types::{
         transaction::{eip2718::TypedTransaction, eip712::Eip712},
-        Address, Signature,
+        Address, Network, Signature,
     },
 };
 use eyre::{bail, Result, WrapErr};
@@ -135,6 +131,8 @@ pub struct Wallet {
     // /// Use AWS Key Management Service.
     // #[clap(long, help_heading = "Wallet options - AWS KMS")]
     // pub aws: bool,
+    #[clap(short, long)]
+    network: Option<Network>,
 }
 
 impl Wallet {
@@ -196,51 +194,52 @@ impl Wallet {
     pub async fn signer(&self, network_id: u64) -> eyre::Result<WalletSigner> {
         trace!("start finding signer");
 
-//         if self.ledger {
-//             let derivation = match self.hd_path.as_ref() {
-//                 Some(hd_path) => LedgerHDPath::Other(hd_path.clone()),
-//                 None => LedgerHDPath::LedgerLive(self.mnemonic_index as usize),
-//             };
-//             let ledger = Ledger::new(derivation, chain_id).await.wrap_err_with(|| {
-//                 "\
-// Could not connect to Ledger device.
-// Make sure it's connected and unlocked, with no other desktop wallet apps open."
-//             })?;
+        //         if self.ledger {
+        //             let derivation = match self.hd_path.as_ref() {
+        //                 Some(hd_path) => LedgerHDPath::Other(hd_path.clone()),
+        //                 None => LedgerHDPath::LedgerLive(self.mnemonic_index as usize),
+        //             };
+        //             let ledger = Ledger::new(derivation, chain_id).await.wrap_err_with(|| {
+        //                 "\
+        // Could not connect to Ledger device.
+        // Make sure it's connected and unlocked, with no other desktop wallet apps open."
+        //             })?;
 
-//             Ok(WalletSigner::Ledger(ledger))
-//         } else if self.trezor {
-//             let derivation = match self.hd_path.as_ref() {
-//                 Some(hd_path) => TrezorHDPath::Other(hd_path.clone()),
-//                 None => TrezorHDPath::TrezorLive(self.mnemonic_index as usize),
-//             };
+        //             Ok(WalletSigner::Ledger(ledger))
+        //         } else if self.trezor {
+        //             let derivation = match self.hd_path.as_ref() {
+        //                 Some(hd_path) => TrezorHDPath::Other(hd_path.clone()),
+        //                 None => TrezorHDPath::TrezorLive(self.mnemonic_index as usize),
+        //             };
 
-//             // cached to ~/.ethers-rs/trezor/cache/trezor.session
-//             let trezor = Trezor::new(derivation, chain_id, None).await.wrap_err_with(|| {
-//                 "\
-// Could not connect to Trezor device.
-// Make sure it's connected and unlocked, with no other conflicting desktop wallet apps open."
-//             })?;
+        //             // cached to ~/.ethers-rs/trezor/cache/trezor.session
+        //             let trezor = Trezor::new(derivation, chain_id, None).await.wrap_err_with(|| {
+        //                 "\
+        // Could not connect to Trezor device.
+        // Make sure it's connected and unlocked, with no other conflicting desktop wallet apps
+        // open."             })?;
 
-//             Ok(WalletSigner::Trezor(trezor))
-//         } else if self.aws {
-//             let client =
-//                 AwsClient::new_with(AwsChainProvider::default(), AwsHttpClient::new().unwrap());
+        //             Ok(WalletSigner::Trezor(trezor))
+        //         } else if self.aws {
+        //             let client =
+        //                 AwsClient::new_with(AwsChainProvider::default(),
+        // AwsHttpClient::new().unwrap());
 
-//             let kms = KmsClient::new_with_client(client, AwsRegion::default());
+        //             let kms = KmsClient::new_with_client(client, AwsRegion::default());
 
-//             let key_id = std::env::var("AWS_KMS_KEY_ID")?;
+        //             let key_id = std::env::var("AWS_KMS_KEY_ID")?;
 
-//             let aws_signer = AwsSigner::new(kms, key_id, chain_id).await?;
+        //             let aws_signer = AwsSigner::new(kms, key_id, chain_id).await?;
 
-//             Ok(WalletSigner::Aws(aws_signer))
-//         } else {
-            trace!("finding local key");
+        //             Ok(WalletSigner::Aws(aws_signer))
+        //         } else {
+        trace!("finding local key");
 
-            let maybe_local = self.try_resolve_local_wallet()?;
+        let maybe_local = self.try_resolve_local_wallet()?;
 
-            let local = maybe_local.ok_or_else(|| {
-                eyre::eyre!(
-                    "\
+        let local = maybe_local.ok_or_else(|| {
+            eyre::eyre!(
+                "\
 Error accessing local wallet. Did you set a private key, mnemonic or keystore?
 Run `cast send --help` or `forge create --help` and use the corresponding CLI
 flag to set your key via:
@@ -248,17 +247,20 @@ flag to set your key via:
 Alternatively, if you're using a local node with unlocked accounts,
 use the --unlocked flag and either set the `ETH_FROM` environment variable to the address
 of the unlocked account you want to use, or provide the --from flag with the address directly."
-                )
-            })?;
+            )
+        })?;
 
-            Ok(WalletSigner::Local(local.with_network_id(network_id)))
-        }
+        Ok(WalletSigner::Local(local.with_network_id(network_id)))
+    }
     // }
 }
 
 pub trait WalletTrait {
     /// Returns the configured sender.
     fn sender(&self) -> Option<Address>;
+
+    /// Returns the configured network.
+    fn network(&self) -> Option<Network>;
 
     fn get_from_interactive(&self) -> Result<LocalWallet> {
         let private_key = rpassword::prompt_password("Enter private key: ")?;
@@ -348,25 +350,27 @@ pub trait WalletTrait {
         keystore_password: Option<&String>,
         keystore_password_file: Option<&String>,
     ) -> Result<Option<LocalWallet>> {
+        let network = self.network().unwrap_or(Network::Mainnet);
+
         Ok(match (keystore_path, keystore_password, keystore_password_file) {
             (Some(path), Some(password), _) => {
                 let path = self.find_keystore_file(path)?;
                 Some(
-                    LocalWallet::decrypt_keystore(&path, password)
+                    LocalWallet::decrypt_keystore(&path, password, network)
                         .wrap_err_with(|| format!("Failed to decrypt keystore {path:?}"))?,
                 )
             }
             (Some(path), _, Some(password_file)) => {
                 let path = self.find_keystore_file(path)?;
                 Some(
-                    LocalWallet::decrypt_keystore(&path, self.password_from_file(password_file)?)
+                    LocalWallet::decrypt_keystore(&path, self.password_from_file(password_file)?, network)
                         .wrap_err_with(|| format!("Failed to decrypt keystore {path:?} with password file {password_file:?}"))?,
                 )
             }
             (Some(path), None, None) => {
                 let path = self.find_keystore_file(path)?;
                 let password = rpassword::prompt_password("Enter keystore password:")?;
-                Some(LocalWallet::decrypt_keystore(path, password)?)
+                Some(LocalWallet::decrypt_keystore(path, password, network)?)
             }
             (None, _, _) => None,
         })
@@ -386,6 +390,10 @@ pub trait WalletTrait {
 impl WalletTrait for Wallet {
     fn sender(&self) -> Option<Address> {
         self.from
+    }
+
+    fn network(&self) -> Option<Network> {
+        self.network
     }
 }
 
@@ -555,11 +563,9 @@ mod tests {
             keystore_password_file: None,
             mnemonic: None,
             mnemonic_passphrase: None,
-            ledger: false,
-            trezor: false,
-            aws: false,
             hd_path: None,
             mnemonic_index: 0,
+            network: Some(Network::Mainnet),
         };
         match wallet.private_key() {
             Ok(_) => {

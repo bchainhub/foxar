@@ -13,7 +13,9 @@ use corebc::{
 use eyre::WrapErr;
 use forge::executor::opts::EvmOpts;
 use foundry_common::{cli_warn, fs, TestFunctionExt};
-use foundry_config::{error::ExtractConfigError, figment::Figment, Config, Network as ConfigNetwork};
+use foundry_config::{
+    error::ExtractConfigError, figment::Figment, Config, Network as ConfigNetwork,
+};
 use std::{fmt::Write, path::PathBuf};
 use tracing::trace;
 use yansi::Paint;

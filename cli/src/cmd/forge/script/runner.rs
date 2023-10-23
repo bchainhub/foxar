@@ -85,80 +85,80 @@ impl ScriptRunner {
         self.executor.set_balance(address, self.initial_balance)?;
 
         // Optionally call the `setUp` function
-        let (success, gas_used, labeled_addresses, transactions, debug, script_wallets) = if !setup
-        {
-            self.executor.backend_mut().set_test_contract(address);
-            (
-                true,
-                0,
-                Default::default(),
-                None,
-                vec![constructor_debug].into_iter().collect(),
-                vec![],
-            )
-        } else {
-            match self.executor.setup(Some(self.sender), address) {
-                Ok(CallResult {
-                    reverted,
-                    traces: setup_traces,
-                    labels,
-                    logs: setup_logs,
-                    debug,
-                    energy_used: gas_used,
-                    transactions,
-                    script_wallets,
-                    ..
-                }) => {
-                    traces.extend(setup_traces.map(|traces| (TraceKind::Setup, traces)));
-                    logs.extend_from_slice(&setup_logs);
-
-                    self.maybe_correct_nonce(sender_nonce, libraries.len())?;
-
-                    (
-                        !reverted,
-                        gas_used,
-                        labels,
-                        transactions,
-                        vec![constructor_debug, debug].into_iter().collect(),
-                        script_wallets,
-                    )
-                }
-                Err(EvmError::Execution(err)) => {
-                    let ExecutionErr {
+        let (success, energy_used, labeled_addresses, transactions, debug, script_wallets) =
+            if !setup {
+                self.executor.backend_mut().set_test_contract(address);
+                (
+                    true,
+                    0,
+                    Default::default(),
+                    None,
+                    vec![constructor_debug].into_iter().collect(),
+                    vec![],
+                )
+            } else {
+                match self.executor.setup(Some(self.sender), address) {
+                    Ok(CallResult {
                         reverted,
                         traces: setup_traces,
                         labels,
                         logs: setup_logs,
                         debug,
-                        energy_used: gas_used,
+                        energy_used: energy_used,
                         transactions,
                         script_wallets,
                         ..
-                    } = *err;
-                    traces.extend(setup_traces.map(|traces| (TraceKind::Setup, traces)));
-                    logs.extend_from_slice(&setup_logs);
+                    }) => {
+                        traces.extend(setup_traces.map(|traces| (TraceKind::Setup, traces)));
+                        logs.extend_from_slice(&setup_logs);
 
-                    self.maybe_correct_nonce(sender_nonce, libraries.len())?;
+                        self.maybe_correct_nonce(sender_nonce, libraries.len())?;
 
-                    (
-                        !reverted,
-                        gas_used,
-                        labels,
-                        transactions,
-                        vec![constructor_debug, debug].into_iter().collect(),
-                        script_wallets,
-                    )
+                        (
+                            !reverted,
+                            energy_used,
+                            labels,
+                            transactions,
+                            vec![constructor_debug, debug].into_iter().collect(),
+                            script_wallets,
+                        )
+                    }
+                    Err(EvmError::Execution(err)) => {
+                        let ExecutionErr {
+                            reverted,
+                            traces: setup_traces,
+                            labels,
+                            logs: setup_logs,
+                            debug,
+                            energy_used: energy_used,
+                            transactions,
+                            script_wallets,
+                            ..
+                        } = *err;
+                        traces.extend(setup_traces.map(|traces| (TraceKind::Setup, traces)));
+                        logs.extend_from_slice(&setup_logs);
+
+                        self.maybe_correct_nonce(sender_nonce, libraries.len())?;
+
+                        (
+                            !reverted,
+                            energy_used,
+                            labels,
+                            transactions,
+                            vec![constructor_debug, debug].into_iter().collect(),
+                            script_wallets,
+                        )
+                    }
+                    Err(e) => return Err(e.into()),
                 }
-                Err(e) => return Err(e.into()),
-            }
-        };
+            };
 
         Ok((
             address,
             ScriptResult {
                 returned: bytes::Bytes::new(),
                 success,
-                gas_used,
+                energy_used,
                 labeled_addresses,
                 transactions,
                 logs,
@@ -209,20 +209,22 @@ impl ScriptRunner {
         if let Some(NameOrAddress::Address(to)) = to {
             self.call(from, to, calldata.unwrap_or_default(), value.unwrap_or(U256::zero()), true)
         } else if to.is_none() {
-            let (address, gas_used, logs, traces, debug) = match self.executor.deploy(
+            let (address, energy_used, logs, traces, debug) = match self.executor.deploy(
                 from,
                 calldata.expect("No data for create transaction").0,
                 value.unwrap_or(U256::zero()),
                 None,
             ) {
-                Ok(DeployResult { address, energy_used: gas_used, logs, traces, debug, .. }) => {
-                    (address, gas_used, logs, traces, debug)
-                }
+                Ok(DeployResult {
+                    address, energy_used: energy_used, logs, traces, debug, ..
+                }) => (address, energy_used, logs, traces, debug),
                 Err(EvmError::Execution(err)) => {
-                    let ExecutionErr { reason, traces, energy_used: gas_used, logs, debug, .. } = *err;
+                    let ExecutionErr {
+                        reason, traces, energy_used: energy_used, logs, debug, ..
+                    } = *err;
                     println!("{}", Paint::red(format!("\nFailed with `{reason}`:\n")));
 
-                    (Address::zero(), gas_used, logs, traces, debug)
+                    (Address::zero(), energy_used, logs, traces, debug)
                 }
                 Err(e) => eyre::bail!("Failed deploying contract: {e:?}"),
             };
@@ -230,12 +232,13 @@ impl ScriptRunner {
             Ok(ScriptResult {
                 returned: bytes::Bytes::new(),
                 success: address != Address::zero(),
-                gas_used,
+                energy_used,
                 logs,
                 traces: traces
                     .map(|mut traces| {
-                        // Manually adjust gas for the trace to add back the stipend/real used gas
-                        traces.arena[0].trace.gas_cost = gas_used;
+                        // Manually adjust energy for the trace to add back the stipend/real used
+                        // energy
+                        traces.arena[0].trace.energy_cost = energy_used;
                         vec![(TraceKind::Execution, traces)]
                     })
                     .unwrap_or_default(),
@@ -254,8 +257,8 @@ impl ScriptRunner {
     ///
     /// This will commit the changes if `commit` is true.
     ///
-    /// This will return _estimated_ gas instead of the precise gas the call would consume, so it
-    /// can be used as `gas_limit`.
+    /// This will return _estimated_ energy instead of the precise energy the call would consume, so
+    /// it can be used as `energy_limit`.
     fn call(
         &mut self,
         from: Address,
@@ -265,15 +268,15 @@ impl ScriptRunner {
         commit: bool,
     ) -> eyre::Result<ScriptResult> {
         let mut res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
-        let mut gas_used = res.energy_used;
+        let mut energy_used = res.energy_used;
 
-        // We should only need to calculate realistic gas costs when preparing to broadcast
+        // We should only need to calculate realistic energy costs when preparing to broadcast
         // something. This happens during the onchain simulation stage, where we commit each
         // collected transactions.
         //
         // Otherwise don't re-execute, or some usecases might be broken: https://github.com/foundry-rs/foundry/issues/3921
         if commit {
-            gas_used = self.search_optimal_gas_usage(&res, from, to, &calldata, value)?;
+            energy_used = self.search_optimal_energy_usage(&res, from, to, &calldata, value)?;
             res = self.executor.call_raw_committing(from, to, calldata.0, value)?;
         }
 
@@ -292,12 +295,12 @@ impl ScriptRunner {
         Ok(ScriptResult {
             returned: result,
             success: !reverted,
-            gas_used,
+            energy_used,
             logs,
             traces: traces
                 .map(|mut traces| {
-                    // Manually adjust gas for the trace to add back the stipend/real used gas
-                    traces.arena[0].trace.gas_cost = gas_used;
+                    // Manually adjust energy for the trace to add back the stipend/real used energy
+                    traces.arena[0].trace.energy_cost = energy_used;
                     vec![(TraceKind::Execution, traces)]
                 })
                 .unwrap_or_default(),
@@ -309,13 +312,14 @@ impl ScriptRunner {
         })
     }
 
-    /// The executor will return the _exact_ gas value this transaction consumed, setting this value
-    /// as gas limit will result in `OutOfGas` so to come up with a better estimate we search over a
-    /// possible range we pick a higher gas limit 3x of a succeeded call should be safe.
+    /// The executor will return the _exact_ energy value this transaction consumed, setting this
+    /// value as energy limit will result in `OutOfEnergy` so to come up with a better estimate
+    /// we search over a possible range we pick a higher energy limit 3x of a succeeded call
+    /// should be safe.
     ///
     /// This might result in executing the same script multiple times. Depending on the user's goal,
     /// it might be problematic when using `ffi`.
-    fn search_optimal_gas_usage(
+    fn search_optimal_energy_usage(
         &mut self,
         res: &RawCallResult,
         from: Address,
@@ -323,44 +327,44 @@ impl ScriptRunner {
         calldata: &Bytes,
         value: U256,
     ) -> eyre::Result<u64> {
-        let mut gas_used = res.energy_used;
+        let mut energy_used = res.energy_used;
         if matches!(res.exit_reason, return_ok!()) {
-            // store the current gas limit and reset it later
-            let init_gas_limit = self.executor.env_mut().tx.gas_limit;
+            // store the current energy limit and reset it later
+            let init_energy_limit = self.executor.env_mut().tx.energy_limit;
 
-            let mut highest_gas_limit = gas_used * 3;
-            let mut lowest_gas_limit = gas_used;
-            let mut last_highest_gas_limit = highest_gas_limit;
-            while (highest_gas_limit - lowest_gas_limit) > 1 {
-                let mid_gas_limit = (highest_gas_limit + lowest_gas_limit) / 2;
-                self.executor.env_mut().tx.gas_limit = mid_gas_limit;
+            let mut highest_energy_limit = energy_used * 3;
+            let mut lowest_energy_limit = energy_used;
+            let mut last_highest_energy_limit = highest_energy_limit;
+            while (highest_energy_limit - lowest_energy_limit) > 1 {
+                let mid_energy_limit = (highest_energy_limit + lowest_energy_limit) / 2;
+                self.executor.env_mut().tx.energy_limit = mid_energy_limit;
                 let res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
                 match res.exit_reason {
                     InstructionResult::Revert |
-                    InstructionResult::OutOfGas |
+                    InstructionResult::OutOfEnergy |
                     InstructionResult::OutOfFund => {
-                        lowest_gas_limit = mid_gas_limit;
+                        lowest_energy_limit = mid_energy_limit;
                     }
                     _ => {
-                        highest_gas_limit = mid_gas_limit;
+                        highest_energy_limit = mid_energy_limit;
                         // if last two successful estimations only vary by 10%, we consider this to
                         // sufficiently accurate
                         const ACCURACY: u64 = 10;
-                        if (last_highest_gas_limit - highest_gas_limit) * ACCURACY /
-                            last_highest_gas_limit <
+                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY /
+                            last_highest_energy_limit <
                             1
                         {
-                            // update the gas
-                            gas_used = highest_gas_limit;
+                            // update the energy
+                            energy_used = highest_energy_limit;
                             break
                         }
-                        last_highest_gas_limit = highest_gas_limit;
+                        last_highest_energy_limit = highest_energy_limit;
                     }
                 }
             }
-            // reset gas limit in the
-            self.executor.env_mut().tx.gas_limit = init_gas_limit;
+            // reset energy limit in the
+            self.executor.env_mut().tx.energy_limit = init_energy_limit;
         }
-        Ok(gas_used)
+        Ok(energy_used)
     }
 }

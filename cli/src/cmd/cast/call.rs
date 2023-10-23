@@ -81,10 +81,9 @@ impl CallArgs {
 
         let mut builder = TxBuilder::new(&provider, sender, to, network).await?;
         builder
-            .gas(tx.gas_limit)
+            .energy(tx.energy_limit)
             // .etherscan_api_key(config.get_etherscan_api_key(Some(network)))
-            .gas_price(tx.gas_price)
-            .priority_gas_price(tx.priority_gas_price)
+            .energy_price(tx.energy_price)
             .nonce(tx.nonce);
         match command {
             Some(CallSubcommands::Create { code, sig, args, value }) => {

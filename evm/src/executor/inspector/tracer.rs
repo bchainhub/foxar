@@ -1,6 +1,6 @@
 use crate::{
     debug::Instruction::OpCode,
-    executor::inspector::utils::{gas_used, get_create_address},
+    executor::inspector::utils::{energy_used, get_create_address},
     trace::{
         CallTrace, CallTraceArena, CallTraceStep, LogCallOrder, RawOrDecodedCall, RawOrDecodedLog,
         RawOrDecodedReturnData,
@@ -33,17 +33,18 @@ pub struct Tracer {
     trace_stack: Vec<usize>,
     step_stack: Vec<(usize, usize)>, // (trace_idx, step_idx)
 
-    gas_inspector: Rc<RefCell<EnergyInspector>>,
+    energy_inspector: Rc<RefCell<EnergyInspector>>,
 }
 
 impl Tracer {
-    /// Enables step recording and uses [revm::EnergyInspector] to report gas costs for each step.
+    /// Enables step recording and uses [revm::EnergyInspector] to report energy costs for each
+    /// step.
     ///
     /// Energy Inspector should be called externally **before** [Tracer], this is why we need it as
     /// `Rc<RefCell<_>>` here.
-    pub fn with_steps_recording(mut self, gas_inspector: Rc<RefCell<EnergyInspector>>) -> Self {
+    pub fn with_steps_recording(mut self, energy_inspector: Rc<RefCell<EnergyInspector>>) -> Self {
         self.record_steps = true;
-        self.gas_inspector = gas_inspector;
+        self.energy_inspector = energy_inspector;
         self
     }
 
@@ -84,7 +85,7 @@ impl Tracer {
         .trace;
         trace.status = status;
         trace.success = success;
-        trace.gas_cost = cost;
+        trace.energy_cost = cost;
         trace.output = RawOrDecodedReturnData::Raw(output.into());
 
         if let Some(address) = address {
@@ -108,9 +109,9 @@ impl Tracer {
             contract: b176_to_h176(interp.contract.address),
             stack: interp.stack.clone(),
             memory: interp.memory.clone(),
-            gas: self.gas_inspector.borrow().energy_remaining(),
-            gas_refund_counter: interp.energy.refunded() as u64,
-            gas_cost: 0,
+            energy: self.energy_inspector.borrow().energy_remaining(),
+            energy_refund_counter: interp.energy.refunded() as u64,
+            energy_cost: 0,
             state_diff: None,
             error: None,
         });
@@ -148,7 +149,7 @@ impl Tracer {
                 _ => None,
             };
 
-            step.gas_cost = step.gas - self.gas_inspector.borrow().energy_remaining();
+            step.energy_cost = step.energy - self.energy_inspector.borrow().energy_remaining();
         }
 
         // Error codes only
@@ -229,19 +230,19 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         _inputs: &CallInputs,
-        gas: Energy,
+        energy: Energy,
         status: InstructionResult,
         retdata: Bytes,
         _is_static: bool,
     ) -> (InstructionResult, Energy, Bytes) {
         self.fill_trace(
             status,
-            gas_used(data.env.cfg.spec_id, gas.spend(), gas.refunded() as u64),
+            energy_used(data.env.cfg.spec_id, energy.spend(), energy.refunded() as u64),
             retdata.to_vec(),
             None,
         );
 
-        (status, gas, retdata)
+        (status, energy, retdata)
     }
 
     fn create(
@@ -249,7 +250,7 @@ where
         data: &mut EVMData<'_, DB>,
         inputs: &mut CreateInputs,
     ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
-        // TODO: Does this increase gas cost?
+        // TODO: Does this increase energy cost?
         let _ = data.journaled_state.load_account(inputs.caller, data.db);
         let nonce = data.journaled_state.account(inputs.caller).info.nonce;
         self.start_trace(
@@ -274,7 +275,7 @@ where
         _inputs: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        gas: Energy,
+        energy: Energy,
         retdata: Bytes,
     ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         let code = match address {
@@ -289,11 +290,11 @@ where
         };
         self.fill_trace(
             status,
-            gas_used(data.env.cfg.spec_id, gas.spend(), gas.refunded() as u64),
+            energy_used(data.env.cfg.spec_id, energy.spend(), energy.refunded() as u64),
             code,
             address.map(b176_to_h176),
         );
 
-        (status, address, gas, retdata)
+        (status, address, energy, retdata)
     }
 }

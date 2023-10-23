@@ -405,21 +405,21 @@ pub fn parse_private_key(private_key: U256) -> Result<SigningKey> {
     SigningKey::from_bytes((&bytes).into()).map_err(Into::into)
 }
 
-// Determines if the gas limit on a given call was manually set in the script and should therefore
-// not be overwritten by later estimations
-pub fn check_if_fixed_gas_limit<DB: DatabaseExt>(
+// Determines if the energy limit on a given call was manually set in the script and should
+// therefore not be overwritten by later estimations
+pub fn check_if_fixed_energy_limit<DB: DatabaseExt>(
     data: &EVMData<'_, DB>,
-    call_gas_limit: u64,
+    call_energy_limit: u64,
 ) -> bool {
-    // If the gas limit was not set in the source code it is set to the estimated gas left at the
-    // time of the call, which should be rather close to configured gas limit.
+    // If the energy limit was not set in the source code it is set to the estimated energy left at
+    // the time of the call, which should be rather close to configured energy limit.
     // TODO: Find a way to reliably make this determination. (for example by
     // generating it in the compilation or evm simulation process)
     U256::from(data.env.tx.energy_limit) > ru256_to_u256(data.env.block.energy_limit) &&
-        U256::from(call_gas_limit) <= ru256_to_u256(data.env.block.energy_limit)
+        U256::from(call_energy_limit) <= ru256_to_u256(data.env.block.energy_limit)
         // Transfers in forge scripts seem to be estimated at 2300 by revm leading to "Intrinsic
-        // gas too low" failure when simulated on chain
-        && call_gas_limit > 2300
+        // energy too low" failure when simulated on chain
+        && call_energy_limit > 2300
 }
 
 /// Small utility function that checks if an address is a potential precompile.

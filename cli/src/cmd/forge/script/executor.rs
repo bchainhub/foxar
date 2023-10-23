@@ -9,8 +9,8 @@ use crate::cmd::{
     needs_setup,
 };
 use corebc::{
-    ylem::artifacts::CompactContractBytecode,
     types::{transaction::eip2718::TypedTransaction, Address, U256},
+    ylem::artifacts::CompactContractBytecode,
 };
 use forge::{
     executor::{
@@ -68,7 +68,7 @@ impl ScriptArgs {
             let script_result = runner.script(address, calldata)?;
 
             result.success &= script_result.success;
-            result.gas_used = script_result.gas_used;
+            result.energy_used = script_result.energy_used;
             result.logs.extend(script_result.logs);
             result.traces.extend(script_result.traces);
             result.debug = script_result.debug;
@@ -145,68 +145,65 @@ impl ScriptArgs {
                     .expect("to have been built.")
                     .write();
 
-                if let TypedTransaction::Legacy(mut tx) = transaction.transaction {
-                    let result = runner
-                        .simulate(
-                            tx.from.expect(
-                                "Transaction doesn't have a `from` address at execution time",
-                            ),
-                            tx.to.clone(),
-                            tx.data.clone(),
-                            tx.value,
-                        )
-                        .expect("Internal EVM error");
+                let TypedTransaction::Legacy(mut tx) = transaction.transaction;
+                let result = runner
+                    .simulate(
+                        tx.from
+                            .expect("Transaction doesn't have a `from` address at execution time"),
+                        tx.to.clone(),
+                        tx.data.clone(),
+                        tx.value,
+                    )
+                    .expect("Internal EVM error");
 
-                    if !result.success || result.traces.is_empty() {
-                        return Ok((None, result.traces))
-                    }
-
-                    let created_contracts = result
-                        .traces
-                        .iter()
-                        .flat_map(|(_, traces)| {
-                            traces.arena.iter().filter_map(|node| {
-                                if matches!(node.kind(), CallKind::Create | CallKind::Create2) {
-                                    return Some(AdditionalContract {
-                                        opcode: node.kind(),
-                                        address: node.trace.address,
-                                        init_code: node.trace.data.to_raw(),
-                                    })
-                                }
-                                None
-                            })
-                        })
-                        .collect();
-
-                    // Simulate mining the transaction if the user passes `--slow`.
-                    if self.slow {
-                        runner.executor.env_mut().block.number += rU256::from(1);
-                    }
-
-                    let is_fixed_gas_limit = tx.gas.is_some();
-                    // If tx.gas is already set that means it was specified in script
-                    if !is_fixed_gas_limit {
-                        // We inflate the gas used by the user specified percentage
-                        tx.gas =
-                            Some(U256::from(result.gas_used * self.gas_estimate_multiplier / 100));
-                    } else {
-                        println!("Gas limit was set in script to {:}", tx.gas.unwrap());
-                    }
-
-                    let tx = TransactionWithMetadata::new(
-                        tx.into(),
-                        transaction.rpc,
-                        &result,
-                        &address_to_abi,
-                        decoder,
-                        created_contracts,
-                        is_fixed_gas_limit,
-                    )?;
-
-                    Ok((Some(tx), result.traces))
-                } else {
-                    unreachable!()
+                if !result.success || result.traces.is_empty() {
+                    return Ok((None, result.traces))
                 }
+
+                let created_contracts = result
+                    .traces
+                    .iter()
+                    .flat_map(|(_, traces)| {
+                        traces.arena.iter().filter_map(|node| {
+                            if matches!(node.kind(), CallKind::Create | CallKind::Create2) {
+                                return Some(AdditionalContract {
+                                    opcode: node.kind(),
+                                    address: node.trace.address,
+                                    init_code: node.trace.data.to_raw(),
+                                })
+                            }
+                            None
+                        })
+                    })
+                    .collect();
+
+                // Simulate mining the transaction if the user passes `--slow`.
+                if self.slow {
+                    runner.executor.env_mut().block.number += rU256::from(1);
+                }
+
+                let is_fixed_energy_limit = tx.energy.is_some();
+                // If tx.energy is already set that means it was specified in script
+                if !is_fixed_energy_limit {
+                    // We inflate the energy used by the user specified percentage
+                    tx.energy = Some(U256::from(
+                        result.energy_used * self.energy_estimate_multiplier / 100,
+                    ));
+                } else {
+                    println!("Gas limit was set in script to {:}", tx.energy.unwrap());
+                }
+
+                let tx = TransactionWithMetadata::new(
+                    tx.into(),
+                    transaction.rpc,
+                    &result,
+                    &address_to_abi,
+                    decoder,
+                    created_contracts,
+                    is_fixed_energy_limit,
+                )?;
+
+                Ok((Some(tx), result.traces))
             })
             .collect::<Vec<_>>();
 
@@ -309,7 +306,7 @@ impl ScriptArgs {
         let mut builder = ExecutorBuilder::default()
             .with_config(env)
             .with_spec(evm_spec(&script_config.config.evm_version))
-            .with_gas_limit(script_config.evm_opts.energy_limit())
+            .with_energy_limit(script_config.evm_opts.energy_limit())
             // We need it enabled to decode contract names: local or external.
             .set_tracing(true);
 

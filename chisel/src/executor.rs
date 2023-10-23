@@ -257,7 +257,7 @@ impl SessionSource {
             .with_chisel_state(final_pc)
             .set_tracing(true)
             .with_spec(foundry_evm::utils::evm_spec(&self.config.foundry_config.evm_version))
-            .with_gas_limit(self.config.evm_opts.energy_limit())
+            .with_energy_limit(self.config.evm_opts.energy_limit())
             .with_cheatcodes(CheatsConfig::new(&self.config.foundry_config, &self.config.evm_opts))
             .build(backend);
 

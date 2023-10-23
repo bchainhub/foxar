@@ -200,8 +200,8 @@ pub struct Env {
 
     /// the tx.energyprice value during EVM execution
     ///
-    /// This is an Option, so we can determine in fork mode whether to use the config's energy price
-    /// (if set by user) or the remote client's energy price.
+    /// This is an Option, so we can determine in fork mode whether to use the config's energy
+    /// price (if set by user) or the remote client's energy price.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub energy_price: Option<u64>,
 

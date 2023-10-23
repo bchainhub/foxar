@@ -20,7 +20,7 @@ impl EtherscanSourceProvider for EtherscanFlattenedSource {
         target: &Path,
         version: &Version,
     ) -> eyre::Result<(String, String, CodeFormat)> {
-        let metadata = project.solc_config.settings.metadata.as_ref();
+        let metadata = project.ylem_config.settings.metadata.as_ref();
         let bch = metadata.and_then(|m| m.bytecode_hash).unwrap_or_default();
 
         eyre::ensure!(
@@ -69,8 +69,8 @@ impl EtherscanFlattenedSource {
         contract_path: &Path,
     ) -> eyre::Result<()> {
         let version = strip_build_meta(version.clone());
-        let solc = Solc::find_svm_installed_version(version.to_string())?
-            .unwrap_or(Solc::blocking_install(&version)?);
+        let solc = Ylem::find_yvm_installed_version(version.to_string())?
+            .unwrap_or(Ylem::blocking_install(&version)?);
 
         let input = CompilerInput {
             language: "Solidity".to_string(),

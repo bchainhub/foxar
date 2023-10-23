@@ -13,8 +13,8 @@ use clap::{Parser, ValueHint};
 use corebc::{
     abi::{Abi, Constructor, Token},
     prelude::{artifacts::BytecodeObject, ContractFactory, Middleware, MiddlewareBuilder},
-    solc::{info::ContractInfo, utils::canonicalized},
-    types::{transaction::eip2718::TypedTransaction, Chain},
+    types::transaction::eip2718::TypedTransaction,
+    ylem::{info::ContractInfo, utils::canonicalized},
 };
 use eyre::Context;
 use foundry_common::{abi::parse_tokens, compile};
@@ -123,7 +123,7 @@ impl CreateArgs {
             None => vec![],
         };
 
-        let chain_id = provider.get_chainid().await?.as_u64();
+        let chain_id = provider.get_networkid().await?.as_u64();
         if self.unlocked {
             // Deploy with unlocked account
             let sender = self.eth.wallet.from.expect("required");
@@ -157,10 +157,7 @@ impl CreateArgs {
             constructor_args,
             constructor_args_path: None,
             num_of_optimizations: None,
-            etherscan: EtherscanOpts {
-                key: self.eth.etherscan.key.clone(),
-                network: Some(chain.into()),
-            },
+            etherscan: EtherscanOpts { network: Some(chain.into()) },
             flatten: false,
             force: false,
             watch: true,
@@ -200,48 +197,30 @@ impl CreateArgs {
                     e
                 }
             })?;
-        let is_legacy = self.tx.legacy ||
-            Chain::try_from(chain).map(|x| Chain::is_legacy(&x)).unwrap_or_default();
-        let mut deployer = if is_legacy { deployer.legacy() } else { deployer };
+        let mut deployer = deployer;
 
         // set tx value if specified
         if let Some(value) = self.tx.value {
             deployer.tx.set_value(value);
         }
 
-        // fill tx first because if you target a lower gas than current base, eth_estimateGas
+        // fill tx first because if you target a lower energy than current base, eth_estimateEnergy
         // will fail and create will fail
         provider.fill_transaction(&mut deployer.tx, None).await?;
 
-        // the max
-        let mut priority_fee = self.tx.priority_gas_price;
-
-        // set gas price if specified
-        if let Some(gas_price) = self.tx.gas_price {
-            deployer.tx.set_gas_price(gas_price);
+        // set energy price if specified
+        if let Some(energy_price) = self.tx.energy_price {
+            deployer.tx.set_energy_price(energy_price);
         }
 
-        // set gas limit if specified
-        if let Some(gas_limit) = self.tx.gas_limit {
-            deployer.tx.set_gas(gas_limit);
+        // set energy limit if specified
+        if let Some(energy_limit) = self.tx.energy_limit {
+            deployer.tx.set_energy(energy_limit);
         }
 
         // set nonce if specified
         if let Some(nonce) = self.tx.nonce {
             deployer.tx.set_nonce(nonce);
-        }
-
-        // set priority fee if specified
-        if let Some(priority_fee) = priority_fee {
-            if is_legacy {
-                eyre::bail!("there is no priority fee for legacy txs");
-            }
-            deployer.tx = match deployer.tx {
-                TypedTransaction::Eip1559(eip1559_tx_request) => TypedTransaction::Eip1559(
-                    eip1559_tx_request.max_priority_fee_per_gas(priority_fee),
-                ),
-                _ => deployer.tx,
-            };
         }
 
         // Before we actually deploy the contract we try check if the verify settings are valid
@@ -295,7 +274,7 @@ impl CreateArgs {
             constructor_args,
             constructor_args_path: None,
             num_of_optimizations,
-            etherscan: EtherscanOpts { key: self.eth.etherscan.key, network: Some(chain.into()) },
+            etherscan: EtherscanOpts { network: Some(chain.into()) },
             flatten: false,
             force: false,
             watch: true,

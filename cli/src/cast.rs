@@ -274,7 +274,9 @@ async fn main() -> eyre::Result<()> {
 
             let address: Address = stdin::unwrap_line(address)?.parse()?;
             let network = provider.get_networkid().await?;
-            let computed = Cast::new(&provider).compute_address(address, nonce, &Network::from(network)).await?;
+            let computed = Cast::new(&provider)
+                .compute_address(address, nonce, &Network::from(network))
+                .await?;
             println!("Computed Address: {}", computed.to_string());
         }
         Subcommands::Disassemble { bytecode } => {
@@ -284,7 +286,7 @@ async fn main() -> eyre::Result<()> {
         Subcommands::GasPrice { rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
-            println!("{}", Cast::new(provider).gas_price().await?);
+            println!("{}", Cast::new(provider).energy_price().await?);
         }
         Subcommands::Index { key_type, key, slot_number } => {
             println!("{}", SimpleCast::index(&key_type, &key, &slot_number)?);

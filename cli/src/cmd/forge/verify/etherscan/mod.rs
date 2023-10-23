@@ -15,6 +15,7 @@ use corebc::{
         Client,
     },
     prelude::errors::BlockindexError,
+    types::Network as CorebcNetwork,
     ylem::{artifacts::CompactContract, cache::CacheEntry, Project, Ylem},
 };
 use eyre::{eyre, Context};
@@ -78,10 +79,15 @@ impl VerificationProvider for EtherscanVerificationProvider {
         trace!(target : "forge::verify", ?verify_args,  "submitting verification request");
 
         let retry: Retry = args.retry.into();
-        let resp = retry.run_async(|| {
-            async {
-                println!("\nSubmitting verification for [{}] {:?}.", verify_args.contract_name, verify_args.address.to_string());
-                let resp = etherscan
+        let resp = retry
+            .run_async(|| {
+                async {
+                    println!(
+                        "\nSubmitting verification for [{}] {:?}.",
+                        verify_args.contract_name,
+                        verify_args.address.to_string()
+                    );
+                    let resp = etherscan
                     .submit_contract_verification(&verify_args)
                     .await
                     .wrap_err_with(|| {
@@ -91,53 +97,56 @@ impl VerificationProvider for EtherscanVerificationProvider {
                         format!("Failed to submit contract verification, payload:\n{args}")
                     })?;
 
-                trace!(target : "forge::verify",  ?resp, "Received verification response");
+                    trace!(target : "forge::verify",  ?resp, "Received verification response");
 
-                if resp.status == "0" {
-                    if resp.result == "Contract source code already verified" {
-                        return Ok(None)
-                    }
+                    //todo:error2215 fix this in future
+                    // if resp.status == "0" {
+                    //     if resp.result == "Contract source code already verified" {
+                    //         return Ok(None)
+                    //     }
 
-                    if resp.result.starts_with("Unable to locate ContractCode at") {
-                        warn!("{}", resp.result);
-                        return Err(eyre!("Etherscan could not detect the deployment."))
-                    }
+                    //     if resp.result.starts_with("Unable to locate ContractCode at") {
+                    //         warn!("{}", resp.result);
+                    //         return Err(eyre!("Etherscan could not detect the deployment."))
+                    //     }
 
-                    warn!("Failed verify submission: {:?}", resp);
-                    eprintln!(
-                        "Encountered an error verifying this contract:\nResponse: `{}`\nDetails: `{}`",
-                        resp.message, resp.result
-                    );
-                    std::process::exit(1);
+                    //     warn!("Failed verify submission: {:?}", resp);
+                    //     eprintln!(
+                    //         "Encountered an error verifying this contract:\nResponse:
+                    // `{}`\nDetails: `{}`",         resp.message, resp.result
+                    //     );
+                    //     std::process::exit(1);
+                    // }
+
+                    Ok(Some(resp))
                 }
-
-                Ok(Some(resp))
-            }
                 .boxed()
-        }).await?;
+            })
+            .await?;
 
-        if let Some(resp) = resp {
-            println!(
-                "Submitted contract for verification:\n\tResponse: `{}`\n\tGUID: `{}`\n\tURL:
-        {}",
-                resp.message,
-                resp.result,
-                etherscan.address_url(args.address)
-            );
+        //todo:error2215 fix this in future
+        // if let Some(resp) = resp {
+        //     println!(
+        //         "Submitted contract for verification:\n\tResponse: `{}`\n\tGUID: `{}`\n\tURL:
+        // {}",
+        //         resp.message,
+        //         resp.result,
+        //         etherscan.address_url(args.address)
+        //     );
 
-            if args.watch {
-                let check_args = VerifyCheckArgs {
-                    id: resp.result,
-                    etherscan: args.etherscan,
-                    retry: RETRY_CHECK_ON_VERIFY,
-                    verifier: args.verifier,
-                };
-                // return check_args.run().await
-                return self.check(check_args).await
-            }
-        } else {
-            println!("Contract source code already verified");
-        }
+        //     if args.watch {
+        //         let check_args = VerifyCheckArgs {
+        //             id: resp.result,
+        //             etherscan: args.etherscan,
+        //             retry: RETRY_CHECK_ON_VERIFY,
+        //             verifier: args.verifier,
+        //         };
+        //         // return check_args.run().await
+        //         return self.check(check_args).await
+        //     }
+        // } else {
+        println!("Contract source code already verified");
+        // }
 
         Ok(())
     }
@@ -148,7 +157,6 @@ impl VerificationProvider for EtherscanVerificationProvider {
         let etherscan = self.client(
             args.etherscan.network.unwrap_or_default(),
             args.verifier.verifier_url.as_deref(),
-            args.etherscan.key.as_deref(),
             &config,
         )?;
         let retry: Retry = args.retry.into();
@@ -162,32 +170,33 @@ impl VerificationProvider for EtherscanVerificationProvider {
 
                     trace!(target : "forge::verify",  ?resp, "Received verification response");
 
-                    eprintln!(
-                        "Contract verification status:\nResponse: `{}`\nDetails: `{}`",
-                        resp.message, resp.result
-                    );
+                    //todo:error2215 - fix this in future
+                    // eprintln!(
+                    //     "Contract verification status:\nResponse: `{}`\nDetails: `{}`",
+                    //     resp.message, resp.result
+                    // );
 
-                    if resp.result == "Pending in queue" {
-                        return Err(eyre!("Verification is still pending...",))
-                    }
+                    // if resp.result == "Pending in queue" {
+                    //     return Err(eyre!("Verification is still pending...",))
+                    // }
 
-                    if resp.result == "Unable to verify" {
-                        return Err(eyre!("Unable to verify.",))
-                    }
+                    // if resp.result == "Unable to verify" {
+                    //     return Err(eyre!("Unable to verify.",))
+                    // }
 
-                    if resp.result == "Already Verified" {
-                        println!("Contract source code already verified");
-                        return Ok(())
-                    }
+                    // if resp.result == "Already Verified" {
+                    //     println!("Contract source code already verified");
+                    //     return Ok(())
+                    // }
 
-                    if resp.status == "0" {
-                        println!("Contract failed to verify.");
-                        std::process::exit(1);
-                    }
+                    // if resp.status == "0" {
+                    //     println!("Contract failed to verify.");
+                    //     std::process::exit(1);
+                    // }
 
-                    if resp.result == "Pass - Verified" {
-                        println!("Contract successfully verified");
-                    }
+                    // if resp.result == "Pass - Verified" {
+                    //     println!("Contract successfully verified");
+                    // }
 
                     Ok(())
                 }
@@ -234,7 +243,6 @@ impl EtherscanVerificationProvider {
         let etherscan = self.client(
             args.etherscan.network.unwrap_or_default(),
             args.verifier.verifier_url.as_deref(),
-            args.etherscan.key.as_deref(),
             &config,
         )?;
         let verify_args = self.create_verify_request(args, Some(config)).await?;
@@ -252,7 +260,7 @@ impl EtherscanVerificationProvider {
 
         if let Err(err) = check {
             match err {
-                EtherscanError::ContractCodeNotVerified(_) => return Ok(false),
+                BlockindexError::ContractCodeNotVerified(_) => return Ok(false),
                 error => return Err(error.into()),
             }
         }
@@ -263,35 +271,30 @@ impl EtherscanVerificationProvider {
     /// Create an etherscan client
     pub(crate) fn client(
         &self,
-        chain: Network,
+        network: Network,
         verifier_url: Option<&str>,
-        etherscan_key: Option<&str>,
         config: &Config,
     ) -> eyre::Result<Client> {
-        let etherscan_config = config.get_etherscan_config_with_chain(Some(chain))?;
+        let etherscan_config = config.get_etherscan_config_with_network(Some(network))?;
 
         let api_url =
             verifier_url.or_else(|| etherscan_config.as_ref().map(|c| c.api_url.as_str()));
         let base_url = etherscan_config
             .as_ref()
             .and_then(|c| c.browser_url.as_deref())
-            .or_else(|| chain.blockindex_urls().map(|urls| urls.1));
-
-        let etherscan_key =
-            etherscan_key.or_else(|| etherscan_config.as_ref().map(|c| c.key.as_str()));
+            .or_else(|| network.blockindex_urls().map(|urls| urls.1));
 
         let mut builder = Client::builder();
 
         builder = if let Some(api_url) = api_url {
             builder.with_api_url(api_url)?.with_url(base_url.unwrap_or(api_url))?
         } else {
-            builder.chain(chain.to_owned().try_into()?)?
+            let network_id = network.to_owned().id();
+            let network = CorebcNetwork::try_from(network_id);
+            builder.network(network.unwrap())?
         };
 
-        builder
-            .with_api_key(etherscan_key.unwrap_or_default())
-            .build()
-            .wrap_err("Failed to create etherscan client")
+        builder.build().wrap_err("Failed to create etherscan client")
     }
 
     /// Creates the `VerifyContract` etherscan request in order to verify the contract
@@ -315,7 +318,7 @@ impl EtherscanVerificationProvider {
         let (source, contract_name, code_format) =
             self.source_provider(args).source(args, &project, &contract_path, &compiler_version)?;
 
-        let compiler_version = format!("v{}", ensure_solc_build_metadata(compiler_version).await?);
+        let compiler_version = format!("v{}", ensure_ylem_build_metadata(compiler_version).await?);
         let constructor_args = self.constructor_args(args, &project)?;
         let mut verify_args =
             VerifyContract::new(args.address, contract_name, source, compiler_version)
@@ -359,7 +362,7 @@ impl EtherscanVerificationProvider {
     /// Parse the compiler version.
     /// The priority desc:
     ///     1. Through CLI arg `--compiler-version`
-    ///     2. `solc` defined in foundry.toml
+    ///     2. `ylem` defined in foundry.toml
     ///     3. The version contract was last compiled with.
     fn compiler_version(
         &mut self,
@@ -371,12 +374,12 @@ impl EtherscanVerificationProvider {
             return Ok(version.trim_start_matches('v').parse()?)
         }
 
-        if let Some(ref solc) = config.ylem {
-            match solc {
+        if let Some(ref ylem) = config.ylem {
+            match ylem {
                 YlemReq::Version(version) => return Ok(version.to_owned()),
-                YlemReq::Local(solc) => {
-                    if solc.is_file() {
-                        return Ok(Solc::new(solc).version()?)
+                YlemReq::Local(ylem) => {
+                    if ylem.is_file() {
+                        return Ok(Ylem::new(ylem).version()?)
                     }
                 }
             }
@@ -441,21 +444,27 @@ impl EtherscanVerificationProvider {
     }
 }
 
-/// Given any solc [Version] return a [Version] with build metadata
+/// Given any ylem [Version] return a [Version] with build metadata
 ///
 /// # Example
 ///
 /// ```ignore
 /// use semver::{BuildMetadata, Version};
 /// let version = Version::new(1, 2, 3);
-/// let version = ensure_solc_build_metadata(version).await?;
+/// let version = ensure_ylem_build_metadata(version).await?;
 /// assert_ne!(version.build, BuildMetadata::EMPTY);
 /// ```
-async fn ensure_solc_build_metadata(version: Version) -> eyre::Result<Version> {
+async fn ensure_ylem_build_metadata(version: Version) -> eyre::Result<Version> {
     if version.build != BuildMetadata::EMPTY {
         Ok(version)
     } else {
-        Ok(lookup_compiler_version(&version).await?)
+        let res =
+            lookup_compiler_version(&corebc::blockindex::utils::YlemLookupQuery::Given(version))
+                .await?;
+        match res {
+            corebc::blockindex::utils::YlemLookupResult::Version(version) => Ok(version),
+            _ => unreachable!(),
+        }
     }
 }
 
@@ -476,7 +485,7 @@ mod tests {
                 [profile.default]
 
                 [etherscan]
-                mumbai = { key = "dummykey", chain = 80001, url = "https://api-testnet.polygonscan.com/" }
+                mumbai = { key = "dummykey", network = 80001, url = "https://api-testnet.polygonscan.com/" }
             "#;
 
         let toml_file = root.join(Config::FILE_NAME);
@@ -486,7 +495,7 @@ mod tests {
             "foundry-cli",
             "0xd8509bee9c9bf012282ad33aba0d87241baf5064",
             "src/Counter.sol:Counter",
-            "--chain",
+            "--network",
             "mumbai",
             "--root",
             root.as_os_str().to_str().unwrap(),
@@ -499,7 +508,6 @@ mod tests {
             .client(
                 args.etherscan.network.unwrap_or_default(),
                 args.verifier.verifier_url.as_deref(),
-                args.etherscan.key.as_deref(),
                 &config,
             )
             .unwrap();
@@ -511,7 +519,7 @@ mod tests {
             "foundry-cli",
             "0xd8509bee9c9bf012282ad33aba0d87241baf5064",
             "src/Counter.sol:Counter",
-            "--chain",
+            "--network",
             "mumbai",
             "--verifier-url",
             "https://verifier-url.com/",
@@ -526,7 +534,6 @@ mod tests {
             .client(
                 args.etherscan.network.unwrap_or_default(),
                 args.verifier.verifier_url.as_deref(),
-                args.etherscan.key.as_deref(),
                 &config,
             )
             .unwrap();

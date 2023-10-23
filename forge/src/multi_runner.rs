@@ -139,7 +139,7 @@ impl MultiContractRunner {
                     .with_cheatcodes(self.cheats_config.clone())
                     .with_config(self.env.clone())
                     .with_spec(self.evm_spec)
-                    .with_gas_limit(self.evm_opts.energy_limit())
+                    .with_energy_limit(self.evm_opts.energy_limit())
                     .set_tracing(self.evm_opts.verbosity >= 3)
                     .set_coverage(self.coverage)
                     .build(db.clone());
