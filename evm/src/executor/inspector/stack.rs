@@ -13,7 +13,7 @@ use corebc::{
 use revm::{
     inspectors::EnergyInspector,
     interpreter::{
-        return_revert, CallInputs, CreateInputs, Gas, InstructionResult, Interpreter, Memory, Stack,
+        return_revert, CallInputs, CreateInputs, Energy, InstructionResult, Interpreter, Memory, Stack,
     },
     primitives::{B176, B256},
     EVMData, Inspector,
