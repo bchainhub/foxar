@@ -141,19 +141,19 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         self
     }
 
-    /// Set etherscan API key. Used to look up function signature buy name
-    pub fn set_etherscan_api_key(&mut self, v: String) -> &mut Self {
-        self.etherscan_api_key = Some(v);
-        self
-    }
+    // /// Set etherscan API key. Used to look up function signature buy name
+    // pub fn set_etherscan_api_key(&mut self, v: String) -> &mut Self {
+    //     self.etherscan_api_key = Some(v);
+    //     self
+    // }
 
-    /// Set etherscan API key, if `v` is not None
-    pub fn etherscan_api_key(&mut self, v: Option<String>) -> &mut Self {
-        if let Some(value) = v {
-            self.set_etherscan_api_key(value);
-        }
-        self
-    }
+    // /// Set etherscan API key, if `v` is not None
+    // pub fn etherscan_api_key(&mut self, v: Option<String>) -> &mut Self {
+    //     if let Some(value) = v {
+    //         self.set_etherscan_api_key(value);
+    //     }
+    //     self
+    // }
 
     pub fn set_data(&mut self, v: Vec<u8>) -> &mut Self {
         self.tx.set_data(v.into());

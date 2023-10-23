@@ -12,7 +12,7 @@ use crate::{
 };
 use corebc::{
     abi::Address,
-    solc::{info::ContractInfo, Project},
+    ylem::{info::ContractInfo, Project},
 };
 use foundry_common::ContractsByArtifact;
 use foundry_config::{Config, Network};
@@ -64,11 +64,11 @@ impl VerifyBundle {
     }
 
     /// Configures the chain and sets the etherscan key, if available
-    pub fn set_chain(&mut self, config: &Config, chain: Network) {
+    pub fn set_network(&mut self, config: &Config, network: Network) {
         // If dealing with multiple chains, we need to be able to change inbetween the config
-        // chain_id.
-        self.etherscan.key = config.get_etherscan_api_key(Some(chain));
-        self.etherscan.chain = Some(chain);
+        // network_id.
+        // self.etherscan.key = config.get_etherscan_api_key(Some(network));
+        self.etherscan.network = Some(network);
     }
 
     /// Given a `VerifyBundle` and contract details, it tries to generate a valid `VerifyArgs` to

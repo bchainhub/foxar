@@ -4,7 +4,7 @@ use corebc::{
     prelude::TransactionReceipt,
     providers::Middleware,
     types::U256,
-    utils::{format_units, to_checksum},
+    utils::format_units,
 };
 use eyre::Result;
 use foundry_config::{Config, Network};
@@ -38,10 +38,10 @@ pub(crate) const VERSION_MESSAGE: &str = concat!(
 
 /// Deterministic fuzzer seed used for gas snapshots and coverage reports.
 ///
-/// The keccak256 hash of "foundry rulez"
+/// The sha3 hash of "foundry rulez"
 pub static STATIC_FUZZ_SEED: [u8; 32] = [
-    0x01, 0x00, 0xfa, 0x69, 0xa5, 0xf1, 0x71, 0x0a, 0x95, 0xcd, 0xef, 0x94, 0x88, 0x9b, 0x02, 0x84,
-    0x5d, 0x64, 0x0b, 0x19, 0xad, 0xf0, 0xe3, 0x57, 0xb8, 0xd4, 0xbe, 0x7d, 0x49, 0xee, 0x70, 0xe6,
+    0x57, 0x37, 0xab, 0x3c, 0x8a, 0x12, 0x17, 0xc0, 0x91, 0xcb, 0xde, 0x7f, 0xe4, 0x10, 0xec, 0xbf,
+    0xc9, 0x73, 0x29, 0x02, 0x46, 0xd5, 0x23, 0x02, 0xba, 0xe9, 0x14, 0xfc, 0x31, 0xca, 0x0e, 0x36
 ];
 
 /// Useful extensions to [`std::path::Path`].
@@ -99,14 +99,14 @@ pub fn get_provider(config: &Config) -> Result<foundry_common::RetryProvider> {
     foundry_common::ProviderBuilder::new(url.as_ref()).network(chain).build()
 }
 
-pub async fn get_chain<M>(chain: Option<Network>, provider: M) -> Result<Network>
+pub async fn get_network<M>(network: Option<Network>, provider: M) -> Result<Network>
 where
     M: Middleware,
     M::Error: 'static,
 {
-    match chain {
-        Some(chain) => Ok(chain),
-        None => Ok(Network::Id(provider.get_chainid().await?.as_u64())),
+    match network {
+        Some(network) => Ok(network),
+        None => Ok(Network::Id(provider.get_networkid().await?.as_u64())),
     }
 }
 
@@ -205,7 +205,7 @@ pub fn enable_paint() {
 pub fn print_receipt(chain: Network, receipt: &TransactionReceipt) {
     let contract_address = receipt
         .contract_address
-        .map(|addr| format!("\nContract Address: {}", to_checksum(&addr, None)))
+        .map(|addr| format!("\nContract Address: {}", addr))
         .unwrap_or_default();
 
     let gas_used = receipt.gas_used.unwrap_or_default();

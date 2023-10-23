@@ -5,8 +5,8 @@ use cast::SimpleCast;
 use clap::Parser;
 use corebc::{
     core::rand::thread_rng,
-    types::{Address, Bytes, H256, U256},
-    utils::{get_create2_address_from_hash, keccak256},
+    types::{Address, Bytes, H256, U256, Network},
+    utils::{get_create2_h160_address_from_hash, sha3, to_ican},
 };
 use eyre::{Result, WrapErr};
 use rayon::prelude::*;
@@ -53,6 +53,9 @@ pub struct Create2Args {
     /// Init code hash of the contract to be deployed.
     #[clap(alias = "ch", long, value_name = "HASH")]
     init_code_hash: Option<String>,
+
+    /// Network to use for address prefix validation.
+    network: Network,  
 }
 
 #[allow(dead_code)]
@@ -79,6 +82,7 @@ impl Create2Args {
             deployer,
             init_code,
             init_code_hash,
+            network
         } = self;
 
         let mut regexs = vec![];
@@ -128,7 +132,7 @@ impl Create2Args {
             a
         } else {
             let init_code = init_code.strip_prefix("0x").unwrap_or(&init_code).as_bytes();
-            keccak256(hex::decode(init_code)?)
+            sha3(hex::decode(init_code)?)
         };
 
         println!("Starting to generate deterministic contract address...");
@@ -139,13 +143,11 @@ impl Create2Args {
                 let salt = H256::random_using(&mut thread_rng());
                 let salt = Bytes::from(salt.to_fixed_bytes());
 
-                let addr = SimpleCast::to_checksum_address(&get_create2_address_from_hash(
-                    deployer,
+                let h160 = get_create2_h160_address_from_hash(deployer,
                     salt.clone(),
-                    init_code_hash,
-                ));
+                    init_code_hash);
 
-                (salt, addr)
+                (salt, h160)
             })
             .find_any(move |(_, addr)| {
                 let addr = addr.to_string();
@@ -155,7 +157,7 @@ impl Create2Args {
             .unwrap();
 
         let salt = U256::from(salt.to_vec().as_slice());
-        let address = Address::from_str(&addr).unwrap();
+        let address = to_ican(&addr, &network);
 
         println!(
             "Successfully found contract address in {} seconds.\nAddress: {}\nSalt: {}",
@@ -266,8 +268,8 @@ mod tests {
     }
 
     fn verify_create2(deployer: Address, salt: U256, init_code: Vec<u8>) -> Address {
-        // let init_code_hash = keccak256(init_code);
-        get_create2_address(deployer, salt.encode(), init_code)
+        // let init_code_hash = sha3(init_code);
+        get_create2_address(deployer, salt.encode(), init_code, &corebc::types::Network::Mainnet)
     }
 
     fn verify_create2_hash(deployer: Address, salt: U256, init_code_hash: Vec<u8>) -> Address {

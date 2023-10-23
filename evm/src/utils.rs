@@ -88,7 +88,7 @@ pub fn halt_to_instruction_result(
     halt: revm::primitives::Halt,
 ) -> revm::interpreter::InstructionResult {
     match halt {
-        revm::primitives::Halt::OutOfGas(_) => revm::interpreter::InstructionResult::OutOfGas,
+        revm::primitives::Halt::OutOfEnergy(_) => revm::interpreter::InstructionResult::OutOfEnergy,
         revm::primitives::Halt::OpcodeNotFound => {
             revm::interpreter::InstructionResult::OpcodeNotFound
         }
@@ -141,26 +141,6 @@ pub fn evm_spec(evm: &CvmVersion) -> SpecId {
     match evm {
         CvmVersion::Istanbul => SpecId::ISTANBUL,
         _ => panic!("Unsupported EVM version"),
-    }
-}
-
-//TODO:error remove evm specs?
-/// Depending on the configured network id and block number this should apply any specific changes
-///
-/// This checks for:
-///    - prevrandao mixhash after merge
-pub fn apply_network_and_block_specific_env_changes<T>(
-    env: &mut revm::primitives::Env,
-    block: &Block<T>,
-) {
-    let block_number = block.number.unwrap_or_default();
-    match env.cfg.network {
-        REVMNetwork::Mainnet | REVMNetwork::Devin | REVMNetwork::Private(_) => {
-            // after merge difficulty is supplanted with prevrandao EIP-4399
-            if block_number.as_u64() >= 15_537_351u64 {
-                env.block.difficulty = env.block.prevrandao.unwrap_or_default().into();
-            }
-        }
     }
 }
 

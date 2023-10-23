@@ -11,9 +11,9 @@ use corebc::{
     types::{Address, Log},
 };
 use revm::{
-    inspectors::GasInspector,
+    inspectors::EnergyInspector,
     interpreter::{
-        return_revert, CallInputs, CreateInputs, Gas, InstructionResult, Interpreter, Memory, Stack,
+        return_revert, CallInputs, CreateInputs, Energy, InstructionResult, Interpreter, Memory, Stack,
     },
     primitives::{B176, B256},
     EVMData, Inspector,
@@ -39,7 +39,7 @@ pub struct InspectorData {
     pub traces: Option<CallTraceArena>,
     pub debug: Option<DebugArena>,
     pub coverage: Option<HitMaps>,
-    pub gas: Option<u64>,
+    pub energy: Option<u64>,
     pub cheatcodes: Option<Cheatcodes>,
     pub script_wallets: Vec<LocalWallet>,
     pub chisel_state: Option<(Stack, Memory, InstructionResult)>,
@@ -54,7 +54,7 @@ pub struct InspectorStack {
     pub tracer: Option<Tracer>,
     pub logs: Option<LogCollector>,
     pub cheatcodes: Option<Cheatcodes>,
-    pub gas: Option<Rc<RefCell<GasInspector>>>,
+    pub gas: Option<Rc<RefCell<EnergyInspector>>>,
     pub debugger: Option<Debugger>,
     pub fuzzer: Option<Fuzzer>,
     pub coverage: Option<CoverageCollector>,
@@ -74,7 +74,7 @@ impl InspectorStack {
             traces: self.tracer.map(|tracer| tracer.traces),
             debug: self.debugger.map(|debugger| debugger.arena),
             coverage: self.coverage.map(|coverage| coverage.maps),
-            gas: self.gas.map(|gas| gas.borrow().gas_remaining()),
+            energy: self.gas.map(|gas| gas.borrow().energy_remaining()),
             script_wallets: self
                 .cheatcodes
                 .as_ref()
@@ -89,11 +89,11 @@ impl InspectorStack {
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &CallInputs,
-        remaining_gas: Gas,
+        remaining_gas: Energy,
         status: InstructionResult,
         retdata: Bytes,
         is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [
@@ -247,7 +247,7 @@ where
         data: &mut EVMData<'_, DB>,
         call: &mut CallInputs,
         is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [
@@ -270,18 +270,18 @@ where
             }
         );
 
-        (InstructionResult::Continue, Gas::new(call.gas_limit), Bytes::new())
+        (InstructionResult::Continue, Energy::new(call.energy_limit), Bytes::new())
     }
 
     fn call_end(
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &CallInputs,
-        remaining_gas: Gas,
+        remaining_gas: Energy,
         status: InstructionResult,
         retdata: Bytes,
         is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         let res = self.do_call_end(data, call, remaining_gas, status, retdata, is_static);
 
         if matches!(res.0, return_revert!()) {
@@ -300,7 +300,7 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [
@@ -322,7 +322,7 @@ where
             }
         );
 
-        (InstructionResult::Continue, None, Gas::new(call.gas_limit), Bytes::new())
+        (InstructionResult::Continue, None, Energy::new(call.energy_limit), Bytes::new())
     }
 
     fn create_end(
@@ -331,9 +331,9 @@ where
         call: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        remaining_gas: Gas,
+        remaining_gas: Energy,
         retdata: Bytes,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [

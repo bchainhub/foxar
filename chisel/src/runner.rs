@@ -142,7 +142,7 @@ impl ChiselRunner {
             };
 
         let mut res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
-        let mut gas_used = res.gas_used;
+        let mut gas_used = res.energy_used;
         if matches!(res.exit_reason, return_ok!()) {
             // store the current gas limit and reset it later
             let init_gas_limit = self.executor.env_mut().tx.gas_limit;

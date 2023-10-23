@@ -1,5 +1,5 @@
 use clap::{Parser, ValueHint};
-use corebc::solc::remappings::Remapping;
+use corebc::ylem::remappings::Remapping;
 use foundry_config::{
     figment,
     figment::{

@@ -21,7 +21,7 @@ use crate::cmd::forge::{
     verify::{VerifyArgs, VerifyCheckArgs},
 };
 use clap::{Parser, Subcommand, ValueHint};
-use corebc::solc::{artifacts::output_selection::ContractOutputSelection, YlemVersion};
+use corebc::ylem::{artifacts::output_selection::ContractOutputSelection, YlemVersion};
 use std::path::PathBuf;
 
 use serde::Serialize;

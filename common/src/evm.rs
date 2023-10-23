@@ -186,7 +186,7 @@ pub struct EnvArgs {
     pub code_size_limit: Option<usize>,
 
     /// The network ID.
-    #[clap(long, alias = "chain", value_name = "NETWORK_ID")]
+    #[clap(long, alias = "network", value_name = "NETWORK_ID")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_id: Option<Network>,
 

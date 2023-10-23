@@ -4,8 +4,8 @@ use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
 use clap::Parser;
 use corebc::{
     signers::{
-        coins_bip39::English, AwsSigner, AwsSignerError, HDPath as LedgerHDPath, Ledger,
-        LedgerError, LocalWallet, MnemonicBuilder, Signer, Trezor, TrezorError, TrezorHDPath,
+        coins_bip39::English,
+        LocalWallet, MnemonicBuilder, Signer,
         WalletError,
     },
     types::{
@@ -124,17 +124,17 @@ pub struct Wallet {
     )]
     pub keystore_password_file: Option<String>,
 
-    /// Use a Ledger hardware wallet.
-    #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
-    pub ledger: bool,
+    // /// Use a Ledger hardware wallet.
+    // #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
+    // pub ledger: bool,
 
-    /// Use a Trezor hardware wallet.
-    #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
-    pub trezor: bool,
+    // /// Use a Trezor hardware wallet.
+    // #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
+    // pub trezor: bool,
 
-    /// Use AWS Key Management Service.
-    #[clap(long, help_heading = "Wallet options - AWS KMS")]
-    pub aws: bool,
+    // /// Use AWS Key Management Service.
+    // #[clap(long, help_heading = "Wallet options - AWS KMS")]
+    // pub aws: bool,
 }
 
 impl Wallet {
@@ -193,47 +193,47 @@ impl Wallet {
 
     /// Returns a [Signer] corresponding to the provided private key, mnemonic or hardware signer.
     #[instrument(skip(self), level = "trace")]
-    pub async fn signer(&self, chain_id: u64) -> eyre::Result<WalletSigner> {
+    pub async fn signer(&self, network_id: u64) -> eyre::Result<WalletSigner> {
         trace!("start finding signer");
 
-        if self.ledger {
-            let derivation = match self.hd_path.as_ref() {
-                Some(hd_path) => LedgerHDPath::Other(hd_path.clone()),
-                None => LedgerHDPath::LedgerLive(self.mnemonic_index as usize),
-            };
-            let ledger = Ledger::new(derivation, chain_id).await.wrap_err_with(|| {
-                "\
-Could not connect to Ledger device.
-Make sure it's connected and unlocked, with no other desktop wallet apps open."
-            })?;
+//         if self.ledger {
+//             let derivation = match self.hd_path.as_ref() {
+//                 Some(hd_path) => LedgerHDPath::Other(hd_path.clone()),
+//                 None => LedgerHDPath::LedgerLive(self.mnemonic_index as usize),
+//             };
+//             let ledger = Ledger::new(derivation, chain_id).await.wrap_err_with(|| {
+//                 "\
+// Could not connect to Ledger device.
+// Make sure it's connected and unlocked, with no other desktop wallet apps open."
+//             })?;
 
-            Ok(WalletSigner::Ledger(ledger))
-        } else if self.trezor {
-            let derivation = match self.hd_path.as_ref() {
-                Some(hd_path) => TrezorHDPath::Other(hd_path.clone()),
-                None => TrezorHDPath::TrezorLive(self.mnemonic_index as usize),
-            };
+//             Ok(WalletSigner::Ledger(ledger))
+//         } else if self.trezor {
+//             let derivation = match self.hd_path.as_ref() {
+//                 Some(hd_path) => TrezorHDPath::Other(hd_path.clone()),
+//                 None => TrezorHDPath::TrezorLive(self.mnemonic_index as usize),
+//             };
 
-            // cached to ~/.ethers-rs/trezor/cache/trezor.session
-            let trezor = Trezor::new(derivation, chain_id, None).await.wrap_err_with(|| {
-                "\
-Could not connect to Trezor device.
-Make sure it's connected and unlocked, with no other conflicting desktop wallet apps open."
-            })?;
+//             // cached to ~/.ethers-rs/trezor/cache/trezor.session
+//             let trezor = Trezor::new(derivation, chain_id, None).await.wrap_err_with(|| {
+//                 "\
+// Could not connect to Trezor device.
+// Make sure it's connected and unlocked, with no other conflicting desktop wallet apps open."
+//             })?;
 
-            Ok(WalletSigner::Trezor(trezor))
-        } else if self.aws {
-            let client =
-                AwsClient::new_with(AwsChainProvider::default(), AwsHttpClient::new().unwrap());
+//             Ok(WalletSigner::Trezor(trezor))
+//         } else if self.aws {
+//             let client =
+//                 AwsClient::new_with(AwsChainProvider::default(), AwsHttpClient::new().unwrap());
 
-            let kms = KmsClient::new_with_client(client, AwsRegion::default());
+//             let kms = KmsClient::new_with_client(client, AwsRegion::default());
 
-            let key_id = std::env::var("AWS_KMS_KEY_ID")?;
+//             let key_id = std::env::var("AWS_KMS_KEY_ID")?;
 
-            let aws_signer = AwsSigner::new(kms, key_id, chain_id).await?;
+//             let aws_signer = AwsSigner::new(kms, key_id, chain_id).await?;
 
-            Ok(WalletSigner::Aws(aws_signer))
-        } else {
+//             Ok(WalletSigner::Aws(aws_signer))
+//         } else {
             trace!("finding local key");
 
             let maybe_local = self.try_resolve_local_wallet()?;
@@ -251,9 +251,9 @@ of the unlocked account you want to use, or provide the --from flag with the add
                 )
             })?;
 
-            Ok(WalletSigner::Local(local.with_chain_id(chain_id)))
+            Ok(WalletSigner::Local(local.with_network_id(network_id)))
         }
-    }
+    // }
 }
 
 pub trait WalletTrait {
@@ -393,20 +393,20 @@ impl WalletTrait for Wallet {
 pub enum WalletSignerError {
     #[error(transparent)]
     Local(#[from] WalletError),
-    #[error(transparent)]
-    Ledger(#[from] LedgerError),
-    #[error(transparent)]
-    Trezor(#[from] TrezorError),
-    #[error(transparent)]
-    Aws(#[from] AwsSignerError),
+    // #[error(transparent)]
+    // Ledger(#[from] LedgerError),
+    // #[error(transparent)]
+    // Trezor(#[from] TrezorError),
+    // #[error(transparent)]
+    // Aws(#[from] AwsSignerError),
 }
 
 #[derive(Debug)]
 pub enum WalletSigner {
     Local(LocalWallet),
-    Ledger(Ledger),
-    Trezor(Trezor),
-    Aws(AwsSigner),
+    // Ledger(Ledger),
+    // Trezor(Trezor),
+    // Aws(AwsSigner),
 }
 
 impl From<LocalWallet> for WalletSigner {
@@ -415,31 +415,31 @@ impl From<LocalWallet> for WalletSigner {
     }
 }
 
-impl From<Ledger> for WalletSigner {
-    fn from(hw: Ledger) -> Self {
-        Self::Ledger(hw)
-    }
-}
+// impl From<Ledger> for WalletSigner {
+//     fn from(hw: Ledger) -> Self {
+//         Self::Ledger(hw)
+//     }
+// }
 
-impl From<Trezor> for WalletSigner {
-    fn from(hw: Trezor) -> Self {
-        Self::Trezor(hw)
-    }
-}
+// impl From<Trezor> for WalletSigner {
+//     fn from(hw: Trezor) -> Self {
+//         Self::Trezor(hw)
+//     }
+// }
 
-impl From<AwsSigner> for WalletSigner {
-    fn from(wallet: AwsSigner) -> Self {
-        Self::Aws(wallet)
-    }
-}
+// impl From<AwsSigner> for WalletSigner {
+//     fn from(wallet: AwsSigner) -> Self {
+//         Self::Aws(wallet)
+//     }
+// }
 
 macro_rules! delegate {
     ($s:ident, $inner:ident => $e:expr) => {
         match $s {
             Self::Local($inner) => $e,
-            Self::Ledger($inner) => $e,
-            Self::Trezor($inner) => $e,
-            Self::Aws($inner) => $e,
+            // Self::Ledger($inner) => $e,
+            // Self::Trezor($inner) => $e,
+            // Self::Aws($inner) => $e,
         }
     };
 }
@@ -470,16 +470,16 @@ impl Signer for WalletSigner {
         delegate!(self, inner => inner.address())
     }
 
-    fn chain_id(&self) -> u64 {
-        delegate!(self, inner => inner.chain_id())
+    fn network_id(&self) -> u64 {
+        delegate!(self, inner => inner.network_id())
     }
 
-    fn with_chain_id<T: Into<u64>>(self, chain_id: T) -> Self {
+    fn with_network_id<T: Into<u64>>(self, network_id: T) -> Self {
         match self {
-            Self::Local(inner) => Self::Local(inner.with_chain_id(chain_id)),
-            Self::Ledger(inner) => Self::Ledger(inner.with_chain_id(chain_id)),
-            Self::Trezor(inner) => Self::Trezor(inner.with_chain_id(chain_id)),
-            Self::Aws(inner) => Self::Aws(inner.with_chain_id(chain_id)),
+            Self::Local(inner) => Self::Local(inner.with_network_id(network_id)),
+            // Self::Ledger(inner) => Self::Ledger(inner.with_network_id(network_id)),
+            // Self::Trezor(inner) => Self::Trezor(inner.with_network_id(network_id)),
+            // Self::Aws(inner) => Self::Aws(inner.with_network_id(network_id)),
         }
     }
 }
@@ -510,12 +510,12 @@ impl Signer for &WalletSigner {
         (*self).address()
     }
 
-    fn chain_id(&self) -> u64 {
-        (*self).chain_id()
+    fn network_id(&self) -> u64 {
+        (*self).network_id()
     }
 
-    fn with_chain_id<T: Into<u64>>(self, chain_id: T) -> Self {
-        let _ = chain_id;
+    fn with_network_id<T: Into<u64>>(self, network_id: T) -> Self {
+        let _ = network_id;
         self
     }
 }

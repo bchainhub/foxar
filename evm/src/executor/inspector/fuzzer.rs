@@ -4,7 +4,7 @@ use crate::{
 };
 use bytes::Bytes;
 use revm::{
-    interpreter::{CallInputs, CallScheme, Gas, InstructionResult, Interpreter},
+    interpreter::{CallInputs, CallScheme, Energy, InstructionResult, Interpreter},
     Database, EVMData, Inspector,
 };
 
@@ -42,7 +42,7 @@ where
         data: &mut EVMData<'_, DB>,
         call: &mut CallInputs,
         _: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         // We don't want to override the very first call made to the test contract.
         if self.call_generator.is_some() && data.env.tx.caller != call.context.caller {
             self.override_call(call);
@@ -52,18 +52,18 @@ where
         // this will be turned off on the next `step`
         self.collect = true;
 
-        (InstructionResult::Continue, Gas::new(call.gas_limit), Bytes::new())
+        (InstructionResult::Continue, Energy::new(call.energy_limit), Bytes::new())
     }
 
     fn call_end(
         &mut self,
         _: &mut EVMData<'_, DB>,
         _: &CallInputs,
-        remaining_gas: Gas,
+        remaining_energy: Energy,
         status: InstructionResult,
         retdata: Bytes,
         _: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         if let Some(ref mut call_generator) = self.call_generator {
             call_generator.used = false;
         }
@@ -72,7 +72,7 @@ where
         // this will be turned off on the next `step`
         self.collect = true;
 
-        (status, remaining_gas, retdata)
+        (status, remaining_energy, retdata)
     }
 }
 

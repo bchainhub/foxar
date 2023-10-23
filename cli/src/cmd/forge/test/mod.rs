@@ -89,8 +89,8 @@ pub struct TestArgs {
     evm_opts: EvmArgs,
 
     /// The Etherscan (or equivalent) API key
-    #[clap(long, env = "ETHERSCAN_API_KEY", value_name = "KEY")]
-    etherscan_api_key: Option<String>,
+    // #[clap(long, env = "ETHERSCAN_API_KEY", value_name = "KEY")]
+    // etherscan_api_key: Option<String>,
 
     #[clap(flatten)]
     opts: CoreBuildArgs,
@@ -294,9 +294,9 @@ impl Provider for TestArgs {
         }
         dict.insert("fuzz".to_string(), fuzz_dict.into());
 
-        if let Some(ref etherscan_api_key) = self.etherscan_api_key {
-            dict.insert("etherscan_api_key".to_string(), etherscan_api_key.to_string().into());
-        }
+        // if let Some(ref etherscan_api_key) = self.etherscan_api_key {
+            // dict.insert("etherscan_api_key".to_string(), etherscan_api_key.to_string().into());
+        // }
 
         Ok(Map::from([(Config::selected_profile(), dict)]))
     }

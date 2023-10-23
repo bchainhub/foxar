@@ -7,8 +7,8 @@ use cast::Cast;
 use clap::Parser;
 use comfy_table::{presets::ASCII_MARKDOWN, Table};
 use corebc::{
-    abi::ethabi::ethereum_types::BigEndianHash, etherscan::Client, prelude::*,
-    solc::artifacts::StorageLayout,
+    abi::ethabi::ethereum_types::BigEndianHash, blockindex::Client, prelude::*,
+    ylem::artifacts::StorageLayout,
 };
 use eyre::Result;
 use foundry_common::{
@@ -27,7 +27,7 @@ use std::str::FromStr;
 /// The minimum Solc version for outputting storage layouts.
 ///
 /// https://github.com/ethereum/solidity/blob/develop/Changelog.md#065-2020-04-06
-const MIN_SOLC: Version = Version::new(0, 6, 5);
+const MIN_YLEM: Version = Version::new(1, 1, 0);
 
 /// CLI arguments for `cast storage`.
 #[derive(Debug, Clone, Parser)]
@@ -120,9 +120,9 @@ impl StorageArgs {
         // Get code from Etherscan
         eprintln!("No matching artifacts found, fetching source code from Etherscan...");
 
-        let chain = utils::get_chain(config.network_id, &provider).await?;
-        let api_key = config.get_etherscan_api_key(Some(chain)).unwrap_or_default();
-        let client = Client::new(chain.named()?, api_key)?;
+        let chain = utils::get_network(config.network_id, &provider).await?;
+        // let api_key = config.get_etherscan_api_key(Some(chain)).unwrap_or_default();
+        let client = Client::new(chain.named()?)?;
         let source = find_source(client, address).await?;
         let metadata = source.items.first().unwrap();
         if metadata.is_vyper() {
@@ -130,7 +130,7 @@ impl StorageArgs {
         }
 
         let version = metadata.compiler_version()?;
-        let auto_detect = version < MIN_SOLC;
+        let auto_detect = version < MIN_YLEM;
 
         // Create a new temp project
         // TODO: Cache instead of using a temp directory: metadata from Etherscan won't change
@@ -150,9 +150,9 @@ impl StorageArgs {
 
             if is_storage_layout_empty(&artifact.storage_layout) && auto_detect {
                 // try recompiling with the minimum version
-                eprintln!("The requested contract was compiled with {version} while the minimum version for storage layouts is {MIN_SOLC} and as a result the output may be empty.");
-                let solc = Solc::find_or_install_svm_version(MIN_SOLC.to_string())?;
-                project.solc = solc;
+                eprintln!("The requested contract was compiled with {version} while the minimum version for storage layouts is {MIN_YLEM} and as a result the output may be empty.");
+                let ylem = Ylem::find_or_install_svm_version(MIN_YLEM.to_string())?;
+                project.ylem = ylem;
                 project.auto_detect = false;
                 if let Ok(output) = suppress_compile(&project) {
                     out = output;

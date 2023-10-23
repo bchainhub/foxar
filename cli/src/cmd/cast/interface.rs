@@ -18,7 +18,7 @@ pub struct InterfaceArgs {
     name: Option<String>,
 
     /// Solidity pragma version.
-    #[clap(long, short, default_value = "^0.8.10", value_name = "VERSION")]
+    #[clap(long, short, default_value = "^1.1.0", value_name = "VERSION")]
     pragma: String,
 
     /// The path to the output file.
@@ -41,13 +41,13 @@ impl InterfaceArgs {
         let InterfaceArgs { path_or_address, name, pragma, output: output_location, etherscan } =
             self;
         let config = Config::from(&etherscan);
-        let chain = config.network_id.unwrap_or_default();
+        let network = config.network_id.unwrap_or_default();
         let source = if Path::new(&path_or_address).exists() {
             AbiPath::Local { path: path_or_address, name }
         } else {
-            let api_key = config.get_etherscan_api_key(Some(chain)).unwrap_or_default();
-            let chain = chain.named()?;
-            AbiPath::Etherscan { chain, api_key, address: path_or_address.parse()? }
+            // let api_key = config.get_etherscan_api_key(Some(network)).unwrap_or_default();
+            let network = network.named()?;
+            AbiPath::Etherscan { network: network, /* api_key , */ address: path_or_address.parse()? }
         };
         let interfaces = SimpleCast::generate_interface(source).await?;
 

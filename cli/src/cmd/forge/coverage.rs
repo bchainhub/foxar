@@ -13,7 +13,7 @@ use corebc::{
         artifacts::{Ast, CompactBytecode, CompactDeployedBytecode},
         Artifact, Bytes, Project, ProjectCompileOutput, U256,
     },
-    solc::{artifacts::contract::CompactContractBytecode, sourcemap::SourceMap},
+    ylem::{artifacts::contract::CompactContractBytecode, sourcemap::SourceMap},
 };
 use eyre::Context;
 use forge::{
@@ -97,10 +97,10 @@ impl CoverageArgs {
             let mut project = config.ephemeral_no_artifacts_project()?;
 
             // Disable the optimizer for more accurate source maps
-            project.solc_config.settings.optimizer.disable();
-            project.solc_config.settings.optimizer.runs = None;
-            project.solc_config.settings.optimizer.details = None;
-            project.solc_config.settings.via_ir = None;
+            project.ylem_config.settings.optimizer.disable();
+            project.ylem_config.settings.optimizer.runs = None;
+            project.ylem_config.settings.optimizer.details = None;
+            project.ylem_config.settings.via_ir = None;
 
             project
         };

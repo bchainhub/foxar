@@ -16,9 +16,9 @@ use corebc::{
     },
     providers::{Http, Middleware},
     signers::LocalWallet,
-    solc::contracts::ArtifactContracts,
+    ylem::contracts::ArtifactContracts,
     types::{
-        transaction::eip2718::TypedTransaction, Address, Chain, Log, NameOrAddress,
+        transaction::eip2718::TypedTransaction, Address, Network, Log, NameOrAddress,
         TransactionRequest, U256,
     },
 };
@@ -77,15 +77,8 @@ mod verify;
 use crate::cmd::retry::RetryArgs;
 pub use transaction::TransactionWithMetadata;
 
-/// List of Chains that support Shanghai.
-static SHANGHAI_ENABLED_CHAINS: &[Chain] = &[
-    // Ethereum Mainnet
-    Chain::Mainnet,
-    // Goerli
-    Chain::Goerli,
-    // Sepolia
-    Chain::Sepolia,
-];
+/// List of Networks that support Shanghai.
+static SHANGHAI_ENABLED_NETWORKS: &[Network] = &[];
 
 // Loads project's figment and merges the build cli arguments into it
 foundry_config::merge_impl_figment_convert!(ScriptArgs, opts, evm_opts);
@@ -175,9 +168,9 @@ pub struct ScriptArgs {
     #[clap(long)]
     pub slow: bool,
 
-    /// The Etherscan (or equivalent) API key
-    #[clap(long, env = "ETHERSCAN_API_KEY", value_name = "KEY")]
-    pub etherscan_api_key: Option<String>,
+    // /// The Etherscan (or equivalent) API key
+    // #[clap(long, env = "ETHERSCAN_API_KEY", value_name = "KEY")]
+    // pub etherscan_api_key: Option<String>,
 
     /// Verifies all the contracts found in the receipts of a script, if any.
     #[clap(long)]
@@ -232,13 +225,13 @@ impl ScriptArgs {
         // Decoding traces using etherscan is costly as we run into rate limits,
         // causing scripts to run for a very long time unnecesarily.
         // Therefore, we only try and use etherscan if the user has provided an API key.
-        let should_use_etherscan_traces = script_config.config.etherscan_api_key.is_some();
+        // let should_use_etherscan_traces = script_config.config.etherscan_api_key.is_some();
 
         for (_, trace) in &mut result.traces {
             decoder.identify(trace, &mut local_identifier);
-            if should_use_etherscan_traces {
+            // if should_use_etherscan_traces {
                 decoder.identify(trace, &mut etherscan_identifier);
-            }
+            // }
         }
         Ok(decoder)
     }
@@ -723,10 +716,10 @@ impl ScriptConfig {
     /// If not, warns the user.
     async fn check_shanghai_support(&self) -> eyre::Result<()> {
         let chain_ids = self.total_rpcs.iter().map(|rpc| async move {
-            if let Ok(provider) = ethers::providers::Provider::<Http>::try_from(rpc) {
-                match provider.get_chainid().await {
-                    Ok(chain_id) => match TryInto::<Chain>::try_into(chain_id) {
-                        Ok(chain) => return Some((SHANGHAI_ENABLED_CHAINS.contains(&chain), chain)),
+            if let Ok(provider) = corebc::providers::Provider::<Http>::try_from(rpc) {
+                match provider.get_networkid().await {
+                    Ok(chain_id) => match TryInto::<Network>::try_into(chain_id) {
+                        Ok(chain) => return Some((SHANGHAI_ENABLED_NETWORKS.contains(&chain), chain)),
                         Err(_) => return None,
                     },
                     Err(_) => return None,
@@ -865,7 +858,7 @@ mod tests {
         ]);
 
         let config = args.load_config();
-        let mumbai = config.get_etherscan_api_key(Some(ethers::types::Chain::PolygonMumbai));
+        let mumbai = config.get_etherscan_api_key(Some(corebc::types::Network::PolygonMumbai));
         assert_eq!(mumbai, Some("https://etherscan-mumbai.com/".to_string()));
     }
 

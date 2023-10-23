@@ -4,7 +4,7 @@ use crate::cmd::{
     LoadConfig,
 };
 use corebc::{
-    prelude::{Middleware, Signer},
+    prelude::Signer,
     types::{transaction::eip2718::TypedTransaction, U256},
 };
 use foundry_common::{contracts::flatten_contracts, try_get_http_provider};
@@ -242,15 +242,15 @@ impl ScriptArgs {
             .ok_or_else(|| eyre::eyre!("Missing `--fork-url` field."))?;
         let provider = Arc::new(try_get_http_provider(fork_url)?);
 
-        let chain = provider.get_chainid().await?.as_u64();
-        verify.set_chain(&script_config.config, chain.into());
+        let network = provider.get_networkid().await?.as_u64();
+        verify.set_network(&script_config.config, network.into());
 
         let broadcasted = self.broadcast || self.resume;
         let mut deployment_sequence = match ScriptSequence::load(
             &script_config.config,
             &self.sig,
             script_config.target_contract(),
-            chain,
+            network,
             broadcasted,
         ) {
             Ok(seq) => seq,
@@ -260,7 +260,7 @@ impl ScriptArgs {
                 &script_config.config,
                 &self.sig,
                 script_config.target_contract(),
-                chain,
+                network,
                 false,
             )?,
             Err(err) => eyre::bail!(err),

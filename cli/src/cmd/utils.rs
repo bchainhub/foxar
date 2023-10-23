@@ -1,8 +1,8 @@
 use crate::suggestions;
 use corebc::{
     abi::Abi,
-    core::types::Chain,
-    solc::{
+    core::types::Network,
+    ylem::{
         artifacts::{CompactBytecode, CompactDeployedBytecode},
         cache::{CacheEntry, SolFilesCache},
         info::ContractInfo,
@@ -13,7 +13,7 @@ use corebc::{
 use eyre::WrapErr;
 use forge::executor::opts::EvmOpts;
 use foundry_common::{cli_warn, fs, TestFunctionExt};
-use foundry_config::{error::ExtractConfigError, figment::Figment, Config, Network as ConfigChain};
+use foundry_config::{error::ExtractConfigError, figment::Figment, Config, Network as ConfigNetwork};
 use std::{fmt::Write, path::PathBuf};
 use tracing::trace;
 use yansi::Paint;
@@ -161,22 +161,6 @@ macro_rules! update_progress {
     ($pb:ident, $index:expr) => {
         $pb.set_position(($index + 1) as u64);
     };
-}
-
-/// True if the network calculates gas costs differently.
-pub fn has_different_gas_calc(chain: u64) -> bool {
-    if let ConfigChain::Named(chain) = ConfigChain::from(chain) {
-        return matches!(chain, Chain::Arbitrum | Chain::ArbitrumTestnet | Chain::ArbitrumGoerli)
-    }
-    false
-}
-
-/// True if it supports broadcasting in batches.
-pub fn has_batch_support(chain: u64) -> bool {
-    if let ConfigChain::Named(chain) = ConfigChain::from(chain) {
-        return !matches!(chain, Chain::Arbitrum | Chain::ArbitrumTestnet | Chain::ArbitrumGoerli)
-    }
-    true
 }
 
 /// Helpers for loading configuration.

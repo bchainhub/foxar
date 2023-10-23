@@ -3,7 +3,7 @@ use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
 use clap::Parser;
 use corebc::{
     prelude::{Middleware, Signer},
-    signers::{AwsSigner, HDPath as LedgerHDPath, Ledger, LocalWallet, Trezor, TrezorHDPath},
+    signers::LocalWallet,
     types::Address,
 };
 use eyre::{Context, ContextCompat, Result};
@@ -32,12 +32,12 @@ macro_rules! get_wallets {
 ///
 /// Should be used with a [`MultiWallet`] instance
 macro_rules! create_hw_wallets {
-    ($self:ident, $chain_id:ident ,$get_wallet:ident, $wallets:ident) => {
+    ($self:ident, $network_id:ident ,$get_wallet:ident, $wallets:ident) => {
         let mut $wallets = vec![];
 
         if let Some(hd_paths) = &$self.hd_paths {
             for path in hd_paths {
-                if let Some(hw) = $self.$get_wallet($chain_id, Some(path), None).await? {
+                if let Some(hw) = $self.$get_wallet($network_id, Some(path), None).await? {
                     $wallets.push(hw);
                 }
             }
@@ -45,14 +45,14 @@ macro_rules! create_hw_wallets {
 
         if let Some(mnemonic_indexes) = &$self.mnemonic_indexes {
             for index in mnemonic_indexes {
-                if let Some(hw) = $self.$get_wallet($chain_id, None, Some(*index as usize)).await? {
+                if let Some(hw) = $self.$get_wallet($network_id, None, Some(*index as usize)).await? {
                     $wallets.push(hw);
                 }
             }
         }
 
         if $wallets.is_empty() {
-            if let Some(hw) = $self.$get_wallet($chain_id, None, Some(0)).await? {
+            if let Some(hw) = $self.$get_wallet($network_id, None, Some(0)).await? {
                 $wallets.push(hw);
             }
         }
@@ -176,17 +176,17 @@ pub struct MultiWallet {
     )]
     pub keystore_password_files: Option<Vec<String>>,
 
-    /// Use a Ledger hardware wallet.
-    #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
-    pub ledger: bool,
+    // /// Use a Ledger hardware wallet.
+    // #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
+    // pub ledger: bool,
 
-    /// Use a Trezor hardware wallet.
-    #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
-    pub trezor: bool,
+    // /// Use a Trezor hardware wallet.
+    // #[clap(long, short, help_heading = "Wallet options - hardware wallet")]
+    // pub trezor: bool,
 
-    /// Use AWS Key Management Service.
-    #[clap(long, help_heading = "Wallet options - remote")]
-    pub aws: bool,
+    // /// Use AWS Key Management Service.
+    // #[clap(long, help_heading = "Wallet options - remote")]
+    // pub aws: bool,
 }
 
 impl WalletTrait for MultiWallet {
@@ -205,7 +205,7 @@ impl MultiWallet {
         script_wallets: &[LocalWallet],
     ) -> Result<HashMap<Address, WalletSigner>> {
         println!("\n###\nFinding wallets for all the necessary addresses...");
-        let chain = provider.get_chainid().await?.as_u64();
+        let network = provider.get_networkid().await?.as_u64();
 
         let mut local_wallets = HashMap::new();
         let mut unused_wallets = vec![];
@@ -213,13 +213,13 @@ impl MultiWallet {
         get_wallets!(
             wallets,
             [
-                self.trezors(chain).await?,
-                self.ledgers(chain).await?,
+                // self.trezors(network).await?,
+                // self.ledgers(network).await?,
                 self.private_keys()?,
                 self.interactives()?,
                 self.mnemonics()?,
                 self.keystores()?,
-                self.aws_signers(chain).await?,
+                // self.aws_signers(network).await?,
                 (!script_wallets.is_empty()).then(|| script_wallets.to_vec())
             ],
             for wallet in wallets.into_iter() {
@@ -227,7 +227,7 @@ impl MultiWallet {
                 if addresses.contains(&address) {
                     addresses.remove(&address);
 
-                    let signer = WalletSigner::from(wallet.with_chain_id(chain));
+                    let signer = WalletSigner::from(wallet.with_network_id(network));
                     local_wallets.insert(address, signer);
 
                     if addresses.is_empty() {
@@ -334,81 +334,81 @@ impl MultiWallet {
         Ok(None)
     }
 
-    pub async fn ledgers(&self, chain_id: u64) -> Result<Option<Vec<Ledger>>> {
-        if self.ledger {
-            let mut args = self.clone();
+    // pub async fn ledgers(&self, chain_id: u64) -> Result<Option<Vec<Ledger>>> {
+    //     if self.ledger {
+    //         let mut args = self.clone();
 
-            if let Some(paths) = &args.hd_paths {
-                if paths.len() > 1 {
-                    eyre::bail!("Ledger only supports one signer.");
-                }
-                args.mnemonic_indexes = None;
-            }
+    //         if let Some(paths) = &args.hd_paths {
+    //             if paths.len() > 1 {
+    //                 eyre::bail!("Ledger only supports one signer.");
+    //             }
+    //             args.mnemonic_indexes = None;
+    //         }
 
-            create_hw_wallets!(args, chain_id, get_from_ledger, wallets);
-            return Ok(Some(wallets))
-        }
-        Ok(None)
-    }
+    //         create_hw_wallets!(args, chain_id, get_from_ledger, wallets);
+    //         return Ok(Some(wallets))
+    //     }
+    //     Ok(None)
+    // }
 
-    pub async fn trezors(&self, chain_id: u64) -> Result<Option<Vec<Trezor>>> {
-        if self.trezor {
-            create_hw_wallets!(self, chain_id, get_from_trezor, wallets);
-            return Ok(Some(wallets))
-        }
-        Ok(None)
-    }
+    // pub async fn trezors(&self, chain_id: u64) -> Result<Option<Vec<Trezor>>> {
+    //     if self.trezor {
+    //         create_hw_wallets!(self, chain_id, get_from_trezor, wallets);
+    //         return Ok(Some(wallets))
+    //     }
+    //     Ok(None)
+    // }
 
-    pub async fn aws_signers(&self, chain_id: u64) -> Result<Option<Vec<AwsSigner>>> {
-        if self.aws {
-            let mut wallets = vec![];
-            let client =
-                AwsClient::new_with(AwsChainProvider::default(), AwsHttpClient::new().unwrap());
+    // pub async fn aws_signers(&self, chain_id: u64) -> Result<Option<Vec<AwsSigner>>> {
+    //     if self.aws {
+    //         let mut wallets = vec![];
+    //         let client =
+    //             AwsClient::new_with(AwsChainProvider::default(), AwsHttpClient::new().unwrap());
 
-            let kms = KmsClient::new_with_client(client, AwsRegion::default());
+    //         let kms = KmsClient::new_with_client(client, AwsRegion::default());
 
-            let env_key_ids = std::env::var("AWS_KMS_KEY_IDS");
-            let key_ids =
-                if env_key_ids.is_ok() { env_key_ids? } else { std::env::var("AWS_KMS_KEY_ID")? };
+    //         let env_key_ids = std::env::var("AWS_KMS_KEY_IDS");
+    //         let key_ids =
+    //             if env_key_ids.is_ok() { env_key_ids? } else { std::env::var("AWS_KMS_KEY_ID")? };
 
-            for key in key_ids.split(',') {
-                let aws_signer = AwsSigner::new(kms.clone(), key, chain_id).await?;
-                wallets.push(aws_signer)
-            }
+    //         for key in key_ids.split(',') {
+    //             let aws_signer = AwsSigner::new(kms.clone(), key, chain_id).await?;
+    //             wallets.push(aws_signer)
+    //         }
 
-            return Ok(Some(wallets))
-        }
-        Ok(None)
-    }
+    //         return Ok(Some(wallets))
+    //     }
+    //     Ok(None)
+    // }
 
-    async fn get_from_trezor(
-        &self,
-        chain_id: u64,
-        hd_path: Option<&str>,
-        mnemonic_index: Option<usize>,
-    ) -> Result<Option<Trezor>> {
-        let derivation = match &hd_path {
-            Some(hd_path) => TrezorHDPath::Other(hd_path.to_string()),
-            None => TrezorHDPath::TrezorLive(mnemonic_index.unwrap_or(0)),
-        };
+    // async fn get_from_trezor(
+    //     &self,
+    //     chain_id: u64,
+    //     hd_path: Option<&str>,
+    //     mnemonic_index: Option<usize>,
+    // ) -> Result<Option<Trezor>> {
+    //     let derivation = match &hd_path {
+    //         Some(hd_path) => TrezorHDPath::Other(hd_path.to_string()),
+    //         None => TrezorHDPath::TrezorLive(mnemonic_index.unwrap_or(0)),
+    //     };
 
-        Ok(Some(Trezor::new(derivation, chain_id, None).await?))
-    }
+    //     Ok(Some(Trezor::new(derivation, chain_id, None).await?))
+    // }
 
-    async fn get_from_ledger(
-        &self,
-        chain_id: u64,
-        hd_path: Option<&str>,
-        mnemonic_index: Option<usize>,
-    ) -> Result<Option<Ledger>> {
-        let derivation = match hd_path {
-            Some(hd_path) => LedgerHDPath::Other(hd_path.to_string()),
-            None => LedgerHDPath::LedgerLive(mnemonic_index.unwrap_or(0)),
-        };
+    // async fn get_from_ledger(
+    //     &self,
+    //     chain_id: u64,
+    //     hd_path: Option<&str>,
+    //     mnemonic_index: Option<usize>,
+    // ) -> Result<Option<Ledger>> {
+    //     let derivation = match hd_path {
+    //         Some(hd_path) => LedgerHDPath::Other(hd_path.to_string()),
+    //         None => LedgerHDPath::LedgerLive(mnemonic_index.unwrap_or(0)),
+    //     };
 
-        trace!(?chain_id, "Creating new ledger signer");
-        Ok(Some(Ledger::new(derivation, chain_id).await.wrap_err("Ledger device not available.")?))
-    }
+    //     trace!(?chain_id, "Creating new ledger signer");
+    //     Ok(Some(Ledger::new(derivation, chain_id).await.wrap_err("Ledger device not available.")?))
+    // }
 }
 
 #[cfg(test)]

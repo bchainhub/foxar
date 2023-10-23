@@ -2,7 +2,7 @@
 use crate::forge_utils;
 use corebc::{
     prelude::artifacts::YulDetails,
-    solc::artifacts::RevertStrings,
+    ylem::artifacts::RevertStrings,
     types::{Address, H256, U256},
 };
 use forge::executor::opts::EvmOpts;

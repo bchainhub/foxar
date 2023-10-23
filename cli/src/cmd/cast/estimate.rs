@@ -83,11 +83,11 @@ impl EstimateArgs {
         let config = Config::from_provider(figment);
 
         let provider = utils::get_provider(&config)?;
-        let chain = utils::get_chain(config.network_id, &provider).await?;
-        let api_key = config.get_etherscan_api_key(Some(chain));
+        let network = utils::get_network(config.network_id, &provider).await?;
+        // let api_key = config.get_etherscan_api_key(Some(network));
 
-        let mut builder = TxBuilder::new(&provider, from, to, chain, false).await?;
-        builder.etherscan_api_key(api_key);
+        let mut builder = TxBuilder::new(&provider, from, to, network).await?;
+        // builder.etherscan_api_key(api_key);
 
         match command {
             Some(EstimateSubcommands::Create { code, sig, args, value }) => {

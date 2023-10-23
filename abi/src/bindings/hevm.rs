@@ -11,7 +11,7 @@ pub use hevm::*;
 )]
 pub mod hevm {
     #[rustfmt::skip]
-    const __ABI: &str = "[\nstruct Log { bytes32[] topics; bytes data; }\nstruct Rpc { string name; string url; }\nstruct DirEntry { string errorMessage; string path; uint64 depth; bool isDir; bool isSymlink; }\nstruct FsMetadata { bool isDir; bool isSymlink; uint256 length; bool readOnly; uint256 modified; uint256 accessed; uint256 created; }\n\nallowCheatcodes(address)\n\nffi(string[])(bytes)\n\nbreakpoint(string)\nbreakpoint(string,bool)\n\nroll(uint256)\nwarp(uint256)\ndifficulty(uint256)\nprevrandao(bytes32)\nfee(uint256)\ncoinbase(address)\nstore(address,bytes32,bytes32)\nload(address,bytes32)(bytes32)\n\nsetEnv(string,string)\nenvBool(string)(bool)\nenvUint(string)(uint256)\nenvInt(string)(int256)\nenvAddress(string)(address)\nenvBytes32(string)(bytes32)\nenvString(string)(string)\nenvBytes(string)(bytes)\nenvBool(string,string)(bool[])\nenvUint(string,string)(uint256[])\nenvInt(string,string)(int256[])\nenvAddress(string,string)(address[])\nenvBytes32(string,string)(bytes32[])\nenvString(string,string)(string[])\nenvBytes(string,string)(bytes[])\nenvOr(string,bool)(bool)\nenvOr(string,uint256)(uint256)\nenvOr(string,int256)(int256)\nenvOr(string,address)(address)\nenvOr(string,bytes32)(bytes32)\nenvOr(string,string)(string)\nenvOr(string,bytes)(bytes)\nenvOr(string,string,bool[])(bool[])\nenvOr(string,string,uint256[])(uint256[])\nenvOr(string,string,int256[])(int256[])\nenvOr(string,string,address[])(address[])\nenvOr(string,string,bytes32[])(bytes32[])\nenvOr(string,string,string[])(string[])\nenvOr(string,string,bytes[])(bytes[])\n\naddr(uint256)(address)\nsign(uint256,bytes32)(uint8,bytes32,bytes32)\nderiveKey(string,uint32)(uint256)\nderiveKey(string,string,uint32)(uint256)\nderiveKey(string,uint32,string)(uint256)\nderiveKey(string,string,uint32,string)(uint256)\nrememberKey(uint256)(address)\n\nprank(address)\nprank(address,address)\nreadCallers()(uint256,address,address)\nstartPrank(address)\nstartPrank(address,address)\nstopPrank()\n\ndeal(address,uint256)\netch(address,bytes)\nexpectRevert()\nexpectRevert(bytes)\nexpectRevert(bytes4)\nrecord()\naccesses(address)(bytes32[],bytes32[])\nskip(bool)\n\nrecordLogs()\ngetRecordedLogs()(Log[])\n\nexpectEmit()\nexpectEmit(address)\nexpectEmit(bool,bool,bool,bool)\nexpectEmit(bool,bool,bool,bool,address)\n\nmockCall(address,bytes,bytes)\nmockCall(address,uint256,bytes,bytes)\nmockCallRevert(address,bytes,bytes)\nmockCallRevert(address,uint256,bytes,bytes)\nclearMockedCalls()\n\nexpectCall(address,bytes)\nexpectCall(address,bytes,uint64)\nexpectCall(address,uint256,bytes)\nexpectCall(address,uint256,bytes,uint64)\nexpectCall(address,uint256,uint64,bytes)\nexpectCall(address,uint256,uint64,bytes,uint64)\nexpectCallMinGas(address,uint256,uint64,bytes)\nexpectCallMinGas(address,uint256,uint64,bytes,uint64)\nexpectSafeMemory(uint64,uint64)\nexpectSafeMemoryCall(uint64,uint64)\n\ngetCode(string)\ngetDeployedCode(string)\nlabel(address,string)\ngetLabel(address)(string)\nassume(bool)\nsetNonce(address,uint64)\ngetNonce(address)\nresetNonce(address)\nsetNonceUnsafe(address,uint64)\nchainId(uint256)\ntxGasPrice(uint256)\n\nbroadcast()\nbroadcast(address)\nbroadcast(uint256)\nstartBroadcast()\nstartBroadcast(address)\nstartBroadcast(uint256)\nstopBroadcast()\n\nprojectRoot()(string)\nreadFile(string)(string)\nreadFileBinary(string)(bytes)\nwriteFile(string,string)\nwriteFileBinary(string,bytes)\nopenFile(string)\nreadLine(string)(string)\nwriteLine(string,string)\ncloseFile(string)\nremoveFile(string)\ncreateDir(string, bool)\nremoveDir(string, bool)\nreadDir(string)(DirEntry[])\nreadDir(string, uint64)(DirEntry[])\nreadDir(string, uint64, bool)(DirEntry[])\nreadLink(string)(string)\nfsMetadata(string)(FsMetadata)\n\ntoString(bytes)\ntoString(address)\ntoString(uint256)\ntoString(int256)\ntoString(bytes32)\ntoString(bool)\nparseBytes(string)(bytes)\nparseAddress(string)(address)\nparseUint(string)(uint256)\nparseInt(string)(int256)\nparseBytes32(string)(bytes32)\nparseBool(string)(bool)\n\nsnapshot()(uint256)\nrevertTo(uint256)(bool)\ncreateFork(string,uint256)(uint256)\ncreateFork(string,bytes32)(uint256)\ncreateFork(string)(uint256)\ncreateSelectFork(string,uint256)(uint256)\ncreateSelectFork(string,bytes32)(uint256)\ncreateSelectFork(string)(uint256)\nselectFork(uint256)\nactiveFork()(uint256)\ntransact(bytes32)\ntransact(uint256,bytes32)\nmakePersistent(address)\nmakePersistent(address,address)\nmakePersistent(address,address,address)\nmakePersistent(address[])\nrevokePersistent(address)\nrevokePersistent(address[])\nisPersistent(address)(bool)\nrollFork(uint256)\nrollFork(bytes32)\nrollFork(uint256,uint256)\nrollFork(uint256,bytes32)\nrpcUrl(string)(string)\nrpcUrls()(string[2][])\nrpcUrlStructs()(Rpc[])\n\nwriteJson(string, string)\nwriteJson(string, string, string)\nparseJson(string)(bytes)\nparseJson(string, string)(bytes)\nparseJsonUint(string, string)(uint256)\nparseJsonUintArray(string, string)(uint256[])\nparseJsonInt(string, string)(int256)\nparseJsonIntArray(string, string)(int256[])\nparseJsonString(string, string)(string)\nparseJsonStringArray(string, string)(string[])\nparseJsonAddress(string, string)(address)\nparseJsonAddressArray(string, string)(address[])\nparseJsonBool(string, string)(bool)\nparseJsonBoolArray(string, string)(bool[])\nparseJsonBytes(string, string)(bytes)\nparseJsonBytesArray(string, string)(bytes[])\nparseJsonBytes32(string, string)(bytes32)\nparseJsonBytes32Array(string, string)(bytes32[])\nserializeBool(string,string,bool)(string)\nserializeBool(string,string,bool[])(string)\nserializeUint(string,string,uint256)(string)\nserializeUint(string,string,uint256[])(string)\nserializeInt(string,string,int256)(string)\nserializeInt(string,string,int256[])(string)\nserializeAddress(string,string,address)(string)\nserializeAddress(string,string,address[])(string)\nserializeBytes32(string,string,bytes32)(string)\nserializeBytes32(string,string,bytes32[])(string)\nserializeString(string,string,string)(string)\nserializeString(string,string,string[])(string)\nserializeBytes(string,string,bytes)(string)\nserializeBytes(string,string,bytes[])(string)\n\npauseGasMetering()\nresumeGasMetering()\n\n]";
+    const __ABI: &str = "[\nstruct Log { bytes32[] topics; bytes data; }\r\nstruct Rpc { string name; string url; }\r\nstruct DirEntry { string errorMessage; string path; uint64 depth; bool isDir; bool isSymlink; }\r\nstruct FsMetadata { bool isDir; bool isSymlink; uint256 length; bool readOnly; uint256 modified; uint256 accessed; uint256 created; }\r\n\r\nallowCheatcodes(address)\r\n\r\nffi(string[])(bytes)\r\n\r\nbreakpoint(string)\r\nbreakpoint(string,bool)\r\n\r\nroll(uint256)\r\nwarp(uint256)\r\ndifficulty(uint256)\r\nprevrandao(bytes32)\r\nfee(uint256)\r\ncoinbase(address)\r\nstore(address,bytes32,bytes32)\r\nload(address,bytes32)(bytes32)\r\n\r\nsetEnv(string,string)\r\nenvBool(string)(bool)\r\nenvUint(string)(uint256)\r\nenvInt(string)(int256)\r\nenvAddress(string)(address)\r\nenvBytes32(string)(bytes32)\r\nenvString(string)(string)\r\nenvBytes(string)(bytes)\r\nenvBool(string,string)(bool[])\r\nenvUint(string,string)(uint256[])\r\nenvInt(string,string)(int256[])\r\nenvAddress(string,string)(address[])\r\nenvBytes32(string,string)(bytes32[])\r\nenvString(string,string)(string[])\r\nenvBytes(string,string)(bytes[])\r\nenvOr(string,bool)(bool)\r\nenvOr(string,uint256)(uint256)\r\nenvOr(string,int256)(int256)\r\nenvOr(string,address)(address)\r\nenvOr(string,bytes32)(bytes32)\r\nenvOr(string,string)(string)\r\nenvOr(string,bytes)(bytes)\r\nenvOr(string,string,bool[])(bool[])\r\nenvOr(string,string,uint256[])(uint256[])\r\nenvOr(string,string,int256[])(int256[])\r\nenvOr(string,string,address[])(address[])\r\nenvOr(string,string,bytes32[])(bytes32[])\r\nenvOr(string,string,string[])(string[])\r\nenvOr(string,string,bytes[])(bytes[])\r\n\r\naddr(uint256)(address)\r\nsign(uint256,bytes32)(uint8,bytes32,bytes32)\r\nderiveKey(string,uint32)(uint256)\r\nderiveKey(string,string,uint32)(uint256)\r\nderiveKey(string,uint32,string)(uint256)\r\nderiveKey(string,string,uint32,string)(uint256)\r\nrememberKey(uint256)(address)\r\n\r\nprank(address)\r\nprank(address,address)\r\nreadCallers()(uint256,address,address)\r\nstartPrank(address)\r\nstartPrank(address,address)\r\nstopPrank()\r\n\r\ndeal(address,uint256)\r\netch(address,bytes)\r\nexpectRevert()\r\nexpectRevert(bytes)\r\nexpectRevert(bytes4)\r\nrecord()\r\naccesses(address)(bytes32[],bytes32[])\r\nskip(bool)\r\n\r\nrecordLogs()\r\ngetRecordedLogs()(Log[])\r\n\r\nexpectEmit()\r\nexpectEmit(address)\r\nexpectEmit(bool,bool,bool,bool)\r\nexpectEmit(bool,bool,bool,bool,address)\r\n\r\nmockCall(address,bytes,bytes)\r\nmockCall(address,uint256,bytes,bytes)\r\nmockCallRevert(address,bytes,bytes)\r\nmockCallRevert(address,uint256,bytes,bytes)\r\nclearMockedCalls()\r\n\r\nexpectCall(address,bytes)\r\nexpectCall(address,bytes,uint64)\r\nexpectCall(address,uint256,bytes)\r\nexpectCall(address,uint256,bytes,uint64)\r\nexpectCall(address,uint256,uint64,bytes)\r\nexpectCall(address,uint256,uint64,bytes,uint64)\r\nexpectCallMinGas(address,uint256,uint64,bytes)\r\nexpectCallMinGas(address,uint256,uint64,bytes,uint64)\r\nexpectSafeMemory(uint64,uint64)\r\nexpectSafeMemoryCall(uint64,uint64)\r\n\r\ngetCode(string)\r\ngetDeployedCode(string)\r\nlabel(address,string)\r\ngetLabel(address)(string)\r\nassume(bool)\r\nsetNonce(address,uint64)\r\ngetNonce(address)\r\nresetNonce(address)\r\nsetNonceUnsafe(address,uint64)\r\nchainId(uint256)\r\ntxGasPrice(uint256)\r\n\r\nbroadcast()\r\nbroadcast(address)\r\nbroadcast(uint256)\r\nstartBroadcast()\r\nstartBroadcast(address)\r\nstartBroadcast(uint256)\r\nstopBroadcast()\r\n\r\nprojectRoot()(string)\r\nreadFile(string)(string)\r\nreadFileBinary(string)(bytes)\r\nwriteFile(string,string)\r\nwriteFileBinary(string,bytes)\r\nopenFile(string)\r\nreadLine(string)(string)\r\nwriteLine(string,string)\r\ncloseFile(string)\r\nremoveFile(string)\r\ncreateDir(string, bool)\r\nremoveDir(string, bool)\r\nreadDir(string)(DirEntry[])\r\nreadDir(string, uint64)(DirEntry[])\r\nreadDir(string, uint64, bool)(DirEntry[])\r\nreadLink(string)(string)\r\nfsMetadata(string)(FsMetadata)\r\n\r\ntoString(bytes)\r\ntoString(address)\r\ntoString(uint256)\r\ntoString(int256)\r\ntoString(bytes32)\r\ntoString(bool)\r\nparseBytes(string)(bytes)\r\nparseAddress(string)(address)\r\nparseUint(string)(uint256)\r\nparseInt(string)(int256)\r\nparseBytes32(string)(bytes32)\r\nparseBool(string)(bool)\r\n\r\nsnapshot()(uint256)\r\nrevertTo(uint256)(bool)\r\ncreateFork(string,uint256)(uint256)\r\ncreateFork(string,bytes32)(uint256)\r\ncreateFork(string)(uint256)\r\ncreateSelectFork(string,uint256)(uint256)\r\ncreateSelectFork(string,bytes32)(uint256)\r\ncreateSelectFork(string)(uint256)\r\nselectFork(uint256)\r\nactiveFork()(uint256)\r\ntransact(bytes32)\r\ntransact(uint256,bytes32)\r\nmakePersistent(address)\r\nmakePersistent(address,address)\r\nmakePersistent(address,address,address)\r\nmakePersistent(address[])\r\nrevokePersistent(address)\r\nrevokePersistent(address[])\r\nisPersistent(address)(bool)\r\nrollFork(uint256)\r\nrollFork(bytes32)\r\nrollFork(uint256,uint256)\r\nrollFork(uint256,bytes32)\r\nrpcUrl(string)(string)\r\nrpcUrls()(string[2][])\r\nrpcUrlStructs()(Rpc[])\r\n\r\nwriteJson(string, string)\r\nwriteJson(string, string, string)\r\nparseJson(string)(bytes)\r\nparseJson(string, string)(bytes)\r\nparseJsonUint(string, string)(uint256)\r\nparseJsonUintArray(string, string)(uint256[])\r\nparseJsonInt(string, string)(int256)\r\nparseJsonIntArray(string, string)(int256[])\r\nparseJsonString(string, string)(string)\r\nparseJsonStringArray(string, string)(string[])\r\nparseJsonAddress(string, string)(address)\r\nparseJsonAddressArray(string, string)(address[])\r\nparseJsonBool(string, string)(bool)\r\nparseJsonBoolArray(string, string)(bool[])\r\nparseJsonBytes(string, string)(bytes)\r\nparseJsonBytesArray(string, string)(bytes[])\r\nparseJsonBytes32(string, string)(bytes32)\r\nparseJsonBytes32Array(string, string)(bytes32[])\r\nserializeBool(string,string,bool)(string)\r\nserializeBool(string,string,bool[])(string)\r\nserializeUint(string,string,uint256)(string)\r\nserializeUint(string,string,uint256[])(string)\r\nserializeInt(string,string,int256)(string)\r\nserializeInt(string,string,int256[])(string)\r\nserializeAddress(string,string,address)(string)\r\nserializeAddress(string,string,address[])(string)\r\nserializeBytes32(string,string,bytes32)(string)\r\nserializeBytes32(string,string,bytes32[])(string)\r\nserializeString(string,string,string)(string)\r\nserializeString(string,string,string[])(string)\r\nserializeBytes(string,string,bytes)(string)\r\nserializeBytes(string,string,bytes[])(string)\r\n\r\npauseGasMetering()\r\nresumeGasMetering()\r\n\n]";
     ///The parsed human-readable ABI of the contract.
     pub static HEVM_ABI: ::corebc_contract::Lazy<::corebc_core::abi::Abi> = ::corebc_contract::Lazy::new(||
     ::corebc_core::abi::parse_abi_str(__ABI).expect("ABI is always valid"));
@@ -4929,804 +4929,954 @@ pub mod hevm {
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::corebc_core::abi::AbiError> {
             let data = data.as_ref();
-            if let Ok(decoded)
-                = <AccessesCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AccessesCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Accesses(decoded));
             }
-            if let Ok(decoded)
-                = <ActiveForkCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ActiveForkCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ActiveFork(decoded));
             }
-            if let Ok(decoded)
-                = <AddrCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AddrCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Addr(decoded));
             }
-            if let Ok(decoded)
-                = <AllowCheatcodesCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AllowCheatcodesCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::AllowCheatcodes(decoded));
             }
-            if let Ok(decoded)
-                = <AssumeCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <AssumeCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Assume(decoded));
             }
-            if let Ok(decoded)
-                = <Breakpoint0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Breakpoint0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Breakpoint0(decoded));
             }
-            if let Ok(decoded)
-                = <Breakpoint1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Breakpoint1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Breakpoint1(decoded));
             }
-            if let Ok(decoded)
-                = <Broadcast0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Broadcast0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Broadcast0(decoded));
             }
-            if let Ok(decoded)
-                = <Broadcast1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Broadcast1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Broadcast1(decoded));
             }
-            if let Ok(decoded)
-                = <Broadcast2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Broadcast2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Broadcast2(decoded));
             }
-            if let Ok(decoded)
-                = <ChainIdCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ChainIdCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ChainId(decoded));
             }
-            if let Ok(decoded)
-                = <ClearMockedCallsCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ClearMockedCallsCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ClearMockedCalls(decoded));
             }
-            if let Ok(decoded)
-                = <CloseFileCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CloseFileCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CloseFile(decoded));
             }
-            if let Ok(decoded)
-                = <CoinbaseCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CoinbaseCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Coinbase(decoded));
             }
-            if let Ok(decoded)
-                = <CreateDirCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CreateDirCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CreateDir(decoded));
             }
-            if let Ok(decoded)
-                = <CreateFork1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CreateFork1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CreateFork1(decoded));
             }
-            if let Ok(decoded)
-                = <CreateFork2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CreateFork2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CreateFork2(decoded));
             }
-            if let Ok(decoded)
-                = <CreateFork0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <CreateFork0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CreateFork0(decoded));
             }
-            if let Ok(decoded)
-                = <CreateSelectFork1Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <CreateSelectFork1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CreateSelectFork1(decoded));
             }
-            if let Ok(decoded)
-                = <CreateSelectFork2Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <CreateSelectFork2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CreateSelectFork2(decoded));
             }
-            if let Ok(decoded)
-                = <CreateSelectFork0Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <CreateSelectFork0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::CreateSelectFork0(decoded));
             }
-            if let Ok(decoded)
-                = <DealCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DealCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Deal(decoded));
             }
-            if let Ok(decoded)
-                = <DeriveKey0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DeriveKey0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::DeriveKey0(decoded));
             }
-            if let Ok(decoded)
-                = <DeriveKey1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DeriveKey1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::DeriveKey1(decoded));
             }
-            if let Ok(decoded)
-                = <DeriveKey2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DeriveKey2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::DeriveKey2(decoded));
             }
-            if let Ok(decoded)
-                = <DeriveKey3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DeriveKey3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::DeriveKey3(decoded));
             }
-            if let Ok(decoded)
-                = <DifficultyCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <DifficultyCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Difficulty(decoded));
             }
-            if let Ok(decoded)
-                = <EnvAddress0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvAddress0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvAddress0(decoded));
             }
-            if let Ok(decoded)
-                = <EnvAddress1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvAddress1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvAddress1(decoded));
             }
-            if let Ok(decoded)
-                = <EnvBool0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvBool0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvBool0(decoded));
             }
-            if let Ok(decoded)
-                = <EnvBool1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvBool1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvBool1(decoded));
             }
-            if let Ok(decoded)
-                = <EnvBytes0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvBytes0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvBytes0(decoded));
             }
-            if let Ok(decoded)
-                = <EnvBytes1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvBytes1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvBytes1(decoded));
             }
-            if let Ok(decoded)
-                = <EnvBytes320Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvBytes320Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvBytes320(decoded));
             }
-            if let Ok(decoded)
-                = <EnvBytes321Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvBytes321Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvBytes321(decoded));
             }
-            if let Ok(decoded)
-                = <EnvInt0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvInt0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvInt0(decoded));
             }
-            if let Ok(decoded)
-                = <EnvInt1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvInt1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvInt1(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr0(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr1(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr2(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr3(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr4Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr4Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr4(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr5Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr5Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr5(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr6Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr6Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr6(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr7Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr7Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr7(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr8Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr8Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr8(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr9Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr9Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr9(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr10Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr10Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr10(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr11Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr11Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr11(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr12Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr12Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr12(decoded));
             }
-            if let Ok(decoded)
-                = <EnvOr13Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvOr13Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvOr13(decoded));
             }
-            if let Ok(decoded)
-                = <EnvString0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvString0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvString0(decoded));
             }
-            if let Ok(decoded)
-                = <EnvString1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvString1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvString1(decoded));
             }
-            if let Ok(decoded)
-                = <EnvUint0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvUint0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvUint0(decoded));
             }
-            if let Ok(decoded)
-                = <EnvUint1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EnvUint1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::EnvUint1(decoded));
             }
-            if let Ok(decoded)
-                = <EtchCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <EtchCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Etch(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCall0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectCall0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCall0(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCall1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectCall1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCall1(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCall2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectCall2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCall2(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCall3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectCall3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCall3(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCall4Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectCall4Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCall4(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCall5Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectCall5Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCall5(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCallMinGas0Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ExpectCallMinGas0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCallMinGas0(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectCallMinGas1Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ExpectCallMinGas1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectCallMinGas1(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectEmit0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectEmit0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectEmit0(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectEmit1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectEmit1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectEmit1(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectEmit2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectEmit2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectEmit2(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectEmit3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectEmit3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectEmit3(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectRevert0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectRevert0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectRevert0(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectRevert1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectRevert1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectRevert1(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectRevert2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectRevert2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectRevert2(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectSafeMemoryCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ExpectSafeMemoryCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectSafeMemory(decoded));
             }
-            if let Ok(decoded)
-                = <ExpectSafeMemoryCallCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ExpectSafeMemoryCallCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ExpectSafeMemoryCall(decoded));
             }
-            if let Ok(decoded)
-                = <FeeCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FeeCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Fee(decoded));
             }
-            if let Ok(decoded)
-                = <FfiCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FfiCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Ffi(decoded));
             }
-            if let Ok(decoded)
-                = <FsMetadataCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <FsMetadataCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::FsMetadata(decoded));
             }
-            if let Ok(decoded)
-                = <GetCodeCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetCodeCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::GetCode(decoded));
             }
-            if let Ok(decoded)
-                = <GetDeployedCodeCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetDeployedCodeCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::GetDeployedCode(decoded));
             }
-            if let Ok(decoded)
-                = <GetLabelCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetLabelCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::GetLabel(decoded));
             }
-            if let Ok(decoded)
-                = <GetNonceCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetNonceCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::GetNonce(decoded));
             }
-            if let Ok(decoded)
-                = <GetRecordedLogsCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <GetRecordedLogsCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::GetRecordedLogs(decoded));
             }
-            if let Ok(decoded)
-                = <IsPersistentCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <IsPersistentCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::IsPersistent(decoded));
             }
-            if let Ok(decoded)
-                = <LabelCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LabelCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Label(decoded));
             }
-            if let Ok(decoded)
-                = <LoadCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <LoadCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Load(decoded));
             }
-            if let Ok(decoded)
-                = <MakePersistent0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MakePersistent0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MakePersistent0(decoded));
             }
-            if let Ok(decoded)
-                = <MakePersistent2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MakePersistent2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MakePersistent2(decoded));
             }
-            if let Ok(decoded)
-                = <MakePersistent3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MakePersistent3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MakePersistent3(decoded));
             }
-            if let Ok(decoded)
-                = <MakePersistent1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MakePersistent1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MakePersistent1(decoded));
             }
-            if let Ok(decoded)
-                = <MockCall0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MockCall0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MockCall0(decoded));
             }
-            if let Ok(decoded)
-                = <MockCall1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MockCall1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MockCall1(decoded));
             }
-            if let Ok(decoded)
-                = <MockCallRevert0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MockCallRevert0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MockCallRevert0(decoded));
             }
-            if let Ok(decoded)
-                = <MockCallRevert1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <MockCallRevert1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::MockCallRevert1(decoded));
             }
-            if let Ok(decoded)
-                = <OpenFileCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <OpenFileCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::OpenFile(decoded));
             }
-            if let Ok(decoded)
-                = <ParseAddressCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseAddressCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseAddress(decoded));
             }
-            if let Ok(decoded)
-                = <ParseBoolCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseBoolCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseBool(decoded));
             }
-            if let Ok(decoded)
-                = <ParseBytesCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseBytesCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseBytes(decoded));
             }
-            if let Ok(decoded)
-                = <ParseBytes32Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseBytes32Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseBytes32(decoded));
             }
-            if let Ok(decoded)
-                = <ParseIntCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseIntCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseInt(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJson0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJson0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJson0(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJson1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJson1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJson1(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonAddressCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJsonAddressCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonAddress(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonAddressArrayCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ParseJsonAddressArrayCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonAddressArray(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonBoolCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJsonBoolCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonBool(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonBoolArrayCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ParseJsonBoolArrayCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonBoolArray(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonBytesCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJsonBytesCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonBytes(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonBytes32Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJsonBytes32Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonBytes32(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonBytes32ArrayCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ParseJsonBytes32ArrayCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonBytes32Array(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonBytesArrayCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ParseJsonBytesArrayCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonBytesArray(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonIntCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJsonIntCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonInt(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonIntArrayCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ParseJsonIntArrayCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonIntArray(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonStringCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJsonStringCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonString(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonStringArrayCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ParseJsonStringArrayCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonStringArray(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonUintCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseJsonUintCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonUint(decoded));
             }
-            if let Ok(decoded)
-                = <ParseJsonUintArrayCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ParseJsonUintArrayCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseJsonUintArray(decoded));
             }
-            if let Ok(decoded)
-                = <ParseUintCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ParseUintCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ParseUint(decoded));
             }
-            if let Ok(decoded)
-                = <PauseGasMeteringCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PauseGasMeteringCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::PauseGasMetering(decoded));
             }
-            if let Ok(decoded)
-                = <Prank0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Prank0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Prank0(decoded));
             }
-            if let Ok(decoded)
-                = <Prank1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Prank1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Prank1(decoded));
             }
-            if let Ok(decoded)
-                = <PrevrandaoCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <PrevrandaoCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Prevrandao(decoded));
             }
-            if let Ok(decoded)
-                = <ProjectRootCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ProjectRootCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ProjectRoot(decoded));
             }
-            if let Ok(decoded)
-                = <ReadCallersCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadCallersCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadCallers(decoded));
             }
-            if let Ok(decoded)
-                = <ReadDir0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadDir0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadDir0(decoded));
             }
-            if let Ok(decoded)
-                = <ReadDir1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadDir1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadDir1(decoded));
             }
-            if let Ok(decoded)
-                = <ReadDir2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadDir2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadDir2(decoded));
             }
-            if let Ok(decoded)
-                = <ReadFileCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadFileCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadFile(decoded));
             }
-            if let Ok(decoded)
-                = <ReadFileBinaryCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadFileBinaryCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadFileBinary(decoded));
             }
-            if let Ok(decoded)
-                = <ReadLineCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadLineCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadLine(decoded));
             }
-            if let Ok(decoded)
-                = <ReadLinkCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ReadLinkCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ReadLink(decoded));
             }
-            if let Ok(decoded)
-                = <RecordCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RecordCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Record(decoded));
             }
-            if let Ok(decoded)
-                = <RecordLogsCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RecordLogsCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RecordLogs(decoded));
             }
-            if let Ok(decoded)
-                = <RememberKeyCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RememberKeyCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RememberKey(decoded));
             }
-            if let Ok(decoded)
-                = <RemoveDirCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RemoveDirCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RemoveDir(decoded));
             }
-            if let Ok(decoded)
-                = <RemoveFileCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RemoveFileCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RemoveFile(decoded));
             }
-            if let Ok(decoded)
-                = <ResetNonceCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ResetNonceCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ResetNonce(decoded));
             }
-            if let Ok(decoded)
-                = <ResumeGasMeteringCall as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <ResumeGasMeteringCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ResumeGasMetering(decoded));
             }
-            if let Ok(decoded)
-                = <RevertToCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RevertToCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RevertTo(decoded));
             }
-            if let Ok(decoded)
-                = <RevokePersistent0Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <RevokePersistent0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RevokePersistent0(decoded));
             }
-            if let Ok(decoded)
-                = <RevokePersistent1Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <RevokePersistent1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RevokePersistent1(decoded));
             }
-            if let Ok(decoded)
-                = <RollCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RollCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Roll(decoded));
             }
-            if let Ok(decoded)
-                = <RollFork0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RollFork0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RollFork0(decoded));
             }
-            if let Ok(decoded)
-                = <RollFork1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RollFork1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RollFork1(decoded));
             }
-            if let Ok(decoded)
-                = <RollFork2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RollFork2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RollFork2(decoded));
             }
-            if let Ok(decoded)
-                = <RollFork3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RollFork3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RollFork3(decoded));
             }
-            if let Ok(decoded)
-                = <RpcUrlCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RpcUrlCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RpcUrl(decoded));
             }
-            if let Ok(decoded)
-                = <RpcUrlStructsCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RpcUrlStructsCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RpcUrlStructs(decoded));
             }
-            if let Ok(decoded)
-                = <RpcUrlsCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <RpcUrlsCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::RpcUrls(decoded));
             }
-            if let Ok(decoded)
-                = <SelectForkCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SelectForkCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SelectFork(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeAddress0Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <SerializeAddress0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeAddress0(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeAddress1Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <SerializeAddress1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeAddress1(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeBool0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeBool0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeBool0(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeBool1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeBool1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeBool1(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeBytes0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeBytes0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeBytes0(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeBytes1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeBytes1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeBytes1(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeBytes320Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <SerializeBytes320Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeBytes320(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeBytes321Call as ::corebc_core::abi::AbiDecode>::decode(
-                    data,
-                ) {
+            if let Ok(decoded) = <SerializeBytes321Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeBytes321(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeInt0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeInt0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeInt0(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeInt1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeInt1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeInt1(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeString0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeString0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeString0(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeString1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeString1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeString1(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeUint0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeUint0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeUint0(decoded));
             }
-            if let Ok(decoded)
-                = <SerializeUint1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SerializeUint1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SerializeUint1(decoded));
             }
-            if let Ok(decoded)
-                = <SetEnvCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetEnvCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SetEnv(decoded));
             }
-            if let Ok(decoded)
-                = <SetNonceCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetNonceCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SetNonce(decoded));
             }
-            if let Ok(decoded)
-                = <SetNonceUnsafeCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SetNonceUnsafeCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::SetNonceUnsafe(decoded));
             }
-            if let Ok(decoded)
-                = <SignCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SignCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Sign(decoded));
             }
-            if let Ok(decoded)
-                = <SkipCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SkipCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Skip(decoded));
             }
-            if let Ok(decoded)
-                = <SnapshotCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <SnapshotCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Snapshot(decoded));
             }
-            if let Ok(decoded)
-                = <StartBroadcast0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StartBroadcast0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::StartBroadcast0(decoded));
             }
-            if let Ok(decoded)
-                = <StartBroadcast1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StartBroadcast1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::StartBroadcast1(decoded));
             }
-            if let Ok(decoded)
-                = <StartBroadcast2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StartBroadcast2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::StartBroadcast2(decoded));
             }
-            if let Ok(decoded)
-                = <StartPrank0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StartPrank0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::StartPrank0(decoded));
             }
-            if let Ok(decoded)
-                = <StartPrank1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StartPrank1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::StartPrank1(decoded));
             }
-            if let Ok(decoded)
-                = <StopBroadcastCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StopBroadcastCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::StopBroadcast(decoded));
             }
-            if let Ok(decoded)
-                = <StopPrankCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StopPrankCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::StopPrank(decoded));
             }
-            if let Ok(decoded)
-                = <StoreCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <StoreCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Store(decoded));
             }
-            if let Ok(decoded)
-                = <ToString0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ToString0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ToString0(decoded));
             }
-            if let Ok(decoded)
-                = <ToString1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ToString1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ToString1(decoded));
             }
-            if let Ok(decoded)
-                = <ToString2Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ToString2Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ToString2(decoded));
             }
-            if let Ok(decoded)
-                = <ToString3Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ToString3Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ToString3(decoded));
             }
-            if let Ok(decoded)
-                = <ToString4Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ToString4Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ToString4(decoded));
             }
-            if let Ok(decoded)
-                = <ToString5Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <ToString5Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::ToString5(decoded));
             }
-            if let Ok(decoded)
-                = <Transact0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Transact0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Transact0(decoded));
             }
-            if let Ok(decoded)
-                = <Transact1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <Transact1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Transact1(decoded));
             }
-            if let Ok(decoded)
-                = <TxGasPriceCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <TxGasPriceCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::TxGasPrice(decoded));
             }
-            if let Ok(decoded)
-                = <WarpCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WarpCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::Warp(decoded));
             }
-            if let Ok(decoded)
-                = <WriteFileCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WriteFileCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::WriteFile(decoded));
             }
-            if let Ok(decoded)
-                = <WriteFileBinaryCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WriteFileBinaryCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::WriteFileBinary(decoded));
             }
-            if let Ok(decoded)
-                = <WriteJson0Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WriteJson0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::WriteJson0(decoded));
             }
-            if let Ok(decoded)
-                = <WriteJson1Call as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WriteJson1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::WriteJson1(decoded));
             }
-            if let Ok(decoded)
-                = <WriteLineCall as ::corebc_core::abi::AbiDecode>::decode(data) {
+            if let Ok(decoded) = <WriteLineCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
                 return Ok(Self::WriteLine(decoded));
             }
             Err(::corebc_core::abi::Error::InvalidData.into())

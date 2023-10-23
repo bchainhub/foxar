@@ -76,13 +76,13 @@ impl CallArgs {
 
         let config = Config::from(&eth);
         let provider = utils::get_provider(&config)?;
-        let chain = utils::get_chain(config.network_id, &provider).await?;
+        let network = utils::get_network(config.network_id, &provider).await?;
         let sender = eth.wallet.sender().await;
 
-        let mut builder = TxBuilder::new(&provider, sender, to, chain, tx.legacy).await?;
+        let mut builder = TxBuilder::new(&provider, sender, to, network).await?;
         builder
             .gas(tx.gas_limit)
-            .etherscan_api_key(config.get_etherscan_api_key(Some(chain)))
+            // .etherscan_api_key(config.get_etherscan_api_key(Some(network)))
             .gas_price(tx.gas_price)
             .priority_gas_price(tx.priority_gas_price)
             .nonce(tx.nonce);

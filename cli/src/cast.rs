@@ -4,8 +4,8 @@ use clap_complete::generate;
 use corebc::{
     core::types::{BlockId, BlockNumber::Latest, H256},
     providers::Middleware,
-    types::Address,
-    utils::keccak256,
+    types::{Address, Network},
+    utils::sha3,
 };
 use foundry_cli::{
     cmd::Cmd,
@@ -103,7 +103,7 @@ async fn main() -> eyre::Result<()> {
         }
         Subcommands::ToCheckSumAddress { address } => {
             let value = stdin::unwrap_line(address)?;
-            println!("{}", SimpleCast::to_checksum_address(&value));
+            println!("{}", value.to_string());
         }
         Subcommands::ToUint256 { value } => {
             let value = stdin::unwrap_line(value)?;
@@ -243,15 +243,15 @@ async fn main() -> eyre::Result<()> {
             let provider = utils::get_provider(&config)?;
             println!("{}", Cast::new(provider).block_number().await?);
         }
-        Subcommands::Chain { rpc } => {
+        Subcommands::Network { rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
-            println!("{}", Cast::new(provider).chain().await?);
+            println!("{}", Cast::new(provider).network().await?);
         }
-        Subcommands::ChainId { rpc } => {
+        Subcommands::NetworkId { rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
-            println!("{}", Cast::new(provider).chain_id().await?);
+            println!("{}", Cast::new(provider).network_id().await?);
         }
         Subcommands::Client { rpc } => {
             let config = Config::from(&rpc);
@@ -273,8 +273,9 @@ async fn main() -> eyre::Result<()> {
             let provider = utils::get_provider(&config)?;
 
             let address: Address = stdin::unwrap_line(address)?.parse()?;
-            let computed = Cast::new(&provider).compute_address(address, nonce).await?;
-            println!("Computed Address: {}", SimpleCast::to_checksum_address(&computed));
+            let network = provider.get_networkid().await?;
+            let computed = Cast::new(&provider).compute_address(address, nonce, &Network::from(network)).await?;
+            println!("Computed Address: {}", computed.to_string());
         }
         Subcommands::Disassemble { bytecode } => {
             println!("{}", SimpleCast::disassemble(&bytecode)?);
@@ -432,22 +433,22 @@ async fn main() -> eyre::Result<()> {
                     "forward lookup verification failed. got {name}, expected {who}"
                 );
             }
-            println!("{}", SimpleCast::to_checksum_address(&address));
+            println!("{}", address.to_string());
         }
 
         // Misc
-        Subcommands::Keccak { data } => {
+        Subcommands::Sha3 { data } => {
             let bytes = match data {
                 Some(data) => data.into_bytes(),
                 None => stdin::read_bytes(false)?,
             };
             match String::from_utf8(bytes) {
                 Ok(s) => {
-                    let s = SimpleCast::keccak(&s)?;
+                    let s = SimpleCast::sha(&s)?;
                     println!("{s}");
                 }
                 Err(e) => {
-                    let hash = keccak256(e.as_bytes());
+                    let hash = sha3(e.as_bytes());
                     let s = hex::encode(hash);
                     println!("0x{s}");
                 }

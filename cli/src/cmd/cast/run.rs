@@ -7,7 +7,7 @@ use clap::Parser;
 use corebc::{
     abi::Address,
     prelude::{artifacts::ContractBytecodeSome, ArtifactId, Middleware},
-    types::H160,
+    types::H176,
 };
 use eyre::WrapErr;
 use forge::{
@@ -27,8 +27,8 @@ use tracing::trace;
 use ui::{TUIExitReason, Tui, Ui};
 use yansi::Paint;
 
-const ARBITRUM_SENDER: H160 = H160([
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+const ARBITRUM_SENDER: H176 = H176([
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x0a, 0x4b, 0x05,
 ]);
 
@@ -171,7 +171,7 @@ impl RunArgs {
                 trace!(tx=?tx.hash,to=?to, "executing call transaction");
                 let RawCallResult {
                     reverted,
-                    gas_used: gas,
+                    energy_used: gas,
                     traces,
                     debug: run_debug,
                     exit_reason: _,
@@ -187,14 +187,14 @@ impl RunArgs {
             } else {
                 trace!(tx=?tx.hash, "executing create transaction");
                 match executor.deploy_with_env(env, None) {
-                    Ok(DeployResult { gas_used, traces, debug: run_debug, .. }) => RunResult {
+                    Ok(DeployResult { energy_used: gas_used, traces, debug: run_debug, .. }) => RunResult {
                         success: true,
                         traces: vec![(TraceKind::Execution, traces.unwrap_or_default())],
                         debug: run_debug.unwrap_or_default(),
                         gas_used,
                     },
                     Err(EvmError::Execution(inner)) => {
-                        let ExecutionErr { reverted, gas_used, traces, debug: run_debug, .. } =
+                        let ExecutionErr { reverted, energy_used: gas_used, traces, debug: run_debug, .. } =
                             *inner;
                         RunResult {
                             success: !reverted,

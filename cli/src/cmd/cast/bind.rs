@@ -1,6 +1,6 @@
 use crate::opts::EtherscanOpts;
 use clap::{Parser, ValueHint};
-use corebc::prelude::{errors::EtherscanError, Abigen, Client, MultiAbigen};
+use corebc::prelude::{errors::BlockindexError, Abigen, Client, MultiAbigen};
 use eyre::Result;
 use foundry_config::Config;
 use std::path::{Path, PathBuf};
@@ -79,17 +79,16 @@ impl BindArgs {
         let config = Config::from(&self.etherscan);
 
         let chain = config.network_id.unwrap_or_default();
-        let api_key = config.get_etherscan_api_key(Some(chain)).unwrap_or_default();
         let chain = chain.named()?;
 
-        let client = Client::new(chain, api_key)?;
+        let client = Client::new(chain)?;
         let address = self.path_or_address.parse()?;
         let source = match client.contract_source_code(address).await {
             Ok(source) => source,
-            Err(EtherscanError::InvalidApiKey) => {
-                eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may be using an API key for another Etherscan API chain (e.g. Etherscan API key for Polygonscan).")
-            }
-            Err(EtherscanError::ContractCodeNotVerified(address)) => {
+            // Err(BlockindexError::InvalidApiKey) => {
+            //     eyre::bail!("Invalid Etherscan API key. Did you set it correctly? You may be using an API key for another Etherscan API chain (e.g. Etherscan API key for Polygonscan).")
+            // }
+            Err(BlockindexError::ContractCodeNotVerified(address)) => {
                 eyre::bail!("Contract source code at {:?} on {} not verified. Maybe you have selected the wrong chain?", address, chain)
             }
             Err(err) => {

@@ -3,7 +3,7 @@ use crate::cmd::{
     Cmd, LoadConfig,
 };
 use clap::{Parser, ValueHint};
-use corebc::solc::Graph;
+use corebc::ylem::Graph;
 use eyre::WrapErr;
 use foundry_config::{impl_figment_convert_basic, Config};
 use itertools::Itertools;

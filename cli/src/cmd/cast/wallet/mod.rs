@@ -11,7 +11,7 @@ use clap::Parser;
 use corebc::{
     core::rand::thread_rng,
     signers::{LocalWallet, Signer},
-    types::{transaction::eip712::TypedData, Address, Signature},
+    types::{transaction::eip712::TypedData, Address, Signature, Network},
 };
 use eyre::Context;
 
@@ -35,6 +35,9 @@ pub enum WalletSubcommands {
         /// This is UNSAFE to use and we recommend using the --password.
         #[clap(long, requires = "path", env = "CAST_PASSWORD", value_name = "PASSWORD")]
         unsafe_password: Option<String>,
+
+        /// Network to use for address prefix validation.
+        network: Network,        
     },
 
     /// Generate a vanity address.
@@ -103,7 +106,7 @@ pub enum WalletSubcommands {
 impl WalletSubcommands {
     pub async fn run(self) -> eyre::Result<()> {
         match self {
-            WalletSubcommands::New { path, unsafe_password, .. } => {
+            WalletSubcommands::New { path, unsafe_password, network, .. } => {
                 let mut rng = thread_rng();
 
                 if let Some(path) = path {
@@ -121,14 +124,14 @@ impl WalletSubcommands {
                     };
 
                     let (wallet, uuid) =
-                        LocalWallet::new_keystore(&path, &mut rng, password, None)?;
+                        LocalWallet::new_keystore(&path, &mut rng, password, None, &network)?;
 
                     println!("Created new encrypted keystore file: {}", path.join(uuid).display());
-                    println!("Address: {}", SimpleCast::to_checksum_address(&wallet.address()));
+                    println!("Address: {}", wallet.address());
                 } else {
-                    let wallet = LocalWallet::new(&mut rng);
+                    let wallet = LocalWallet::new(&mut rng, &network);
                     println!("Successfully created new keypair.");
-                    println!("Address:     {}", SimpleCast::to_checksum_address(&wallet.address()));
+                    println!("Address:     {}", wallet.address());
                     println!("Private key: 0x{}", hex::encode(wallet.signer().to_bytes()));
                 }
             }
@@ -142,7 +145,7 @@ impl WalletSubcommands {
                     .signer(0)
                     .await?;
                 let addr = wallet.address();
-                println!("{}", SimpleCast::to_checksum_address(&addr));
+                println!("{}", addr);
             }
             WalletSubcommands::Sign { message, data, from_file, wallet } => {
                 let wallet = wallet.signer(0).await?;

@@ -118,32 +118,28 @@ impl UIfmt for TransactionReceipt {
     fn pretty(&self) -> String {
         format!(
             "
-blockHash               {}
-blockNumber             {}
-contractAddress         {}
-cumulativeGasUsed       {}
-effectiveGasPrice       {}
-gasUsed                 {}
-logs                    {}
-logsBloom               {}
-root                    {}
-status                  {}
-transactionHash         {}
-transactionIndex        {}
-type                    {}",
+blockHash                  {}
+blockNumber                {}
+contractAddress            {}
+cumulativeEnergyUsed       {}
+energyUsed                 {}
+logs                       {}
+logsBloom                  {}
+root                       {}
+status                     {}
+transactionHash            {}
+transactionIndex           {}",
             self.block_hash.pretty(),
             self.block_number.pretty(),
             self.contract_address.pretty(),
-            self.cumulative_gas_used.pretty(),
-            self.effective_gas_price.pretty(),
-            self.gas_used.pretty(),
+            self.cumulative_energy_used.pretty(),
+            self.energy_used.pretty(),
             serde_json::to_string(&self.logs).unwrap(),
             self.logs_bloom.pretty(),
             self.root.pretty(),
             self.status.pretty(),
             self.transaction_hash.pretty(),
             self.transaction_index.pretty(),
-            self.transaction_type.pretty()
         )
     }
 }
@@ -201,30 +197,28 @@ transactions:        {}",
 fn pretty_block_basics<T>(block: &Block<T>) -> String {
     format!(
         "
-baseFeePerGas        {}
-difficulty           {}
-extraData            {}
-gasLimit             {}
-gasUsed              {}
-hash                 {}
-logsBloom            {}
-miner                {}
-mixHash              {}
-nonce                {}
-number               {}
-parentHash           {}
-receiptsRoot         {}
-sealFields           {}
-sha3Uncles           {}
-size                 {}
-stateRoot            {}
-timestamp            {}
-totalDifficulty      {}{}",
-        block.base_fee_per_gas.pretty(),
+difficulty              {}
+extraData               {}
+energyLimit             {}
+energyUsed              {}
+hash                    {}
+logsBloom               {}
+miner                   {}
+mixHash                 {}
+nonce                   {}
+number                  {}
+parentHash              {}
+receiptsRoot            {}
+sealFields              {}
+sha3Uncles              {}
+size                    {}
+stateRoot               {}
+timestamp               {}
+totalDifficulty         {}",
         block.difficulty.pretty(),
         block.extra_data.pretty(),
-        block.gas_limit.pretty(),
-        block.gas_used.pretty(),
+        block.energy_limit.pretty(),
+        block.energy_used.pretty(),
         block.hash.pretty(),
         block.logs_bloom.pretty(),
         block.author.pretty(),
@@ -239,26 +233,7 @@ totalDifficulty      {}{}",
         block.state_root.pretty(),
         block.timestamp.pretty(),
         block.total_difficulty.pretty(),
-        block.other.pretty()
     )
-}
-
-impl UIfmt for OtherFields {
-    fn pretty(&self) -> String {
-        let mut s = String::with_capacity(self.len() * 30);
-        if !self.is_empty() {
-            s.push('\n');
-        }
-        for (key, value) in self.iter() {
-            let val = EthValue::from(value.clone()).pretty();
-            let offset = NAME_COLUMN_LEN.saturating_sub(key.len());
-            s.push_str(key);
-            s.extend(std::iter::repeat(' ').take(offset + 1));
-            s.push_str(&val);
-            s.push('\n');
-        }
-        s
-    }
 }
 
 /// Various numerical ethereum types used for pretty printing
@@ -295,25 +270,25 @@ impl UIfmt for Transaction {
     fn pretty(&self) -> String {
         format!(
             "
-blockHash            {}
-blockNumber          {}
-from                 {}
-gas                  {}
-gasPrice             {}
-hash                 {}
-input                {}
-nonce                {}
-r                    {}
-s                    {}
-to                   {}
-transactionIndex     {}
-v                    {}
-value                {}{}",
+blockHash               {}
+blockNumber             {}
+from                    {}
+energy                  {}
+energyPrice             {}
+hash                    {}
+input                   {}
+nonce                   {}
+r                       {}
+s                       {}
+to                      {}
+transactionIndex        {}
+v                       {}
+value                   {}",
             self.block_hash.pretty(),
             self.block_number.pretty(),
             self.from.pretty(),
-            self.gas.pretty(),
-            self.gas_price.pretty(),
+            self.energy.pretty(),
+            self.energy_price.pretty(),
             self.hash.pretty(),
             self.input.pretty(),
             self.nonce.pretty(),
@@ -323,7 +298,6 @@ value                {}{}",
             self.transaction_index.pretty(),
             self.v.pretty(),
             self.value.pretty(),
-            self.other.pretty()
         )
     }
 }
@@ -341,8 +315,8 @@ pub fn get_pretty_tx_attr(transaction: &Transaction, attr: &str) -> Option<Strin
         "blockHash" | "block_hash" => Some(transaction.block_hash.pretty()),
         "blockNumber" | "block_number" => Some(transaction.block_number.pretty()),
         "from" => Some(transaction.from.pretty()),
-        "gas" => Some(transaction.gas.pretty()),
-        "gasPrice" | "gas_price" => Some(transaction.gas_price.pretty()),
+        "energy" => Some(transaction.energy.pretty()),
+        "energyPrice" | "energy_price" => Some(transaction.energy_price.pretty()),
         "hash" => Some(transaction.hash.pretty()),
         "input" => Some(transaction.input.pretty()),
         "nonce" => Some(transaction.nonce.pretty()),
@@ -352,23 +326,17 @@ pub fn get_pretty_tx_attr(transaction: &Transaction, attr: &str) -> Option<Strin
         "transactionIndex" | "transaction_index" => Some(transaction.transaction_index.pretty()),
         "v" => Some(transaction.v.pretty()),
         "value" => Some(transaction.value.pretty()),
-        other => {
-            if let Some(value) = transaction.other.get(other) {
-                return Some(value.to_string().trim_matches('"').to_string())
-            }
-            None
-        }
+        _ => None,
     }
 }
 
 /// Returns the `UiFmt::pretty()` formatted attribute of the given block
 pub fn get_pretty_block_attr<TX>(block: &Block<TX>, attr: &str) -> Option<String> {
     match attr {
-        "baseFeePerGas" | "base_fee_per_gas" => Some(block.base_fee_per_gas.pretty()),
         "difficulty" => Some(block.difficulty.pretty()),
         "extraData" | "extra_data" => Some(block.extra_data.pretty()),
-        "gasLimit" | "gas_limit" => Some(block.gas_limit.pretty()),
-        "gasUsed" | "gas_used" => Some(block.gas_used.pretty()),
+        "energyLimit" | "energy_limit" => Some(block.energy_limit.pretty()),
+        "energyUsed" | "energy_used" => Some(block.energy_used.pretty()),
         "hash" => Some(block.hash.pretty()),
         "logsBloom" | "logs_bloom" => Some(block.logs_bloom.pretty()),
         "miner" | "author" => Some(block.author.pretty()),
@@ -383,11 +351,7 @@ pub fn get_pretty_block_attr<TX>(block: &Block<TX>, attr: &str) -> Option<String
         "stateRoot" | "state_root" => Some(block.state_root.pretty()),
         "timestamp" => Some(block.timestamp.pretty()),
         "totalDifficulty" | "total_difficult" => Some(block.total_difficulty.pretty()),
-        other => {
-            if let Some(value) = block.other.get(other) {
-                let val = EthValue::from(value.clone());
-                return Some(val.pretty())
-            }
+        _ => {
             None
         }
     }
@@ -420,8 +384,8 @@ mod tests {
         "blockHash": "0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae",
         "blockNumber": "0x1b4",
         "from": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
-        "gas": "0x11cbbdc",
-        "gasPrice": "0x0",
+        "energy": "0x11cbbdc",
+        "energyPrice": "0x0",
         "hash": "0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f",
         "input": "0xd294f093",
         "nonce": "0xa2",
@@ -448,8 +412,8 @@ mod tests {
 blockHash            0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae
 blockNumber          436
 from                 ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
-gas                  18660316
-gasPrice             0
+energy                  18660316
+energyPrice             0
 hash                 0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f
 input                0xd294f093
 nonce                162
@@ -473,13 +437,13 @@ txType
 
     #[test]
     fn print_block_w_txs() {
-        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"0x0000000000000000000000000000000000000000","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","gasLimit":"0x6691b7","gasUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","gas":"0x15f90","gasPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
+        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"0x0000000000000000000000000000000000000000","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","energyLimit":"0x6691b7","energyUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","energy":"0x15f90","energyPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
         let block: Block<Transaction> = serde_json::from_str(block).unwrap();
         let output ="\nblockHash            0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972
 blockNumber          3
 from                 0xFdCeDC3bFca10eCb0890337fbdD1977aba84807a
-gas                  90000
-gasPrice             20000000000
+energy                  90000
+energyPrice             20000000000
 hash                 0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067
 input                0x
 nonce                2
@@ -538,7 +502,7 @@ value                0".to_string();
     }
     #[test]
     fn test_pretty_tx_attr() {
-        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","gasLimit":"0x6691b7","gasUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","gas":"0x15f90","gasPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
+        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","energyLimit":"0x6691b7","energyUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","energy":"0x15f90","energyPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
         let block: Block<Transaction> = serde_json::from_str(block).unwrap();
         assert_eq!(None, get_pretty_tx_attr(&block.transactions[0], ""));
         assert_eq!(
@@ -549,10 +513,10 @@ value                0".to_string();
             Some("0xFdCeDC3bFca10eCb0890337fbdD1977aba84807a".to_string()),
             get_pretty_tx_attr(&block.transactions[0], "from")
         );
-        assert_eq!(Some("90000".to_string()), get_pretty_tx_attr(&block.transactions[0], "gas"));
+        assert_eq!(Some("90000".to_string()), get_pretty_tx_attr(&block.transactions[0], "energy"));
         assert_eq!(
             Some("20000000000".to_string()),
-            get_pretty_tx_attr(&block.transactions[0], "gasPrice")
+            get_pretty_tx_attr(&block.transactions[0], "energyPrice")
         );
         assert_eq!(
             Some("0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067".to_string()),
@@ -583,7 +547,7 @@ value                0".to_string();
     fn test_pretty_block_attr() {
         let json = serde_json::json!(
         {
-            "baseFeePerGas": "0x7",
+            "baseFeePerEnergy": "0x7",
             "miner": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
             "number": "0x1b4",
             "hash": "0x0e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
@@ -603,9 +567,9 @@ value                0".to_string();
             "totalDifficulty": "0x27f07",
             "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
             "size": "0x27f07",
-            "gasLimit": "0x9f759",
-            "minGasPrice": "0x9f759",
-            "gasUsed": "0x9f759",
+            "energyLimit": "0x9f759",
+            "minEnergyPrice": "0x9f759",
+            "energyUsed": "0x9f759",
             "timestamp": "0x54e34e8e",
             "transactions": [],
             "uncles": []
@@ -615,14 +579,14 @@ value                0".to_string();
         let block: Block<()> = serde_json::from_value(json).unwrap();
 
         assert_eq!(None, get_pretty_block_attr(&block, ""));
-        assert_eq!(Some("7".to_string()), get_pretty_block_attr(&block, "baseFeePerGas"));
+        assert_eq!(Some("7".to_string()), get_pretty_block_attr(&block, "baseFeePerEnergy"));
         assert_eq!(Some("163591".to_string()), get_pretty_block_attr(&block, "difficulty"));
         assert_eq!(
             Some("0x0000000000000000000000000000000000000000000000000000000000000000".to_string()),
             get_pretty_block_attr(&block, "extraData")
         );
-        assert_eq!(Some("653145".to_string()), get_pretty_block_attr(&block, "gasLimit"));
-        assert_eq!(Some("653145".to_string()), get_pretty_block_attr(&block, "gasUsed"));
+        assert_eq!(Some("653145".to_string()), get_pretty_block_attr(&block, "energyLimit"));
+        assert_eq!(Some("653145".to_string()), get_pretty_block_attr(&block, "energyUsed"));
         assert_eq!(
             Some("0x0e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331".to_string()),
             get_pretty_block_attr(&block, "hash")

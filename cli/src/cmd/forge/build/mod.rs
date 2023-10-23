@@ -7,7 +7,7 @@ use crate::cmd::{
     Cmd, LoadConfig,
 };
 use clap::Parser;
-use corebc::solc::{Project, ProjectCompileOutput};
+use corebc::ylem::{Project, ProjectCompileOutput};
 use foundry_common::{
     compile,
     compile::{ProjectCompiler, SkipBuildFilter},

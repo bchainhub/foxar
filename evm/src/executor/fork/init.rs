@@ -1,5 +1,5 @@
 use crate::utils::{
-    apply_network_and_block_specific_env_changes, h176_to_b176, h256_to_b256, u256_to_ru256,
+    h176_to_b176, h256_to_b256, u256_to_ru256,
 };
 use corebc::{
     providers::Middleware,
@@ -86,8 +86,6 @@ where
             ..Default::default()
         },
     };
-
-    apply_network_and_block_specific_env_changes(&mut env, &block);
 
     Ok((env, block))
 }

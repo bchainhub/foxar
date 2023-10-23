@@ -80,7 +80,7 @@ impl InspectorStackConfig {
         stack.cheatcodes = self.create_cheatcodes();
         if let Some(ref mut cheatcodes) = stack.cheatcodes {
             cheatcodes.block = Some(self.block.clone());
-            cheatcodes.gas_price = Some(self.gas_price);
+            cheatcodes.energy_price = Some(self.gas_price);
         }
 
         if self.tracing {

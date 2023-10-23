@@ -3,7 +3,7 @@ use crate::{
     opts::forge::CompilerArgs,
 };
 use clap::{Parser, ValueHint};
-use corebc::solc::{
+use corebc::ylem::{
     artifacts::RevertStrings, remappings::Remapping, utils::canonicalized, Project,
 };
 use foundry_config::{
@@ -35,7 +35,7 @@ pub struct CoreBuildArgs {
     #[serde(flatten)]
     pub compiler: CompilerArgs,
 
-    /// Ignore solc warnings by error code.
+    /// Ignore ylem warnings by error code.
     #[clap(long, help_heading = "Compiler options", value_name = "ERROR_CODES")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub ignored_error_codes: Vec<u64>,
@@ -45,21 +45,21 @@ pub struct CoreBuildArgs {
     #[serde(skip)]
     pub deny_warnings: bool,
 
-    /// Do not auto-detect the `solc` version.
+    /// Do not auto-detect the `ylem` version.
     #[clap(long, help_heading = "Compiler options")]
     #[serde(skip)]
     pub no_auto_detect: bool,
 
-    /// Specify the solc version, or a path to a local solc, to build with.
+    /// Specify the ylem version, or a path to a local ylem, to build with.
     ///
-    /// Valid values are in the format `x.y.z`, `solc:x.y.z` or `path/to/solc`.
-    #[clap(long = "use", help_heading = "Compiler options", value_name = "SOLC_VERSION")]
+    /// Valid values are in the format `x.y.z`, `ylem:x.y.z` or `path/to/ylem`.
+    #[clap(long = "use", help_heading = "Compiler options", value_name = "YLEM_VERSION")]
     #[serde(skip)]
-    pub use_solc: Option<String>,
+    pub use_ylem: Option<String>,
 
     /// Do not access the network.
     ///
-    /// Missing solc versions will not be installed.
+    /// Missing ylem versions will not be installed.
     #[clap(help_heading = "Compiler options", long)]
     #[serde(skip)]
     pub offline: bool,
@@ -182,11 +182,11 @@ impl Provider for CoreBuildArgs {
         let mut dict = value.into_dict().ok_or(error)?;
 
         if self.no_auto_detect {
-            dict.insert("auto_detect_solc".to_string(), false.into());
+            dict.insert("auto_detect_ylem".to_string(), false.into());
         }
 
-        if let Some(ref solc) = self.use_solc {
-            dict.insert("solc".to_string(), solc.trim_start_matches("solc:").into());
+        if let Some(ref ylem) = self.use_ylem {
+            dict.insert("ylem".to_string(), ylem.trim_start_matches("ylem:").into());
         }
 
         if self.offline {
