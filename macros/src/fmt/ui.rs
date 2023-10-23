@@ -351,9 +351,7 @@ pub fn get_pretty_block_attr<TX>(block: &Block<TX>, attr: &str) -> Option<String
         "stateRoot" | "state_root" => Some(block.state_root.pretty()),
         "timestamp" => Some(block.timestamp.pretty()),
         "totalDifficulty" | "total_difficult" => Some(block.total_difficulty.pretty()),
-        _ => {
-            None
-        }
+        _ => None,
     }
 }
 

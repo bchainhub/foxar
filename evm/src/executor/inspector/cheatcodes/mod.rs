@@ -173,6 +173,7 @@ pub struct Cheatcodes {
     /// Holds the stored energy info for when we pause energy metering. It is an `Option<Option<..>>`
     /// because the `call` callback in an `Inspector` doesn't get access to
     /// the `revm::Interpreter` which holds the `revm::Energy` struct that
+    /// the `revm::Interpreter` which holds the `revm::Energy` struct that
     /// we need to copy. So we convert it to a `Some(None)` in `apply_cheatcode`, and once we have
     /// the interpreter, we copy the energy struct. Then each time there is an execution of an
     /// operation, we reset the energy.
@@ -691,7 +692,8 @@ where
                             )
                         }
 
-                        let is_fixed_gas_limit = check_if_fixed_gas_limit(data, call.gas_limit);
+                        let is_fixed_energy_limit =
+                            check_if_fixed_gas_limit(data, call.energy_limit);
 
                         let account = data
                             .journaled_state
@@ -868,7 +870,7 @@ where
                                     )
                                     .encode()
                                     .into(),
-                                )
+                                );
                             }
                         }
                         // If the cheatcode was called without a `count` argument,
@@ -894,7 +896,7 @@ where
                                     )
                                     .encode()
                                     .into(),
-                                )
+                                );
                             }
                         }
                     }
@@ -913,7 +915,7 @@ where
                         .to_string()
                         .encode()
                         .into(),
-                )
+                );
             }
         }
 
@@ -1007,7 +1009,7 @@ where
                         }
                     };
 
-                    let is_fixed_gas_limit = check_if_fixed_gas_limit(data, call.gas_limit);
+                    let is_fixed_energy_limit = check_if_fixed_gas_limit(data, call.energy_limit);
 
                     self.broadcastable_transactions.push_back(BroadcastableTransaction {
                         rpc: data.db.active_fork_url(),

@@ -21,7 +21,7 @@ use revm::{
     precompile::{Precompiles, SpecId},
     primitives::{
         Account, AccountInfo, Bytecode, CreateScheme, Env, Log, ResultAndState, TransactTo, B176,
-        B256, KECCAK_EMPTY, U256 as rU256,
+        B256, SHA3_EMPTY, U256 as rU256,
     },
     Database, DatabaseCommit, Inspector, JournaledState, EVM,
 };
@@ -1119,9 +1119,7 @@ impl DatabaseExt for Backend {
         env.block.timestamp = u256_to_ru256(block.timestamp);
         env.block.coinbase = h176_to_b176(block.author.unwrap_or_default());
         env.block.difficulty = u256_to_ru256(block.difficulty);
-        env.block.prevrandao = block.mix_hash.map(h256_to_b256);
-        env.block.basefee = u256_to_ru256(block.base_fee_per_gas.unwrap_or_default());
-        env.block.gas_limit = u256_to_ru256(block.gas_limit);
+        env.block.energy_limit = u256_to_ru256(block.energy_limit);
         env.block.number = u256_to_ru256(block.number.unwrap_or(fork_block).as_u64().into());
 
         // replay all transactions that came before
@@ -1397,7 +1395,7 @@ impl Fork {
     /// Returns true if the account is a contract
     pub fn is_contract(&self, acc: Address) -> bool {
         if let Ok(Some(acc)) = self.db.basic(h176_to_b176(acc)) {
-            if acc.code_hash != KECCAK_EMPTY {
+            if acc.code_hash != SHA3_EMPTY {
                 return true
             }
         }
@@ -1739,11 +1737,7 @@ fn merge_db_account_data<ExtDB: DatabaseRef>(
 fn is_contract_in_state(journaled_state: &JournaledState, acc: Address) -> bool {
     let acc = h176_to_b176(acc);
 
-    journaled_state
-        .state
-        .get(&acc)
-        .map(|acc| acc.info.code_hash != KECCAK_EMPTY)
-        .unwrap_or_default()
+    journaled_state.state.get(&acc).map(|acc| acc.info.code_hash != SHA3_EMPTY).unwrap_or_default()
 }
 
 /// Executes the given transaction and commits state changes to the database _and_ the journaled

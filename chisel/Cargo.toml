@@ -55,7 +55,7 @@ serde = "1"
 serde_json = { version = "1", features = ["raw_value"] }
 semver = "1"
 bytes = "1"
-revm = { git = "https://github.com/core-coin/ican-revm.git", default-features = false, features = ["std", "serde", "memory_limit"], branch = "main" }
+revm = { workspace = true, default-features = false, features = ["std", "serde", "memory_limit"] }
 eyre = "0.6"
 dirs = "5"
 time = { version = "0.3", features = ["formatting"] }

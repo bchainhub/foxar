@@ -302,7 +302,7 @@ impl MultiContractRunnerBuilder {
             known_contracts,
             evm_opts,
             env,
-            evm_spec: self.evm_spec.unwrap_or(SpecId::MERGE),
+            evm_spec: self.evm_spec.unwrap_or(SpecId::LATEST),
             sender: self.sender,
             errors: Some(execution_info.2),
             source_paths,

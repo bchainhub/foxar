@@ -181,14 +181,18 @@ impl From<revm::primitives::InvalidTransaction> for InvalidTransactionError {
         use revm::primitives::InvalidTransaction;
         match err {
             InvalidTransaction::InvalidChainId => InvalidTransactionError::InvalidChainId,
-            InvalidTransaction::GasMaxFeeGreaterThanPriorityFee => {
+            InvalidTransaction::EnergyMaxFeeGreaterThanPriorityFee => {
                 InvalidTransactionError::TipAboveFeeCap
             }
-            InvalidTransaction::GasPriceLessThanBasefee => InvalidTransactionError::FeeCapTooLow,
-            InvalidTransaction::CallerGasLimitMoreThanBlock => InvalidTransactionError::GasTooHigh,
-            InvalidTransaction::CallGasCostMoreThanGasLimit => InvalidTransactionError::GasTooHigh,
+            InvalidTransaction::EnergyPriceLessThanBasefee => InvalidTransactionError::FeeCapTooLow,
+            InvalidTransaction::CallerEnergyLimitMoreThanBlock => {
+                InvalidTransactionError::GasTooHigh
+            }
+            InvalidTransaction::CallEnergyCostMoreThanEnergyLimit => {
+                InvalidTransactionError::GasTooHigh
+            }
             InvalidTransaction::RejectCallerWithCode => InvalidTransactionError::SenderNoEOA,
-            InvalidTransaction::LackOfFundForGasLimit { .. } => {
+            InvalidTransaction::LackOfFundForEnergyLimit { .. } => {
                 InvalidTransactionError::InsufficientFunds
             }
             InvalidTransaction::OverflowPaymentInTransaction => {

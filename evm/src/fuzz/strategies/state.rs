@@ -16,7 +16,7 @@ use parking_lot::RwLock;
 use proptest::prelude::{BoxedStrategy, Strategy};
 use revm::{
     db::{CacheDB, DatabaseRef},
-    interpreter::opcode::{self, spec_opcode_gas},
+    interpreter::opcode::{self, spec_opcode_energy},
     primitives::SpecId,
 };
 use std::{io::Write, sync::Arc};
@@ -213,7 +213,7 @@ fn collect_push_bytes(code: Bytes) -> Vec<[u8; 32]> {
 
     // We use [SpecId::LATEST] since we do not really care what spec it is - we are not interested
     // in gas costs.
-    let opcode_infos = spec_opcode_gas(SpecId::LATEST);
+    let opcode_infos = spec_opcode_energy(SpecId::LATEST);
 
     let mut i = 0;
     while i < code.len().min(PUSH_BYTE_ANALYSIS_LIMIT) {

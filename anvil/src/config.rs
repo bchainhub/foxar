@@ -7,7 +7,7 @@ use crate::{
             mem::fork_db::ForkedDatabase,
             time::duration_since_unix_epoch,
         },
-        fees::{INITIAL_BASE_FEE, INITIAL_GAS_PRICE},
+        fees::INITIAL_GAS_PRICE,
         pool::transactions::TransactionOrder,
     },
     genesis::Genesis,
@@ -25,9 +25,8 @@ use corebc::{
         MnemonicBuilder, Signer,
     },
     types::BlockNumber,
-    utils::{format_ether, hex, to_checksum, WEI_IN_ETHER},
+    utils::{format_core, hex, to_checksum, WEI_IN_CORE},
 };
-use forge::utils::{h256_to_b256, u256_to_ru256};
 use foundry_common::{
     ProviderBuilder, ALCHEMY_FREE_TIER_CUPS, NON_ARCHIVE_NODE_WARNING, REQUEST_TIMEOUT,
 };
@@ -35,8 +34,9 @@ use foundry_config::Config;
 use foundry_evm::{
     executor::fork::{BlockchainDb, BlockchainDbMeta, SharedBackend},
     revm,
-    revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256},
+    revm::primitives::{BlockEnv, CfgEnv, Network, TxEnv, U256 as rU256},
 };
+use foundry_utils::types::ToRuint;
 use parking_lot::RwLock;
 use serde_json::{json, to_writer, Value};
 use std::{
@@ -90,8 +90,6 @@ pub struct NodeConfig {
     pub disable_block_gas_limit: bool,
     /// Default gas price for all txs
     pub gas_price: Option<U256>,
-    /// Default base fee
-    pub base_fee: Option<U256>,
     /// The hardfork to use
     pub hardfork: Option<Hardfork>,
     /// Signer accounts that will be initialised with `genesis_balance` in the genesis block
@@ -177,7 +175,7 @@ Available Accounts
 ==================
 "#
         );
-        let balance = format_ether(self.genesis_balance);
+        let balance = format_core(self.genesis_balance);
         for (idx, wallet) in self.genesis_accounts.iter().enumerate() {
             let _ = write!(
                 config_string,
@@ -241,31 +239,19 @@ Chain ID
 ==================
 {}
 "#,
-                Paint::green(format!("\n{}", self.get_chain_id()))
+                Paint::green(format!("\n{}", self.get_network_id()))
             );
         }
 
-        if (SpecId::from(self.get_hardfork()) as u8) < (SpecId::LONDON as u8) {
-            let _ = write!(
-                config_string,
-                r#"
+        let _ = write!(
+            config_string,
+            r#"
 Gas Price
 ==================
 {}
 "#,
-                Paint::green(format!("\n{}", self.get_gas_price()))
-            );
-        } else {
-            let _ = write!(
-                config_string,
-                r#"
-Base Fee
-==================
-{}
-"#,
-                Paint::green(format!("\n{}", self.get_base_fee()))
-            );
-        }
+            Paint::green(format!("\n{}", self.get_gas_price()))
+        );
 
         let _ = write!(
             config_string,
@@ -317,7 +303,6 @@ Genesis Timestamp
               "block_hash": fork.block_hash(),
               "chain_id": fork.chain_id(),
               "wallet": wallet_description,
-              "base_fee": format!("{}", self.get_base_fee()),
               "gas_price": format!("{}", self.get_gas_price()),
               "gas_limit": format!("{}", self.gas_limit),
             })
@@ -326,7 +311,6 @@ Genesis Timestamp
               "available_accounts": available_accounts,
               "private_keys": private_keys,
               "wallet": wallet_description,
-              "base_fee": format!("{}", self.get_base_fee()),
               "gas_price": format!("{}", self.get_gas_price()),
               "gas_limit": format!("{}", self.gas_limit),
               "genesis_timestamp": format!("{}", self.get_genesis_timestamp()),
@@ -360,7 +344,7 @@ impl Default for NodeConfig {
             genesis_timestamp: None,
             genesis_accounts,
             // 100ETH default balance
-            genesis_balance: WEI_IN_ETHER.saturating_mul(100u64.into()),
+            genesis_balance: WEI_IN_CORE.saturating_mul(100u64.into()),
             block_time: None,
             no_mining: false,
             port: NODE_PORT,
@@ -370,7 +354,6 @@ impl Default for NodeConfig {
             eth_rpc_url: None,
             fork_block_number: None,
             account_generator: None,
-            base_fee: None,
             enable_tracing: true,
             enable_steps_tracing: false,
             no_storage_caching: false,
@@ -395,13 +378,6 @@ impl Default for NodeConfig {
 }
 
 impl NodeConfig {
-    /// Returns the base fee to use
-    pub fn get_base_fee(&self) -> U256 {
-        self.base_fee
-            .or_else(|| self.genesis.as_ref().and_then(|g| g.base_fee_per_gas))
-            .unwrap_or_else(|| INITIAL_BASE_FEE.into())
-    }
-
     /// Returns the base fee to use
     pub fn get_gas_price(&self) -> U256 {
         self.gas_price.unwrap_or_else(|| INITIAL_GAS_PRICE.into())
@@ -434,7 +410,7 @@ impl NodeConfig {
     }
 
     /// Returns the chain ID to use
-    pub fn get_chain_id(&self) -> u64 {
+    pub fn get_network_id(&self) -> u64 {
         self.chain_id
             .or_else(|| self.genesis.as_ref().and_then(|g| g.chain_id()))
             .unwrap_or(CHAIN_ID)
@@ -443,12 +419,12 @@ impl NodeConfig {
     /// Sets the chain id and updates all wallets
     pub fn set_chain_id(&mut self, chain_id: Option<impl Into<u64>>) {
         self.chain_id = chain_id.map(Into::into);
-        let chain_id = self.get_chain_id();
+        let chain_id = self.get_network_id();
         self.genesis_accounts.iter_mut().for_each(|wallet| {
-            *wallet = wallet.clone().with_chain_id(chain_id);
+            *wallet = wallet.clone().with_network_id(chain_id);
         });
         self.signer_accounts.iter_mut().for_each(|wallet| {
-            *wallet = wallet.clone().with_chain_id(chain_id);
+            *wallet = wallet.clone().with_network_id(chain_id);
         })
     }
 
@@ -491,13 +467,6 @@ impl NodeConfig {
         transaction_block_keeper: Option<U>,
     ) -> Self {
         self.transaction_block_keeper = transaction_block_keeper.map(Into::into);
-        self
-    }
-
-    /// Sets the base fee
-    #[must_use]
-    pub fn with_base_fee<U: Into<U256>>(mut self, base_fee: Option<U>) -> Self {
-        self.base_fee = base_fee.map(Into::into);
         self
     }
 
@@ -749,7 +718,7 @@ impl NodeConfig {
         if self.no_storage_caching || self.eth_rpc_url.is_none() {
             return None
         }
-        let chain_id = self.get_chain_id();
+        let chain_id = self.get_network_id();
 
         Config::foundry_block_cache_file(chain_id, block)
     }
@@ -763,23 +732,15 @@ impl NodeConfig {
         let mut env = revm::primitives::Env {
             cfg: CfgEnv {
                 spec_id: self.get_hardfork().into(),
-                network_id: rU256::from(self.get_chain_id()),
+                network: Network::from(self.get_network_id()),
                 limit_contract_code_size: self.code_size_limit,
-                // EIP-3607 rejects transactions from senders with deployed code.
-                // If EIP-3607 is enabled it can cause issues during fuzz/invariant tests if the
-                // caller is a contract. So we disable the check by default.
-                disable_eip3607: true,
-                disable_block_gas_limit: self.disable_block_gas_limit,
+                disable_block_energy_limit: self.disable_block_gas_limit,
                 ..Default::default()
             },
-            block: BlockEnv {
-                gas_limit: self.gas_limit.into(),
-                basefee: self.get_base_fee().into(),
-                ..Default::default()
-            },
-            tx: TxEnv { chain_id: self.get_chain_id().into(), ..Default::default() },
+            block: BlockEnv { energy_limit: self.gas_limit.to_ruint(), ..Default::default() },
+            tx: TxEnv { network_id: self.get_network_id().into(), ..Default::default() },
         };
-        let fees = FeeManager::new(env.cfg.spec_id, self.get_base_fee(), self.get_gas_price());
+        let fees = FeeManager::new(env.cfg.spec_id, self.get_gas_price());
 
         let (db, fork): (Arc<tokio::sync::RwLock<dyn Db>>, Option<ClientFork>) =
             if let Some(eth_rpc_url) = self.eth_rpc_url.clone() {
@@ -796,36 +757,37 @@ impl NodeConfig {
                         .expect("Failed to establish provider to fork url"),
                 );
 
-                let (fork_block_number, fork_chain_id) = if let Some(fork_block_number) =
-                    self.fork_block_number
-                {
-                    let chain_id = if let Some(chain_id) = self.fork_chain_id {
-                        Some(chain_id)
-                    } else if self.hardfork.is_none() {
-                        // auto adjust hardfork if not specified
-                        // but only if we're forking mainnet
-                        let chain_id =
-                            provider.get_chainid().await.expect("Failed to fetch network chain id");
-                        if chain_id == corebc::types::Chain::Mainnet.into() {
-                            let hardfork: Hardfork = fork_block_number.into();
-                            env.cfg.spec_id = hardfork.into();
-                            self.hardfork = Some(hardfork);
-                        }
-                        Some(chain_id)
-                    } else {
-                        None
-                    };
+                let (fork_block_number, fork_chain_id) =
+                    if let Some(fork_block_number) = self.fork_block_number {
+                        let chain_id = if let Some(chain_id) = self.fork_chain_id {
+                            Some(chain_id)
+                        } else if self.hardfork.is_none() {
+                            // auto adjust hardfork if not specified
+                            // but only if we're forking mainnet
+                            let chain_id = provider
+                                .get_networkid()
+                                .await
+                                .expect("Failed to fetch network chain id");
+                            if chain_id == corebc::types::Network::Mainnet.into() {
+                                let hardfork: Hardfork = fork_block_number.into();
+                                env.cfg.spec_id = hardfork.into();
+                                self.hardfork = Some(hardfork);
+                            }
+                            Some(chain_id)
+                        } else {
+                            None
+                        };
 
-                    (fork_block_number, chain_id)
-                } else {
-                    // pick the last block number but also ensure it's not pending anymore
-                    (
-                        find_latest_fork_block(&provider)
-                            .await
-                            .expect("Failed to get fork block number"),
-                        None,
-                    )
-                };
+                        (fork_block_number, chain_id)
+                    } else {
+                        // pick the last block number but also ensure it's not pending anymore
+                        (
+                            find_latest_fork_block(&provider)
+                                .await
+                                .expect("Failed to get fork block number"),
+                            None,
+                        )
+                    };
 
                 let block = provider
                     .get_block(BlockNumber::Number(fork_block_number.into()))
@@ -853,44 +815,28 @@ latest block number: {latest_block}"
 
                 // we only use the gas limit value of the block if it is non-zero, since there are networks where this is not used and is always `0x0` which would inevitably result in `OutOfGas` errors as soon as the evm is about to record gas, See also <https://github.com/foundry-rs/foundry/issues/3247>
 
-                let gas_limit = if block.gas_limit.is_zero() {
-                    env.block.gas_limit
+                let gas_limit = if block.energy_limit.is_zero() {
+                    env.block.energy_limit
                 } else {
-                    u256_to_ru256(block.gas_limit)
+                    block.energy_limit.to_ruint()
                 };
 
                 env.block = BlockEnv {
                     number: rU256::from(fork_block_number),
-                    timestamp: block.timestamp.into(),
-                    difficulty: block.difficulty.into(),
+                    timestamp: block.timestamp.to_ruint(),
+                    difficulty: block.difficulty.to_ruint(),
                     // ensures prevrandao is set
-                    prevrandao: Some(block.mix_hash.unwrap_or_default()).map(h256_to_b256),
-                    gas_limit,
+                    energy_limit: gas_limit,
                     // Keep previous `coinbase` and `basefee` value
                     coinbase: env.block.coinbase,
-                    basefee: env.block.basefee,
                 };
 
-                // if not set explicitly we use the base fee of the latest block
-                if self.base_fee.is_none() {
-                    if let Some(base_fee) = block.base_fee_per_gas {
-                        self.base_fee = Some(base_fee);
-                        env.block.basefee = u256_to_ru256(base_fee);
-                        // this is the base fee of the current block, but we need the base fee of
-                        // the next block
-                        let next_block_base_fee = fees.get_next_block_base_fee_per_gas(
-                            block.gas_used,
-                            block.gas_limit,
-                            block.base_fee_per_gas.unwrap_or_default(),
-                        );
-                        // update next base fee
-                        fees.set_base_fee(next_block_base_fee.into());
-                    }
-                }
+                // apply changes such as difficulty -> prevrandao
+                apply_network_and_block_specific_env_changes(&mut env, &block);
 
                 // use remote gas price
                 if self.gas_price.is_none() {
-                    if let Ok(gas_price) = provider.get_gas_price().await {
+                    if let Ok(gas_price) = provider.get_energy_price().await {
                         self.gas_price = Some(gas_price);
                         fees.set_gas_price(gas_price);
                     }
@@ -904,14 +850,14 @@ latest block number: {latest_block}"
                     let chain_id = if let Some(fork_chain_id) = fork_chain_id {
                         fork_chain_id
                     } else {
-                        provider.get_chainid().await.unwrap()
+                        provider.get_networkid().await.unwrap()
                     }
                     .as_u64();
 
                     // need to update the dev signers and env with the chain id
                     self.set_chain_id(Some(chain_id));
-                    env.cfg.network_id = rU256::from(chain_id);
-                    env.tx.chain_id = chain_id.into();
+                    env.cfg.network = Network::from(chain_id);
+                    env.tx.network_id = chain_id.into();
                     chain_id
                 };
                 let override_chain_id = self.chain_id;
@@ -944,7 +890,6 @@ latest block number: {latest_block}"
                         chain_id,
                         override_chain_id,
                         timestamp: block.timestamp.as_u64(),
-                        base_fee: block.base_fee_per_gas,
                         timeout: self.fork_request_timeout,
                         retries: self.fork_request_retries,
                         backoff: self.fork_retry_backoff,
@@ -966,7 +911,7 @@ latest block number: {latest_block}"
 
         let genesis = GenesisConfig {
             timestamp: self.get_genesis_timestamp(),
-            balance: self.genesis_balance.into(),
+            balance: self.genesis_balance.to_ruint(),
             accounts: self.genesis_accounts.iter().map(|acc| acc.address()).collect(),
             fork_genesis_account_infos: Arc::new(Default::default()),
             genesis_init: self.genesis.clone(),
@@ -1085,7 +1030,7 @@ impl AccountGenerator {
         for idx in 0..self.amount {
             let builder =
                 builder.clone().derivation_path(&format!("{derivation_path}{idx}")).unwrap();
-            let wallet = builder.build().unwrap().with_chain_id(self.chain_id);
+            let wallet = builder.build().unwrap().with_network_id(self.chain_id);
             wallets.push(wallet)
         }
         wallets

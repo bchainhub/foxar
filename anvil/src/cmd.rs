@@ -7,7 +7,7 @@ use crate::{
 use anvil_server::ServerConfig;
 use clap::Parser;
 use core::fmt;
-use corebc::utils::WEI_IN_ETHER;
+use corebc::utils::WEI_IN_CORE;
 use foundry_config::{Config, Network};
 use futures::FutureExt;
 use std::{
@@ -158,7 +158,7 @@ const DEFAULT_DUMP_INTERVAL: Duration = Duration::from_secs(60);
 
 impl NodeArgs {
     pub fn into_node_config(self) -> NodeConfig {
-        let genesis_balance = WEI_IN_ETHER.saturating_mul(self.balance.into());
+        let genesis_balance = WEI_IN_CORE.saturating_mul(self.balance.into());
         let compute_units_per_second = if self.evm_opts.no_rate_limit {
             Some(u64::MAX)
         } else {
@@ -187,7 +187,6 @@ impl NodeArgs {
             .fork_retry_backoff(self.evm_opts.fork_retry_backoff.map(Duration::from_millis))
             .fork_compute_units_per_second(compute_units_per_second)
             .with_eth_rpc_url(self.evm_opts.fork_url.map(|fork| fork.url))
-            .with_base_fee(self.evm_opts.block_base_fee_per_gas)
             .with_storage_caching(self.evm_opts.no_storage_caching)
             .with_server_config(self.server_config)
             .with_host(self.host)
@@ -267,9 +266,7 @@ impl NodeArgs {
                  _ = &mut sigterm => {
                     trace!("received sigterm signal, shutting down");
                 },
-                _ = &mut on_shutdown =>{
-
-                }
+                _ = &mut on_shutdown => {}
                 _ = &mut state_dumper =>{}
             }
 

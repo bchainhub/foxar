@@ -14,9 +14,9 @@ use corebc::{
     types::{Address, Network, U256},
 };
 use revm::{
-    inspectors::GasInspector,
+    inspectors::EnergyInspector,
     interpreter::{
-        opcode, return_ok, CallInputs, CallScheme, CreateInputs, Gas, InstructionResult,
+        opcode, return_ok, CallInputs, CallScheme, CreateInputs, Energy, InstructionResult,
         Interpreter,
     },
     primitives::{B176, B256},
@@ -33,15 +33,15 @@ pub struct Tracer {
     trace_stack: Vec<usize>,
     step_stack: Vec<(usize, usize)>, // (trace_idx, step_idx)
 
-    gas_inspector: Rc<RefCell<GasInspector>>,
+    gas_inspector: Rc<RefCell<EnergyInspector>>,
 }
 
 impl Tracer {
-    /// Enables step recording and uses [revm::GasInspector] to report gas costs for each step.
+    /// Enables step recording and uses [revm::EnergyInspector] to report gas costs for each step.
     ///
-    /// Gas Inspector should be called externally **before** [Tracer], this is why we need it as
+    /// Energy Inspector should be called externally **before** [Tracer], this is why we need it as
     /// `Rc<RefCell<_>>` here.
-    pub fn with_steps_recording(mut self, gas_inspector: Rc<RefCell<GasInspector>>) -> Self {
+    pub fn with_steps_recording(mut self, gas_inspector: Rc<RefCell<EnergyInspector>>) -> Self {
         self.record_steps = true;
         self.gas_inspector = gas_inspector;
         self
@@ -108,8 +108,8 @@ impl Tracer {
             contract: b176_to_h176(interp.contract.address),
             stack: interp.stack.clone(),
             memory: interp.memory.clone(),
-            gas: self.gas_inspector.borrow().gas_remaining(),
-            gas_refund_counter: interp.gas.refunded() as u64,
+            gas: self.gas_inspector.borrow().energy_remaining(),
+            gas_refund_counter: interp.energy.refunded() as u64,
             gas_cost: 0,
             state_diff: None,
             error: None,
@@ -148,11 +148,11 @@ impl Tracer {
                 _ => None,
             };
 
-            step.gas_cost = step.gas - self.gas_inspector.borrow().gas_remaining();
+            step.gas_cost = step.gas - self.gas_inspector.borrow().energy_remaining();
         }
 
         // Error codes only
-        if status as u8 > InstructionResult::OutOfGas as u8 {
+        if status as u8 > InstructionResult::OutOfEnergy as u8 {
             step.error = Some(format!("{status:?}"));
         }
     }
@@ -205,7 +205,7 @@ where
         data: &mut EVMData<'_, DB>,
         inputs: &mut CallInputs,
         _is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         let (from, to) = match inputs.context.scheme {
             CallScheme::DelegateCall | CallScheme::CallCode => {
                 (inputs.context.address, inputs.context.code_address)
@@ -222,18 +222,18 @@ where
             b176_to_h176(from),
         );
 
-        (InstructionResult::Continue, Gas::new(inputs.gas_limit), Bytes::new())
+        (InstructionResult::Continue, Energy::new(inputs.energy_limit), Bytes::new())
     }
 
     fn call_end(
         &mut self,
         data: &mut EVMData<'_, DB>,
         _inputs: &CallInputs,
-        gas: Gas,
+        gas: Energy,
         status: InstructionResult,
         retdata: Bytes,
         _is_static: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         self.fill_trace(
             status,
             gas_used(data.env.cfg.spec_id, gas.spend(), gas.refunded() as u64),
@@ -248,7 +248,7 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         inputs: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         // TODO: Does this increase gas cost?
         let _ = data.journaled_state.load_account(inputs.caller, data.db);
         let nonce = data.journaled_state.account(inputs.caller).info.nonce;
@@ -265,7 +265,7 @@ where
             b176_to_h176(inputs.caller),
         );
 
-        (InstructionResult::Continue, None, Gas::new(inputs.gas_limit), Bytes::new())
+        (InstructionResult::Continue, None, Energy::new(inputs.energy_limit), Bytes::new())
     }
 
     fn create_end(
@@ -274,9 +274,9 @@ where
         _inputs: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        gas: Gas,
+        gas: Energy,
         retdata: Bytes,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         let code = match address {
             Some(address) => data
                 .journaled_state

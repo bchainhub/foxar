@@ -9,7 +9,7 @@ use corebc::{
     types::{Address, H256},
 };
 use forge::{
-    revm::primitives::{B160, B256, KECCAK_EMPTY, U256},
+    revm::primitives::{B256, SHA3_EMPTY, U256},
     utils::b176_to_h176,
 };
 use foundry_evm::{
@@ -19,6 +19,7 @@ use foundry_evm::{
     },
     revm::primitives::{AccountInfo, Bytecode},
 };
+use foundry_utils::types::{ToEthersU256, ToRuint};
 use parking_lot::Mutex;
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::RwLockWriteGuard;
@@ -49,7 +50,7 @@ impl GenesisConfig {
         self.accounts.iter().copied().map(|address| {
             let info = AccountInfo {
                 balance: self.balance,
-                code_hash: KECCAK_EMPTY,
+                code_hash: SHA3_EMPTY,
                 // we set this to empty so `Database::code_by_hash` doesn't get called
                 code: Some(Default::default()),
                 nonce: 0,
@@ -105,7 +106,7 @@ pub(crate) struct AtGenesisStateDb<'a> {
 
 impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
     type Error = DatabaseError;
-    fn basic(&self, address: B160) -> DatabaseResult<Option<AccountInfo>> {
+    fn basic(&self, address: foundry_evm::executor::B176) -> DatabaseResult<Option<AccountInfo>> {
         if let Some(acc) = self.accounts.get(&address.into()).cloned() {
             return Ok(Some(acc))
         }
@@ -119,15 +120,18 @@ impl<'a> DatabaseRef for AtGenesisStateDb<'a> {
         self.db.code_by_hash(code_hash)
     }
 
-    fn storage(&self, address: B160, index: U256) -> DatabaseResult<U256> {
+    fn storage(&self, address: foundry_evm::executor::B176, index: U256) -> DatabaseResult<U256> {
         if let Some(acc) = self
             .genesis
             .as_ref()
             .and_then(|genesis| genesis.alloc.accounts.get(&b176_to_h176(address)))
         {
-            let value =
-                acc.storage.get(&H256::from_uint(&index.into())).copied().unwrap_or_default();
-            return Ok(value.into_uint().into())
+            let value = acc
+                .storage
+                .get(&H256::from_uint(&index.to_ethers_u256()))
+                .copied()
+                .unwrap_or_default();
+            return Ok(value.into_uint().to_ruint())
         }
         self.db.storage(address, index)
     }

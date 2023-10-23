@@ -23,6 +23,7 @@ pub mod abi;
 pub mod error;
 pub mod glob;
 pub mod rpc;
+pub mod types;
 
 #[derive(Debug)]
 pub struct PostLinkInput<'a, T, U> {

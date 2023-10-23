@@ -2,7 +2,6 @@
 
 use crate::{
     eth::{
-        fees::FeeHistoryService,
         miner::Miner,
         pool::{transactions::PoolTransaction, Pool},
     },
@@ -34,8 +33,6 @@ pub struct NodeService {
     block_producer: BlockProducer,
     /// the miner responsible to select transactions from the `pool´
     miner: Miner,
-    /// maintenance task for fee history related tasks
-    fee_history: FeeHistoryService,
     /// Tracks all active filters
     filters: Filters,
     /// The interval at which to check for filters that need to be evicted
@@ -43,20 +40,13 @@ pub struct NodeService {
 }
 
 impl NodeService {
-    pub fn new(
-        pool: Arc<Pool>,
-        backend: Arc<Backend>,
-        miner: Miner,
-        fee_history: FeeHistoryService,
-        filters: Filters,
-    ) -> Self {
+    pub fn new(pool: Arc<Pool>, backend: Arc<Backend>, miner: Miner, filters: Filters) -> Self {
         let start = tokio::time::Instant::now() + filters.keep_alive();
         let filter_eviction_interval = tokio::time::interval_at(start, filters.keep_alive());
         Self {
             pool,
             block_producer: BlockProducer::new(backend),
             miner,
-            fee_history,
             filter_eviction_interval,
             filters,
         }
@@ -86,9 +76,6 @@ impl Future for NodeService {
                 break
             }
         }
-
-        // poll the fee history task
-        let _ = pin.fee_history.poll_unpin(cx);
 
         if pin.filter_eviction_interval.poll_tick(cx).is_ready() {
             let filters = pin.filters.clone();

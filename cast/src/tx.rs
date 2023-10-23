@@ -71,7 +71,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
 
     /// Set gas for tx
     pub fn set_gas(&mut self, v: U256) -> &mut Self {
-        self.tx.set_gas(v);
+        self.tx.set_energy(v);
         self
     }
 
@@ -85,7 +85,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
 
     /// Set gas price
     pub fn set_gas_price(&mut self, v: U256) -> &mut Self {
-        self.tx.set_gas_price(v);
+        self.tx.set_energy_price(v);
         self
     }
 
@@ -93,22 +93,6 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
     pub fn gas_price(&mut self, v: Option<U256>) -> &mut Self {
         if let Some(value) = v {
             self.set_gas_price(value);
-        }
-        self
-    }
-
-    /// Set priority gas price
-    pub fn set_priority_gas_price(&mut self, v: U256) -> &mut Self {
-        if let TypedTransaction::Eip1559(tx) = &mut self.tx {
-            tx.max_priority_fee_per_gas = Some(v)
-        }
-        self
-    }
-
-    /// Set priority gas price, if `v` is not None
-    pub fn priority_gas_price(&mut self, v: Option<U256>) -> &mut Self {
-        if let Some(value) = v {
-            self.set_priority_gas_price(value);
         }
         self
     }
@@ -166,7 +150,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         args: Vec<String>,
     ) -> Result<(Vec<u8>, Function)> {
         if sig.trim().is_empty() {
-            return Err(FunctionSignatureError::MissingSignature.into());
+            return Err(FunctionSignatureError::MissingSignature.into())
         }
 
         let args = resolve_name_args(&args, self.provider).await;
@@ -222,7 +206,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         value: Option<(&str, Vec<String>)>,
     ) -> Result<&mut TxBuilder<'a, M>> {
         if let Some((sig, args)) = value {
-            return self.set_args(sig, args).await;
+            return self.set_args(sig, args).await
         }
         Ok(self)
     }

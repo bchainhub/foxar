@@ -4,7 +4,7 @@ use crate::{
 };
 use corebc::{
     abi::{ethereum_types::BigEndianHash, Address, RawLog},
-    types::{Bytes, DefaultFrame, GethDebugTracingOptions, StructLog, H256, U256},
+    types::{Bytes, DefaultFrame, GoCoreDebugTracingOptions, StructLog, H256, U256},
 };
 pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
 use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
@@ -97,7 +97,7 @@ impl CallTraceArena {
         storage: &mut HashMap<Address, BTreeMap<H256, H256>>,
         trace_node: &CallTraceNode,
         struct_logs: &mut Vec<StructLog>,
-        opts: &GethDebugTracingOptions,
+        opts: &GoCoreDebugTracingOptions,
     ) {
         let mut child_id = 0;
         // Iterate over the steps inside the given trace
@@ -153,7 +153,7 @@ impl CallTraceArena {
     pub fn geth_trace(
         &self,
         receipt_gas_used: U256,
-        opts: GethDebugTracingOptions,
+        opts: GoCoreDebugTracingOptions,
     ) -> DefaultFrame {
         if self.arena.is_empty() {
             return Default::default()

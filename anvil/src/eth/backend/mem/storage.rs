@@ -13,9 +13,10 @@ use anvil_core::eth::{
 };
 use corebc::{
     prelude::{BlockId, BlockNumber, DefaultFrame, Trace, H256, H256 as TxHash, U64},
-    types::{ActionType, Bytes, GethDebugTracingOptions, TransactionReceipt, U256},
+    types::{ActionType, Bytes, GoCoreDebugTracingOptions, TransactionReceipt, U256},
 };
 use forge::revm::{interpreter::InstructionResult, primitives::Env};
+use foundry_utils::types::ToEthersU256;
 use parking_lot::RwLock;
 use std::{
     collections::{HashMap, VecDeque},
@@ -221,14 +222,13 @@ pub struct BlockchainStorage {
 
 impl BlockchainStorage {
     /// Creates a new storage with a genesis block
-    pub fn new(env: &Env, base_fee: Option<U256>, timestamp: u64) -> Self {
+    pub fn new(env: &Env, timestamp: u64) -> Self {
         // create a dummy genesis block
         let partial_header = PartialHeader {
             timestamp,
-            base_fee,
-            gas_limit: env.block.gas_limit.into(),
+            gas_limit: env.block.energy_limit.to_ethers_u256(),
             beneficiary: env.block.coinbase.into(),
-            difficulty: env.block.difficulty.into(),
+            difficulty: env.block.difficulty.to_ethers_u256(),
             ..Default::default()
         };
         let block = Block::new::<MaybeImpersonatedTransaction>(partial_header, vec![], vec![]);
@@ -313,8 +313,8 @@ pub struct Blockchain {
 
 impl Blockchain {
     /// Creates a new storage with a genesis block
-    pub fn new(env: &Env, base_fee: Option<U256>, timestamp: u64) -> Self {
-        Self { storage: Arc::new(RwLock::new(BlockchainStorage::new(env, base_fee, timestamp))) }
+    pub fn new(env: &Env, timestamp: u64) -> Self {
+        Self { storage: Arc::new(RwLock::new(BlockchainStorage::new(env, timestamp))) }
     }
 
     pub fn forked(block_number: u64, block_hash: H256, total_difficulty: U256) -> Self {
@@ -396,7 +396,7 @@ impl MinedTransaction {
         traces
     }
 
-    pub fn geth_trace(&self, opts: GethDebugTracingOptions) -> DefaultFrame {
+    pub fn geth_trace(&self, opts: GoCoreDebugTracingOptions) -> DefaultFrame {
         self.info.traces.geth_trace(self.receipt.gas_used(), opts)
     }
 }

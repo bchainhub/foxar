@@ -10,6 +10,7 @@ use crate::{
 };
 use corebc::prelude::H256;
 use forge::utils::h176_to_b176;
+use foundry_utils::types::{ToEthersU256, ToRuint};
 use tracing::{trace, warn};
 
 // reexport for convenience
@@ -23,11 +24,11 @@ impl Db for MemDb {
     }
 
     fn set_storage_at(&mut self, address: Address, slot: U256, val: U256) -> DatabaseResult<()> {
-        self.inner.insert_account_storage(address.into(), slot.into(), val.into())
+        self.inner.insert_account_storage(address.into(), slot.to_ruint(), val.to_ruint())
     }
 
     fn insert_block_hash(&mut self, number: U256, hash: H256) {
-        self.inner.block_hashes.insert(number.into(), hash.into());
+        self.inner.block_hashes.insert(number.to_ruint(), hash.into());
     }
 
     fn dump_state(&self) -> DatabaseResult<Option<SerializableState>> {
@@ -47,9 +48,13 @@ impl Db for MemDb {
                     k.into(),
                     SerializableAccountRecord {
                         nonce: v.info.nonce,
-                        balance: v.info.balance.into(),
+                        balance: v.info.balance.to_ethers_u256(),
                         code: code.bytes()[..code.len()].to_vec().into(),
-                        storage: v.storage.into_iter().map(|k| (k.0.into(), k.1.into())).collect(),
+                        storage: v
+                            .storage
+                            .into_iter()
+                            .map(|k| (k.0.to_ethers_u256(), k.1.to_ethers_u256()))
+                            .collect(),
                     },
                 ))
             })
@@ -120,7 +125,7 @@ mod tests {
     };
     use bytes::Bytes;
     use corebc::types::U256;
-    use forge::revm::primitives::{Bytecode, KECCAK_EMPTY, U256 as rU256};
+    use forge::revm::primitives::{Bytecode, SHA3_EMPTY, U256 as rU256};
     use foundry_evm::executor::{backend::MemDb, DatabaseRef};
     use std::{collections::BTreeMap, str::FromStr};
 
@@ -140,7 +145,7 @@ mod tests {
             test_addr,
             AccountInfo {
                 balance: rU256::from(123456),
-                code_hash: KECCAK_EMPTY,
+                code_hash: SHA3_EMPTY,
                 code: Some(contract_code.clone()),
                 nonce: 1234,
             },
@@ -183,7 +188,7 @@ mod tests {
             test_addr,
             AccountInfo {
                 balance: rU256::from(123456),
-                code_hash: KECCAK_EMPTY,
+                code_hash: SHA3_EMPTY,
                 code: Some(contract_code.clone()),
                 nonce: 1234,
             },

@@ -6,9 +6,8 @@ use corebc::{
     prelude::BlockNumber,
     providers::{Middleware, ProviderError},
     types::{
-        transaction::eip2930::AccessListWithGasUsed, Address, Block, BlockId, Bytes, FeeHistory,
-        Filter, GethDebugTracingOptions, GethTrace, Log, Trace, Transaction, TransactionReceipt,
-        TxHash, H256, U256,
+        Address, Block, BlockId, Bytes, Filter, GoCoreDebugTracingOptions, GoCoreTrace, Log, Trace,
+        Transaction, TransactionReceipt, TxHash, H256, U256,
     },
 };
 use foundry_common::{ProviderBuilder, RetryProvider};
@@ -66,7 +65,7 @@ impl ClientFork {
             let chain_id = if let Some(chain_id) = override_chain_id {
                 chain_id.into()
             } else {
-                self.provider().get_chainid().await?
+                self.provider().get_networkid().await?
             };
             self.config.write().chain_id = chain_id.as_u64();
         }
@@ -76,14 +75,12 @@ impl ClientFork {
             provider.get_block(block_number).await?.ok_or(BlockchainError::BlockNotFound)?;
         let block_hash = block.hash.ok_or(BlockchainError::BlockNotFound)?;
         let timestamp = block.timestamp.as_u64();
-        let base_fee = block.base_fee_per_gas;
         let total_difficulty = block.total_difficulty.unwrap_or_default();
 
         self.config.write().update_block(
             block.number.ok_or(BlockchainError::BlockNotFound)?.as_u64(),
             block_hash,
             timestamp,
-            base_fee,
             total_difficulty,
         );
 
@@ -118,10 +115,6 @@ impl ClientFork {
         self.config.read().total_difficulty
     }
 
-    pub fn base_fee(&self) -> Option<U256> {
-        self.config.read().base_fee
-    }
-
     pub fn block_hash(&self) -> H256 {
         self.config.read().block_hash
     }
@@ -144,16 +137,6 @@ impl ClientFork {
 
     fn storage_write(&self) -> RwLockWriteGuard<'_, RawRwLock, ForkedStorage> {
         self.storage.write()
-    }
-
-    /// Returns the fee history  `eth_feeHistory`
-    pub async fn fee_history(
-        &self,
-        block_count: U256,
-        newest_block: BlockNumber,
-        reward_percentiles: &[f64],
-    ) -> Result<FeeHistory, ProviderError> {
-        self.provider().fee_history(block_count, newest_block, reward_percentiles).await
     }
 
     /// Sends `eth_getProof`
@@ -222,17 +205,6 @@ impl ClientFork {
         }
 
         Ok(res)
-    }
-
-    /// Sends `eth_createAccessList`
-    pub async fn create_access_list(
-        &self,
-        request: &EthTransactionRequest,
-        block: Option<BlockNumber>,
-    ) -> Result<AccessListWithGasUsed, ProviderError> {
-        let tx = corebc::utils::serialize(request);
-        let block = corebc::utils::serialize(&block.unwrap_or(BlockNumber::Latest));
-        self.provider().request("eth_createAccessList", [tx, block]).await
     }
 
     pub async fn storage_at(
@@ -350,8 +322,8 @@ impl ClientFork {
     pub async fn debug_trace_transaction(
         &self,
         hash: H256,
-        opts: GethDebugTracingOptions,
-    ) -> Result<GethTrace, ProviderError> {
+        opts: GoCoreDebugTracingOptions,
+    ) -> Result<GoCoreTrace, ProviderError> {
         if let Some(traces) = self.storage_read().geth_transaction_traces.get(&hash).cloned() {
             return Ok(traces)
         }
@@ -534,8 +506,6 @@ pub struct ClientForkConfig {
     pub override_chain_id: Option<u64>,
     /// The timestamp for the forked block
     pub timestamp: u64,
-    /// The basefee of the forked block
-    pub base_fee: Option<U256>,
     /// request timeout
     pub timeout: Duration,
     /// request retries for spurious networks
@@ -579,13 +549,11 @@ impl ClientForkConfig {
         block_number: u64,
         block_hash: H256,
         timestamp: u64,
-        base_fee: Option<U256>,
         total_difficulty: U256,
     ) {
         self.block_number = block_number;
         self.block_hash = block_hash;
         self.timestamp = timestamp;
-        self.base_fee = base_fee;
         self.total_difficulty = total_difficulty;
         trace!(target: "fork", "Updated block number={} hash={:?}", block_number, block_hash);
     }
@@ -601,7 +569,7 @@ pub struct ForkedStorage {
     pub transaction_receipts: HashMap<H256, TransactionReceipt>,
     pub transaction_traces: HashMap<H256, Vec<Trace>>,
     pub logs: HashMap<Filter, Vec<Log>>,
-    pub geth_transaction_traces: HashMap<H256, GethTrace>,
+    pub geth_transaction_traces: HashMap<H256, GoCoreTrace>,
     pub block_traces: HashMap<u64, Vec<Trace>>,
     pub eth_gas_estimations: HashMap<(Arc<EthTransactionRequest>, u64), U256>,
     pub eth_call: HashMap<(Arc<EthTransactionRequest>, u64), Bytes>,

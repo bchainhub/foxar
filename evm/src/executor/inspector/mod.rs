@@ -7,7 +7,7 @@ pub use logs::LogCollector;
 use std::{cell::RefCell, rc::Rc};
 
 mod access_list;
-pub use access_list::AccessListTracer;
+// pub use access_list::AccessListTracer;
 
 mod tracer;
 pub use tracer::Tracer;
@@ -29,7 +29,7 @@ pub use chisel_state::ChiselState;
 
 use corebc::types::U256;
 
-use revm::{inspectors::GasInspector, primitives::BlockEnv};
+use revm::{inspectors::EnergyInspector, primitives::BlockEnv};
 
 mod fuzzer;
 pub use fuzzer::Fuzzer;
@@ -87,7 +87,7 @@ impl InspectorStackConfig {
             stack.tracer = Some(Tracer::default());
         }
         if self.debugger {
-            let gas_inspector = Rc::new(RefCell::new(GasInspector::default()));
+            let gas_inspector = Rc::new(RefCell::new(EnergyInspector::default()));
             stack.gas = Some(gas_inspector.clone());
             stack.debugger = Some(Debugger::new(gas_inspector));
         }

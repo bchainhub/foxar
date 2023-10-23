@@ -21,7 +21,7 @@ use futures::{
 };
 use revm::{
     db::DatabaseRef,
-    primitives::{AccountInfo, Bytecode, B176, B256, KECCAK_EMPTY, U256 as rU256},
+    primitives::{AccountInfo, Bytecode, B176, B256, SHA3_EMPTY, U256 as rU256},
 };
 use std::{
     collections::{hash_map::Entry, HashMap, VecDeque},
@@ -275,7 +275,7 @@ where
                             warn!(target: "backendhandler", ?number, "block not found");
                             // if no block was returned then the block does not exist, in which case
                             // we return empty hash
-                            Ok(b256_to_h256(KECCAK_EMPTY))
+                            Ok(b256_to_h256(SHA3_EMPTY))
                         }
                         Err(err) => {
                             error!(target: "backendhandler", ?err, ?number, "failed to get block");
@@ -345,7 +345,7 @@ where
                             let (code, code_hash) = if !code.0.is_empty() {
                                 (Some(code.0.clone()), sha3(&code).into())
                             } else {
-                                (Some(bytes::Bytes::default()), KECCAK_EMPTY)
+                                (Some(bytes::Bytes::default()), SHA3_EMPTY)
                             };
 
                             // update the cache
@@ -674,7 +674,7 @@ impl DatabaseRef for SharedBackend {
 
     fn block_hash(&self, number: rU256) -> Result<B256, Self::Error> {
         if number > rU256::from(u64::MAX) {
-            return Ok(KECCAK_EMPTY)
+            return Ok(SHA3_EMPTY)
         }
         let number: U256 = ru256_to_u256(number);
         let number = number.as_u64();
