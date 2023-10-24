@@ -43,8 +43,8 @@ pub struct ChiselResult {
     pub logs: Vec<Log>,
     /// Call traces
     pub traces: Vec<(TraceKind, CallTraceArena)>,
-    /// Amount of gas used in the transaction
-    pub gas_used: u64,
+    /// Amount of energy used in the transaction
+    pub energy_used: u64,
     /// Map of addresses to their labels
     pub labeled_addresses: BTreeMap<Address, String>,
     /// Return data
@@ -120,8 +120,8 @@ impl ChiselRunner {
     ///
     /// This will commit the changes if `commit` is true.
     ///
-    /// This will return _estimated_ gas instead of the precise gas the call would consume, so it
-    /// can be used as `gas_limit`.
+    /// This will return _estimated_ energy instead of the precise energy the call would consume, so it
+    /// can be used as `energy_limit`.
     ///
     /// Taken from [Forge's Script Runner](https://github.com/foundry-rs/foundry/blob/master/cli/src/cmd/forge/script/runner.rs)
     fn call(
@@ -142,50 +142,50 @@ impl ChiselRunner {
             };
 
         let mut res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
-        let mut gas_used = res.energy_used;
+        let mut energy_used = res.energy_used;
         if matches!(res.exit_reason, return_ok!()) {
-            // store the current gas limit and reset it later
-            let init_gas_limit = self.executor.env_mut().tx.gas_limit;
+            // store the current energy limit and reset it later
+            let init_energy_limit = self.executor.env_mut().tx.energy_limit;
 
-            // the executor will return the _exact_ gas value this transaction consumed, setting
-            // this value as gas limit will result in `OutOfGas` so to come up with a
-            // better estimate we search over a possible range we pick a higher gas
+            // the executor will return the _exact_ energy value this transaction consumed, setting
+            // this value as energy limit will result in `OutOfGas` so to come up with a
+            // better estimate we search over a possible range we pick a higher energy
             // limit 3x of a succeeded call should be safe
-            let mut highest_gas_limit = gas_used * 3;
-            let mut lowest_gas_limit = gas_used;
-            let mut last_highest_gas_limit = highest_gas_limit;
-            while (highest_gas_limit - lowest_gas_limit) > 1 {
-                let mid_gas_limit = (highest_gas_limit + lowest_gas_limit) / 2;
-                self.executor.env_mut().tx.gas_limit = mid_gas_limit;
+            let mut highest_energy_limit = energy_used * 3;
+            let mut lowest_energy_limit = energy_used;
+            let mut last_highest_energy_limit = highest_energy_limit;
+            while (highest_energy_limit - lowest_energy_limit) > 1 {
+                let mid_energy_limit = (highest_energy_limit + lowest_energy_limit) / 2;
+                self.executor.env_mut().tx.energy_limit = mid_energy_limit;
                 let res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
                 match res.exit_reason {
                     InstructionResult::Revert |
-                    InstructionResult::OutOfGas |
+                    InstructionResult::OutOfEnergy |
                     InstructionResult::OutOfFund => {
-                        lowest_gas_limit = mid_gas_limit;
+                        lowest_energy_limit = mid_energy_limit;
                     }
                     _ => {
-                        highest_gas_limit = mid_gas_limit;
+                        highest_energy_limit = mid_energy_limit;
                         // if last two successful estimations only vary by 10%, we consider this to
                         // sufficiently accurate
                         const ACCURACY: u64 = 10;
-                        if (last_highest_gas_limit - highest_gas_limit) * ACCURACY /
-                            last_highest_gas_limit <
+                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY /
+                            last_highest_energy_limit <
                             1
                         {
-                            // update the gas
-                            gas_used = highest_gas_limit;
+                            // update the energy
+                            energy_used = highest_energy_limit;
                             break
                         }
-                        last_highest_gas_limit = highest_gas_limit;
+                        last_highest_energy_limit = highest_energy_limit;
                     }
                 }
             }
-            // reset gas limit in the
-            self.executor.env_mut().tx.gas_limit = init_gas_limit;
+            // reset energy limit in the
+            self.executor.env_mut().tx.energy_limit = init_energy_limit;
         }
 
-        // if we changed `fs_commit` during gas limit search, re-execute the call with original
+        // if we changed `fs_commit` during energy limit search, re-execute the call with original
         // value
         if fs_commit_changed {
             if let Some(ref mut cheatcodes) = self.executor.inspector_config_mut().cheatcodes {
@@ -205,13 +205,13 @@ impl ChiselRunner {
         Ok(ChiselResult {
             returned: result,
             success: !reverted,
-            gas_used,
+            energy_used: energy_used,
             logs,
             traces: traces
                 .map(|traces| {
-                    // Manually adjust gas for the trace to add back the stipend/real used gas
+                    // Manually adjust energy for the trace to add back the stipend/real used energy
                     // TODO: For chisel, we may not want to perform this adjustment.
-                    // traces.arena[0].trace.gas_cost = gas_used;
+                    // traces.arena[0].trace.energy_cost = energy_used;
                     vec![(TraceKind::Execution, traces)]
                 })
                 .unwrap_or_default(),

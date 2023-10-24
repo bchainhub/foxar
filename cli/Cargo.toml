@@ -23,7 +23,7 @@ cast = { path = "../cast" }
 ui = { path = "../ui" }
 
 # eth
-corebc = { git = "https://github.com/core-coin/corebc-rs.git", workspace = true, features = ["rustls"], branch = "main" }
+corebc = {workspace = true, features = ["rustls"]}
 solang-parser.workspace = true
 
 # cli

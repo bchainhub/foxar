@@ -201,7 +201,6 @@ async fn main() -> eyre::Result<()> {
         }
 
         // Blockchain & RPC queries
-        Subcommands::AccessList(cmd) => cmd.run().await?,
         Subcommands::Age { block, rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
@@ -275,7 +274,7 @@ async fn main() -> eyre::Result<()> {
             let address: Address = stdin::unwrap_line(address)?.parse()?;
             let network = provider.get_networkid().await?;
             let computed = Cast::new(&provider)
-                .compute_address(address, nonce, &Network::from(network))
+                .compute_address(address, nonce, &Network::try_from(network.as_u64()).unwrap())
                 .await?;
             println!("Computed Address: {}", computed.to_string());
         }

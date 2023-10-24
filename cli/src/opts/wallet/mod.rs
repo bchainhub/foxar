@@ -132,7 +132,7 @@ pub struct Wallet {
     // #[clap(long, help_heading = "Wallet options - AWS KMS")]
     // pub aws: bool,
     #[clap(short, long)]
-    network: Option<Network>,
+    pub network: Option<Network>,
 }
 
 impl Wallet {

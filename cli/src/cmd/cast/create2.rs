@@ -56,7 +56,7 @@ pub struct Create2Args {
 
     /// Network to use for address prefix validation.
     #[clap(short, long)]
-    network: Option<Network>,
+    pub network: Option<Network>,
 }
 
 #[allow(dead_code)]

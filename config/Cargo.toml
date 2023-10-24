@@ -9,9 +9,9 @@ readme = "README.md"
 
 [dependencies]
 # eth
-corebc-core = { workspace = true, branch = "main"  }
-corebc-ylem = { workspace = true, features = ["async", "yvm-ylem"], branch = "main"  }
-corebc-blockindex = { workspace = true, branch = "main"  }
+corebc-core = { workspace = true}
+corebc-ylem = { workspace = true, features = ["async", "yvm-ylem"]}
+corebc-blockindex = { workspace = true}
 
 # formats
 Inflector = "0.11"

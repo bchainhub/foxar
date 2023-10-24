@@ -38,8 +38,8 @@ foundry-common = { path = "../common" }
 forge-fmt = { path = "../fmt" }
 
 # corebc
-corebc = { workspace = true, branch = "main"  }
-corebc-ylem = { workspace = true, features = ["project-util", "full"], branch = "main"  }
+corebc = { workspace = true }
+corebc-ylem = { workspace = true, features = ["project-util", "full"]}
 
 # async
 tokio = { version = "1", features = ["full"] }

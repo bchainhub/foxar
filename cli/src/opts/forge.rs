@@ -21,7 +21,7 @@ use crate::cmd::forge::{
     verify::{VerifyArgs, VerifyCheckArgs},
 };
 use clap::{Parser, Subcommand, ValueHint};
-use corebc::ylem::{artifacts::output_selection::ContractOutputSelection, YlemVersion};
+use corebc::ylem::{artifacts::output_selection::ContractOutputSelection, CvmVersion};
 use std::path::PathBuf;
 
 use serde::Serialize;
@@ -165,17 +165,17 @@ pub enum Subcommands {
     },
 }
 
-// A set of solc compiler settings that can be set via command line arguments, which are intended
+// A set of ylem compiler settings that can be set via command line arguments, which are intended
 // to be merged into an existing `foundry_config::Config`.
 //
 // See also [`BuildArgs`]
 #[derive(Default, Debug, Clone, Parser, Serialize)]
 #[clap(next_help_heading = "Compiler options")]
 pub struct CompilerArgs {
-    /// The target YVM version.
+    /// The target CVM version.
     #[clap(long, value_name = "VERSION")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub yvm_version: Option<YlemVersion>,
+    pub cvm_version: Option<CvmVersion>,
 
     /// Activate the Solidity optimizer.
     #[clap(long)]
@@ -211,8 +211,8 @@ mod tests {
     #[test]
     fn can_parse_evm_version() {
         let args: CompilerArgs =
-            CompilerArgs::parse_from(["foundry-cli", "--evm-version", "london"]);
-        assert_eq!(args.yvm_version, Some(YlemVersion::London));
+            CompilerArgs::parse_from(["foundry-cli", "--evm-version", "nucleus"]);
+        assert_eq!(args.cvm_version, Some(CvmVersion::Nucleus));
     }
 
     #[test]

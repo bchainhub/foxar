@@ -9,13 +9,13 @@ repository = "https://github.com/foundry-rs/foundry"
 exclude = ["abi", "build.rs"]
 
 [build-dependencies]
-corebc-contract-abigen = { workspace = true, branch = "main"  }
+corebc-contract-abigen = { workspace = true}
 eyre = "0.6"
 syn = "2.0"
 
 [dependencies]
 foundry-macros = { path = "../macros" }
 
-corebc-core = { workspace = true, branch = "main"  }
-corebc-contract = { workspace = true, features = ["abigen"], branch = "main"  }
-corebc-providers = { workspace = true, branch = "main"  }
+corebc-core = { workspace = true}
+corebc-contract = { workspace = true, features = ["abigen"]}
+corebc-providers = { workspace = true}

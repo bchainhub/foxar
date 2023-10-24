@@ -190,7 +190,7 @@ pub struct MultiWallet {
     // #[clap(long, help_heading = "Wallet options - remote")]
     // pub aws: bool,
     #[clap(short, long)]
-    network: Option<Network>,
+    pub network: Option<Network>,
 }
 
 impl WalletTrait for MultiWallet {

@@ -13,11 +13,11 @@ foundry-evm = { path = "./../evm" }
 foundry-config = { path = "./../config" }
 foundry-common = { path = "./../common" }
 
-corebc-blockindex = { workspace = true, branch = "main"  }
-corebc-contract = { workspace = true, features = ["abigen"], branch = "main"  }
-corebc-core = { workspace = true, branch = "main"  }
-corebc-providers = { workspace = true, branch = "main"  }
-corebc-signers = { workspace = true, branch = "main"  }
+corebc-blockindex = { workspace = true}
+corebc-contract = { workspace = true, features = ["abigen"]}
+corebc-core = { workspace = true}
+corebc-providers = { workspace = true}
+corebc-signers = { workspace = true}
 futures = "0.3"
 eyre = "0.6"
 rustc-hex = "2"

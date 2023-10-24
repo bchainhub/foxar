@@ -9,12 +9,12 @@ repository = "https://github.com/foundry-rs/foundry"
 [dependencies]
 forge-fmt = { path = "../fmt" }
 
-corebc-core = { workspace = true, branch = "main"  }
-corebc-contract = { workspace = true, features = ["abigen"], branch = "main"  }
-corebc-blockindex = { workspace = true, branch = "main"  }
-corebc-addressbook = { workspace = true, branch = "main"  }
-corebc-providers = { workspace = true, branch = "main"  }
-corebc-ylem = { workspace = true, branch = "main"  }
+corebc-core = { workspace = true}
+corebc-contract = { workspace = true, features = ["abigen"]}
+corebc-blockindex = { workspace = true}
+corebc-addressbook = { workspace = true}
+corebc-providers = { workspace = true}
+corebc-ylem = { workspace = true}
 
 revm = { workspace = true }
 
@@ -34,5 +34,5 @@ tracing = "0.1"
 
 [dev-dependencies]
 foundry-common = { path = "./../common" }
-corebc = { workspace = true, features = ["ylem-full"], branch = "main"  }
+corebc = { workspace = true, features = ["ylem-full"]}
 pretty_assertions = "1.3.0"
