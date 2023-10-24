@@ -16,7 +16,7 @@ corebc-addressbook = { workspace = true}
 corebc-providers = { workspace = true}
 corebc-ylem = { workspace = true}
 
-revm = { workspace = true }
+revm = { workspace = true, features = ["std"] }
 
 eyre = { version = "0.6", default-features = false }
 futures = "0.3"
