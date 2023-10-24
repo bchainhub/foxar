@@ -103,7 +103,7 @@ async fn main() -> eyre::Result<()> {
         }
         Subcommands::ToCheckSumAddress { address } => {
             let value = stdin::unwrap_line(address)?;
-            println!("{}", value.to_string());
+            println!("{}", value);
         }
         Subcommands::ToUint256 { value } => {
             let value = stdin::unwrap_line(value)?;
@@ -276,7 +276,7 @@ async fn main() -> eyre::Result<()> {
             let computed = Cast::new(&provider)
                 .compute_address(address, nonce, &Network::try_from(network.as_u64()).unwrap())
                 .await?;
-            println!("Computed Address: {}", computed.to_string());
+            println!("Computed Address: {}", computed);
         }
         Subcommands::Disassemble { bytecode } => {
             println!("{}", SimpleCast::disassemble(&bytecode)?);
@@ -434,7 +434,7 @@ async fn main() -> eyre::Result<()> {
                     "forward lookup verification failed. got {name}, expected {who}"
                 );
             }
-            println!("{}", address.to_string());
+            println!("{}", address);
         }
 
         // Misc

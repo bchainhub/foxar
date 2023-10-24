@@ -394,11 +394,9 @@ impl MultiWallet {
     //     chain_id: u64,
     //     hd_path: Option<&str>,
     //     mnemonic_index: Option<usize>,
-    // ) -> Result<Option<Trezor>> {
-    //     let derivation = match &hd_path {
-    //         Some(hd_path) => TrezorHDPath::Other(hd_path.to_string()),
-    //         None => TrezorHDPath::TrezorLive(mnemonic_index.unwrap_or(0)),
-    //     };
+    // ) -> Result<Option<Trezor>> { let derivation = match &hd_path { Some(hd_path) =>
+    //   TrezorHDPath::Other(hd_path.to_string()), None =>
+    //   TrezorHDPath::TrezorLive(mnemonic_index.unwrap_or(0)), };
 
     //     Ok(Some(Trezor::new(derivation, chain_id, None).await?))
     // }
@@ -408,11 +406,9 @@ impl MultiWallet {
     //     chain_id: u64,
     //     hd_path: Option<&str>,
     //     mnemonic_index: Option<usize>,
-    // ) -> Result<Option<Ledger>> {
-    //     let derivation = match hd_path {
-    //         Some(hd_path) => LedgerHDPath::Other(hd_path.to_string()),
-    //         None => LedgerHDPath::LedgerLive(mnemonic_index.unwrap_or(0)),
-    //     };
+    // ) -> Result<Option<Ledger>> { let derivation = match hd_path { Some(hd_path) =>
+    //   LedgerHDPath::Other(hd_path.to_string()), None =>
+    //   LedgerHDPath::LedgerLive(mnemonic_index.unwrap_or(0)), };
 
     //     trace!(?chain_id, "Creating new ledger signer");
     //     Ok(Some(Ledger::new(derivation, chain_id).await.wrap_err("Ledger device not

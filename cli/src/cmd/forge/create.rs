@@ -252,8 +252,8 @@ impl CreateArgs {
             });
             println!("{output}");
         } else {
-            println!("Deployer: {}", deployer_address.to_string());
-            println!("Deployed to: {}", address.to_string());
+            println!("Deployer: {}", deployer_address);
+            println!("Deployed to: {}", address);
             println!("Transaction hash: {:?}", receipt.transaction_hash);
         };
 
