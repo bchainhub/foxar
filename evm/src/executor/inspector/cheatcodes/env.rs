@@ -17,7 +17,7 @@ use corebc::{
 };
 use foundry_config::Config;
 use revm::{
-    primitives::{Bytecode, Network, SpecId, B256, SHA3_EMPTY},
+    primitives::{Bytecode, Network, SHA3_EMPTY},
     Database, EVMData,
 };
 use std::collections::BTreeMap;

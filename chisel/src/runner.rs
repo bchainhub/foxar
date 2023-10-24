@@ -120,8 +120,8 @@ impl ChiselRunner {
     ///
     /// This will commit the changes if `commit` is true.
     ///
-    /// This will return _estimated_ energy instead of the precise energy the call would consume, so it
-    /// can be used as `energy_limit`.
+    /// This will return _estimated_ energy instead of the precise energy the call would consume, so
+    /// it can be used as `energy_limit`.
     ///
     /// Taken from [Forge's Script Runner](https://github.com/foundry-rs/foundry/blob/master/cli/src/cmd/forge/script/runner.rs)
     fn call(
@@ -205,7 +205,7 @@ impl ChiselRunner {
         Ok(ChiselResult {
             returned: result,
             success: !reverted,
-            energy_used: energy_used,
+            energy_used,
             logs,
             traces: traces
                 .map(|traces| {

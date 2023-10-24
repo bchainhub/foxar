@@ -5,7 +5,6 @@ use crate::cmd::forge::{
         transaction::{wrapper, AdditionalContract, TransactionWithMetadata},
         verify::VerifyBundle,
     },
-    verify::provider::VerificationProviderType,
 };
 use corebc::{
     abi::Address,
@@ -264,12 +263,12 @@ impl ScriptSequence {
     /// created contract on etherscan.
     pub async fn verify_contracts(
         &mut self,
-        config: &Config,
+        _config: &Config,
         mut verify: VerifyBundle,
     ) -> eyre::Result<()> {
         trace!(target: "script", "verifying {} contracts [{}]", verify.known_contracts.len(), self.network);
 
-        verify.set_network(config, self.network.into());
+        verify.set_network(self.network.into());
 
         trace!(target: "script", "prepare future verifications");
 

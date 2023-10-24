@@ -1,7 +1,7 @@
 //! Commonly used helpers to construct `Provider`s
 
 use crate::{ALCHEMY_FREE_TIER_CUPS, REQUEST_TIMEOUT};
-use corebc_core::types::{Network, U256};
+use corebc_core::types::Network;
 use corebc_providers::{
     is_local_endpoint, Http, HttpRateLimitRetryPolicy, Middleware, Provider, RetryClient,
     RetryClientBuilder, DEFAULT_LOCAL_POLL_INTERVAL,

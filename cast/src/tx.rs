@@ -18,7 +18,6 @@ pub struct TxBuilder<'a, M: Middleware> {
     chain: Network,
     tx: TypedTransaction,
     func: Option<Function>,
-    etherscan_api_key: Option<String>,
     provider: &'a M,
 }
 
@@ -66,7 +65,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         } else {
             None
         };
-        Ok(Self { to: to_addr, chain: network, tx, func: None, etherscan_api_key: None, provider })
+        Ok(Self { to: to_addr, chain: network, tx, func: None, provider })
     }
 
     /// Set energy for tx

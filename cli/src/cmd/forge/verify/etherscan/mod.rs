@@ -4,9 +4,8 @@ mod standard_json;
 use super::{VerifyArgs, VerifyCheckArgs};
 use crate::cmd::{
     forge::verify::provider::VerificationProvider, get_cached_entry_by_name,
-    read_constructor_args_file, retry::RETRY_CHECK_ON_VERIFY, LoadConfig,
+    read_constructor_args_file, LoadConfig,
 };
-use cast::SimpleCast;
 use corebc::{
     abi::Function,
     blockindex::{
@@ -79,7 +78,7 @@ impl VerificationProvider for EtherscanVerificationProvider {
         trace!(target : "forge::verify", ?verify_args,  "submitting verification request");
 
         let retry: Retry = args.retry.into();
-        let resp = retry
+        let _ = retry
             .run_async(|| {
                 async {
                     println!(

@@ -104,7 +104,7 @@ impl ScriptRunner {
                         labels,
                         logs: setup_logs,
                         debug,
-                        energy_used: energy_used,
+                        energy_used,
                         transactions,
                         script_wallets,
                         ..
@@ -130,7 +130,7 @@ impl ScriptRunner {
                             labels,
                             logs: setup_logs,
                             debug,
-                            energy_used: energy_used,
+                            energy_used,
                             transactions,
                             script_wallets,
                             ..
@@ -215,13 +215,11 @@ impl ScriptRunner {
                 value.unwrap_or(U256::zero()),
                 None,
             ) {
-                Ok(DeployResult {
-                    address, energy_used: energy_used, logs, traces, debug, ..
-                }) => (address, energy_used, logs, traces, debug),
+                Ok(DeployResult { address, energy_used, logs, traces, debug, .. }) => {
+                    (address, energy_used, logs, traces, debug)
+                }
                 Err(EvmError::Execution(err)) => {
-                    let ExecutionErr {
-                        reason, traces, energy_used: energy_used, logs, debug, ..
-                    } = *err;
+                    let ExecutionErr { reason, traces, energy_used, logs, debug, .. } = *err;
                     println!("{}", Paint::red(format!("\nFailed with `{reason}`:\n")));
 
                     (Address::zero(), energy_used, logs, traces, debug)

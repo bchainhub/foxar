@@ -2,15 +2,11 @@
 
 use crate::cmd::Cmd;
 use cache::Cache;
-use clap::{
-    builder::{PossibleValuesParser, TypedValueParser},
-    Arg, Command, Parser, Subcommand,
-};
+use clap::{Parser, Subcommand};
 use corebc::prelude::Network;
 use eyre::Result;
 use foundry_config::{cache, Config, Network as FoundryConfigNetwork};
-use std::{ffi::OsStr, str::FromStr};
-use strum::VariantNames;
+use std::str::FromStr;
 
 /// CLI arguments for `forge cache`.
 #[derive(Debug, Parser)]

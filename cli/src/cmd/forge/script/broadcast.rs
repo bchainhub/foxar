@@ -66,9 +66,9 @@ impl ScriptArgs {
             let sequential_broadcast = send_kind.signers_count() != 1 || self.slow;
 
             // Make a one-time energy price estimation
-            let (energy_price) = {
+            let energy_price = {
                 match deployment_sequence.transactions.front().unwrap().typed_tx() {
-                    TypedTransaction::Legacy(_) => (provider.get_energy_price().await.ok()),
+                    TypedTransaction::Legacy(_) => provider.get_energy_price().await.ok(),
                 }
             };
 
@@ -524,7 +524,7 @@ impl ScriptArgs {
         &self,
         provider: Arc<RetryProvider>,
         signer: &WalletSigner,
-        mut legacy_or_1559: TypedTransaction,
+        legacy_or_1559: TypedTransaction,
     ) -> Result<TxHash> {
         tracing::debug!("sending transaction: {:?}", legacy_or_1559);
 

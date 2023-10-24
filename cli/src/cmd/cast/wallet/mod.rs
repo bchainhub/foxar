@@ -6,7 +6,6 @@ use crate::{
     cmd::{cast::wallet::vanity::VanityArgs, Cmd},
     opts::Wallet,
 };
-use cast::SimpleCast;
 use clap::Parser;
 use corebc::{
     core::rand::thread_rng,

@@ -1,13 +1,12 @@
 //! Vanity address generation
 
 use crate::cmd::Cmd;
-use cast::SimpleCast;
 use clap::{builder::TypedValueParser, Parser};
 use corebc::{
     core::{k256::ecdsa::SigningKey, rand::thread_rng},
     prelude::{LocalWallet, Signer},
     types::{Network, H160, U256},
-    utils::{get_contract_address, get_contract_h160_address, secret_key_to_h160_address, to_ican},
+    utils::{get_contract_address, get_contract_h160_address, secret_key_to_h160_address},
 };
 use rayon::iter::{self, ParallelIterator};
 use regex::Regex;

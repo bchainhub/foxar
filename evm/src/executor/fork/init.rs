@@ -1,4 +1,4 @@
-use crate::utils::{h176_to_b176, h256_to_b256, u256_to_ru256};
+use crate::utils::{h176_to_b176, u256_to_ru256};
 use corebc::{
     providers::Middleware,
     types::{Address, Block, TxHash, U256},
@@ -56,7 +56,7 @@ where
         eyre::bail!("Failed to get block for block number: {}", block_number)
     };
 
-    let mut env = Env {
+    let env = Env {
         cfg: CfgEnv {
             network: Network::from(override_network_id.unwrap_or(rpc_network_id.as_u64())),
             memory_limit,

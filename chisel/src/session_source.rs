@@ -6,7 +6,7 @@
 
 use corebc_ylem::{
     artifacts::{Source, Sources},
-    CompilerInput, CompilerOutput, Ylem, YlemVersion, CvmVersion,
+    CompilerInput, CompilerOutput, Ylem,
 };
 use eyre::Result;
 use forge::executor::{opts::EvmOpts, Backend};

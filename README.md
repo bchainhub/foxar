@@ -4,15 +4,15 @@
 
 - [x] abi -> Compiles
 - [x] anvil -> Compiles
-- [x] binder -> Compiles with warnings
-- [x] cast  -> Compiles with warnings
-- [x] chisel -> Doesn't compile but that is because of other crates
-- [ ] cli - in progress
+- [x] binder -> Compiles
+- [x] cast  -> Compiles
+- [x] chisel -> Compiles
+- [x] cli - Compiles
 - [x] common -> Compiles
 - [x] config - Compiles
 - [x] evm -> Compiles
 - [x] fmt -> Compiles
-- [x] forge -> Doesn't compile but that is because of other crates
+- [x] forge -> Compiles
 - [ ] foundryup
 - [x] macros -> Compiles
 - [x] ui -> Compiles

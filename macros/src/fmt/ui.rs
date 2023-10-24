@@ -3,9 +3,6 @@
 use corebc_core::{types::*, utils::hex};
 use serde::Deserialize;
 
-/// length of the name column for pretty formatting `{:>20}{value}`
-const NAME_COLUMN_LEN: usize = 20usize;
-
 /// Helper trait to format corebc types.
 ///
 /// # Examples

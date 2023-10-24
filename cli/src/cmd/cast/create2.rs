@@ -1,7 +1,6 @@
 //! cast create2 subcommand
 
 use crate::cmd::Cmd;
-use cast::SimpleCast;
 use clap::Parser;
 use corebc::{
     core::rand::thread_rng,
@@ -11,7 +10,7 @@ use corebc::{
 use eyre::{Result, WrapErr};
 use rayon::prelude::*;
 use regex::RegexSetBuilder;
-use std::{str::FromStr, time::Instant};
+use std::time::Instant;
 
 /// CLI arguments for `cast create2`.
 #[derive(Debug, Clone, Parser)]

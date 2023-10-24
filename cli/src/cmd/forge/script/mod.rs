@@ -14,11 +14,11 @@ use corebc::{
         artifacts::{ContractBytecodeSome, Libraries},
         ArtifactId, Bytes, Project,
     },
-    providers::{Http, Middleware},
+    providers::Middleware,
     signers::LocalWallet,
     types::{
-        transaction::eip2718::TypedTransaction, Address, Log, NameOrAddress, Network,
-        TransactionRequest, U256,
+        transaction::eip2718::TypedTransaction, Address, Log, NameOrAddress, TransactionRequest,
+        U256,
     },
     ylem::contracts::ArtifactContracts,
 };
@@ -41,7 +41,7 @@ use foundry_common::{
     shell, ContractsByArtifact, RpcUrl, CONTRACT_MAX_SIZE, SELECTOR_LEN,
 };
 use foundry_config::{figment, Config};
-use futures::future;
+
 use serde::{Deserialize, Serialize};
 use std::{
     collections::{BTreeMap, HashMap, HashSet, VecDeque},
@@ -76,9 +76,6 @@ mod verify;
 
 use crate::cmd::retry::RetryArgs;
 pub use transaction::TransactionWithMetadata;
-
-/// List of Networks that support Shanghai.
-static SHANGHAI_ENABLED_NETWORKS: &[Network] = &[];
 
 // Loads project's figment and merges the build cli arguments into it
 foundry_config::merge_impl_figment_convert!(ScriptArgs, opts, evm_opts);
@@ -398,7 +395,6 @@ impl ScriptArgs {
                                 }
                             }
                         }
-                        _ => unreachable!(),
                     }
                 }
             }
@@ -617,7 +613,7 @@ impl Provider for ScriptArgs {
     }
 
     fn data(&self) -> Result<Map<Profile, Dict>, figment::Error> {
-        let mut dict = Dict::default();
+        let dict = Dict::default();
         Ok(Map::from([(Config::selected_profile(), dict)]))
     }
 }

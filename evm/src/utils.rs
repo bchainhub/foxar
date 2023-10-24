@@ -1,12 +1,12 @@
 use corebc::{
     abi::{Abi, FixedBytes, Function},
-    types::{Block, H256, U256},
+    types::{H256, U256},
     ylem::CvmVersion,
 };
 use eyre::ContextCompat;
 use revm::{
     interpreter::{opcode, opcode::spec_opcode_energy},
-    primitives::{Network as REVMNetwork, SpecId},
+    primitives::SpecId,
 };
 use std::collections::BTreeMap;
 

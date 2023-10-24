@@ -8,12 +8,10 @@ use crate::{
     opts::{EthereumOpts, EtherscanOpts, TransactionOpts},
     utils,
 };
-use cast::SimpleCast;
 use clap::{Parser, ValueHint};
 use corebc::{
     abi::{Abi, Constructor, Token},
     prelude::{artifacts::BytecodeObject, ContractFactory, Middleware, MiddlewareBuilder},
-    types::transaction::eip2718::TypedTransaction,
     ylem::{info::ContractInfo, utils::canonicalized},
 };
 use eyre::Context;

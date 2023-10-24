@@ -84,7 +84,7 @@ impl figment::Provider for EtherscanOpts {
 }
 
 impl EtherscanOpts {
-    pub fn key<'a>(&'a self, config: Option<&'a Config>) -> Option<Cow<'a, str>> {
+    pub fn key(&self) -> Option<Cow<str>> {
         // match (self.key.as_deref(), config) {
         //     (Some(key), _) => Some(Cow::Borrowed(key)),
         //     (None, Some(config)) => config.get_etherscan_api_key(self.network).map(Cow::Owned),

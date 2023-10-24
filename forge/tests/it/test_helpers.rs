@@ -3,8 +3,8 @@
 use super::*;
 use corebc::{
     prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, YlemConfig},
-    ylem::{artifacts::Libraries, Project, ProjectPathsConfig},
     types::{Address, U256},
+    ylem::{artifacts::Libraries, Project, ProjectPathsConfig},
 };
 use foundry_config::Config;
 use foundry_evm::{

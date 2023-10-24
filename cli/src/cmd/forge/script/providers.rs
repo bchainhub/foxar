@@ -1,7 +1,7 @@
 use corebc::prelude::{Http, Middleware, Provider, RetryClient, U256};
 use eyre::WrapErr;
 use foundry_common::{get_http_provider, RpcUrl};
-use foundry_config::Network;
+
 use std::{
     collections::{hash_map::Entry, HashMap},
     ops::Deref,

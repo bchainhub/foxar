@@ -1,12 +1,12 @@
 use super::{WalletSigner, WalletTrait};
-use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
+
 use clap::Parser;
 use corebc::{
     prelude::{Middleware, Signer},
     signers::LocalWallet,
     types::{Address, Network},
 };
-use eyre::{Context, ContextCompat, Result};
+use eyre::{ContextCompat, Result};
 use foundry_common::RetryProvider;
 use foundry_config::Config;
 use itertools::izip;
@@ -16,7 +16,6 @@ use std::{
     iter::repeat,
     sync::Arc,
 };
-use tracing::trace;
 
 macro_rules! get_wallets {
     ($id:ident, [ $($wallets:expr),+ ], $call:expr) => {
@@ -31,35 +30,35 @@ macro_rules! get_wallets {
 /// A macro that initializes multiple wallets
 ///
 /// Should be used with a [`MultiWallet`] instance
-macro_rules! create_hw_wallets {
-    ($self:ident, $network_id:ident ,$get_wallet:ident, $wallets:ident) => {
-        let mut $wallets = vec![];
+// macro_rules! create_hw_wallets {
+//     ($self:ident, $network_id:ident ,$get_wallet:ident, $wallets:ident) => {
+//         let mut $wallets = vec![];
 
-        if let Some(hd_paths) = &$self.hd_paths {
-            for path in hd_paths {
-                if let Some(hw) = $self.$get_wallet($network_id, Some(path), None).await? {
-                    $wallets.push(hw);
-                }
-            }
-        }
+//         if let Some(hd_paths) = &$self.hd_paths {
+//             for path in hd_paths {
+//                 if let Some(hw) = $self.$get_wallet($network_id, Some(path), None).await? {
+//                     $wallets.push(hw);
+//                 }
+//             }
+//         }
 
-        if let Some(mnemonic_indexes) = &$self.mnemonic_indexes {
-            for index in mnemonic_indexes {
-                if let Some(hw) =
-                    $self.$get_wallet($network_id, None, Some(*index as usize)).await?
-                {
-                    $wallets.push(hw);
-                }
-            }
-        }
+//         if let Some(mnemonic_indexes) = &$self.mnemonic_indexes {
+//             for index in mnemonic_indexes {
+//                 if let Some(hw) =
+//                     $self.$get_wallet($network_id, None, Some(*index as usize)).await?
+//                 {
+//                     $wallets.push(hw);
+//                 }
+//             }
+//         }
 
-        if $wallets.is_empty() {
-            if let Some(hw) = $self.$get_wallet($network_id, None, Some(0)).await? {
-                $wallets.push(hw);
-            }
-        }
-    };
-}
+//         if $wallets.is_empty() {
+//             if let Some(hw) = $self.$get_wallet($network_id, None, Some(0)).await? {
+//                 $wallets.push(hw);
+//             }
+//         }
+//     };
+// }
 
 /// The wallet options can either be:
 /// 1. Ledger

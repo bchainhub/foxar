@@ -7,8 +7,8 @@ use crate::prelude::{
 };
 use core::fmt::Debug;
 use corebc::{
-    abi::{ethabi, ParamType, Token, Address},
-    types::{I256, U256, Network},
+    abi::{ethabi, Address, ParamType, Token},
+    types::{I256, U256},
     utils::hex,
 };
 use corebc_ylem::Artifact;
@@ -494,7 +494,7 @@ impl Type {
             pt::Expression::AddressLiteral(_, _) => Some(Self::Builtin(ParamType::Address)),
             pt::Expression::HexNumberLiteral(_, s, _) => {
                 match s.parse() {
-                    Ok(addr) => {   
+                    Ok(addr) => {
                         corebc::utils::to_checksum(&addr, None);
                         Some(Self::Builtin(ParamType::Address))
                     },

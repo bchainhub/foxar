@@ -94,7 +94,7 @@ impl RunArgs {
         evm_opts.fork_block_number = Some(tx_block_number - 1);
 
         // Set up the execution environment
-        let mut env = evm_opts.evm_env().await;
+        let env = evm_opts.evm_env().await;
         let db = Backend::spawn(evm_opts.get_fork(&config, env.clone())).await;
 
         // configures a bare version of the evm executor: no cheatcode inspector is enabled,
@@ -182,9 +182,7 @@ impl RunArgs {
             } else {
                 trace!(tx=?tx.hash, "executing create transaction");
                 match executor.deploy_with_env(env, None) {
-                    Ok(DeployResult {
-                        energy_used: energy_used, traces, debug: run_debug, ..
-                    }) => RunResult {
+                    Ok(DeployResult { energy_used, traces, debug: run_debug, .. }) => RunResult {
                         success: true,
                         traces: vec![(TraceKind::Execution, traces.unwrap_or_default())],
                         debug: run_debug.unwrap_or_default(),
@@ -192,11 +190,7 @@ impl RunArgs {
                     },
                     Err(EvmError::Execution(inner)) => {
                         let ExecutionErr {
-                            reverted,
-                            energy_used: energy_used,
-                            traces,
-                            debug: run_debug,
-                            ..
+                            reverted, energy_used, traces, debug: run_debug, ..
                         } = *inner;
                         RunResult {
                             success: !reverted,

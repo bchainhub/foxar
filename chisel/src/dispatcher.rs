@@ -7,19 +7,17 @@ use crate::prelude::{
     ChiselCommand, ChiselResult, ChiselSession, CmdCategory, CmdDescriptor, SessionSourceConfig,
     SolidityHelper,
 };
-use corebc::{abi::ParamType, contract::Lazy, types::Address, utils::hex};
+use corebc::{contract::Lazy, utils::hex};
 use forge::{
     decode::decode_console_logs,
     trace::{
-        identifier::{EtherscanIdentifier, SignaturesIdentifier},
-        CallTraceDecoder, CallTraceDecoderBuilder, TraceKind,
+        identifier::SignaturesIdentifier, CallTraceDecoder, CallTraceDecoderBuilder, TraceKind,
     },
 };
 use forge_fmt::FormatterConfig;
 use foundry_config::{Config, RpcEndpoint};
 use regex::Regex;
 use reqwest::Url;
-use serde::{Deserialize, Serialize};
 use solang_parser::diagnostics::Diagnostic;
 use std::{borrow::Cow, error::Error, io::Write, path::PathBuf, process::Command};
 use strum::IntoEnumIterator;
@@ -37,9 +35,6 @@ pub static CHISEL_CHAR: &str = "⚒️";
 /// Matches Ylem comments
 static COMMENT_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^\s*(?://.*\s*$)|(/*[\s\S]*?\*/\s*$)").unwrap());
-
-/// Matches Core addresses
-static ADDRESS_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"[a-fA-F0-9]{44}").unwrap());
 
 /// Chisel input dispatcher
 #[derive(Debug)]
@@ -85,22 +80,22 @@ pub enum DispatchResult {
 /// Used to format ABI parameters into valid solidity function / error / event param syntax
 /// TODO: Smarter resolution of storage location, defaults to "memory" for all types
 /// that cannot be stored on the stack.
-macro_rules! format_param {
-    ($param:expr) => {{
-        let param = $param;
-        format!(
-            "{}{}",
-            param.kind,
-            if param.kind.is_dynamic() ||
-                matches!(param.kind, ParamType::FixedArray(_, _) | ParamType::Tuple(_))
-            {
-                " memory"
-            } else {
-                ""
-            }
-        )
-    }};
-}
+// macro_rules! format_param {
+//     ($param:expr) => {{
+//         let param = $param;
+//         format!(
+//             "{}{}",
+//             param.kind,
+//             if param.kind.is_dynamic() ||
+//                 matches!(param.kind, ParamType::FixedArray(_, _) | ParamType::Tuple(_))
+//             {
+//                 " memory"
+//             } else {
+//                 ""
+//             }
+//         )
+//     }};
+// }
 
 /// Helper function that formats solidity source with the given [FormatterConfig]
 pub fn format_source(source: &str, config: FormatterConfig) -> eyre::Result<String> {
@@ -799,7 +794,7 @@ impl ChiselDispatcher {
     }
 
     /// Dispatches an input as a command via [Self::dispatch_command] or as a Solidity snippet.
-    pub async fn dispatch(&mut self, mut input: &str) -> DispatchResult {
+    pub async fn dispatch(&mut self, input: &str) -> DispatchResult {
         // Check if the input is a builtin command.
         // Commands are denoted with a `!` leading character.
         if input.starts_with(COMMAND_LEADER) {
@@ -956,7 +951,7 @@ impl ChiselDispatcher {
             session_config.foundry_config.offline,
         )?);
 
-        for (_, trace) in &mut result.traces {
+        for (_, _trace) in &mut result.traces {
             // decoder.identify(trace, &mut local_identifier);
             //todo:error2215 commented out (waiting for blockindex implementation)
             // decoder.identify(trace, &mut etherscan_identifier);

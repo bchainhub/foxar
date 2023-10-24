@@ -4,14 +4,12 @@ use corebc::{
     prelude::TransactionReceipt,
     providers::Middleware,
     types::U256,
-    utils::format_units,
 };
 use eyre::Result;
 use foundry_config::{Config, Network};
 use std::{
     ffi::OsStr,
     future::Future,
-    ops::Mul,
     path::{Path, PathBuf},
     process::{Command, Output, Stdio},
     str::FromStr,
