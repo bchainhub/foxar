@@ -1,6 +1,4 @@
-use crate::utils::{
-    h176_to_b176, h256_to_b256, u256_to_ru256,
-};
+use crate::utils::{h176_to_b176, u256_to_ru256};
 use corebc::{
     providers::Middleware,
     types::{Address, Block, TxHash, U256},
@@ -15,7 +13,7 @@ use revm::primitives::{BlockEnv, CfgEnv, Env, Network, TxEnv};
 pub async fn environment<M: Middleware>(
     provider: &M,
     memory_limit: u64,
-    gas_price: Option<u64>,
+    energy_price: Option<u64>,
     override_network_id: Option<u64>,
     pin_block: Option<u64>,
     origin: Address,
@@ -28,10 +26,10 @@ where
     } else {
         provider.get_block_number().await.wrap_err("Failed to get latest block number")?.as_u64()
     };
-    let (fork_gas_price, rpc_network_id, block) = tokio::try_join!(
+    let (fork_energy_price, rpc_network_id, block) = tokio::try_join!(
         provider
-            .get_gas_price()
-            .map_err(|err| { eyre::Error::new(err).wrap_err("Failed to get gas price") }),
+            .get_energy_price()
+            .map_err(|err| { eyre::Error::new(err).wrap_err("Failed to get energy price") }),
         provider
             .get_networkid()
             .map_err(|err| { eyre::Error::new(err).wrap_err("Failed to get network id") }),
@@ -58,15 +56,11 @@ where
         eyre::bail!("Failed to get block for block number: {}", block_number)
     };
 
-    let mut env = Env {
+    let env = Env {
         cfg: CfgEnv {
             network: Network::from(override_network_id.unwrap_or(rpc_network_id.as_u64())),
             memory_limit,
             limit_contract_code_size: Some(usize::MAX),
-            // EIP-3607 rejects transactions from senders with deployed code.
-            // If EIP-3607 is enabled it can cause issues during fuzz/invariant tests if the caller
-            // is a contract. So we disable the check by default.
-            disable_eip3607: true,
             ..Default::default()
         },
         block: BlockEnv {
@@ -74,15 +68,13 @@ where
             timestamp: u256_to_ru256(block.timestamp),
             coinbase: h176_to_b176(block.author.unwrap_or_default()),
             difficulty: u256_to_ru256(block.difficulty),
-            prevrandao: Some(block.mix_hash.map(h256_to_b256).unwrap_or_default()),
-            basefee: u256_to_ru256(block.base_fee_per_gas.unwrap_or_default()),
-            gas_limit: u256_to_ru256(block.gas_limit),
+            energy_limit: u256_to_ru256(block.energy_limit),
         },
         tx: TxEnv {
             caller: h176_to_b176(origin),
-            gas_price: u256_to_ru256(gas_price.map(U256::from).unwrap_or(fork_gas_price)),
+            energy_price: u256_to_ru256(energy_price.map(U256::from).unwrap_or(fork_energy_price)),
             network_id: Some(override_network_id.unwrap_or(rpc_network_id.as_u64())),
-            gas_limit: block.gas_limit.as_u64(),
+            energy_limit: block.energy_limit.as_u64(),
             ..Default::default()
         },
     };

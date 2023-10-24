@@ -12,6 +12,7 @@ use foundry_evm::executor::{
     backend::{snapshot::StateSnapshot, DatabaseResult},
     fork::database::ForkDbSnapshot,
 };
+use foundry_utils::types::{ToEthersU256, ToRuint};
 
 /// Implement the helper for the fork database
 impl Db for ForkedDatabase {
@@ -26,7 +27,7 @@ impl Db for ForkedDatabase {
     }
 
     fn insert_block_hash(&mut self, number: U256, hash: H256) {
-        self.inner().block_hashes().write().insert(number.into(), hash.into());
+        self.inner().block_hashes().write().insert(number.to_ruint(), hash.into());
     }
 
     fn dump_state(&self) -> DatabaseResult<Option<SerializableState>> {
@@ -47,12 +48,12 @@ impl Db for ForkedDatabase {
                     k.into(),
                     SerializableAccountRecord {
                         nonce: v.info.nonce,
-                        balance: v.info.balance.into(),
+                        balance: v.info.balance.to_ethers_u256(),
                         code: code.bytes()[..code.len()].to_vec().into(),
                         storage: v
                             .storage
                             .into_iter()
-                            .map(|kv| (kv.0.into(), kv.1.into()))
+                            .map(|kv| (kv.0.to_ethers_u256(), kv.1.to_ethers_u256()))
                             .collect(),
                     },
                 ))

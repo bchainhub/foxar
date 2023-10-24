@@ -5,7 +5,7 @@ use corebc::prelude::{
     Bytes,
 };
 use revm::{
-    interpreter::opcode::{self, spec_opcode_gas},
+    interpreter::opcode::{self, spec_opcode_energy},
     primitives::SpecId,
 };
 
@@ -107,7 +107,7 @@ pub fn find_anchor_branch(
 ) -> eyre::Result<(ItemAnchor, ItemAnchor)> {
     // NOTE(onbjerg): We use `SpecId::LATEST` here since it does not matter; the only difference
     // is the gas cost.
-    let opcode_infos = spec_opcode_gas(SpecId::LATEST);
+    let opcode_infos = spec_opcode_energy(SpecId::LATEST);
 
     let mut anchors: Option<(ItemAnchor, ItemAnchor)> = None;
     let mut pc = 0;

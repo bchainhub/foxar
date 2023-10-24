@@ -1,7 +1,7 @@
 use super::{VerifyArgs, VerifyCheckArgs};
 use crate::cmd::LoadConfig;
 use async_trait::async_trait;
-use cast::SimpleCast;
+
 use corebc::ylem::ConfigurableContractArtifact;
 
 use crate::cmd::forge::verify::provider::VerificationProvider;
@@ -120,7 +120,7 @@ impl SourcifyVerificationProvider {
         let cache = project.read_cache_file()?;
         let (path, entry) = crate::cmd::get_cached_entry_by_name(&cache, &args.contract.name)?;
 
-        if entry.solc_config.settings.metadata.is_none() {
+        if entry.ylem_config.settings.metadata.is_none() {
             eyre::bail!(
                 r#"Contract {} was compiled without the solc `metadata` setting.
 Sourcify requires contract metadata for verification.

@@ -218,9 +218,8 @@ where
     let mut builder = TxBuilder::new(&provider, from, to, chain).await?;
     builder
         // .etherscan_api_key(etherscan_api_key)
-        .gas(tx.gas_limit)
-        .gas_price(tx.gas_price)
-        .priority_gas_price(tx.priority_gas_price)
+        .energy(tx.energy_limit)
+        .energy_price(tx.energy_price)
         .value(tx.value)
         .nonce(tx.nonce);
 

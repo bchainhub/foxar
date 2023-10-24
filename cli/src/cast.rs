@@ -103,7 +103,7 @@ async fn main() -> eyre::Result<()> {
         }
         Subcommands::ToCheckSumAddress { address } => {
             let value = stdin::unwrap_line(address)?;
-            println!("{}", value.to_string());
+            println!("{}", value);
         }
         Subcommands::ToUint256 { value } => {
             let value = stdin::unwrap_line(value)?;
@@ -201,7 +201,6 @@ async fn main() -> eyre::Result<()> {
         }
 
         // Blockchain & RPC queries
-        Subcommands::AccessList(cmd) => cmd.run().await?,
         Subcommands::Age { block, rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
@@ -274,8 +273,10 @@ async fn main() -> eyre::Result<()> {
 
             let address: Address = stdin::unwrap_line(address)?.parse()?;
             let network = provider.get_networkid().await?;
-            let computed = Cast::new(&provider).compute_address(address, nonce, &Network::from(network)).await?;
-            println!("Computed Address: {}", computed.to_string());
+            let computed = Cast::new(&provider)
+                .compute_address(address, nonce, &Network::try_from(network.as_u64()).unwrap())
+                .await?;
+            println!("Computed Address: {}", computed);
         }
         Subcommands::Disassemble { bytecode } => {
             println!("{}", SimpleCast::disassemble(&bytecode)?);
@@ -284,7 +285,7 @@ async fn main() -> eyre::Result<()> {
         Subcommands::GasPrice { rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
-            println!("{}", Cast::new(provider).gas_price().await?);
+            println!("{}", Cast::new(provider).energy_price().await?);
         }
         Subcommands::Index { key_type, key, slot_number } => {
             println!("{}", SimpleCast::index(&key_type, &key, &slot_number)?);
@@ -433,7 +434,7 @@ async fn main() -> eyre::Result<()> {
                     "forward lookup verification failed. got {name}, expected {who}"
                 );
             }
-            println!("{}", address.to_string());
+            println!("{}", address);
         }
 
         // Misc

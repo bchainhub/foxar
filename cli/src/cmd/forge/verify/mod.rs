@@ -9,7 +9,7 @@ use crate::{
     opts::EtherscanOpts,
 };
 use clap::{Parser, ValueHint};
-use corebc::{abi::Address, solc::info::ContractInfo};
+use corebc::{abi::Address, ylem::info::ContractInfo};
 use foundry_config::{figment, impl_figment_convert, impl_figment_convert_cast, Config};
 use provider::VerificationProviderType;
 use reqwest::Url;
@@ -132,7 +132,8 @@ impl VerifyArgs {
         let config = self.load_config_emit_warnings();
         let chain = config.network_id.unwrap_or_default();
         self.etherscan.network = Some(chain);
-        self.etherscan.key = config.get_etherscan_config_with_chain(Some(chain))?.map(|c| c.key);
+        // self.etherscan.key = config.get_etherscan_config_with_network(Some(chain))?.map(|c|
+        // c.key);
 
         if self.show_standard_json_input {
             let args =
@@ -143,7 +144,7 @@ impl VerifyArgs {
 
         let verifier_url = self.verifier.verifier_url.clone();
         println!("Start verifying contract `{:?}` deployed on {chain}", self.address);
-        self.verifier.verifier.client(&self.etherscan.key)?.verify(self).await.map_err(|err| {
+        self.verifier.verifier.client()?.verify(self).await.map_err(|err| {
             if let Some(verifier_url) = verifier_url {
                  match Url::parse(&verifier_url) {
                     Ok(url) => {
@@ -167,7 +168,7 @@ impl VerifyArgs {
 
     /// Returns the configured verification provider
     pub fn verification_provider(&self) -> eyre::Result<Box<dyn VerificationProvider>> {
-        self.verifier.verifier.client(&self.etherscan.key)
+        self.verifier.verifier.client()
     }
 }
 
@@ -197,7 +198,7 @@ impl VerifyCheckArgs {
     /// Run the verify command to submit the contract's source code for verification on etherscan
     pub async fn run(self) -> eyre::Result<()> {
         println!("Checking verification status on {}", self.etherscan.network.unwrap_or_default());
-        self.verifier.verifier.client(&self.etherscan.key)?.check(self).await
+        self.verifier.verifier.client()?.check(self).await
     }
 }
 

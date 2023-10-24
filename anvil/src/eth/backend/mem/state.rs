@@ -12,7 +12,7 @@ use forge::{
     executor::DatabaseRef,
     revm::{
         db::{CacheDB, DbAccount},
-        primitives::{Bytecode, B160, U256 as rU256},
+        primitives::{Bytecode, U256 as rU256},
     },
     utils::{b176_to_h176, b256_to_h256, ru256_to_u256, u256_to_ru256},
 };
@@ -21,7 +21,9 @@ use foundry_evm::{
     revm::primitives::{AccountInfo, Log},
     HashMap as Map,
 };
+use foundry_utils::types::{ToEthersU256, ToRuint};
 use memory_db::HashKey;
+use revm::primitives::B176;
 use trie_db::TrieMut;
 
 /// Returns the log hash for all `logs`
@@ -40,7 +42,7 @@ pub fn log_rlp_hash(logs: Vec<Log>) -> H256 {
     stream.finalize_unbounded_list();
     let out = stream.out().freeze();
 
-    let out = corebc::utils::keccak256(out);
+    let out = corebc::utils::sha3(out);
     H256::from_slice(out.as_slice())
 }
 
@@ -56,7 +58,7 @@ pub fn storage_trie_db(storage: &Map<rU256, rU256>) -> (AsHashDB, H256) {
                 let mut temp: [u8; 32] = [0; 32];
                 ru256_to_u256(*k).to_big_endian(&mut temp);
                 let key = H256::from(temp);
-                let value = rlp::encode(v);
+                let value = rlp::encode(&v.to_ethers_u256());
                 trie.insert(key.as_bytes(), value.as_ref()).unwrap();
             }
         }
@@ -67,7 +69,7 @@ pub fn storage_trie_db(storage: &Map<rU256, rU256>) -> (AsHashDB, H256) {
 }
 
 /// Returns the account data as `HashDB`
-pub fn trie_hash_db(accounts: &Map<B160, DbAccount>) -> (AsHashDB, H256) {
+pub fn trie_hash_db(accounts: &Map<B176, DbAccount>) -> (AsHashDB, H256) {
     let accounts = trie_accounts(accounts);
 
     // Populate DB with full trie from entries.
@@ -87,7 +89,7 @@ pub fn trie_hash_db(accounts: &Map<B160, DbAccount>) -> (AsHashDB, H256) {
 }
 
 /// Returns all RLP-encoded Accounts
-pub fn trie_accounts(accounts: &Map<B160, DbAccount>) -> Vec<(B160, Bytes)> {
+pub fn trie_accounts(accounts: &Map<B176, DbAccount>) -> Vec<(B176, Bytes)> {
     accounts
         .iter()
         .map(|(address, account)| {
@@ -97,7 +99,7 @@ pub fn trie_accounts(accounts: &Map<B160, DbAccount>) -> Vec<(B160, Bytes)> {
         .collect()
 }
 
-pub fn state_merkle_trie_root(accounts: &Map<B160, DbAccount>) -> H256 {
+pub fn state_merkle_trie_root(accounts: &Map<B176, DbAccount>) -> H256 {
     trie_hash_db(accounts).1
 }
 
@@ -105,7 +107,7 @@ pub fn state_merkle_trie_root(accounts: &Map<B160, DbAccount>) -> H256 {
 pub fn trie_account_rlp(info: &AccountInfo, storage: &Map<rU256, rU256>) -> Bytes {
     let mut stream = RlpStream::new_list(4);
     stream.append(&info.nonce);
-    stream.append(&info.balance);
+    stream.append(&info.balance.to_ethers_u256());
     stream.append(&storage_trie_db(storage).1);
     stream.append(&info.code_hash.as_bytes());
     stream.out().freeze()
@@ -130,7 +132,7 @@ where
             account_info.code = Some(Bytecode::new_raw(code.to_vec().into()));
         }
         if let Some(balance) = account_overrides.balance {
-            account_info.balance = balance.into();
+            account_info.balance = balance.to_ruint();
         }
 
         cache_db.insert_account_info((*account).into(), account_info);
@@ -160,8 +162,8 @@ where
                 for (key, value) in account_state_diff.iter() {
                     cache_db.insert_account_storage(
                         (*account).into(),
-                        key.into_uint().into(),
-                        value.into_uint().into(),
+                        key.into_uint().to_ruint(),
+                        value.into_uint().to_ruint(),
                     )?;
                 }
             }

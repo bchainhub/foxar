@@ -8,7 +8,7 @@ use crate::{
 };
 use anvil_core::eth::{
     block::{Block, BlockInfo, Header, PartialHeader},
-    receipt::{EIP1559Receipt, EIP2930Receipt, EIP658Receipt, Log, TypedReceipt},
+    receipt::{EIP658Receipt, Log, TypedReceipt},
     transaction::{PendingTransaction, TransactionInfo, TypedTransaction},
     trie,
 };
@@ -19,20 +19,18 @@ use corebc::{
 };
 use forge::{
     revm::primitives::{EVMError, ExecutionResult},
-    utils::{
-        b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result,
-        ru256_to_u256,
-    },
+    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result},
 };
 use foundry_evm::{
     executor::backend::DatabaseError,
     revm,
     revm::{
         interpreter::InstructionResult,
-        primitives::{BlockEnv, CfgEnv, Env, Output, SpecId},
+        primitives::{BlockEnv, CfgEnv, Env, Output},
     },
     trace::{node::CallTraceNode, CallTraceArena},
 };
+use foundry_utils::types::ToEthersU256;
 use std::sync::Arc;
 use tracing::{trace, warn};
 
@@ -60,18 +58,6 @@ impl ExecutedTransaction {
         let status_code = u8::from(self.exit_reason as u8 <= InstructionResult::SelfDestruct as u8);
         match &self.transaction.pending_transaction.transaction.transaction {
             TypedTransaction::Legacy(_) => TypedReceipt::Legacy(EIP658Receipt {
-                status_code,
-                gas_used: used_gas,
-                logs_bloom: bloom,
-                logs,
-            }),
-            TypedTransaction::EIP2930(_) => TypedReceipt::EIP2930(EIP2930Receipt {
-                status_code,
-                gas_used: used_gas,
-                logs_bloom: bloom,
-                logs,
-            }),
-            TypedTransaction::EIP1559(_) => TypedReceipt::EIP1559(EIP1559Receipt {
                 status_code,
                 gas_used: used_gas,
                 logs_bloom: bloom,
@@ -119,17 +105,12 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
         let mut cumulative_gas_used = U256::zero();
         let mut invalid = Vec::new();
         let mut included = Vec::new();
-        let gas_limit = self.block_env.gas_limit;
+        let gas_limit = self.block_env.energy_limit;
         let parent_hash = self.parent_hash;
         let block_number = self.block_env.number;
         let difficulty = self.block_env.difficulty;
         let beneficiary = self.block_env.coinbase;
-        let timestamp = ru256_to_u256(self.block_env.timestamp).as_u64();
-        let base_fee = if (self.cfg_env.spec_id as u8) >= (SpecId::LONDON as u8) {
-            Some(self.block_env.basefee)
-        } else {
-            None
-        };
+        let timestamp = self.block_env.timestamp.to_ethers_u256().as_u64();
 
         for tx in self.into_iter() {
             let tx = match tx {
@@ -193,15 +174,14 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
             state_root: self.db.maybe_state_root().unwrap_or_default(),
             receipts_root,
             logs_bloom: bloom,
-            difficulty: difficulty.into(),
-            number: block_number.into(),
-            gas_limit: gas_limit.into(),
+            difficulty: difficulty.to_ethers_u256(),
+            number: block_number.to_ethers_u256(),
+            gas_limit: gas_limit.to_ethers_u256(),
             gas_used: cumulative_gas_used,
             timestamp,
             extra_data: Default::default(),
             mix_hash: Default::default(),
             nonce: Default::default(),
-            base_fee: base_fee.map(|x| x.into()),
         };
 
         let block = Block::new(partial_header, transactions.clone(), ommers);
@@ -240,8 +220,8 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
         };
         let env = self.env_for(&transaction.pending_transaction);
         // check that we comply with the block's gas limit
-        let max_gas = self.gas_used.saturating_add(U256::from(env.tx.gas_limit));
-        if max_gas > env.block.gas_limit.into() {
+        let max_gas = self.gas_used.saturating_add(U256::from(env.tx.energy_limit));
+        if max_gas > env.block.energy_limit.to_ethers_u256() {
             return Some(TransactionExecutionOutcome::Exhausted(transaction))
         }
 
@@ -289,18 +269,18 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
         inspector.print_logs();
 
         let (exit_reason, gas_used, out, logs) = match exec_result {
-            ExecutionResult::Success { reason, gas_used, logs, output, .. } => {
-                (eval_to_instruction_result(reason), gas_used, Some(output), Some(logs))
+            ExecutionResult::Success { reason, energy_used, logs, output, .. } => {
+                (eval_to_instruction_result(reason), energy_used, Some(output), Some(logs))
             }
-            ExecutionResult::Revert { gas_used, output } => {
-                (InstructionResult::Revert, gas_used, Some(Output::Call(output)), None)
+            ExecutionResult::Revert { energy_used, output } => {
+                (InstructionResult::Revert, energy_used, Some(Output::Call(output)), None)
             }
-            ExecutionResult::Halt { reason, gas_used } => {
-                (halt_to_instruction_result(reason), gas_used, None, None)
+            ExecutionResult::Halt { reason, energy_used } => {
+                (halt_to_instruction_result(reason), energy_used, None, None)
             }
         };
 
-        if exit_reason == InstructionResult::OutOfGas {
+        if exit_reason == InstructionResult::OutOfEnergy {
             // this currently useful for debugging estimations
             warn!(target: "backend", "[{:?}] executed with out of gas", transaction.hash())
         }

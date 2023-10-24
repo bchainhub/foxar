@@ -11,10 +11,10 @@ keywords = ["ethereum", "web3", "evm", "debugger"]
 forge = { path = "../forge" }
 foundry-common = { path = "../common" }
 
-corebc = { workspace = true }
+corebc = { workspace = true}
 
 crossterm = "0.26"
 eyre = "0.6"
 hex = "0.4"
-revm = { git = "https://github.com/core-coin/ican-revm.git", default-features = false, features = ["std", "serde", "memory_limit"], branch = "main" }
+revm = { workspace = true, default-features = false, features = ["std", "serde", "memory_limit"] }
 tui = { version = "0.19", default-features = false, features = ["crossterm"] }

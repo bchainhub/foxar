@@ -1,12 +1,12 @@
 use super::{WalletSigner, WalletTrait};
-use cast::{AwsChainProvider, AwsClient, AwsHttpClient, AwsRegion, KmsClient};
+
 use clap::Parser;
 use corebc::{
     prelude::{Middleware, Signer},
     signers::LocalWallet,
-    types::Address,
+    types::{Address, Network},
 };
-use eyre::{Context, ContextCompat, Result};
+use eyre::{ContextCompat, Result};
 use foundry_common::RetryProvider;
 use foundry_config::Config;
 use itertools::izip;
@@ -16,7 +16,6 @@ use std::{
     iter::repeat,
     sync::Arc,
 };
-use tracing::trace;
 
 macro_rules! get_wallets {
     ($id:ident, [ $($wallets:expr),+ ], $call:expr) => {
@@ -31,33 +30,35 @@ macro_rules! get_wallets {
 /// A macro that initializes multiple wallets
 ///
 /// Should be used with a [`MultiWallet`] instance
-macro_rules! create_hw_wallets {
-    ($self:ident, $network_id:ident ,$get_wallet:ident, $wallets:ident) => {
-        let mut $wallets = vec![];
+// macro_rules! create_hw_wallets {
+//     ($self:ident, $network_id:ident ,$get_wallet:ident, $wallets:ident) => {
+//         let mut $wallets = vec![];
 
-        if let Some(hd_paths) = &$self.hd_paths {
-            for path in hd_paths {
-                if let Some(hw) = $self.$get_wallet($network_id, Some(path), None).await? {
-                    $wallets.push(hw);
-                }
-            }
-        }
+//         if let Some(hd_paths) = &$self.hd_paths {
+//             for path in hd_paths {
+//                 if let Some(hw) = $self.$get_wallet($network_id, Some(path), None).await? {
+//                     $wallets.push(hw);
+//                 }
+//             }
+//         }
 
-        if let Some(mnemonic_indexes) = &$self.mnemonic_indexes {
-            for index in mnemonic_indexes {
-                if let Some(hw) = $self.$get_wallet($network_id, None, Some(*index as usize)).await? {
-                    $wallets.push(hw);
-                }
-            }
-        }
+//         if let Some(mnemonic_indexes) = &$self.mnemonic_indexes {
+//             for index in mnemonic_indexes {
+//                 if let Some(hw) =
+//                     $self.$get_wallet($network_id, None, Some(*index as usize)).await?
+//                 {
+//                     $wallets.push(hw);
+//                 }
+//             }
+//         }
 
-        if $wallets.is_empty() {
-            if let Some(hw) = $self.$get_wallet($network_id, None, Some(0)).await? {
-                $wallets.push(hw);
-            }
-        }
-    };
-}
+//         if $wallets.is_empty() {
+//             if let Some(hw) = $self.$get_wallet($network_id, None, Some(0)).await? {
+//                 $wallets.push(hw);
+//             }
+//         }
+//     };
+// }
 
 /// The wallet options can either be:
 /// 1. Ledger
@@ -187,11 +188,17 @@ pub struct MultiWallet {
     // /// Use AWS Key Management Service.
     // #[clap(long, help_heading = "Wallet options - remote")]
     // pub aws: bool,
+    #[clap(short, long)]
+    pub network: Option<Network>,
 }
 
 impl WalletTrait for MultiWallet {
     fn sender(&self) -> Option<Address> {
         self.froms.as_ref()?.first().copied()
+    }
+
+    fn network(&self) -> Option<Network> {
+        self.network
     }
 }
 
@@ -369,7 +376,8 @@ impl MultiWallet {
 
     //         let env_key_ids = std::env::var("AWS_KMS_KEY_IDS");
     //         let key_ids =
-    //             if env_key_ids.is_ok() { env_key_ids? } else { std::env::var("AWS_KMS_KEY_ID")? };
+    //             if env_key_ids.is_ok() { env_key_ids? } else { std::env::var("AWS_KMS_KEY_ID")?
+    // };
 
     //         for key in key_ids.split(',') {
     //             let aws_signer = AwsSigner::new(kms.clone(), key, chain_id).await?;
@@ -386,11 +394,9 @@ impl MultiWallet {
     //     chain_id: u64,
     //     hd_path: Option<&str>,
     //     mnemonic_index: Option<usize>,
-    // ) -> Result<Option<Trezor>> {
-    //     let derivation = match &hd_path {
-    //         Some(hd_path) => TrezorHDPath::Other(hd_path.to_string()),
-    //         None => TrezorHDPath::TrezorLive(mnemonic_index.unwrap_or(0)),
-    //     };
+    // ) -> Result<Option<Trezor>> { let derivation = match &hd_path { Some(hd_path) =>
+    //   TrezorHDPath::Other(hd_path.to_string()), None =>
+    //   TrezorHDPath::TrezorLive(mnemonic_index.unwrap_or(0)), };
 
     //     Ok(Some(Trezor::new(derivation, chain_id, None).await?))
     // }
@@ -400,15 +406,13 @@ impl MultiWallet {
     //     chain_id: u64,
     //     hd_path: Option<&str>,
     //     mnemonic_index: Option<usize>,
-    // ) -> Result<Option<Ledger>> {
-    //     let derivation = match hd_path {
-    //         Some(hd_path) => LedgerHDPath::Other(hd_path.to_string()),
-    //         None => LedgerHDPath::LedgerLive(mnemonic_index.unwrap_or(0)),
-    //     };
+    // ) -> Result<Option<Ledger>> { let derivation = match hd_path { Some(hd_path) =>
+    //   LedgerHDPath::Other(hd_path.to_string()), None =>
+    //   LedgerHDPath::LedgerLive(mnemonic_index.unwrap_or(0)), };
 
     //     trace!(?chain_id, "Creating new ledger signer");
-    //     Ok(Some(Ledger::new(derivation, chain_id).await.wrap_err("Ledger device not available.")?))
-    // }
+    //     Ok(Some(Ledger::new(derivation, chain_id).await.wrap_err("Ledger device not
+    // available.")?)) }
 }
 
 #[cfg(test)]
@@ -457,36 +461,5 @@ mod tests {
             wallets[0].address(),
             "ec554aeafe75601aaab43bd4621a22284db566c2".parse().unwrap()
         );
-    }
-
-    // https://github.com/foundry-rs/foundry/issues/5179
-    #[test]
-    fn should_not_require_the_mnemonics_flag_with_mnemonic_indexes() {
-        let wallet_options = vec![
-            ("ledger", "--mnemonic-indexes", 1),
-            ("trezor", "--mnemonic-indexes", 2),
-            ("aws", "--mnemonic-indexes", 10),
-        ];
-
-        for test_case in wallet_options {
-            let args: MultiWallet = MultiWallet::parse_from([
-                "foundry-cli",
-                &format!("--{}", test_case.0),
-                test_case.1,
-                &test_case.2.to_string(),
-            ]);
-
-            match test_case.0 {
-                "ledger" => assert!(args.ledger),
-                "trezor" => assert!(args.trezor),
-                "aws" => assert!(args.aws),
-                _ => panic!("Should have matched one of the previous wallet options"),
-            }
-
-            assert_eq!(
-                args.mnemonic_indexes.expect("--mnemonic-indexes should have been set")[0],
-                test_case.2
-            )
-        }
     }
 }

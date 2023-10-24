@@ -2,7 +2,7 @@ use clap::{builder::RangedU64ValueParser, Parser};
 use foundry_utils::Retry;
 
 /// Retry config used when waiting for verification
-pub const RETRY_CHECK_ON_VERIFY: RetryArgs = RetryArgs { retries: 8, delay: 15 };
+// pub const RETRY_CHECK_ON_VERIFY: RetryArgs = RetryArgs { retries: 8, delay: 15 };
 
 /// Retry config used when waiting for a created contract
 pub const RETRY_VERIFY_ON_CREATE: RetryArgs = RetryArgs { retries: 15, delay: 5 };

@@ -7,7 +7,7 @@ pub use logs::LogCollector;
 use std::{cell::RefCell, rc::Rc};
 
 mod access_list;
-pub use access_list::AccessListTracer;
+// pub use access_list::AccessListTracer;
 
 mod tracer;
 pub use tracer::Tracer;
@@ -29,7 +29,7 @@ pub use chisel_state::ChiselState;
 
 use corebc::types::U256;
 
-use revm::{inspectors::GasInspector, primitives::BlockEnv};
+use revm::{inspectors::EnergyInspector, primitives::BlockEnv};
 
 mod fuzzer;
 pub use fuzzer::Fuzzer;
@@ -47,11 +47,11 @@ pub struct InspectorStackConfig {
     /// Used in the cheatcode handler to overwrite the block environment separately from the
     /// execution block environment.
     pub block: BlockEnv,
-    /// The gas price
+    /// The energy price
     ///
-    /// Used in the cheatcode handler to overwrite the gas price separately from the gas price
-    /// in the execution environment.
-    pub gas_price: U256,
+    /// Used in the cheatcode handler to overwrite the energy price separately from the energy
+    /// price in the execution environment.
+    pub energy_price: U256,
     /// Whether tracing is enabled
     pub tracing: bool,
     /// Whether the debugger is enabled
@@ -80,16 +80,16 @@ impl InspectorStackConfig {
         stack.cheatcodes = self.create_cheatcodes();
         if let Some(ref mut cheatcodes) = stack.cheatcodes {
             cheatcodes.block = Some(self.block.clone());
-            cheatcodes.energy_price = Some(self.gas_price);
+            cheatcodes.energy_price = Some(self.energy_price);
         }
 
         if self.tracing {
             stack.tracer = Some(Tracer::default());
         }
         if self.debugger {
-            let gas_inspector = Rc::new(RefCell::new(GasInspector::default()));
-            stack.gas = Some(gas_inspector.clone());
-            stack.debugger = Some(Debugger::new(gas_inspector));
+            let energy_inspector = Rc::new(RefCell::new(EnergyInspector::default()));
+            stack.energy = Some(energy_inspector.clone());
+            stack.debugger = Some(Debugger::new(energy_inspector));
         }
         stack.fuzzer = self.fuzzer.clone();
 

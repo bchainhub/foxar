@@ -17,7 +17,7 @@ use corebc::{
 };
 use foundry_config::Config;
 use revm::{
-    primitives::{Bytecode, Network, SpecId, B256, SHA3_EMPTY},
+    primitives::{Bytecode, Network, SHA3_EMPTY},
     Database, EVMData,
 };
 use std::collections::BTreeMap;
@@ -328,29 +328,17 @@ pub fn apply<DB: DatabaseExt>(
             Bytes::new()
         }
         HEVMCalls::Difficulty(inner) => {
-            ensure!(
-                data.env.cfg.spec_id < SpecId::MERGE,
-                "Difficulty is not supported after the Paris hard fork. Please use vm.prevrandao instead. For more information, please see https://eips.ethereum.org/EIPS/eip-4399"
-            );
             data.env.block.difficulty = u256_to_ru256(inner.0);
-            Bytes::new()
-        }
-        HEVMCalls::Prevrandao(inner) => {
-            ensure!(
-                data.env.cfg.spec_id >= SpecId::MERGE,
-                "Prevrandao is not supported before the Paris hard fork. Please use vm.difficulty instead. For more information, please see https://eips.ethereum.org/EIPS/eip-4399"
-            );
-            data.env.block.prevrandao = Some(B256::from(inner.0));
             Bytes::new()
         }
         HEVMCalls::Roll(inner) => {
             data.env.block.number = u256_to_ru256(inner.0);
             Bytes::new()
         }
-        HEVMCalls::Fee(inner) => {
-            data.env.block.basefee = u256_to_ru256(inner.0);
-            Bytes::new()
-        }
+        // HEVMCalls::Fee(inner) => {
+        //     data.env.block.basefee = u256_to_ru256(inner.0);
+        //     Bytes::new()
+        // }
         HEVMCalls::Coinbase(inner) => {
             data.env.block.coinbase = h176_to_b176(inner.0);
             Bytes::new()
@@ -371,7 +359,7 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::Load(inner) => {
             ensure!(!is_potential_precompile(inner.0), "Load cannot be used on precompile addresses (N < 10). Please use an address bigger than 10 instead");
-            // TODO: Does this increase gas usage?
+            // TODO: Does this increase energy usage?
             data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
             let (val, _) = data.journaled_state.sload(
                 h176_to_b176(inner.0),
@@ -386,7 +374,7 @@ pub fn apply<DB: DatabaseExt>(
             ensure!(!is_potential_precompile(inner.0), "Etch cannot be used on precompile addresses (N < 10). Please use an address bigger than 10 instead");
             let code = inner.1.clone();
             trace!(address=?inner.0, code=?hex::encode(&code), "etch cheatcode");
-            // TODO: Does this increase gas usage?
+            // TODO: Does this increase energy usage?
             data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
             data.journaled_state
                 .set_code(h176_to_b176(inner.0), Bytecode::new_raw(code.0).to_checked());
@@ -512,8 +500,8 @@ pub fn apply<DB: DatabaseExt>(
                 state,
             )?;
 
-            // TODO:  this is probably not a good long-term solution since it might mess up the gas
-            // calculations
+            // TODO:  this is probably not a good long-term solution since it might mess up the
+            // energy calculations
             data.journaled_state.load_account(h176_to_b176(inner.0), data.db)?;
 
             // we can safely unwrap because `load_account` insert inner.0 to DB.
@@ -526,7 +514,7 @@ pub fn apply<DB: DatabaseExt>(
             Bytes::new()
         }
         HEVMCalls::TxGasPrice(inner) => {
-            data.env.tx.gas_price = u256_to_ru256(inner.0);
+            data.env.tx.energy_price = u256_to_ru256(inner.0);
             Bytes::new()
         }
         HEVMCalls::Broadcast0(_) => {

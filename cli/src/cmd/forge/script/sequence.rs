@@ -5,7 +5,6 @@ use crate::cmd::forge::{
         transaction::{wrapper, AdditionalContract, TransactionWithMetadata},
         verify::VerifyBundle,
     },
-    verify::provider::VerificationProviderType,
 };
 use corebc::{
     abi::Address,
@@ -134,7 +133,7 @@ impl ScriptSequence {
             .wrap_err(format!("Deployment not found for network `{network_id}`."))?;
 
         let sensitive_script_sequence: SensitiveScriptSequence =
-        corebc::ylem::utils::read_json_file(&sensitive_path).wrap_err(format!(
+            corebc::ylem::utils::read_json_file(&sensitive_path).wrap_err(format!(
                 "Deployment's sensitive details not found for network `{network_id}`."
             ))?;
 
@@ -264,64 +263,58 @@ impl ScriptSequence {
     /// created contract on etherscan.
     pub async fn verify_contracts(
         &mut self,
-        config: &Config,
+        _config: &Config,
         mut verify: VerifyBundle,
     ) -> eyre::Result<()> {
         trace!(target: "script", "verifying {} contracts [{}]", verify.known_contracts.len(), self.network);
 
-        verify.set_network(config, self.network.into());
+        verify.set_network(self.network.into());
 
-        if verify.etherscan.key.is_some() ||
-            verify.verifier.verifier != VerificationProviderType::Etherscan
-        {
-            trace!(target: "script", "prepare future verifications");
+        trace!(target: "script", "prepare future verifications");
 
-            let mut future_verifications = Vec::with_capacity(self.receipts.len());
-            let mut unverifiable_contracts = vec![];
+        let mut future_verifications = Vec::with_capacity(self.receipts.len());
+        let mut unverifiable_contracts = vec![];
 
-            // Make sure the receipts have the right order first.
-            self.sort_receipts();
+        // Make sure the receipts have the right order first.
+        self.sort_receipts();
 
-            for (receipt, tx) in self.receipts.iter_mut().zip(self.transactions.iter()) {
-                // create2 hash offset
-                let mut offset = 0;
+        for (receipt, tx) in self.receipts.iter_mut().zip(self.transactions.iter()) {
+            // create2 hash offset
+            let mut offset = 0;
 
-                if tx.is_create2() {
-                    receipt.contract_address = tx.contract_address;
-                    offset = 32;
-                }
-
-                // Verify contract created directly from the transaction
-                if let (Some(address), Some(data)) =
-                    (receipt.contract_address, tx.typed_tx().data())
-                {
-                    match verify.get_verify_args(address, offset, &data.0, &self.libraries) {
-                        Some(verify) => future_verifications.push(verify.run()),
-                        None => unverifiable_contracts.push(address),
-                    };
-                }
-
-                // Verify potential contracts created during the transaction execution
-                for AdditionalContract { address, init_code, .. } in &tx.additional_contracts {
-                    match verify.get_verify_args(*address, 0, init_code, &self.libraries) {
-                        Some(verify) => future_verifications.push(verify.run()),
-                        None => unverifiable_contracts.push(*address),
-                    };
-                }
+            if tx.is_create2() {
+                receipt.contract_address = tx.contract_address;
+                offset = 32;
             }
 
-            trace!(target: "script", "collected {} verification jobs and {} unverifiable contracts", future_verifications.len(), unverifiable_contracts.len());
-
-            self.check_unverified(unverifiable_contracts, verify);
-
-            let num_verifications = future_verifications.len();
-            println!("##\nStart verification for ({num_verifications}) contracts",);
-            for verification in future_verifications {
-                verification.await?;
+            // Verify contract created directly from the transaction
+            if let (Some(address), Some(data)) = (receipt.contract_address, tx.typed_tx().data()) {
+                match verify.get_verify_args(address, offset, &data.0, &self.libraries) {
+                    Some(verify) => future_verifications.push(verify.run()),
+                    None => unverifiable_contracts.push(address),
+                };
             }
 
-            println!("All ({num_verifications}) contracts were verified!");
+            // Verify potential contracts created during the transaction execution
+            for AdditionalContract { address, init_code, .. } in &tx.additional_contracts {
+                match verify.get_verify_args(*address, 0, init_code, &self.libraries) {
+                    Some(verify) => future_verifications.push(verify.run()),
+                    None => unverifiable_contracts.push(*address),
+                };
+            }
         }
+
+        trace!(target: "script", "collected {} verification jobs and {} unverifiable contracts", future_verifications.len(), unverifiable_contracts.len());
+
+        self.check_unverified(unverifiable_contracts, verify);
+
+        let num_verifications = future_verifications.len();
+        println!("##\nStart verification for ({num_verifications}) contracts",);
+        for verification in future_verifications {
+            verification.await?;
+        }
+
+        println!("All ({num_verifications}) contracts were verified!");
 
         Ok(())
     }

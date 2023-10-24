@@ -881,7 +881,7 @@ impl Config {
     /// If not matching alias was found, then this will try to find the first entry in the table
     /// with a matching chain id. If an etherscan_api_key is already set it will take precedence
     /// over the chain's entry in the table.
-    pub fn get_etherscan_config_with_chain(
+    pub fn get_etherscan_config_with_network(
         &self,
         chain: Option<impl Into<Network>>,
     ) -> Result<Option<ResolvedEtherscanConfig>, EtherscanConfigError> {
@@ -922,7 +922,7 @@ impl Config {
 
     /// Helper function to just get the API key
     pub fn get_etherscan_api_key(&self, chain: Option<impl Into<Network>>) -> Option<String> {
-        self.get_etherscan_config_with_chain(chain).ok().flatten().map(|c| c.key)
+        self.get_etherscan_config_with_network(chain).ok().flatten().map(|c| c.key)
     }
 
     /// Returns the remapping for the project's _src_ directory
@@ -2886,16 +2886,16 @@ mod tests {
             )?;
 
             let config = Config::load();
-            assert!(config.get_etherscan_config_with_chain(None::<u64>).unwrap().is_none());
+            assert!(config.get_etherscan_config_with_network(None::<u64>).unwrap().is_none());
             assert!(config
-                .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Devin))
+                .get_etherscan_config_with_network(Some(corebc_core::types::Network::Devin))
                 .is_err());
 
             std::env::set_var(env_key, env_value);
 
             assert_eq!(
                 config
-                    .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Mainnet))
+                    .get_etherscan_config_with_network(Some(corebc_core::types::Network::Mainnet))
                     .unwrap()
                     .unwrap()
                     .key,
@@ -2907,7 +2907,7 @@ mod tests {
 
             assert_eq!(
                 with_key
-                    .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Devin))
+                    .get_etherscan_config_with_network(Some(corebc_core::types::Network::Devin))
                     .unwrap()
                     .unwrap()
                     .key,
@@ -3098,7 +3098,7 @@ mod tests {
             let config = Config::load();
 
             let mumbai = config
-                .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Devin))
+                .get_etherscan_config_with_network(Some(corebc_core::types::Network::Devin))
                 .unwrap()
                 .unwrap();
             assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
@@ -3123,7 +3123,7 @@ mod tests {
             let config = Config::load();
 
             let mumbai = config
-                .get_etherscan_config_with_chain(Some(corebc_core::types::Network::Devin))
+                .get_etherscan_config_with_network(Some(corebc_core::types::Network::Devin))
                 .unwrap()
                 .unwrap();
             assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
@@ -3153,7 +3153,7 @@ mod tests {
             let config = Config::load();
 
             let mumbai =
-                config.get_etherscan_config_with_chain(Option::<u64>::None).unwrap().unwrap();
+                config.get_etherscan_config_with_network(Option::<u64>::None).unwrap().unwrap();
             assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
 
             let mumbai_rpc = config.get_rpc_url().unwrap().unwrap();

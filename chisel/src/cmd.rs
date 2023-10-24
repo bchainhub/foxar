@@ -76,7 +76,8 @@ impl FromStr for ChiselCommand {
             "memdump" | "md" => Ok(ChiselCommand::MemDump),
             "stackdump" | "sd" => Ok(ChiselCommand::StackDump),
             "export" | "ex" => Ok(ChiselCommand::Export),
-            "fetch" | "fe" => Ok(ChiselCommand::Fetch),
+            //todo:error2215 commented out (waiting for blockindex implementation)
+            // "fetch" | "fe" => Ok(ChiselCommand::Fetch),
             "exec" | "e" => Ok(ChiselCommand::Exec),
             "rawstack" | "rs" => Ok(ChiselCommand::RawStack),
             "edit" => Ok(ChiselCommand::Edit),

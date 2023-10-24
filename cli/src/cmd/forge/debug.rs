@@ -46,7 +46,7 @@ impl DebugArgs {
             args: self.args,
             target_contract: self.target_contract,
             sig: self.sig,
-            gas_estimate_multiplier: 130,
+            energy_estimate_multiplier: 130,
             opts: BuildArgs { args: self.opts, ..Default::default() },
             evm_opts: self.evm_opts,
             debug: true,

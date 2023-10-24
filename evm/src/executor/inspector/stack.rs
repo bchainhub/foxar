@@ -13,7 +13,8 @@ use corebc::{
 use revm::{
     inspectors::EnergyInspector,
     interpreter::{
-        return_revert, CallInputs, CreateInputs, Energy, InstructionResult, Interpreter, Memory, Stack,
+        return_revert, CallInputs, CreateInputs, Energy, InstructionResult, Interpreter, Memory,
+        Stack,
     },
     primitives::{B176, B256},
     EVMData, Inspector,
@@ -54,7 +55,7 @@ pub struct InspectorStack {
     pub tracer: Option<Tracer>,
     pub logs: Option<LogCollector>,
     pub cheatcodes: Option<Cheatcodes>,
-    pub gas: Option<Rc<RefCell<EnergyInspector>>>,
+    pub energy: Option<Rc<RefCell<EnergyInspector>>>,
     pub debugger: Option<Debugger>,
     pub fuzzer: Option<Fuzzer>,
     pub coverage: Option<CoverageCollector>,
@@ -74,7 +75,7 @@ impl InspectorStack {
             traces: self.tracer.map(|tracer| tracer.traces),
             debug: self.debugger.map(|debugger| debugger.arena),
             coverage: self.coverage.map(|coverage| coverage.maps),
-            energy: self.gas.map(|gas| gas.borrow().energy_remaining()),
+            energy: self.energy.map(|energy| energy.borrow().energy_remaining()),
             script_wallets: self
                 .cheatcodes
                 .as_ref()
@@ -89,7 +90,7 @@ impl InspectorStack {
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &CallInputs,
-        remaining_gas: Energy,
+        remaining_energy: Energy,
         status: InstructionResult,
         retdata: Bytes,
         is_static: bool,
@@ -97,7 +98,7 @@ impl InspectorStack {
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.fuzzer,
                 &mut self.debugger,
                 &mut self.tracer,
@@ -107,10 +108,10 @@ impl InspectorStack {
                 &mut self.printer
             ],
             {
-                let (new_status, new_gas, new_retdata) = inspector.call_end(
+                let (new_status, new_energy, new_retdata) = inspector.call_end(
                     data,
                     call,
-                    remaining_gas,
+                    remaining_energy,
                     status,
                     retdata.clone(),
                     is_static,
@@ -121,12 +122,12 @@ impl InspectorStack {
                 if new_status != status ||
                     (new_status == InstructionResult::Revert && new_retdata != retdata)
                 {
-                    return (new_status, new_gas, new_retdata)
+                    return (new_status, new_energy, new_retdata)
                 }
             }
         );
 
-        (status, remaining_gas, retdata)
+        (status, remaining_energy, retdata)
     }
 }
 
@@ -143,7 +144,7 @@ where
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.debugger,
                 &mut self.coverage,
                 &mut self.tracer,
@@ -173,7 +174,7 @@ where
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.fuzzer,
                 &mut self.debugger,
                 &mut self.tracer,
@@ -221,7 +222,7 @@ where
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.debugger,
                 &mut self.tracer,
                 &mut self.logs,
@@ -251,7 +252,7 @@ where
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.fuzzer,
                 &mut self.debugger,
                 &mut self.tracer,
@@ -261,11 +262,11 @@ where
                 &mut self.printer
             ],
             {
-                let (status, gas, retdata) = inspector.call(data, call, is_static);
+                let (status, energy, retdata) = inspector.call(data, call, is_static);
 
                 // Allow inspectors to exit early
                 if status != InstructionResult::Continue {
-                    return (status, gas, retdata)
+                    return (status, energy, retdata)
                 }
             }
         );
@@ -277,12 +278,12 @@ where
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &CallInputs,
-        remaining_gas: Energy,
+        remaining_energy: Energy,
         status: InstructionResult,
         retdata: Bytes,
         is_static: bool,
     ) -> (InstructionResult, Energy, Bytes) {
-        let res = self.do_call_end(data, call, remaining_gas, status, retdata, is_static);
+        let res = self.do_call_end(data, call, remaining_energy, status, retdata, is_static);
 
         if matches!(res.0, return_revert!()) {
             // Encountered a revert, since cheatcodes may have altered the evm state in such a way
@@ -304,7 +305,7 @@ where
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.debugger,
                 &mut self.tracer,
                 &mut self.coverage,
@@ -313,11 +314,11 @@ where
                 &mut self.printer
             ],
             {
-                let (status, addr, gas, retdata) = inspector.create(data, call);
+                let (status, addr, energy, retdata) = inspector.create(data, call);
 
                 // Allow inspectors to exit early
                 if status != InstructionResult::Continue {
-                    return (status, addr, gas, retdata)
+                    return (status, addr, energy, retdata)
                 }
             }
         );
@@ -331,13 +332,13 @@ where
         call: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        remaining_gas: Energy,
+        remaining_energy: Energy,
         retdata: Bytes,
     ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.debugger,
                 &mut self.tracer,
                 &mut self.coverage,
@@ -346,22 +347,22 @@ where
                 &mut self.printer
             ],
             {
-                let (new_status, new_address, new_gas, new_retdata) = inspector.create_end(
+                let (new_status, new_address, new_energy, new_retdata) = inspector.create_end(
                     data,
                     call,
                     status,
                     address,
-                    remaining_gas,
+                    remaining_energy,
                     retdata.clone(),
                 );
 
                 if new_status != status {
-                    return (new_status, new_address, new_gas, new_retdata)
+                    return (new_status, new_address, new_energy, new_retdata)
                 }
             }
         );
 
-        (status, address, remaining_gas, retdata)
+        (status, address, remaining_energy, retdata)
     }
 
     fn selfdestruct(&mut self, contract: B176, target: B176) {

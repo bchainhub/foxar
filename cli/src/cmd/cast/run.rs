@@ -18,18 +18,18 @@ use forge::{
     },
     revm::primitives::U256 as rU256,
     trace::{identifier::EtherscanIdentifier, CallTraceDecoderBuilder, TraceKind},
-    utils::h256_to_b256,
 };
 use foundry_config::{find_project_root_path, Config};
 use foundry_evm::utils::evm_spec;
+use foundry_utils::types::ToRuint;
 use std::{collections::BTreeMap, str::FromStr};
 use tracing::trace;
 use ui::{TUIExitReason, Tui, Ui};
 use yansi::Paint;
 
 const ARBITRUM_SENDER: H176 = H176([
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x0a, 0x4b, 0x05,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x0a, 0x4b, 0x05,
 ]);
 
 /// CLI arguments for `cast run`.
@@ -94,10 +94,7 @@ impl RunArgs {
         evm_opts.fork_block_number = Some(tx_block_number - 1);
 
         // Set up the execution environment
-        let mut env = evm_opts.evm_env().await;
-        // can safely disable base fee checks on replaying txs because can
-        // assume those checks already passed on confirmed txs
-        env.cfg.disable_base_fee = true;
+        let env = evm_opts.evm_env().await;
         let db = Backend::spawn(evm_opts.get_fork(&config, env.clone())).await;
 
         // configures a bare version of the evm executor: no cheatcode inspector is enabled,
@@ -112,12 +109,10 @@ impl RunArgs {
 
         let block = provider.get_block_with_txs(tx_block_number).await?;
         if let Some(ref block) = block {
-            env.block.timestamp = block.timestamp.into();
+            env.block.timestamp = block.timestamp.to_ruint();
             env.block.coinbase = block.author.unwrap_or_default().into();
-            env.block.difficulty = block.difficulty.into();
-            env.block.prevrandao = block.mix_hash.map(h256_to_b256);
-            env.block.basefee = block.base_fee_per_gas.unwrap_or_default().into();
-            env.block.gas_limit = block.gas_limit.into();
+            env.block.difficulty = block.difficulty.to_ruint();
+            env.block.energy_limit = block.energy_limit.to_ruint();
         }
 
         // Set the state to the moment right before the transaction
@@ -129,8 +124,8 @@ impl RunArgs {
                 pb.set_position(0);
 
                 for (index, tx) in block.transactions.into_iter().enumerate() {
-                    // arbitrum L1 transaction at the start of every block that has gas price 0
-                    // and gas limit 0 which causes reverts, so we skip it
+                    // arbitrum L1 transaction at the start of every block that has energy price 0
+                    // and energy limit 0 which causes reverts, so we skip it
                     if tx.from == ARBITRUM_SENDER {
                         update_progress!(pb, index);
                         continue
@@ -171,7 +166,7 @@ impl RunArgs {
                 trace!(tx=?tx.hash,to=?to, "executing call transaction");
                 let RawCallResult {
                     reverted,
-                    energy_used: gas,
+                    energy_used: energy,
                     traces,
                     debug: run_debug,
                     exit_reason: _,
@@ -182,25 +177,26 @@ impl RunArgs {
                     success: !reverted,
                     traces: vec![(TraceKind::Execution, traces.unwrap_or_default())],
                     debug: run_debug.unwrap_or_default(),
-                    gas_used: gas,
+                    energy_used: energy,
                 }
             } else {
                 trace!(tx=?tx.hash, "executing create transaction");
                 match executor.deploy_with_env(env, None) {
-                    Ok(DeployResult { energy_used: gas_used, traces, debug: run_debug, .. }) => RunResult {
+                    Ok(DeployResult { energy_used, traces, debug: run_debug, .. }) => RunResult {
                         success: true,
                         traces: vec![(TraceKind::Execution, traces.unwrap_or_default())],
                         debug: run_debug.unwrap_or_default(),
-                        gas_used,
+                        energy_used,
                     },
                     Err(EvmError::Execution(inner)) => {
-                        let ExecutionErr { reverted, energy_used: gas_used, traces, debug: run_debug, .. } =
-                            *inner;
+                        let ExecutionErr {
+                            reverted, energy_used, traces, debug: run_debug, ..
+                        } = *inner;
                         RunResult {
                             success: !reverted,
                             traces: vec![(TraceKind::Execution, traces.unwrap_or_default())],
                             debug: run_debug.unwrap_or_default(),
-                            gas_used,
+                            energy_used,
                         }
                     }
                     Err(err) => {
@@ -299,7 +295,7 @@ async fn print_traces(
         println!("{}", Paint::red("Transaction failed."));
     }
 
-    println!("Gas used: {}", result.gas_used);
+    println!("Energy used: {}", result.energy_used);
     Ok(())
 }
 
@@ -307,5 +303,5 @@ struct RunResult {
     pub success: bool,
     pub traces: Traces,
     pub debug: DebugArena,
-    pub gas_used: u64,
+    pub energy_used: u64,
 }

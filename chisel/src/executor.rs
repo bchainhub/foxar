@@ -7,8 +7,8 @@ use crate::prelude::{
 };
 use core::fmt::Debug;
 use corebc::{
-    abi::{ethabi, ParamType, Token},
-    types::{Address, I256, U256},
+    abi::{ethabi, Address, ParamType, Token},
+    types::{I256, U256},
     utils::hex,
 };
 use corebc_ylem::Artifact;
@@ -257,7 +257,7 @@ impl SessionSource {
             .with_chisel_state(final_pc)
             .set_tracing(true)
             .with_spec(foundry_evm::utils::evm_spec(&self.config.foundry_config.evm_version))
-            .with_gas_limit(self.config.evm_opts.energy_limit())
+            .with_energy_limit(self.config.evm_opts.energy_limit())
             .with_cheatcodes(CheatsConfig::new(&self.config.foundry_config, &self.config.evm_opts))
             .build(backend);
 
@@ -494,7 +494,8 @@ impl Type {
             pt::Expression::AddressLiteral(_, _) => Some(Self::Builtin(ParamType::Address)),
             pt::Expression::HexNumberLiteral(_, s, _) => {
                 match s.parse() {
-                    Ok(addr::H176) => {
+                    Ok(addr) => {
+                        corebc::utils::to_checksum(&addr, None);
                         Some(Self::Builtin(ParamType::Address))
                     },
                     _ => {

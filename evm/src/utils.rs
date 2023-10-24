@@ -1,12 +1,12 @@
 use corebc::{
     abi::{Abi, FixedBytes, Function},
-    types::{Block, H256, U256},
+    types::{H256, U256},
     ylem::CvmVersion,
 };
 use eyre::ContextCompat;
 use revm::{
-    interpreter::{opcode, opcode::spec_opcode_gas},
-    primitives::{Network as REVMNetwork, SpecId},
+    interpreter::{opcode, opcode::spec_opcode_energy},
+    primitives::SpecId,
 };
 use std::collections::BTreeMap;
 
@@ -149,7 +149,7 @@ pub type PCICMap = BTreeMap<usize, usize>;
 
 /// Builds a mapping from program counters to instruction counters.
 pub fn build_pc_ic_map(spec: SpecId, code: &[u8]) -> PCICMap {
-    let opcode_infos = spec_opcode_gas(spec);
+    let opcode_infos = spec_opcode_energy(spec);
     let mut pc_ic_map: PCICMap = BTreeMap::new();
 
     let mut i = 0;
@@ -175,7 +175,7 @@ pub type ICPCMap = BTreeMap<usize, usize>;
 
 /// Builds a mapping from instruction counters to program counters.
 pub fn build_ic_pc_map(spec: SpecId, code: &[u8]) -> ICPCMap {
-    let opcode_infos = spec_opcode_gas(spec);
+    let opcode_infos = spec_opcode_energy(spec);
     let mut ic_pc_map: ICPCMap = ICPCMap::new();
 
     let mut i = 0;

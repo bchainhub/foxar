@@ -4,7 +4,7 @@ use crate::{
 };
 use corebc::{
     abi::{ethereum_types::BigEndianHash, Address, RawLog},
-    types::{Bytes, DefaultFrame, GethDebugTracingOptions, StructLog, H256, U256},
+    types::{Bytes, DefaultFrame, GoCoreDebugTracingOptions, StructLog, H256, U256},
 };
 pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
 use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
@@ -97,7 +97,7 @@ impl CallTraceArena {
         storage: &mut HashMap<Address, BTreeMap<H256, H256>>,
         trace_node: &CallTraceNode,
         struct_logs: &mut Vec<StructLog>,
-        opts: &GethDebugTracingOptions,
+        opts: &GoCoreDebugTracingOptions,
     ) {
         let mut child_id = 0;
         // Iterate over the steps inside the given trace
@@ -152,8 +152,8 @@ impl CallTraceArena {
     /// Generate a geth-style trace e.g. for debug_traceTransaction
     pub fn geth_trace(
         &self,
-        receipt_gas_used: U256,
-        opts: GethDebugTracingOptions,
+        receipt_energy_used: U256,
+        opts: GoCoreDebugTracingOptions,
     ) -> DefaultFrame {
         if self.arena.is_empty() {
             return Default::default()
@@ -167,7 +167,7 @@ impl CallTraceArena {
         let mut acc = DefaultFrame {
             // If the top-level trace succeeded, then it was a success
             failed: !main_trace.success,
-            gas: receipt_gas_used,
+            gas: receipt_energy_used,
             return_value: main_trace.output.to_bytes(),
             ..Default::default()
         };
@@ -398,14 +398,14 @@ pub struct CallTraceStep {
     pub stack: Stack,
     /// Memory before step execution
     pub memory: Memory,
-    /// Remaining gas before step execution
-    pub gas: u64,
-    /// Gas refund counter before step execution
-    pub gas_refund_counter: u64,
+    /// Remaining energy before step execution
+    pub energy: u64,
+    /// Energy refund counter before step execution
+    pub energy_refund_counter: u64,
 
     // Fields filled in `step_end`
-    /// Gas cost of step execution
-    pub gas_cost: u64,
+    /// Energy cost of step execution
+    pub energy_cost: u64,
     /// Change of the contract state after step execution (effect of the SLOAD/SSTORE instructions)
     pub state_diff: Option<(U256, U256)>,
     /// Error (if any) after step execution
@@ -417,13 +417,13 @@ impl From<&CallTraceStep> for StructLog {
         StructLog {
             depth: step.depth,
             error: step.error.clone(),
-            gas: step.gas,
-            gas_cost: step.gas_cost,
+            gas: step.energy,
+            gas_cost: step.energy_cost,
             memory: Some(convert_memory(step.memory.data())),
             op: step.op.to_string(),
             pc: step.pc as u64,
-            refund_counter: if step.gas_refund_counter > 0 {
-                Some(step.gas_refund_counter)
+            refund_counter: if step.energy_refund_counter > 0 {
+                Some(step.energy_refund_counter)
             } else {
                 None
             },
@@ -447,7 +447,7 @@ pub struct CallTrace {
     ///
     /// This member is not used by the core call tracing functionality (decoding/displaying). The
     /// intended use case is for other components that may want to process traces by specific
-    /// contracts (e.g. gas reports).
+    /// contracts (e.g. energy reports).
     pub contract: Option<String>,
     /// The label for the destination address, if any
     pub label: Option<String>,
@@ -464,8 +464,8 @@ pub struct CallTrace {
     /// The return data of the call if this was not a contract creation, otherwise it is the
     /// runtime bytecode of the created contract
     pub output: RawOrDecodedReturnData,
-    /// The gas cost of the call
-    pub gas_cost: u64,
+    /// The energy cost of the call
+    pub energy_cost: u64,
     /// The status of the trace's call
     pub status: InstructionResult,
     /// call context of the runtime
@@ -496,7 +496,7 @@ impl Default for CallTrace {
             value: Default::default(),
             data: Default::default(),
             output: Default::default(),
-            gas_cost: Default::default(),
+            energy_cost: Default::default(),
             status: InstructionResult::Continue,
             call_context: Default::default(),
             steps: Default::default(),
@@ -511,7 +511,7 @@ impl fmt::Display for CallTrace {
             write!(
                 f,
                 "[{}] {}{} {}@{}",
-                self.gas_cost,
+                self.energy_cost,
                 Paint::yellow(CALL),
                 Paint::yellow("new"),
                 self.label.as_ref().unwrap_or(&"<Unknown>".to_string()),
@@ -541,7 +541,7 @@ impl fmt::Display for CallTrace {
             write!(
                 f,
                 "[{}] {}::{}{}({}) {}",
-                self.gas_cost,
+                self.energy_cost,
                 color.paint(self.label.as_ref().unwrap_or(&address.to_string())),
                 color.paint(func),
                 if !self.value.is_zero() {

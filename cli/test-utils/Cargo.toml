@@ -10,8 +10,8 @@ repository = "https://github.com/foundry-rs/foundry"
 foundry-config = { path = "../../config" }
 foundry-common = { path = "../../common" }
 
-corebc = { workspace = true }
-corebc-ylem = { workspace = true, features = ["project-util"] }
+corebc = { workspace = true}
+corebc-ylem = { workspace = true, features = ["project-util"]}
 
 eyre = "0.6"
 is-terminal = "0.4"

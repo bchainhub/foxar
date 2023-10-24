@@ -251,6 +251,7 @@ impl PartialOrd for MockCallDataContext {
     }
 }
 
+#[allow(clippy::single_range_in_vec_init)]
 fn expect_safe_memory(state: &mut Cheatcodes, start: u64, end: u64, depth: u64) -> Result {
     ensure!(start < end, "Invalid memory range: [{start}:{end}]");
     // #[allow(clippy::single_range_in_vec_init)]
@@ -297,8 +298,10 @@ fn expect_call(
                 !expecteds.contains_key(&calldata),
                 "Counted expected calls can only bet set once."
             );
-            expecteds
-                .insert(calldata, (ExpectedCallData { value, energy: gas, min_energy: min_gas, count, call_type }, 0));
+            expecteds.insert(
+                calldata,
+                (ExpectedCallData { value, energy: gas, min_energy: min_gas, count, call_type }, 0),
+            );
             Ok(Bytes::new())
         }
         ExpectedCallType::NonCount => {
@@ -316,7 +319,16 @@ fn expect_call(
                 // If it does not exist, then create it.
                 expecteds.insert(
                     calldata,
-                    (ExpectedCallData { value, energy: gas, min_energy: min_gas, count, call_type }, 0),
+                    (
+                        ExpectedCallData {
+                            value,
+                            energy: gas,
+                            min_energy: min_gas,
+                            count,
+                            call_type,
+                        },
+                        0,
+                    ),
                 );
             }
             Ok(Bytes::new())

@@ -1,7 +1,7 @@
 use crate::{
     eth::{
         backend::{info::StorageInfo, mem},
-        fees::{FeeHistoryService, FeeManager},
+        fees::FeeManager,
         miner::{Miner, MiningMode},
         pool::Pool,
         sign::{DevSigner, Signer as EthSigner},
@@ -23,7 +23,6 @@ use corebc::{
 use eth::backend::fork::ClientFork;
 use foundry_evm::revm;
 use futures::{FutureExt, TryFutureExt};
-use parking_lot::Mutex;
 use std::{
     future::Future,
     io,
@@ -134,15 +133,6 @@ pub async fn spawn(mut config: NodeConfig) -> (EthApi, NodeHandle) {
         }
     }
 
-    let fees = backend.fees().clone();
-    let fee_history_cache = Arc::new(Mutex::new(Default::default()));
-    let fee_history_service = FeeHistoryService::new(
-        backend.new_block_notifications(),
-        Arc::clone(&fee_history_cache),
-        fees,
-        StorageInfo::new(Arc::clone(&backend)),
-    );
-
     let filters = Filters::default();
 
     // create the cloneable api wrapper
@@ -150,8 +140,6 @@ pub async fn spawn(mut config: NodeConfig) -> (EthApi, NodeHandle) {
         Arc::clone(&pool),
         Arc::clone(&backend),
         Arc::new(signers),
-        fee_history_cache,
-        fee_history_service.fee_history_limit(),
         miner.clone(),
         logger,
         filters.clone(),
@@ -159,8 +147,7 @@ pub async fn spawn(mut config: NodeConfig) -> (EthApi, NodeHandle) {
     );
 
     // spawn the node service
-    let node_service =
-        tokio::task::spawn(NodeService::new(pool, backend, miner, fee_history_service, filters));
+    let node_service = tokio::task::spawn(NodeService::new(pool, backend, miner, filters));
 
     let host = config.host.unwrap_or(IpAddr::V4(Ipv4Addr::LOCALHOST));
     let mut addr = SocketAddr::new(host, port);

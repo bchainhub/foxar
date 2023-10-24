@@ -125,10 +125,6 @@ impl StorageArgs {
         let client = Client::new(chain.named()?)?;
         let source = find_source(client, address).await?;
         let metadata = source.items.first().unwrap();
-        if metadata.is_vyper() {
-            eyre::bail!("Contract at provided address is not a valid Solidity contract")
-        }
-
         let version = metadata.compiler_version()?;
         let auto_detect = version < MIN_YLEM;
 
@@ -151,7 +147,7 @@ impl StorageArgs {
             if is_storage_layout_empty(&artifact.storage_layout) && auto_detect {
                 // try recompiling with the minimum version
                 eprintln!("The requested contract was compiled with {version} while the minimum version for storage layouts is {MIN_YLEM} and as a result the output may be empty.");
-                let ylem = Ylem::find_or_install_svm_version(MIN_YLEM.to_string())?;
+                let ylem = Ylem::find_or_install_yvm_version(MIN_YLEM.to_string())?;
                 project.ylem = ylem;
                 project.auto_detect = false;
                 if let Ok(output) = suppress_compile(&project) {
@@ -242,7 +238,7 @@ fn print_storage(layout: StorageLayout, values: Vec<String>, pretty: bool) -> Re
 fn add_storage_layout_output(project: &mut Project) {
     project.artifacts.additional_values.storage_layout = true;
     let output_selection = project.artifacts.output_selection();
-    project.solc_config.settings.push_all(output_selection);
+    project.ylem_config.settings.push_all(output_selection);
 }
 
 fn is_storage_layout_empty(storage_layout: &Option<StorageLayout>) -> bool {

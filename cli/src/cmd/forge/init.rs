@@ -208,7 +208,7 @@ fn init_vscode(root: &Path) -> eyre::Result<()> {
         fs::create_dir_all(&vscode_dir)?;
         serde_json::json!({})
     } else if settings_file.exists() {
-        ethers::solc::utils::read_json_file(&settings_file)?
+        corebc::ylem::utils::read_json_file(&settings_file)?
     } else {
         serde_json::json!({})
     };

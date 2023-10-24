@@ -9,7 +9,7 @@ use corebc::{
 };
 use foundry_macros::ConsoleFmt;
 use revm::{
-    interpreter::{CallInputs, Gas, InstructionResult},
+    interpreter::{CallInputs, Energy, InstructionResult},
     primitives::{B176, B256},
     Database, EVMData, Inspector,
 };
@@ -61,12 +61,12 @@ where
         _: &mut EVMData<'_, DB>,
         call: &mut CallInputs,
         _: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         if call.contract == h176_to_b176(HARDHAT_CONSOLE_ADDRESS) {
             let (status, reason) = self.hardhat_log(call.input.to_vec());
-            (status, Gas::new(call.gas_limit), reason)
+            (status, Energy::new(call.energy_limit), reason)
         } else {
-            (InstructionResult::Continue, Gas::new(call.gas_limit), Bytes::new())
+            (InstructionResult::Continue, Energy::new(call.energy_limit), Bytes::new())
         }
     }
 }

@@ -38,7 +38,8 @@ pub struct CommentWithMetadata {
 
 impl PartialOrd for CommentWithMetadata {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.loc.partial_cmp(&other.loc)
+        // self.loc.partial_cmp(&other.loc)
+        Some(self.cmp(other))
     }
 }
 

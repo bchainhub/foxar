@@ -1,8 +1,8 @@
 use super::{multi::MultiChainSequence, providers::ProvidersManager, sequence::ScriptSequence, *};
 use crate::{
     cmd::forge::script::{
-            receipts::clear_pendings, transaction::TransactionWithMetadata, verify::VerifyBundle,
-        },
+        receipts::clear_pendings, transaction::TransactionWithMetadata, verify::VerifyBundle,
+    },
     init_progress,
     opts::WalletSigner,
     update_progress,
@@ -63,15 +63,12 @@ impl ScriptArgs {
             // We only wait for a transaction receipt before sending the next transaction, if there
             // is more than one signer. There would be no way of assuring their order
             // otherwise. Or if the chain does not support batched transactions (eg. Arbitrum).
-            let sequential_broadcast =
-                send_kind.signers_count() != 1 || self.slow;
+            let sequential_broadcast = send_kind.signers_count() != 1 || self.slow;
 
-            // Make a one-time gas price estimation
-            let (gas_price, eip1559_fees) = {
+            // Make a one-time energy price estimation
+            let energy_price = {
                 match deployment_sequence.transactions.front().unwrap().typed_tx() {
-                    TypedTransaction::Legacy(_) | TypedTransaction::Eip2930(_) => {
-                        (provider.get_gas_price().await.ok(), None)
-                    }
+                    TypedTransaction::Legacy(_) => provider.get_energy_price().await.ok(),
                 }
             };
 
@@ -86,30 +83,26 @@ impl ScriptArgs {
                     let from = *tx.from().expect("No sender for onchain transaction!");
 
                     let kind = send_kind.for_sender(&from)?;
-                    let is_fixed_gas_limit = tx_with_metadata.is_fixed_gas_limit;
+                    let is_fixed_energy_limit = tx_with_metadata.is_fixed_energy_limit;
 
                     let mut tx = tx.clone();
 
                     tx.set_network_id(network);
 
-                    if let Some(gas_price) = self.with_gas_price {
-                        tx.set_gas_price(gas_price);
+                    if let Some(energy_price) = self.with_energy_price {
+                        tx.set_energy_price(energy_price);
                     } else {
-                        // fill gas price
+                        // fill energy price
                         match tx {
-                            TypedTransaction::Eip2930(_) | TypedTransaction::Legacy(_) => {
-                                tx.set_gas_price(gas_price.expect("Could not get gas_price."));
-                            }
-                            TypedTransaction::Eip1559(ref mut inner) => {
-                                let eip1559_fees =
-                                    eip1559_fees.expect("Could not get eip1559 fee estimation.");
-                                inner.max_fee_per_gas = Some(eip1559_fees.0);
-                                inner.max_priority_fee_per_gas = Some(eip1559_fees.1);
+                            TypedTransaction::Legacy(_) => {
+                                tx.set_energy_price(
+                                    energy_price.expect("Could not get energy_price."),
+                                );
                             }
                         }
                     }
 
-                    Ok((tx, kind, is_fixed_gas_limit))
+                    Ok((tx, kind, is_fixed_energy_limit))
                 })
                 .collect::<Result<Vec<_>>>()?;
 
@@ -129,14 +122,14 @@ impl ScriptArgs {
                     batch_number * batch_size,
                     batch_number * batch_size + min(batch_size, batch.len()) - 1
                 ))?;
-                for (tx, kind, is_fixed_gas_limit) in batch.into_iter() {
+                for (tx, kind, is_fixed_energy_limit) in batch.into_iter() {
                     let tx_hash = self.send_transaction(
                         provider.clone(),
                         tx,
                         kind,
                         sequential_broadcast,
                         fork_url,
-                        is_fixed_gas_limit,
+                        is_fixed_energy_limit,
                     );
 
                     if sequential_broadcast {
@@ -181,22 +174,23 @@ impl ScriptArgs {
         shell::println("\n\n==========================")?;
         shell::println("\nONCHAIN EXECUTION COMPLETE & SUCCESSFUL.")?;
 
-        let (total_gas, total_gas_price, total_paid) = deployment_sequence.receipts.iter().fold(
-            (U256::zero(), U256::zero(), U256::zero()),
-            |acc, receipt| {
-                let gas_used = receipt.gas_used.unwrap_or_default();
-                let gas_price = receipt.effective_gas_price.unwrap_or_default();
-                (acc.0 + gas_used, acc.1 + gas_price, acc.2 + gas_used.mul(gas_price))
-            },
-        );
+        let (total_energy, total_energy_price, total_paid) = deployment_sequence
+            .receipts
+            .iter()
+            .fold((U256::zero(), U256::zero(), U256::zero()), |acc, receipt| {
+                let energy_used = receipt.energy_used.unwrap_or_default();
+                // let energy_price = receipt.effective_energy_price.unwrap_or_default();
+                (acc.0 + energy_used, acc.1 + 1, acc.2 + energy_used.mul(1))
+            });
         let paid = format_units(total_paid, 18).unwrap_or_else(|_| "N/A".to_string());
-        let avg_gas_price = format_units(total_gas_price / deployment_sequence.receipts.len(), 9)
-            .unwrap_or_else(|_| "N/A".to_string());
+        let avg_energy_price =
+            format_units(total_energy_price / deployment_sequence.receipts.len(), 9)
+                .unwrap_or_else(|_| "N/A".to_string());
         shell::println(format!(
-            "Total Paid: {} ETH ({} gas * avg {} gwei)",
+            "Total Paid: {} ETH ({} energy * avg {} gwei)",
             paid.trim_end_matches('0'),
-            total_gas,
-            avg_gas_price.trim_end_matches('0').trim_end_matches('.')
+            total_energy,
+            avg_energy_price.trim_end_matches('0').trim_end_matches('.')
         ))?;
 
         Ok(())
@@ -209,7 +203,7 @@ impl ScriptArgs {
         kind: SendTransactionKind<'_>,
         sequential_broadcast: bool,
         fork_url: &str,
-        is_fixed_gas_limit: bool,
+        is_fixed_energy_limit: bool,
     ) -> Result<TxHash> {
         let from = tx.from().expect("no sender");
 
@@ -229,11 +223,10 @@ impl ScriptArgs {
             SendTransactionKind::Unlocked(addr) => {
                 tracing::debug!("sending transaction from unlocked account {:?}: {:?}", addr, tx);
 
-                // Chains which use `eth_estimateGas` are being sent sequentially and require their
-                // gas to be re-estimated right before broadcasting.
-                if !is_fixed_gas_limit && self.skip_simulation
-                {
-                    self.estimate_gas(&mut tx, &provider).await?;
+                // Chains which use `eth_estimateEnergy` are being sent sequentially and require
+                // their energy to be re-estimated right before broadcasting.
+                if !is_fixed_energy_limit && self.skip_simulation {
+                    self.estimate_energy(&mut tx, &provider).await?;
                 }
 
                 // Submit the transaction
@@ -258,7 +251,6 @@ impl ScriptArgs {
         if let Some(txs) = result.transactions.take() {
             script_config.collect_rpcs(&txs);
             script_config.check_multi_chain_constraints(&libraries)?;
-            script_config.check_shanghai_support().await?;
 
             if !script_config.missing_rpc {
                 trace!(target: "script", "creating deployments");
@@ -352,15 +344,15 @@ impl ScriptArgs {
         known_contracts: &ContractsByArtifact,
     ) -> Result<Vec<ScriptSequence>> {
         if !txs.is_empty() {
-            let gas_filled_txs = self
-                .fills_transactions_with_gas(txs, script_config, decoder, known_contracts)
+            let energy_filled_txs = self
+                .fills_transactions_with_energy(txs, script_config, decoder, known_contracts)
                 .await?;
 
             let returns = self.get_returns(&*script_config, &script_result.returned)?;
 
             return self
                 .bundle_transactions(
-                    gas_filled_txs,
+                    energy_filled_txs,
                     &script_config.target_contract().clone(),
                     &mut script_config.config,
                     returns,
@@ -374,16 +366,16 @@ impl ScriptArgs {
     }
 
     /// Takes the collected transactions and executes them locally before converting them to
-    /// [`TransactionWithMetadata`] with the appropriate gas execution estimation. If
+    /// [`TransactionWithMetadata`] with the appropriate energy execution estimation. If
     /// `--skip-simulation` is passed, then it will skip the execution.
-    async fn fills_transactions_with_gas(
+    async fn fills_transactions_with_energy(
         &self,
         txs: BroadcastableTransactions,
         script_config: &mut ScriptConfig,
         decoder: &mut CallTraceDecoder,
         known_contracts: &ContractsByArtifact,
     ) -> Result<VecDeque<TransactionWithMetadata>> {
-        let gas_filled_txs = if self.skip_simulation {
+        let energy_filled_txs = if self.skip_simulation {
             shell::println("\nSKIPPING ON CHAIN SIMULATION.")?;
             txs.into_iter()
                 .map(|btx| {
@@ -402,14 +394,14 @@ impl ScriptArgs {
             .await
             .wrap_err("\nTransaction failed when running the on-chain simulation. Check the trace above for more information.")?
         };
-        Ok(gas_filled_txs)
+        Ok(energy_filled_txs)
     }
 
     /// Returns all transactions of the [`TransactionWithMetadata`] type in a list of
     /// [`ScriptSequence`]. List length will be higher than 1, if we're dealing with a multi
     /// chain deployment.
     ///
-    /// Each transaction will be added with the correct transaction type and gas estimation.
+    /// Each transaction will be added with the correct transaction type and energy estimation.
     async fn bundle_transactions(
         &self,
         transactions: VecDeque<TransactionWithMetadata>,
@@ -421,7 +413,7 @@ impl ScriptArgs {
         let last_rpc = &transactions.back().expect("exists; qed").rpc;
         let is_multi_deployment = transactions.iter().any(|tx| &tx.rpc != last_rpc);
 
-        let mut total_gas_per_rpc: HashMap<RpcUrl, U256> = HashMap::new();
+        let mut total_energy_per_rpc: HashMap<RpcUrl, U256> = HashMap::new();
 
         // Batches sequence of transactions from different rpcs.
         let mut new_sequence = VecDeque::new();
@@ -447,17 +439,17 @@ impl ScriptArgs {
                 }
             };
 
-            let provider_info = manager.get_or_init_provider(&tx_rpc, self.legacy).await?;
+            let provider_info = manager.get_or_init_provider(&tx_rpc).await?;
 
             // Handles chain specific requirements.
-            tx.change_type(provider_info.is_legacy);
             tx.transaction.set_network_id(provider_info.network);
 
             if !self.skip_simulation {
                 let typed_tx = tx.typed_tx_mut();
 
-                let total_gas = total_gas_per_rpc.entry(tx_rpc.clone()).or_insert(U256::zero());
-                *total_gas += *typed_tx.gas().expect("gas is set");
+                let total_energy =
+                    total_energy_per_rpc.entry(tx_rpc.clone()).or_insert(U256::zero());
+                *total_energy += *typed_tx.energy().expect("energy is set");
             }
 
             new_sequence.push_back(tx);
@@ -489,32 +481,34 @@ impl ScriptArgs {
         config.network_id = original_config_chain;
 
         if !self.skip_simulation {
-            // Present gas information on a per RPC basis.
-            for (rpc, total_gas) in total_gas_per_rpc {
+            // Present energy information on a per RPC basis.
+            for (rpc, total_energy) in total_energy_per_rpc {
                 let provider_info = manager.get(&rpc).expect("provider is set.");
 
                 // We don't store it in the transactions, since we want the most updated value.
                 // Right before broadcasting.
-                let per_gas = if let Some(gas_price) = self.with_gas_price {
-                    gas_price
+                let per_energy = if let Some(energy_price) = self.with_energy_price {
+                    energy_price
                 } else {
-                    provider_info.gas_price()?
+                    provider_info.energy_price()?
                 };
 
                 shell::println("\n==========================")?;
                 shell::println(format!("\nChain {}", provider_info.network))?;
 
                 shell::println(format!(
-                    "\nEstimated gas price: {} gwei",
-                    format_units(per_gas, 9)
+                    "\nEstimated energy price: {} gwei",
+                    format_units(per_energy, 9)
                         .unwrap_or_else(|_| "[Could not calculate]".to_string())
                         .trim_end_matches('0')
                         .trim_end_matches('.')
                 ))?;
-                shell::println(format!("\nEstimated total gas used for script: {total_gas}"))?;
+                shell::println(format!(
+                    "\nEstimated total energy used for script: {total_energy}"
+                ))?;
                 shell::println(format!(
                     "\nEstimated amount required: {} ETH",
-                    format_units(total_gas.saturating_mul(per_gas), 18)
+                    format_units(total_energy.saturating_mul(per_energy), 18)
                         .unwrap_or_else(|_| "[Could not calculate]".to_string())
                         .trim_end_matches('0')
                 ))?;
@@ -530,7 +524,7 @@ impl ScriptArgs {
         &self,
         provider: Arc<RetryProvider>,
         signer: &WalletSigner,
-        mut legacy_or_1559: TypedTransaction,
+        legacy_or_1559: TypedTransaction,
     ) -> Result<TxHash> {
         tracing::debug!("sending transaction: {:?}", legacy_or_1559);
 
@@ -547,20 +541,22 @@ impl ScriptArgs {
         Ok(pending.tx_hash())
     }
 
-    async fn estimate_gas<T>(&self, tx: &mut TypedTransaction, provider: &Provider<T>) -> Result<()>
+    async fn estimate_energy<T>(
+        &self,
+        tx: &mut TypedTransaction,
+        provider: &Provider<T>,
+    ) -> Result<()>
     where
         T: JsonRpcClient,
     {
-        // if already set, some RPC endpoints might simply return the gas value that is already
+        // if already set, some RPC endpoints might simply return the energy value that is already
         // set in the request and omit the estimate altogether, so we remove it here
-        let _ = tx.gas_mut().take();
+        let _ = tx.energy_mut().take();
 
-        tx.set_gas(
-            provider
-                .estimate_gas(tx, None)
-                .await
-                .wrap_err_with(|| format!("Failed to estimate gas for tx: {:?}", tx.sighash()))? *
-                self.gas_estimate_multiplier /
+        tx.set_energy(
+            provider.estimate_energy(tx, None).await.wrap_err_with(|| {
+                format!("Failed to estimate energy for tx: {:?}", tx.sighash())
+            })? * self.energy_estimate_multiplier /
                 100,
         );
         Ok(())

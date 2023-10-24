@@ -10,8 +10,8 @@ keywords = ["ethereum", "web3", "solidity"]
 
 [dependencies]
 foundry-config = { path = "../config" }
-corebc-ylem = { workspace = true, features = ["async", "yvm-ylem", "project-util"] }
-corebc-contract = { workspace = true, features = ["abigen"] }
+corebc-ylem = { workspace = true, features = ["async", "yvm-ylem", "project-util"]}
+corebc-contract = { workspace = true, features = ["abigen"]}
 curl = { version = "0.4", default-features = false, features = ["http2"] }
 eyre = "0.6"
 git2 = { version = "0.17", default-features = false }

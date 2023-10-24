@@ -2,7 +2,7 @@ use crate::{
     debug::{DebugArena, DebugNode, DebugStep, Instruction},
     executor::{
         backend::DatabaseExt,
-        inspector::utils::{gas_used, get_create_address},
+        inspector::utils::{energy_used, get_create_address},
         CHEATCODE_ADDRESS,
     },
     utils::{b176_to_h176, ru256_to_u256},
@@ -12,10 +12,10 @@ use bytes::Bytes;
 use corebc::types::{Address, Network};
 use foundry_utils::error::SolError;
 use revm::{
-    inspectors::GasInspector,
+    inspectors::EnergyInspector,
     interpreter::{
-        opcode::{self, spec_opcode_gas},
-        CallInputs, CreateInputs, Gas, InstructionResult, Interpreter, Memory,
+        opcode::{self, spec_opcode_energy},
+        CallInputs, CreateInputs, Energy, InstructionResult, Interpreter, Memory,
     },
     primitives::B176,
     EVMData, Inspector,
@@ -32,16 +32,16 @@ pub struct Debugger {
     /// The current execution address.
     pub context: Address,
 
-    gas_inspector: Rc<RefCell<GasInspector>>,
+    energy_inspector: Rc<RefCell<EnergyInspector>>,
 }
 
 impl Debugger {
-    pub fn new(gas_inspector: Rc<RefCell<GasInspector>>) -> Self {
+    pub fn new(energy_inspector: Rc<RefCell<EnergyInspector>>) -> Self {
         Self {
             arena: Default::default(),
             head: Default::default(),
             context: Default::default(),
-            gas_inspector,
+            energy_inspector,
         }
     }
 
@@ -76,7 +76,7 @@ where
         let op = interpreter.contract.bytecode.bytecode()[pc];
 
         // Get opcode information
-        let opcode_infos = spec_opcode_gas(data.env.cfg.spec_id);
+        let opcode_infos = spec_opcode_energy(data.env.cfg.spec_id);
         let opcode_info = &opcode_infos[op as usize];
 
         // Extract the push bytes
@@ -90,10 +90,13 @@ where
             }
         };
 
-        let total_gas_used = gas_used(
+        let total_energy_used = energy_used(
             data.env.cfg.spec_id,
-            interpreter.gas.limit().saturating_sub(self.gas_inspector.borrow().gas_remaining()),
-            interpreter.gas.refunded() as u64,
+            interpreter
+                .energy
+                .limit()
+                .saturating_sub(self.energy_inspector.borrow().energy_remaining()),
+            interpreter.energy.refunded() as u64,
         );
 
         self.arena.arena[self.head].steps.push(DebugStep {
@@ -102,7 +105,7 @@ where
             memory: interpreter.memory.clone(),
             instruction: Instruction::OpCode(op),
             push_bytes,
-            total_gas_used,
+            total_energy_used,
         });
 
         InstructionResult::Continue
@@ -113,7 +116,7 @@ where
         data: &mut EVMData<'_, DB>,
         call: &mut CallInputs,
         _: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         self.enter(
             data.journaled_state.depth() as usize,
             b176_to_h176(call.context.code_address),
@@ -129,32 +132,32 @@ where
             });
         }
 
-        (InstructionResult::Continue, Gas::new(call.gas_limit), Bytes::new())
+        (InstructionResult::Continue, Energy::new(call.energy_limit), Bytes::new())
     }
 
     fn call_end(
         &mut self,
         _: &mut EVMData<'_, DB>,
         _: &CallInputs,
-        gas: Gas,
+        energy: Energy,
         status: InstructionResult,
         retdata: Bytes,
         _: bool,
-    ) -> (InstructionResult, Gas, Bytes) {
+    ) -> (InstructionResult, Energy, Bytes) {
         self.exit();
 
-        (status, gas, retdata)
+        (status, energy, retdata)
     }
 
     fn create(
         &mut self,
         data: &mut EVMData<'_, DB>,
         call: &mut CreateInputs,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
-        // TODO: Does this increase gas cost?
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
+        // TODO: Does this increase energy cost?
         if let Err(err) = data.journaled_state.load_account(call.caller, data.db) {
-            let gas = Gas::new(call.gas_limit);
-            return (InstructionResult::Revert, None, gas, err.encode_string().0)
+            let energy = Energy::new(call.energy_limit);
+            return (InstructionResult::Revert, None, energy, err.encode_string().0)
         }
 
         let nonce = data.journaled_state.account(call.caller).info.nonce;
@@ -168,7 +171,7 @@ where
             CallKind::Create,
         );
 
-        (InstructionResult::Continue, None, Gas::new(call.gas_limit), Bytes::new())
+        (InstructionResult::Continue, None, Energy::new(call.energy_limit), Bytes::new())
     }
 
     fn create_end(
@@ -177,11 +180,11 @@ where
         _: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        gas: Gas,
+        energy: Energy,
         retdata: Bytes,
-    ) -> (InstructionResult, Option<B176>, Gas, Bytes) {
+    ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         self.exit();
 
-        (status, address, gas, retdata)
+        (status, address, energy, retdata)
     }
 }

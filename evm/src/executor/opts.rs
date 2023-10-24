@@ -1,10 +1,10 @@
 use crate::{
     executor::fork::CreateFork,
-    utils::{h176_to_b176, h256_to_b256, u256_to_ru256, RuntimeOrHandle},
+    utils::{h176_to_b176, u256_to_ru256, RuntimeOrHandle},
 };
 use corebc::{
     providers::{Middleware, Provider},
-    types::{Address, Block, Network, TxHash, H256, U256},
+    types::{Address, Block, Network, TxHash, U256},
 };
 use eyre::WrapErr;
 use foundry_common::{self, ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
@@ -105,12 +105,9 @@ impl EvmOpts {
                 network: REVMNetwork::from(
                     self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID),
                 ),
-                spec_id: SpecId::ISTANBUL,
+                spec_id: SpecId::LATEST,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
-                // EIP-3607 rejects transactions from senders with deployed code.
-                // If EIP-3607 is enabled it can cause issues during fuzz/invariant tests if the
-                // caller is a contract. So we disable the check by default.
                 ..Default::default()
             },
             tx: TxEnv {
@@ -203,8 +200,8 @@ pub struct Env {
 
     /// the tx.energyprice value during EVM execution
     ///
-    /// This is an Option, so we can determine in fork mode whether to use the config's energy price
-    /// (if set by user) or the remote client's energy price.
+    /// This is an Option, so we can determine in fork mode whether to use the config's energy
+    /// price (if set by user) or the remote client's energy price.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub energy_price: Option<u64>,
 

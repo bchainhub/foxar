@@ -1,4 +1,4 @@
-use super::{NetworkValueParser, Wallet, WalletSigner};
+use super::{Wallet, WalletSigner};
 use clap::Parser;
 use eyre::Result;
 use foundry_config::{
@@ -61,18 +61,12 @@ impl RpcOpts {
 #[derive(Clone, Debug, Default, Parser, Serialize)]
 pub struct EtherscanOpts {
     /// The Etherscan (or equivalent) API key
-    // #[clap(short = 'e', long = "etherscan-api-key", alias = "api-key", env = "ETHERSCAN_API_KEY")]
-    // #[serde(rename = "etherscan_api_key", skip_serializing_if = "Option::is_none")]
-    // pub key: Option<String>,
+    // #[clap(short = 'e', long = "etherscan-api-key", alias = "api-key", env =
+    // "ETHERSCAN_API_KEY")] #[serde(rename = "etherscan_api_key", skip_serializing_if =
+    // "Option::is_none")] pub key: Option<String>,
 
     /// The network name or EIP-155 network ID
-    #[clap(
-        short,
-        long,
-        alias = "network-id",
-        env = "NETWORK",
-        value_parser = NetworkValueParser::default(),
-    )]
+    #[clap(short, long, alias = "network-id", env = "NETWORK")]
     #[serde(rename = "network_id", skip_serializing_if = "Option::is_none")]
     pub network: Option<Network>,
 }
@@ -90,12 +84,13 @@ impl figment::Provider for EtherscanOpts {
 }
 
 impl EtherscanOpts {
-    pub fn key<'a>(&'a self, config: Option<&'a Config>) -> Option<Cow<'a, str>> {
-        match (self.key.as_deref(), config) {
-            (Some(key), _) => Some(Cow::Borrowed(key)),
-            (None, Some(config)) => config.get_etherscan_api_key(self.network).map(Cow::Owned),
-            (None, None) => None,
-        }
+    pub fn key(&self) -> Option<Cow<str>> {
+        // match (self.key.as_deref(), config) {
+        //     (Some(key), _) => Some(Cow::Borrowed(key)),
+        //     (None, Some(config)) => config.get_etherscan_api_key(self.network).map(Cow::Owned),
+        //     (None, None) => None,
+        // }
+        None
     }
 
     pub fn dict(&self) -> Dict {

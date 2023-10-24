@@ -3,8 +3,8 @@
 use super::*;
 use corebc::{
     prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, YlemConfig},
-    solc::{artifacts::Libraries, Project, ProjectPathsConfig},
     types::{Address, U256},
+    ylem::{artifacts::Libraries, Project, ProjectPathsConfig},
 };
 use foundry_config::Config;
 use foundry_evm::{
@@ -37,7 +37,7 @@ pub static LIBS_PROJECT: Lazy<Project> = Lazy::new(|| {
         .paths(paths)
         .ephemeral()
         .no_artifacts()
-        .solc_config(solc_config)
+        .ylem_config(solc_config)
         .build()
         .unwrap()
 });

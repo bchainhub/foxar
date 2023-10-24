@@ -5,12 +5,12 @@ use corebc::{
         artifacts::Libraries, cache::SolFilesCache, ArtifactId, Graph, Project,
         ProjectCompileOutput,
     },
+    types::{Address, Network as CorebcNetwork, U256},
     ylem::{
         artifacts::{CompactContractBytecode, ContractBytecode, ContractBytecodeSome},
         contracts::ArtifactContracts,
         info::ContractInfo,
     },
-    types::{Address, U256},
 };
 use eyre::{Context, ContextCompat};
 use foundry_common::compile;
@@ -110,9 +110,11 @@ impl ScriptArgs {
             }
         }
 
-        let network = self.evm_opts.env.network_id.unwrap_or({
+        if self.evm_opts.env.network_id.is_none() {
             eyre::bail!("Network is not provided. Please specify the network with `--network {{network_id}}`")
-        });
+        };
+        let network_config = self.evm_opts.env.network_id.unwrap();
+        let network = CorebcNetwork::try_from(network_config.id()).unwrap();
 
         foundry_utils::link_with_nonce_or_address(
             contracts.clone(),
@@ -173,7 +175,7 @@ impl ScriptArgs {
                 highlevel_known_contracts.insert(id, tc.unwrap());
                 Ok(())
             },
-            network
+            network,
         )?;
 
         let target = extra_info

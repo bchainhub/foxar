@@ -2,8 +2,9 @@ use crate::eth::{receipt::TypedReceipt, transaction::TransactionInfo, trie};
 use corebc_core::{
     types::{Address, Bloom, Bytes, H256, H64, U256},
     utils::{
-        keccak256, rlp,
+        rlp,
         rlp::{Decodable, DecoderError, Encodable, Rlp, RlpStream},
+        sha3,
     },
 };
 
@@ -48,7 +49,7 @@ impl Block {
         T: Into<Transaction>,
     {
         let transactions: Vec<_> = transactions.into_iter().map(Into::into).collect();
-        let ommers_hash = H256::from_slice(keccak256(&rlp::encode_list(&ommers)[..]).as_slice());
+        let ommers_hash = H256::from_slice(sha3(&rlp::encode_list(&ommers)[..]).as_slice());
         let transactions_root =
             trie::ordered_trie_root(transactions.iter().map(|r| rlp::encode(r).freeze()));
 
@@ -95,8 +96,6 @@ pub struct Header {
     pub extra_data: Bytes,
     pub mix_hash: H256,
     pub nonce: H64,
-    /// BaseFee was added by EIP-1559 and is ignored in legacy headers.
-    pub base_fee_per_gas: Option<U256>,
 }
 
 // == impl Header ==
@@ -119,12 +118,11 @@ impl Header {
             extra_data: partial_header.extra_data,
             mix_hash: partial_header.mix_hash,
             nonce: partial_header.nonce,
-            base_fee_per_gas: partial_header.base_fee,
         }
     }
 
     pub fn hash(&self) -> H256 {
-        H256::from_slice(keccak256(&rlp::encode(self)).as_slice())
+        H256::from_slice(sha3(&rlp::encode(self)).as_slice())
     }
 
     /// Returns the rlp length of the Header body, _not including_ trailing EIP155 fields or the
@@ -150,18 +148,13 @@ impl Header {
         length += self.extra_data.length();
         length += self.mix_hash.length();
         length += self.nonce.length();
-        length += self.base_fee_per_gas.map(|fee| fee.length()).unwrap_or_default();
         length
     }
 }
 
 impl rlp::Encodable for Header {
     fn rlp_append(&self, s: &mut rlp::RlpStream) {
-        if self.base_fee_per_gas.is_none() {
-            s.begin_list(15);
-        } else {
-            s.begin_list(16);
-        }
+        s.begin_list(15);
         s.append(&self.parent_hash);
         s.append(&self.ommers_hash);
         s.append(&self.beneficiary);
@@ -177,9 +170,6 @@ impl rlp::Encodable for Header {
         s.append(&self.extra_data.as_ref());
         s.append(&self.mix_hash);
         s.append(&self.nonce);
-        if let Some(ref base_fee) = self.base_fee_per_gas {
-            s.append(base_fee);
-        }
     }
 }
 
@@ -201,11 +191,6 @@ impl rlp::Decodable for Header {
             extra_data: rlp.val_at::<Vec<u8>>(12)?.into(),
             mix_hash: rlp.val_at(13)?,
             nonce: rlp.val_at(14)?,
-            base_fee_per_gas: if let Ok(base_fee) = rlp.at(15) {
-                Some(<U256 as Decodable>::decode(&base_fee)?)
-            } else {
-                None
-            },
         };
         Ok(result)
     }
@@ -241,19 +226,12 @@ impl open_fastrlp::Encodable for Header {
         self.extra_data.encode(out);
         self.mix_hash.encode(out);
         self.nonce.encode(out);
-        if let Some(base_fee_per_gas) = self.base_fee_per_gas {
-            base_fee_per_gas.encode(out);
-        }
     }
 }
 
 #[cfg(feature = "fastrlp")]
 impl open_fastrlp::Decodable for Header {
     fn decode(buf: &mut &[u8]) -> Result<Self, open_fastrlp::DecodeError> {
-        // slice out the rlp list header
-        let header = open_fastrlp::Header::decode(buf)?;
-        let start_len = buf.len();
-
         Ok(Header {
             parent_hash: <H256 as open_fastrlp::Decodable>::decode(buf)?,
             ommers_hash: <H256 as open_fastrlp::Decodable>::decode(buf)?,
@@ -270,12 +248,6 @@ impl open_fastrlp::Decodable for Header {
             extra_data: <Bytes as open_fastrlp::Decodable>::decode(buf)?,
             mix_hash: <H256 as open_fastrlp::Decodable>::decode(buf)?,
             nonce: <H64 as open_fastrlp::Decodable>::decode(buf)?,
-            base_fee_per_gas: if start_len - header.payload_length < buf.len() {
-                // if there is leftover data in the payload, decode the base fee
-                Some(<U256 as open_fastrlp::Decodable>::decode(buf)?)
-            } else {
-                None
-            },
         })
     }
 }
@@ -296,7 +268,6 @@ pub struct PartialHeader {
     pub extra_data: Bytes,
     pub mix_hash: H256,
     pub nonce: H64,
-    pub base_fee: Option<U256>,
 }
 
 impl From<Header> for PartialHeader {
@@ -315,7 +286,6 @@ impl From<Header> for PartialHeader {
             extra_data: header.extra_data,
             mix_hash: header.mix_hash,
             nonce: header.nonce,
-            base_fee: header.base_fee_per_gas,
         }
     }
 }
@@ -349,7 +319,6 @@ mod tests {
             extra_data: Default::default(),
             mix_hash: Default::default(),
             nonce: 99u64.to_be_bytes().into(),
-            base_fee_per_gas: None,
         };
 
         let encoded = rlp::encode(&header);
@@ -382,7 +351,6 @@ mod tests {
             extra_data: Default::default(),
             mix_hash: Default::default(),
             nonce: H64::from_low_u64_be(99u64),
-            base_fee_per_gas: None,
         };
 
         let mut encoded = vec![];
@@ -424,7 +392,6 @@ mod tests {
             extra_data: hex::decode("7788").unwrap().into(),
             mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
-            base_fee_per_gas: None,
         };
         header.encode(&mut data);
         assert_eq!(hex::encode(&data), hex::encode(expected));
@@ -453,7 +420,6 @@ mod tests {
             extra_data: hex::decode("42").unwrap().into(),
             mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
-            base_fee_per_gas: Some(0x036b.into()),
         };
         assert_eq!(header.hash(), expected_hash);
     }
@@ -479,7 +445,6 @@ mod tests {
             extra_data: hex::decode("7788").unwrap().into(),
             mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
-            base_fee_per_gas: None,
         };
         let header = <Header as open_fastrlp::Decodable>::decode(&mut data.as_slice()).unwrap();
         assert_eq!(header, expected);

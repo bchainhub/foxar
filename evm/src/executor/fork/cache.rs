@@ -2,7 +2,7 @@
 use crate::{executor::backend::snapshot::StateSnapshot, HashMap as Map};
 use parking_lot::RwLock;
 use revm::{
-    primitives::{Account, AccountInfo, B176, B256, KECCAK_EMPTY, U256},
+    primitives::{Account, AccountInfo, B176, B256, SHA3_EMPTY, U256},
     DatabaseCommit,
 };
 use serde::{ser::SerializeMap, Deserialize, Deserializer, Serialize, Serializer};
@@ -259,7 +259,7 @@ impl MemDb {
                 {
                     acc.info.code_hash = code_hash;
                 } else if acc.info.code_hash.is_zero() {
-                    acc.info.code_hash = KECCAK_EMPTY;
+                    acc.info.code_hash = SHA3_EMPTY;
                 }
                 accounts.insert(add, acc.info);
 

@@ -2,8 +2,8 @@
 use crate::forge_utils;
 use corebc::{
     prelude::artifacts::YulDetails,
-    ylem::artifacts::RevertStrings,
     types::{Address, H256, U256},
+    ylem::{artifacts::RevertStrings, CvmVersion},
 };
 use forge::executor::opts::EvmOpts;
 use foundry_cli_test_utils::{
@@ -33,7 +33,7 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         cache_path: "test-cache".into(),
         broadcast: "broadcast".into(),
         force: true,
-        evm_version: YlemVersion::Byzantium,
+        evm_version: CvmVersion::Nucleus,
         gas_reports: vec!["Contract".to_string()],
         gas_reports_ignore: vec![],
         ylem: Some(YlemReq::Local(PathBuf::from("custom-solc"))),

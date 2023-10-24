@@ -69,12 +69,11 @@ impl GasReport {
                 (!self.ignore.contains(&contract_name) && self.report_for.is_empty()) ||
                 (self.report_for.contains(&contract_name));
             if report_contract {
-                let contract_report =
-                    self.contracts.entry(name.to_string()).or_insert_with(Default::default);
+                let contract_report = self.contracts.entry(name.to_string()).or_default();
 
                 match &trace.data {
                     RawOrDecodedCall::Raw(bytes) if trace.created() => {
-                        contract_report.gas = trace.gas_cost.into();
+                        contract_report.gas = trace.energy_cost.into();
                         contract_report.size = bytes.len().into();
                     }
                     // TODO: More robust test contract filtering
@@ -87,7 +86,7 @@ impl GasReport {
                             .or_default()
                             .entry(sig.clone())
                             .or_default();
-                        function_report.calls.push(trace.gas_cost.into());
+                        function_report.calls.push(trace.energy_cost.into());
                     }
                     _ => (),
                 }
