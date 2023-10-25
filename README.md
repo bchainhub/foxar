@@ -2,6 +2,24 @@
 
 ## TODO
 
+#### Tests:
+**Before working on any crate please write your name next to it, so we won't do duplicate work**
+- [ ] abi
+- [ ] anvil
+- [ ] binder
+- [ ] cast
+- [ ] chisel
+- [ ] cli
+- [ ] common
+- [ ] config
+- [ ] evm
+- [ ] fmt
+- [ ] forge
+- [ ] macros
+- [ ] ui
+- [ ] utils
+
+#### Compiles:
 - [x] abi -> Compiles
 - [x] anvil -> Compiles
 - [x] binder -> Compiles
