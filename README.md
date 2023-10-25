@@ -15,7 +15,7 @@
 - [ ] evm
 - [ ] fmt
 - [ ] forge
-- [O] macros - In work (Misha)
+- [ ] macros - In work (Misha)
 - [ ] ui
 - [ ] utils
 
