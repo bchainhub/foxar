@@ -5,14 +5,14 @@
 #### Tests:
 **Before working on any crate please write your name next to it, so we won't do duplicate work**
 - [ ] abi
-- [ ] anvil - David(First I will have to implement our new signatures, then fix the tests)
+- [ ] anvil 
 - [ ] binder
 - [ ] cast
 - [ ] chisel
 - [ ] cli
 - [ ] common
 - [ ] config
-- [ ] evm
+- [ ] evm - David 
 - [ ] fmt
 - [ ] forge
 - [ ] macros - In work (Misha)
