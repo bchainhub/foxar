@@ -2639,6 +2639,7 @@ dependencies = [
  "hex",
  "itertools",
  "jsonpath_lib",
+ "libgoldilocks",
  "once_cell",
  "ordered-float",
  "parking_lot",
@@ -3886,7 +3887,7 @@ dependencies = [
 [[package]]
 name = "libgoldilocks"
 version = "0.1.0"
-source = "git+https://github.com/todesstille/ed448-rs#dd6c36c4daccd1a9b42220a87b78b8b94c0514a7"
+source = "git+https://github.com/todesstille/ed448-rs.git#dd6c36c4daccd1a9b42220a87b78b8b94c0514a7"
 dependencies = [
  "hex",
  "rand 0.8.5",
@@ -5377,7 +5378,7 @@ dependencies = [
 [[package]]
 name = "revm"
 version = "3.0.0"
-source = "git+https://github.com/core-coin/ican-revm.git#73d13f6a3eedfdbf9ce380608642f77e5e9bd3cf"
+source = "git+https://github.com/core-coin/cvm.git#fcf165d8c8896ebe691fa38d1fd659753fee4a9d"
 dependencies = [
  "auto_impl",
  "revm-interpreter",
@@ -5389,7 +5390,7 @@ dependencies = [
 [[package]]
 name = "revm-interpreter"
 version = "1.0.0"
-source = "git+https://github.com/core-coin/ican-revm.git#73d13f6a3eedfdbf9ce380608642f77e5e9bd3cf"
+source = "git+https://github.com/core-coin/cvm.git#fcf165d8c8896ebe691fa38d1fd659753fee4a9d"
 dependencies = [
  "derive_more",
  "enumn",
@@ -5401,7 +5402,7 @@ dependencies = [
 [[package]]
 name = "revm-precompile"
 version = "2.0.0"
-source = "git+https://github.com/core-coin/ican-revm.git#73d13f6a3eedfdbf9ce380608642f77e5e9bd3cf"
+source = "git+https://github.com/core-coin/cvm.git#fcf165d8c8896ebe691fa38d1fd659753fee4a9d"
 dependencies = [
  "k256 0.11.6",
  "num",
@@ -5416,7 +5417,7 @@ dependencies = [
 [[package]]
 name = "revm-primitives"
 version = "1.0.0"
-source = "git+https://github.com/core-coin/ican-revm.git#73d13f6a3eedfdbf9ce380608642f77e5e9bd3cf"
+source = "git+https://github.com/core-coin/cvm.git#fcf165d8c8896ebe691fa38d1fd659753fee4a9d"
 dependencies = [
  "auto_impl",
  "bitvec",

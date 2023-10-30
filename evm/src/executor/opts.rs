@@ -9,7 +9,7 @@ use corebc::{
 use eyre::WrapErr;
 use foundry_common::{self, ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
 use foundry_config::Config;
-use revm::primitives::{BlockEnv, CfgEnv, Network as REVMNetwork, SpecId, TxEnv, U256 as rU256};
+use revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256};
 use serde::{Deserialize, Deserializer, Serialize};
 
 use super::fork::environment;
@@ -102,9 +102,7 @@ impl EvmOpts {
                 energy_limit: u256_to_ru256(self.energy_limit()),
             },
             cfg: CfgEnv {
-                network: REVMNetwork::from(
-                    self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID),
-                ),
+                network_id: self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID),
                 spec_id: SpecId::LATEST,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
@@ -134,7 +132,7 @@ impl EvmOpts {
     /// be at `~/.foundry/cache/mainnet/14435000/storage.json`
     pub fn get_fork(&self, config: &Config, env: revm::primitives::Env) -> Option<CreateFork> {
         let url = self.fork_url.clone()?;
-        let enable_caching = config.enable_caching(&url, env.cfg.network.as_u64());
+        let enable_caching = config.enable_caching(&url, env.cfg.network_id);
         Some(CreateFork { url, enable_caching, env, evm_opts: self.clone() })
     }
 
@@ -150,7 +148,7 @@ impl EvmOpts {
     ///   - mainnet otherwise
     pub fn get_chain_id(&self) -> u64 {
         if let Some(id) = self.env.network_id {
-            return id
+            return id;
         }
         self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), u64::from)
     }
@@ -163,7 +161,7 @@ impl EvmOpts {
         if self.no_rpc_rate_limit {
             u64::MAX
         } else if let Some(cups) = self.compute_units_per_second {
-            return cups
+            return cups;
         } else {
             ALCHEMY_FREE_TIER_CUPS
         }
@@ -174,14 +172,14 @@ impl EvmOpts {
         if let Some(ref url) = self.fork_url {
             if url.contains("mainnet") {
                 trace!(?url, "auto detected mainnet chain");
-                return Some(Network::Mainnet)
+                return Some(Network::Mainnet);
             }
             trace!(?url, "retrieving chain via eth_chainId");
             let provider = Provider::try_from(url.as_str())
                 .unwrap_or_else(|_| panic!("Failed to establish provider to {url}"));
 
             if let Ok(id) = RuntimeOrHandle::new().block_on(provider.get_networkid()) {
-                return Network::try_from(id.as_u64()).ok()
+                return Network::try_from(id.as_u64()).ok();
             }
         }
 

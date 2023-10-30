@@ -87,16 +87,16 @@ impl<'a> FuzzedExecutor<'a> {
         };
 
         let mut weights = vec![];
-        let network = &Network::try_from(self.executor.env().cfg.network.as_u64()).unwrap();
+        let network = Network::from(self.executor.env().cfg.network_id);
 
         let dictionary_weight = self.config.dictionary.dictionary_weight.min(100);
         if self.config.dictionary.dictionary_weight < 100 {
-            weights.push((100 - dictionary_weight, fuzz_calldata(func.clone(), network)));
+            weights.push((100 - dictionary_weight, fuzz_calldata(func.clone(), &network)));
         }
         if dictionary_weight > 0 {
             weights.push((
                 self.config.dictionary.dictionary_weight,
-                fuzz_calldata_from_state(func.clone(), state.clone(), network),
+                fuzz_calldata_from_state(func.clone(), state.clone(), &network),
             ));
         }
 
@@ -122,7 +122,7 @@ impl<'a> FuzzedExecutor<'a> {
 
             // When assume cheat code is triggered return a special string "FOUNDRY::ASSUME"
             if call.result.as_ref() == ASSUME_MAGIC_RETURN_CODE {
-                return Err(TestCaseError::reject(FuzzError::AssumeReject))
+                return Err(TestCaseError::reject(FuzzError::AssumeReject));
             }
 
             let success = self.executor.is_success(

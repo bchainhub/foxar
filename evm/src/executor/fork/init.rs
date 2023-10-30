@@ -58,7 +58,7 @@ where
 
     let env = Env {
         cfg: CfgEnv {
-            network: Network::from(override_network_id.unwrap_or(rpc_network_id.as_u64())),
+            network_id: override_network_id.unwrap_or(rpc_network_id.as_u64()),
             memory_limit,
             limit_contract_code_size: Some(usize::MAX),
             ..Default::default()
