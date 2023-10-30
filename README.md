@@ -4,7 +4,7 @@
 
 #### Tests:
 **Before working on any crate please write your name next to it, so we won't do duplicate work**
-- [ ] abi
+- [ ] abi - David(This needs to be fixed in order for the evm tests to pass)
 - [ ] anvil 
 - [ ] binder
 - [ ] cast
