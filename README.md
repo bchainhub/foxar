@@ -11,11 +11,11 @@
 - [ ] chisel
 - [ ] cli
 - [ ] common
-- [ ] config
+- [ ] config - Misha
 - [ ] evm - David 
 - [ ] fmt
 - [ ] forge
-- [ ] macros - In work (Misha)
+- [x] macros
 - [ ] ui
 - [ ] utils
 
