@@ -79,7 +79,6 @@ impl BindArgs {
         let config = Config::from(&self.etherscan);
 
         let chain = config.network_id.unwrap_or_default();
-        let chain = chain.named()?;
 
         let client = Client::new(chain)?;
         let address = self.path_or_address.parse()?;

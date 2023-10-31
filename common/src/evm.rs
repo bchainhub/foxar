@@ -1,6 +1,6 @@
 //! cli arguments for configuring the evm settings
 use clap::{ArgAction, Parser};
-use corebc_core::types::{Address, H256, U256};
+use corebc_core::types::{Address, Network, H256, U256};
 use eyre::ContextCompat;
 use foundry_config::{
     figment::{
@@ -9,7 +9,7 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile, Provider,
     },
-    Config, Network,
+    Config,
 };
 use serde::Serialize;
 use std::collections::HashMap;
@@ -255,26 +255,20 @@ mod tests {
     #[test]
     fn can_parse_network_id() {
         let args = EvmArgs {
-            env: EnvArgs {
-                network_id: Some(corebc_core::types::Network::Mainnet.into()),
-                ..Default::default()
-            },
+            env: EnvArgs { network_id: Some(Network::Mainnet), ..Default::default() },
             ..Default::default()
         };
         let config = Config::from_provider(Config::figment().merge(args));
-        assert_eq!(config.network_id, Some(corebc_core::types::Network::Mainnet.into()));
+        assert_eq!(config.network_id, Some(Network::Mainnet));
 
-        let env = EnvArgs::parse_from(["foundry-common", "--chain-id", "devin"]);
-        assert_eq!(env.network_id, Some(corebc_core::types::Network::Devin.into()));
+        let env = EnvArgs::parse_from(["foundry-common", "--chain-id", "3"]);
+        assert_eq!(env.network_id, Some(Network::Devin));
     }
 
     #[test]
     fn test_memory_limit() {
         let args = EvmArgs {
-            env: EnvArgs {
-                network_id: Some(corebc_core::types::Network::Mainnet.into()),
-                ..Default::default()
-            },
+            env: EnvArgs { network_id: Some(Network::Mainnet), ..Default::default() },
             ..Default::default()
         };
         let config = Config::from_provider(Config::figment().merge(args));

@@ -12,10 +12,11 @@ use crate::{
 };
 use corebc::{
     abi::Address,
+    core::types::Network,
     ylem::{info::ContractInfo, Project},
 };
 use foundry_common::ContractsByArtifact;
-use foundry_config::{Config, Network};
+use foundry_config::Config;
 use semver::Version;
 
 /// Data struct to help `ScriptSequence` verify contracts on `etherscan`.

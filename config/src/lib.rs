@@ -2,7 +2,7 @@
 #![deny(missing_docs, unsafe_code, unused_crate_dependencies)]
 
 use crate::cache::StorageCachingConfig;
-use corebc_core::types::{Address, Network::Mainnet, H176, H256, U256};
+use corebc_core::types::{Address, Network, H176, H256, U256};
 pub use corebc_ylem::artifacts::OptimizerDetails;
 use corebc_ylem::{
     artifacts::{
@@ -51,9 +51,6 @@ pub use resolve::UnresolvedEnvVarError;
 
 pub mod cache;
 use cache::{Cache, NetworkCache};
-
-mod network;
-pub use network::Network;
 
 pub mod fmt;
 pub use fmt::FormatterConfig;
@@ -870,7 +867,7 @@ impl Config {
 
         // we treat the `etherscan_api_key` as actual API key
         // if no chain provided, we assume mainnet
-        let chain = self.network_id.unwrap_or(Network::Named(Mainnet));
+        let chain = self.network_id.unwrap_or(Network::Mainnet);
         let api_key = self.etherscan_api_key.as_ref()?;
         ResolvedEtherscanConfig::create(api_key, chain).map(Ok)
     }
@@ -1107,7 +1104,7 @@ impl Config {
     /// Returns the default config that uses dapptools style paths
     pub fn dapptools() -> Self {
         Config {
-            network_id: Some(Network::Id(99)),
+            network_id: Some(Network::Private(99)),
             block_timestamp: 0,
             block_number: 0,
             ..Config::default()
@@ -3205,9 +3202,9 @@ mod tests {
                     via_ir: true,
                     rpc_storage_caching: StorageCachingConfig {
                         networks: CachedNetworks::Networks(vec![
-                            Network::Named(corebc_core::types::Network::Mainnet),
-                            Network::Named(corebc_core::types::Network::Devin),
-                            Network::Id(999999)
+                            Network::Mainnet,
+                            Network::Devin,
+                            Network::Private(999999)
                         ]),
                         endpoints: CachedEndpoints::All
                     },

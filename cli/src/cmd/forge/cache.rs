@@ -5,7 +5,7 @@ use cache::Cache;
 use clap::{Parser, Subcommand};
 use corebc::prelude::Network;
 use eyre::Result;
-use foundry_config::{cache, Config, Network as FoundryConfigNetwork};
+use foundry_config::{cache, Config};
 use std::str::FromStr;
 
 /// CLI arguments for `forge cache`.
@@ -124,7 +124,7 @@ impl FromStr for NetworkOrAll {
 }
 
 fn clean_network_cache(
-    network: impl Into<FoundryConfigNetwork>,
+    network: impl Into<Network>,
     blocks: Vec<u64>,
     etherscan: bool,
 ) -> Result<()> {

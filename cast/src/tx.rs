@@ -2,13 +2,13 @@ use crate::errors::FunctionSignatureError;
 use corebc_core::{
     abi::Function,
     types::{
-        transaction::eip2718::TypedTransaction, NameOrAddress, TransactionRequest, H176, U256,
+        transaction::eip2718::TypedTransaction, NameOrAddress, Network, TransactionRequest, H176,
+        U256,
     },
 };
 use corebc_providers::Middleware;
 use eyre::{eyre, Result};
 use foundry_common::abi::{encode_args, get_func, get_func_blockindex};
-use foundry_config::Network;
 use futures::future::join_all;
 
 use crate::strip_0x;
