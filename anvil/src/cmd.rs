@@ -7,8 +7,8 @@ use crate::{
 use anvil_server::ServerConfig;
 use clap::Parser;
 use core::fmt;
-use corebc::utils::WEI_IN_CORE;
-use foundry_config::{Config, Network};
+use corebc::{core::types::Network, utils::WEI_IN_CORE};
+use foundry_config::Config;
 use futures::FutureExt;
 use std::{
     future::Future,

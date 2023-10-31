@@ -1,8 +1,9 @@
 //! Support for multiple etherscan keys
 use crate::{
     resolve::{interpolate, UnresolvedEnvVarError, RE_PLACEHOLDER},
-    Config, Network,
+    Config,
 };
+use corebc_core::types::Network;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{
     collections::BTreeMap,
@@ -271,7 +272,7 @@ impl ResolvedEtherscanConfig {
             .or_else(|| {
                 if api_url == mainnet_api {
                     // try to match against mainnet, which is usually the most common target
-                    Some(corebc_core::types::Network::Mainnet.into())
+                    Some(corebc_core::types::Network::Mainnet)
                 } else {
                     None
                 }

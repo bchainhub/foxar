@@ -14,12 +14,12 @@ use corebc::{
         Client,
     },
     prelude::errors::BlockindexError,
-    types::Network as CorebcNetwork,
+    types::Network,
     ylem::{artifacts::CompactContract, cache::CacheEntry, Project, Ylem},
 };
 use eyre::{eyre, Context};
 use foundry_common::abi::encode_args;
-use foundry_config::{Config, Network, YlemReq};
+use foundry_config::{Config, YlemReq};
 use foundry_utils::Retry;
 use futures::FutureExt;
 use once_cell::sync::Lazy;
@@ -274,7 +274,7 @@ impl EtherscanVerificationProvider {
         verifier_url: Option<&str>,
         config: &Config,
     ) -> eyre::Result<Client> {
-        let etherscan_config = config.get_etherscan_config_with_network(Some(network))?;
+        let etherscan_config = config.get_etherscan_config_with_network(Some(network.clone()))?;
 
         let api_url =
             verifier_url.or_else(|| etherscan_config.as_ref().map(|c| c.api_url.as_str()));
@@ -288,9 +288,7 @@ impl EtherscanVerificationProvider {
         builder = if let Some(api_url) = api_url {
             builder.with_api_url(api_url)?.with_url(base_url.unwrap_or(api_url))?
         } else {
-            let network_id = network.to_owned().id();
-            let network = CorebcNetwork::try_from(network_id);
-            builder.network(network.unwrap())?
+            builder.network(network)?
         };
 
         builder.build().wrap_err("Failed to create etherscan client")

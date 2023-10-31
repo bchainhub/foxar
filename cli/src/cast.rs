@@ -470,7 +470,6 @@ async fn main() -> eyre::Result<()> {
             let config = Config::from(&etherscan);
             let chain = config.network_id.unwrap_or_default();
             let api_key = config.get_etherscan_api_key(Some(chain)).unwrap_or_default();
-            let chain = chain.named()?;
             match directory {
                 Some(dir) => {
                     SimpleCast::expand_etherscan_source_to_directory(chain, address, api_key, dir)

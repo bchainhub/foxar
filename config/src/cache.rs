@@ -1,6 +1,6 @@
 //! Support types for configuring storage caching
 
-use crate::network::Network;
+use corebc_core::types::Network;
 use number_prefix::NumberPrefix;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{fmt, fmt::Formatter, str::FromStr};
@@ -47,7 +47,7 @@ impl CachedNetworks {
         match self {
             CachedNetworks::All => true,
             CachedNetworks::None => false,
-            CachedNetworks::Networks(networks) => networks.iter().any(|c| c.id() == network),
+            CachedNetworks::Networks(networks) => networks.iter().any(|c| u64::from(*c) == network),
         }
     }
 }
@@ -259,9 +259,9 @@ mod tests {
             w.rpc_storage_caching,
             StorageCachingConfig {
                 networks: CachedNetworks::Networks(vec![
-                    Network::Named(corebc_core::types::Network::Devin),
-                    Network::Named(corebc_core::types::Network::Mainnet),
-                    Network::Id(999999)
+                    Network::Devin,
+                    Network::Mainnet,
+                    Network::Private(999999)
                 ]),
                 endpoints: CachedEndpoints::All
             }
