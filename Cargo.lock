@@ -1220,7 +1220,7 @@ checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
 [[package]]
 name = "corebc"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "corebc-addressbook",
  "corebc-blockindex",
@@ -1235,7 +1235,7 @@ dependencies = [
 [[package]]
 name = "corebc-addressbook"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "corebc-core",
  "once_cell",
@@ -1246,7 +1246,7 @@ dependencies = [
 [[package]]
 name = "corebc-blockindex"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "corebc-core",
  "corebc-ylem",
@@ -1262,7 +1262,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "corebc-contract-abigen",
  "corebc-contract-derive",
@@ -1280,7 +1280,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract-abigen"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "Inflector",
  "corebc-blockindex",
@@ -1306,7 +1306,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract-derive"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "Inflector",
  "corebc-contract-abigen",
@@ -1321,7 +1321,7 @@ dependencies = [
 [[package]]
 name = "corebc-core"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "arrayvec",
  "bytes",
@@ -1350,7 +1350,7 @@ dependencies = [
 [[package]]
 name = "corebc-middleware"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "async-trait",
  "auto_impl",
@@ -1376,7 +1376,7 @@ dependencies = [
 [[package]]
 name = "corebc-providers"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "async-trait",
  "auto_impl",
@@ -1414,7 +1414,7 @@ dependencies = [
 [[package]]
 name = "corebc-signers"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "async-trait",
  "coins-bip32",
@@ -1441,7 +1441,7 @@ dependencies = [
 [[package]]
 name = "corebc-ylem"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#660addaaa92218755cac387c9798b0b8387547d7"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=feature/network_serde#ad4ea194908da61251d955b515d5becd844592e5"
 dependencies = [
  "cfg-if",
  "corebc-core",
@@ -1504,9 +1504,9 @@ dependencies = [
 
 [[package]]
 name = "crc-catalog"
-version = "2.2.0"
+version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9cace84e55f07e7301bae1c519df89cdad8cc3cd868413d3fdbdeca9ff3db484"
+checksum = "4939f9ed1444bd8c896d37f3090012fa6e7834fe84ef8c9daa166109515732f9"
 
 [[package]]
 name = "crc32fast"
@@ -3631,9 +3631,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.0.2"
+version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8adf3ddd720272c6ea8bf59463c04e0f93d0bbf7c5439b691bca2987e0270897"
+checksum = "d530e1a18b1cb4c484e6e34556a0d948706958449fca0cab753d649f2bce3d1f"
 dependencies = [
  "equivalent",
  "hashbrown 0.14.2",
@@ -4745,7 +4745,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e1d3afd2628e69da2be385eb6f2fd57c8ac7977ceeff6dc166ff1657b0e386a9"
 dependencies = [
  "fixedbitset",
- "indexmap 2.0.2",
+ "indexmap 2.1.0",
 ]
 
 [[package]]
@@ -5545,9 +5545,9 @@ dependencies = [
 
 [[package]]
 name = "ruint"
-version = "1.10.1"
+version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95294d6e3a6192f3aabf91c38f56505a625aa495533442744185a36d75a790c4"
+checksum = "724fd11728a3804e9944b14cab63825024c40bf42f8af87c8b5d97c4bbacf426"
 dependencies = [
  "alloy-rlp",
  "ark-ff 0.3.0",
@@ -5555,6 +5555,7 @@ dependencies = [
  "bytes",
  "fastrlp",
  "num-bigint",
+ "num-traits",
  "parity-scale-codec",
  "primitive-types 0.12.2",
  "proptest",
@@ -6010,7 +6011,7 @@ version = "1.0.108"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d1c7e3eac408d115102c4c24ad393e0821bb3a5df4d506a80f85f7a742a526b"
 dependencies = [
- "indexmap 2.0.2",
+ "indexmap 2.1.0",
  "itoa",
  "ryu",
  "serde",
@@ -6816,7 +6817,7 @@ version = "0.7.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd79e69d3b627db300ff956027cc6c3798cef26d22526befdfcd12feeb6d2257"
 dependencies = [
- "indexmap 2.0.2",
+ "indexmap 2.1.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -6850,7 +6851,7 @@ version = "0.19.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1b5bb770da30e5cbfde35a2d7b9b8a2c4b8ef89548a7a6aeab5c9a576e3e7421"
 dependencies = [
- "indexmap 2.0.2",
+ "indexmap 2.1.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -6863,7 +6864,7 @@ version = "0.20.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70f427fce4d84c72b5b732388bf4a9f4531b53f74e2887e3ecb2481f68f66d81"
 dependencies = [
- "indexmap 2.0.2",
+ "indexmap 2.1.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -7853,18 +7854,18 @@ dependencies = [
 
 [[package]]
 name = "zerocopy"
-version = "0.7.20"
+version = "0.7.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd66a62464e3ffd4e37bd09950c2b9dd6c4f8767380fabba0d523f9a775bc85a"
+checksum = "686b7e407015242119c33dab17b8f61ba6843534de936d94368856528eae4dcc"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.7.20"
+version = "0.7.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "255c4596d41e6916ced49cfafea18727b24d67878fa180ddfd69b9df34fd1726"
+checksum = "020f3dfe25dfc38dfea49ce62d5d45ecdd7f0d8a724fa63eb36b6eba4ec76806"
 dependencies = [
  "proc-macro2",
  "quote",

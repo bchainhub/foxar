@@ -13,7 +13,7 @@
 - [ ] common - Misha
 - [x] config
 - [ ] evm - David 
-- [ ] fmt
+- [ ] fmt - Misha
 - [ ] forge
 - [x] macros
 - [ ] ui
