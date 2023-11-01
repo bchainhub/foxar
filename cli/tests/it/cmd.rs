@@ -1109,8 +1109,8 @@ contract ContractThreeTest is DSTest {
 
     // report for all
     prj.write_config(Config {
-        gas_reports: (vec!["*".to_string()]),
-        gas_reports_ignore: (vec![]),
+        energy_reports: (vec!["*".to_string()]),
+        energy_reports_ignore: (vec![]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1119,14 +1119,14 @@ contract ContractThreeTest is DSTest {
     // cmd.arg("test").arg("--gas-report").print_output();
 
     cmd.forge_fuse();
-    prj.write_config(Config { gas_reports: (vec![]), ..Default::default() });
+    prj.write_config(Config { energy_reports: (vec![]), ..Default::default() });
     cmd.forge_fuse();
     let second_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(second_out.contains("foo") && second_out.contains("bar") && second_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 
     cmd.forge_fuse();
-    prj.write_config(Config { gas_reports: (vec!["*".to_string()]), ..Default::default() });
+    prj.write_config(Config { energy_reports: (vec!["*".to_string()]), ..Default::default() });
     cmd.forge_fuse();
     let third_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(third_out.contains("foo") && third_out.contains("bar") && third_out.contains("baz"));
@@ -1134,7 +1134,7 @@ contract ContractThreeTest is DSTest {
 
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec![
+        energy_reports: (vec![
             "ContractOne".to_string(),
             "ContractTwo".to_string(),
             "ContractThree".to_string(),
@@ -1242,8 +1242,8 @@ contract ContractThreeTest is DSTest {
 
     // report for One
     prj.write_config(Config {
-        gas_reports: (vec!["ContractOne".to_string()]),
-        gas_reports_ignore: (vec![]),
+        energy_reports: (vec!["ContractOne".to_string()]),
+        energy_reports_ignore: (vec![]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1254,7 +1254,7 @@ contract ContractThreeTest is DSTest {
     // report for Two
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec!["ContractTwo".to_string()]),
+        energy_reports: (vec!["ContractTwo".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1267,7 +1267,7 @@ contract ContractThreeTest is DSTest {
     // report for Three
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec!["ContractThree".to_string()]),
+        energy_reports: (vec!["ContractThree".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1371,8 +1371,8 @@ contract ContractThreeTest is DSTest {
 
     // ignore ContractOne
     prj.write_config(Config {
-        gas_reports: (vec!["*".to_string()]),
-        gas_reports_ignore: (vec!["ContractOne".to_string()]),
+        energy_reports: (vec!["*".to_string()]),
+        energy_reports_ignore: (vec!["ContractOne".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1383,8 +1383,8 @@ contract ContractThreeTest is DSTest {
     // ignore ContractTwo
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec![]),
-        gas_reports_ignore: (vec!["ContractTwo".to_string()]),
+        energy_reports: (vec![]),
+        energy_reports_ignore: (vec!["ContractTwo".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1397,12 +1397,12 @@ contract ContractThreeTest is DSTest {
     // ignore ContractThree
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec![
+        energy_reports: (vec![
             "ContractOne".to_string(),
             "ContractTwo".to_string(),
             "ContractThree".to_string(),
         ]),
-        gas_reports_ignore: (vec!["ContractThree".to_string()]),
+        energy_reports_ignore: (vec!["ContractThree".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();

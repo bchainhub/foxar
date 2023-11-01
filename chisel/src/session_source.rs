@@ -103,7 +103,7 @@ impl SessionSourceConfig {
                 // We now need to verify if the ylem version provided is supported by the evm
                 // version set. If not, we bail and ask the user to provide a newer version.
                 // 1. Do we need ylem 0.8.18 or higher?
-                let evm_version = self.foundry_config.evm_version;
+                let evm_version = self.foundry_config.cvm_version;
                 // 2. Check if the version provided is less than 0.8.18 and bail,
                 // or leave it as-is if we don't need a post merge ylem version or the version we
                 // have is good enough.
@@ -331,7 +331,7 @@ impl SessionSource {
             .collect();
 
         // We also need to enforce the EVM version that the user has specified.
-        compiler_input.settings.evm_version = Some(self.config.foundry_config.evm_version);
+        compiler_input.settings.evm_version = Some(self.config.foundry_config.cvm_version);
 
         compiler_input
     }

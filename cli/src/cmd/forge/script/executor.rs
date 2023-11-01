@@ -305,7 +305,7 @@ impl ScriptArgs {
 
         let mut builder = ExecutorBuilder::default()
             .with_config(env)
-            .with_spec(evm_spec(&script_config.config.evm_version))
+            .with_spec(evm_spec(&script_config.config.cvm_version))
             .with_energy_limit(script_config.evm_opts.energy_limit())
             // We need it enabled to decode contract names: local or external.
             .set_tracing(true);

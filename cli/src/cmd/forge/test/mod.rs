@@ -179,7 +179,7 @@ impl TestArgs {
         let env = evm_opts.evm_env().await;
 
         // Prepare the test builder
-        let evm_spec = evm_spec(&config.evm_version);
+        let evm_spec = evm_spec(&config.cvm_version);
 
         let mut runner = MultiContractRunnerBuilder::default()
             .initial_balance(evm_opts.initial_balance)
@@ -554,7 +554,7 @@ async fn test(
             tokio::task::spawn(async move { runner.test(filter, Some(tx), test_options).await });
 
         let mut results: BTreeMap<String, SuiteResult> = BTreeMap::new();
-        let mut gas_report = GasReport::new(config.gas_reports, config.gas_reports_ignore);
+        let mut gas_report = GasReport::new(config.energy_reports, config.energy_reports_ignore);
         let sig_identifier =
             SignaturesIdentifier::new(Config::foundry_cache_dir(), config.offline)?;
 
