@@ -5,10 +5,10 @@ use corebc::{
     blockindex,
     blockindex::contract::{ContractMetadata, Metadata},
     prelude::{artifacts::ContractBytecodeSome, errors::BlockindexError, ArtifactId},
-    types::H176,
+    types::{Network, H176},
 };
 use foundry_common::compile;
-use foundry_config::{Config, Network};
+use foundry_config::Config;
 use futures::{
     future::{join_all, Future},
     stream::{FuturesUnordered, Stream, StreamExt},

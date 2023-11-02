@@ -90,10 +90,8 @@ impl ProviderBuilder {
     }
 
     /// Sets the network of the node the provider will connect to
-    pub fn network(mut self, network: impl Into<foundry_config::Network>) -> Self {
-        if let foundry_config::Network::Named(network) = network.into() {
-            self.network = network;
-        }
+    pub fn network(mut self, network: impl Into<Network>) -> Self {
+        self.network = network.into();
         self
     }
 

@@ -1,4 +1,4 @@
-//! error handling and solc error codes
+//! error handling and ylem error codes
 use figment::providers::{Format, Toml};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{collections::HashSet, error::Error, fmt, str::FromStr};
@@ -261,14 +261,14 @@ impl<'de> Deserialize<'de> for SolidityErrorCode {
         /// Helper deserializer for error codes as names and codes
         #[derive(Deserialize)]
         #[serde(untagged)]
-        enum SolCode {
+        enum YlemCode {
             Name(String),
             Code(u64),
         }
 
-        match SolCode::deserialize(deserializer)? {
-            SolCode::Code(code) => Ok(code.into()),
-            SolCode::Name(name) => name.parse().map_err(serde::de::Error::custom),
+        match YlemCode::deserialize(deserializer)? {
+            YlemCode::Code(code) => Ok(code.into()),
+            YlemCode::Name(name) => name.parse().map_err(serde::de::Error::custom),
         }
     }
 }

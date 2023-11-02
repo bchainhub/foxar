@@ -11,7 +11,7 @@
 - [ ] chisel
 - [ ] cli
 - [ ] common
-- [ ] config - Misha
+- [x] config - Misha
 - [x] evm - David 
 - [ ] fmt
 - [ ] forge

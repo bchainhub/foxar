@@ -28,9 +28,6 @@ dirs-next = "2"
 globset = "0.4"
 walkdir = "2"
 
-# encoding
-open-fastrlp = { git = "https://github.com/Kuly14/open-fastrlp" }
-
 # misc
 eyre = "0.6"
 regex = "1"

@@ -39,7 +39,7 @@ fn test_write_session() {
     ChiselSession::create_cache_dir().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { evm_version: CvmVersion::Nucleus, ..Default::default() };
+    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
@@ -70,7 +70,7 @@ fn test_write_session_with_name() {
     ChiselSession::create_cache_dir().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { evm_version: CvmVersion::Nucleus, ..Default::default() };
+    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
@@ -94,7 +94,7 @@ fn test_clear_cache() {
     let cache_dir = ChiselSession::cache_dir().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { evm_version: CvmVersion::Nucleus, ..Default::default() };
+    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     ChiselSession::create_cache_dir().unwrap();
     let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
@@ -120,7 +120,7 @@ fn test_list_sessions() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { evm_version: CvmVersion::Nucleus, ..Default::default() };
+    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
@@ -147,7 +147,7 @@ fn test_load_cache() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { evm_version: CvmVersion::Nucleus, ..Default::default() };
+    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
@@ -178,7 +178,7 @@ fn test_write_same_session_multiple_times() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { evm_version: CvmVersion::Nucleus, ..Default::default() };
+    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
@@ -201,7 +201,7 @@ fn test_load_latest_cache() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { evm_version: CvmVersion::Nucleus, ..Default::default() };
+    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create sessions
     let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {

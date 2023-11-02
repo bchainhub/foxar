@@ -6,10 +6,11 @@ use crate::{
 use cast::{Cast, TxBuilder};
 use clap::Parser;
 use corebc::{
-    prelude::MiddlewareBuilder, providers::Middleware, signers::Signer, types::NameOrAddress,
+    core::types::Network, prelude::MiddlewareBuilder, providers::Middleware, signers::Signer,
+    types::NameOrAddress,
 };
 use foundry_common::cli_warn;
-use foundry_config::{Config, Network};
+use foundry_config::Config;
 use std::str::FromStr;
 
 /// CLI arguments for `cast send`.

@@ -4,6 +4,7 @@ use crate::constants::*;
 use clap::CommandFactory;
 use corebc::{
     prelude::remappings::Remapping,
+    types::Network,
     ylem::{
         artifacts::{BytecodeHash, Metadata},
         ConfigurableContractArtifact,
@@ -15,7 +16,7 @@ use foundry_cli_test_utils::{
     forgetest, forgetest_init,
     util::{pretty_err, read_string, OutputExt, TestCommand, TestProject},
 };
-use foundry_config::{parse_with_profile, BasicConfig, Config, Network, SolidityErrorCode};
+use foundry_config::{parse_with_profile, BasicConfig, Config, SolidityErrorCode};
 use semver::Version;
 use std::{
     env, fs,
@@ -51,7 +52,7 @@ forgetest!(
     #[ignore]
     can_cache_ls,
     |_: TestProject, mut cmd: TestCommand| {
-        let chain = Network::Named(ethers::prelude::Chain::Mainnet);
+        let chain = corebc::prelude::Network::Mainnet;
         let block1 = 100;
         let block2 = 101;
 
@@ -148,7 +149,7 @@ forgetest!(
     #[ignore]
     can_cache_clean_chain,
     |_: TestProject, mut cmd: TestCommand| {
-        let chain = Network::Named(ethers::prelude::Chain::Mainnet);
+        let chain = corebc::prelude::Network::Mainnet;
         let cache_dir = Config::foundry_network_cache_dir(chain).unwrap();
         let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(chain).unwrap();
         let path = cache_dir.as_path();
@@ -171,7 +172,7 @@ forgetest!(
     #[ignore]
     can_cache_clean_blocks,
     |_: TestProject, mut cmd: TestCommand| {
-        let chain = Network::Named(ethers::prelude::Chain::Mainnet);
+        let chain = corebc::prelude::Network::Mainnet;
         let block1 = 100;
         let block2 = 101;
         let block3 = 102;
@@ -206,12 +207,9 @@ forgetest!(
     can_cache_clean_chain_etherscan,
     |_: TestProject, mut cmd: TestCommand| {
         let cache_dir =
-            Config::foundry_network_cache_dir(Network::Named(ethers::prelude::Chain::Mainnet))
-                .unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(Network::Named(
-            ethers::prelude::Chain::Mainnet,
-        ))
-        .unwrap();
+            Config::foundry_network_cache_dir(corebc::prelude::Network::Mainnet).unwrap();
+        let etherscan_cache_dir =
+            Config::foundry_etherscan_network_cache_dir(corebc::prelude::Network::Mainnet).unwrap();
         let path = cache_dir.as_path();
         let etherscan_path = etherscan_cache_dir.as_path();
         fs::create_dir_all(path).unwrap();
@@ -367,7 +365,7 @@ forgetest!(can_init_vscode, |prj: TestProject, mut cmd: TestCommand| {
 
     let settings = prj.root().join(".vscode/settings.json");
     assert!(settings.is_file());
-    let settings: serde_json::Value = ethers::solc::utils::read_json_file(&settings).unwrap();
+    let settings: serde_json::Value = corebc::solc::utils::read_json_file(&settings).unwrap();
     assert_eq!(
         settings,
         serde_json::json!({
@@ -442,7 +440,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
 
     let artifact_path = prj.paths().artifacts.join(TEMPLATE_CONTRACT_ARTIFACT_JSON);
     let artifact: ConfigurableContractArtifact =
-        ethers::solc::utils::read_json_file(artifact_path).unwrap();
+        corebc::solc::utils::read_json_file(artifact_path).unwrap();
     assert!(artifact.metadata.is_some());
 
     cmd.forge_fuse().args(["build", "--extra-output-files", "metadata", "--force"]).root_arg();
@@ -450,7 +448,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
 
     let metadata_path =
         prj.paths().artifacts.join(format!("{TEMPLATE_CONTRACT_ARTIFACT_BASE}.metadata.json"));
-    let _artifact: Metadata = ethers::solc::utils::read_json_file(metadata_path).unwrap();
+    let _artifact: Metadata = corebc::solc::utils::read_json_file(metadata_path).unwrap();
 });
 
 // checks that extra output works
@@ -460,7 +458,7 @@ forgetest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: Test
 
     let artifact_path = prj.paths().artifacts.join(TEMPLATE_CONTRACT_ARTIFACT_JSON);
     let artifact: ConfigurableContractArtifact =
-        ethers::solc::utils::read_json_file(artifact_path).unwrap();
+        corebc::solc::utils::read_json_file(artifact_path).unwrap();
     assert!(artifact.metadata.is_some());
     assert!(artifact.ir.is_some());
     assert!(artifact.ir_optimized.is_some());
@@ -479,7 +477,7 @@ forgetest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: Test
 
     let metadata_path =
         prj.paths().artifacts.join(format!("{TEMPLATE_CONTRACT_ARTIFACT_BASE}.metadata.json"));
-    let _artifact: Metadata = ethers::solc::utils::read_json_file(metadata_path).unwrap();
+    let _artifact: Metadata = corebc::solc::utils::read_json_file(metadata_path).unwrap();
 
     let iropt = prj.paths().artifacts.join(format!("{TEMPLATE_CONTRACT_ARTIFACT_BASE}.iropt"));
     std::fs::read_to_string(iropt).unwrap();
@@ -1111,8 +1109,8 @@ contract ContractThreeTest is DSTest {
 
     // report for all
     prj.write_config(Config {
-        gas_reports: (vec!["*".to_string()]),
-        gas_reports_ignore: (vec![]),
+        energy_reports: (vec!["*".to_string()]),
+        energy_reports_ignore: (vec![]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1121,14 +1119,14 @@ contract ContractThreeTest is DSTest {
     // cmd.arg("test").arg("--gas-report").print_output();
 
     cmd.forge_fuse();
-    prj.write_config(Config { gas_reports: (vec![]), ..Default::default() });
+    prj.write_config(Config { energy_reports: (vec![]), ..Default::default() });
     cmd.forge_fuse();
     let second_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(second_out.contains("foo") && second_out.contains("bar") && second_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 
     cmd.forge_fuse();
-    prj.write_config(Config { gas_reports: (vec!["*".to_string()]), ..Default::default() });
+    prj.write_config(Config { energy_reports: (vec!["*".to_string()]), ..Default::default() });
     cmd.forge_fuse();
     let third_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(third_out.contains("foo") && third_out.contains("bar") && third_out.contains("baz"));
@@ -1136,7 +1134,7 @@ contract ContractThreeTest is DSTest {
 
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec![
+        energy_reports: (vec![
             "ContractOne".to_string(),
             "ContractTwo".to_string(),
             "ContractThree".to_string(),
@@ -1244,8 +1242,8 @@ contract ContractThreeTest is DSTest {
 
     // report for One
     prj.write_config(Config {
-        gas_reports: (vec!["ContractOne".to_string()]),
-        gas_reports_ignore: (vec![]),
+        energy_reports: (vec!["ContractOne".to_string()]),
+        energy_reports_ignore: (vec![]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1256,7 +1254,7 @@ contract ContractThreeTest is DSTest {
     // report for Two
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec!["ContractTwo".to_string()]),
+        energy_reports: (vec!["ContractTwo".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1269,7 +1267,7 @@ contract ContractThreeTest is DSTest {
     // report for Three
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec!["ContractThree".to_string()]),
+        energy_reports: (vec!["ContractThree".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1373,8 +1371,8 @@ contract ContractThreeTest is DSTest {
 
     // ignore ContractOne
     prj.write_config(Config {
-        gas_reports: (vec!["*".to_string()]),
-        gas_reports_ignore: (vec!["ContractOne".to_string()]),
+        energy_reports: (vec!["*".to_string()]),
+        energy_reports_ignore: (vec!["ContractOne".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1385,8 +1383,8 @@ contract ContractThreeTest is DSTest {
     // ignore ContractTwo
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec![]),
-        gas_reports_ignore: (vec!["ContractTwo".to_string()]),
+        energy_reports: (vec![]),
+        energy_reports_ignore: (vec!["ContractTwo".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();
@@ -1399,12 +1397,12 @@ contract ContractThreeTest is DSTest {
     // ignore ContractThree
     cmd.forge_fuse();
     prj.write_config(Config {
-        gas_reports: (vec![
+        energy_reports: (vec![
             "ContractOne".to_string(),
             "ContractTwo".to_string(),
             "ContractThree".to_string(),
         ]),
-        gas_reports_ignore: (vec!["ContractThree".to_string()]),
+        energy_reports_ignore: (vec!["ContractThree".to_string()]),
         ..Default::default()
     });
     cmd.forge_fuse();

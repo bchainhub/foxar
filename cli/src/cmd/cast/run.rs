@@ -100,7 +100,7 @@ impl RunArgs {
         // configures a bare version of the evm executor: no cheatcode inspector is enabled,
         // tracing will be enabled only for the targeted transaction
         let builder =
-            ExecutorBuilder::default().with_config(env).with_spec(evm_spec(&config.evm_version));
+            ExecutorBuilder::default().with_config(env).with_spec(evm_spec(&config.cvm_version));
 
         let mut executor = builder.build(db);
 

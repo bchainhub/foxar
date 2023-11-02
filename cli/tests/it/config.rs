@@ -33,11 +33,11 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         cache_path: "test-cache".into(),
         broadcast: "broadcast".into(),
         force: true,
-        evm_version: CvmVersion::Nucleus,
-        gas_reports: vec!["Contract".to_string()],
-        gas_reports_ignore: vec![],
+        cvm_version: CvmVersion::Nucleus,
+        energy_reports: vec!["Contract".to_string()],
+        energy_reports_ignore: vec![],
         ylem: Some(YlemReq::Local(PathBuf::from("custom-solc"))),
-        auto_detect_solc: false,
+        auto_detect_ylem: false,
         auto_detect_remappings: true,
         offline: true,
         optimizer: false,
@@ -72,15 +72,14 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         block_number: 10,
         fork_block_number: Some(200),
         network_id: Some(9999.into()),
-        gas_limit: 99_000_000u64.into(),
+        energy_limit: 99_000_000u64.into(),
         code_size_limit: Some(100000),
-        gas_price: Some(999),
-        block_base_fee_per_gas: 10,
+        energy_price: Some(999),
         block_coinbase: Address::random(),
         block_timestamp: 10,
         block_difficulty: 10,
         block_prevrandao: H256::random(),
-        block_gas_limit: Some(100u64.into()),
+        block_energy_limit: Some(100u64.into()),
         memory_limit: 2u64.pow(25),
         eth_rpc_url: Some("localhost".to_string()),
         etherscan_api_key: None,
@@ -214,19 +213,19 @@ forgetest_init!(
     |prj: TestProject, _cmd: TestCommand| {
         let url = "http://127.0.0.1:8545";
         let config = prj.config_from_output(["--no-auto-detect", "--rpc-url", url]);
-        assert!(!config.auto_detect_solc);
+        assert!(!config.auto_detect_ylem);
         assert_eq!(config.eth_rpc_url, Some(url.to_string()));
 
         let mut config = Config::load_with_root(prj.root());
         config.eth_rpc_url = Some("http://127.0.0.1:8545".to_string());
-        config.auto_detect_solc = false;
+        config.auto_detect_ylem = false;
         // write to `foundry.toml`
         prj.create_file(
             Config::FILE_NAME,
             &config.to_string_pretty().unwrap().replace("eth_rpc_url", "eth-rpc-url"),
         );
         let config = prj.config_from_output(["--force"]);
-        assert!(!config.auto_detect_solc);
+        assert!(!config.auto_detect_ylem);
         assert_eq!(config.eth_rpc_url, Some(url.to_string()));
     }
 );
@@ -383,14 +382,14 @@ forgetest!(can_set_optimizer_runs, |prj: TestProject, mut cmd: TestCommand| {
 // test that gas_price can be set
 forgetest!(can_set_gas_price, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set gas_price
-    let config = Config { gas_price: Some(1337), ..Default::default() };
+    let config = Config { energy_price: Some(1337), ..Default::default() };
     prj.write_config(config);
 
     let config = cmd.config();
-    assert_eq!(config.gas_price, Some(1337));
+    assert_eq!(config.energy_price, Some(1337));
 
     let config = prj.config_from_output(["--gas-price", "300"]);
-    assert_eq!(config.gas_price, Some(300));
+    assert_eq!(config.energy_price, Some(300));
 });
 
 // test that optimizer runs works
