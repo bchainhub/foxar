@@ -10,7 +10,7 @@
 - [ ] cast
 - [ ] chisel
 - [ ] cli
-- [ ] common - Misha
+- [x] common
 - [x] config
 - [ ] evm - David 
 - [x] fmt
