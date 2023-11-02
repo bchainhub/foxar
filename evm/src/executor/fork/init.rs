@@ -6,7 +6,7 @@ use corebc::{
 use eyre::WrapErr;
 use foundry_common::NON_ARCHIVE_NODE_WARNING;
 use futures::TryFutureExt;
-use revm::primitives::{BlockEnv, CfgEnv, Env, Network, TxEnv};
+use revm::primitives::{BlockEnv, CfgEnv, Env, TxEnv};
 
 /// Initializes a REVM block environment based on a forked
 /// ethereum provider.

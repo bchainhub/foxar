@@ -44,7 +44,6 @@ revm = { workspace = true, default-features = false, features = [
   "std",
   "serde",
   "memory_limit",
-  "optional_block_energy_limit",
 ] }
 # Fuzzer
 proptest = "1"

@@ -10,11 +10,7 @@ use crate::{
 use bytes::{BufMut, Bytes, BytesMut};
 use corebc::{
     abi::{AbiEncode, Address, ParamType, Token},
-    core::k256::elliptic_curve::Curve,
-    prelude::{
-        k256::{elliptic_curve::bigint::Encoding, Secp256k1},
-        LocalWallet, Signer, H176, *,
-    },
+    prelude::{LocalWallet, Signer, H176, *},
     signers::{
         coins_bip39::{
             ChineseSimplified, ChineseTraditional, Czech, English, French, Italian, Japanese,
@@ -84,14 +80,14 @@ where
     Ok(f(account))
 }
 //TODO:error2215 change crypto
-fn addr(private_key: String, network: &Network) -> Result {
-    let key = parse_private_key_from_str(&private_key)?;
+fn addr(private_key: &str, network: &Network) -> Result {
+    let key = parse_private_key_from_str(private_key)?;
     let addr = utils::secret_key_to_address(&key, network);
     Ok(addr.encode().into())
 }
 
-fn sign(private_key: String, digest: H256, network_id: U256) -> Result {
-    let key = parse_private_key_from_str(&private_key)?;
+fn sign(private_key: &str, digest: H256, network_id: U256) -> Result {
+    let key = parse_private_key_from_str(private_key)?;
     let network_id = network_id.as_u64();
     let wallet = LocalWallet::from(key).with_network_id(network_id);
     let network = Network::from(network_id);
@@ -171,8 +167,8 @@ fn derive_key_with_wordlist(mnemonic: &str, path: &str, index: u32, lang: &str) 
     }
 }
 
-fn remember_key(state: &mut Cheatcodes, private_key: String, chain_id: U256) -> Result {
-    let key = parse_private_key_from_str(&private_key)?;
+fn remember_key(state: &mut Cheatcodes, private_key: &str, chain_id: U256) -> Result {
+    let key = parse_private_key_from_str(private_key)?;
     let wallet = LocalWallet::from(key).with_network_id(chain_id.as_u64());
     let address = wallet.address();
 
@@ -209,9 +205,9 @@ pub fn apply<DB: Database>(
     call: &HEVMCalls,
 ) -> Option<Result> {
     Some(match call {
-        HEVMCalls::Addr(inner) => addr(inner.0, &Network::from(data.env.cfg.network_id)),
+        HEVMCalls::Addr(inner) => addr(&inner.0, &Network::from(data.env.cfg.network_id)),
         HEVMCalls::Sign(inner) => {
-            sign(inner.0, inner.1.into(), U256::from(data.env.cfg.network_id))
+            sign(&inner.0, inner.1.into(), U256::from(data.env.cfg.network_id))
         }
         HEVMCalls::DeriveKey0(inner) => {
             derive_key::<English>(&inner.0, DEFAULT_DERIVATION_PATH_PREFIX, inner.1)
@@ -224,7 +220,7 @@ pub fn apply<DB: Database>(
             derive_key_with_wordlist(&inner.0, &inner.1, inner.2, &inner.3)
         }
         HEVMCalls::RememberKey(inner) => {
-            remember_key(state, inner.0, U256::from(data.env.cfg.network_id))
+            remember_key(state, &inner.0, U256::from(data.env.cfg.network_id))
         }
         HEVMCalls::Label(inner) => {
             state.labels.insert(inner.0, inner.1.clone());

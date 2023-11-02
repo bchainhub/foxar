@@ -131,7 +131,7 @@ fn broadcast(
 /// iff broadcast is successful
 fn broadcast_key(
     state: &mut Cheatcodes,
-    private_key: String,
+    private_key: &str,
     original_caller: Address,
     original_origin: Address,
     network_id: U256,
@@ -139,7 +139,7 @@ fn broadcast_key(
     single_call: bool,
 ) -> Result {
     //TODO:error2215 implement Ed448 keys and ICAN Addresses?
-    let key = super::util::parse_private_key_from_str(&private_key)?;
+    let key = super::util::parse_private_key_from_str(private_key)?;
     let wallet = LocalWallet::from(key).with_network_id(network_id.as_u64());
     let new_origin = wallet.address();
 
@@ -558,7 +558,7 @@ pub fn apply<DB: DatabaseExt>(
             )?;
             broadcast_key(
                 state,
-                inner.0,
+                &inner.0,
                 caller,
                 b176_to_h176(data.env.tx.caller),
                 U256::from(data.env.cfg.network_id),
@@ -607,7 +607,7 @@ pub fn apply<DB: DatabaseExt>(
             )?;
             broadcast_key(
                 state,
-                inner.0,
+                &inner.0,
                 caller,
                 b176_to_h176(data.env.tx.caller),
                 U256::from(data.env.cfg.network_id),
