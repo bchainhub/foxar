@@ -2,7 +2,7 @@
 #![deny(missing_docs, unsafe_code, unused_crate_dependencies)]
 
 use crate::cache::StorageCachingConfig;
-use corebc_core::types::{Address, Network, H176, H256, U256};
+use corebc_core::types::{Address, Network, H176, U256};
 pub use corebc_ylem::artifacts::OptimizerDetails;
 use corebc_ylem::{
     artifacts::{
@@ -155,34 +155,34 @@ pub struct Config {
     pub cache_path: PathBuf,
     /// where the broadcast logs are stored
     pub broadcast: PathBuf,
-    /// additional solc allow paths for `--allow-paths`
+    /// additional ylem allow paths for `--allow-paths`
     pub allow_paths: Vec<PathBuf>,
-    /// additional solc include paths for `--include-path`
+    /// additional ylem include paths for `--include-path`
     pub include_paths: Vec<PathBuf>,
     /// whether to force a `project.clean()`
     pub force: bool,
-    /// evm version to use
+    /// cvm version to use
     #[serde(with = "from_str_lowercase")]
-    pub evm_version: CvmVersion,
-    /// list of contracts to report gas of
-    pub gas_reports: Vec<String>,
-    /// list of contracts to ignore for gas reports
-    pub gas_reports_ignore: Vec<String>,
-    /// The Solc instance to use if any.
+    pub cvm_version: CvmVersion,
+    /// list of contracts to report energy of
+    pub energy_reports: Vec<String>,
+    /// list of contracts to ignore for energy reports
+    pub energy_reports_ignore: Vec<String>,
+    /// The Ylem instance to use if any.
     ///
-    /// This takes precedence over `auto_detect_solc`, if a version is set then this overrides
+    /// This takes precedence over `auto_detect_ylem`, if a version is set then this overrides
     /// auto-detection.
     ///
-    /// **Note** for backwards compatibility reasons this also accepts solc_version from the toml
+    /// **Note** for backwards compatibility reasons this also accepts ylem_version from the toml
     /// file, see [`BackwardsCompatProvider`]
     pub ylem: Option<YlemReq>,
-    /// whether to autodetect the solc compiler version to use
-    pub auto_detect_solc: bool,
-    /// Offline mode, if set, network access (downloading solc) is disallowed.
+    /// whether to autodetect the ylem compiler version to use
+    pub auto_detect_ylem: bool,
+    /// Offline mode, if set, network access (downloading ylem) is disallowed.
     ///
-    /// Relationship with `auto_detect_solc`:
-    ///    - if `auto_detect_solc = true` and `offline = true`, the required solc version(s) will
-    ///      be auto detected but if the solc version is not installed, it will _not_ try to
+    /// Relationship with `auto_detect_ylem`:
+    ///    - if `auto_detect_ylem = true` and `offline = true`, the required ylem version(s) will
+    ///      be auto detected but if the ylem version is not installed, it will _not_ try to
     ///      install it
     pub offline: bool,
     /// Whether to activate optimizer
@@ -234,50 +234,46 @@ pub struct Config {
     pub ffi: bool,
     /// The address which will be executing all tests
     pub sender: Address,
-    /// The tx.origin value during EVM execution
+    /// The tx.origin value during CVM execution
     pub tx_origin: Address,
     /// the initial balance of each deployed test contract
     pub initial_balance: U256,
-    /// the block.number value during EVM execution
+    /// the block.number value during CVM execution
     pub block_number: u64,
     /// pins the block number for the state fork
     pub fork_block_number: Option<u64>,
     /// The network id to use
     pub network_id: Option<Network>,
-    /// Block gas limit
-    pub gas_limit: GasLimit,
+    /// Block energy limit
+    pub energy_limit: EnergyLimit,
     /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests.
     pub code_size_limit: Option<usize>,
-    /// `tx.gasprice` value during EVM execution"
+    /// `tx.energyprice` value during CVM execution"
     ///
-    /// This is an Option, so we can determine in fork mode whether to use the config's gas price
-    /// (if set by user) or the remote client's gas price
-    pub gas_price: Option<u64>,
-    /// the base fee in a block
-    pub block_base_fee_per_gas: u64,
-    /// the `block.coinbase` value during EVM execution
+    /// This is an Option, so we can determine in fork mode whether to use the config's energy
+    /// price (if set by user) or the remote client's energy price
+    pub energy_price: Option<u64>,
+    /// the `block.coinbase` value during CVM execution
     pub block_coinbase: Address,
-    /// the `block.timestamp` value during EVM execution
+    /// the `block.timestamp` value during CVM execution
     pub block_timestamp: u64,
-    /// the `block.difficulty` value during EVM execution
+    /// the `block.difficulty` value during CVM execution
     pub block_difficulty: u64,
-    /// Before merge the `block.max_hash` after merge it is `block.prevrandao`
-    pub block_prevrandao: H256,
-    /// the `block.gaslimit` value during EVM execution
-    pub block_gas_limit: Option<GasLimit>,
-    /// The memory limit of the EVM (32 MB by default)
+    /// the `block.energylimit` value during CVM execution
+    pub block_energy_limit: Option<EnergyLimit>,
+    /// The memory limit of the CVM (32 MB by default)
     pub memory_limit: u64,
     /// Additional output selection for all contracts
     /// such as "ir", "devdoc", "storageLayout", etc.
-    /// See [Solc Compiler Api](https://docs.soliditylang.org/en/latest/using-the-compiler.html#compiler-api)
+    /// See [Ylem Compiler Api](https://docs.soliditylang.org/en/latest/using-the-compiler.html#compiler-api)
     ///
     /// The following values are always set because they're required by `forge`
     //{
     //   "*": [
     //       "abi",
-    //       "evm.bytecode",
-    //       "evm.deployedBytecode",
-    //       "evm.methodIdentifiers"
+    //       "cvm.bytecode",
+    //       "cvm.deployedBytecode",
+    //       "cvm.methodIdentifiers"
     //     ]
     // }
     // "#
@@ -320,7 +316,7 @@ pub struct Config {
     pub bytecode_hash: BytecodeHash,
     /// Whether to append the metadata hash to the bytecode.
     ///
-    /// If this is `false` and the `bytecode_hash` option above is not `None` solc will issue a
+    /// If this is `false` and the `bytecode_hash` option above is not `None` ylem will issue a
     /// warning.
     pub cbor_metadata: bool,
     /// How to treat revert (and require) reason strings.
@@ -329,12 +325,12 @@ pub struct Config {
     /// Whether to compile in sparse mode
     ///
     /// If this option is enabled, only the required contracts/files will be selected to be
-    /// included in solc's output selection, see also
+    /// included in ylem's output selection, see also
     /// [OutputSelection](corebc_ylem::artifacts::output_selection::OutputSelection)
     pub sparse_mode: bool,
     /// Whether to emit additional build info files
     ///
-    /// If set to `true`, `ethers-solc` will generate additional build info json files for every
+    /// If set to `true`, "corebc-ylem` will generate additional build info json files for every
     /// new build, containing the `CompilerInput` and `CompilerOutput`
     pub build_info: bool,
     /// The path to the `build-info` directory that contains the build info json files.
@@ -587,7 +583,7 @@ impl Config {
 
     /// Serves as the entrypoint for obtaining the project.
     ///
-    /// Returns the `Project` configured with all `solc` and path related values.
+    /// Returns the `Project` configured with all `ylem` and path related values.
     ///
     /// *Note*: this also _cleans_ [`Project::cleanup`] the workspace if `force` is set to true.
     ///
@@ -616,7 +612,7 @@ impl Config {
             .allowed_paths(&self.libs)
             .allowed_paths(&self.allow_paths)
             .include_paths(&self.include_paths)
-            .ylem_config(YlemConfig::builder().settings(self.solc_settings()?).build())
+            .ylem_config(YlemConfig::builder().settings(self.ylem_settings()?).build())
             .ignore_error_codes(self.ignored_error_codes.iter().copied().map(Into::into))
             .set_compiler_severity_filter(if self.deny_warnings {
                 Severity::Warning
@@ -634,8 +630,8 @@ impl Config {
             project.cleanup()?;
         }
 
-        if let Some(solc) = self.ensure_solc()? {
-            project.ylem = solc;
+        if let Some(ylem) = self.ensure_ylem()? {
+            project.ylem = ylem;
         }
 
         Ok(project)
@@ -643,38 +639,38 @@ impl Config {
 
     /// Ensures that the configured version is installed if explicitly set
     ///
-    /// If `solc` is [`SolcReq::Version`] then this will download and install the solc version if
+    /// If `ylem` is [`YlemReq::Version`] then this will download and install the ylem version if
     /// it's missing, unless the `offline` flag is enabled, in which case an error is thrown.
     ///
-    /// If `solc` is [`SolcReq::Local`] then this will ensure that the path exists.
-    fn ensure_solc(&self) -> Result<Option<Ylem>, YlemError> {
-        if let Some(ref solc) = self.ylem {
-            let solc = match solc {
+    /// If `ylem` is [`YlemReq::Local`] then this will ensure that the path exists.
+    fn ensure_ylem(&self) -> Result<Option<Ylem>, YlemError> {
+        if let Some(ref ylem) = self.ylem {
+            let ylem = match ylem {
                 YlemReq::Version(version) => {
                     let v = version.to_string();
-                    let mut solc = Ylem::find_yvm_installed_version(&v)?;
-                    if solc.is_none() {
+                    let mut ylem = Ylem::find_yvm_installed_version(&v)?;
+                    if ylem.is_none() {
                         if self.offline {
                             return Err(YlemError::msg(format!(
-                                "can't install missing solc {version} in offline mode"
+                                "can't install missing ylem {version} in offline mode"
                             )))
                         }
                         Ylem::blocking_install(version)?;
-                        solc = Ylem::find_yvm_installed_version(&v)?;
+                        ylem = Ylem::find_yvm_installed_version(&v)?;
                     }
-                    solc
+                    ylem
                 }
-                YlemReq::Local(solc) => {
-                    if !solc.is_file() {
+                YlemReq::Local(ylem) => {
+                    if !ylem.is_file() {
                         return Err(YlemError::msg(format!(
                             "`ylem` {} does not exist",
-                            solc.display()
+                            ylem.display()
                         )))
                     }
-                    Some(Ylem::new(solc))
+                    Some(Ylem::new(ylem))
                 }
             };
-            return Ok(solc)
+            return Ok(ylem)
         }
 
         Ok(None)
@@ -682,13 +678,13 @@ impl Config {
 
     /// Returns whether the compiler version should be auto-detected
     ///
-    /// Returns `false` if `solc_version` is explicitly set, otherwise returns the value of
-    /// `auto_detect_solc`
+    /// Returns `false` if `ylem_version` is explicitly set, otherwise returns the value of
+    /// `auto_detect_ylem`
     pub fn is_auto_detect(&self) -> bool {
         if self.ylem.is_some() {
             return false
         }
-        self.auto_detect_solc
+        self.auto_detect_ylem
     }
 
     /// Whether caching should be enabled for the given network id
@@ -866,32 +862,32 @@ impl Config {
         }
 
         // we treat the `etherscan_api_key` as actual API key
-        // if no chain provided, we assume mainnet
-        let chain = self.network_id.unwrap_or(Network::Mainnet);
+        // if no network provided, we assume mainnet
+        let network = self.network_id.unwrap_or(Network::Mainnet);
         let api_key = self.etherscan_api_key.as_ref()?;
-        ResolvedEtherscanConfig::create(api_key, chain).map(Ok)
+        ResolvedEtherscanConfig::create(api_key, network).map(Ok)
     }
 
     /// Same as [`Self::get_etherscan_config()`] but optionally updates the config with the given
-    /// `chain`, and `etherscan_api_key`
+    /// `network`, and `etherscan_api_key`
     ///
     /// If not matching alias was found, then this will try to find the first entry in the table
-    /// with a matching chain id. If an etherscan_api_key is already set it will take precedence
-    /// over the chain's entry in the table.
+    /// with a matching network id. If an etherscan_api_key is already set it will take precedence
+    /// over the network's entry in the table.
     pub fn get_etherscan_config_with_network(
         &self,
-        chain: Option<impl Into<Network>>,
+        network: Option<impl Into<Network>>,
     ) -> Result<Option<ResolvedEtherscanConfig>, EtherscanConfigError> {
-        let chain = chain.map(Into::into);
+        let network = network.map(Into::into);
         if let Some(maybe_alias) = self.etherscan_api_key.as_ref().or(self.eth_rpc_url.as_ref()) {
             if self.etherscan.contains_key(maybe_alias) {
                 return self.etherscan.clone().resolved().remove(maybe_alias).transpose()
             }
         }
 
-        // try to find by comparing chain IDs after resolving
+        // try to find by comparing network IDs after resolving
         if let Some(res) =
-            chain.and_then(|chain| self.etherscan.clone().resolved().find_network(chain))
+            network.and_then(|network| self.etherscan.clone().resolved().find_network(network))
         {
             match (res, self.etherscan_api_key.as_ref()) {
                 (Ok(mut config), Some(key)) => {
@@ -910,16 +906,16 @@ impl Config {
 
         // etherscan fallback via API key
         if let Some(key) = self.etherscan_api_key.as_ref() {
-            let chain = chain.or(self.network_id).unwrap_or_default();
-            return Ok(ResolvedEtherscanConfig::create(key, chain))
+            let network = network.or(self.network_id).unwrap_or_default();
+            return Ok(ResolvedEtherscanConfig::create(key, network))
         }
 
         Ok(None)
     }
 
     /// Helper function to just get the API key
-    pub fn get_etherscan_api_key(&self, chain: Option<impl Into<Network>>) -> Option<String> {
-        self.get_etherscan_config_with_network(chain).ok().flatten().map(|c| c.key)
+    pub fn get_etherscan_api_key(&self, network: Option<impl Into<Network>>) -> Option<String> {
+        self.get_etherscan_config_with_network(network).ok().flatten().map(|c| c.key)
     }
 
     /// Returns the remapping for the project's _src_ directory
@@ -927,7 +923,7 @@ impl Config {
     /// **Note:** this will add an additional `<src>/=<src path>` remapping here so imports that
     /// look like `import {Foo} from "src/Foo.sol";` are properly resolved.
     ///
-    /// This is due the fact that `solc`'s VFS resolves [direct imports](https://docs.soliditylang.org/en/develop/path-resolution.html#direct-imports) that start with the source directory's name.
+    /// This is due the fact that `ylem`'s VFS resolves [direct imports](https://docs.soliditylang.org/en/develop/path-resolution.html#direct-imports) that start with the source directory's name.
     pub fn get_source_dir_remapping(&self) -> Option<Remapping> {
         get_dir_remapping(&self.src)
     }
@@ -962,11 +958,11 @@ impl Config {
     /// `extra_output` fields
     pub fn configured_artifacts_handler(&self) -> ConfigurableArtifacts {
         let mut extra_output = self.extra_output.clone();
-        // Sourcify verification requires solc metadata output. Since, it doesn't
+        // Sourcify verification requires ylem metadata output. Since, it doesn't
         // affect the UX & performance of the compiler, output the metadata files
         // by default.
         // For more info see: <https://github.com/foundry-rs/foundry/issues/2795>
-        // Metadata is not emitted as separate file because this breaks typechain support: <https://github.com/foundry-rs/foundry/issues/2969>
+        // Metadata is not emitted as separate file because this breaks typenetwork support: <https://github.com/foundry-rs/foundry/issues/2969>
         if !extra_output.contains(&ContractOutputSelection::Metadata) {
             extra_output.push(ContractOutputSelection::Metadata);
         }
@@ -980,11 +976,11 @@ impl Config {
         Libraries::parse(&self.libraries)
     }
 
-    /// Returns the configured `solc` `Settings` that includes:
+    /// Returns the configured `ylem` `Settings` that includes:
     ///   - all libraries
     ///   - the optimizer (including details, if configured)
-    ///   - evm version
-    pub fn solc_settings(&self) -> Result<Settings, YlemError> {
+    ///   - cvm version
+    pub fn ylem_settings(&self) -> Result<Settings, YlemError> {
         let libraries = self.parsed_libraries()?.with_applied_remappings(&self.project_paths());
         let optimizer = self.optimizer();
 
@@ -1000,7 +996,7 @@ impl Config {
 
         let mut settings = Settings {
             optimizer,
-            evm_version: Some(self.evm_version),
+            evm_version: Some(self.cvm_version),
             libraries,
             metadata: Some(SettingsMetadata {
                 use_literal_content: Some(self.use_literal_content),
@@ -1729,11 +1725,11 @@ impl Default for Config {
             allow_paths: vec![],
             include_paths: vec![],
             force: false,
-            evm_version: CvmVersion::Istanbul,
-            gas_reports: vec!["*".to_string()],
-            gas_reports_ignore: vec![],
+            cvm_version: CvmVersion::Istanbul,
+            energy_reports: vec!["*".to_string()],
+            energy_reports_ignore: vec![],
             ylem: None,
-            auto_detect_solc: true,
+            auto_detect_ylem: true,
             offline: false,
             optimizer: true,
             optimizer_runs: 200,
@@ -1758,15 +1754,13 @@ impl Default for Config {
             block_number: 1,
             fork_block_number: None,
             network_id: None,
-            gas_limit: i64::MAX.into(),
+            energy_limit: i64::MAX.into(),
             code_size_limit: None,
-            gas_price: None,
-            block_base_fee_per_gas: 0,
+            energy_price: None,
             block_coinbase: Address::zero(),
             block_timestamp: 1,
             block_difficulty: 0,
-            block_prevrandao: Default::default(),
-            block_gas_limit: None,
+            block_energy_limit: None,
             memory_limit: 2u64.pow(25),
             eth_rpc_url: None,
             etherscan_api_key: None,
@@ -1801,41 +1795,41 @@ impl Default for Config {
     }
 }
 
-/// Wrapper for the config's `gas_limit` value necessary because toml-rs can't handle larger number because integers are stored signed: <https://github.com/alexcrichton/toml-rs/issues/256>
+/// Wrapper for the config's `energy_limit` value necessary because toml-rs can't handle larger number because integers are stored signed: <https://github.com/alexcrichton/toml-rs/issues/256>
 ///
 /// Due to this limitation this type will be serialized/deserialized as String if it's larger than
 /// `i64`
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct GasLimit(pub u64);
+pub struct EnergyLimit(pub u64);
 
-impl From<u64> for GasLimit {
-    fn from(gas: u64) -> Self {
-        Self(gas)
+impl From<u64> for EnergyLimit {
+    fn from(energy: u64) -> Self {
+        Self(energy)
     }
 }
-impl From<i64> for GasLimit {
-    fn from(gas: i64) -> Self {
-        Self(gas as u64)
+impl From<i64> for EnergyLimit {
+    fn from(energy: i64) -> Self {
+        Self(energy as u64)
     }
 }
-impl From<i32> for GasLimit {
-    fn from(gas: i32) -> Self {
-        Self(gas as u64)
+impl From<i32> for EnergyLimit {
+    fn from(energy: i32) -> Self {
+        Self(energy as u64)
     }
 }
-impl From<u32> for GasLimit {
-    fn from(gas: u32) -> Self {
-        Self(gas as u64)
-    }
-}
-
-impl From<GasLimit> for u64 {
-    fn from(gas: GasLimit) -> Self {
-        gas.0
+impl From<u32> for EnergyLimit {
+    fn from(energy: u32) -> Self {
+        Self(energy as u64)
     }
 }
 
-impl Serialize for GasLimit {
+impl From<EnergyLimit> for u64 {
+    fn from(energy: EnergyLimit) -> Self {
+        energy.0
+    }
+}
+
+impl Serialize for EnergyLimit {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -1848,7 +1842,7 @@ impl Serialize for GasLimit {
     }
 }
 
-impl<'de> Deserialize<'de> for GasLimit {
+impl<'de> Deserialize<'de> for EnergyLimit {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -1857,31 +1851,31 @@ impl<'de> Deserialize<'de> for GasLimit {
 
         #[derive(Deserialize)]
         #[serde(untagged)]
-        enum Gas {
+        enum Energy {
             Number(u64),
             Text(String),
         }
 
-        let gas = match Gas::deserialize(deserializer)? {
-            Gas::Number(num) => GasLimit(num),
-            Gas::Text(s) => match s.as_str() {
-                "max" | "MAX" | "Max" | "u64::MAX" | "u64::Max" => GasLimit(u64::MAX),
-                s => GasLimit(s.parse().map_err(D::Error::custom)?),
+        let energy = match Energy::deserialize(deserializer)? {
+            Energy::Number(num) => EnergyLimit(num),
+            Energy::Text(s) => match s.as_str() {
+                "max" | "MAX" | "Max" | "u64::MAX" | "u64::Max" => EnergyLimit(u64::MAX),
+                s => EnergyLimit(s.parse().map_err(D::Error::custom)?),
             },
         };
 
-        Ok(gas)
+        Ok(energy)
     }
 }
 
-/// Variants for selecting the [`Solc`] instance
+/// Variants for selecting the [`Ylem`] instance
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum YlemReq {
-    /// Requires a specific solc version, that's either already installed (via `yvm`) or will be
+    /// Requires a specific ylem version, that's either already installed (via `yvm`) or will be
     /// auto installed (via `yvm`)
     Version(Version),
-    /// Path to an existing local solc installation
+    /// Path to an existing local ylem installation
     Local(PathBuf),
 }
 
@@ -2003,13 +1997,13 @@ impl<P: Provider> Provider for BackwardsCompatTomlProvider<P> {
 
     fn data(&self) -> Result<Map<Profile, Dict>, Error> {
         let mut map = Map::new();
-        let solc_env = std::env::var("FOUNDRY_SOLC_VERSION")
-            .or_else(|_| std::env::var("DAPP_SOLC_VERSION"))
+        let ylem_env = std::env::var("FOUNDRY_YLEM_VERSION")
+            .or_else(|_| std::env::var("DAPP_YLEM_VERSION"))
             .map(Value::from)
             .ok();
         for (profile, mut dict) in self.0.data()? {
-            if let Some(v) = solc_env.clone().or_else(|| dict.remove("solc_version")) {
-                dict.insert("solc".to_string(), v);
+            if let Some(v) = ylem_env.clone().or_else(|| dict.remove("ylem_version")) {
+                dict.insert("ylem".to_string(), v);
             }
             map.insert(profile, dict);
         }
@@ -2493,22 +2487,22 @@ mod tests {
     fn default_sender() {
         assert_eq!(
             Config::DEFAULT_SENDER,
-            "0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38".parse().unwrap()
+            "cb231804c8AB1F12E6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
     }
 
     #[test]
     fn test_caching() {
         let mut config = Config::default();
-        let chain_id = corebc_core::types::Network::Mainnet;
-        let url = "https://eth-mainnet.alchemyapi";
-        assert!(config.enable_caching(url, chain_id));
+        let network_id = corebc_core::types::Network::Mainnet;
+        let url = "https://blockindex.net";
+        assert!(config.enable_caching(url, network_id));
 
         config.no_storage_caching = true;
-        assert!(!config.enable_caching(url, chain_id));
+        assert!(!config.enable_caching(url, network_id));
 
         config.no_storage_caching = false;
-        assert!(!config.enable_caching(url, corebc_core::types::Network::Devin));
+        assert!(!config.enable_caching(url, corebc_core::types::Network::Private(99)));
     }
 
     #[test]
@@ -2817,21 +2811,21 @@ mod tests {
     }
 
     #[test]
-    fn test_large_gas_limit() {
+    fn test_large_energy_limit() {
         figment::Jail::expect_with(|jail| {
-            let gas = u64::MAX;
+            let energy = u64::MAX;
             jail.create_file(
                 "foundry.toml",
                 &format!(
                     r#"
                 [profile.default]
-                gas_limit = "{gas}"
+                energy_limit = "{energy}"
             "#
                 ),
             )?;
 
             let config = Config::load();
-            assert_eq!(config, Config { gas_limit: gas.into(), ..Config::default() });
+            assert_eq!(config, Config { energy_limit: energy.into(), ..Config::default() });
 
             Ok(())
         });
@@ -2868,9 +2862,9 @@ mod tests {
     }
 
     #[test]
-    fn test_resolve_etherscan_with_chain() {
+    fn test_resolve_etherscan_with_network() {
         figment::Jail::expect_with(|jail| {
-            let env_key = "__BSC_ETHERSCAN_API_KEY";
+            let env_key = "__DEVIN_ETHERSCAN_API_KEY";
             let env_value = "env value";
             jail.create_file(
                 "foundry.toml",
@@ -2878,7 +2872,7 @@ mod tests {
                 [profile.default]
 
                 [etherscan]
-                bsc = { key = "${__BSC_ETHERSCAN_API_KEY}", url = "https://api.bscscan.com/api" }
+                devin = { key = "${__DEVIN_ETHERSCAN_API_KEY}", url = "https://devin.blockindex.net/api" }
             "#,
             )?;
 
@@ -2892,7 +2886,7 @@ mod tests {
 
             assert_eq!(
                 config
-                    .get_etherscan_config_with_network(Some(corebc_core::types::Network::Mainnet))
+                    .get_etherscan_config_with_network(Some(corebc_core::types::Network::Devin))
                     .unwrap()
                     .unwrap()
                     .key,
@@ -3057,30 +3051,30 @@ mod tests {
                 "foundry.toml",
                 r#"
                 [profile.default]
-                etherscan_api_key = "optimism"
+                etherscan_api_key = "mainnet"
 
                 [etherscan]
-                optimism = { key = "https://etherscan-optimism.com/" }
-                mumbai = { key = "https://etherscan-mumbai.com/" }
+                mainnet = { key = "https://blockindex.net/" }
+                devin = { key = "https://devin.blockindex.net/" }
             "#,
             )?;
 
             let mut config = Config::load();
 
-            let optimism = config.get_etherscan_api_key(Some(corebc_core::types::Network::Devin));
-            assert_eq!(optimism, Some("https://etherscan-optimism.com/".to_string()));
+            let mainnet = config.get_etherscan_api_key(Some(corebc_core::types::Network::Mainnet));
+            assert_eq!(mainnet, Some("https://blockindex.net/".to_string()));
 
-            config.etherscan_api_key = Some("mumbai".to_string());
+            config.etherscan_api_key = Some("devin".to_string());
 
-            let mumbai = config.get_etherscan_api_key(Some(corebc_core::types::Network::Devin));
-            assert_eq!(mumbai, Some("https://etherscan-mumbai.com/".to_string()));
+            let devin = config.get_etherscan_api_key(Some(corebc_core::types::Network::Devin));
+            assert_eq!(devin, Some("https://devin.blockindex.net/".to_string()));
 
             Ok(())
         });
     }
 
     #[test]
-    fn test_extract_etherscan_config_by_chain() {
+    fn test_extract_etherscan_config_by_network() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
                 "foundry.toml",
@@ -3088,24 +3082,24 @@ mod tests {
                 [profile.default]
 
                 [etherscan]
-                mumbai = { key = "https://etherscan-mumbai.com/", chain = 80001 }
+                devin = { key = "https://devin.blockindex.net/", network = 3 }
             "#,
             )?;
 
             let config = Config::load();
 
-            let mumbai = config
+            let devin = config
                 .get_etherscan_config_with_network(Some(corebc_core::types::Network::Devin))
                 .unwrap()
                 .unwrap();
-            assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
+            assert_eq!(devin.key, "https://devin.blockindex.net/".to_string());
 
             Ok(())
         });
     }
 
     #[test]
-    fn test_extract_etherscan_config_by_chain_with_url() {
+    fn test_extract_etherscan_config_by_network_with_url() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
                 "foundry.toml",
@@ -3113,48 +3107,48 @@ mod tests {
                 [profile.default]
 
                 [etherscan]
-                mumbai = { key = "https://etherscan-mumbai.com/", chain = 80001 , url =  "https://verifier-url.com/"}
+                devin = { key = "https://devin.blockindex.net/", network = 3 , url =  "https://devin.blockindex.net/api"}
             "#,
             )?;
 
             let config = Config::load();
 
-            let mumbai = config
+            let devin = config
                 .get_etherscan_config_with_network(Some(corebc_core::types::Network::Devin))
                 .unwrap()
                 .unwrap();
-            assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
-            assert_eq!(mumbai.api_url, "https://verifier-url.com/".to_string());
+            assert_eq!(devin.key, "https://devin.blockindex.net/".to_string());
+            assert_eq!(devin.api_url, "https://devin.blockindex.net/api".to_string());
 
             Ok(())
         });
     }
 
     #[test]
-    fn test_extract_etherscan_config_by_chain_and_alias() {
+    fn test_extract_etherscan_config_by_network_and_alias() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
                 "foundry.toml",
                 r#"
                 [profile.default]
-                eth_rpc_url = "mumbai"
+                eth_rpc_url = "devin"
 
                 [etherscan]
-                mumbai = { key = "https://etherscan-mumbai.com/" }
+                devin = { key = "https://devin.blockindex.net/" }
 
                 [rpc_endpoints]
-                mumbai = "https://polygon-mumbai.g.alchemy.com/v2/mumbai"
+                devin = "https://devin.blockindex.net/api"
             "#,
             )?;
 
             let config = Config::load();
 
-            let mumbai =
+            let devin =
                 config.get_etherscan_config_with_network(Option::<u64>::None).unwrap().unwrap();
-            assert_eq!(mumbai.key, "https://etherscan-mumbai.com/".to_string());
+            assert_eq!(devin.key, "https://devin.blockindex.net/".to_string());
 
-            let mumbai_rpc = config.get_rpc_url().unwrap().unwrap();
-            assert_eq!(mumbai_rpc, "https://polygon-mumbai.g.alchemy.com/v2/mumbai");
+            let devin_rpc = config.get_rpc_url().unwrap().unwrap();
+            assert_eq!(devin_rpc, "https://devin.blockindex.net/api");
             Ok(())
         });
     }
@@ -3173,7 +3167,7 @@ mod tests {
                 verbosity = 3
                 remappings = ["ds-test=lib/ds-test/"]
                 via_ir = true
-                rpc_storage_caching = { chains = [1, "optimism", 999999], endpoints = "all"}
+                rpc_storage_caching = { networks = [1, "devin", "999999"], endpoints = "all"}
                 use_literal_content = false
                 bytecode_hash = "ipfs"
                 cbor_metadata = true
@@ -3182,10 +3176,10 @@ mod tests {
                 build_info_path = "build-info"
 
                 [rpc_endpoints]
-                optimism = "https://example.com/"
+                devin = "https://example.com/"
                 mainnet = "${RPC_MAINNET}"
-                mainnet_2 = "https://eth-mainnet.alchemyapi.io/v2/${API_KEY}"
-                mainnet_3 = "https://eth-mainnet.alchemyapi.io/v2/${API_KEY}/${ANOTHER_KEY}"
+                mainnet_2 = "https://blockindex.net/api/v2/${API_KEY}"
+                mainnet_3 = "https://blockindex.net/api/v2/${API_KEY}/${ANOTHER_KEY}"
             "#,
             )?;
 
@@ -3214,18 +3208,18 @@ mod tests {
                     revert_strings: Some(RevertStrings::Strip),
                     allow_paths: vec![PathBuf::from("allow"), PathBuf::from("paths")],
                     rpc_endpoints: RpcEndpoints::new([
-                        ("optimism", RpcEndpoint::Url("https://example.com/".to_string())),
+                        ("devin", RpcEndpoint::Url("https://example.com/".to_string())),
                         ("mainnet", RpcEndpoint::Env("${RPC_MAINNET}".to_string())),
                         (
                             "mainnet_2",
                             RpcEndpoint::Env(
-                                "https://eth-mainnet.alchemyapi.io/v2/${API_KEY}".to_string()
+                                "https://blockindex.net/api/v2/${API_KEY}".to_string()
                             )
                         ),
                         (
                             "mainnet_3",
                             RpcEndpoint::Env(
-                                "https://eth-mainnet.alchemyapi.io/v2/${API_KEY}/${ANOTHER_KEY}"
+                                "https://blockindex.net/api/v2/${API_KEY}/${ANOTHER_KEY}"
                                     .to_string()
                             )
                         ),
@@ -3267,11 +3261,9 @@ mod tests {
                 "foundry.toml",
                 r#"
                 [profile.default]
-                auto_detect_solc = true
-                block_base_fee_per_gas = 0
-                block_coinbase = '0x0000000000000000000000000000000000000000'
+                auto_detect_ylem = true
+                block_coinbase = '00000000000000000000000000000000000000000000'
                 block_difficulty = 0
-                block_prevrandao = '0x0000000000000000000000000000000000000000000000000000000000000000'
                 block_number = 1
                 block_timestamp = 1
                 use_literal_content = false
@@ -3279,14 +3271,14 @@ mod tests {
                 cbor_metadata = true
                 cache = true
                 cache_path = 'cache'
-                evm_version = 'london'
+                cvm_version = 'istanbul'
                 extra_output = []
                 extra_output_files = []
                 ffi = false
                 force = false
-                gas_limit = 9223372036854775807
-                gas_price = 0
-                gas_reports = ['*']
+                energy_limit = 9223372036854775807
+                energy_price = 0
+                energy_reports = ['*']
                 ignored_error_codes = [1878]
                 deny_warnings = false
                 initial_balance = '0xffffffffffffffffffffffff'
@@ -3301,23 +3293,23 @@ mod tests {
                 optimizer_runs = 200
                 out = 'out'
                 remappings = ['nested/=lib/nested/']
-                sender = '0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38'
+                sender = 'cb231804c8AB1F12E6bbf3894d4083f33e07309d1f38'
                 sizes = false
                 sparse_mode = false
                 src = 'src'
                 test = 'test'
-                tx_origin = '0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38'
+                tx_origin = 'cb231804c8AB1F12E6bbf3894d4083f33e07309d1f38'
                 verbosity = 0
                 via_ir = false
                 
                 [profile.default.rpc_storage_caching]
-                chains = 'all'
+                networks = 'all'
                 endpoints = 'all'
 
                 [rpc_endpoints]
-                optimism = "https://example.com/"
+                devin = "https://example.com/"
                 mainnet = "${RPC_MAINNET}"
-                mainnet_2 = "https://eth-mainnet.alchemyapi.io/v2/${API_KEY}"
+                mainnet_2 = "https://blockindex.net/api/v2/${API_KEY}"
 
                 [fuzz]
                 runs = 256
@@ -3344,13 +3336,11 @@ mod tests {
             assert_eq!(
                 config.rpc_endpoints,
                 RpcEndpoints::new([
-                    ("optimism", RpcEndpoint::Url("https://example.com/".to_string())),
+                    ("devin", RpcEndpoint::Url("https://example.com/".to_string())),
                     ("mainnet", RpcEndpoint::Env("${RPC_MAINNET}".to_string())),
                     (
                         "mainnet_2",
-                        RpcEndpoint::Env(
-                            "https://eth-mainnet.alchemyapi.io/v2/${API_KEY}".to_string()
-                        )
+                        RpcEndpoint::Env("https://blockindex.net/api/v2/${API_KEY}".to_string())
                     ),
                 ]),
             );
@@ -3360,13 +3350,13 @@ mod tests {
     }
 
     #[test]
-    fn test_solc_req() {
+    fn test_ylem_req() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
                 "foundry.toml",
                 r#"
                 [profile.default]
-                solc_version = "0.8.12"
+                ylem_version = "0.8.12"
             "#,
             )?;
 
@@ -3377,7 +3367,7 @@ mod tests {
                 "foundry.toml",
                 r#"
                 [profile.default]
-                solc = "0.8.12"
+                ylem = "0.8.12"
             "#,
             )?;
 
@@ -3388,14 +3378,14 @@ mod tests {
                 "foundry.toml",
                 r#"
                 [profile.default]
-                solc = "path/to/local/solc"
+                ylem = "path/to/local/ylem"
             "#,
             )?;
 
             let config = Config::load();
-            assert_eq!(config.ylem, Some(YlemReq::Local("path/to/local/solc".into())));
+            assert_eq!(config.ylem, Some(YlemReq::Local("path/to/local/ylem".into())));
 
-            jail.set_env("FOUNDRY_SOLC_VERSION", "0.6.6");
+            jail.set_env("FOUNDRY_YLEM_VERSION", "0.6.6");
             let config = Config::load();
             assert_eq!(config.ylem, Some(YlemReq::Version("0.6.6".parse().unwrap())));
             Ok(())
@@ -3413,8 +3403,8 @@ mod tests {
                 out = "some-out"
                 cache = true
                 eth-rpc-url = "https://example.com/"
-                evm-version = "berlin"
-                auto-detect-solc = false
+                cvm-version = "istanbul"
+                auto-detect-ylem = false
             "#,
             )?;
 
@@ -3426,8 +3416,8 @@ mod tests {
                     out: "some-out".into(),
                     cache: true,
                     eth_rpc_url: Some("https://example.com/".to_string()),
-                    auto_detect_solc: false,
-                    evm_version: CvmVersion::Istanbul,
+                    auto_detect_ylem: false,
+                    cvm_version: CvmVersion::Istanbul,
                     ..Config::default()
                 }
             );
@@ -3514,14 +3504,14 @@ mod tests {
                 src = "mysrc"
                 out = "myout"
                 verbosity = 3
-                evm_version = 'berlin'
+                cvm_version = 'istanbul'
 
                 [profile.other]
                 src = "other-src"
             "#,
             )?;
             let loaded = Config::load();
-            assert_eq!(loaded.evm_version, CvmVersion::Istanbul);
+            assert_eq!(loaded.cvm_version, CvmVersion::Istanbul);
             let base = loaded.into_basic();
             let default = Config::default();
             assert_eq!(
@@ -4184,23 +4174,23 @@ mod tests {
 
     #[test]
     fn list_cached_blocks() -> eyre::Result<()> {
-        fn fake_block_cache(chain_path: &Path, block_number: &str, size_bytes: usize) {
-            let block_path = chain_path.join(block_number);
+        fn fake_block_cache(network_path: &Path, block_number: &str, size_bytes: usize) {
+            let block_path = network_path.join(block_number);
             fs::create_dir(block_path.as_path()).unwrap();
             let file_path = block_path.join("storage.json");
             let mut file = File::create(file_path).unwrap();
             writeln!(file, "{}", vec![' '; size_bytes - 1].iter().collect::<String>()).unwrap();
         }
 
-        let chain_dir = tempdir()?;
+        let network_dir = tempdir()?;
 
-        fake_block_cache(chain_dir.path(), "1", 100);
-        fake_block_cache(chain_dir.path(), "2", 500);
+        fake_block_cache(network_dir.path(), "1", 100);
+        fake_block_cache(network_dir.path(), "2", 500);
         // Pollution file that should not show up in the cached block
-        let mut pol_file = File::create(chain_dir.path().join("pol.txt")).unwrap();
+        let mut pol_file = File::create(network_dir.path().join("pol.txt")).unwrap();
         writeln!(pol_file, "{}", [' '; 10].iter().collect::<String>()).unwrap();
 
-        let result = Config::get_cached_blocks(chain_dir.path())?;
+        let result = Config::get_cached_blocks(network_dir.path())?;
 
         assert_eq!(result.len(), 2);
         let block1 = &result.iter().find(|x| x.0 == "1").unwrap();
@@ -4210,15 +4200,15 @@ mod tests {
         assert_eq!(block2.0, "2");
         assert_eq!(block2.1, 500);
 
-        chain_dir.close()?;
+        network_dir.close()?;
         Ok(())
     }
 
     #[test]
     fn list_etherscan_cache() -> eyre::Result<()> {
-        fn fake_etherscan_cache(chain_path: &Path, address: &str, size_bytes: usize) {
-            let metadata_path = chain_path.join("sources");
-            let abi_path = chain_path.join("abi");
+        fn fake_etherscan_cache(network_path: &Path, address: &str, size_bytes: usize) {
+            let metadata_path = network_path.join("sources");
+            let abi_path = network_path.join("abi");
             let _ = fs::create_dir(metadata_path.as_path());
             let _ = fs::create_dir(abi_path.as_path());
 
@@ -4233,16 +4223,16 @@ mod tests {
                 .unwrap();
         }
 
-        let chain_dir = tempdir()?;
+        let network_dir = tempdir()?;
 
-        fake_etherscan_cache(chain_dir.path(), "1", 100);
-        fake_etherscan_cache(chain_dir.path(), "2", 500);
+        fake_etherscan_cache(network_dir.path(), "1", 100);
+        fake_etherscan_cache(network_dir.path(), "2", 500);
 
-        let result = Config::get_cached_block_explorer_data(chain_dir.path())?;
+        let result = Config::get_cached_block_explorer_data(network_dir.path())?;
 
         assert_eq!(result, 600);
 
-        chain_dir.close()?;
+        network_dir.close()?;
         Ok(())
     }
 

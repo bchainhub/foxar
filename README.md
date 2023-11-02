@@ -10,8 +10,8 @@
 - [ ] cast
 - [ ] chisel
 - [ ] cli
-- [ ] common
-- [ ] config - Misha
+- [ ] common - Misha
+- [x] config
 - [ ] evm - David 
 - [ ] fmt
 - [ ] forge
