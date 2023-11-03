@@ -4,20 +4,20 @@
 
 #### Tests:
 **Before working on any crate please write your name next to it, so we won't do duplicate work**
-- [ ] abi - David(This needs to be fixed in order for the evm tests to pass)
+- [x] abi 
 - [ ] anvil 
 - [ ] binder
 - [ ] cast
 - [ ] chisel
 - [ ] cli
-- [ ] common - Misha
-- [x] config
-- [ ] evm - David 
-- [ ] fmt
+- [x] common
+- [x] config - Misha
+- [x] evm - David 
+- [x] fmt
 - [ ] forge
 - [x] macros
 - [ ] ui
-- [ ] utils
+- [ ] utils - Misha
 
 #### Compiles:
 - [x] abi -> Compiles

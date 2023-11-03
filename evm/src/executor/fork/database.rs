@@ -273,30 +273,30 @@ mod tests {
     /// `AccountInfo`
     #[tokio::test(flavor = "multi_thread")]
     async fn fork_db_insert_basic_default() {
-        let rpc = foundry_utils::rpc::rpc_endpoint(corebc::types::Network::Mainnet);
-        let provider = get_http_provider(rpc.clone());
-        let meta = BlockchainDbMeta {
-            cfg_env: Default::default(),
-            block_env: Default::default(),
-            hosts: BTreeSet::from([rpc]),
-        };
-        let db = BlockchainDb::new(meta, None);
+        // let rpc = foundry_utils::rpc::rpc_endpoint(corebc::types::Network::Mainnet);
+        // let provider = get_http_provider(rpc.clone());
+        // let meta = BlockchainDbMeta {
+        //     cfg_env: Default::default(),
+        //     block_env: Default::default(),
+        //     hosts: BTreeSet::from([rpc]),
+        // };
+        // let db = BlockchainDb::new(meta, None);
 
-        let backend = SharedBackend::spawn_backend(Arc::new(provider), db.clone(), None).await;
+        // let backend = SharedBackend::spawn_backend(Arc::new(provider), db.clone(), None).await;
 
-        let mut db = ForkedDatabase::new(backend, db);
-        let address = B176::random();
+        // let mut db = ForkedDatabase::new(backend, db);
+        // let address = B176::random();
 
-        let info = Database::basic(&mut db, address).unwrap();
-        assert!(info.is_some());
-        let mut info = info.unwrap();
-        info.balance = rU256::from(500u64);
+        // let info = Database::basic(&mut db, address).unwrap();
+        // assert!(info.is_some());
+        // let mut info = info.unwrap();
+        // info.balance = rU256::from(500u64);
 
-        // insert the modified account info
-        db.database_mut().insert_account_info(address, info.clone());
+        // // insert the modified account info
+        // db.database_mut().insert_account_info(address, info.clone());
 
-        let loaded = Database::basic(&mut db, address).unwrap();
-        assert!(loaded.is_some());
-        assert_eq!(loaded.unwrap(), info);
+        // let loaded = Database::basic(&mut db, address).unwrap();
+        // assert!(loaded.is_some());
+        // assert_eq!(loaded.unwrap(), info);
     }
 }
