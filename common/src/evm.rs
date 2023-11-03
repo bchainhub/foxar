@@ -261,7 +261,7 @@ mod tests {
         let config = Config::from_provider(Config::figment().merge(args));
         assert_eq!(config.network_id, Some(Network::Mainnet));
 
-        let env = EnvArgs::parse_from(["foundry-common", "--chain-id", "3"]);
+        let env = EnvArgs::parse_from(["foundry-common", "--network-id", "3"]);
         assert_eq!(env.network_id, Some(Network::Devin));
     }
 

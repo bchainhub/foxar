@@ -460,18 +460,16 @@ mod tests {
 
     #[test]
     fn test_format_token_addr() {
-        // copied from testcases in https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md
-        let eip55 = "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed";
+        let mainnet = "cb324eaeb6053f3e94c9b9a09f33669435e7ef1beaed";
         assert_eq!(
-            format_token(&Token::Address(Address::from_str(&eip55.to_lowercase()).unwrap())),
-            eip55.to_string()
+            format_token(&Token::Address(Address::from_str(&mainnet.to_lowercase()).unwrap())),
+            mainnet.to_string()
         );
 
-        // copied from testcases in https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1191.md
-        let eip1191 = "0xFb6916095cA1Df60bb79ce92cE3EA74c37c5d359";
-        assert_ne!(
-            format_token(&Token::Address(Address::from_str(&eip1191.to_lowercase()).unwrap())),
-            eip1191.to_string()
+        let devin = "ab22fb6916095ca1df60bb79ce92ce3ea74c37c5d359";
+        assert_eq!(
+            format_token(&Token::Address(Address::from_str(&devin.to_lowercase()).unwrap())),
+            devin.to_string()
         );
     }
 }

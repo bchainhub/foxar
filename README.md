@@ -10,14 +10,14 @@
 - [ ] cast
 - [ ] chisel
 - [ ] cli
-- [ ] common - Misha
+- [x] common
 - [x] config
 - [ ] evm - David 
-- [ ] fmt
+- [x] fmt
 - [ ] forge
 - [x] macros
 - [ ] ui
-- [ ] utils
+- [ ] utils - Misha
 
 #### Compiles:
 - [x] abi -> Compiles
