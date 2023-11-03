@@ -63,9 +63,7 @@ fn to_ethers_transaction_with_hash_and_sender(
             energy: t.gas_limit,
             input: t.input.clone(),
             network_id: t.network_id().map(Into::into),
-            v: t.signature.v.into(),
-            r: t.signature.r,
-            s: t.signature.s,
+            sig: t.signature.sig,
         },
     }
 }

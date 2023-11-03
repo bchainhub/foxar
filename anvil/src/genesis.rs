@@ -87,7 +87,7 @@ impl Genesis {
     /// Applies all settings to the given `env`
     pub fn apply(&self, env: &mut Env) {
         if let Some(chain_id) = self.chain_id() {
-            env.cfg.network = foundry_evm::revm::primitives::Network::from(chain_id);
+            env.cfg.network_id = chain_id;
         }
         if let Some(timestamp) = self.timestamp {
             env.block.timestamp = rU256::from(timestamp);
@@ -244,7 +244,7 @@ pub mod secret_key {
     {
         if let Some(s) = Option::<Bytes>::deserialize(deserializer)? {
             if s.is_empty() {
-                return Ok(None)
+                return Ok(None);
             }
             SecretKey::from_bytes(s.as_ref().into())
                 .map_err(de::Error::custom)
