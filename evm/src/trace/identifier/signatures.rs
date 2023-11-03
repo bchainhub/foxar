@@ -94,7 +94,7 @@ impl SignaturesIdentifier {
     ) -> Option<T> {
         // Exit early if we have unsuccessfully queried it before.
         if self.unavailable.contains(identifier) {
-            return None
+            return None;
         }
 
         let map = match selector_type {
@@ -115,7 +115,7 @@ impl SignaturesIdentifier {
         }
 
         if let Some(signature) = map.get(&hex_identifier) {
-            return get_type(signature).ok()
+            return get_type(signature).ok();
         }
 
         self.unavailable.insert(identifier.to_vec());
@@ -162,6 +162,7 @@ mod tests {
     use super::*;
 
     #[tokio::test(flavor = "multi_thread")]
+    #[ignore = "We don't yet have any registery for function selectors, fix once we do"]
     async fn can_query_signatures() {
         let tmp = tempfile::tempdir().unwrap();
         {

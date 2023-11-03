@@ -157,17 +157,13 @@ where
         // TODO: Does this increase energy cost?
         if let Err(err) = data.journaled_state.load_account(call.caller, data.db) {
             let energy = Energy::new(call.energy_limit);
-            return (InstructionResult::Revert, None, energy, err.encode_string().0)
+            return (InstructionResult::Revert, None, energy, err.encode_string().0);
         }
 
         let nonce = data.journaled_state.account(call.caller).info.nonce;
         self.enter(
             data.journaled_state.depth() as usize,
-            get_create_address(
-                call,
-                nonce,
-                &Network::try_from(data.env.cfg.network.as_u64()).unwrap(),
-            ),
+            get_create_address(call, nonce, &Network::from(data.env.cfg.network_id)),
             CallKind::Create,
         );
 
