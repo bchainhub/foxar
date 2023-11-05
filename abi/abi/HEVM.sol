@@ -54,7 +54,7 @@ deriveKey(string,uint32)(uint256)
 deriveKey(string,string,uint32)(uint256)
 deriveKey(string,uint32,string)(uint256)
 deriveKey(string,string,uint32,string)(uint256)
-rememberKey(uint256)(address)
+rememberKey(string)(address)
 
 prank(address)
 prank(address,address)
