@@ -102,13 +102,13 @@ impl SessionSourceConfig {
             YlemReq::Version(version) => {
                 // We now need to verify if the ylem version provided is supported by the evm
                 // version set. If not, we bail and ask the user to provide a newer version.
-                // 1. Do we need ylem 0.8.18 or higher?
+                // 1. Do we need ylem 1.1.0 or higher?
                 let evm_version = self.foundry_config.cvm_version;
-                // 2. Check if the version provided is less than 0.8.18 and bail,
+                // 2. Check if the version provided is less than 1.1.0 and bail,
                 // or leave it as-is if we don't need a post merge ylem version or the version we
                 // have is good enough.
                 let v = if version < Version::new(0, 8, 18) {
-                    eyre::bail!("ylem {version} is not supported by the set evm version: {evm_version}. Please install and use a version of ylem higher or equal to 0.8.18.
+                    eyre::bail!("ylem {version} is not supported by the set evm version: {evm_version}. Please install and use a version of ylem higher or equal to 1.1.0.
 You can also set the ylem version in your foundry.toml.")
                 } else {
                     version.to_string()
