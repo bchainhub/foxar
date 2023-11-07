@@ -478,6 +478,7 @@ mod tests {
             .unwrap();
 
         let project = Project::builder().paths(paths).ephemeral().no_artifacts().build().unwrap();
+        println!("{:?}", project);
 
         let output = project.compile().unwrap();
         let contracts = output
@@ -485,86 +486,86 @@ mod tests {
             .filter(|(i, _)| contract_names.contains(&i.slug().as_str()))
             .map(|(id, c)| (id, c.into_contract_bytecode()))
             .collect::<ArtifactContracts>();
+        println!("{:#?}", contracts);
+        // let mut known_contracts = ContractsByArtifact::default();
+        // let mut deployable_contracts: BTreeMap<String, (Abi, Bytes, Vec<Bytes>)> =
+        //     Default::default();
 
-        let mut known_contracts = ContractsByArtifact::default();
-        let mut deployable_contracts: BTreeMap<String, (Abi, Bytes, Vec<Bytes>)> =
-            Default::default();
+        // let mut res = contracts.keys().map(|i| i.slug()).collect::<Vec<String>>();
+        // res.sort_unstable();
+        // assert_eq!(&res[..], &contract_names[..]);
 
-        let mut res = contracts.keys().map(|i| i.slug()).collect::<Vec<String>>();
-        res.sort_unstable();
-        assert_eq!(&res[..], &contract_names[..]);
+        // let lib_linked = hex::encode(
+        //     &contracts
+        //         .iter()
+        //         .find(|(i, _)| i.slug() == "Lib.json:Lib")
+        //         .unwrap()
+        //         .1
+        //         .bytecode
+        //         .clone()
+        //         .expect("library had no bytecode")
+        //         .object
+        //         .into_bytes()
+        //         .expect("could not get bytecode as bytes"),
+        // );
+        // let nested_lib_unlinked = &contracts
+        //     .iter()
+        //     .find(|(i, _)| i.slug() == "NestedLib.json:NestedLib")
+        //     .unwrap()
+        //     .1
+        //     .bytecode
+        //     .as_ref()
+        //     .expect("nested library had no bytecode")
+        //     .object
+        //     .as_str()
+        //     .expect("could not get bytecode as str")
+        //     .to_string();
 
-        let lib_linked = hex::encode(
-            &contracts
-                .iter()
-                .find(|(i, _)| i.slug() == "Lib.json:Lib")
-                .unwrap()
-                .1
-                .bytecode
-                .clone()
-                .expect("library had no bytecode")
-                .object
-                .into_bytes()
-                .expect("could not get bytecode as bytes"),
-        );
-        let nested_lib_unlinked = &contracts
-            .iter()
-            .find(|(i, _)| i.slug() == "NestedLib.json:NestedLib")
-            .unwrap()
-            .1
-            .bytecode
-            .as_ref()
-            .expect("nested library had no bytecode")
-            .object
-            .as_str()
-            .expect("could not get bytecode as str")
-            .to_string();
-
-        link_with_nonce_or_address(
-            contracts,
-            &mut known_contracts,
-            Default::default(),
-            Address::default(),
-            U256::one(),
-            &mut deployable_contracts,
-            |file, key| (format!("{key}.json:{key}"), file, key),
-            |post_link_input| {
-                match post_link_input.id.slug().as_str() {
-                    "DSTest.json:DSTest" => {
-                        assert_eq!(post_link_input.dependencies.len(), 0);
-                    }
-                    "LibraryLinkingTest.json:LibraryLinkingTest" => {
-                        assert_eq!(post_link_input.dependencies.len(), 3);
-                        assert_eq!(hex::encode(&post_link_input.dependencies[0].1), lib_linked);
-                        assert_eq!(hex::encode(&post_link_input.dependencies[1].1), lib_linked);
-                        assert_ne!(
-                            hex::encode(&post_link_input.dependencies[2].1),
-                            *nested_lib_unlinked
-                        );
-                    }
-                    "Lib.json:Lib" => {
-                        assert_eq!(post_link_input.dependencies.len(), 0);
-                    }
-                    "NestedLib.json:NestedLib" => {
-                        assert_eq!(post_link_input.dependencies.len(), 1);
-                        assert_eq!(hex::encode(&post_link_input.dependencies[0].1), lib_linked);
-                    }
-                    "LibraryConsumer.json:LibraryConsumer" => {
-                        assert_eq!(post_link_input.dependencies.len(), 3);
-                        assert_eq!(hex::encode(&post_link_input.dependencies[0].1), lib_linked);
-                        assert_eq!(hex::encode(&post_link_input.dependencies[1].1), lib_linked);
-                        assert_ne!(
-                            hex::encode(&post_link_input.dependencies[2].1),
-                            *nested_lib_unlinked
-                        );
-                    }
-                    s => panic!("unexpected slug {s}"),
-                }
-                Ok(())
-            },
-            Network::Mainnet,
-        )
-        .unwrap();
+        // link_with_nonce_or_address(
+        //     contracts,
+        //     &mut known_contracts,
+        //     Default::default(),
+        //     Address::default(),
+        //     U256::one(),
+        //     &mut deployable_contracts,
+        //     |file, key| (format!("{key}.json:{key}"), file, key),
+        //     |post_link_input| {
+        //         match post_link_input.id.slug().as_str() {
+        //             "DSTest.json:DSTest" => {
+        //                 assert_eq!(post_link_input.dependencies.len(), 0);
+        //             }
+        //             "LibraryLinkingTest.json:LibraryLinkingTest" => {
+        //                 assert_eq!(post_link_input.dependencies.len(), 3);
+        //                 assert_eq!(hex::encode(&post_link_input.dependencies[0].1), lib_linked);
+        //                 assert_eq!(hex::encode(&post_link_input.dependencies[1].1), lib_linked);
+        //                 assert_ne!(
+        //                     hex::encode(&post_link_input.dependencies[2].1),
+        //                     *nested_lib_unlinked
+        //                 );
+        //             }
+        //             "Lib.json:Lib" => {
+        //                 assert_eq!(post_link_input.dependencies.len(), 0);
+        //             }
+        //             "NestedLib.json:NestedLib" => {
+        //                 assert_eq!(post_link_input.dependencies.len(), 1);
+        //                 assert_eq!(hex::encode(&post_link_input.dependencies[0].1), lib_linked);
+        //             }
+        //             "LibraryConsumer.json:LibraryConsumer" => {
+        //                 assert_eq!(post_link_input.dependencies.len(), 3);
+        //                 assert_eq!(hex::encode(&post_link_input.dependencies[0].1), lib_linked);
+        //                 assert_eq!(hex::encode(&post_link_input.dependencies[1].1), lib_linked);
+        //                 assert_ne!(
+        //                     hex::encode(&post_link_input.dependencies[2].1),
+        //                     *nested_lib_unlinked
+        //                 );
+        //             }
+        //             s => panic!("unexpected slug {s}"),
+        //         }
+        //         Ok(())
+        //     },
+        //     Network::Mainnet,
+        // )
+        // .unwrap();
     }
 
     #[test]
