@@ -38,9 +38,9 @@ The concept of cheat codes and cheat code inspector is very simple.
 
 In solidity cheat codes are calls to a specific address, the cheat code handler address:
 
-`address(uint160(uint256(keccak256('hevm cheat code'))))`: 0x7109709ECfa91a80626fF3989D68f67F5b1DD12D
+`address(uint160(uint256(keccak256('hevm cheat code'))))`: cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8
 
-which can be initialized like `Cheats constant cheats = Cheats(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);`, when
+which can be initialized like `Cheats constant cheats = Cheats(cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);`, when
 inheriting from `forge-std/Test.sol` it can be accessed via `vm.<cheatcode>` directly.
 
 Since cheat codes are bound to a constant address, the cheat code inspector listens for that address:

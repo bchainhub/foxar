@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pragma solidity >=0.4.23;
+pragma solidity >=1.1.0;
 
 contract DSTest {
     event log(string);
@@ -38,7 +38,7 @@ contract DSTest {
     bool public IS_TEST = true;
     bool public _failed;
 
-    address constant HEVM_ADDRESS = address(bytes20(uint160(uint256(keccak256("hevm cheat code")))));
+    address constant HEVM_ADDRESS = address(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
 
     modifier mayRevert() {
         _;
@@ -81,7 +81,7 @@ contract DSTest {
     function hasHEVMContext() internal view returns (bool) {
         uint256 hevmCodeSize = 0;
         assembly {
-            hevmCodeSize := extcodesize(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D)
+            hevmCodeSize := extcodesize(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8)
         }
         return hevmCodeSize > 0;
     }

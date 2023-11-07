@@ -57,7 +57,7 @@ contract ParseJson is DSTest {
         bytes memory data = cheats.parseJson(json, ".addressArray");
         address[] memory decodedData = abi.decode(data, (address[]));
         assertEq(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, decodedData[0]);
-        assertEq(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, decodedData[1]);
+        assertEq(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, decodedData[1]);
     }
 
     function test_H160ButNotaddress() public {

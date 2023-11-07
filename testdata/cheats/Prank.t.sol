@@ -53,7 +53,7 @@ contract NestedVictim {
 }
 
 contract NestedPranker {
-    Cheats constant cheats = Cheats(address(bytes20(uint160(uint256(keccak256("hevm cheat code"))))));
+    Cheats constant cheats = Cheats(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
 
     address newSender;
     address newOrigin;

@@ -8,8 +8,8 @@ contract CoinbaseTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
     function testCoinbase() public {
-        cheats.coinbase(0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8);
-        assertEq(block.coinbase, 0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8, "coinbase failed");
+        cheats.coinbase(0x0000EA674fdDe714fd979de3EdF0F56AA9716B898ec8);
+        assertEq(block.coinbase, 0x0000EA674fdDe714fd979de3EdF0F56AA9716B898ec8, "coinbase failed");
     }
 
     function testCoinbaseFuzzed(address who) public {

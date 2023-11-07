@@ -287,7 +287,7 @@ forgetest!(can_use_solc, |prj: TestProject, mut cmd: TestCommand| {
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.7.0;
+pragma solidity >=1.1.0;
 contract Foo {}
    "#,
         )

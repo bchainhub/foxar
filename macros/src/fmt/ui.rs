@@ -34,12 +34,9 @@ impl UIfmt for U256 {
     }
 }
 
-impl UIfmt for U1368 {
+impl UIfmt for H1368 {
     fn pretty(&self) -> String {
-        let mut buffer: [u8; 176] = [0; 176]; // we need to use 22 * 8 = 176 bytes
-        self.to_big_endian(&mut buffer);
-        let u1368 = buffer[5..].to_vec(); // remove first 5 bytes (we need only 171 from 176)
-        Bytes::from(u1368).to_string()
+        self.to_string()
     }
 }
 

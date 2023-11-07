@@ -257,7 +257,7 @@ forgetest!(
                 "Contract.t.sol",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.8.10;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract ContractTest is DSTest {
     function setUp() public {}

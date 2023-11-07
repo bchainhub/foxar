@@ -1,6 +1,6 @@
 [profile.default]
 ylem = '1.1.0'
-block_coinbase = '00000000000000000000000000000000000000000000'
+block_coinbase = 'cb540000000000000000000000000000000000000000'
 block_difficulty = 0
 block_number = 0
 block_timestamp = 0

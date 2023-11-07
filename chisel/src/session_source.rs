@@ -481,7 +481,7 @@ import {{Cheats}} from "forge-std/Vm.sol";
 {}
 
 contract {} {{
-    Cheats internal constant vm = Cheats(address(uint176(uint256(sha3("hevm cheat code")))));
+    Cheats internal constant vm = Cheats(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
     {}
   
     /// @notice REPL contract entry point
