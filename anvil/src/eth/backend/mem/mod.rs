@@ -350,7 +350,7 @@ impl Backend {
             // update all settings related to the forked block
             {
                 let mut env = self.env.write();
-                env.cfg.network = revm::primitives::Network::from(fork.chain_id());
+                env.cfg.network_id = fork.chain_id();
 
                 env.block = BlockEnv {
                     number: rU256::from(fork_block_number),
@@ -926,7 +926,7 @@ impl Backend {
         env.block = block_env;
         // we want to disable this in eth_call, since this is common practice used by other node
         // impls and providers <https://github.com/foundry-rs/foundry/issues/4388>
-        env.cfg.disable_block_energy_limit = true;
+        // env.cfg.disable_block_energy_limit = true;
 
         let gas_price = gas_price.unwrap_or_else(|| self.gas_price());
         let caller = from.unwrap_or_default();
@@ -1355,7 +1355,6 @@ impl Backend {
             uncles: vec![],
             transactions: transactions.into_iter().map(|tx| tx.hash()).collect(),
             size: Some(size),
-            mix_hash: Some(mix_hash),
             nonce: Some(nonce),
         }
     }
@@ -1970,21 +1969,19 @@ impl TransactionValidator for Backend {
     ) -> Result<(), InvalidTransactionError> {
         let tx = &pending.transaction;
 
-        if let Some(tx_chain_id) = tx.network_id() {
-            let chain_id = self.chain_id();
-            if chain_id != tx_chain_id.into() {
-                if let Some(legacy) = tx.as_legacy() {
-                    // <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md>
-                    if env.cfg.spec_id >= SpecId::SPURIOUS_DRAGON
-                        && !legacy.meets_eip155(chain_id.as_u64())
-                    {
-                        warn!(target: "backend", ?chain_id, ?tx_chain_id, "incompatible EIP155-based V");
-                        return Err(InvalidTransactionError::IncompatibleEIP155);
-                    }
-                } else {
-                    warn!(target: "backend", ?chain_id, ?tx_chain_id, "invalid chain id");
-                    return Err(InvalidTransactionError::InvalidChainId);
+        let chain_id = self.chain_id();
+        if chain_id != tx.network_id().into() {
+            if let Some(legacy) = tx.as_legacy() {
+                // <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md>
+                if env.cfg.spec_id >= SpecId::SPURIOUS_DRAGON
+                    && !legacy.meets_eip155(chain_id.as_u64())
+                {
+                    warn!(target: "backend", ?chain_id, ?chain_id, "incompatible EIP155-based V");
+                    return Err(InvalidTransactionError::IncompatibleEIP155);
                 }
+            } else {
+                warn!(target: "backend", ?chain_id, ?chain_id, "invalid chain id");
+                return Err(InvalidTransactionError::InvalidChainId);
             }
         }
 
@@ -2051,7 +2048,7 @@ pub fn transaction_build(
 
     transaction.block_number = block.as_ref().map(|block| block.header.number.as_u64().into());
 
-    transaction.transaction_index = info.as_ref().map(|status| status.transaction_index.into());
+    // transaction.transaction_index = info.as_ref().map(|status| status.transaction_index.into());
 
     // need to check if the signature of the transaction is impersonated, if so then we
     // can't recover the sender, instead we use the sender from the executed transaction and set the

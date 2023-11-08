@@ -17,7 +17,6 @@ use crate::{
 };
 use anvil_server::ServerConfig;
 use corebc::{
-    core::k256::ecdsa::SigningKey,
     prelude::{rand::thread_rng, Wallet, U256},
     providers::Middleware,
     signers::{
@@ -37,6 +36,7 @@ use foundry_evm::{
     revm::primitives::{BlockEnv, CfgEnv, Network, TxEnv, U256 as rU256},
 };
 use foundry_utils::types::ToRuint;
+use libgoldilocks::SigningKey;
 use parking_lot::RwLock;
 use serde_json::{json, to_writer, Value};
 use std::{
@@ -734,7 +734,7 @@ impl NodeConfig {
                 spec_id: self.get_hardfork().into(),
                 network_id: self.get_network_id(),
                 limit_contract_code_size: self.code_size_limit,
-                disable_block_energy_limit: self.disable_block_gas_limit,
+                // disable_block_energy_limit: self.disable_block_gas_limit,
                 ..Default::default()
             },
             block: BlockEnv { energy_limit: self.gas_limit.to_ruint(), ..Default::default() },
@@ -854,7 +854,7 @@ latest block number: {latest_block}"
 
                     // need to update the dev signers and env with the chain id
                     self.set_chain_id(Some(chain_id));
-                    env.cfg.network = Network::from(chain_id);
+                    env.cfg.network_id = chain_id;
                     env.tx.network_id = chain_id.into();
                     chain_id
                 };

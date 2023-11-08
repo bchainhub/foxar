@@ -1,5 +1,4 @@
 //! Helper trait and functions to format corebc types.
-
 use corebc_core::{types::*, utils::hex};
 use serde::Deserialize;
 

@@ -37,7 +37,7 @@ impl From<TypedTransactionRequest> for EthersTypedTransactionRequest {
                     value: Some(value),
                     data: Some(input),
                     nonce: Some(nonce),
-                    network_id: network_id.map(Into::into),
+                    network_id: Some(network_id.into()),
                 })
             }
         }
@@ -55,14 +55,14 @@ fn to_ethers_transaction_with_hash_and_sender(
             nonce: t.nonce,
             block_hash: None,
             block_number: None,
-            transaction_index: None,
+            // transaction_index: None,
             from,
             to: None,
             value: t.value,
             energy_price: t.gas_price,
             energy: t.gas_limit,
             input: t.input.clone(),
-            network_id: t.network_id().map(Into::into),
+            network_id: Some(t.network_id().into()),
             sig: t.signature.sig,
         },
     }
@@ -108,7 +108,7 @@ impl From<TransactionRequest> for EthTransactionRequest {
             value,
             data,
             nonce,
-            network_id,
+            network_id: network_id.unwrap_or(1.into()),
         }
     }
 }

@@ -2,7 +2,9 @@
 
 use crate::eth::receipt::Log;
 use corebc_core::{
-    types::{Address, Bloom, Bytes, Network, Signature, SignatureError, TxHash, H256, U256, U64},
+    types::{
+        Address, Bloom, Bytes, Network, Signature, SignatureError, TxHash, H1368, H256, U256, U64,
+    },
     utils::{
         rlp,
         rlp::{Decodable, DecoderError, Encodable, Rlp, RlpStream},
@@ -22,7 +24,7 @@ mod ethers_compat;
 
 /// The signature used to bypass signing via the `eth_sendUnsignedTransaction` cheat RPC
 #[cfg(feature = "impersonated-tx")]
-pub const IMPERSONATED_SIGNATURE: Signature = Signature { sig: corebc_core::types::U1368::zero() };
+pub const IMPERSONATED_SIGNATURE: Signature = Signature { sig: corebc_core::types::H1368::zero() };
 
 /// Container type for various Ethereum transaction requests
 ///
@@ -58,7 +60,7 @@ pub struct EthTransactionRequest {
     pub nonce: Option<U256>,
     /// chain id
     #[cfg_attr(feature = "serde", serde(default))]
-    pub network_id: Option<U64>,
+    pub network_id: U64,
 }
 
 // == impl EthTransactionRequest ==
@@ -67,7 +69,7 @@ impl EthTransactionRequest {
     /// Converts the request into a [TypedTransactionRequest]
     pub fn into_typed_request(self) -> Option<TypedTransactionRequest> {
         let EthTransactionRequest { to, gas_price, gas, value, data, nonce, network_id, .. } = self;
-        let network_id = network_id.map(|id| id.as_u64());
+        let network_id = network_id.as_u64();
         match gas_price {
             Some(_) => Some(TypedTransactionRequest::Legacy(LegacyTransactionRequest {
                 nonce: nonce.unwrap_or(U256::zero()),
@@ -201,14 +203,13 @@ impl From<LegacyTransaction> for LegacyTransactionRequest {
 
 impl Encodable for LegacyTransactionRequest {
     fn rlp_append(&self, s: &mut RlpStream) {
-        s.begin_list(8);
+        s.begin_list(7);
         s.append(&self.nonce);
         s.append(&self.gas_price);
         s.append(&self.gas_limit);
         s.append(&self.network_id);
         s.append(&self.kind);
         s.append(&self.value);
-        s.append(&self.input);
         s.append(&self.input.as_ref());
     }
 }
@@ -568,7 +569,7 @@ impl Decodable for LegacyTransaction {
             kind: rlp.val_at(4)?,
             value: rlp.val_at(5)?,
             input: rlp.val_at::<Vec<u8>>(6)?.into(),
-            signature: Signature { sig: rlp.val_at::<U1368>(7)? },
+            signature: Signature { sig: rlp.val_at::<H1368>(7)? },
         })
     }
 }

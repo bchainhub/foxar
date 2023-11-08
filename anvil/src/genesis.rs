@@ -221,7 +221,8 @@ pub struct CliqueConfig {
 /// serde support for `secretKey` in genesis
 
 pub mod secret_key {
-    use corebc::{core::k256::SecretKey, signers::LocalWallet, types::Bytes};
+    use corebc::{signers::LocalWallet, types::Bytes};
+    use libgoldilocks::SecretKey;
     use serde::{
         de::{self},
         Deserialize, Deserializer, Serialize, Serializer,
@@ -232,7 +233,7 @@ pub mod secret_key {
         S: Serializer,
     {
         if let Some(wallet) = value {
-            Bytes::from(wallet.signer().to_bytes().as_ref()).serialize(serializer)
+            Bytes::from(&wallet.signer().to_bytes()).serialize(serializer)
         } else {
             serializer.serialize_none()
         }

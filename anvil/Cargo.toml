@@ -67,6 +67,7 @@ clap_complete_fig = "4"
 ethereum-forkid = "0.12"
 revm = { workspace = true, default-features = false, features = ["std", "serde", "memory_limit"] }
 
+libgoldilocks = { git = "https://github.com/todesstille/ed448-rs.git" }
 
 [dev-dependencies]
 corebc = { workspace = true, features = ["abigen"]}

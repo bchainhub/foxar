@@ -14,7 +14,6 @@ use crate::{
     tasks::TaskManager,
 };
 use corebc::{
-    core::k256::ecdsa::SigningKey,
     prelude::Wallet,
     providers::{Http, Provider, Ws},
     signers::Signer,
@@ -23,6 +22,7 @@ use corebc::{
 use eth::backend::fork::ClientFork;
 use foundry_evm::revm;
 use futures::{FutureExt, TryFutureExt};
+use libgoldilocks::SigningKey;
 use std::{
     future::Future,
     io,
