@@ -7,8 +7,8 @@
 - [x] abi 
 - [ ] anvil 
 - [ ] binder
-- [ ] cast
-- [ ] chisel
+- [x] cast
+- [ ] chisel - David
 - [ ] cli
 - [x] common
 - [x] config - Misha
