@@ -16,7 +16,7 @@
 - [x] fmt
 - [ ] forge
 - [x] macros
-- [ ] ui
+- [x] ui
 - [ ] utils - Misha
 
 #### Compiles:
