@@ -252,7 +252,7 @@ impl MultiForkHandler {
             #[allow(irrefutable_let_patterns)]
             if let ForkTask::Create(_, in_progress, _, additional) = task {
                 if in_progress == id {
-                    return Some(additional);
+                    return Some(additional)
                 }
             }
         }
@@ -270,7 +270,7 @@ impl MultiForkHandler {
             // there could already be a task for the requested fork in progress
             if let Some(in_progress) = self.find_in_progress_task(&fork_id) {
                 in_progress.push(sender);
-                return;
+                return
             }
 
             let retries = self.retries;
@@ -333,7 +333,7 @@ impl Future for MultiForkHandler {
                 Poll::Ready(None) => {
                     // channel closed, but we still need to drive the fork handlers to completion
                     trace!(target: "fork::multi", "request channel closed");
-                    break;
+                    break
                 }
                 Poll::Pending => break,
             }
@@ -394,7 +394,7 @@ impl Future for MultiForkHandler {
 
         if pin.handlers.is_empty() && pin.incoming.is_done() {
             trace!(target: "fork::multi", "completed");
-            return Poll::Ready(());
+            return Poll::Ready(())
         }
 
         // periodically flush cached RPC state
@@ -402,8 +402,8 @@ impl Future for MultiForkHandler {
             .flush_cache_interval
             .as_mut()
             .map(|interval| interval.poll_tick(cx).is_ready())
-            .unwrap_or_default()
-            && !pin.forks.is_empty()
+            .unwrap_or_default() &&
+            !pin.forks.is_empty()
         {
             trace!(target: "fork::multi", "tick flushing caches");
             let forks = pin.forks.values().map(|f| f.backend.clone()).collect::<Vec<_>>();

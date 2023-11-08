@@ -20,7 +20,7 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-pragma solidity >=0.6.12 <0.7.0;
+pragma solidity >=1.1.0 <1.1.0;
 
 pragma experimental ABIEncoderV2;
 

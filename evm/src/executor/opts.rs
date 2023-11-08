@@ -148,7 +148,7 @@ impl EvmOpts {
     ///   - mainnet otherwise
     pub fn get_chain_id(&self) -> u64 {
         if let Some(id) = self.env.network_id {
-            return id;
+            return id
         }
         self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), u64::from)
     }
@@ -161,7 +161,7 @@ impl EvmOpts {
         if self.no_rpc_rate_limit {
             u64::MAX
         } else if let Some(cups) = self.compute_units_per_second {
-            return cups;
+            return cups
         } else {
             ALCHEMY_FREE_TIER_CUPS
         }
@@ -172,14 +172,14 @@ impl EvmOpts {
         if let Some(ref url) = self.fork_url {
             if url.contains("mainnet") {
                 trace!(?url, "auto detected mainnet chain");
-                return Some(Network::Mainnet);
+                return Some(Network::Mainnet)
             }
             trace!(?url, "retrieving chain via eth_chainId");
             let provider = Provider::try_from(url.as_str())
                 .unwrap_or_else(|_| panic!("Failed to establish provider to {url}"));
 
             if let Ok(id) = RuntimeOrHandle::new().block_on(provider.get_networkid()) {
-                return Network::try_from(id.as_u64()).ok();
+                return Network::try_from(id.as_u64()).ok()
             }
         }
 

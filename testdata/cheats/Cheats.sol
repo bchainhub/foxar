@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity >=0.8.0;
+pragma solidity >=1.1.0;
 
 interface Cheats {
     // Possible caller modes for readCallers()

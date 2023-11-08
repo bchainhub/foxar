@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 import "./Cheats.sol";
@@ -10,7 +10,7 @@ contract ParseTest is DSTest {
     function testParseBytes() public {
         bytes memory testBytes = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
 
-        string memory stringBytes = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D";
+        string memory stringBytes = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
         assertEq(testBytes, cheats.parseBytes(stringBytes));
 
         stringBytes = "7109709ECfa91a80626fF3989D68f67F5b1DD12D";
@@ -23,9 +23,9 @@ contract ParseTest is DSTest {
     }
 
     function testParseAddress() public {
-        address testAddress = 0x7109709ECfa91a80626fF3989D68f67F5b1DD12D;
+        address testAddress = 0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
 
-        string memory stringAddress = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D";
+        string memory stringAddress = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
         assertEq(testAddress, cheats.parseAddress(stringAddress));
 
         stringAddress = "7109709ECfa91a80626fF3989D68f67F5b1DD12D";
