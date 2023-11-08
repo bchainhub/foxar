@@ -312,7 +312,7 @@ where
                     }
                     Poll::Ready(None) => {
                         trace!(target: "backendhandler", "last sender dropped, ready to drop (&flush cache)");
-                        return Poll::Ready(());
+                        return Poll::Ready(())
                     }
                     Poll::Pending => break,
                 }
@@ -337,7 +337,7 @@ where
                                             )));
                                         })
                                     }
-                                    continue;
+                                    continue
                                 }
                             };
 
@@ -363,7 +363,7 @@ where
                                     let _ = l.send(Ok(acc.clone()));
                                 })
                             }
-                            continue;
+                            continue
                         }
                     }
                     ProviderRequest::Storage(fut) => {
@@ -384,7 +384,7 @@ where
                                             )));
                                         })
                                     }
-                                    continue;
+                                    continue
                                 }
                             };
 
@@ -402,7 +402,7 @@ where
                                     let _ = l.send(Ok(value));
                                 })
                             }
-                            continue;
+                            continue
                         }
                     }
                     ProviderRequest::BlockHash(fut) => {
@@ -420,7 +420,7 @@ where
                                             )));
                                         })
                                     }
-                                    continue;
+                                    continue
                                 }
                             };
 
@@ -433,7 +433,7 @@ where
                                     let _ = l.send(Ok(value));
                                 })
                             }
-                            continue;
+                            continue
                         }
                     }
                     ProviderRequest::FullBlock(fut) => {
@@ -447,7 +447,7 @@ where
                                 }
                             };
                             let _ = sender.send(msg);
-                            continue;
+                            continue
                         }
                     }
                     ProviderRequest::Transaction(fut) => {
@@ -461,7 +461,7 @@ where
                                 }
                             };
                             let _ = sender.send(msg);
-                            continue;
+                            continue
                         }
                     }
                 }
@@ -472,7 +472,7 @@ where
             // If no new requests have been queued, break to
             // be polled again later.
             if pin.queued_requests.is_empty() {
-                return Poll::Pending;
+                return Poll::Pending
             }
         }
     }
@@ -674,7 +674,7 @@ impl DatabaseRef for SharedBackend {
 
     fn block_hash(&self, number: rU256) -> Result<B256, Self::Error> {
         if number > rU256::from(u64::MAX) {
-            return Ok(SHA3_EMPTY);
+            return Ok(SHA3_EMPTY)
         }
         let number: U256 = ru256_to_u256(number);
         let number = number.as_u64();

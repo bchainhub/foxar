@@ -281,7 +281,6 @@ hash                    {}
 input                   {}
 nonce                   {}
 to                      {}
-transactionIndex        {}
 value                   {}
 signature               {}
 network_id              {}",
@@ -294,7 +293,6 @@ network_id              {}",
             self.input.pretty(),
             self.nonce.pretty(),
             self.to.pretty(),
-            self.transaction_index.pretty(),
             self.value.pretty(),
             self.sig.pretty(),
             self.network_id.pretty(),
@@ -323,7 +321,6 @@ pub fn get_pretty_tx_attr(transaction: &Transaction, attr: &str) -> Option<Strin
         "signature" => Some(transaction.sig.pretty()),
         "network_id" => Some(transaction.network_id.pretty()),
         "to" => Some(transaction.to.pretty()),
-        "transactionIndex" | "transaction_index" => Some(transaction.transaction_index.pretty()),
         "value" => Some(transaction.value.pretty()),
         _ => None,
     }
@@ -396,8 +393,9 @@ mod tests {
         "#;
 
         let tx: Transaction = serde_json::from_str(s).unwrap();
-        assert_eq!(tx.pretty().trim(),
-                   r#"
+        assert_eq!(
+            tx.pretty().trim(),
+            r#"
 blockHash               0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae
 blockNumber             436
 from                    ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
@@ -407,11 +405,11 @@ hash                    0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858
 input                   0xd294f093
 nonce                   162
 to                      ab36393ecaa2d3209cee16ce9b2360e327ed3c923347
-transactionIndex        3
 value                   512
-signature               0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbe
+signature               0xdead…adbe
 network_id              3
-"#.trim()
+"#
+            .trim()
         );
     }
 
@@ -428,9 +426,8 @@ hash                    0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858
 input                   0xd294f093
 nonce                   162
 to                      ab36393ecaa2d3209cee16ce9b2360e327ed3c923347
-transactionIndex        3
 value                   512
-signature               0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbe
+signature               0xdead…adbe
 network_id              3".to_string();
         let generated = block.transactions[0].pretty();
         assert_eq!(generated.as_str(), output.as_str());
@@ -514,13 +511,9 @@ network_id              3".to_string();
             Some("ab36393ecaa2d3209cee16ce9b2360e327ed3c923347".into()),
             get_pretty_tx_attr(&block.transactions[0], "to")
         );
-        assert_eq!(
-            Some("3".to_string()),
-            get_pretty_tx_attr(&block.transactions[0], "transactionIndex")
-        );
         assert_eq!(Some("512".to_string()), get_pretty_tx_attr(&block.transactions[0], "value"));
         assert_eq!(
-            Some("0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbe".to_string()),
+            Some("0xdead…adbe".to_string()),
             get_pretty_tx_attr(&block.transactions[0], "signature")
         );
     }

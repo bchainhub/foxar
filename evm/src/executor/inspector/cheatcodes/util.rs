@@ -98,8 +98,7 @@ fn sign(private_key: &str, digest: H256, network_id: U256) -> Result {
 
     assert_eq!(recovered, wallet.address());
 
-    let mut sig_bytes = [0u8; 171];
-    sig.sig.to_big_endian(&mut sig_bytes);
+    let sig_bytes = sig.sig.to_fixed_bytes();
 
     Ok(sig_bytes.encode().into())
 }
@@ -185,13 +184,13 @@ pub fn parse(s: &str, ty: &ParamType) -> Result {
 
 pub fn skip(state: &mut Cheatcodes, depth: u64, skip: bool) -> Result {
     if !skip {
-        return Ok(b"".into());
+        return Ok(b"".into())
     }
 
     // Skip should not work if called deeper than at test level.
     // As we're not returning the magic skip bytes, this will cause a test failure.
     if depth > 1 {
-        return Err(Error::custom("The skip cheatcode can only be used at test level"));
+        return Err(Error::custom("The skip cheatcode can only be used at test level"))
     }
 
     state.skip = true;
@@ -288,14 +287,14 @@ where
                 Some(code) => {
                     if code.is_empty() {
                         trace!(create2=?DEFAULT_CREATE2_DEPLOYER, "Empty Create 2 deployer code");
-                        return Err(DatabaseError::MissingCreate2Deployer);
+                        return Err(DatabaseError::MissingCreate2Deployer)
                     }
                 }
                 None => {
                     // forked db
                     trace!(create2=?DEFAULT_CREATE2_DEPLOYER, "Missing Create 2 deployer code");
                     if data.db.code_by_hash(info.code_hash)?.is_empty() {
-                        return Err(DatabaseError::MissingCreate2Deployer);
+                        return Err(DatabaseError::MissingCreate2Deployer)
                     }
                 }
             }

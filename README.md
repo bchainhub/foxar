@@ -14,10 +14,10 @@
 - [x] config - Misha
 - [x] evm - David 
 - [x] fmt
-- [ ] forge
+- [ ] forge - Misha
 - [x] macros
 - [ ] ui
-- [ ] utils - Misha
+- [x] utils - Misha
 
 #### Compiles:
 - [x] abi -> Compiles

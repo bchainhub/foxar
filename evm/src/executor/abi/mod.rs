@@ -11,8 +11,8 @@ pub use foundry_abi::{
 /// The cheatcode handler address (0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8).
 ///
 /// This is the same address as the one used in DappTools's HEVM.
-/// `address(bytes20(uint160(uint256(sha3('hevm cheat code')))))` cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8
-/// CORETODO: Change this
+/// `address(bytes20(uint160(uint256(sha3('hevm cheat code')))))`
+/// cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8 CORETODO: Change this
 pub const CHEATCODE_ADDRESS: Address = H176([
     0x00, 0x00, 0x71, 0x09, 0x70, 0x9E, 0xcf, 0xa9, 0x1a, 0x80, 0x62, 0x6f, 0xf3, 0x98, 0x9d, 0x68,
     0xf6, 0x7f, 0x5b, 0x1d, 0xd1, 0x2d,

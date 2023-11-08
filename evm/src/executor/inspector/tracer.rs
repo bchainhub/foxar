@@ -170,7 +170,7 @@ where
         _is_static: bool,
     ) -> InstructionResult {
         if !self.record_steps {
-            return InstructionResult::Continue;
+            return InstructionResult::Continue
         }
 
         self.start_step(interp, data);
@@ -193,7 +193,7 @@ where
         status: InstructionResult,
     ) -> InstructionResult {
         if !self.record_steps {
-            return InstructionResult::Continue;
+            return InstructionResult::Continue
         }
 
         self.fill_step(interp, data, status);
