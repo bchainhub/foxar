@@ -7,8 +7,8 @@
 - [x] abi 
 - [ ] anvil 
 - [ ] binder
-- [ ] cast
-- [ ] chisel
+- [x] cast
+- [ ] chisel - David
 - [ ] cli
 - [x] common
 - [x] config - Misha
@@ -16,7 +16,7 @@
 - [x] fmt
 - [ ] forge
 - [x] macros
-- [ ] ui
+- [x] ui
 - [ ] utils - Misha
 
 #### Compiles:
