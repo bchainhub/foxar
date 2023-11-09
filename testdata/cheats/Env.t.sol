@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 import "./Cheats.sol";
@@ -77,9 +77,9 @@ contract EnvTest is DSTest {
     function testEnvAddress() public {
         string memory key = "_foundryCheatcodeEnvAddressTestKey";
         string[numEnvAddressTests] memory values =
-            ["0x7109709ECfa91a80626fF3989D68f67F5b1DD12D", "0x0000000000000000000000000000000000000000"];
+            ["0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", "0x0000000000000000000000000000000000000000"];
         address[numEnvAddressTests] memory expected =
-            [0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, 0x0000000000000000000000000000000000000000];
+            [0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, 0x0000000000000000000000000000000000000000];
         for (uint256 i = 0; i < numEnvAddressTests; ++i) {
             cheats.setEnv(key, values[i]);
             address output = cheats.envAddress(key);
@@ -91,9 +91,9 @@ contract EnvTest is DSTest {
 
     function testEnvBytes32() public {
         string memory key = "_foundryCheatcodeEnvBytes32TestKey";
-        string[numEnvBytes32Tests] memory values = ["0x7109709ECfa91a80626fF3989D68f67F5b1DD12D", "0x00"];
+        string[numEnvBytes32Tests] memory values = ["0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", "0x00"];
         bytes32[numEnvBytes32Tests] memory expected = [
-            bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000),
+            bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000),
             bytes32(0x0000000000000000000000000000000000000000000000000000000000000000)
         ];
         for (uint256 i = 0; i < numEnvBytes32Tests; ++i) {
@@ -107,8 +107,8 @@ contract EnvTest is DSTest {
 
     function testEnvString() public {
         string memory key = "_foundryCheatcodeEnvStringTestKey";
-        string[numEnvStringTests] memory values = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
-        string[numEnvStringTests] memory expected = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
+        string[numEnvStringTests] memory values = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
+        string[numEnvStringTests] memory expected = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
         for (uint256 i = 0; i < numEnvStringTests; ++i) {
             cheats.setEnv(key, values[i]);
             string memory output = cheats.envString(key);
@@ -120,7 +120,7 @@ contract EnvTest is DSTest {
 
     function testEnvBytes() public {
         string memory key = "_foundryCheatcodeEnvBytesTestKey";
-        string[numEnvBytesTests] memory values = ["0x7109709ECfa91a80626fF3989D68f67F5b1DD12D", "0x00"];
+        string[numEnvBytesTests] memory values = ["0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", "0x00"];
         bytes[] memory expected = new bytes[](numEnvBytesTests);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
         expected[1] = hex"00";
@@ -173,9 +173,9 @@ contract EnvTest is DSTest {
 
     function testEnvAddressArr() public {
         string memory key = "_foundryCheatcodeEnvAddressArrTestKey";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x0000000000000000000000000000000000000000";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x0000000000000000000000000000000000000000";
         address[2] memory expected =
-            [0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, 0x0000000000000000000000000000000000000000];
+            [0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, 0x0000000000000000000000000000000000000000];
 
         cheats.setEnv(key, value);
         string memory delimiter = ",";
@@ -187,9 +187,9 @@ contract EnvTest is DSTest {
 
     function testEnvBytes32Arr() public {
         string memory key = "_foundryCheatcodeEnvBytes32ArrTestKey";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x00";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x00";
         bytes32[2] memory expected = [
-            bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000),
+            bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000),
             bytes32(0x0000000000000000000000000000000000000000000000000000000000000000)
         ];
 
@@ -203,8 +203,8 @@ contract EnvTest is DSTest {
 
     function testEnvStringArr() public {
         string memory key = "_foundryCheatcodeEnvStringArrTestKey";
-        string memory value = "hello, world!|" "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D";
-        string[2] memory expected = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
+        string memory value = "hello, world!|" "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        string[2] memory expected = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
 
         cheats.setEnv(key, value);
         string memory delimiter = "|";
@@ -219,7 +219,7 @@ contract EnvTest is DSTest {
 
     function testEnvBytesArr() public {
         string memory key = "_foundryCheatcodeEnvBytesArrTestKey";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x00";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x00";
         bytes[] memory expected = new bytes[](numEnvBytesTests);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
         expected[1] = hex"00";
@@ -425,9 +425,9 @@ contract EnvTest is DSTest {
     function testEnvOrAddressKey() public {
         string memory key = "_foundryCheatcodeEnvOrAddressTestKey";
         string[numEnvAddressTests] memory values =
-            ["0x7109709ECfa91a80626fF3989D68f67F5b1DD12D", "0x0000000000000000000000000000000000000000"];
+            ["0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", "0x0000000000000000000000000000000000000000"];
         address[numEnvAddressTests] memory expected =
-            [0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, 0x0000000000000000000000000000000000000000];
+            [0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, 0x0000000000000000000000000000000000000000];
         for (uint256 i = 0; i < numEnvAddressTests; ++i) {
             cheats.setEnv(key, values[i]);
             address output = cheats.envOr(key, expected[i]);
@@ -438,7 +438,7 @@ contract EnvTest is DSTest {
     function testEnvOrAddressDefault() public {
         string memory key = "_foundryCheatcodeEnvOrAddressTestDefault";
         address[numEnvAddressTests] memory expected =
-            [0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, 0x0000000000000000000000000000000000000000];
+            [0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, 0x0000000000000000000000000000000000000000];
         for (uint256 i = 0; i < numEnvAddressTests; ++i) {
             address output = cheats.envOr(key, expected[i]);
             require(output == expected[i], "envOrAddressDefault failed");
@@ -447,9 +447,9 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytes32Key() public {
         string memory key = "_foundryCheatcodeEnvOrBytes32TestKey";
-        string[numEnvBytes32Tests] memory values = ["0x7109709ECfa91a80626fF3989D68f67F5b1DD12D", "0x00"];
+        string[numEnvBytes32Tests] memory values = ["0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", "0x00"];
         bytes32[numEnvBytes32Tests] memory expected = [
-            bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000),
+            bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000),
             bytes32(0x0000000000000000000000000000000000000000000000000000000000000000)
         ];
         for (uint256 i = 0; i < numEnvBytes32Tests; ++i) {
@@ -462,7 +462,7 @@ contract EnvTest is DSTest {
     function testEnvOrBytes32Default() public {
         string memory key = "_foundryCheatcodeEnvOrBytes32TestDefault";
         bytes32[numEnvBytes32Tests] memory expected = [
-            bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000),
+            bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000),
             bytes32(0x0000000000000000000000000000000000000000000000000000000000000000)
         ];
         for (uint256 i = 0; i < numEnvBytes32Tests; ++i) {
@@ -473,8 +473,8 @@ contract EnvTest is DSTest {
 
     function testEnvOrStringKey() public {
         string memory key = "_foundryCheatcodeEnvOrStringTestKey";
-        string[numEnvStringTests] memory values = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
-        string[numEnvStringTests] memory expected = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
+        string[numEnvStringTests] memory values = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
+        string[numEnvStringTests] memory expected = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
         for (uint256 i = 0; i < numEnvStringTests; ++i) {
             cheats.setEnv(key, values[i]);
             string memory output = cheats.envOr(key, expected[i]);
@@ -484,7 +484,7 @@ contract EnvTest is DSTest {
 
     function testEnvOrStringDefault() public {
         string memory key = "_foundryCheatcodeEnvOrStringTestDefault";
-        string[numEnvStringTests] memory expected = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
+        string[numEnvStringTests] memory expected = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
         for (uint256 i = 0; i < numEnvStringTests; ++i) {
             string memory output = cheats.envOr(key, expected[i]);
             assertEq(output, expected[i], "envOrStringDefault failed");
@@ -493,7 +493,7 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytesKey() public {
         string memory key = "_foundryCheatcodeEnvOrBytesTestKey";
-        string[numEnvBytesTests] memory values = ["0x7109709ECfa91a80626fF3989D68f67F5b1DD12D", "0x00"];
+        string[numEnvBytesTests] memory values = ["0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", "0x00"];
         bytes[] memory expected = new bytes[](numEnvBytesTests);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
         expected[1] = hex"00";
@@ -641,11 +641,11 @@ contract EnvTest is DSTest {
 
     function testEnvOrAddressArrKey() public {
         string memory key = "_foundryCheatcodeEnvOrAddressArrTestKey";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x0000000000000000000000000000000000000000";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x0000000000000000000000000000000000000000";
         address[2] memory expected =
-            [0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, 0x0000000000000000000000000000000000000000];
+            [0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, 0x0000000000000000000000000000000000000000];
         address[] memory defaultValues = new address[](2);
-        defaultValues[0] = 0x7109709ECfa91a80626fF3989D68f67F5b1DD12D;
+        defaultValues[0] = 0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
         defaultValues[1] = 0x0000000000000000000000000000000000000000;
 
         cheats.setEnv(key, value);
@@ -659,11 +659,11 @@ contract EnvTest is DSTest {
 
     function testEnvOrAddressArrDefault() public {
         string memory key = "_foundryCheatcodeEnvOrAddressArrTestDefault";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x0000000000000000000000000000000000000000";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x0000000000000000000000000000000000000000";
         address[2] memory expected =
-            [0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, 0x0000000000000000000000000000000000000000];
+            [0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, 0x0000000000000000000000000000000000000000];
         address[] memory defaultValues = new address[](2);
-        defaultValues[0] = 0x7109709ECfa91a80626fF3989D68f67F5b1DD12D;
+        defaultValues[0] = 0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
         defaultValues[1] = 0x0000000000000000000000000000000000000000;
 
         string memory delimiter = ",";
@@ -676,13 +676,13 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytes32ArrKey() public {
         string memory key = "_foundryCheatcodeEnvOrBytes32ArrTestKey";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x00";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x00";
         bytes32[2] memory expected = [
-            bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000),
+            bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000),
             bytes32(0x0000000000000000000000000000000000000000000000000000000000000000)
         ];
         bytes32[] memory defaultValues = new bytes32[](2);
-        defaultValues[0] = bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000);
+        defaultValues[0] = bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000);
         defaultValues[1] = bytes32(0x0000000000000000000000000000000000000000000000000000000000000000);
 
         cheats.setEnv(key, value);
@@ -696,13 +696,13 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytes32ArrDefault() public {
         string memory key = "_foundryCheatcodeEnvOrBytes32ArrTestDefault";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x00";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x00";
         bytes32[2] memory expected = [
-            bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000),
+            bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000),
             bytes32(0x0000000000000000000000000000000000000000000000000000000000000000)
         ];
         bytes32[] memory defaultValues = new bytes32[](2);
-        defaultValues[0] = bytes32(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D000000000000000000000000);
+        defaultValues[0] = bytes32(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8000000000000000000000000);
         defaultValues[1] = bytes32(0x0000000000000000000000000000000000000000000000000000000000000000);
 
         string memory delimiter = ",";
@@ -715,11 +715,11 @@ contract EnvTest is DSTest {
 
     function testEnvOrStringArrKey() public {
         string memory key = "_foundryCheatcodeEnvOrStringArrTestKey";
-        string memory value = "hello, world!|" "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D";
-        string[2] memory expected = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
+        string memory value = "hello, world!|" "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        string[2] memory expected = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
         string[] memory defaultValues = new string[](2);
         defaultValues[0] = "hello, world!";
-        defaultValues[1] = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D";
+        defaultValues[1] = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
 
         cheats.setEnv(key, value);
         string memory delimiter = "|";
@@ -734,11 +734,11 @@ contract EnvTest is DSTest {
 
     function testEnvOrStringArrDefault() public {
         string memory key = "_foundryCheatcodeEnvOrStringArrTestDefault";
-        string memory value = "hello, world!|" "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D";
-        string[2] memory expected = ["hello, world!", "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D"];
+        string memory value = "hello, world!|" "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        string[2] memory expected = ["hello, world!", "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"];
         string[] memory defaultValues = new string[](2);
         defaultValues[0] = "hello, world!";
-        defaultValues[1] = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D";
+        defaultValues[1] = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
 
         string memory delimiter = "|";
         string[] memory output = cheats.envOr(key, delimiter, defaultValues);
@@ -752,7 +752,7 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytesArrKey() public {
         string memory key = "_foundryCheatcodeEnvOrBytesArrTestKey";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x00";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x00";
         bytes[] memory expected = new bytes[](2);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
         expected[1] = hex"00";
@@ -770,7 +770,7 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytesArrDefault() public {
         string memory key = "_foundryCheatcodeEnvOrBytesArrTestDefault";
-        string memory value = "0x7109709ECfa91a80626fF3989D68f67F5b1DD12D," "0x00";
+        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8," "0x00";
         bytes[] memory expected = new bytes[](2);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
         expected[1] = hex"00";

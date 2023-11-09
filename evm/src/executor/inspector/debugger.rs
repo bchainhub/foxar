@@ -157,7 +157,7 @@ where
         // TODO: Does this increase energy cost?
         if let Err(err) = data.journaled_state.load_account(call.caller, data.db) {
             let energy = Energy::new(call.energy_limit);
-            return (InstructionResult::Revert, None, energy, err.encode_string().0);
+            return (InstructionResult::Revert, None, energy, err.encode_string().0)
         }
 
         let nonce = data.journaled_state.account(call.caller).info.nonce;

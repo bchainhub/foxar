@@ -509,7 +509,7 @@ impl Type {
             pt::Expression::Negate(_, inner) => Self::from_expression(inner).map(Self::invert_int),
 
             // int if either operand is int
-            // TODO: will need an update for Solidity v0.8.18 user defined operators:
+            // TODO: will need an update for Solidity v1.1.0 user defined operators:
             // https://github.com/ethereum/solidity/issues/13718#issuecomment-1341058649
             pt::Expression::Add(_, lhs, rhs) |
             pt::Expression::Subtract(_, lhs, rhs) |

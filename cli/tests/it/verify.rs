@@ -18,7 +18,7 @@ fn add_unique(prj: &TestProject) {
             format!(
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.4.0;
+pragma solidity >=1.1.0;
 
 contract Unique {{
     uint public _timestamp = {timestamp};

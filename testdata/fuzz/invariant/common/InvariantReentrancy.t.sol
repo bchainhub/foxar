@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 
