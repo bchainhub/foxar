@@ -6,7 +6,7 @@
 **Before working on any crate please write your name next to it, so we won't do duplicate work**
 - [x] abi 
 - [ ] anvil 
-- [ ] binder
+- [x] binder
 - [x] cast
 - [ ] chisel - David
 - [ ] cli
