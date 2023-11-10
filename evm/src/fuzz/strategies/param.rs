@@ -13,7 +13,6 @@ pub const MAX_ARRAY_LEN: usize = 256;
 ///
 /// Works with ABI Encoder v2 tuples.
 pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = Token> {
-    println!("{:?}", param);
     match param {
         ParamType::Address => {
             // The key to making this work is the `boxed()` call which type erases everything
@@ -39,13 +38,10 @@ pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = 
                 .boxed()
         }
         ParamType::FixedBytes(size) => {
-            let res = (0..*size as u64)
+            (0..*size as u64)
             .map(|_| any::<u8>())
             .collect::<Vec<_>>()
-            .prop_map(Token::FixedBytes);
-            println!("{:?}", res.clone());
-            
-            res.boxed()
+            .prop_map(Token::FixedBytes).boxed()
         },
         ParamType::FixedArray(param, size) => std::iter::repeat_with(|| {
             fuzz_param(param, network).prop_map(|param| param.into_token())

@@ -186,7 +186,6 @@ pub fn skip(state: &mut Cheatcodes, depth: u64, skip: bool) -> Result {
     if !skip {
         return Ok(b"".into())
     }
-    println!("111111111111111111111");
     // Skip should not work if called deeper than at test level.
     // As we're not returning the magic skip bytes, this will cause a test failure.
     if depth > 1 {
@@ -243,7 +242,6 @@ pub fn apply<DB: Database>(
             Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ToString3(inner) => {
-            println!("3333333333");
             Ok(corebc::abi::encode(&[Token::String(inner.0.pretty())]).into())
         }
         HEVMCalls::ToString4(inner) => {

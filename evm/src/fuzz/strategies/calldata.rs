@@ -8,7 +8,6 @@ use proptest::prelude::{BoxedStrategy, Strategy};
 /// Given a function, it returns a strategy which generates valid calldata
 /// for that function's input types.
 pub fn fuzz_calldata(func: Function, network: &Network) -> BoxedStrategy<Bytes> {
-    println!("111");
     // We need to compose all the strategies generated for each parameter in all
     // possible combinations
     let strats =
