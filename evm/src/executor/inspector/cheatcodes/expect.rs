@@ -343,11 +343,18 @@ pub fn apply<DB: DatabaseExt>(
     call: &HEVMCalls,
 ) -> Option<Result> {
     let result = match call {
-        HEVMCalls::ExpectRevert0(_) => expect_revert(state, None, data.journaled_state.depth()),
+        HEVMCalls::ExpectRevert0(_) => {
+        println!("333333333333333333");
+        expect_revert(state, None, data.journaled_state.depth())
+     }
         HEVMCalls::ExpectRevert1(inner) => {
+            println!("333333333333333333");
+
             expect_revert(state, Some(inner.0.clone()), data.journaled_state.depth())
         }
         HEVMCalls::ExpectRevert2(inner) => {
+            println!("333333333333333333");
+
             expect_revert(state, Some(inner.0.into()), data.journaled_state.depth())
         }
         HEVMCalls::ExpectEmit0(_) => {

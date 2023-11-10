@@ -65,6 +65,7 @@ impl<'a> FuzzedExecutor<'a> {
         errors: Option<&Abi>,
     ) -> FuzzTestResult {
         // Stores the first Fuzzcase
+        println!("1111111");
         let first_case: RefCell<Option<FuzzCase>> = RefCell::default();
 
         // gas usage per case
@@ -171,7 +172,7 @@ impl<'a> FuzzedExecutor<'a> {
                 ))
             }
         });
-
+        println!("2222222");
         let (calldata, call) = counterexample.into_inner();
         let mut result = FuzzTestResult {
             first_case: first_case.take().unwrap_or_default(),

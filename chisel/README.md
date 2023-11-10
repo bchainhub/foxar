@@ -175,8 +175,8 @@ To fetch an interface of a verified contract on Etherscan, use the `!fetch` / `!
 > networks with Etherscan explorers coming soon.
 
 ```text
-➜ !fetch 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 IWETH
-Added 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2's interface to source as `IWETH`
+➜ !fetch 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 IWETH
+Added 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2's interface to source as `IWETH`
 ```
 
 ### Executing a Shell Command

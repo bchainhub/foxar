@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity ^0.6.12;
+pragma solidity ^1.1.0;
 
 import "ds-test/test.sol";
 import "./DssExecLib.sol";
@@ -24,8 +24,8 @@ contract DummyContract {
 }
 
 contract ForkTest is DSTest {
-    address constant DAI_TOKEN_ADDR = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
-    address constant WETH_TOKEN_ADDR = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address constant DAI_TOKEN_ADDR = 0xcb916b175474e89094c44da98b954eedeac495271d0f;
+    address constant WETH_TOKEN_ADDR = 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
 
     // checks that we can retrieve the fork we launched with
     function testActiveFork() public {
@@ -56,11 +56,11 @@ contract ForkTest is DSTest {
         IWETH WETH = IWETH(WETH_TOKEN_ADDR);
         bytes32 value = bytes32(uint256(1));
         // "0x3617319a054d772f909f7c479a2cebe5066e836a939412e32403c99029b92eff" is the slot storing the balance of zero address for the weth contract
-        // `cast index address uint 0x0000000000000000000000000000000000000000 3`
+        // `cast index address uint 0xcb540000000000000000000000000000000000000000 3`
         bytes32 zero_address_balance_slot = 0x3617319a054d772f909f7c479a2cebe5066e836a939412e32403c99029b92eff;
         cheatvm.store(WETH_TOKEN_ADDR, zero_address_balance_slot, value);
         assertEq(
-            WETH.balanceOf(0x0000000000000000000000000000000000000000),
+            WETH.balanceOf(0xcb540000000000000000000000000000000000000000),
             1,
             "Cheatcode did not change value at the storage slot."
         );

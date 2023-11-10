@@ -48,7 +48,7 @@ use yansi::Paint;
 /// Default port the rpc will open
 pub const NODE_PORT: u16 = 8545;
 /// Default chain id of the node
-pub const CHAIN_ID: u64 = 31337;
+pub const CHAIN_ID: u64 = 1;
 /// Default mnemonic for dev accounts
 pub const DEFAULT_MNEMONIC: &str = "test test test test test test test test test test test junk";
 

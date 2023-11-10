@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^1.1.0;
 
 contract Override {
     event Payload(address sender, address target, bytes data);

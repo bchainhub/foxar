@@ -1359,6 +1359,7 @@ pub mod hevm {
             &self,
             p0: ::std::string::String,
         ) -> ::corebc_contract::builders::ContractCall<M, ::std::string::String> {
+            println!("111");
             self.0
                 .method_hash([135, 90, 117, 157], p0)
                 .expect("method not found (this should never happen)")
@@ -1877,6 +1878,7 @@ pub mod hevm {
             &self,
             p0: ::corebc_core::types::I256,
         ) -> ::corebc_contract::builders::ContractCall<M, ()> {
+            println!("3333333333");
             self.0
                 .method_hash([245, 217, 26, 236], p0)
                 .expect("method not found (this should never happen)")

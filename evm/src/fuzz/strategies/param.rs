@@ -13,12 +13,13 @@ pub const MAX_ARRAY_LEN: usize = 256;
 ///
 /// Works with ABI Encoder v2 tuples.
 pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = Token> {
+    println!("{:?}", param);
     match param {
         ParamType::Address => {
             // The key to making this work is the `boxed()` call which type erases everything
             // https://altsysrq.github.io/proptest-book/proptest/tutorial/transforming-strategies.html
             any::<[u8; 20]>()
-                .prop_map(move |x| to_ican(&H160::from_slice(&x[12..]), &network).into_token())
+                .prop_map(move |x| to_ican(&H160::from_slice(&x), &network).into_token())
                 .boxed()
         }
         ParamType::Bytes => any::<Vec<u8>>().prop_map(|x| Bytes::from(x).into_token()).boxed(),
@@ -37,11 +38,15 @@ pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = 
                 .prop_map(Token::Array)
                 .boxed()
         }
-        ParamType::FixedBytes(size) => (0..*size as u64)
+        ParamType::FixedBytes(size) => {
+            let res = (0..*size as u64)
             .map(|_| any::<u8>())
             .collect::<Vec<_>>()
-            .prop_map(Token::FixedBytes)
-            .boxed(),
+            .prop_map(Token::FixedBytes);
+            println!("{:?}", res.clone());
+            
+            res.boxed()
+        },
         ParamType::FixedArray(param, size) => std::iter::repeat_with(|| {
             fuzz_param(param, network).prop_map(|param| param.into_token())
         })

@@ -111,11 +111,11 @@ Type "!fork mainnet"
 Enter
 Sleep 500ms
 
-Type@2ms "!fetch 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 IWETH"
+Type@2ms "!fetch 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 IWETH"
 Enter
 Sleep 1.5s
 
-Type@2ms "IWETH weth = IWETH(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2)"
+Type@2ms "IWETH weth = IWETH(0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2)"
 Enter
 Sleep 3s
 

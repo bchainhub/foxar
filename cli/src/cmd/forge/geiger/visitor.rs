@@ -60,9 +60,11 @@ impl Visitor for CheatcodeVisitor {
                 expr.visit(self)?;
             }
             Expression::FunctionCall(loc, lhs, rhs) => {
+                println!("1111222");
                 // all cheatcodes are accessd via <vm>.cheatcode
                 if let Expression::MemberAccess(_, expr, identifier) = &**lhs {
                     if let Expression::Variable(_) = &**expr {
+                        println!("{:?}: {}", loc, identifier.name.as_str());
                         match identifier.name.as_str() {
                             "ffi" => self.cheatcodes.ffi.push(*loc),
                             "readFile" => self.cheatcodes.read_file.push(*loc),

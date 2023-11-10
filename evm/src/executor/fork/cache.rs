@@ -466,7 +466,7 @@ mod tests {
         },
         "block_env": {
             "number": "0xed3ddf",
-            "coinbase": "0x00000000000000000000000000000000000000000000",
+            "coinbase": "cb540000000000000000000000000000000000000000",
             "timestamp": "0x6324bc3f",
             "difficulty": "0x0",
             "energy_limit": "0x1c9c380"

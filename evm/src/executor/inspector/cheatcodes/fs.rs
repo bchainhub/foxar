@@ -19,6 +19,7 @@ fn project_root(state: &Cheatcodes) -> Result {
 }
 
 fn read_file(state: &Cheatcodes, path: impl AsRef<Path>) -> Result {
+    println!("111222");
     let path = state.config.ensure_path_allowed(path, FsAccessKind::Read)?;
     let data = fs::read_to_string(path)?;
     Ok(abi::encode(&[Token::String(data)]).into())
@@ -243,6 +244,7 @@ fn fs_metadata(state: &Cheatcodes, path: impl AsRef<Path>) -> Result {
 
 #[instrument(level = "error", name = "fs", target = "evm::cheatcodes", skip_all)]
 pub fn apply(state: &mut Cheatcodes, call: &HEVMCalls) -> Option<Result> {
+    println!("1111112222");
     let res = match call {
         HEVMCalls::ProjectRoot(_) => project_root(state),
         HEVMCalls::ReadFile(inner) => read_file(state, &inner.0),

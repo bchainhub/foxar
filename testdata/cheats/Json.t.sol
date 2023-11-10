@@ -50,13 +50,13 @@ contract ParseJson is DSTest {
     function test_address() public {
         bytes memory data = cheats.parseJson(json, ".address");
         address decodedData = abi.decode(data, (address));
-        assertEq(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, decodedData);
+        assertEq(0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266, decodedData);
     }
 
     function test_addressArray() public {
         bytes memory data = cheats.parseJson(json, ".addressArray");
         address[] memory decodedData = abi.decode(data, (address[]));
-        assertEq(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, decodedData[0]);
+        assertEq(0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266, decodedData[0]);
         assertEq(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, decodedData[1]);
     }
 

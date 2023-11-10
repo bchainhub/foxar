@@ -398,9 +398,9 @@ impl Config {
 
     /// Default address for tx.origin
     ///
-    /// `0xcb231804c8AB1F12E6bbf3894d4083f33e07309d1f38`
+    /// `0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38`
     pub const DEFAULT_SENDER: H176 = H176([
-        0xcb, 0x23, 0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83,
+        0xcb, 0x68, 0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83,
         0xF3, 0x3E, 0x07, 0x30, 0x9D, 0x1F, 0x38,
     ]);
 
@@ -1757,7 +1757,7 @@ impl Default for Config {
             energy_limit: i64::MAX.into(),
             code_size_limit: None,
             energy_price: None,
-            block_coinbase: Address::zero(),
+            block_coinbase: Address::from_str("cb540000000000000000000000000000000000000000").unwrap(),
             block_timestamp: 1,
             block_difficulty: 0,
             block_energy_limit: None,
@@ -2487,7 +2487,7 @@ mod tests {
     fn default_sender() {
         assert_eq!(
             Config::DEFAULT_SENDER,
-            "cb231804c8AB1F12E6bbf3894d4083f33e07309d1f38".parse().unwrap()
+            "cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
     }
 
@@ -3262,7 +3262,7 @@ mod tests {
                 r#"
                 [profile.default]
                 auto_detect_ylem = true
-                block_coinbase = '00000000000000000000000000000000000000000000'
+                block_coinbase = 'cb540000000000000000000000000000000000000000'
                 block_difficulty = 0
                 block_number = 1
                 block_timestamp = 1
@@ -3293,12 +3293,12 @@ mod tests {
                 optimizer_runs = 200
                 out = 'out'
                 remappings = ['nested/=lib/nested/']
-                sender = 'cb231804c8AB1F12E6bbf3894d4083f33e07309d1f38'
+                sender = 'cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38'
                 sizes = false
                 sparse_mode = false
                 src = 'src'
                 test = 'test'
-                tx_origin = 'cb231804c8AB1F12E6bbf3894d4083f33e07309d1f38'
+                tx_origin = 'cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38'
                 verbosity = 0
                 via_ir = false
                 

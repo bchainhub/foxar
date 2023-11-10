@@ -7,7 +7,7 @@ import "./Cheats.sol";
 contract GetDeployedCodeTest is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
-    address public constant overrideAddress = 0x0000000000000000000000000000000000000064;
+    address public constant overrideAddress = 0xcb720000000000000000000000000000000000000064;
 
     event Payload(address sender, address target, bytes data);
 

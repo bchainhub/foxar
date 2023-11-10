@@ -14,14 +14,16 @@ contract HardhatLogsTest {
     bool testBool;
     address testAddr;
     bytes testBytes;
+    bytes1 testBytes1;
 
     function setUp() public {
         testStr = "test";
         testInt = -31337;
         testUint = 1;
         testBool = false;
-        testAddr = 0x0000000000000000000000000000000000000001;
+        testAddr = address(0xcb270000000000000000000000000000000000000001);
         testBytes = "a";
+        testBytes1 = "a";
     }
 
     function testInts() public view {
@@ -69,131 +71,131 @@ contract HardhatLogsTest {
     }
 
     function testLogBytes1() public view {
-        console.logBytes1(bytes1(testBytes));
+        console.logBytes1(bytes1(testBytes1));
     }
 
     function testLogBytes2() public view {
-        console.logBytes2(bytes2(testBytes));
+        console.logBytes2(bytes2(testBytes1));
     }
 
     function testLogBytes3() public view {
-        console.logBytes3(bytes3(testBytes));
+        console.logBytes3(bytes3(testBytes1));
     }
 
     function testLogBytes4() public view {
-        console.logBytes4(bytes4(testBytes));
+        console.logBytes4(bytes4(testBytes1));
     }
 
     function testLogBytes5() public view {
-        console.logBytes5(bytes5(testBytes));
+        console.logBytes5(bytes5(testBytes1));
     }
 
     function testLogBytes6() public view {
-        console.logBytes6(bytes6(testBytes));
+        console.logBytes6(bytes6(testBytes1));
     }
 
     function testLogBytes7() public view {
-        console.logBytes7(bytes7(testBytes));
+        console.logBytes7(bytes7(testBytes1));
     }
 
     function testLogBytes8() public view {
-        console.logBytes8(bytes8(testBytes));
+        console.logBytes8(bytes8(testBytes1));
     }
 
     function testLogBytes9() public view {
-        console.logBytes9(bytes9(testBytes));
+        console.logBytes9(bytes9(testBytes1));
     }
 
     function testLogBytes10() public view {
-        console.logBytes10(bytes10(testBytes));
+        console.logBytes10(bytes10(testBytes1));
     }
 
     function testLogBytes11() public view {
-        console.logBytes11(bytes11(testBytes));
+        console.logBytes11(bytes11(testBytes1));
     }
 
     function testLogBytes12() public view {
-        console.logBytes12(bytes12(testBytes));
+        console.logBytes12(bytes12(testBytes1));
     }
 
     function testLogBytes13() public view {
-        console.logBytes13(bytes13(testBytes));
+        console.logBytes13(bytes13(testBytes1));
     }
 
     function testLogBytes14() public view {
-        console.logBytes14(bytes14(testBytes));
+        console.logBytes14(bytes14(testBytes1));
     }
 
     function testLogBytes15() public view {
-        console.logBytes15(bytes15(testBytes));
+        console.logBytes15(bytes15(testBytes1));
     }
 
     function testLogBytes16() public view {
-        console.logBytes16(bytes16(testBytes));
+        console.logBytes16(bytes16(testBytes1));
     }
 
     function testLogBytes17() public view {
-        console.logBytes17(bytes17(testBytes));
+        console.logBytes17(bytes17(testBytes1));
     }
 
     function testLogBytes18() public view {
-        console.logBytes18(bytes18(testBytes));
+        console.logBytes18(bytes18(testBytes1));
     }
 
     function testLogBytes19() public view {
-        console.logBytes19(bytes19(testBytes));
+        console.logBytes19(bytes19(testBytes1));
     }
 
     function testLogBytes20() public view {
-        console.logBytes20(bytes20(testBytes));
+        console.logBytes20(bytes20(testBytes1));
     }
 
     function testLogBytes21() public view {
-        console.logBytes21(bytes21(testBytes));
+        console.logBytes21(bytes21(testBytes1));
     }
 
     function testLogBytes22() public view {
-        console.logBytes22(bytes22(testBytes));
+        console.logBytes22(bytes22(testBytes1));
     }
 
     function testLogBytes23() public view {
-        console.logBytes23(bytes23(testBytes));
+        console.logBytes23(bytes23(testBytes1));
     }
 
     function testLogBytes24() public view {
-        console.logBytes24(bytes24(testBytes));
+        console.logBytes24(bytes24(testBytes1));
     }
 
     function testLogBytes25() public view {
-        console.logBytes25(bytes25(testBytes));
+        console.logBytes25(bytes25(testBytes1));
     }
 
     function testLogBytes26() public view {
-        console.logBytes26(bytes26(testBytes));
+        console.logBytes26(bytes26(testBytes1));
     }
 
     function testLogBytes27() public view {
-        console.logBytes27(bytes27(testBytes));
+        console.logBytes27(bytes27(testBytes1));
     }
 
     function testLogBytes28() public view {
-        console.logBytes28(bytes28(testBytes));
+        console.logBytes28(bytes28(testBytes1));
     }
 
     function testLogBytes29() public view {
-        console.logBytes29(bytes29(testBytes));
+        console.logBytes29(bytes29(testBytes1));
     }
 
     function testLogBytes30() public view {
-        console.logBytes30(bytes30(testBytes));
+        console.logBytes30(bytes30(testBytes1));
     }
 
     function testLogBytes31() public view {
-        console.logBytes31(bytes31(testBytes));
+        console.logBytes31(bytes31(testBytes1));
     }
 
     function testLogBytes32() public view {
-        console.logBytes32(bytes32(testBytes));
+        console.logBytes32(bytes32(testBytes1));
     }
 
     function testConsoleLogUint() public view {

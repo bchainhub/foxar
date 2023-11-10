@@ -87,6 +87,7 @@ pub(crate) fn decode_cheatcode_outputs(
     if func.name == "parseJson" && verbosity != 5 {
         return Some("<encoded JSON value>".to_string())
     }
+    println!("111");
     if func.name == "readFile" && verbosity != 5 {
         return Some("<file>".to_string())
     }
