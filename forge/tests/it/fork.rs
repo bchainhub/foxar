@@ -1,5 +1,6 @@
 //! forge tests for cheat codes
 
+/* todo:error2215 fix tests after forking will be implemented for core blockchain
 use crate::{
     config::*,
     test_helpers::{filter::Filter, RE_PATH_SEPARATOR},
@@ -63,3 +64,4 @@ async fn test_create_same_fork() {
     let filter = Filter::new(".*", ".*", &format!(".*fork{RE_PATH_SEPARATOR}ForkSame"));
     TestConfig::filter(filter).await.run().await;
 }
+*/

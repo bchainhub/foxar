@@ -6,7 +6,7 @@ import "ds-test/test.sol";
 contract SampleContract {
     uint256 public counter;
     uint256 public counterX2;
-    address public owner = address(0xBEEF);
+    address public owner = address(0xcb92000000000000000000000000000000000000beef);
     bool public found_needle;
 
     event Incremented(uint256 counter);

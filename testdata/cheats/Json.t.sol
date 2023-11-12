@@ -257,7 +257,7 @@ contract WriteJson is DSTest {
         assertEq(decodedData.b, "test");
 
         // replace a single value to key b
-        address ex = address(0xBEEF);
+        address ex = address(0xcb92000000000000000000000000000000000000beef);
         vm.writeJson(vm.toString(ex), path, ".b");
         json = vm.readFile(path);
         data = vm.parseJson(json, ".b");
