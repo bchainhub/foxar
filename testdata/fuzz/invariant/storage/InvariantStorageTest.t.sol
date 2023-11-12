@@ -10,7 +10,7 @@ contract Contract {
 
     function changeAddress(address _addr) public {
         if (_addr == addr) {
-            addr = address(0);
+            addr = address(0xcb540000000000000000000000000000000000000000);
         }
     }
 
