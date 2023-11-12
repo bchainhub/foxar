@@ -1757,7 +1757,8 @@ impl Default for Config {
             energy_limit: i64::MAX.into(),
             code_size_limit: None,
             energy_price: None,
-            block_coinbase: Address::from_str("cb540000000000000000000000000000000000000000").unwrap(),
+            block_coinbase: Address::from_str("cb540000000000000000000000000000000000000000")
+                .unwrap(),
             block_timestamp: 1,
             block_difficulty: 0,
             block_energy_limit: None,

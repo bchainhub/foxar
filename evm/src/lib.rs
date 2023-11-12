@@ -47,8 +47,8 @@ pub const CALLER: Address = H176([
 
 /// Stores the default test contract address: cb04b4c79dab8f259c7aee6e5b2aa729821864227e84
 pub const TEST_CONTRACT_ADDRESS: Address = H176([
-    203, 4, 180, 199, 157, 171, 143, 37, 156, 122, 238, 110, 91, 42, 167, 41, 130, 24, 100, 34, 126,
-    132,
+    203, 4, 180, 199, 157, 171, 143, 37, 156, 122, 238, 110, 91, 42, 167, 41, 130, 24, 100, 34,
+    126, 132,
 ]);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]

@@ -37,12 +37,11 @@ pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = 
                 .prop_map(Token::Array)
                 .boxed()
         }
-        ParamType::FixedBytes(size) => {
-            (0..*size as u64)
+        ParamType::FixedBytes(size) => (0..*size as u64)
             .map(|_| any::<u8>())
             .collect::<Vec<_>>()
-            .prop_map(Token::FixedBytes).boxed()
-        },
+            .prop_map(Token::FixedBytes)
+            .boxed(),
         ParamType::FixedArray(param, size) => std::iter::repeat_with(|| {
             fuzz_param(param, network).prop_map(|param| param.into_token())
         })

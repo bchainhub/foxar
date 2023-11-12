@@ -6,15 +6,15 @@
 **Before working on any crate please write your name next to it, so we won't do duplicate work**
 - [x] abi 
 - [ ] anvil 
-- [ ] binder
+- [x] binder
 - [x] cast
 - [ ] chisel - David
-- [ ] cli
+- [ ] cli - Misha
 - [x] common
 - [x] config - Misha
 - [x] evm - David 
 - [x] fmt
-- [ ] forge - Misha
+- [x] forge - Misha
 - [x] macros
 - [x] ui
 - [x] utils - Misha
