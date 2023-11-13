@@ -1352,7 +1352,7 @@ impl Backend {
             uncles: vec![],
             transactions: transactions.into_iter().map(|tx| tx.hash()).collect(),
             size: Some(size),
-            // mix_hash: Some(mix_hash),
+            mix_hash: Some(mix_hash),
             nonce: Some(nonce),
         }
     }
