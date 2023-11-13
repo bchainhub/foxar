@@ -1220,7 +1220,7 @@ checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
 [[package]]
 name = "corebc"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "corebc-addressbook",
  "corebc-blockindex",
@@ -1235,7 +1235,7 @@ dependencies = [
 [[package]]
 name = "corebc-addressbook"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "corebc-core",
  "once_cell",
@@ -1246,7 +1246,7 @@ dependencies = [
 [[package]]
 name = "corebc-blockindex"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "corebc-core",
  "corebc-ylem",
@@ -1262,7 +1262,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "corebc-contract-abigen",
  "corebc-contract-derive",
@@ -1280,7 +1280,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract-abigen"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "Inflector",
  "corebc-blockindex",
@@ -1306,7 +1306,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract-derive"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "Inflector",
  "corebc-contract-abigen",
@@ -1321,7 +1321,7 @@ dependencies = [
 [[package]]
 name = "corebc-core"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "arrayvec",
  "bytes",
@@ -1331,7 +1331,7 @@ dependencies = [
  "getrandom 0.2.11",
  "hex",
  "k256 0.13.1",
- "libgoldilocks",
+ "libgoldilocks 0.1.0 (git+https://github.com/core-coin/ed448-rs.git)",
  "num_enum",
  "once_cell",
  "open-fastrlp",
@@ -1350,7 +1350,7 @@ dependencies = [
 [[package]]
 name = "corebc-middleware"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "async-trait",
  "auto_impl",
@@ -1376,7 +1376,7 @@ dependencies = [
 [[package]]
 name = "corebc-providers"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "async-trait",
  "auto_impl",
@@ -1414,7 +1414,7 @@ dependencies = [
 [[package]]
 name = "corebc-signers"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "async-trait",
  "coins-bip32",
@@ -1441,7 +1441,7 @@ dependencies = [
 [[package]]
 name = "corebc-ylem"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#4ddb025ecbfabec9803b2562abea842c4520150a"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=david/dependency-fix#282053f42ce52b5392309a9a4099c2a5b5b1f78c"
 dependencies = [
  "cfg-if",
  "corebc-core",
@@ -2638,7 +2638,7 @@ dependencies = [
  "hex",
  "itertools",
  "jsonpath_lib",
- "libgoldilocks",
+ "libgoldilocks 0.1.0 (git+https://github.com/todesstille/ed448-rs.git)",
  "once_cell",
  "ordered-float",
  "parking_lot",
@@ -3881,6 +3881,16 @@ dependencies = [
  "libc",
  "libz-sys",
  "pkg-config",
+]
+
+[[package]]
+name = "libgoldilocks"
+version = "0.1.0"
+source = "git+https://github.com/core-coin/ed448-rs.git#26bf75c87cb5615e0d16898aed1e68ba3e979fd1"
+dependencies = [
+ "hex",
+ "rand 0.8.5",
+ "sha3",
 ]
 
 [[package]]

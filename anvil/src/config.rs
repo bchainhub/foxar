@@ -17,7 +17,7 @@ use crate::{
 };
 use anvil_server::ServerConfig;
 use corebc::{
-    core::k256::ecdsa::SigningKey,
+    core::libgoldilocks::SigningKey,
     prelude::{rand::thread_rng, Wallet, U256},
     providers::Middleware,
     signers::{
@@ -705,7 +705,7 @@ impl NodeConfig {
             .expect("Failed writing json");
         }
         if self.silent {
-            return
+            return;
         }
 
         println!("{}", self.as_string(fork))
@@ -716,7 +716,7 @@ impl NodeConfig {
     /// See also [ Config::foundry_block_cache_file()]
     pub fn block_cache_path(&self, block: u64) -> Option<PathBuf> {
         if self.no_storage_caching || self.eth_rpc_url.is_none() {
-            return None
+            return None;
         }
         let chain_id = self.get_network_id();
 
@@ -732,9 +732,8 @@ impl NodeConfig {
         let mut env = revm::primitives::Env {
             cfg: CfgEnv {
                 spec_id: self.get_hardfork().into(),
-                network: Network::from(self.get_network_id()),
+                network_id: self.get_network_id(),
                 limit_contract_code_size: self.code_size_limit,
-                disable_block_energy_limit: self.disable_block_gas_limit,
                 ..Default::default()
             },
             block: BlockEnv { energy_limit: self.gas_limit.to_ruint(), ..Default::default() },
@@ -853,7 +852,7 @@ latest block number: {latest_block}"
 
                     // need to update the dev signers and env with the chain id
                     self.set_chain_id(Some(chain_id));
-                    env.cfg.network = Network::from(chain_id);
+                    env.cfg.network_id = chain_id;
                     env.tx.network_id = chain_id.into();
                     chain_id
                 };
@@ -1056,7 +1055,7 @@ async fn find_latest_fork_block<M: Middleware>(provider: M) -> Result<u64, M::Er
     for _ in 0..2 {
         if let Some(block) = provider.get_block(num).await? {
             if block.hash.is_some() {
-                break
+                break;
             }
         }
         // block not actually finalized, so we try the block before

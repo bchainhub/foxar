@@ -126,7 +126,7 @@ impl Encodable for TypedReceipt {
 impl Decodable for TypedReceipt {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         if rlp.is_list() {
-            return Ok(TypedReceipt::Legacy(Decodable::decode(rlp)?))
+            return Ok(TypedReceipt::Legacy(Decodable::decode(rlp)?));
         }
 
         Err(DecoderError::Custom("unknown receipt type"))
@@ -171,7 +171,7 @@ mod tests {
         use std::str::FromStr;
 
         use corebc_core::{
-            types::{Bytes, H160, H256},
+            types::{Bytes, H176, H256},
             utils::hex,
         };
         use open_fastrlp::Encodable;
@@ -185,7 +185,7 @@ mod tests {
             logs_bloom: [0; 256].into(),
             gas_used: 0x1u64.into(),
             logs: vec![Log {
-                address: H160::from_str("0000000000000000000000000000000000000011").unwrap(),
+                address: H176::from_str("00000000000000000000000000000000000000000011").unwrap(),
                 topics: vec![
                     H256::from_str(
                         "000000000000000000000000000000000000000000000000000000000000dead",
@@ -214,7 +214,7 @@ mod tests {
         use std::str::FromStr;
 
         use corebc_core::{
-            types::{Bytes, H160, H256},
+            types::{Bytes, H176, H256},
             utils::hex,
         };
         use open_fastrlp::Decodable;
@@ -227,7 +227,7 @@ mod tests {
             logs_bloom: [0; 256].into(),
             gas_used: 0x1u64.into(),
             logs: vec![Log {
-                address: H160::from_str("0000000000000000000000000000000000000011").unwrap(),
+                address: H176::from_str("0000000000000000000000000000000000000011").unwrap(),
                 topics: vec![
                     H256::from_str(
                         "000000000000000000000000000000000000000000000000000000000000dead",
