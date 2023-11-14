@@ -36,7 +36,7 @@ async fn can_apply_genesis() {
 
     let provider = handle.http_provider();
 
-    assert_eq!(provider.get_chainid().await.unwrap(), 19763u64.into());
+    assert_eq!(provider.get_networkid().await.unwrap(), 19763u64.into());
 
     let addr: Address = "71562b71999873db5b286df957af199ec94617f7".parse().unwrap();
     let balance = provider.get_balance(addr, None).await.unwrap();

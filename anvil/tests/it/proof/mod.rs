@@ -10,7 +10,7 @@ use anvil_core::eth::proof::{AccountProof, BasicAccount};
 
 use crate::proof::eip1186::verify_proof;
 use anvil_core::eth::trie::ExtensionLayout;
-use corebc::utils::{keccak256, rlp};
+use corebc::utils::{sha3, rlp};
 use foundry_evm::revm::primitives::SHA3_EMPTY;
 
 mod eip1186;
@@ -43,7 +43,7 @@ async fn can_get_proof() {
     verify_proof::<ExtensionLayout>(
         &root.0,
         &acc_proof,
-        &keccak256(acc.as_bytes())[..],
+        &sha3(acc.as_bytes())[..],
         Some(rlp_account.as_ref()),
     )
     .unwrap();

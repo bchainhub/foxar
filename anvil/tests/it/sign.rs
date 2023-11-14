@@ -2,7 +2,7 @@ use anvil::{spawn, NodeConfig};
 use corebc::{
     prelude::{Middleware, SignerMiddleware},
     signers::Signer,
-    types::{transaction::eip712::TypedData, Address, Chain, TransactionRequest},
+    types::{transaction::eip712::TypedData, Address, Network, TransactionRequest},
 };
 
 #[tokio::test(flavor = "multi_thread")]
@@ -286,7 +286,7 @@ async fn rejects_different_chain_id() {
     let provider = handle.http_provider();
 
     let wallet = handle.dev_wallets().next().unwrap();
-    let client = SignerMiddleware::new(provider, wallet.with_chain_id(Chain::Mainnet));
+    let client = SignerMiddleware::new(provider, wallet.with_network_id(Network::Mainnet));
 
     let tx = TransactionRequest::new().to(Address::random()).value(100u64);
 
@@ -298,7 +298,7 @@ async fn rejects_different_chain_id() {
 #[tokio::test(flavor = "multi_thread")]
 async fn rejects_invalid_chain_id() {
     let (_api, handle) = spawn(NodeConfig::test()).await;
-    let wallet = handle.dev_wallets().next().unwrap().with_chain_id(99u64);
+    let wallet = handle.dev_wallets().next().unwrap().with_network_id(99u64);
     let provider = handle.http_provider();
     let client = SignerMiddleware::new(provider, wallet);
     let tx = TransactionRequest::new().to(Address::random()).value(100u64);

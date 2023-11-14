@@ -127,6 +127,7 @@ mod tests {
     use corebc::types::U256;
     use forge::revm::primitives::{Bytecode, SHA3_EMPTY, U256 as rU256};
     use foundry_evm::executor::{backend::MemDb, DatabaseRef};
+    use foundry_utils::types::ToRuint;
     use std::{collections::BTreeMap, str::FromStr};
 
     // verifies that all substantial aspects of a loaded account remain the state after an account
@@ -134,7 +135,7 @@ mod tests {
     #[test]
     fn test_dump_reload_cycle() {
         let test_addr: Address =
-            Address::from_str("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266").unwrap();
+            Address::from_str("0xcb66f39fd6e51aad88f6f4ce6ab8827279cfffb92266").unwrap();
 
         let mut dump_db = MemDb::default();
 
@@ -165,8 +166,8 @@ mod tests {
         assert_eq!(load_db.code_by_hash(loaded_account.code_hash).unwrap(), contract_code);
         assert_eq!(loaded_account.nonce, 1234);
         assert_eq!(
-            load_db.storage(test_addr.into(), Into::<U256>::into("0x1234567").into()).unwrap(),
-            Into::<U256>::into("0x1").into()
+            load_db.storage(test_addr.into(), Into::<U256>::into("0x1234567").to_ruint()).unwrap(),
+            Into::<U256>::into("0x1").to_ruint()
         );
     }
 
@@ -175,9 +176,9 @@ mod tests {
     #[test]
     fn test_load_state_merge() {
         let test_addr: Address =
-            Address::from_str("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266").unwrap();
+            Address::from_str("0xcb66f39fd6e51aad88f6f4ce6ab8827279cfffb92266").unwrap();
         let test_addr2: Address =
-            Address::from_str("0x70997970c51812dc3a010c7d01b50e0d17dc79c8").unwrap();
+            Address::from_str("0xcb6670997970c51812dc3a010c7d01b50e0d17dc79c8").unwrap();
 
         let contract_code: Bytecode =
             Bytecode::new_raw(Bytes::from("fake contract code")).to_checked();
@@ -233,12 +234,13 @@ mod tests {
         assert_eq!(db.code_by_hash(loaded_account.code_hash).unwrap(), contract_code);
         assert_eq!(loaded_account.nonce, 1234);
         assert_eq!(
-            db.storage(test_addr.into(), Into::<U256>::into("0x1234567").into()).unwrap(),
-            Into::<U256>::into("0x1").into()
+            db.storage(test_addr.into(), Into::<U256>::into("0x1234567").to_ruint()).unwrap(),
+            U256::from(1).to_ruint(),
         );
         assert_eq!(
-            db.storage(test_addr.into(), Into::<U256>::into("0x1234568").into()).unwrap(),
-            Into::<U256>::into("0x5").into()
+            db.storage(test_addr.into(), Into::<U256>::into("0x1234568").to_ruint()).unwrap(),
+            U256::from(5).to_ruint(),
+            // U256::from(5)
         );
     }
 }

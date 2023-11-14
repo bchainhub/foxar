@@ -17,7 +17,7 @@ pub type TxMarker = Vec<u8>;
 
 /// creates an unique identifier for aan (`nonce` + `Address`) combo
 pub fn to_marker(nonce: u64, from: Address) -> TxMarker {
-    let mut data = [0u8; 28];
+    let mut data = [0u8; 30];
     data[..8].copy_from_slice(&nonce.to_le_bytes()[..]);
     data[8..].copy_from_slice(&from.0[..]);
     data.to_vec()

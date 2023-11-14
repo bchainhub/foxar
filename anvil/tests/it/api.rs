@@ -9,7 +9,7 @@ use corebc::{
     abi::{Address, Tokenizable},
     prelude::{builders::ContractCall, decode_function_data, Middleware, SignerMiddleware},
     signers::Signer,
-    types::{Block, BlockNumber, Chain, Transaction, TransactionRequest, H256, U256},
+    types::{Block, BlockNumber, Network, Transaction, TransactionRequest, H256, U256},
     utils::get_contract_address,
 };
 use std::{collections::HashMap, sync::Arc, time::Duration};
@@ -46,7 +46,7 @@ async fn can_get_price() {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let provider = handle.http_provider();
 
-    let _ = provider.get_gas_price().await.unwrap();
+    let _ = provider.get_energy_price().await.unwrap();
 }
 
 #[tokio::test(flavor = "multi_thread")]
@@ -71,20 +71,20 @@ async fn can_get_chain_id() {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let provider = handle.http_provider();
 
-    let chain_id = provider.get_chainid().await.unwrap();
+    let chain_id = provider.get_networkid().await.unwrap();
     assert_eq!(chain_id, CHAIN_ID.into());
 }
 
 #[tokio::test(flavor = "multi_thread")]
 async fn can_modify_chain_id() {
-    let (_api, handle) = spawn(NodeConfig::test().with_chain_id(Some(Chain::Goerli))).await;
+    let (_api, handle) = spawn(NodeConfig::test().with_chain_id(Some(Network::Devin))).await;
     let provider = handle.http_provider();
 
-    let chain_id = provider.get_chainid().await.unwrap();
-    assert_eq!(chain_id, Chain::Goerli.into());
+    let chain_id = provider.get_networkid().await.unwrap();
+    assert_eq!(chain_id, Network::Devin.into());
 
     let chain_id = provider.get_net_version().await.unwrap();
-    assert_eq!(chain_id, (Chain::Goerli as u64).to_string());
+    assert_eq!(chain_id, u64::from(Network::Devin).to_string());
 }
 
 #[tokio::test(flavor = "multi_thread")]
@@ -167,7 +167,8 @@ async fn can_call_on_pending_block() {
 
     let mut deploy_tx = MulticallContract::deploy(Arc::clone(&client), ()).unwrap().deployer.tx;
     deploy_tx.set_nonce(0);
-    let pending_contract_address = get_contract_address(sender, deploy_tx.nonce().unwrap());
+    let pending_contract_address =
+        get_contract_address(sender, deploy_tx.nonce().unwrap(), &corebc::types::Network::Mainnet);
 
     client.send_transaction(deploy_tx, None).await.unwrap();
 
@@ -208,7 +209,7 @@ async fn can_call_on_pending_block() {
             .call()
             .await
             .unwrap();
-        assert_eq!(block.gas_limit, block_gas_limit);
+        assert_eq!(block.energy_limit, block_gas_limit);
 
         let block_coinbase =
             pending_contract.get_current_block_coinbase().block(block_number).call().await.unwrap();

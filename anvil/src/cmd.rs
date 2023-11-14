@@ -639,8 +639,8 @@ mod tests {
 
     #[test]
     fn can_parse_hardfork() {
-        let args: NodeArgs = NodeArgs::parse_from(["anvil", "--hardfork", "berlin"]);
-        assert_eq!(args.hardfork, Some(Hardfork::Berlin));
+        let args: NodeArgs = NodeArgs::parse_from(["anvil", "--hardfork", "istanbul"]);
+        assert_eq!(args.hardfork, Some(Hardfork::Istanbul));
     }
 
     #[test]

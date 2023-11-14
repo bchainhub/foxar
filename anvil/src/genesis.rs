@@ -59,12 +59,6 @@ pub struct Genesis {
     pub gas_used: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parent_hash: Option<H256>,
-    #[serde(
-        default,
-        deserialize_with = "deserialize_stringified_numeric_opt",
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub base_fee_per_gas: Option<U256>,
 }
 
 impl Genesis {
@@ -79,7 +73,7 @@ impl Genesis {
     }
 
     pub fn chain_id(&self) -> Option<u64> {
-        self.config.as_ref().and_then(|c| c.chain_id)
+        self.config.as_ref().and_then(|c| c.network_id)
     }
 
     /// Applies all settings to the given `env`
@@ -158,7 +152,7 @@ impl From<GenesisAccount> for AccountInfo {
 #[serde(rename_all = "camelCase")]
 pub struct Config {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub chain_id: Option<u64>,
+    pub network_id: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub homestead_block: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -260,7 +254,7 @@ mod tests {
     fn can_parse_genesis_json() {
         let s = r#"{
     "config": {
-        "chainId": 19763,
+        "networkId": 19763,
         "homesteadBlock": 0,
         "eip150Block": 0,
         "eip155Block": 0,
@@ -273,9 +267,9 @@ mod tests {
     "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "gasLimit": "0x80000000",
     "difficulty": "0x20000",
-    "coinbase": "0x0000000000000000000000000000000000000000",
+    "coinbase": "00000000000000000000000000000000000000000000",
     "alloc": {
-        "71562b71999873db5b286df957af199ec94617f7": {
+        "cb6671562b71999873db5b286df957af199ec94617f7": {
             "balance": "0xffffffffffffffffffffffffff",
             "secretkey": "0x305b526d493844b63466be6d48a424ab83f5216011eef860acc6db4c1821adc9"
         }
@@ -292,6 +286,6 @@ mod tests {
         assert_eq!(gen.difficulty, 131072);
         assert_eq!(gen.alloc.accounts.len(), 1);
         let config = gen.config.unwrap();
-        assert_eq!(config.chain_id, Some(19763));
+        assert_eq!(config.network_id, Some(19763));
     }
 }

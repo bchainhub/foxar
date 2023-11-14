@@ -786,19 +786,20 @@ impl EthApi {
                 Err(_) => return Err(BlockchainError::FailedToDecodeSignedTransaction),
             }
         } else {
+            unreachable!("EIP-1559 Transactions are not supported");
             // the [TypedTransaction] requires a valid rlp input,
             // but EIP-1559 prepends a version byte, so we need to encode the data first to get a
             // valid rlp and then rlp decode impl of `TypedTransaction` will remove and check the
             // version byte
-            let extend = rlp::encode(&data);
-            let tx = match rlp::decode::<TypedTransaction>(&extend[..]) {
-                Ok(transaction) => transaction,
-                Err(_) => return Err(BlockchainError::FailedToDecodeSignedTransaction),
-            };
+            // let extend = rlp::encode(&data);
+            // let tx = match rlp::decode::<TypedTransaction>(&extend[..]) {
+            //     Ok(transaction) => transaction,
+            //     Err(_) => return Err(BlockchainError::FailedToDecodeSignedTransaction),
+            // };
 
-            self.ensure_typed_transaction_supported(&tx)?;
+            // self.ensure_typed_transaction_supported(&tx)?;
 
-            tx
+            // tx
         };
 
         let pending_transaction = PendingTransaction::new(transaction)?;

@@ -155,7 +155,7 @@ async fn watch_events() {
     // and we make a few calls
     let num = client.get_block_number().await.unwrap();
     for i in 0..num_calls {
-        let call = contract.method::<_, H256>("setValue", i.to_string()).unwrap().legacy();
+        let call = contract.method::<_, H256>("setValue", i.to_string()).unwrap();
         let pending_tx = call.send().await.unwrap();
         let _receipt = pending_tx.await.unwrap();
     }
