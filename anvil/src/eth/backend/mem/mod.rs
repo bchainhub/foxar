@@ -1328,7 +1328,6 @@ impl Backend {
             gas_used,
             timestamp,
             extra_data,
-            mix_hash,
             nonce,
         } = header;
 
@@ -1348,11 +1347,10 @@ impl Backend {
             timestamp: timestamp.into(),
             difficulty,
             total_difficulty: Some(self.total_difficulty()),
-            seal_fields: { vec![mix_hash.as_bytes().to_vec().into(), nonce.0.to_vec().into()] },
+            seal_fields: { vec![nonce.0.to_vec().into()] },
             uncles: vec![],
             transactions: transactions.into_iter().map(|tx| tx.hash()).collect(),
             size: Some(size),
-            mix_hash: Some(mix_hash),
             nonce: Some(nonce),
         }
     }

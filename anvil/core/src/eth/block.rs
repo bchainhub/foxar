@@ -94,7 +94,6 @@ pub struct Header {
     pub gas_used: U256,
     pub timestamp: u64,
     pub extra_data: Bytes,
-    pub mix_hash: H256,
     pub nonce: H64,
 }
 
@@ -116,7 +115,6 @@ impl Header {
             gas_used: partial_header.gas_used,
             timestamp: partial_header.timestamp,
             extra_data: partial_header.extra_data,
-            mix_hash: partial_header.mix_hash,
             nonce: partial_header.nonce,
         }
     }
@@ -146,7 +144,6 @@ impl Header {
         length += self.gas_used.length();
         length += self.timestamp.length();
         length += self.extra_data.length();
-        length += self.mix_hash.length();
         length += self.nonce.length();
         length
     }
@@ -168,7 +165,6 @@ impl rlp::Encodable for Header {
         s.append(&self.gas_used);
         s.append(&self.timestamp);
         s.append(&self.extra_data.as_ref());
-        s.append(&self.mix_hash);
         s.append(&self.nonce);
     }
 }
@@ -189,8 +185,7 @@ impl rlp::Decodable for Header {
             gas_used: rlp.val_at(10)?,
             timestamp: rlp.val_at(11)?,
             extra_data: rlp.val_at::<Vec<u8>>(12)?.into(),
-            mix_hash: rlp.val_at(13)?,
-            nonce: rlp.val_at(14)?,
+            nonce: rlp.val_at(13)?,
         };
         Ok(result)
     }
@@ -224,7 +219,6 @@ impl open_fastrlp::Encodable for Header {
         self.gas_used.encode(out);
         self.timestamp.encode(out);
         self.extra_data.encode(out);
-        self.mix_hash.encode(out);
         self.nonce.encode(out);
     }
 }
@@ -232,12 +226,6 @@ impl open_fastrlp::Encodable for Header {
 #[cfg(feature = "fastrlp")]
 impl open_fastrlp::Decodable for Header {
     fn decode(buf: &mut &[u8]) -> Result<Self, open_fastrlp::DecodeError> {
-        let timestamp = <u64 as open_fastrlp::Decodable>::decode(buf)?;
-        todo!();
-        let difficulty = <U256 as open_fastrlp::Decodable>::decode(buf)?;
-        let number = <U256 as open_fastrlp::Decodable>::decode(buf)?;
-        let gas_limit = <U256 as open_fastrlp::Decodable>::decode(buf)?;
-        let gas_used = <U256 as open_fastrlp::Decodable>::decode(buf)?;
         let parent_hash = <H256 as open_fastrlp::Decodable>::decode(buf)?;
         let ommers_hash = <H256 as open_fastrlp::Decodable>::decode(buf)?;
         let beneficiary = <Address as open_fastrlp::Decodable>::decode(buf)?;
@@ -245,8 +233,12 @@ impl open_fastrlp::Decodable for Header {
         let transactions_root = <H256 as open_fastrlp::Decodable>::decode(buf)?;
         let receipts_root = <H256 as open_fastrlp::Decodable>::decode(buf)?;
         let logs_bloom = <Bloom as open_fastrlp::Decodable>::decode(buf)?;
+        let difficulty = <U256 as open_fastrlp::Decodable>::decode(buf)?;
+        let number = <U256 as open_fastrlp::Decodable>::decode(buf)?;
+        let gas_limit = <U256 as open_fastrlp::Decodable>::decode(buf)?;
+        let gas_used = <U256 as open_fastrlp::Decodable>::decode(buf)?;
+        let timestamp = <u64 as open_fastrlp::Decodable>::decode(buf)?;
         let extra_data = <Bytes as open_fastrlp::Decodable>::decode(buf)?;
-        let mix_hash = <H256 as open_fastrlp::Decodable>::decode(buf)?;
         let nonce = <H64 as open_fastrlp::Decodable>::decode(buf)?;
 
         Ok(Header {
@@ -263,7 +255,6 @@ impl open_fastrlp::Decodable for Header {
             gas_used,
             timestamp,
             extra_data,
-            mix_hash,
             nonce,
         })
     }
@@ -283,7 +274,6 @@ pub struct PartialHeader {
     pub gas_used: U256,
     pub timestamp: u64,
     pub extra_data: Bytes,
-    pub mix_hash: H256,
     pub nonce: H64,
 }
 
@@ -301,7 +291,6 @@ impl From<Header> for PartialHeader {
             gas_used: header.gas_used,
             timestamp: header.timestamp,
             extra_data: header.extra_data,
-            mix_hash: header.mix_hash,
             nonce: header.nonce,
         }
     }
@@ -334,7 +323,6 @@ mod tests {
             gas_used: 1337u64.into(),
             timestamp: 0,
             extra_data: Default::default(),
-            mix_hash: Default::default(),
             nonce: 99u64.to_be_bytes().into(),
         };
 
@@ -364,7 +352,6 @@ mod tests {
             gas_used: 1337u64.into(),
             timestamp: 0,
             extra_data: Default::default(),
-            mix_hash: Default::default(),
             nonce: H64::from_low_u64_be(99u64),
         };
 
@@ -403,7 +390,6 @@ mod tests {
             gas_used: 0x15b3u64.into(),
             timestamp: 0x1a0au64,
             extra_data: hex::decode("7788").unwrap().into(),
-            mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
         };
         header.encode(&mut data);
@@ -432,7 +418,6 @@ mod tests {
             gas_used: 0x15b3u64.into(),
             timestamp: 0x1a0au64,
             extra_data: hex::decode("7788").unwrap().into(),
-            mix_hash: H256::from_str("0000000000000000000000000000000000000000000000000000000000000000").unwrap(),
             nonce: H64::from_low_u64_be(0x0),
         };
         let header = <Header as open_fastrlp::Decodable>::decode(&mut data.as_slice()).unwrap();

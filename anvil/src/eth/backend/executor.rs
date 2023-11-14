@@ -121,13 +121,13 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
                 TransactionExecutionOutcome::Exhausted(_) => continue,
                 TransactionExecutionOutcome::Invalid(tx, _) => {
                     invalid.push(tx);
-                    continue
+                    continue;
                 }
                 TransactionExecutionOutcome::DatabaseError(_, err) => {
                     // Note: this is only possible in forking mode, if for example a rpc request
                     // failed
                     trace!(target: "backend", ?err,  "Failed to execute transaction due to database error");
-                    continue
+                    continue;
                 }
             };
             let receipt = tx.create_receipt();
@@ -180,7 +180,6 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
             gas_used: cumulative_gas_used,
             timestamp,
             extra_data: Default::default(),
-            mix_hash: Default::default(),
             nonce: Default::default(),
         };
 
@@ -222,7 +221,7 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
         // check that we comply with the block's gas limit
         let max_gas = self.gas_used.saturating_add(U256::from(env.tx.energy_limit));
         if max_gas > env.block.energy_limit.to_ethers_u256() {
-            return Some(TransactionExecutionOutcome::Exhausted(transaction))
+            return Some(TransactionExecutionOutcome::Exhausted(transaction));
         }
 
         // validate before executing
@@ -232,7 +231,7 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
             &env,
         ) {
             warn!(target: "backend", "Skipping invalid tx execution [{:?}] {}", transaction.hash(), err);
-            return Some(TransactionExecutionOutcome::Invalid(transaction, err))
+            return Some(TransactionExecutionOutcome::Invalid(transaction, err));
         }
 
         let mut evm = revm::EVM::new();

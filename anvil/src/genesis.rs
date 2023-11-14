@@ -42,8 +42,6 @@ pub struct Genesis {
     #[serde(deserialize_with = "deserialize_stringified_u64")]
     pub difficulty: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mix_hash: Option<H256>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub coinbase: Option<Address>,
     #[serde(default)]
     pub alloc: Alloc,
@@ -275,7 +273,6 @@ mod tests {
     "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "gasLimit": "0x80000000",
     "difficulty": "0x20000",
-    "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "coinbase": "0x0000000000000000000000000000000000000000",
     "alloc": {
         "71562b71999873db5b286df957af199ec94617f7": {
