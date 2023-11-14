@@ -18,6 +18,10 @@ pub fn next_http_archive_rpc_endpoint() -> String {
     client.blockindex_api_url().as_str().to_string()
 }
 
+pub fn next_http_rpc_endpoint() -> String {
+    todo!("Here we will need a list of publicly avalible rpc endpoints");
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
