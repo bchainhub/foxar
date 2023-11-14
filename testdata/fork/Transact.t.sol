@@ -14,7 +14,7 @@ interface IERC20 {
 contract TransactOnForkTest is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
-    IERC20 constant USDT = IERC20(0xdAC17F958D2ee523a2206206994597C13D831ec7);
+    IERC20 constant USDT = IERC20(0xcb23dac17f958d2ee523a2206206994597c13d831ec7);
 
     event Transfer(address indexed from, address indexed to, uint256 value);
 

@@ -114,8 +114,8 @@ match_path = "*/Foo*"
 no_match_path = "*/Bar*"
 ffi = false
 # These are the default callers, generated using `address(uint160(uint256(keccak256("foundry default caller"))))`
-sender = '0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38'
-tx_origin = '0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38'
+sender = '0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38'
+tx_origin = '0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38'
 initial_balance = '0xffffffffffffffffffffffff'
 block_number = 0
 fork_block_number = 0

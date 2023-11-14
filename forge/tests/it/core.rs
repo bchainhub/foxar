@@ -143,7 +143,7 @@ async fn test_logs() {
                         Some(vec![
                             "0".into(),
                             "1".into(),
-                            "0x0000000000000000000000000000000000000001".into(),
+                            "00000000000000000000000000000000000000000001".into(),
                         ]),
                         None,
                     ),
@@ -185,7 +185,7 @@ async fn test_logs() {
                         Some(vec![
                             "0".into(),
                             "1".into(),
-                            "address: 0x0000000000000000000000000000000000000001".into()]),
+                            "address: 00000000000000000000000000000000000000000001".into()]),
                         None,
                     ),
                     (
@@ -282,7 +282,7 @@ async fn test_logs() {
                         None,
                         Some(vec![
                             "constructor".into(),
-                            "testMisc 0x0000000000000000000000000000000000000001".into(),
+                            "testMisc 00000000000000000000000000000000000000000001".into(),
                             "testMisc 42".into(),
                         ]),
                         None,
@@ -333,7 +333,7 @@ async fn test_logs() {
                         "testLogAddress()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x0000000000000000000000000000000000000001".into()]),
+                        Some(vec!["constructor".into(), "cb270000000000000000000000000000000000000001".into()]),
                         None,
                     ),
                     (
@@ -592,7 +592,7 @@ async fn test_logs() {
                         "testConsoleLogAddress()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x0000000000000000000000000000000000000001".into()]),
+                        Some(vec!["constructor".into(), "cb270000000000000000000000000000000000000001".into()]),
                         None,
                     ),
                     (
@@ -613,7 +613,7 @@ async fn test_logs() {
                         "testConsoleLogFormatAddress()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "formatted log addr=0x0000000000000000000000000000000000000001".into()]),
+                        Some(vec!["constructor".into(), "formatted log addr=cb270000000000000000000000000000000000000001".into()]),
                         None,
                     ),
                     (

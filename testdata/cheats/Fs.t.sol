@@ -65,7 +65,7 @@ contract FsTest is DSTest {
         string memory line2 = "second line";
         cheats.writeLine(path, line2);
 
-        assertEq(cheats.readFile(path), string.concat(line1, "\n", line2, "\n"));
+        assertEq(cheats.readFile(path), string(bytes.concat(bytes(line1), bytes("\n"), bytes(line2), bytes("\n"))));
 
         cheats.removeFile(path);
 
@@ -100,7 +100,7 @@ contract FsTest is DSTest {
 
     function testWriteLineFoundrytoml() public {
         string memory root = cheats.projectRoot();
-        string memory foundryToml = string.concat(root, "/", "foundry.toml");
+        string memory foundryToml = string(bytes.concat(bytes(root), bytes("/"), bytes("foundry.toml")));
         cheats.expectRevert(FOUNDRY_TOML_ACCESS_ERR);
         cheats.writeLine(foundryToml, "\nffi = true\n");
 
@@ -119,7 +119,7 @@ contract FsTest is DSTest {
 
     function testWriteFoundrytoml() public {
         string memory root = cheats.projectRoot();
-        string memory foundryToml = string.concat(root, "/", "foundry.toml");
+        string memory foundryToml = string(bytes.concat(bytes(root), bytes("/"), bytes("foundry.toml")));
         cheats.expectRevert(FOUNDRY_TOML_ACCESS_ERR);
         cheats.writeFile(foundryToml, "\nffi = true\n");
 
@@ -173,7 +173,7 @@ contract FsTest is DSTest {
 
     function testCreateRemoveDir() public {
         string memory path = "../testdata/fixtures/Dir/remove_dir";
-        string memory child = string.concat(path, "/child");
+        string memory child = string(bytes.concat(bytes(path), bytes("/child")));
 
         cheats.createDir(path, false);
         assertEq(cheats.fsMetadata(path).isDir, true);

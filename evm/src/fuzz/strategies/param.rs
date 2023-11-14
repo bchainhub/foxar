@@ -18,7 +18,7 @@ pub fn fuzz_param(param: &ParamType, network: Network) -> impl Strategy<Value = 
             // The key to making this work is the `boxed()` call which type erases everything
             // https://altsysrq.github.io/proptest-book/proptest/tutorial/transforming-strategies.html
             any::<[u8; 20]>()
-                .prop_map(move |x| to_ican(&H160::from_slice(&x[12..]), &network).into_token())
+                .prop_map(move |x| to_ican(&H160::from_slice(&x), &network).into_token())
                 .boxed()
         }
         ParamType::Bytes => any::<Vec<u8>>().prop_map(|x| Bytes::from(x).into_token()).boxed(),

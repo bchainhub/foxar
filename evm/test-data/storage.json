@@ -10,7 +10,7 @@
         },
         "block_env": {
             "number": "0xdc42b8",
-            "coinbase": "0x00000000000000000000000000000000000000000000",
+            "coinbase": "cb540000000000000000000000000000000000000000",
             "timestamp": "0x1",
             "difficulty": "0x0",
             "energy_limit": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"

@@ -171,7 +171,6 @@ impl<'a> FuzzedExecutor<'a> {
                 ))
             }
         });
-
         let (calldata, call) = counterexample.into_inner();
         let mut result = FuzzTestResult {
             first_case: first_case.take().unwrap_or_default(),
