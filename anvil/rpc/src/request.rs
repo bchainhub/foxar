@@ -126,7 +126,7 @@ mod tests {
         let batch = Request::Batch(vec![
             RpcCall::MethodCall(RpcMethodCall {
                 jsonrpc: Version::V2,
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::Array(vec![
                     serde_json::Value::from(999),
                     serde_json::Value::from(1337),
@@ -135,7 +135,7 @@ mod tests {
             }),
             RpcCall::Notification(RpcNotification {
                 jsonrpc: Some(Version::V2),
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::Array(vec![serde_json::Value::from(999)]),
             }),
         ]);
@@ -143,13 +143,13 @@ mod tests {
         let obj = serde_json::to_string(&batch).unwrap();
         assert_eq!(
             obj,
-            r#"[{"jsonrpc":"2.0","method":"eth_method","params":[999,1337],"id":1},{"jsonrpc":"2.0","method":"eth_method","params":[999]}]"#
+            r#"[{"jsonrpc":"2.0","method":"xcb_method","params":[999,1337],"id":1},{"jsonrpc":"2.0","method":"xcb_method","params":[999]}]"#
         );
     }
 
     #[test]
     fn can_deserialize_batch() {
-        let s = r#"[{}, {"jsonrpc": "2.0", "method": "eth_call", "params": [1337,420], "id": 1},{"jsonrpc": "2.0", "method": "notify", "params": [999]}]"#;
+        let s = r#"[{}, {"jsonrpc": "2.0", "method": "xcb_call", "params": [1337,420], "id": 1},{"jsonrpc": "2.0", "method": "notify", "params": [999]}]"#;
         let obj: Request = serde_json::from_str(s).unwrap();
         assert_eq!(
             obj,
@@ -157,7 +157,7 @@ mod tests {
                 RpcCall::Invalid { id: Id::Null },
                 RpcCall::MethodCall(RpcMethodCall {
                     jsonrpc: Version::V2,
-                    method: "eth_call".to_owned(),
+                    method: "xcb_call".to_owned(),
                     params: RequestParams::Array(vec![
                         serde_json::Value::from(1337),
                         serde_json::Value::from(420)
@@ -177,7 +177,7 @@ mod tests {
     fn can_serialize_method() {
         let m = RpcMethodCall {
             jsonrpc: Version::V2,
-            method: "eth_method".to_owned(),
+            method: "xcb_method".to_owned(),
             params: RequestParams::Array(vec![
                 serde_json::Value::from(999),
                 serde_json::Value::from(1337),
@@ -186,44 +186,44 @@ mod tests {
         };
 
         let obj = serde_json::to_string(&m).unwrap();
-        assert_eq!(obj, r#"{"jsonrpc":"2.0","method":"eth_method","params":[999,1337],"id":1}"#);
+        assert_eq!(obj, r#"{"jsonrpc":"2.0","method":"xcb_method","params":[999,1337],"id":1}"#);
     }
 
     #[test]
     fn can_serialize_call_notification() {
         let n = RpcCall::Notification(RpcNotification {
             jsonrpc: Some(Version::V2),
-            method: "eth_method".to_owned(),
+            method: "xcb_method".to_owned(),
             params: RequestParams::Array(vec![serde_json::Value::from(999)]),
         });
         let obj = serde_json::to_string(&n).unwrap();
-        assert_eq!(obj, r#"{"jsonrpc":"2.0","method":"eth_method","params":[999]}"#);
+        assert_eq!(obj, r#"{"jsonrpc":"2.0","method":"xcb_method","params":[999]}"#);
     }
 
     #[test]
     fn can_serialize_notification() {
         let n = RpcNotification {
             jsonrpc: Some(Version::V2),
-            method: "eth_method".to_owned(),
+            method: "xcb_method".to_owned(),
             params: RequestParams::Array(vec![
                 serde_json::Value::from(999),
                 serde_json::Value::from(1337),
             ]),
         };
         let obj = serde_json::to_string(&n).unwrap();
-        assert_eq!(obj, r#"{"jsonrpc":"2.0","method":"eth_method","params":[999,1337]}"#);
+        assert_eq!(obj, r#"{"jsonrpc":"2.0","method":"xcb_method","params":[999,1337]}"#);
     }
 
     #[test]
     fn can_deserialize_notification() {
-        let s = r#"{"jsonrpc": "2.0", "method": "eth_method", "params": [999,1337]}"#;
+        let s = r#"{"jsonrpc": "2.0", "method": "xcb_method", "params": [999,1337]}"#;
         let obj: RpcNotification = serde_json::from_str(s).unwrap();
 
         assert_eq!(
             obj,
             RpcNotification {
                 jsonrpc: Some(Version::V2),
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::Array(vec![
                     serde_json::Value::from(999),
                     serde_json::Value::from(1337)
@@ -240,67 +240,67 @@ mod tests {
                 params: RequestParams::None,
             }
         );
-        let s = r#"{"jsonrpc": "2.0", "method": "eth_method", "params": [999,1337], "id": 1}"#;
+        let s = r#"{"jsonrpc": "2.0", "method": "xcb_method", "params": [999,1337], "id": 1}"#;
         let obj: Result<RpcNotification, _> = serde_json::from_str(s);
         assert!(obj.is_err());
     }
 
     #[test]
     fn can_deserialize_call() {
-        let s = r#"{"jsonrpc": "2.0", "method": "eth_method", "params": [999]}"#;
+        let s = r#"{"jsonrpc": "2.0", "method": "xcb_method", "params": [999]}"#;
         let obj: RpcCall = serde_json::from_str(s).unwrap();
         assert_eq!(
             obj,
             RpcCall::Notification(RpcNotification {
                 jsonrpc: Some(Version::V2),
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::Array(vec![serde_json::Value::from(999)])
             })
         );
 
-        let s = r#"{"jsonrpc": "2.0", "method": "eth_method", "params": [999], "id": 1}"#;
+        let s = r#"{"jsonrpc": "2.0", "method": "xcb_method", "params": [999], "id": 1}"#;
         let obj: RpcCall = serde_json::from_str(s).unwrap();
         assert_eq!(
             obj,
             RpcCall::MethodCall(RpcMethodCall {
                 jsonrpc: Version::V2,
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::Array(vec![serde_json::Value::from(999)]),
                 id: Id::Number(1)
             })
         );
 
-        let s = r#"{"jsonrpc": "2.0", "method": "eth_method", "params": [], "id": 1}"#;
+        let s = r#"{"jsonrpc": "2.0", "method": "xcb_method", "params": [], "id": 1}"#;
         let obj: RpcCall = serde_json::from_str(s).unwrap();
         assert_eq!(
             obj,
             RpcCall::MethodCall(RpcMethodCall {
                 jsonrpc: Version::V2,
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::Array(vec![]),
                 id: Id::Number(1)
             })
         );
 
-        let s = r#"{"jsonrpc": "2.0", "method": "eth_method", "params": null, "id": 1}"#;
+        let s = r#"{"jsonrpc": "2.0", "method": "xcb_method", "params": null, "id": 1}"#;
         let obj: RpcCall = serde_json::from_str(s).unwrap();
         assert_eq!(
             obj,
             RpcCall::MethodCall(RpcMethodCall {
                 jsonrpc: Version::V2,
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::None,
                 id: Id::Number(1)
             })
         );
 
-        let s = r#"{"jsonrpc": "2.0", "method": "eth_method", "id": 1}"#;
+        let s = r#"{"jsonrpc": "2.0", "method": "xcb_method", "id": 1}"#;
         let obj: RpcCall = serde_json::from_str(s).unwrap();
         assert_eq!(
             obj,
             RpcCall::MethodCall(RpcMethodCall {
                 jsonrpc: Version::V2,
-                method: "eth_method".to_owned(),
+                method: "xcb_method".to_owned(),
                 params: RequestParams::None,
                 id: Id::Number(1)
             })

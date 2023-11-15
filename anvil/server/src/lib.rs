@@ -119,6 +119,9 @@ pub trait RpcHandler: Clone + Send + Sync + 'static {
     async fn on_call(&self, call: RpcMethodCall) -> RpcResponse {
         trace!(target: "rpc",  id = ?call.id , method = ?call.method, "received method call");
         let RpcMethodCall { method, params, id, .. } = call;
+        println!("METHOD: {}", method);
+        println!("PARAMS: {:?}", params);
+        println!("ID: {}", id);
 
         let params: serde_json::Value = params.into();
         let call = serde_json::json!({

@@ -9,7 +9,7 @@ use corebc::{
     abi::{ethereum_types::BigEndianHash, AbiDecode},
     prelude::{Middleware, SignerMiddleware},
     types::{
-        transaction::eip2718::TypedTransaction, Address, BlockNumber, 
+        Address, BlockNumber, 
         TransactionRequest, H256, U256, U64,
     },
     utils::hex,
@@ -115,6 +115,8 @@ async fn can_auto_impersonate_account() {
     let tx = TransactionRequest::new().from(impersonate).to(to).value(val);
 
     let res = provider.send_transaction(tx.clone(), None).await;
+    println!("{:?}", res);
+    todo!();
     res.unwrap_err();
 
     api.anvil_auto_impersonate_account(true).await.unwrap();

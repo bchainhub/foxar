@@ -60,7 +60,7 @@ pub enum EthRequest {
     #[cfg_attr(feature = "serde", serde(rename = "net_listening", with = "empty_params"))]
     NetListening(()),
 
-    #[cfg_attr(feature = "serde", serde(rename = "xcb_gasPrice", with = "empty_params"))]
+    #[cfg_attr(feature = "serde", serde(rename = "xcb_energyPrice", with = "empty_params"))]
     EthGasPrice(()),
 
     #[cfg_attr(
@@ -161,7 +161,7 @@ pub enum EthRequest {
         #[cfg_attr(feature = "serde", serde(default))] Option<StateOverride>,
     ),
 
-    #[cfg_attr(feature = "serde", serde(rename = "xcb_estimateGas"))]
+    #[cfg_attr(feature = "serde", serde(rename = "xcb_estimateEnergy"))]
     EthEstimateGas(
         EthTransactionRequest,
         #[cfg_attr(feature = "serde", serde(default))] Option<BlockId>,

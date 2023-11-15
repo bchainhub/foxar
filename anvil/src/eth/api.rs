@@ -737,7 +737,7 @@ impl EthApi {
     ///
     /// Handler for ETH RPC call: `eth_sendTransaction`
     pub async fn send_transaction(&self, request: EthTransactionRequest) -> Result<TxHash> {
-        node_info!("eth_sendTransaction");
+        node_info!("xcb_sendTransaction");
 
         let from = request.from.map(Ok).unwrap_or_else(|| {
             self.accounts()?.get(0).cloned().ok_or(BlockchainError::NoSignerAvailable)

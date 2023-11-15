@@ -34,7 +34,7 @@ use foundry_config::Config;
 use foundry_evm::{
     executor::fork::{BlockchainDb, BlockchainDbMeta, SharedBackend},
     revm,
-    revm::primitives::{BlockEnv, CfgEnv, Network, TxEnv, U256 as rU256},
+    revm::primitives::{BlockEnv, CfgEnv, TxEnv, U256 as rU256},
 };
 use foundry_utils::types::ToRuint;
 use parking_lot::RwLock;
@@ -1016,20 +1016,32 @@ impl AccountGenerator {
 
 impl AccountGenerator {
     pub fn gen(&self) -> Vec<Wallet<SigningKey>> {
-        let builder = MnemonicBuilder::<English>::default().phrase(self.phrase.as_str());
+        // CORETODO: Reimplement whe n we can use mnemonic
+        // let builder = MnemonicBuilder::<English>::default().phrase(self.phrase.as_str());
+        //
+        // // use the
+        // let derivation_path = self.get_derivation_path();
+        //
+        // let mut wallets = Vec::with_capacity(self.amount);
+        //
+        // for idx in 0..self.amount {
+        //     let builder =
+        //         builder.clone().derivation_path(&format!("{derivation_path}{idx}")).unwrap();
+        //     let wallet = builder.build().unwrap().with_network_id(self.chain_id);
+        //     wallets.push(wallet)
+        // }
+        // wallets
 
-        // use the
-        let derivation_path = self.get_derivation_path();
-
-        let mut wallets = Vec::with_capacity(self.amount);
-
-        for idx in 0..self.amount {
-            let builder =
-                builder.clone().derivation_path(&format!("{derivation_path}{idx}")).unwrap();
-            let wallet = builder.build().unwrap().with_network_id(self.chain_id);
-            wallets.push(wallet)
+        let mut wallets = Vec::new();
+        for i in 1..=self.amount {
+            let mut priv_key = [0u8; 57];
+            priv_key[56] = i as u8;
+            let wallet = Wallet::from_bytes(&priv_key, corebc::types::Network::from(self.chain_id)).unwrap();
+            wallets.push(wallet);
         }
+
         wallets
+
     }
 }
 
