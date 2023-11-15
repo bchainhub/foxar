@@ -5,8 +5,8 @@ use std::fmt::Display;
 
 /// Solidity revert prefix.
 ///
-/// `sha3("Error(String)")[..4] == 0xb7e452d5`
-pub const REVERT_PREFIX: [u8; 4] = [183, 228, 82, 213];
+/// `sha3("Error(string)")[..4] == 0x4e401cbe`
+pub const REVERT_PREFIX: [u8; 4] = [78, 64, 28, 190];
 
 /// Custom Cheatcode error prefix.
 ///

@@ -10,7 +10,7 @@ interface IWETH {
 }
 
 contract ForkTest is DSTest {
-    address constant WETH_TOKEN_ADDR = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address constant WETH_TOKEN_ADDR = 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
     uint256 constant mainblock = 14_608_400;
 
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
@@ -51,11 +51,11 @@ contract ForkTest is DSTest {
     function testForksHaveSeparatedStorage() public {
         cheats.selectFork(forkA);
         // read state from forkA
-        assert(WETH.balanceOf(0x0000000000000000000000000000000000000000) != 1);
+        assert(WETH.balanceOf(0xcb540000000000000000000000000000000000000000) != 1);
 
         cheats.selectFork(forkB);
         // read state from forkB
-        uint256 forkBbalance = WETH.balanceOf(0x0000000000000000000000000000000000000000);
+        uint256 forkBbalance = WETH.balanceOf(0xcb540000000000000000000000000000000000000000);
         assert(forkBbalance != 1);
 
         cheats.selectFork(forkA);
@@ -63,11 +63,11 @@ contract ForkTest is DSTest {
         // modify state
         bytes32 value = bytes32(uint256(1));
         // "0x3617319a054d772f909f7c479a2cebe5066e836a939412e32403c99029b92eff" is the slot storing the balance of zero address for the weth contract
-        // `cast index address uint 0x0000000000000000000000000000000000000000 3`
+        // `cast index address uint 0xcb540000000000000000000000000000000000000000 3`
         bytes32 zero_address_balance_slot = 0x3617319a054d772f909f7c479a2cebe5066e836a939412e32403c99029b92eff;
         cheats.store(WETH_TOKEN_ADDR, zero_address_balance_slot, value);
         assertEq(
-            WETH.balanceOf(0x0000000000000000000000000000000000000000),
+            WETH.balanceOf(0xcb540000000000000000000000000000000000000000),
             1,
             "Cheatcode did not change value at the storage slot."
         );
@@ -77,7 +77,7 @@ contract ForkTest is DSTest {
         assert(forkBbalance != 1);
         // balance of forkB is untouched
         assertEq(
-            WETH.balanceOf(0x0000000000000000000000000000000000000000),
+            WETH.balanceOf(0xcb540000000000000000000000000000000000000000),
             forkBbalance,
             "Cheatcode did not change value at the storage slot."
         );

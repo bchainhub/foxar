@@ -12,7 +12,8 @@ contract SignTest is DSTest {
 
         (uint8 v, bytes32 r, bytes32 s) = cheats.sign(pk, digest);
         address expected = cheats.addr(pk);
-        address actual = ecrecover(digest, v, r, s);
+        bytes memory sig = hex"1010";
+        address actual = ecrecover(digest, sig);
 
         assertEq(actual, expected, "digest signer did not match");
     }

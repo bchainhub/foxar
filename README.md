@@ -9,12 +9,12 @@
 - [x] binder
 - [x] cast
 - [ ] chisel - David
-- [ ] cli
+- [ ] cli - Misha
 - [x] common
 - [x] config - Misha
 - [x] evm - David 
 - [x] fmt
-- [ ] forge - Misha
+- [x] forge - Misha
 - [x] macros
 - [x] ui
 - [x] utils - Misha

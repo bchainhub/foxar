@@ -63,10 +63,12 @@ pub static COMPILED_WITH_LIBS: Lazy<ProjectCompileOutput> = Lazy::new(|| {
 pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         energy_limit: 18446744073709551615,
-        network_id: None,
+        network_id: Some(1),
         tx_origin: Config::DEFAULT_SENDER,
         block_number: 1,
         block_timestamp: 1,
+        block_coinbase: Address::from_str("0xcb540000000000000000000000000000000000000000")
+            .unwrap(),
         ..Default::default()
     },
     sender: Config::DEFAULT_SENDER,

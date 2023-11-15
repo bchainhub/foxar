@@ -3884,16 +3884,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "libgoldilocks"
-version = "0.1.0"
-source = "git+https://github.com/todesstille/ed448-rs.git#c66694f11f995d0f57e04e8a9cce9668a771b767"
-dependencies = [
- "hex",
- "rand 0.8.5",
- "sha3",
-]
-
-[[package]]
 name = "libm"
 version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"

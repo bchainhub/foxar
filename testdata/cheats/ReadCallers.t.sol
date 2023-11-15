@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity >=;
+pragma solidity >= 1.1.0;
 
 import "ds-test/test.sol";
 import "./Cheats.sol";

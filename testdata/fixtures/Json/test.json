@@ -4,10 +4,10 @@
   "strArray": ["hai", "there"],
   "bool": true,
   "boolArray": [true, false],
-  "address": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "address": "000039Fd6e51aad88F6F4ce6aB8827279cffFb92266",
   "addressArray": [
-    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-    "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+    "0000f39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
   ],
   "H160NotAddress": "0000000000000000000000000000000000001337",
   "nestedObject": {

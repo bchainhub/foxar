@@ -107,7 +107,7 @@ contract ForkTest is DSTest {
         bytes32 tx = 0x67cbad73764049e228495a3f90144aab4a37cb4b5fd697dffc234aa5ed811ace;
 
         // account that sends ether in 2 transaction before tx
-        address account = 0xAe45a8240147E6179ec7c9f92c5A18F9a97B3fCA;
+        address account = 0xcb64ae45a8240147e6179ec7c9f92c5a18f9a97b3fca;
 
         assertEq(account.balance, 275780074926400862972);
 

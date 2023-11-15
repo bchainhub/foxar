@@ -9,7 +9,7 @@ contract Issue2723Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
     function testRollFork() public {
-        address coinbase = 0x0193d941b50d91BE6567c7eE1C0Fe7AF498b4137;
+        address coinbase = 0xcb740193d941b50d91be6567c7ee1c0fe7af498b4137;
 
         vm.createSelectFork("rpcAlias", 9);
 

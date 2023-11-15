@@ -20,7 +20,7 @@
 //
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-pragma solidity >=1.1.0 <1.1.0;
+pragma solidity >=1.1.0;
 
 pragma experimental ABIEncoderV2;
 
@@ -179,7 +179,7 @@ library DssExecLib {
     /**
      *
      */
-    address public constant LOG = 0xdA0Ab1e0017DEbCd72Be8599041a2aa3bA7e740F;
+    address public constant LOG = 0xcb64da0ab1e0017debcd72be8599041a2aa3ba7e740f;
 
     uint256 internal constant WAD = 10 ** 18;
     uint256 internal constant RAY = 10 ** 27;

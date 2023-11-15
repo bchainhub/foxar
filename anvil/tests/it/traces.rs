@@ -548,7 +548,7 @@ async fn test_trace_address_fork2() {
         "callType": "staticcall",
         "gas": "0x34237",
         "input": "0x70a082310000000000000000000000004b5ab61593a2401b1075b90c04cbcdd3f87ce011",
-        "to": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "to": "0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "value": "0x0"
       },
       "blockHash": "0xf689ba7749648b8c5c8f5eedd73001033f0aed7ea50b7c81048ad1533b8d3d73",
@@ -598,7 +598,7 @@ async fn test_trace_address_fork2() {
         "callType": "call",
         "gas": "0x324db",
         "input": "0xa9059cbb0000000000000000000000004b5ab61593a2401b1075b90c04cbcdd3f87ce0110000000000000000000000000000000000000000000000008b5116525f9edc3e",
-        "to": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "to": "0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "value": "0x0"
       },
       "blockHash": "0xf689ba7749648b8c5c8f5eedd73001033f0aed7ea50b7c81048ad1533b8d3d73",
@@ -624,7 +624,7 @@ async fn test_trace_address_fork2() {
         "callType": "staticcall",
         "gas": "0x30535",
         "input": "0x70a082310000000000000000000000004b5ab61593a2401b1075b90c04cbcdd3f87ce011",
-        "to": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "to": "0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "value": "0x0"
       },
       "blockHash": "0xf689ba7749648b8c5c8f5eedd73001033f0aed7ea50b7c81048ad1533b8d3d73",
