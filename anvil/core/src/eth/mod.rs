@@ -410,7 +410,7 @@ pub enum EthRequest {
     )]
     SetLogging(bool),
 
-    /// Set the minimum gas price for the node
+    /// Set the minimum energy price for the node
     #[cfg_attr(
         feature = "serde",
         serde(
@@ -495,7 +495,7 @@ pub enum EthRequest {
     )]
     EvmSetNextBlockTimeStamp(U256),
 
-    /// Set the exact gas limit that you want in the next block
+    /// Set the exact energy limit that you want in the next block
     #[cfg_attr(
         feature = "serde",
         serde(
@@ -915,7 +915,7 @@ mod tests {
     }
 
     #[test]
-    fn test_serde_custom_min_gas_price() {
+    fn test_serde_custom_min_energy_price() {
         let s = r#"{"method": "anvil_setMinGasPrice", "params": ["0x0"]}"#;
         let value: serde_json::Value = serde_json::from_str(s).unwrap();
         let _req = serde_json::from_value::<EthRequest>(value).unwrap();

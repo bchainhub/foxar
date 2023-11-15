@@ -226,7 +226,7 @@ impl BlockchainStorage {
         // create a dummy genesis block
         let partial_header = PartialHeader {
             timestamp,
-            gas_limit: env.block.energy_limit.to_ethers_u256(),
+            energy_limit: env.block.energy_limit.to_ethers_u256(),
             beneficiary: env.block.coinbase.into(),
             difficulty: env.block.difficulty.to_ethers_u256(),
             ..Default::default()
@@ -397,7 +397,7 @@ impl MinedTransaction {
     }
 
     pub fn geth_trace(&self, opts: GoCoreDebugTracingOptions) -> DefaultFrame {
-        self.info.traces.geth_trace(self.receipt.gas_used(), opts)
+        self.info.traces.geth_trace(self.receipt.energy_used(), opts)
     }
 }
 

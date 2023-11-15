@@ -179,7 +179,7 @@ impl ClientFork {
     }
 
     /// Sends `eth_call`
-    pub async fn estimate_gas(
+    pub async fn estimate_energy(
         &self,
         request: &EthTransactionRequest,
         block: Option<BlockNumber>,
@@ -190,7 +190,7 @@ impl ClientFork {
         if let BlockNumber::Number(num) = block {
             // check if this request was already been sent
             let key = (request.clone(), num.as_u64());
-            if let Some(res) = self.storage_read().eth_gas_estimations.get(&key).cloned() {
+            if let Some(res) = self.storage_read().eth_energy_estimations.get(&key).cloned() {
                 return Ok(res)
             }
         }
@@ -201,7 +201,7 @@ impl ClientFork {
         if let BlockNumber::Number(num) = block {
             // cache result
             let mut storage = self.storage_write();
-            storage.eth_gas_estimations.insert((request, num.as_u64()), res);
+            storage.eth_energy_estimations.insert((request, num.as_u64()), res);
         }
 
         Ok(res)
@@ -571,7 +571,7 @@ pub struct ForkedStorage {
     pub logs: HashMap<Filter, Vec<Log>>,
     pub geth_transaction_traces: HashMap<H256, GoCoreTrace>,
     pub block_traces: HashMap<u64, Vec<Trace>>,
-    pub eth_gas_estimations: HashMap<(Arc<EthTransactionRequest>, u64), U256>,
+    pub eth_energy_estimations: HashMap<(Arc<EthTransactionRequest>, u64), U256>,
     pub eth_call: HashMap<(Arc<EthTransactionRequest>, u64), Bytes>,
     pub code_at: HashMap<(Address, u64), Bytes>,
 }

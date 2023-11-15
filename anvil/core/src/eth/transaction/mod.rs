@@ -47,11 +47,11 @@ pub struct EthTransactionRequest {
     pub from: Option<Address>,
     /// to address
     pub to: Option<Address>,
-    /// legacy, gas Price
+    /// legacy, energy Price
     #[cfg_attr(feature = "serde", serde(default))]
-    pub gas_price: Option<U256>,
-    /// gas
-    pub gas: Option<U256>,
+    pub energy_price: Option<U256>,
+    ///energy 
+    pub energy: Option<U256>,
     /// value of th tx in wei
     pub value: Option<U256>,
     /// Any additional data sent
@@ -68,12 +68,12 @@ pub struct EthTransactionRequest {
 impl EthTransactionRequest {
     /// Converts the request into a [TypedTransactionRequest]
     pub fn into_typed_request(self) -> Option<TypedTransactionRequest> {
-        let EthTransactionRequest { to, gas_price, gas, value, data, nonce, network_id, .. } = self;
-        match gas_price {
+        let EthTransactionRequest { to, energy_price, energy, value, data, nonce, network_id, .. } = self;
+        match energy_price {
             Some(_) => Some(TypedTransactionRequest::Legacy(LegacyTransactionRequest {
                 nonce: nonce.unwrap_or(U256::zero()),
-                gas_price: gas_price.unwrap_or_default(),
-                gas_limit: gas.unwrap_or_default(),
+                energy_price: energy_price.unwrap_or_default(),
+                energy_limit: energy.unwrap_or_default(),
                 value: value.unwrap_or(U256::zero()),
                 input: data.unwrap_or_default(),
                 kind: match to {
@@ -169,8 +169,8 @@ impl open_fastrlp::Decodable for TransactionKind {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LegacyTransactionRequest {
     pub nonce: U256,
-    pub gas_price: U256,
-    pub gas_limit: U256,
+    pub energy_price: U256,
+    pub energy_limit: U256,
     pub kind: TransactionKind,
     pub value: U256,
     pub input: Bytes,
@@ -190,8 +190,8 @@ impl From<LegacyTransaction> for LegacyTransactionRequest {
         let network_id = tx.network_id();
         Self {
             nonce: tx.nonce,
-            gas_price: tx.gas_price,
-            gas_limit: tx.gas_limit,
+            energy_price: tx.energy_price,
+            energy_limit: tx.energy_limit,
             kind: tx.kind,
             value: tx.value,
             input: tx.input,
@@ -204,8 +204,8 @@ impl Encodable for LegacyTransactionRequest {
     fn rlp_append(&self, s: &mut RlpStream) {
         s.begin_list(7);
         s.append(&self.nonce);
-        s.append(&self.gas_price);
-        s.append(&self.gas_limit);
+        s.append(&self.energy_price);
+        s.append(&self.energy_limit);
         s.append(&self.kind);
         s.append(&self.value);
         s.append(&self.input.as_ref());
@@ -332,15 +332,15 @@ pub enum TypedTransaction {
 // == impl TypedTransaction ==
 
 impl TypedTransaction {
-    pub fn gas_price(&self) -> U256 {
+    pub fn energy_price(&self) -> U256 {
         match self {
-            TypedTransaction::Legacy(tx) => tx.gas_price,
+            TypedTransaction::Legacy(tx) => tx.energy_price,
         }
     }
 
-    pub fn gas_limit(&self) -> U256 {
+    pub fn energy_limit(&self) -> U256 {
         match self {
-            TypedTransaction::Legacy(tx) => tx.gas_limit,
+            TypedTransaction::Legacy(tx) => tx.energy_limit,
         }
     }
 
@@ -365,7 +365,7 @@ impl TypedTransaction {
 
     /// Max cost of the transaction
     pub fn max_cost(&self) -> U256 {
-        self.gas_limit().saturating_mul(self.gas_price())
+        self.energy_limit().saturating_mul(self.energy_price())
     }
 
     /// Returns a helper type that contains commonly used values as fields
@@ -375,8 +375,8 @@ impl TypedTransaction {
                 kind: t.kind,
                 input: t.input.clone(),
                 nonce: t.nonce,
-                gas_limit: t.gas_limit,
-                gas_price: Some(t.gas_price),
+                energy_limit: t.energy_limit,
+                energy_price: Some(t.energy_price),
                 value: t.value,
                 network_id: t.network_id(),
             },
@@ -499,8 +499,8 @@ impl open_fastrlp::Decodable for TypedTransaction {
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct LegacyTransaction {
     pub nonce: U256,
-    pub gas_price: U256,
-    pub gas_limit: U256,
+    pub energy_price: U256,
+    pub energy_limit: U256,
     pub network_id: u64,
     pub kind: TransactionKind,
     pub value: U256,
@@ -545,8 +545,8 @@ impl Encodable for LegacyTransaction {
     fn rlp_append(&self, s: &mut RlpStream) {
         s.begin_list(8);
         s.append(&self.nonce);
-        s.append(&self.gas_price);
-        s.append(&self.gas_limit);
+        s.append(&self.energy_price);
+        s.append(&self.energy_limit);
         s.append(&self.network_id);
         s.append(&self.kind);
         s.append(&self.value);
@@ -563,8 +563,8 @@ impl Decodable for LegacyTransaction {
 
         Ok(Self {
             nonce: rlp.val_at(0)?,
-            gas_price: rlp.val_at(1)?,
-            gas_limit: rlp.val_at(2)?,
+            energy_price: rlp.val_at(1)?,
+            energy_limit: rlp.val_at(2)?,
             network_id: rlp.val_at(3)?,
             kind: rlp.val_at(4)?,
             value: rlp.val_at(5)?,
@@ -579,8 +579,8 @@ pub struct TransactionEssentials {
     pub kind: TransactionKind,
     pub input: Bytes,
     pub nonce: U256,
-    pub gas_limit: U256,
-    pub gas_price: Option<U256>,
+    pub energy_limit: U256,
+    pub energy_price: Option<U256>,
     pub value: U256,
     pub network_id: u64,
 }
@@ -645,8 +645,8 @@ impl PendingTransaction {
             TypedTransaction::Legacy(tx) => {
                 let LegacyTransaction {
                     nonce,
-                    gas_price,
-                    gas_limit,
+                    energy_price,
+                    energy_limit,
                     value,
                     kind,
                     input,
@@ -660,8 +660,8 @@ impl PendingTransaction {
                     network_id: Some(*network_id),
                     nonce: Some(nonce.as_u64()),
                     value: (*value).to_ruint(),
-                    energy_price: (*gas_price).to_ruint(),
-                    energy_limit: gas_limit.as_u64(),
+                    energy_price: (*energy_price).to_ruint(),
+                    energy_limit: energy_limit.as_u64(),
                 }
             }
         }
@@ -735,8 +735,8 @@ mod tests {
         };
 
         assert_eq!(tx.input, Bytes::from_str("0x27dc297e800332e506f28f49a13c1edf087bdd6482d6cb3abdf2a4c455642aef1e98fc240000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000002d7b22444149223a313439332e37342c2254555344223a313438392e36362c2255534443223a313439322e34387d00000000000000000000000000000000000000").unwrap());
-        assert_eq!(tx.gas_price, U256::from(0xa));
-        assert_eq!(tx.gas_limit, U256::from(0xc350));
+        assert_eq!(tx.energy_price, U256::from(0xa));
+        assert_eq!(tx.energy_limit, U256::from(0xc350));
         assert_eq!(tx.nonce, U256::from(0x3));
         if let TransactionKind::Call(ref to) = tx.kind {
             assert_eq!(*to, "cb08095e7baea6a6c7c4c2dfeb977efac326af552d87".parse().unwrap());
@@ -785,8 +785,8 @@ mod tests {
         let bytes_first = &mut &hex::decode("f8d802843b9aca00830186a001960000c26ad91f4e7a0cad84c4b9315f420ca9217e315d87038d7ea4c6800080b8abeeb96ca19e8a77102767a41fc85a36afd5c61ccb09911cec5d3e86e193d9c5ae3a456401896b1b6055311536bf00a718568c744d8c1f9df59879e83350220ca188350220ca1850220ca188350220ca1350220ca18835b96ca19e8a77102767a41fc85a36afd5c61ccb09911cec5d3e86e193d9c5ae3a456401896b1b6055311536bf00a718568c744d8c1f9df59879e83350220ca188350220ca1850220ca188350220ca1350220ca18835").unwrap()[..];
         let expected = TypedTransaction::Legacy(LegacyTransaction {
             nonce: 2u64.into(),
-            gas_price: 1000000000u64.into(),
-            gas_limit: 100000u64.into(),
+            energy_price: 1000000000u64.into(),
+            energy_limit: 100000u64.into(),
             network_id: 1,
             kind: TransactionKind::Call(Address::from_slice(
                 &hex::decode("0000c26ad91f4e7a0cad84c4b9315f420ca9217e315d").unwrap()[..],
@@ -805,8 +805,8 @@ mod tests {
         let bytes_second = &mut &hex::decode("f8d801843b9aca00830186a001960000d3e8763675e4c425df46cc3b5c0f6cbdac3960468702769bb01b2a0080b8abeeb96ca19e84444444444444444444444444444444444444444444444444444444444444896b1b6055311536bf00a718568c744d8c1f9df59879e83350220ca188350220ca1850220ca188350220ca1350220ca18835b96ca19e8a77102767a41fc85a36afd5c61ccb09911cec5d3e86e193d9c5ae3a456401896b1b6055311536bf00a718568c744d8c1f9df59879e83350220ca188350220ca1850220ca188350220ca1350220ca18835").unwrap()[..];
         let expected = TypedTransaction::Legacy(LegacyTransaction {
             nonce: 1u64.into(),
-            gas_price: 1000000000u64.into(),
-            gas_limit: 100000u64.into(),
+            energy_price: 1000000000u64.into(),
+            energy_limit: 100000u64.into(),
             network_id: 1,
             kind: TransactionKind::Call(Address::from_slice(
                 &hex::decode("0000d3e8763675e4c425df46cc3b5c0f6cbdac396046").unwrap()[..],
@@ -825,8 +825,8 @@ mod tests {
         let bytes_third = &mut &hex::decode("f8d8038477359400839896800196cb44d3e8763675e4c425df46cc3b5c0f6cbdac39604687038d7ea4c6800080b8abeeb96ca19e84444444444444444444444444444444444444444444444444444444444444896b1b6055311536bf00a718568c744d8c1f9df59fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff35").unwrap()[..];
         let expected = TypedTransaction::Legacy(LegacyTransaction {
             nonce: 3u64.into(),
-            gas_price: 2000000000u64.into(),
-            gas_limit: 10000000u64.into(),
+            energy_price: 2000000000u64.into(),
+            energy_limit: 10000000u64.into(),
             network_id: 1,
             kind: TransactionKind::Call(Address::from_slice(
                 &hex::decode("cb44d3e8763675e4c425df46cc3b5c0f6cbdac396046").unwrap()[..],
@@ -846,8 +846,8 @@ mod tests {
         let bytes_fifth = &mut &hex::decode("f8d20f84832156008287fb03960000cf7f9e66af820a19257a2108375b180b0ec491678204d280b8abeeb96ca19e84444444444444444444444444444444444444444444444444444444444444896b1b6055311536bf00a718568c744d8c1f9df59fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff35").unwrap()[..];
         let expected = TypedTransaction::Legacy(LegacyTransaction {
             nonce: 15u64.into(),
-            gas_price: 2200000000u64.into(),
-            gas_limit: 34811u64.into(),
+            energy_price: 2200000000u64.into(),
+            energy_limit: 34811u64.into(),
             network_id: 3,
             kind: TransactionKind::Call(Address::from_slice(
                 &hex::decode("0000cf7f9e66af820a19257a2108375b180b0ec49167").unwrap()[..],

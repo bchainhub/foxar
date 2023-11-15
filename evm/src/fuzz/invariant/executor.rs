@@ -79,14 +79,14 @@ impl<'a> InvariantExecutor<'a> {
     }
 
     /// Fuzzes any deployed contract and checks any broken invariant at `invariant_address`
-    /// Returns a list of all the consumed gas and calldata of every invariant fuzz case
+    /// Returns a list of all the consumed energy and calldata of every invariant fuzz case
     pub fn invariant_fuzz(
         &mut self,
         invariant_contract: InvariantContract,
     ) -> eyre::Result<InvariantFuzzTestResult> {
         let (fuzz_state, targeted_contracts, strat) = self.prepare_fuzzing(&invariant_contract)?;
 
-        // Stores the consumed gas and calldata of every successful fuzz call.
+        // Stores the consumed energy and calldata of every successful fuzz call.
         let fuzz_cases: RefCell<Vec<FuzzedCases>> = RefCell::new(Default::default());
 
         // Stores data related to reverts or failed assertions of the test.
@@ -133,7 +133,7 @@ impl<'a> InvariantExecutor<'a> {
                 // Before each run, we must reset the backend state.
                 let mut executor = blank_executor.borrow().clone();
 
-                // Used for stat reports (eg. gas usage).
+                // Used for stat reports (eg. energy usage).
                 let mut fuzz_runs = Vec::with_capacity(self.config.depth as usize);
 
                 // Created contracts during a run.
@@ -176,7 +176,7 @@ impl<'a> InvariantExecutor<'a> {
 
                     fuzz_runs.push(FuzzCase {
                         calldata: calldata.clone(),
-                        gas: call_result.energy_used,
+                        energy: call_result.energy_used,
                         stipend: call_result.stipend,
                     });
 

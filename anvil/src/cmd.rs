@@ -166,9 +166,9 @@ impl NodeArgs {
         };
 
         NodeConfig::default()
-            .with_gas_limit(self.evm_opts.gas_limit)
-            .disable_block_gas_limit(self.evm_opts.disable_block_gas_limit)
-            .with_gas_price(self.evm_opts.gas_price)
+            .with_energy_limit(self.evm_opts.energy_limit)
+            .disable_block_energy_limit(self.evm_opts.disable_block_energy_limit)
+            .with_energy_price(self.evm_opts.energy_price)
             .with_hardfork(self.hardfork)
             .with_blocktime(self.block_time.map(Duration::from_secs))
             .with_no_mining(self.no_mining)
@@ -400,28 +400,28 @@ pub struct AnvilEvmArgs {
     #[clap(long, requires = "fork_url", help_heading = "Fork config")]
     pub no_storage_caching: bool,
 
-    /// The block gas limit.
-    #[clap(long, alias = "block-gas-limit", help_heading = "Environment config")]
-    pub gas_limit: Option<u64>,
+    /// The block energy limit.
+    #[clap(long, alias = "block-energy-limit", help_heading = "Environment config")]
+    pub energy_limit: Option<u64>,
 
-    /// Disable the `call.gas_limit <= block.gas_limit` constraint.
+    /// Disable the `call.energy_limit <= block.energy_limit` constraint.
     #[clap(
         long,
-        value_name = "DISABLE_GAS_LIMIT",
+        value_name = "DISABLE_ENERGY_LIMIT",
         help_heading = "Environment config",
-        alias = "disable-gas-limit",
-        conflicts_with = "gas_limit"
+        alias = "disable-energy-limit",
+        conflicts_with = "energy_limit"
     )]
-    pub disable_block_gas_limit: bool,
+    pub disable_block_energy_limit: bool,
 
     /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests. By
     /// default, it is 0x6000 (~25kb).
     #[clap(long, value_name = "CODE_SIZE", help_heading = "Environment config")]
     pub code_size_limit: Option<usize>,
 
-    /// The gas price.
+    /// The energy price.
     #[clap(long, help_heading = "Environment config")]
-    pub gas_price: Option<u64>,
+    pub energy_price: Option<u64>,
 
     /// The base fee in a block.
     #[clap(
@@ -430,7 +430,7 @@ pub struct AnvilEvmArgs {
         value_name = "FEE",
         help_heading = "Environment config"
     )]
-    pub block_base_fee_per_gas: Option<u64>,
+    pub block_base_fee_per_energy: Option<u64>,
 
     /// The chain ID.
     #[clap(long, alias = "chain", help_heading = "Environment config")]
@@ -653,12 +653,12 @@ mod tests {
     }
 
     #[test]
-    fn can_parse_disable_block_gas_limit() {
-        let args: NodeArgs = NodeArgs::parse_from(["anvil", "--disable-block-gas-limit"]);
-        assert!(args.evm_opts.disable_block_gas_limit);
+    fn can_parse_disable_block_energy_limit() {
+        let args: NodeArgs = NodeArgs::parse_from(["anvil", "--disable-block-energy-limit"]);
+        assert!(args.evm_opts.disable_block_energy_limit);
 
         let args =
-            NodeArgs::try_parse_from(["anvil", "--disable-block-gas-limit", "--gas-limit", "100"]);
+            NodeArgs::try_parse_from(["anvil", "--disable-block-energy-limit", "--energy-limit", "100"]);
         assert!(args.is_err());
     }
 }

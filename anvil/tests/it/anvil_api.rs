@@ -22,25 +22,25 @@ use std::{
 };
 
 #[tokio::test(flavor = "multi_thread")]
-async fn can_set_gas_price() {
+async fn can_set_energy_price() {
     let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
     let provider = handle.http_provider();
 
-    let gas_price = 1337u64.into();
-    api.anvil_set_min_gas_price(gas_price).await.unwrap();
-    assert_eq!(gas_price, provider.get_energy_price().await.unwrap());
+    let energy_price = 1337u64.into();
+    api.anvil_set_min_energy_price(energy_price).await.unwrap();
+    assert_eq!(energy_price, provider.get_energy_price().await.unwrap());
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn can_set_block_gas_limit() {
+async fn can_set_block_energy_limit() {
     let (api, _) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
 
-    let block_gas_limit = 1337u64.into();
-    assert!(api.evm_set_block_gas_limit(block_gas_limit).unwrap());
-    // Mine a new block, and check the new block gas limit
+    let block_energy_limit = 1337u64.into();
+    assert!(api.evm_set_block_energy_limit(block_energy_limit).unwrap());
+    // Mine a new block, and check the new block energy limit
     api.mine_one().await;
     let latest_block = api.block_by_number(BlockNumber::Latest).await.unwrap().unwrap();
-    assert_eq!(block_gas_limit, latest_block.energy_limit);
+    assert_eq!(block_energy_limit, latest_block.energy_limit);
 }
 
 // Ref <https://github.com/foundry-rs/foundry/issues/2341>
@@ -79,6 +79,7 @@ async fn can_impersonate_account() {
     let tx = TransactionRequest::new().from(impersonate).to(to).value(val);
 
     let res = provider.send_transaction(tx.clone(), None).await;
+    println!("{:?}", res);
     res.unwrap_err();
 
     api.anvil_impersonate_account(impersonate).await.unwrap();
@@ -437,8 +438,8 @@ async fn can_get_node_info() {
         transaction_order: "fees".to_owned(),
         environment: NodeEnvironment {
             chain_id: U256::from_str("0x7a69").unwrap(),
-            gas_limit: U256::from_str("0x1c9c380").unwrap(),
-            gas_price: U256::from_str("0x77359400").unwrap(),
+            energy_limit: U256::from_str("0x1c9c380").unwrap(),
+            energy_price: U256::from_str("0x77359400").unwrap(),
         },
         fork_config: NodeForkConfig {
             fork_url: None,

@@ -7,7 +7,7 @@ use crate::{
             mem::fork_db::ForkedDatabase,
             time::duration_since_unix_epoch,
         },
-        fees::INITIAL_GAS_PRICE,
+        fees::INITIAL_ENERGY_PRICE,
         pool::transactions::TransactionOrder,
     },
     genesis::Genesis,
@@ -84,12 +84,12 @@ const BANNER: &str = r"
 pub struct NodeConfig {
     /// Chain ID of the EVM chain
     pub chain_id: Option<u64>,
-    /// Default gas limit for all txs
-    pub gas_limit: U256,
-    /// If set to `true`, disables the block gas limit
-    pub disable_block_gas_limit: bool,
-    /// Default gas price for all txs
-    pub gas_price: Option<U256>,
+    /// Default energy limit for all txs
+    pub energy_limit: U256,
+    /// If set to `true`, disables the block energy limit
+    pub disable_block_energy_limit: bool,
+    /// Default energy price for all txs
+    pub energy_price: Option<U256>,
     /// The hardfork to use
     pub hardfork: Option<Hardfork>,
     /// Signer accounts that will be initialised with `genesis_balance` in the genesis block
@@ -250,7 +250,7 @@ Gas Price
 ==================
 {}
 "#,
-            Paint::green(format!("\n{}", self.get_gas_price()))
+            Paint::green(format!("\n{}", self.get_energy_price()))
         );
 
         let _ = write!(
@@ -260,7 +260,7 @@ Gas Limit
 ==================
 {}
 "#,
-            Paint::green(format!("\n{}", self.gas_limit))
+            Paint::green(format!("\n{}", self.energy_limit))
         );
 
         let _ = write!(
@@ -303,16 +303,16 @@ Genesis Timestamp
               "block_hash": fork.block_hash(),
               "chain_id": fork.chain_id(),
               "wallet": wallet_description,
-              "gas_price": format!("{}", self.get_gas_price()),
-              "gas_limit": format!("{}", self.gas_limit),
+              "energy_price": format!("{}", self.get_energy_price()),
+              "energy_limit": format!("{}", self.energy_limit),
             })
         } else {
             json!({
               "available_accounts": available_accounts,
               "private_keys": private_keys,
               "wallet": wallet_description,
-              "gas_price": format!("{}", self.get_gas_price()),
-              "gas_limit": format!("{}", self.gas_limit),
+              "energy_price": format!("{}", self.get_energy_price()),
+              "energy_limit": format!("{}", self.energy_limit),
               "genesis_timestamp": format!("{}", self.get_genesis_timestamp()),
             })
         }
@@ -336,9 +336,9 @@ impl Default for NodeConfig {
         let genesis_accounts = AccountGenerator::new(10).phrase(DEFAULT_MNEMONIC).gen();
         Self {
             chain_id: None,
-            gas_limit: U256::from(30_000_000),
-            disable_block_gas_limit: false,
-            gas_price: None,
+            energy_limit: U256::from(30_000_000),
+            disable_block_energy_limit: false,
+            energy_price: None,
             hardfork: None,
             signer_accounts: genesis_accounts.clone(),
             genesis_timestamp: None,
@@ -379,8 +379,8 @@ impl Default for NodeConfig {
 
 impl NodeConfig {
     /// Returns the base fee to use
-    pub fn get_gas_price(&self) -> U256 {
-        self.gas_price.unwrap_or_else(|| INITIAL_GAS_PRICE.into())
+    pub fn get_energy_price(&self) -> U256 {
+        self.energy_price.unwrap_or_else(|| INITIAL_ENERGY_PRICE.into())
     }
 
     /// Returns the base fee to use
@@ -428,28 +428,28 @@ impl NodeConfig {
         })
     }
 
-    /// Sets the gas limit
+    /// Sets the energy limit
     #[must_use]
-    pub fn with_gas_limit<U: Into<U256>>(mut self, gas_limit: Option<U>) -> Self {
-        if let Some(gas_limit) = gas_limit {
-            self.gas_limit = gas_limit.into();
+    pub fn with_energy_limit<U: Into<U256>>(mut self, energy_limit: Option<U>) -> Self {
+        if let Some(energy_limit) = energy_limit {
+            self.energy_limit = energy_limit.into();
         }
         self
     }
 
-    /// Disable block gas limit check
+    /// Disable block energy limit check
     ///
-    /// If set to `true` block gas limit will not be enforced
+    /// If set to `true` block energy limit will not be enforced
     #[must_use]
-    pub fn disable_block_gas_limit(mut self, disable_block_gas_limit: bool) -> Self {
-        self.disable_block_gas_limit = disable_block_gas_limit;
+    pub fn disable_block_energy_limit(mut self, disable_block_energy_limit: bool) -> Self {
+        self.disable_block_energy_limit = disable_block_energy_limit;
         self
     }
 
-    /// Sets the gas price
+    /// Sets the energy price
     #[must_use]
-    pub fn with_gas_price<U: Into<U256>>(mut self, gas_price: Option<U>) -> Self {
-        self.gas_price = gas_price.map(Into::into);
+    pub fn with_energy_price<U: Into<U256>>(mut self, energy_price: Option<U>) -> Self {
+        self.energy_price = energy_price.map(Into::into);
         self
     }
 
@@ -736,10 +736,10 @@ impl NodeConfig {
                 limit_contract_code_size: self.code_size_limit,
                 ..Default::default()
             },
-            block: BlockEnv { energy_limit: self.gas_limit.to_ruint(), ..Default::default() },
+            block: BlockEnv { energy_limit: self.energy_limit.to_ruint(), ..Default::default() },
             tx: TxEnv { network_id: self.get_network_id().into(), ..Default::default() },
         };
-        let fees = FeeManager::new(env.cfg.spec_id, self.get_gas_price());
+        let fees = FeeManager::new(env.cfg.spec_id, self.get_energy_price());
 
         let (db, fork): (Arc<tokio::sync::RwLock<dyn Db>>, Option<ClientFork>) =
             if let Some(eth_rpc_url) = self.eth_rpc_url.clone() {
@@ -812,9 +812,9 @@ latest block number: {latest_block}"
                     panic!("Failed to get block for block number: {fork_block_number}")
                 };
 
-                // we only use the gas limit value of the block if it is non-zero, since there are networks where this is not used and is always `0x0` which would inevitably result in `OutOfGas` errors as soon as the evm is about to record gas, See also <https://github.com/foundry-rs/foundry/issues/3247>
+                // we only use the energy limit value of the block if it is non-zero, since there are networks where this is not used and is always `0x0` which would inevitably result in `OutOfGas` errors as soon as the evm is about to record energy, See also <https://github.com/foundry-rs/foundry/issues/3247>
 
-                let gas_limit = if block.energy_limit.is_zero() {
+                let energy_limit = if block.energy_limit.is_zero() {
                     env.block.energy_limit
                 } else {
                     block.energy_limit.to_ruint()
@@ -825,16 +825,16 @@ latest block number: {latest_block}"
                     timestamp: block.timestamp.to_ruint(),
                     difficulty: block.difficulty.to_ruint(),
                     // ensures prevrandao is set
-                    energy_limit: gas_limit,
+                    energy_limit,
                     // Keep previous `coinbase` and `basefee` value
                     coinbase: env.block.coinbase,
                 };
 
-                // use remote gas price
-                if self.gas_price.is_none() {
-                    if let Ok(gas_price) = provider.get_energy_price().await {
-                        self.gas_price = Some(gas_price);
-                        fees.set_gas_price(gas_price);
+                // use remote energy price
+                if self.energy_price.is_none() {
+                    if let Ok(energy_price) = provider.get_energy_price().await {
+                        self.energy_price = Some(energy_price);
+                        fees.set_energy_price(energy_price);
                     }
                 }
 

@@ -136,11 +136,11 @@ async fn can_replace_transaction() {
 
     let tx = TransactionRequest::new().to(to).value(amount).from(from).nonce(nonce);
 
-    // send transaction with lower gas price
+    // send transaction with lower energy price
     let lower_priced_pending_tx =
         provider.send_transaction(tx.clone().energy_price(energy_price), None).await.unwrap();
 
-    // send the same transaction with higher gas price
+    // send the same transaction with higher energy price
     let higher_priced_pending_tx =
         provider.send_transaction(tx.energy_price(energy_price + 1u64), None).await.unwrap();
 
@@ -160,7 +160,7 @@ async fn can_replace_transaction() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn can_reject_too_high_gas_limits() {
+async fn can_reject_too_high_energy_limits() {
     let (api, handle) = spawn(NodeConfig::test()).await;
     let provider = handle.http_provider();
 
@@ -168,26 +168,26 @@ async fn can_reject_too_high_gas_limits() {
     let from = accounts[0].address();
     let to = accounts[1].address();
 
-    let gas_limit = api.gas_limit();
+    let energy_limit = api.energy_limit();
     let amount = handle.genesis_balance().checked_div(3u64.into()).unwrap();
 
     let tx = TransactionRequest::new().to(to).value(amount).from(from);
 
-    // send transaction with the exact gas limit
-    let pending = provider.send_transaction(tx.clone().energy(gas_limit), None).await;
+    // send transaction with the exact energy limit
+    let pending = provider.send_transaction(tx.clone().energy(energy_limit), None).await;
 
     pending.unwrap();
 
-    // send transaction with higher gas limit
-    let pending = provider.send_transaction(tx.clone().energy(gas_limit + 1u64), None).await;
+    // send transaction with higher energy limit
+    let pending = provider.send_transaction(tx.clone().energy(energy_limit + 1u64), None).await;
 
     assert!(pending.is_err());
     let err = pending.unwrap_err();
-    assert!(err.to_string().contains("gas too high"));
+    assert!(err.to_string().contains("energy too high"));
 
     api.anvil_set_balance(from, U256::MAX).await.unwrap();
 
-    let pending = provider.send_transaction(tx.energy(gas_limit), None).await;
+    let pending = provider.send_transaction(tx.energy(energy_limit), None).await;
     pending.unwrap();
 }
 
@@ -210,11 +210,11 @@ async fn can_reject_underpriced_replacement() {
 
     let tx = TransactionRequest::new().to(to).value(amount).from(from).nonce(nonce);
 
-    // send transaction with higher gas price
+    // send transaction with higher energy price
     let higher_priced_pending_tx =
         provider.send_transaction(tx.clone().energy_price(energy_price + 1u64), None).await.unwrap();
 
-    // send the same transaction with lower gas price
+    // send the same transaction with lower energy price
     let lower_priced_pending_tx = provider.send_transaction(tx.energy_price(energy_price), None).await;
 
     let replacement_err = lower_priced_pending_tx.unwrap_err();
@@ -824,9 +824,9 @@ async fn can_stream_pending_transactions() {
 }
 
 
-// ensures that the gas estimate is running on pending block by default
+// ensures that the energy estimate is running on pending block by default
 #[tokio::test(flavor = "multi_thread")]
-async fn estimates_gas_on_pending_by_default() {
+async fn estimates_energy_on_pending_by_default() {
     let (api, handle) = spawn(NodeConfig::test()).await;
 
     // disable auto mine
@@ -845,34 +845,34 @@ async fn estimates_gas_on_pending_by_default() {
 
     let tx =
         TransactionRequest::new().from(recipient).to(sender).value(1e10 as u64).data(vec![0x42]);
-    api.estimate_gas(tx.into(), None).await.unwrap();
+    api.estimate_energy(tx.into(), None).await.unwrap();
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn test_reject_gas_too_low() {
+async fn test_reject_energy_too_low() {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let provider = handle.http_provider();
 
     let account = handle.dev_accounts().next().unwrap();
 
-    let gas = 21_000u64 - 1;
+    let energy = 21_000u64 - 1;
     let tx = TransactionRequest::new()
         .to(Address::random())
         .value(U256::from(1337u64))
         .from(account)
-        .energy(gas);
+        .energy(energy);
 
     let resp = provider.send_transaction(tx, None).await;
 
     let err = resp.unwrap_err().to_string();
-    assert!(err.contains("intrinsic gas too low"));
+    assert!(err.contains("intrinsic energy too low"));
 }
 
 // <https://github.com/foundry-rs/foundry/issues/3783>
 #[tokio::test(flavor = "multi_thread")]
-async fn can_call_with_high_gas_limit() {
+async fn can_call_with_high_energy_limit() {
     let (_api, handle) =
-        spawn(NodeConfig::test().with_gas_limit(Some(U256::from(100_000_000)))).await;
+        spawn(NodeConfig::test().with_energy_limit(Some(U256::from(100_000_000)))).await;
     let provider = handle.http_provider();
 
     let wallet = handle.dev_wallets().next().unwrap();
@@ -896,11 +896,11 @@ async fn test_reject_eip1559_pre_london() {
     let wallet = handle.dev_wallets().next().unwrap();
     let client = Arc::new(SignerMiddleware::new(provider, wallet));
 
-    let gas_limit = api.gas_limit();
-    let energy_price = api.gas_price().unwrap();
+    let energy_limit = api.energy_limit();
+    let energy_price = api.energy_price().unwrap();
     let unsupported = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
         .unwrap()
-        .energy(gas_limit)
+        .energy(energy_limit)
         .energy_price(energy_price)
         .send()
         .await

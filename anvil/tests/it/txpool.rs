@@ -14,8 +14,8 @@ async fn geth_txpool() {
 
     let account = provider.get_accounts().await.unwrap()[0];
     let value: u64 = 42;
-    let gas_price: U256 = 221435145689u64.into();
-    let tx = TransactionRequest::new().to(account).from(account).value(value).energy_price(gas_price);
+    let energy_price: U256 = 221435145689u64.into();
+    let tx = TransactionRequest::new().to(account).from(account).value(value).energy_price(energy_price);
 
     // send a few transactions
     let mut txs = Vec::new();
@@ -34,7 +34,7 @@ async fn geth_txpool() {
     let summary = inspect.pending.get(&account).unwrap();
     for i in 0..10 {
         let tx_summary = summary.get(&i.to_string()).unwrap();
-        assert_eq!(tx_summary.energy_price, gas_price);
+        assert_eq!(tx_summary.energy_price, energy_price);
         assert_eq!(tx_summary.value, value.into());
         assert_eq!(tx_summary.energy, 21000.into());
         assert_eq!(tx_summary.to.unwrap(), account);

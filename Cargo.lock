@@ -827,10 +827,11 @@ checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
 
 [[package]]
 name = "cc"
-version = "1.0.84"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f8e7c90afad890484a21653d08b6e209ae34770fb5ee298f9c699fcc1e5c856"
+checksum = "f1174fb0b6ec23863f8b971027804a42614e347eafb0a95bf0b12cdae21fc4d0"
 dependencies = [
+ "jobserver",
  "libc",
 ]
 
@@ -1219,7 +1220,7 @@ checksum = "e496a50fda8aacccc86d7529e2c1e0892dbd0f898a6b5645b5561b89c3210efa"
 [[package]]
 name = "corebc"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "corebc-addressbook",
  "corebc-blockindex",
@@ -1234,7 +1235,7 @@ dependencies = [
 [[package]]
 name = "corebc-addressbook"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "corebc-core",
  "once_cell",
@@ -1245,7 +1246,7 @@ dependencies = [
 [[package]]
 name = "corebc-blockindex"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "corebc-core",
  "corebc-ylem",
@@ -1261,7 +1262,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "corebc-contract-abigen",
  "corebc-contract-derive",
@@ -1279,7 +1280,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract-abigen"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "Inflector",
  "corebc-blockindex",
@@ -1305,7 +1306,7 @@ dependencies = [
 [[package]]
 name = "corebc-contract-derive"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "Inflector",
  "corebc-contract-abigen",
@@ -1320,7 +1321,7 @@ dependencies = [
 [[package]]
 name = "corebc-core"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "arrayvec",
  "bytes",
@@ -1349,7 +1350,7 @@ dependencies = [
 [[package]]
 name = "corebc-middleware"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "async-trait",
  "auto_impl",
@@ -1375,7 +1376,7 @@ dependencies = [
 [[package]]
 name = "corebc-providers"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "async-trait",
  "auto_impl",
@@ -1413,7 +1414,7 @@ dependencies = [
 [[package]]
 name = "corebc-signers"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "async-trait",
  "coins-bip32",
@@ -1440,7 +1441,7 @@ dependencies = [
 [[package]]
 name = "corebc-ylem"
 version = "2.0.3"
-source = "git+https://github.com/core-coin/corebc-rs.git?branch=development#15b5e760c6f2f3e403c2b93adb923deb60f9c2a6"
+source = "git+https://github.com/core-coin/corebc-rs.git?branch=fix/transaction-serialization#e6ff34b9dccafacd9e3ff00e75c87bc730846f01"
 dependencies = [
  "cfg-if",
  "corebc-core",
@@ -3729,6 +3730,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af150ab688ff2122fcef229be89cb50dd66af9e01a4ff320cc137eecc9bacc38"
 
 [[package]]
+name = "jobserver"
+version = "0.1.27"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8c37f63953c4c63420ed5fd3d6d398c719489b9f872b9fa683262f8edd363c7d"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "js-sys"
 version = "0.3.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5695,9 +5705,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.38.22"
+version = "0.38.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "80109a168d9bc0c7f483083244543a6eb0dba02295d33ca268145e6190d6df0c"
+checksum = "9ad981d6c340a49cdc40a1028d9c6084ec7e9fa33fcb839cab656a267071e234"
 dependencies = [
  "bitflags 2.4.1",
  "errno",
@@ -7851,18 +7861,18 @@ dependencies = [
 
 [[package]]
 name = "zerocopy"
-version = "0.7.25"
+version = "0.7.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8cd369a67c0edfef15010f980c3cbe45d7f651deac2cd67ce097cd801de16557"
+checksum = "e97e415490559a91254a2979b4829267a57d2fcd741a98eee8b722fb57289aa0"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.7.25"
+version = "0.7.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2f140bda219a26ccc0cdb03dba58af72590c53b22642577d88a927bc5c87d6b"
+checksum = "dd7e48ccf166952882ca8bd778a43502c64f33bf94c12ebe2a7f08e5a0f6689f"
 dependencies = [
  "proc-macro2",
  "quote",

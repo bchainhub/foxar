@@ -22,8 +22,8 @@ impl From<TypedTransactionRequest> for EthersTypedTransactionRequest {
             TypedTransactionRequest::Legacy(tx) => {
                 let LegacyTransactionRequest {
                     nonce,
-                    gas_price,
-                    gas_limit,
+                    energy_price,
+                    energy_limit,
                     kind,
                     value,
                     input,
@@ -32,8 +32,8 @@ impl From<TypedTransactionRequest> for EthersTypedTransactionRequest {
                 EthersTypedTransactionRequest::Legacy(EthersLegacyTransactionRequest {
                     from: None,
                     to: kind.as_call().cloned().map(Into::into),
-                    energy: Some(gas_limit),
-                    energy_price: Some(gas_price),
+                    energy: Some(energy_limit),
+                    energy_price: Some(energy_price),
                     value: Some(value),
                     data: Some(input),
                     nonce: Some(nonce),
@@ -59,8 +59,8 @@ fn to_ethers_transaction_with_hash_and_sender(
             from,
             to: None,
             value: t.value,
-            energy_price: t.gas_price,
-            energy: t.gas_limit,
+            energy_price: t.energy_price,
+            energy: t.energy_limit,
             input: t.input.clone(),
             network_id: Some(t.network_id().into()),
             sig: t.signature.sig,
@@ -106,8 +106,8 @@ impl From<TransactionRequest> for EthTransactionRequest {
                 NameOrAddress::Name(_) => None,
                 NameOrAddress::Address(to) => Some(to),
             }),
-            gas_price: energy_price,
-            gas: energy,
+            energy_price: energy_price,
+            energy: energy,
             value,
             data,
             nonce,
@@ -118,12 +118,12 @@ impl From<TransactionRequest> for EthTransactionRequest {
 
 impl From<EthTransactionRequest> for TransactionRequest {
     fn from(req: EthTransactionRequest) -> Self {
-        let EthTransactionRequest { from, to, gas_price, gas, value, data, nonce, .. } = req;
+        let EthTransactionRequest { from, to, energy_price, energy, value, data, nonce, .. } = req;
         TransactionRequest {
             from,
             to: to.map(NameOrAddress::Address),
-            energy: gas,
-            energy_price: gas_price,
+            energy,
+            energy_price,
             value,
             data,
             nonce,

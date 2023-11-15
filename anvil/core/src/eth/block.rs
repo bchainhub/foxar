@@ -90,8 +90,8 @@ pub struct Header {
     pub logs_bloom: Bloom,
     pub difficulty: U256,
     pub number: U256,
-    pub gas_limit: U256,
-    pub gas_used: U256,
+    pub energy_limit: U256,
+    pub energy_used: U256,
     pub timestamp: u64,
     pub extra_data: Bytes,
     pub nonce: H64,
@@ -111,8 +111,8 @@ impl Header {
             logs_bloom: partial_header.logs_bloom,
             difficulty: partial_header.difficulty,
             number: partial_header.number,
-            gas_limit: partial_header.gas_limit,
-            gas_used: partial_header.gas_used,
+            energy_limit: partial_header.energy_limit,
+            energy_used: partial_header.energy_used,
             timestamp: partial_header.timestamp,
             extra_data: partial_header.extra_data,
             nonce: partial_header.nonce,
@@ -140,8 +140,8 @@ impl Header {
         length += self.logs_bloom.length();
         length += self.difficulty.length();
         length += self.number.length();
-        length += self.gas_limit.length();
-        length += self.gas_used.length();
+        length += self.energy_limit.length();
+        length += self.energy_used.length();
         length += self.timestamp.length();
         length += self.extra_data.length();
         length += self.nonce.length();
@@ -161,8 +161,8 @@ impl rlp::Encodable for Header {
         s.append(&self.logs_bloom);
         s.append(&self.difficulty);
         s.append(&self.number);
-        s.append(&self.gas_limit);
-        s.append(&self.gas_used);
+        s.append(&self.energy_limit);
+        s.append(&self.energy_used);
         s.append(&self.timestamp);
         s.append(&self.extra_data.as_ref());
         s.append(&self.nonce);
@@ -181,8 +181,8 @@ impl rlp::Decodable for Header {
             logs_bloom: rlp.val_at(6)?,
             difficulty: rlp.val_at(7)?,
             number: rlp.val_at(8)?,
-            gas_limit: rlp.val_at(9)?,
-            gas_used: rlp.val_at(10)?,
+            energy_limit: rlp.val_at(9)?,
+            energy_used: rlp.val_at(10)?,
             timestamp: rlp.val_at(11)?,
             extra_data: rlp.val_at::<Vec<u8>>(12)?.into(),
             nonce: rlp.val_at(13)?,
@@ -215,8 +215,8 @@ impl open_fastrlp::Encodable for Header {
         self.logs_bloom.encode(out);
         self.difficulty.encode(out);
         self.number.encode(out);
-        self.gas_limit.encode(out);
-        self.gas_used.encode(out);
+        self.energy_limit.encode(out);
+        self.energy_used.encode(out);
         self.timestamp.encode(out);
         self.extra_data.encode(out);
         self.nonce.encode(out);
@@ -237,8 +237,8 @@ impl open_fastrlp::Decodable for Header {
         let logs_bloom = <Bloom as open_fastrlp::Decodable>::decode(buf)?;
         let difficulty = <U256 as open_fastrlp::Decodable>::decode(buf)?;
         let number = <U256 as open_fastrlp::Decodable>::decode(buf)?;
-        let gas_limit = <U256 as open_fastrlp::Decodable>::decode(buf)?;
-        let gas_used = <U256 as open_fastrlp::Decodable>::decode(buf)?;
+        let energy_limit = <U256 as open_fastrlp::Decodable>::decode(buf)?;
+        let energy_used = <U256 as open_fastrlp::Decodable>::decode(buf)?;
         let timestamp = <u64 as open_fastrlp::Decodable>::decode(buf)?;
         let extra_data = <Bytes as open_fastrlp::Decodable>::decode(buf)?;
         let nonce = <H64 as open_fastrlp::Decodable>::decode(buf)?;
@@ -253,8 +253,8 @@ impl open_fastrlp::Decodable for Header {
             logs_bloom,
             difficulty,
             number,
-            gas_limit,
-            gas_used,
+            energy_limit,
+            energy_used,
             timestamp,
             extra_data,
             nonce,
@@ -272,8 +272,8 @@ pub struct PartialHeader {
     pub logs_bloom: Bloom,
     pub difficulty: U256,
     pub number: U256,
-    pub gas_limit: U256,
-    pub gas_used: U256,
+    pub energy_limit: U256,
+    pub energy_used: U256,
     pub timestamp: u64,
     pub extra_data: Bytes,
     pub nonce: H64,
@@ -289,8 +289,8 @@ impl From<Header> for PartialHeader {
             logs_bloom: header.logs_bloom,
             difficulty: header.difficulty,
             number: header.number,
-            gas_limit: header.gas_limit,
-            gas_used: header.gas_used,
+            energy_limit: header.energy_used,
+            energy_used: header.energy_used,
             timestamp: header.timestamp,
             extra_data: header.extra_data,
             nonce: header.nonce,
@@ -321,8 +321,8 @@ mod tests {
             logs_bloom: Default::default(),
             difficulty: Default::default(),
             number: 124u64.into(),
-            gas_limit: Default::default(),
-            gas_used: 1337u64.into(),
+            energy_limit: Default::default(),
+            energy_used: 1337u64.into(),
             timestamp: 0,
             extra_data: Default::default(),
             nonce: 99u64.to_be_bytes().into(),
@@ -350,8 +350,8 @@ mod tests {
             logs_bloom: Default::default(),
             difficulty: Default::default(),
             number: 124u64.into(),
-            gas_limit: Default::default(),
-            gas_used: 1337u64.into(),
+            energy_limit: Default::default(),
+            energy_used: 1337u64.into(),
             timestamp: 0,
             extra_data: Default::default(),
             nonce: H64::from_low_u64_be(99u64),
@@ -388,8 +388,8 @@ mod tests {
             logs_bloom: <[u8; 256]>::from_hex("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000").unwrap().into(),
             difficulty: 0x8aeu64.into(),
             number: 0xd05u64.into(),
-            gas_limit: 0x115cu64.into(),
-            gas_used: 0x15b3u64.into(),
+            energy_limit: 0x115cu64.into(),
+            energy_used: 0x15b3u64.into(),
             timestamp: 0x1a0au64,
             extra_data: hex::decode("7788").unwrap().into(),
             nonce: H64::from_low_u64_be(0x0),
@@ -416,8 +416,8 @@ mod tests {
             logs_bloom: <[u8; 256]>::from_hex("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000").unwrap().into(),
             difficulty: 0x8aeu64.into(),
             number: 0xd05u64.into(),
-            gas_limit: 0x115cu64.into(),
-            gas_used: 0x15b3u64.into(),
+            energy_limit: 0x115cu64.into(),
+            energy_used: 0x15b3u64.into(),
             timestamp: 0x1a0au64,
             extra_data: hex::decode("7788").unwrap().into(),
             nonce: H64::from_low_u64_be(0x0),

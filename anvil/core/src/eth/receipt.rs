@@ -63,7 +63,7 @@ impl Decodable for Log {
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct EIP658Receipt {
     pub status_code: u8,
-    pub gas_used: U256,
+    pub energy_used: U256,
     pub logs_bloom: Bloom,
     pub logs: Vec<Log>,
 }
@@ -72,7 +72,7 @@ impl Encodable for EIP658Receipt {
     fn rlp_append(&self, stream: &mut RlpStream) {
         stream.begin_list(4);
         stream.append(&self.status_code);
-        stream.append(&self.gas_used);
+        stream.append(&self.energy_used);
         stream.append(&self.logs_bloom);
         stream.append_list(&self.logs);
     }
@@ -82,7 +82,7 @@ impl Decodable for EIP658Receipt {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         let result = EIP658Receipt {
             status_code: rlp.val_at(0)?,
-            gas_used: rlp.val_at(1)?,
+            energy_used: rlp.val_at(1)?,
             logs_bloom: rlp.val_at(2)?,
             logs: rlp.list_at(3)?,
         };
@@ -100,14 +100,14 @@ pub enum TypedReceipt {
 // == impl TypedReceipt ==
 
 impl TypedReceipt {
-    /// Returns the gas used by the transactions
-    pub fn gas_used(&self) -> U256 {
+    /// Returns the energy used by the transactions
+    pub fn energy_used(&self) -> U256 {
         match self {
-            TypedReceipt::Legacy(r) => r.gas_used,
+            TypedReceipt::Legacy(r) => r.energy_used,
         }
     }
 
-    /// Returns the gas used by the transactions
+    /// Returns the energy used by the transactions
     pub fn logs_bloom(&self) -> &Bloom {
         match self {
             TypedReceipt::Legacy(r) => &r.logs_bloom,
@@ -183,7 +183,7 @@ mod tests {
         let mut data = vec![];
         let receipt = TypedReceipt::Legacy(EIP658Receipt {
             logs_bloom: [0; 256].into(),
-            gas_used: 0.into(),
+            energy_used: 0.into(),
             logs: Vec::new(),
             status_code: 1,
         });
@@ -212,7 +212,7 @@ mod tests {
 
         let expected = TypedReceipt::Legacy(EIP658Receipt {
             logs_bloom: [0; 256].into(),
-            gas_used: 0.into(),
+            energy_used: 0.into(),
             logs: Vec::new(),
             status_code: 1,
         });

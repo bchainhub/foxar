@@ -186,8 +186,8 @@ pub struct NodeInfo {
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct NodeEnvironment {
     pub chain_id: U256,
-    pub gas_limit: U256,
-    pub gas_price: U256,
+    pub energy_limit: U256,
+    pub energy_price: U256,
 }
 
 #[derive(Debug, Clone, Default, Eq, PartialEq)]

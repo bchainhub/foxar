@@ -185,7 +185,7 @@ async fn can_call_on_pending_block() {
     let accounts: Vec<Address> = handle.dev_wallets().map(|w| w.address()).collect();
     for i in 1..10 {
         api.anvil_set_coinbase(accounts[i % accounts.len()]).await.unwrap();
-        api.evm_set_block_gas_limit((30_000_000 + i).into()).unwrap();
+        api.evm_set_block_energy_limit((30_000_000 + i).into()).unwrap();
 
         api.anvil_mine(Some(1.into()), None).await.unwrap();
         tokio::time::sleep(Duration::from_secs(1)).await;
@@ -203,13 +203,13 @@ async fn can_call_on_pending_block() {
             .unwrap();
         assert_eq!(block.timestamp, block_timestamp);
 
-        let block_gas_limit = pending_contract
+        let block_energy_limit = pending_contract
             .get_current_block_gas_limit()
             .block(block_number)
             .call()
             .await
             .unwrap();
-        assert_eq!(block.energy_limit, block_gas_limit);
+        assert_eq!(block.energy_limit, block_energy_limit);
 
         let block_coinbase =
             pending_contract.get_current_block_coinbase().block(block_number).call().await.unwrap();
