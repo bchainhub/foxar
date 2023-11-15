@@ -20,7 +20,6 @@ async fn can_apply_genesis() {
   "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
   "gasLimit": "0x80000000",
   "difficulty": "0x20000",
-  "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
   "coinbase": "0x0000000000000000000000000000000000000000",
   "alloc": {
     "71562b71999873db5b286df957af199ec94617f7": {
@@ -37,7 +36,7 @@ async fn can_apply_genesis() {
 
     let provider = handle.http_provider();
 
-    assert_eq!(provider.get_chainid().await.unwrap(), 19763u64.into());
+    assert_eq!(provider.get_networkid().await.unwrap(), 19763u64.into());
 
     let addr: Address = "71562b71999873db5b286df957af199ec94617f7".parse().unwrap();
     let balance = provider.get_balance(addr, None).await.unwrap();

@@ -42,8 +42,6 @@ pub struct Genesis {
     #[serde(deserialize_with = "deserialize_stringified_u64")]
     pub difficulty: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub mix_hash: Option<H256>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub coinbase: Option<Address>,
     #[serde(default)]
     pub alloc: Alloc,
@@ -61,12 +59,6 @@ pub struct Genesis {
     pub gas_used: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parent_hash: Option<H256>,
-    #[serde(
-        default,
-        deserialize_with = "deserialize_stringified_numeric_opt",
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub base_fee_per_gas: Option<U256>,
 }
 
 impl Genesis {
@@ -81,13 +73,13 @@ impl Genesis {
     }
 
     pub fn chain_id(&self) -> Option<u64> {
-        self.config.as_ref().and_then(|c| c.chain_id)
+        self.config.as_ref().and_then(|c| c.network_id)
     }
 
     /// Applies all settings to the given `env`
     pub fn apply(&self, env: &mut Env) {
         if let Some(chain_id) = self.chain_id() {
-            env.cfg.network = foundry_evm::revm::primitives::Network::from(chain_id);
+            env.cfg.network_id = chain_id;
         }
         if let Some(timestamp) = self.timestamp {
             env.block.timestamp = rU256::from(timestamp);
@@ -160,7 +152,7 @@ impl From<GenesisAccount> for AccountInfo {
 #[serde(rename_all = "camelCase")]
 pub struct Config {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub chain_id: Option<u64>,
+    pub network_id: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub homestead_block: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -221,7 +213,7 @@ pub struct CliqueConfig {
 /// serde support for `secretKey` in genesis
 
 pub mod secret_key {
-    use corebc::{core::k256::SecretKey, signers::LocalWallet, types::Bytes};
+    use corebc::{core::libgoldilocks::SecretKey, signers::LocalWallet, types::Bytes};
     use serde::{
         de::{self},
         Deserialize, Deserializer, Serialize, Serializer,
@@ -232,7 +224,7 @@ pub mod secret_key {
         S: Serializer,
     {
         if let Some(wallet) = value {
-            Bytes::from(wallet.signer().to_bytes().as_ref()).serialize(serializer)
+            Bytes::from(wallet.signer().to_bytes()).serialize(serializer)
         } else {
             serializer.serialize_none()
         }
@@ -244,12 +236,10 @@ pub mod secret_key {
     {
         if let Some(s) = Option::<Bytes>::deserialize(deserializer)? {
             if s.is_empty() {
-                return Ok(None)
+                return Ok(None);
             }
-            SecretKey::from_bytes(s.as_ref().into())
-                .map_err(de::Error::custom)
-                .map(Into::into)
-                .map(Some)
+
+            Ok(Some(SecretKey::from_bytes(s.as_ref().into()).into()))
         } else {
             Ok(None)
         }
@@ -264,7 +254,7 @@ mod tests {
     fn can_parse_genesis_json() {
         let s = r#"{
     "config": {
-        "chainId": 19763,
+        "networkId": 19763,
         "homesteadBlock": 0,
         "eip150Block": 0,
         "eip155Block": 0,
@@ -277,10 +267,9 @@ mod tests {
     "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "gasLimit": "0x80000000",
     "difficulty": "0x20000",
-    "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "coinbase": "0x0000000000000000000000000000000000000000",
+    "coinbase": "00000000000000000000000000000000000000000000",
     "alloc": {
-        "71562b71999873db5b286df957af199ec94617f7": {
+        "cb6671562b71999873db5b286df957af199ec94617f7": {
             "balance": "0xffffffffffffffffffffffffff",
             "secretkey": "0x305b526d493844b63466be6d48a424ab83f5216011eef860acc6db4c1821adc9"
         }
@@ -297,6 +286,6 @@ mod tests {
         assert_eq!(gen.difficulty, 131072);
         assert_eq!(gen.alloc.accounts.len(), 1);
         let config = gen.config.unwrap();
-        assert_eq!(config.chain_id, Some(19763));
+        assert_eq!(config.network_id, Some(19763));
     }
 }

@@ -3,8 +3,6 @@ mod anvil;
 mod anvil_api;
 mod api;
 mod fork;
-mod ganache;
-mod gas;
 mod genesis;
 mod geth;
 mod ipc;

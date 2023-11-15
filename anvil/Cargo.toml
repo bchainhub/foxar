@@ -67,7 +67,6 @@ clap_complete_fig = "4"
 ethereum-forkid = "0.12"
 revm = { workspace = true, default-features = false, features = ["std", "serde", "memory_limit"] }
 
-
 [dev-dependencies]
 corebc = { workspace = true, features = ["abigen"]}
 corebc-ylem = { workspace = true, features = ["project-util", "full"]}

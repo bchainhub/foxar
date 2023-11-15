@@ -3,7 +3,7 @@ use anvil_core::eth::transaction::{
     LegacyTransaction, LegacyTransactionRequest, TypedTransaction, TypedTransactionRequest,
 };
 use corebc::{
-    core::k256::ecdsa::SigningKey,
+    core::libgoldilocks::SigningKey,
     prelude::{Address, Wallet},
     signers::Signer as EthersSigner,
     types::{
@@ -107,12 +107,20 @@ pub fn build_typed_transaction(
     let tx = match request {
         TypedTransactionRequest::Legacy(tx) => {
             let LegacyTransactionRequest {
-                nonce, gas_price, gas_limit, kind, value, input, ..
+                nonce,
+                gas_price,
+                gas_limit,
+                kind,
+                value,
+                input,
+                network_id,
+                ..
             } = tx;
             TypedTransaction::Legacy(LegacyTransaction {
                 nonce,
                 gas_price,
                 gas_limit,
+                network_id,
                 kind,
                 value,
                 input,

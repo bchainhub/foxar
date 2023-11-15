@@ -3,10 +3,10 @@ use anvil::{spawn, NodeConfig};
 use corebc::{
     contract::ContractInstance,
     prelude::{
-        Action, ContractFactory, GethTrace, GethTraceFrame, Middleware, Signer, SignerMiddleware,
+        Action, ContractFactory, GoCoreTrace, GoCoreTraceFrame, Middleware, Signer, SignerMiddleware,
         TransactionRequest,
     },
-    types::{ActionType, Address, GethDebugTracingCallOptions, Trace},
+    types::{ActionType, Address, GoCoreDebugTracingCallOptions, Trace},
     utils::hex,
 };
 use corebc_ylem::{project_util::TempProject, Artifact};
@@ -136,19 +136,19 @@ contract Contract {
 
     let traces = handle
         .http_provider()
-        .debug_trace_call(call.tx, None, GethDebugTracingCallOptions::default())
+        .debug_trace_call(call.tx, None, GoCoreDebugTracingCallOptions::default())
         .await
         .unwrap();
     match traces {
-        GethTrace::Known(traces) => match traces {
-            GethTraceFrame::Default(traces) => {
+        GoCoreTrace::Known(traces) => match traces {
+            GoCoreTraceFrame::Default(traces) => {
                 assert!(!traces.failed);
             }
             _ => {
                 unreachable!()
             }
         },
-        GethTrace::Unknown(_) => {
+        GoCoreTrace::Unknown(_) => {
             unreachable!()
         }
     }
@@ -164,7 +164,7 @@ async fn test_trace_address_fork() {
 
     let from: Address = "0x2e4777139254ff76db957e284b186a4507ff8c67".parse().unwrap();
     let to: Address = "0xe2f2a5c287993345a840db3b0845fbc70f5935a5".parse().unwrap();
-    let tx = TransactionRequest::new().to(to).from(from).data(input).gas(300_000);
+    let tx = TransactionRequest::new().to(to).from(from).data(input).energy(300_000);
 
     api.anvil_impersonate_account(from).await.unwrap();
 
@@ -380,7 +380,7 @@ async fn test_trace_address_fork2() {
 
     let from: Address = "0xa009fa1ac416ec02f6f902a3a4a584b092ae6123".parse().unwrap();
     let to: Address = "0x99999999d116ffa7d76590de2f427d8e15aeb0b8".parse().unwrap();
-    let tx = TransactionRequest::new().to(to).from(from).data(input).gas(350_000);
+    let tx = TransactionRequest::new().to(to).from(from).data(input).energy(350_000);
 
     api.anvil_impersonate_account(from).await.unwrap();
 

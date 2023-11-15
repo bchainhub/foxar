@@ -9,7 +9,7 @@ use corebc::{
     abi::{ethereum_types::BigEndianHash, AbiDecode},
     prelude::{Middleware, SignerMiddleware},
     types::{
-        transaction::eip2718::TypedTransaction, Address, BlockNumber, Eip1559TransactionRequest,
+        transaction::eip2718::TypedTransaction, Address, BlockNumber, 
         TransactionRequest, H256, U256, U64,
     },
     utils::hex,
@@ -23,24 +23,24 @@ use std::{
 
 #[tokio::test(flavor = "multi_thread")]
 async fn can_set_gas_price() {
-    let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Berlin))).await;
+    let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
     let provider = handle.http_provider();
 
     let gas_price = 1337u64.into();
     api.anvil_set_min_gas_price(gas_price).await.unwrap();
-    assert_eq!(gas_price, provider.get_gas_price().await.unwrap());
+    assert_eq!(gas_price, provider.get_energy_price().await.unwrap());
 }
 
 #[tokio::test(flavor = "multi_thread")]
 async fn can_set_block_gas_limit() {
-    let (api, _) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Berlin))).await;
+    let (api, _) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
 
     let block_gas_limit = 1337u64.into();
     assert!(api.evm_set_block_gas_limit(block_gas_limit).unwrap());
     // Mine a new block, and check the new block gas limit
     api.mine_one().await;
     let latest_block = api.block_by_number(BlockNumber::Latest).await.unwrap().unwrap();
-    assert_eq!(block_gas_limit, latest_block.gas_limit);
+    assert_eq!(block_gas_limit, latest_block.energy_limit);
 }
 
 // Ref <https://github.com/foundry-rs/foundry/issues/2341>
@@ -431,10 +431,9 @@ async fn can_get_node_info() {
         current_block_number: U64([0]),
         current_block_timestamp: 1,
         current_block_hash: block.hash.unwrap(),
-        hard_fork: SpecId::SHANGHAI,
+        hard_fork: SpecId::ISTANBUL,
         transaction_order: "fees".to_owned(),
         environment: NodeEnvironment {
-            base_fee: U256::from_str("0x3b9aca00").unwrap(),
             chain_id: U256::from_str("0x7a69").unwrap(),
             gas_limit: U256::from_str("0x1c9c380").unwrap(),
             gas_price: U256::from_str("0x77359400").unwrap(),
@@ -449,32 +448,3 @@ async fn can_get_node_info() {
     assert_eq!(node_info, expected_node_info);
 }
 
-#[tokio::test(flavor = "multi_thread")]
-async fn test_get_transaction_receipt() {
-    let (api, handle) = spawn(NodeConfig::test()).await;
-    let provider = handle.http_provider();
-
-    // set the base fee
-    let new_base_fee = U256::from(1_000);
-    api.anvil_set_next_block_base_fee_per_gas(new_base_fee).await.unwrap();
-
-    // send a EIP-1559 transaction
-    let tx =
-        TypedTransaction::Eip1559(Eip1559TransactionRequest::new().gas(U256::from(30_000_000)));
-    let receipt =
-        provider.send_transaction(tx.clone(), None).await.unwrap().await.unwrap().unwrap();
-
-    // the block should have the new base fee
-    let block = provider.get_block(BlockNumber::Latest).await.unwrap().unwrap();
-    assert_eq!(block.base_fee_per_gas.unwrap().as_u64(), new_base_fee.as_u64());
-
-    // mine block
-    api.evm_mine(None).await.unwrap();
-
-    // the transaction receipt should have the original effective gas price
-    let new_receipt = provider.get_transaction_receipt(receipt.transaction_hash).await.unwrap();
-    assert_eq!(
-        receipt.effective_gas_price.unwrap().as_u64(),
-        new_receipt.unwrap().effective_gas_price.unwrap().as_u64()
-    );
-}

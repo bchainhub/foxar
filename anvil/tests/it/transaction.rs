@@ -1,13 +1,11 @@
 use crate::abi::*;
 use anvil::{spawn, Hardfork, NodeConfig};
 use corebc::{
-    abi::ethereum_types::BigEndianHash,
     prelude::{
         signer::SignerMiddlewareError, BlockId, Middleware, Signer, SignerMiddleware,
         TransactionRequest,
     },
     types::{
-        transaction::eip2930::{AccessList, AccessListItem},
         Address, BlockNumber, Transaction, TransactionReceipt, H256, U256,
     },
 };
@@ -64,14 +62,14 @@ async fn can_order_transactions() {
 
     let amount = handle.genesis_balance().checked_div(2u64.into()).unwrap();
 
-    let gas_price = provider.get_gas_price().await.unwrap();
+    let energy_price = provider.get_energy_price().await.unwrap();
 
     // craft the tx with lower price
-    let tx = TransactionRequest::new().to(to).from(from).value(amount).gas_price(gas_price);
+    let tx = TransactionRequest::new().to(to).from(from).value(amount).energy_price(energy_price);
     let tx_lower = provider.send_transaction(tx, None).await.unwrap();
 
     // craft the tx with higher price
-    let tx = TransactionRequest::new().to(from).from(to).value(amount).gas_price(gas_price + 1);
+    let tx = TransactionRequest::new().to(from).from(to).value(amount).energy_price(energy_price + 1);
     let tx_higher = provider.send_transaction(tx, None).await.unwrap();
 
     // manually mine the block with the transactions
@@ -133,18 +131,18 @@ async fn can_replace_transaction() {
     let to = accounts[1].address();
 
     let nonce = provider.get_transaction_count(from, None).await.unwrap();
-    let gas_price = provider.get_gas_price().await.unwrap();
+    let energy_price = provider.get_energy_price().await.unwrap();
     let amount = handle.genesis_balance().checked_div(3u64.into()).unwrap();
 
     let tx = TransactionRequest::new().to(to).value(amount).from(from).nonce(nonce);
 
     // send transaction with lower gas price
     let lower_priced_pending_tx =
-        provider.send_transaction(tx.clone().gas_price(gas_price), None).await.unwrap();
+        provider.send_transaction(tx.clone().energy_price(energy_price), None).await.unwrap();
 
     // send the same transaction with higher gas price
     let higher_priced_pending_tx =
-        provider.send_transaction(tx.gas_price(gas_price + 1u64), None).await.unwrap();
+        provider.send_transaction(tx.energy_price(energy_price + 1u64), None).await.unwrap();
 
     // mine exactly one block
     api.mine_one().await;
@@ -176,12 +174,12 @@ async fn can_reject_too_high_gas_limits() {
     let tx = TransactionRequest::new().to(to).value(amount).from(from);
 
     // send transaction with the exact gas limit
-    let pending = provider.send_transaction(tx.clone().gas(gas_limit), None).await;
+    let pending = provider.send_transaction(tx.clone().energy(gas_limit), None).await;
 
     pending.unwrap();
 
     // send transaction with higher gas limit
-    let pending = provider.send_transaction(tx.clone().gas(gas_limit + 1u64), None).await;
+    let pending = provider.send_transaction(tx.clone().energy(gas_limit + 1u64), None).await;
 
     assert!(pending.is_err());
     let err = pending.unwrap_err();
@@ -189,7 +187,7 @@ async fn can_reject_too_high_gas_limits() {
 
     api.anvil_set_balance(from, U256::MAX).await.unwrap();
 
-    let pending = provider.send_transaction(tx.gas(gas_limit), None).await;
+    let pending = provider.send_transaction(tx.energy(gas_limit), None).await;
     pending.unwrap();
 }
 
@@ -207,17 +205,17 @@ async fn can_reject_underpriced_replacement() {
     let to = accounts[1].address();
 
     let nonce = provider.get_transaction_count(from, None).await.unwrap();
-    let gas_price = provider.get_gas_price().await.unwrap();
+    let energy_price = provider.get_energy_price().await.unwrap();
     let amount = handle.genesis_balance().checked_div(3u64.into()).unwrap();
 
     let tx = TransactionRequest::new().to(to).value(amount).from(from).nonce(nonce);
 
     // send transaction with higher gas price
     let higher_priced_pending_tx =
-        provider.send_transaction(tx.clone().gas_price(gas_price + 1u64), None).await.unwrap();
+        provider.send_transaction(tx.clone().energy_price(energy_price + 1u64), None).await.unwrap();
 
     // send the same transaction with lower gas price
-    let lower_priced_pending_tx = provider.send_transaction(tx.gas_price(gas_price), None).await;
+    let lower_priced_pending_tx = provider.send_transaction(tx.energy_price(energy_price), None).await;
 
     let replacement_err = lower_priced_pending_tx.unwrap_err();
     assert!(replacement_err.to_string().contains("replacement transaction underpriced"));
@@ -242,7 +240,6 @@ async fn can_deploy_greeter_http() {
 
     let greeter_contract = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
         .unwrap()
-        .legacy()
         .send()
         .await
         .unwrap();
@@ -364,7 +361,6 @@ async fn can_deploy_greeter_ws() {
 
     let greeter_contract = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
         .unwrap()
-        .legacy()
         .send()
         .await
         .unwrap();
@@ -389,7 +385,6 @@ async fn can_deploy_get_code() {
 
     let greeter_contract = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
         .unwrap()
-        .legacy()
         .send()
         .await
         .unwrap();
@@ -505,7 +500,7 @@ async fn can_handle_multiple_concurrent_transfers_with_same_nonce() {
     let nonce = provider.get_transaction_count(from, None).await.unwrap();
 
     // explicitly set the nonce
-    let tx = TransactionRequest::new().to(to).value(100u64).from(from).nonce(nonce).gas(21_000u64);
+    let tx = TransactionRequest::new().to(to).value(100u64).from(from).nonce(nonce).energy(21_000u64);
     let mut tasks = Vec::new();
     for _ in 0..10 {
         let provider = provider.clone();
@@ -537,7 +532,7 @@ async fn can_handle_multiple_concurrent_deploys_with_same_nonce() {
     let mut tx =
         Greeter::deploy(Arc::clone(&client), "Hello World!".to_string()).unwrap().deployer.tx;
     tx.set_nonce(nonce);
-    tx.set_gas(300_000u64);
+    tx.set_energy(300_000u64);
 
     for _ in 0..10 {
         let client = Arc::clone(&client);
@@ -578,11 +573,11 @@ async fn can_handle_multiple_concurrent_transactions_with_same_nonce() {
     let mut deploy_tx =
         Greeter::deploy(Arc::clone(&client), "Hello World!".to_string()).unwrap().deployer.tx;
     deploy_tx.set_nonce(nonce);
-    deploy_tx.set_gas(300_000u64);
+    deploy_tx.set_energy(300_000u64);
 
     let mut set_greeting_tx = greeter_contract.set_greeting("Hello".to_string()).tx;
     set_greeting_tx.set_nonce(nonce);
-    set_greeting_tx.set_gas(300_000u64);
+    set_greeting_tx.set_energy(300_000u64);
 
     for idx in 0..10 {
         let client = Arc::clone(&client);
@@ -828,99 +823,6 @@ async fn can_stream_pending_transactions() {
     }
 }
 
-#[tokio::test(flavor = "multi_thread")]
-async fn test_tx_access_list() {
-    /// returns a String representation of the AccessList, with sorted
-    /// keys (address) and storage slots
-    fn access_list_to_sorted_string(a: AccessList) -> String {
-        let mut a = a.0;
-        a.sort_by_key(|v| v.address);
-
-        let a = a
-            .iter_mut()
-            .map(|v| {
-                v.storage_keys.sort();
-                (v.address, std::mem::take(&mut v.storage_keys))
-            })
-            .collect::<Vec<_>>();
-
-        format!("{a:?}")
-    }
-
-    /// asserts that the two access lists are equal, by comparing their sorted
-    /// string representation
-    fn assert_access_list_eq(a: AccessList, b: AccessList) {
-        assert_eq!(access_list_to_sorted_string(a), access_list_to_sorted_string(b))
-    }
-
-    // We want to test a couple of things:
-    //     - When calling a contract with no storage read/write, it shouldn't be in the AL
-    //     - When a contract calls a contract, the latter one should be in the AL
-    //     - No precompiles should be in the AL
-    //     - The sender shouldn't be in the AL
-    let (_api, handle) = spawn(NodeConfig::test()).await;
-
-    let wallet = handle.dev_wallets().next().unwrap();
-    let client = Arc::new(SignerMiddleware::new(handle.http_provider(), wallet));
-
-    let sender = Address::random();
-    let other_acc = Address::random();
-    let multicall = MulticallContract::deploy(client.clone(), ()).unwrap().send().await.unwrap();
-    let simple_storage =
-        SimpleStorage::deploy(client.clone(), "foo".to_string()).unwrap().send().await.unwrap();
-
-    // when calling `setValue` on SimpleStorage, both the `lastSender` and `_value` storages are
-    // modified The `_value` is a `string`, so the storage slots here (small string) are `0x1`
-    // and `keccak(0x1)`
-    let set_value_tx = simple_storage.set_value("bar".to_string()).from(sender).tx;
-    let access_list = client.create_access_list(&set_value_tx, None).await.unwrap();
-    assert_access_list_eq(
-        access_list.access_list,
-        AccessList::from(vec![AccessListItem {
-            address: simple_storage.address(),
-            storage_keys: vec![
-                H256::zero(),
-                H256::from_uint(&(1u64.into())),
-                "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6"
-                    .parse()
-                    .unwrap(),
-            ],
-        }]),
-    );
-
-    // With a subcall that fetches the balances of an account (`other_acc`), only the address
-    // of this account should be in the Access List
-    let call_tx = multicall.get_eth_balance(other_acc).from(sender).tx;
-    let access_list = client.create_access_list(&call_tx, None).await.unwrap();
-    assert_access_list_eq(
-        access_list.access_list,
-        AccessList::from(vec![AccessListItem { address: other_acc, storage_keys: vec![] }]),
-    );
-
-    // With a subcall to another contract, the AccessList should be the same as when calling the
-    // subcontract directly (given that the proxy contract doesn't read/write any state)
-    let subcall_tx = multicall
-        .aggregate(vec![Call {
-            target: simple_storage.address(),
-            call_data: set_value_tx.data().unwrap().clone(),
-        }])
-        .from(sender)
-        .tx;
-    let access_list = client.create_access_list(&subcall_tx, None).await.unwrap();
-    assert_access_list_eq(
-        access_list.access_list,
-        AccessList::from(vec![AccessListItem {
-            address: simple_storage.address(),
-            storage_keys: vec![
-                H256::zero(),
-                H256::from_uint(&(1u64.into())),
-                "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6"
-                    .parse()
-                    .unwrap(),
-            ],
-        }]),
-    );
-}
 
 // ensures that the gas estimate is running on pending block by default
 #[tokio::test(flavor = "multi_thread")]
@@ -958,7 +860,7 @@ async fn test_reject_gas_too_low() {
         .to(Address::random())
         .value(U256::from(1337u64))
         .from(account)
-        .gas(gas);
+        .energy(gas);
 
     let resp = provider.send_transaction(tx, None).await;
 
@@ -982,24 +884,24 @@ async fn can_call_with_high_gas_limit() {
         .await
         .unwrap();
 
-    let greeting = greeter_contract.greet().gas(60_000_000u64).call().await.unwrap();
+    let greeting = greeter_contract.greet().energy(60_000_000u64).call().await.unwrap();
     assert_eq!("Hello World!", greeting);
 }
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_reject_eip1559_pre_london() {
-    let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Berlin))).await;
+    let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
     let provider = handle.http_provider();
 
     let wallet = handle.dev_wallets().next().unwrap();
     let client = Arc::new(SignerMiddleware::new(provider, wallet));
 
     let gas_limit = api.gas_limit();
-    let gas_price = api.gas_price().unwrap();
+    let energy_price = api.gas_price().unwrap();
     let unsupported = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
         .unwrap()
-        .gas(gas_limit)
-        .gas_price(gas_price)
+        .energy(gas_limit)
+        .energy_price(energy_price)
         .send()
         .await
         .unwrap_err()
@@ -1008,7 +910,6 @@ async fn test_reject_eip1559_pre_london() {
 
     let greeter_contract = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
         .unwrap()
-        .legacy()
         .send()
         .await
         .unwrap();

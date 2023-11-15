@@ -1,10 +1,10 @@
 use corebc::{
     addressbook::contract,
-    types::{Address, Chain},
+    types::{Address, Network},
 };
 
 /// Returns a set of various contract addresses
-pub fn contract_addresses(chain: Chain) -> Vec<Address> {
+pub fn contract_addresses(chain: Network) -> Vec<Address> {
     vec![
         contract("dai").unwrap().address(chain).unwrap(),
         contract("usdc").unwrap().address(chain).unwrap(),

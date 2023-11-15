@@ -9,6 +9,7 @@ use crate::{
 };
 use bytes::{BufMut, Bytes, BytesMut};
 use corebc::{
+    core::libgoldilocks::SigningKey,
     abi::{AbiEncode, Address, ParamType, Token},
     prelude::{LocalWallet, Signer, H176, *},
     signers::{
@@ -22,7 +23,6 @@ use corebc::{
     utils,
 };
 use foundry_common::{fmt::*, RpcUrl};
-use libgoldilocks::SigningKey;
 use revm::{
     interpreter::CreateInputs,
     primitives::{Account, TransactTo},
