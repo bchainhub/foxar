@@ -45,7 +45,7 @@ impl TransactionOrder {
     pub fn priority(&self, tx: &TypedTransaction) -> TransactionPriority {
         match self {
             TransactionOrder::Fifo => TransactionPriority::default(),
-            TransactionOrder::Fees => TransactionPriority(tx.gas_price()),
+            TransactionOrder::Fees => TransactionPriority(tx.energy_price()),
         }
     }
 }
@@ -92,9 +92,9 @@ impl PoolTransaction {
         self.pending_transaction.hash()
     }
 
-    /// Returns the gas pric of this transaction
-    pub fn gas_price(&self) -> U256 {
-        self.pending_transaction.transaction.gas_price()
+    /// Returns the energy pric of this transaction
+    pub fn energy_price(&self) -> U256 {
+        self.pending_transaction.transaction.energy_price()
     }
 }
 
@@ -154,7 +154,7 @@ impl PendingTransactions {
             .and_then(|hash| self.waiting_queue.get(hash))
         {
             // check if underpriced
-            if tx.transaction.gas_price() < replace.transaction.gas_price() {
+            if tx.transaction.energy_price() < replace.transaction.energy_price() {
                 warn!(target: "txpool", "pending replacement transaction underpriced [{:?}]", tx.transaction.hash());
                 return Err(PoolError::ReplacementUnderpriced(Box::new(
                     tx.transaction.as_ref().clone(),
@@ -476,14 +476,14 @@ impl ReadyTransactions {
             let ready = self.ready_tx.read();
             for to_remove in remove_hashes.iter().filter_map(|hash| ready.get(hash)) {
                 // if we're attempting to replace a transaction that provides the exact same markers
-                // (addr + nonce) then we check for gas price
+                // (addr + nonce) then we check for energy price
                 if to_remove.provides() == tx.provides {
                     // check if underpriced
-                    if tx.pending_transaction.transaction.gas_price() <= to_remove.gas_price() {
+                    if tx.pending_transaction.transaction.energy_price() <= to_remove.energy_price() {
                         warn!(target: "txpool", "ready replacement transaction underpriced [{:?}]", tx.hash());
                         return Err(PoolError::ReplacementUnderpriced(Box::new(tx.clone())))
                     } else {
-                        trace!(target: "txpool", "replacing ready transaction [{:?}] with higher gas price [{:?}]", to_remove.transaction.transaction.hash(), tx.hash());
+                        trace!(target: "txpool", "replacing ready transaction [{:?}] with higher energy price [{:?}]", to_remove.transaction.transaction.hash(), tx.hash());
                     }
                 }
 
@@ -680,8 +680,8 @@ impl ReadyTransaction {
         &self.transaction.transaction.provides
     }
 
-    pub fn gas_price(&self) -> U256 {
-        self.transaction.transaction.gas_price()
+    pub fn energy_price(&self) -> U256 {
+        self.transaction.transaction.energy_price()
     }
 }
 

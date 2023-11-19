@@ -38,7 +38,7 @@ pub struct Genesis {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub extra_data: Option<Bytes>,
     #[serde(deserialize_with = "deserialize_stringified_u64")]
-    pub gas_limit: u64,
+    pub energy_limit: u64,
     #[serde(deserialize_with = "deserialize_stringified_u64")]
     pub difficulty: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -56,7 +56,7 @@ pub struct Genesis {
         deserialize_with = "deserialize_stringified_u64_opt",
         skip_serializing_if = "Option::is_none"
     )]
-    pub gas_used: Option<u64>,
+    pub energy_used: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parent_hash: Option<H256>,
 }
@@ -91,7 +91,7 @@ impl Genesis {
             env.block.coinbase = h176_to_b176(coinbase);
         }
         env.block.difficulty = rU256::from(self.difficulty);
-        env.block.energy_limit = rU256::from(self.gas_limit);
+        env.block.energy_limit = rU256::from(self.energy_limit);
     }
 
     /// Returns all private keys from the genesis accounts, if they exist
@@ -265,7 +265,7 @@ mod tests {
     "nonce": "0xdeadbeefdeadbeef",
     "timestamp": "0x0",
     "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "gasLimit": "0x80000000",
+    "energyLimit": "0x80000000",
     "difficulty": "0x20000",
     "coinbase": "00000000000000000000000000000000000000000000",
     "alloc": {
@@ -275,14 +275,14 @@ mod tests {
         }
     },
     "number": "0x0",
-    "gasUsed": "0x0",
+    "energyUsed": "0x0",
     "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
 }
 "#;
 
         let gen: Genesis = serde_json::from_str(s).unwrap();
         assert_eq!(gen.nonce, Some(16045690984833335023));
-        assert_eq!(gen.gas_limit, 2147483648);
+        assert_eq!(gen.energy_limit, 2147483648);
         assert_eq!(gen.difficulty, 131072);
         assert_eq!(gen.alloc.accounts.len(), 1);
         let config = gen.config.unwrap();

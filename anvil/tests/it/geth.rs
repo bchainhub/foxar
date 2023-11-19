@@ -72,20 +72,20 @@ async fn test_geth_revert_transaction() {
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore]
-async fn test_geth_low_gas_limit() {
+async fn test_geth_low_energy_limit() {
     let provider = Arc::new(Provider::try_from("http://127.0.0.1:8545").unwrap());
 
     let account = provider.get_accounts().await.unwrap().remove(0);
 
-    let gas = 21_000u64 - 1;
+    let energy = 21_000u64 - 1;
     let tx = TransactionRequest::new()
         .to(Address::random())
         .value(U256::from(1337u64))
         .from(account)
-        .energy(gas);
+        .energy(energy);
 
     let resp = provider.send_transaction(tx, None).await;
 
     let err = resp.unwrap_err().to_string();
-    assert!(err.contains("intrinsic gas too low"));
+    assert!(err.contains("intrinsic energy too low"));
 }

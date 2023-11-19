@@ -198,9 +198,9 @@ pub fn handle_expect_emit(state: &mut Cheatcodes, log: RawLog, address: &Address
 pub struct ExpectedCallData {
     /// The expected value sent in the call
     pub value: Option<U256>,
-    /// The expected gas supplied to the call
+    /// The expected energy supplied to the call
     pub energy: Option<u64>,
-    /// The expected *minimum* gas supplied to the call
+    /// The expected *minimum* energy supplied to the call
     pub min_energy: Option<u64>,
     /// The number of times the call is expected to be made.
     /// If the type of call is `NonCount`, this is the lower bound for the number of calls
@@ -283,8 +283,8 @@ fn expect_call(
     target: H176,
     calldata: Vec<u8>,
     value: Option<U256>,
-    gas: Option<u64>,
-    min_gas: Option<u64>,
+    energy: Option<u64>,
+    min_energy: Option<u64>,
     count: u64,
     call_type: ExpectedCallType,
 ) -> Result {
@@ -300,7 +300,7 @@ fn expect_call(
             );
             expecteds.insert(
                 calldata,
-                (ExpectedCallData { value, energy: gas, min_energy: min_gas, count, call_type }, 0),
+                (ExpectedCallData { value, energy: energy, min_energy: min_energy, count, call_type }, 0),
             );
             Ok(Bytes::new())
         }
@@ -322,8 +322,8 @@ fn expect_call(
                     (
                         ExpectedCallData {
                             value,
-                            energy: gas,
-                            min_energy: min_gas,
+                            energy: energy,
+                            min_energy: min_energy,
                             count,
                             call_type,
                         },
@@ -426,7 +426,7 @@ pub fn apply<DB: DatabaseExt>(
         ),
         HEVMCalls::ExpectCall4(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 gas
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
             // to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
@@ -443,7 +443,7 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::ExpectCall5(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 gas
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
             // to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
@@ -460,7 +460,7 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::ExpectCallMinGas0(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 gas
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
             // to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
@@ -477,7 +477,7 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::ExpectCallMinGas1(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 gas
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
             // to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
@@ -493,7 +493,7 @@ pub fn apply<DB: DatabaseExt>(
             )
         }
         HEVMCalls::MockCall0(inner) => {
-            // TODO: Does this increase gas usage?
+            // TODO: Does this increase energy usage?
             if let Err(err) = data.journaled_state.load_account(h176_to_b176(inner.0), data.db) {
                 return Some(Err(err.into()))
             }

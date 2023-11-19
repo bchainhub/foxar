@@ -20,7 +20,7 @@ use std::{cell::RefCell, rc::Rc};
 /// The [`revm::Inspector`] used when transacting in the evm
 #[derive(Debug, Clone, Default)]
 pub struct Inspector {
-    pub gas: Option<Rc<RefCell<EnergyInspector>>>,
+    pub energy: Option<Rc<RefCell<EnergyInspector>>>,
     pub tracer: Option<Tracer>,
     /// collects all `console.sol` logs
     pub logs: LogCollector,
@@ -48,9 +48,9 @@ impl Inspector {
         if self.tracer.is_none() {
             self = self.with_tracing()
         }
-        let gas_inspector = Rc::new(RefCell::new(EnergyInspector::default()));
-        self.gas = Some(gas_inspector.clone());
-        self.tracer = self.tracer.map(|tracer| tracer.with_steps_recording(gas_inspector));
+        let energy_inspector = Rc::new(RefCell::new(EnergyInspector::default()));
+        self.energy = Some(energy_inspector.clone());
+        self.tracer = self.tracer.map(|tracer| tracer.with_steps_recording(energy_inspector));
 
         self
     }
@@ -65,7 +65,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
     ) -> InstructionResult {
         call_inspectors!(
             inspector,
-            [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
+            [&mut self.energy.as_deref().map(|energy| energy.borrow_mut()), &mut self.tracer],
             { inspector.initialize_interp(interp, data, is_static) }
         );
         InstructionResult::Continue
@@ -79,7 +79,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
     ) -> InstructionResult {
         call_inspectors!(
             inspector,
-            [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
+            [&mut self.energy.as_deref().map(|energy| energy.borrow_mut()), &mut self.tracer],
             {
                 inspector.step(interp, data, is_static);
             }
@@ -97,7 +97,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.tracer,
                 Some(&mut self.logs)
             ],
@@ -116,7 +116,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
     ) -> InstructionResult {
         call_inspectors!(
             inspector,
-            [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
+            [&mut self.energy.as_deref().map(|energy| energy.borrow_mut()), &mut self.tracer],
             {
                 inspector.step_end(interp, data, is_static, eval);
             }
@@ -133,7 +133,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
         call_inspectors!(
             inspector,
             [
-                &mut self.gas.as_deref().map(|gas| gas.borrow_mut()),
+                &mut self.energy.as_deref().map(|energy| energy.borrow_mut()),
                 &mut self.tracer,
                 Some(&mut self.logs)
             ],
@@ -149,19 +149,19 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
         &mut self,
         data: &mut EVMData<'_, DB>,
         inputs: &CallInputs,
-        remaining_gas: Energy,
+        remaining_energy: Energy,
         ret: InstructionResult,
         out: Bytes,
         is_static: bool,
     ) -> (InstructionResult, Energy, Bytes) {
         call_inspectors!(
             inspector,
-            [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
+            [&mut self.energy.as_deref().map(|energy| energy.borrow_mut()), &mut self.tracer],
             {
-                inspector.call_end(data, inputs, remaining_gas, ret, out.clone(), is_static);
+                inspector.call_end(data, inputs, remaining_energy, ret, out.clone(), is_static);
             }
         );
-        (ret, remaining_gas, out)
+        (ret, remaining_energy, out)
     }
 
     fn create(
@@ -171,7 +171,7 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
     ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         call_inspectors!(
             inspector,
-            [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
+            [&mut self.energy.as_deref().map(|energy| energy.borrow_mut()), &mut self.tracer],
             {
                 inspector.create(data, call);
             }
@@ -186,17 +186,17 @@ impl<DB: Database> revm::Inspector<DB> for Inspector {
         inputs: &CreateInputs,
         status: InstructionResult,
         address: Option<B176>,
-        gas: Energy,
+        energy: Energy,
         retdata: Bytes,
     ) -> (InstructionResult, Option<B176>, Energy, Bytes) {
         call_inspectors!(
             inspector,
-            [&mut self.gas.as_deref().map(|gas| gas.borrow_mut()), &mut self.tracer],
+            [&mut self.energy.as_deref().map(|energy| energy.borrow_mut()), &mut self.tracer],
             {
-                inspector.create_end(data, inputs, status, address, gas, retdata.clone());
+                inspector.create_end(data, inputs, status, address, energy, retdata.clone());
             }
         );
-        (status, address, gas, retdata)
+        (status, address, energy, retdata)
     }
 }
 

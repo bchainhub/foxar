@@ -106,7 +106,7 @@ pub fn find_anchor_branch(
     loc: &SourceLocation,
 ) -> eyre::Result<(ItemAnchor, ItemAnchor)> {
     // NOTE(onbjerg): We use `SpecId::LATEST` here since it does not matter; the only difference
-    // is the gas cost.
+    // is the energy cost.
     let opcode_infos = spec_opcode_energy(SpecId::LATEST);
 
     let mut anchors: Option<(ItemAnchor, ItemAnchor)> = None;

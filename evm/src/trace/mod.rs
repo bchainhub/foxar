@@ -167,7 +167,7 @@ impl CallTraceArena {
         let mut acc = DefaultFrame {
             // If the top-level trace succeeded, then it was a success
             failed: !main_trace.success,
-            gas: receipt_energy_used,
+            energy: receipt_energy_used,
             return_value: main_trace.output.to_bytes(),
             ..Default::default()
         };
@@ -417,8 +417,8 @@ impl From<&CallTraceStep> for StructLog {
         StructLog {
             depth: step.depth,
             error: step.error.clone(),
-            gas: step.energy,
-            gas_cost: step.energy_cost,
+            energy: step.energy,
+            energy_cost: step.energy_cost,
             memory: Some(convert_memory(step.memory.data())),
             op: step.op.to_string(),
             pc: step.pc as u64,

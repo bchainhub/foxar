@@ -20,8 +20,8 @@ use tracing::trace;
 /// Maximum number of entries in the fee history cache
 pub const MAX_FEE_HISTORY_CACHE_SIZE: u64 = 2048u64;
 
-/// Initial default gas price for the first block
-pub const INITIAL_GAS_PRICE: u64 = 1_875_000_000;
+/// Initial default energy price for the first block
+pub const INITIAL_ENERGY_PRICE: u64 = 1_875_000_000;
 
 /// Bounds the amount the base fee can change between blocks.
 pub const BASE_FEE_CHANGE_DENOMINATOR: u64 = 8;
@@ -42,17 +42,17 @@ pub struct FeeManager {
     /// The base price to use Pre London
     ///
     /// This will be constant value unless changed manually
-    gas_price: Arc<RwLock<U256>>,
+    energy_price: Arc<RwLock<U256>>,
     elasticity: Arc<RwLock<f64>>,
 }
 
 // === impl FeeManager ===
 
 impl FeeManager {
-    pub fn new(spec_id: SpecId, gas_price: U256) -> Self {
+    pub fn new(spec_id: SpecId, energy_price: U256) -> Self {
         Self {
             spec_id,
-            gas_price: Arc::new(RwLock::new(gas_price)),
+            energy_price: Arc::new(RwLock::new(energy_price)),
             elasticity: Arc::new(RwLock::new(default_elasticity())),
         }
     }
@@ -61,15 +61,15 @@ impl FeeManager {
         *self.elasticity.read()
     }
 
-    /// Calculates the current gas price
-    pub fn gas_price(&self) -> U256 {
-        *self.gas_price.read()
+    /// Calculates the current energy price
+    pub fn energy_price(&self) -> U256 {
+        *self.energy_price.read()
     }
 
-    /// Returns the current gas price
-    pub fn set_gas_price(&self, price: U256) {
-        let mut gas = self.gas_price.write();
-        *gas = price;
+    /// Returns the current energy price
+    pub fn set_energy_price(&self, price: U256) {
+        let mut energy = self.energy_price.write();
+        *energy = price;
     }
 }
 
@@ -131,7 +131,7 @@ impl FeeHistoryService {
         };
 
         let mut block_number: Option<u64> = None;
-        let mut item = FeeHistoryCacheItem { gas_used_ratio: 0f64, rewards: Vec::new() };
+        let mut item = FeeHistoryCacheItem { energy_used_ratio: 0f64, rewards: Vec::new() };
 
         let current_block = self.storage_info.block(hash);
         let current_receipts = self.storage_info.receipts(hash);
@@ -139,25 +139,25 @@ impl FeeHistoryService {
         if let (Some(block), Some(receipts)) = (current_block, current_receipts) {
             block_number = Some(block.header.number.as_u64());
 
-            let gas_used = block.header.gas_used.as_u64() as f64;
-            let gas_limit = block.header.gas_limit.as_u64() as f64;
+            let energy_used = block.header.energy_used.as_u64() as f64;
+            let energy_limit = block.header.energy_limit.as_u64() as f64;
 
-            let gas_target = gas_limit / elasticity;
-            item.gas_used_ratio = gas_used / (gas_target * elasticity);
+            let energy_target = energy_limit / elasticity;
+            item.energy_used_ratio = energy_used / (energy_target * elasticity);
 
-            // extract useful tx info (gas_used, effective_reward)
+            // extract useful tx info (energy_used, effective_reward)
             let mut transactions: Vec<(u64, u64)> = receipts
                 .iter()
                 .enumerate()
                 .map(|(i, receipt)| {
-                    let gas_used = receipt.gas_used().as_u64();
+                    let energy_used = receipt.energy_used().as_u64();
                     let effective_reward = match block.transactions.get(i).map(|tx| &tx.transaction)
                     {
-                        Some(TypedTransaction::Legacy(t)) => t.gas_price.as_u64(),
+                        Some(TypedTransaction::Legacy(t)) => t.energy_price.as_u64(),
                         None => 0,
                     };
 
-                    (gas_used, effective_reward)
+                    (energy_used, effective_reward)
                 })
                 .collect();
 
@@ -168,11 +168,11 @@ impl FeeHistoryService {
             item.rewards = reward_percentiles
                 .into_iter()
                 .filter_map(|p| {
-                    let target_gas = (p * gas_used / 100f64) as u64;
-                    let mut sum_gas = 0;
-                    for (gas_used, effective_reward) in transactions.iter().cloned() {
-                        sum_gas += gas_used;
-                        if target_gas <= sum_gas {
+                    let target_energy = (p * energy_used / 100f64) as u64;
+                    let mut sum_energy = 0;
+                    for (energy_used, effective_reward) in transactions.iter().cloned() {
+                        sum_energy += energy_used;
+                        if target_energy <= sum_energy {
                             return Some(effective_reward)
                         }
                     }
@@ -228,52 +228,52 @@ pub type FeeHistoryCache = Arc<Mutex<BTreeMap<u64, FeeHistoryCacheItem>>>;
 /// A single item in the whole fee history cache
 #[derive(Debug, Clone)]
 pub struct FeeHistoryCacheItem {
-    pub gas_used_ratio: f64,
+    pub energy_used_ratio: f64,
     pub rewards: Vec<u64>,
 }
 
 #[derive(Default, Clone)]
 pub struct FeeDetails {
-    pub gas_price: Option<U256>,
+    pub energy_price: Option<U256>,
 }
 
 impl FeeDetails {
     /// All values zero
     pub fn zero() -> Self {
-        Self { gas_price: Some(U256::zero()) }
+        Self { energy_price: Some(U256::zero()) }
     }
 
-    /// If neither `gas_price` nor `max_fee_per_gas` is `Some`, this will set both to `0`
+    /// If neither `energy_price` nor `max_fee_per_energy` is `Some`, this will set both to `0`
     pub fn or_zero_fees(self) -> Self {
-        let FeeDetails { gas_price } = self;
+        let FeeDetails { energy_price } = self;
 
-        let no_fees = gas_price.is_none();
-        let gas_price = if no_fees { Some(U256::zero()) } else { gas_price };
+        let no_fees = energy_price.is_none();
+        let energy_price = if no_fees { Some(U256::zero()) } else { energy_price };
 
-        Self { gas_price }
+        Self { energy_price }
     }
 
     /// Turns this type into a tuple
     pub fn split(self) -> Option<U256> {
-        let Self { gas_price } = self;
-        gas_price
+        let Self { energy_price } = self;
+        energy_price
     }
 
-    pub fn gas_price(&self) -> Option<U256> {
-        self.gas_price
+    pub fn energy_price(&self) -> Option<U256> {
+        self.energy_price
     }
 
-    /// Creates a new instance from the request's gas related values
-    pub fn new(request_gas_price: Option<U256>) -> Result<FeeDetails, BlockchainError> {
-        let gas_price = request_gas_price;
-        Ok(FeeDetails { gas_price })
+    /// Creates a new instance from the request's energy related values
+    pub fn new(request_energy_price: Option<U256>) -> Result<FeeDetails, BlockchainError> {
+        let energy_price = request_energy_price;
+        Ok(FeeDetails { energy_price })
     }
 }
 
 impl fmt::Debug for FeeDetails {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         write!(fmt, "Fees {{ ")?;
-        write!(fmt, "gaPrice: {:?}, ", self.gas_price)?;
+        write!(fmt, "gaPrice: {:?}, ", self.energy_price)?;
         write!(fmt, "}}")?;
         Ok(())
     }

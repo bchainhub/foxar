@@ -6,3 +6,8 @@
 - [x] server - No tests in this crate to fix
 - [x] src
 - [ ] tests
+
+
+## Known problems
+
+Right now if we call .hash() on transactions, it will always append the network_id at the end of the rlp. Fix later

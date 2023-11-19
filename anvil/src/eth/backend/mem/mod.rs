@@ -490,24 +490,24 @@ impl Backend {
         self.env.read().cfg.spec_id
     }
 
-    /// Returns the block gas limit
-    pub fn gas_limit(&self) -> U256 {
+    /// Returns the block energy limit
+    pub fn energy_limit(&self) -> U256 {
         self.env().read().block.energy_limit.to_ethers_u256()
     }
 
-    /// Sets the block gas limit
-    pub fn set_gas_limit(&self, gas_limit: U256) {
-        self.env().write().block.energy_limit = gas_limit.to_ruint();
+    /// Sets the block energy limit
+    pub fn set_energy_limit(&self, energy_limit: U256) {
+        self.env().write().block.energy_limit = energy_limit.to_ruint();
     }
 
-    /// Returns the current gas price
-    pub fn gas_price(&self) -> U256 {
-        self.fees.gas_price()
+    /// Returns the current energy price
+    pub fn energy_price(&self) -> U256 {
+        self.fees.energy_price()
     }
 
-    /// Sets the gas price
-    pub fn set_gas_price(&self, price: U256) {
-        self.fees.set_gas_price(price)
+    /// Sets the energy price
+    pub fn set_energy_price(&self, price: U256) {
+        self.fees.set_energy_price(price)
     }
 
     pub fn elasticity(&self) -> f64 {
@@ -697,7 +697,7 @@ impl Backend {
             block_env: env.block.clone(),
             cfg_env: env.cfg,
             parent_hash: storage.best_hash,
-            gas_used: U256::zero(),
+            energy_used: U256::zero(),
             enable_steps_tracing: self.enable_steps_tracing,
         };
 
@@ -747,7 +747,7 @@ impl Backend {
                     block_env: env.block.clone(),
                     cfg_env: env.cfg.clone(),
                     parent_hash: best_hash,
-                    gas_used: U256::zero(),
+                    energy_used: U256::zero(),
                     enable_steps_tracing: self.enable_steps_tracing,
                 };
                 let executed_tx = executor.execute();
@@ -791,7 +791,7 @@ impl Backend {
                     if let Some(ref contract) = info.contract_address {
                         node_info!("    Contract created: {:?}", contract);
                     }
-                    node_info!("    Gas used: {}", receipt.gas_used());
+                    node_info!("    Gas used: {}", receipt.energy_used());
                     match info.exit {
                         return_ok!() => (),
                         InstructionResult::OutOfFund => {
@@ -826,7 +826,7 @@ impl Backend {
                             }
                         }
                         InstructionResult::OutOfEnergy => {
-                            node_info!("    Error: ran out of gas");
+                            node_info!("    Error: ran out of energy");
                         }
                         reason => {
                             node_info!("    Error: failed due to {:?}", reason);
@@ -899,15 +899,15 @@ impl Backend {
     ) -> Result<(InstructionResult, Option<Output>, u64, State), BlockchainError> {
         self.with_database_at(block_request, |state, block| {
             let block_number = block.number.to_ethers_u256().as_u64();
-            let (exit, out, gas, state) = match overrides {
+            let (exit, out, energy, state) = match overrides {
                 None => self.call_with_state(state, request, fee_details, block),
                 Some(overrides) => {
                     let state = state::apply_state_override(overrides, state)?;
                     self.call_with_state(state, request, fee_details, block)
                 },
             }?;
-            trace!(target: "backend", "call return {:?} out: {:?} gas {} on block {}", exit, out, gas, block_number);
-            Ok((exit, out, gas, state))
+            trace!(target: "backend", "call return {:?} out: {:?} energy {} on block {}", exit, out, energy, block_number);
+            Ok((exit, out, energy, state))
         }).await?
     }
 
@@ -917,21 +917,21 @@ impl Backend {
         fee_details: FeeDetails,
         block_env: BlockEnv,
     ) -> Env {
-        let EthTransactionRequest { from, to, gas, value, data, nonce, .. } = request;
+        let EthTransactionRequest { from, to, energy, value, data, nonce, .. } = request;
 
-        let FeeDetails { gas_price } = fee_details;
+        let FeeDetails { energy_price } = fee_details;
 
-        let gas_limit = gas.unwrap_or(block_env.energy_limit.to_ethers_u256());
+        let energy_limit = energy.unwrap_or(block_env.energy_limit.to_ethers_u256());
         let mut env = self.env.read().clone();
         env.block = block_env;
 
-        let gas_price = gas_price.unwrap_or_else(|| self.gas_price());
+        let energy_price = energy_price.unwrap_or_else(|| self.energy_price());
         let caller = from.unwrap_or_default();
 
         env.tx = TxEnv {
             caller: caller.into(),
-            energy_limit: gas_limit.as_u64(),
-            energy_price: gas_price.to_ruint(),
+            energy_limit: energy_limit.as_u64(),
+            energy_price: energy_price.to_ruint(),
             transact_to: match to {
                 Some(addr) => TransactTo::Call(addr.into()),
                 None => TransactTo::Create(CreateScheme::Create),
@@ -970,7 +970,7 @@ impl Backend {
         let state = result_and_state.state;
         let state: hashbrown::HashMap<H176, Account> =
             state.into_iter().map(|kv| (kv.0.into(), kv.1)).collect();
-        let (exit_reason, gas_used, out) = match result_and_state.result {
+        let (exit_reason, energy_used, out) = match result_and_state.result {
             ExecutionResult::Success { reason, energy_used, output, .. } => {
                 (eval_to_instruction_result(reason), energy_used, Some(output))
             }
@@ -982,7 +982,7 @@ impl Backend {
             }
         };
         inspector.print_logs();
-        Ok((exit_reason, out, gas_used, state))
+        Ok((exit_reason, out, energy_used, state))
     }
 
     pub async fn call_with_tracing(
@@ -1003,7 +1003,7 @@ impl Backend {
                     Ok(result_and_state) => result_and_state,
                     Err(e) => return Err(e.into()),
                 };
-            let (exit_reason, gas_used, out, ) = match result_and_state.result {
+            let (exit_reason, energy_used, out, ) = match result_and_state.result {
                 ExecutionResult::Success { reason, energy_used, output, .. } => {
                     (eval_to_instruction_result(reason), energy_used, Some(output), )
                 },
@@ -1014,8 +1014,8 @@ impl Backend {
                     (halt_to_instruction_result(reason), energy_used, None)
                 },
             };
-            let res = inspector.tracer.unwrap_or_default().traces.geth_trace(gas_used.into(), opts);
-            trace!(target: "backend", "trace call return {:?} out: {:?} gas {} on block {}", exit_reason, out, gas_used, block_number);
+            let res = inspector.tracer.unwrap_or_default().traces.geth_trace(energy_used.into(), opts);
+            trace!(target: "backend", "trace call return {:?} out: {:?} energy {} on block {}", exit_reason, out, energy_used, block_number);
             Ok(res)
         })
         .await?
@@ -1324,8 +1324,8 @@ impl Backend {
             logs_bloom,
             difficulty,
             number,
-            gas_limit,
-            gas_used,
+            energy_limit,
+            energy_used,
             timestamp,
             extra_data,
             nonce,
@@ -1340,8 +1340,8 @@ impl Backend {
             transactions_root,
             receipts_root,
             number: Some(number.as_u64().into()),
-            energy_used: gas_used,
-            energy_limit: gas_limit,
+            energy_used: energy_used,
+            energy_limit: energy_limit,
             extra_data,
             logs_bloom: Some(logs_bloom),
             timestamp: timestamp.into(),
@@ -1422,7 +1422,7 @@ impl Backend {
                             coinbase: block.header.beneficiary.into(),
                             timestamp: rU256::from(block.header.timestamp),
                             difficulty: block.header.difficulty.to_ruint(),
-                            energy_limit: block.header.gas_limit.to_ruint(),
+                            energy_limit: block.header.energy_limit.to_ruint(),
                         };
                         f(state, block)
                     })
@@ -1447,7 +1447,7 @@ impl Backend {
                         coinbase: block.header.beneficiary.into(),
                         timestamp: rU256::from(block.header.timestamp),
                         difficulty: block.header.difficulty.to_ruint(),
-                        energy_limit: block.header.gas_limit.to_ruint(),
+                        energy_limit: block.header.energy_limit.to_ruint(),
                     };
                     return Ok(f(Box::new(state), block));
                 }
@@ -1689,21 +1689,21 @@ impl Backend {
         let MinedTransaction { info, receipt, block_hash, .. } =
             self.blockchain.storage.read().transactions.get(&hash)?.clone();
 
-        let EIP658Receipt { status_code, gas_used, logs_bloom, logs } = receipt.into();
+        let EIP658Receipt { status_code, energy_used, logs_bloom, logs } = receipt.into();
 
         let index = info.transaction_index as usize;
 
         let block = self.blockchain.storage.read().blocks.get(&block_hash).cloned()?;
 
-        // TODO store cumulative gas used in receipt instead
+        // TODO store cumulative energy used in receipt instead
         let receipts = self.get_receipts(block.transactions.iter().map(|tx| tx.hash()));
 
-        let mut cumulative_gas_used = U256::zero();
+        let mut cumulative_energy_used = U256::zero();
         for receipt in receipts.iter().take(index + 1) {
-            cumulative_gas_used = cumulative_gas_used.saturating_add(receipt.gas_used());
+            cumulative_energy_used = cumulative_energy_used.saturating_add(receipt.energy_used());
         }
 
-        // cumulative_gas_used = cumulative_gas_used.saturating_sub(gas_used);
+        // cumulative_energy_used = cumulative_energy_used.saturating_sub(energy_used);
 
         let mut cumulative_receipts = receipts;
         cumulative_receipts.truncate(index + 1);
@@ -1715,8 +1715,8 @@ impl Backend {
             block_number: Some(block.header.number.as_u64().into()),
             from: info.from,
             to: info.to,
-            cumulative_energy_used: cumulative_gas_used,
-            energy_used: Some(gas_used),
+            cumulative_energy_used: cumulative_energy_used,
+            energy_used: Some(energy_used),
             contract_address: info.contract_address,
             logs: {
                 let mut pre_receipts_log_index = None;
@@ -1982,13 +1982,13 @@ impl TransactionValidator for Backend {
             }
         }
 
-        if tx.gas_limit() < MIN_TRANSACTION_GAS {
-            warn!(target: "backend", "[{:?}] gas too low", tx.hash());
+        if tx.energy_limit() < MIN_TRANSACTION_GAS {
+            warn!(target: "backend", "[{:?}] energy too low", tx.hash());
             return Err(InvalidTransactionError::GasTooLow);
         }
 
-        if tx.gas_limit() > env.block.energy_limit.to_ethers_u256() {
-            warn!(target: "backend", "[{:?}] gas too high", tx.hash());
+        if tx.energy_limit() > env.block.energy_limit.to_ethers_u256() {
+            warn!(target: "backend", "[{:?}] energy too high", tx.hash());
             return Err(InvalidTransactionError::GasTooHigh);
         }
 
@@ -2002,7 +2002,7 @@ impl TransactionValidator for Backend {
 
         let max_cost = tx.max_cost();
         let value = tx.value();
-        // check sufficient funds: `gas * price + value`
+        // check sufficient funds: `energy * price + value`
         let req_funds = max_cost.checked_add(value).ok_or_else(|| {
             warn!(target: "backend", "[{:?}] cost too high",
             tx.hash());

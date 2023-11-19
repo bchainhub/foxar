@@ -560,10 +560,10 @@ impl<'a> ContractRunner<'a> {
         }
 
         let kind = TestKind::Fuzz {
-            median_gas: result.median_gas(false),
-            mean_gas: result.mean_gas(false),
+            median_gas: result.median_energy(false),
+            mean_gas: result.mean_energy(false),
             first_case: result.first_case,
-            runs: result.gas_by_case.len(),
+            runs: result.energy_by_case.len(),
         };
 
         // Record logs, labels and traces

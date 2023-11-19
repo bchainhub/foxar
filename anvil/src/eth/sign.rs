@@ -108,8 +108,8 @@ pub fn build_typed_transaction(
         TypedTransactionRequest::Legacy(tx) => {
             let LegacyTransactionRequest {
                 nonce,
-                gas_price,
-                gas_limit,
+                energy_price,
+                energy_limit,
                 kind,
                 value,
                 input,
@@ -118,8 +118,8 @@ pub fn build_typed_transaction(
             } = tx;
             TypedTransaction::Legacy(LegacyTransaction {
                 nonce,
-                gas_price,
-                gas_limit,
+                energy_price,
+                energy_limit,
                 network_id,
                 kind,
                 value,
