@@ -1,38 +1,38 @@
 {
     "types": {
-        "EIP712Domain": [
+      "CIP712Domain": [
         {
-            "name": "name",
-            "type": "string"
+          "name": "name",
+          "type": "string"
         },
         {
-            "name": "version",
-            "type": "string"
+          "name": "version",
+          "type": "string"
         },
         {
-            "name": "chainId",
-            "type": "uint256"
+          "name": "networkId",
+          "type": "uint256"
         },
         {
-            "name": "verifyingContract",
-            "type": "address"
+          "name": "verifyingContract",
+          "type": "address"
         }
-        ],
-        "Message": [
+      ],
+      "Message": [
         {
-            "name": "data",
-            "type": "string"
+          "name": "data",
+          "type": "string"
         }
-        ]
+      ]
     },
     "primaryType": "Message",
     "domain": {
-        "name": "example.metamask.io",
-        "version": "1",
-        "chainId": "1",
-        "verifyingContract": "0x0000000000000000000000000000000000000000"
+      "name": "example.metamask.io",
+      "version": "1",
+      "networkId": "1",
+      "verifyingContract": "cb375a538daf54f2e568bb4237357b1cee1aa3cb7eba"
     },
     "message": {
-        "data": "Hello!"
+      "data": "Hello!"
     }
-}
+  }

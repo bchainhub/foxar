@@ -8,7 +8,7 @@ use corebc::{
     signers::Signer as EthersSigner,
     types::{
         transaction::{
-            eip2718::TypedTransaction as EthersTypedTransactionRequest, eip712::TypedData,
+            cip712::TypedData, eip2718::TypedTransaction as EthersTypedTransactionRequest,
         },
         Signature,
     },
@@ -29,7 +29,7 @@ pub trait Signer: Send + Sync {
     /// Returns the signature
     async fn sign(&self, address: Address, message: &[u8]) -> Result<Signature, BlockchainError>;
 
-    /// Encodes and signs the typed data according EIP-712. Payload must implement Eip712 trait.
+    /// Encodes and signs the typed data according EIP-712. Payload must implement Cip712 trait.
     async fn sign_typed_data(
         &self,
         address: Address,

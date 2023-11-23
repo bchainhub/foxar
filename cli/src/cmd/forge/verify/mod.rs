@@ -9,10 +9,11 @@ use crate::{
     opts::EtherscanOpts,
 };
 use clap::{Parser, ValueHint};
-use corebc::{abi::Address, ylem::info::ContractInfo};
+use corebc::{abi::Address, ylem::info::ContractInfo, types::Network};
 use foundry_config::{figment, impl_figment_convert, impl_figment_convert_cast, Config};
 use provider::VerificationProviderType;
 use reqwest::Url;
+use serde::{Serialize};
 use std::path::PathBuf;
 
 mod etherscan;
@@ -100,6 +101,10 @@ pub struct VerifyArgs {
     /// the browser.
     #[clap(long, conflicts_with = "flatten")]
     pub show_standard_json_input: bool,
+
+    /// The network name or EIP-155 network ID
+    #[clap(short, long, alias = "network-id", alias = "network_id", env = "NETWORK")]
+    pub network: Option<Network>,    
 }
 
 impl_figment_convert!(VerifyArgs);
@@ -131,7 +136,7 @@ impl VerifyArgs {
     pub async fn run(mut self) -> eyre::Result<()> {
         let config = self.load_config_emit_warnings();
         let chain = config.network_id.unwrap_or_default();
-        self.etherscan.network = Some(chain);
+        self.network = Some(chain);
         // self.etherscan.key = config.get_etherscan_config_with_network(Some(chain))?.map(|c|
         // c.key);
 
@@ -190,6 +195,10 @@ pub struct VerifyCheckArgs {
 
     #[clap(flatten)]
     verifier: VerifierArgs,
+
+    /// The network name or EIP-155 network ID
+    #[clap(short, long, alias = "network-id", alias = "network_id", env = "NETWORK")]
+    pub network: Option<Network>,
 }
 
 impl_figment_convert_cast!(VerifyCheckArgs);
@@ -197,7 +206,7 @@ impl_figment_convert_cast!(VerifyCheckArgs);
 impl VerifyCheckArgs {
     /// Run the verify command to submit the contract's source code for verification on etherscan
     pub async fn run(self) -> eyre::Result<()> {
-        println!("Checking verification status on {}", self.etherscan.network.unwrap_or_default());
+        println!("Checking verification status on {}", self.network.unwrap_or_default());
         self.verifier.verifier.client()?.check(self).await
     }
 }

@@ -47,7 +47,7 @@ use corebc::{
     prelude::{DefaultFrame, TxpoolInspect},
     providers::ProviderError,
     types::{
-        transaction::eip712::TypedData, Address, Block, BlockId, BlockNumber, Bytes, Filter,
+        transaction::cip712::TypedData, Address, Block, BlockId, BlockNumber, Bytes, Filter,
         FilteredParams, GoCoreDebugTracingOptions, GoCoreTrace, Log, Trace, Transaction,
         TransactionReceipt, TxHash, TxpoolContent, TxpoolInspectSummary, TxpoolStatus, H256, U256,
         U64,

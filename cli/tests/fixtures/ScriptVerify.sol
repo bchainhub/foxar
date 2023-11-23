@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =0.8.16;
+pragma solidity =1.1.0;
 
 import {Unique} from "./unique.sol";
 

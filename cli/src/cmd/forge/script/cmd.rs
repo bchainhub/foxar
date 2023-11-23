@@ -243,7 +243,6 @@ impl ScriptArgs {
         let provider = Arc::new(try_get_http_provider(fork_url)?);
 
         let network = provider.get_networkid().await?.as_u64();
-        verify.set_network(network.into());
 
         let broadcasted = self.broadcast || self.resume;
         let mut deployment_sequence = match ScriptSequence::load(

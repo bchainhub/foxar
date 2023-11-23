@@ -10,7 +10,7 @@ use clap::Parser;
 use corebc::{
     core::rand::thread_rng,
     signers::{LocalWallet, Signer},
-    types::{transaction::eip712::TypedData, Address, Network, Signature},
+    types::{transaction::cip712::TypedData, Address, Network, Signature},
 };
 use eyre::Context;
 
@@ -37,7 +37,7 @@ pub enum WalletSubcommands {
 
         /// Network to use for address prefix validation.
         #[clap(short, long)]
-        network: Option<Network>,
+        network: Network,
     },
 
     /// Generate a vanity address.
@@ -86,6 +86,10 @@ pub enum WalletSubcommands {
 
         #[clap(flatten)]
         wallet: Wallet,
+
+        /// Network to use for address prefix validation.
+        #[clap(short, long)]
+        network: Network,
     },
 
     /// Verify the signature of a message.
@@ -100,6 +104,10 @@ pub enum WalletSubcommands {
         /// The address of the message signer.
         #[clap(long, short)]
         address: Address,
+
+        /// Network to use for address prefix validation.
+        #[clap(short, long)]
+        network: Network,
     },
 }
 
@@ -128,13 +136,13 @@ impl WalletSubcommands {
                         &mut rng,
                         password,
                         None,
-                        network.unwrap(),
+                        network,
                     )?;
 
                     println!("Created new encrypted keystore file: {}", path.join(uuid).display());
                     println!("Address: {}", wallet.address());
                 } else {
-                    let wallet = LocalWallet::new(&mut rng, network.unwrap());
+                    let wallet = LocalWallet::new(&mut rng, network);
                     println!("Successfully created new keypair.");
                     println!("Address:     {}", wallet.address());
                     println!("Private key: 0x{}", hex::encode(wallet.signer().to_bytes()));
@@ -152,8 +160,8 @@ impl WalletSubcommands {
                 let addr = wallet.address();
                 println!("{}", addr);
             }
-            WalletSubcommands::Sign { message, data, from_file, wallet } => {
-                let wallet = wallet.signer(0).await?;
+            WalletSubcommands::Sign { message, data, from_file, wallet, network } => {
+                let wallet = wallet.signer(u64::from(network)).await?;
                 let sig = if data {
                     let typed_data: TypedData = if from_file {
                         // data is a file name, read json from file
@@ -168,8 +176,8 @@ impl WalletSubcommands {
                 };
                 println!("0x{sig}");
             }
-            WalletSubcommands::Verify { message, signature, address } => {
-                match signature.verify(Self::hex_str_to_bytes(&message)?, address) {
+            WalletSubcommands::Verify { message, signature, address, network } => {
+                match signature.verify(Self::hex_str_to_bytes(&message)?, &network, address) {
                     Ok(_) => {
                         println!("Validation succeeded. Address {address} signed this message.")
                     }

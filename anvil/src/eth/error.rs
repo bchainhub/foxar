@@ -180,7 +180,7 @@ impl From<revm::primitives::InvalidTransaction> for InvalidTransactionError {
     fn from(err: revm::primitives::InvalidTransaction) -> Self {
         use revm::primitives::InvalidTransaction;
         match err {
-            InvalidTransaction::InvalidChainId => InvalidTransactionError::InvalidChainId,
+            InvalidTransaction::InvalidNetworkId => InvalidTransactionError::InvalidChainId,
             InvalidTransaction::EnergyMaxFeeGreaterThanPriorityFee => {
                 InvalidTransactionError::TipAboveFeeCap
             }

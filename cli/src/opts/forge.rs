@@ -191,7 +191,7 @@ pub struct CompilerArgs {
     ///
     /// Example keys: evm.assembly, ewasm, ir, irOptimized, metadata
     ///
-    /// For a full description, see https://docs.soliditylang.org/en/v0.8.13/using-the-compiler.html#input-description
+    /// For a full description, see https://docs.soliditylang.org/en/v1.1.0/using-the-compiler.html#input-description
     #[clap(long, num_args(1..), value_name = "SELECTOR")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub extra_output: Vec<ContractOutputSelection>,
@@ -211,7 +211,7 @@ mod tests {
     #[test]
     fn can_parse_evm_version() {
         let args: CompilerArgs =
-            CompilerArgs::parse_from(["foundry-cli", "--evm-version", "nucleus"]);
+            CompilerArgs::parse_from(["foundry-cli", "--cvm-version", "nucleus"]);
         assert_eq!(args.cvm_version, Some(CvmVersion::Nucleus));
     }
 

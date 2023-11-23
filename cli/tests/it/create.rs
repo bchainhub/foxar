@@ -80,7 +80,7 @@ fn setup_oracle(prj: &mut TestProject) -> String {
             "Contract",
             r#"
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^1.1.0;
 import {ChainlinkTWAP} from "./libraries/ChainlinkTWAP.sol";
 contract Contract {
     function getPrice() public view returns (int latest) {
@@ -96,7 +96,7 @@ contract Contract {
             "libraries/ChainlinkTWAP",
             r#"
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^1.1.0;
 
 library ChainlinkTWAP {
    function getLatestPrice(address base) public view returns (int256) {
@@ -165,7 +165,7 @@ forgetest_async!(
             "create",
             format!("./src/{TEMPLATE_CONTRACT}.sol:{TEMPLATE_CONTRACT}").as_str(),
             "--use",
-            "solc:0.8.15",
+            "solc:1.1.0",
             "--rpc-url",
             rpc.as_str(),
             "--private-key",
@@ -203,7 +203,7 @@ forgetest_async!(
             "create",
             format!("./src/{TEMPLATE_CONTRACT}.sol:{TEMPLATE_CONTRACT}").as_str(),
             "--use",
-            "solc:0.8.15",
+            "solc:1.1.0",
             "--rpc-url",
             rpc.as_str(),
             "--from",

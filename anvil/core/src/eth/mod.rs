@@ -9,7 +9,7 @@ use crate::{
 use corebc_core::{
     abi::ethereum_types::H64,
     types::{
-        transaction::eip712::TypedData, Address, BlockId, BlockNumber, Bytes, Filter,
+        transaction::cip712::TypedData, Address, BlockId, BlockNumber, Bytes, Filter,
         GoCoreDebugTracingOptions, TxHash, H256, U256,
     },
 };

@@ -445,7 +445,7 @@ async fn main() -> eyre::Result<()> {
             };
             match String::from_utf8(bytes) {
                 Ok(s) => {
-                    let s = SimpleCast::sha(&s)?;
+                    let s = SimpleCast::sha3(&s)?;
                     println!("{s}");
                 }
                 Err(e) => {

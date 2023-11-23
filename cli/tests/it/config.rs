@@ -36,7 +36,7 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         cvm_version: CvmVersion::Nucleus,
         energy_reports: vec!["Contract".to_string()],
         energy_reports_ignore: vec![],
-        ylem: Some(YlemReq::Local(PathBuf::from("custom-solc"))),
+        ylem: Some(YlemReq::Local(PathBuf::from("custom-ylem"))),
         auto_detect_ylem: false,
         auto_detect_remappings: true,
         offline: true,
@@ -66,19 +66,18 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         },
         invariant: InvariantConfig { runs: 256, ..Default::default() },
         ffi: true,
-        sender: "00a329c0648769A73afAc7F9381D08FB43dBEA72".parse().unwrap(),
-        tx_origin: "00a329c0648769A73afAc7F9F81E08FB43dBEA72".parse().unwrap(),
+        sender: "000000a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
+        tx_origin: "000000a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
         initial_balance: U256::from(0xffffffffffffffffffffffffu128),
         block_number: 10,
         fork_block_number: Some(200),
-        network_id: Some(9999.into()),
+        network_id: Some(corebc::types::Network::Mainnet),
         energy_limit: 99_000_000u64.into(),
         code_size_limit: Some(100000),
         energy_price: Some(999),
         block_coinbase: Address::random(),
         block_timestamp: 10,
         block_difficulty: 10,
-        block_prevrandao: H256::random(),
         block_energy_limit: Some(100u64.into()),
         memory_limit: 2u64.pow(25),
         eth_rpc_url: Some("localhost".to_string()),
@@ -254,21 +253,21 @@ forgetest_init!(can_set_config_values, |prj: TestProject, _cmd: TestCommand| {
     assert!(config.via_ir);
 });
 
-// tests that solc can be explicitly set
-forgetest!(can_set_solc_explicitly, |prj: TestProject, mut cmd: TestCommand| {
+// tests that ylem can be explicitly set
+forgetest!(can_set_ylem_explicitly, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >0.8.9;
+pragma solidity >=1.1.0;
 contract Greeter {}
    "#,
         )
         .unwrap();
 
-    // explicitly set to run with 0.8.10
-    let config = Config { ylem: Some("0.8.10".into()), ..Default::default() };
+    // explicitly set to run with 1.1.0
+    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
 
     cmd.arg("build");
@@ -280,8 +279,8 @@ Compiler run successful!
     ));
 });
 
-// tests that `--use <solc>` works
-forgetest!(can_use_solc, |prj: TestProject, mut cmd: TestCommand| {
+// tests that `--use <ylem>` works
+forgetest!(can_use_ylem, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
@@ -298,19 +297,19 @@ contract Foo {}
     let stdout = cmd.stdout_lossy();
     assert!(stdout.contains("Compiler run successful"));
 
-    cmd.forge_fuse().args(["build", "--force", "--use", "solc:0.7.1"]).root_arg();
+    cmd.forge_fuse().args(["build", "--force", "--use", "ylem:0.7.1"]).root_arg();
 
     assert!(stdout.contains("Compiler run successful"));
 
-    // fails to use solc that does not exist
-    cmd.forge_fuse().args(["build", "--use", "this/solc/does/not/exist"]);
-    assert!(cmd.stderr_lossy().contains("this/solc/does/not/exist does not exist"));
+    // fails to use ylem that does not exist
+    cmd.forge_fuse().args(["build", "--use", "this/ylem/does/not/exist"]);
+    assert!(cmd.stderr_lossy().contains("this/ylem/does/not/exist does not exist"));
 
     // 0.7.1 was installed in previous step, so we can use the path to this directly
-    let local_solc = ethers::solc::Solc::find_svm_installed_version("0.7.1")
+    let local_ylem = corebc::ylem::Ylem::find_yvm_installed_version("0.7.1")
         .unwrap()
-        .expect("solc 0.7.1 is installed");
-    cmd.forge_fuse().args(["build", "--force", "--use"]).arg(local_solc.solc).root_arg();
+        .expect("ylem 0.7.1 is installed");
+    cmd.forge_fuse().args(["build", "--force", "--use"]).arg(local_ylem.ylem).root_arg();
     assert!(stdout.contains("Compiler run successful"));
 });
 
@@ -321,7 +320,7 @@ forgetest!(can_set_yul_optimizer, |prj: TestProject, mut cmd: TestCommand| {
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract Foo {
     function bar() public pure {
        assembly {

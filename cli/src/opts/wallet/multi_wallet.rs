@@ -188,8 +188,9 @@ pub struct MultiWallet {
     // /// Use AWS Key Management Service.
     // #[clap(long, help_heading = "Wallet options - remote")]
     // pub aws: bool,
-    #[clap(short, long)]
-    pub network: Option<Network>,
+
+    #[clap(long)]
+    pub wallet_network: Option<Network>,
 }
 
 impl WalletTrait for MultiWallet {
@@ -198,7 +199,7 @@ impl WalletTrait for MultiWallet {
     }
 
     fn network(&self) -> Option<Network> {
-        self.network
+        self.wallet_network
     }
 }
 
@@ -437,7 +438,7 @@ mod tests {
     fn parse_keystore_password_file() {
         let keystore = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/keystore");
         let keystore_file = keystore
-            .join("UTC--2022-12-20T10-30-43.591916000Z--ec554aeafe75601aaab43bd4621a22284db566c2");
+            .join("UTC--2023-11-17T08-49-29.100000000Z--cb65e49851f010cd7d81b5b4969f3b0e8325c415359d");
 
         let keystore_password_file = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/keystore/password-ec554")
@@ -459,7 +460,7 @@ mod tests {
         assert_eq!(wallets.len(), 1);
         assert_eq!(
             wallets[0].address(),
-            "ec554aeafe75601aaab43bd4621a22284db566c2".parse().unwrap()
+            "cb65e49851f010cd7d81b5b4969f3b0e8325c415359d".parse().unwrap()
         );
     }
 }

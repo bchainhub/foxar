@@ -9,7 +9,7 @@ use crate::cmd::forge::{
 use corebc::{
     abi::Address,
     prelude::{artifacts::Libraries, ArtifactId, TransactionReceipt, TxHash},
-    types::transaction::eip2718::TypedTransaction,
+    types::{transaction::eip2718::TypedTransaction, Network},
 };
 use eyre::{ContextCompat, WrapErr};
 use foundry_common::{fs, shell, SELECTOR_LEN};
@@ -81,7 +81,7 @@ impl ScriptSequence {
         broadcasted: bool,
         is_multi: bool,
     ) -> eyre::Result<Self> {
-        let chain = config.network_id.unwrap_or_default().id();
+        let chain = u64::from(config.network_id.unwrap_or_default());
 
         let (path, sensitive_path) = ScriptSequence::get_paths(
             &config.broadcast,
@@ -268,8 +268,6 @@ impl ScriptSequence {
     ) -> eyre::Result<()> {
         trace!(target: "script", "verifying {} contracts [{}]", verify.known_contracts.len(), self.network);
 
-        verify.set_network(self.network.into());
-
         trace!(target: "script", "prepare future verifications");
 
         let mut future_verifications = Vec::with_capacity(self.receipts.len());
@@ -289,7 +287,7 @@ impl ScriptSequence {
 
             // Verify contract created directly from the transaction
             if let (Some(address), Some(data)) = (receipt.contract_address, tx.typed_tx().data()) {
-                match verify.get_verify_args(address, offset, &data.0, &self.libraries) {
+                match verify.get_verify_args(address, offset, &data.0, &self.libraries, &Network::from(self.network)) {
                     Some(verify) => future_verifications.push(verify.run()),
                     None => unverifiable_contracts.push(address),
                 };
@@ -297,7 +295,7 @@ impl ScriptSequence {
 
             // Verify potential contracts created during the transaction execution
             for AdditionalContract { address, init_code, .. } in &tx.additional_contracts {
-                match verify.get_verify_args(*address, 0, init_code, &self.libraries) {
+                match verify.get_verify_args(*address, 0, init_code, &self.libraries, &Network::from(self.network)) {
                     Some(verify) => future_verifications.push(verify.run()),
                     None => unverifiable_contracts.push(*address),
                 };

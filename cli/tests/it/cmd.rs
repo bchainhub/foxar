@@ -365,7 +365,7 @@ forgetest!(can_init_vscode, |prj: TestProject, mut cmd: TestCommand| {
 
     let settings = prj.root().join(".vscode/settings.json");
     assert!(settings.is_file());
-    let settings: serde_json::Value = corebc::solc::utils::read_json_file(&settings).unwrap();
+    let settings: serde_json::Value = corebc::ylem::utils::read_json_file(&settings).unwrap();
     assert_eq!(
         settings,
         serde_json::json!({
@@ -440,7 +440,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
 
     let artifact_path = prj.paths().artifacts.join(TEMPLATE_CONTRACT_ARTIFACT_JSON);
     let artifact: ConfigurableContractArtifact =
-        corebc::solc::utils::read_json_file(artifact_path).unwrap();
+        corebc::ylem::utils::read_json_file(artifact_path).unwrap();
     assert!(artifact.metadata.is_some());
 
     cmd.forge_fuse().args(["build", "--extra-output-files", "metadata", "--force"]).root_arg();
@@ -448,7 +448,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
 
     let metadata_path =
         prj.paths().artifacts.join(format!("{TEMPLATE_CONTRACT_ARTIFACT_BASE}.metadata.json"));
-    let _artifact: Metadata = corebc::solc::utils::read_json_file(metadata_path).unwrap();
+    let _artifact: Metadata = corebc::ylem::utils::read_json_file(metadata_path).unwrap();
 });
 
 // checks that extra output works
@@ -458,7 +458,7 @@ forgetest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: Test
 
     let artifact_path = prj.paths().artifacts.join(TEMPLATE_CONTRACT_ARTIFACT_JSON);
     let artifact: ConfigurableContractArtifact =
-        corebc::solc::utils::read_json_file(artifact_path).unwrap();
+        corebc::ylem::utils::read_json_file(artifact_path).unwrap();
     assert!(artifact.metadata.is_some());
     assert!(artifact.ir.is_some());
     assert!(artifact.ir_optimized.is_some());
@@ -477,7 +477,7 @@ forgetest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: Test
 
     let metadata_path =
         prj.paths().artifacts.join(format!("{TEMPLATE_CONTRACT_ARTIFACT_BASE}.metadata.json"));
-    let _artifact: Metadata = corebc::solc::utils::read_json_file(metadata_path).unwrap();
+    let _artifact: Metadata = corebc::ylem::utils::read_json_file(metadata_path).unwrap();
 
     let iropt = prj.paths().artifacts.join(format!("{TEMPLATE_CONTRACT_ARTIFACT_BASE}.iropt"));
     std::fs::read_to_string(iropt).unwrap();
@@ -493,7 +493,7 @@ forgetest!(can_print_warnings, |prj: TestProject, mut cmd: TestCommand| {
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >0.8.9;
+pragma solidity >= 1.1.0;
 contract Greeter {
     function foo(uint256 a) public {
         uint256 x = 1;
@@ -503,8 +503,8 @@ contract Greeter {
         )
         .unwrap();
 
-    // explicitly set to run with 0.8.10
-    let config = Config { ylem: Some("0.8.10".into()), ..Default::default() };
+    // explicitly set to run with 1.1.0
+    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
 
     cmd.arg("build");
@@ -520,7 +520,7 @@ Warning (5667): Warning: Unused function parameter. Remove or comment out the va
 
 // Tests that direct import paths are handled correctly
 //
-// NOTE(onbjerg): Disabled for Windows -- for some reason solc fails with a bogus error message
+// NOTE(onbjerg): Disabled for Windows -- for some reason ylem fails with a bogus error message
 // here: error[9553]: TypeError: Invalid type for argument in function call. Invalid implicit
 // conversion from struct Bar memory to struct Bar memory requested.   --> src\Foo.sol:12:22:
 //    |
@@ -541,7 +541,7 @@ forgetest!(can_handle_direct_imports_into_src, |prj: TestProject, mut cmd: TestC
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import {FooLib} from "src/FooLib.sol";
 struct Bar {
     uint8 x;
@@ -565,7 +565,7 @@ contract Foo {
             "FooLib",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import {Foo, Bar} from "src/Foo.sol";
 library FooLib {
     function check(Bar memory b) public {}
@@ -596,7 +596,7 @@ forgetest!(can_execute_inspect_command, |prj: TestProject, mut cmd: TestCommand|
             contract_name,
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract Foo {
     event log_string(string);
     function run() external {
@@ -638,7 +638,7 @@ forgetest!(
                 "ATest.t.sol",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "./test.sol";
 contract ATest is DSTest {
     function testExample() public {
@@ -672,7 +672,7 @@ forgetest!(can_compile_without_warnings, |prj: TestProject, mut cmd: TestCommand
         .add_source(
             "A",
             r#"
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract A {
     function testExample() public {}
 }
@@ -708,7 +708,7 @@ forgetest!(can_fail_compile_with_warnings, |prj: TestProject, mut cmd: TestComma
         .add_source(
             "A",
             r#"
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract A {
     function testExample() public {}
 }
@@ -780,7 +780,7 @@ forgetest!(can_build_after_failure, |prj: TestProject, mut cmd: TestCommand| {
             "ATest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "./test.sol";
 contract ATest is DSTest {
     function testExample() public {
@@ -795,7 +795,7 @@ contract ATest is DSTest {
             "BTest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "./test.sol";
 contract BTest is DSTest {
     function testExample() public {
@@ -813,7 +813,7 @@ contract BTest is DSTest {
 
     let syntax_err = r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "./test.sol";
 contract CTest is DSTest {
     function testExample() public {
@@ -843,7 +843,7 @@ contract CTest is DSTest {
             "CTest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "./test.sol";
 contract CTest is DSTest {
     function testExample() public {
@@ -999,7 +999,7 @@ forgetest!(
                 "MyTokenCopy",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.6.0;
+pragma solidity ^1.1.0;
 import "issue-2264-repro/MyToken.sol";
 contract MyTokenCopy is MyToken {
 }
@@ -1021,7 +1021,7 @@ forgetest!(gas_report_all_contracts, |prj: TestProject, mut cmd: TestCommand| {
             "Contracts.sol",
             r#"
 //SPDX-license-identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^1.1.0;
 
 import "./test.sol";
 
@@ -1154,7 +1154,7 @@ forgetest!(gas_report_some_contracts, |prj: TestProject, mut cmd: TestCommand| {
             "Contracts.sol",
             r#"
 //SPDX-license-identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^1.1.0;
 
 import "./test.sol";
 
@@ -1283,7 +1283,7 @@ forgetest!(gas_ignore_some_contracts, |prj: TestProject, mut cmd: TestCommand| {
             "Contracts.sol",
             r#"
 //SPDX-license-identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^1.1.0;
 
 import "./test.sol";
 
@@ -1424,7 +1424,7 @@ forgetest_init!(can_use_absolute_imports, |prj: TestProject, mut cmd: TestComman
         .add_lib(
             "myDepdendency/src/interfaces/IConfig.sol",
             r#"
-    pragma solidity ^0.8.10;
+    pragma solidity ^1.1.0;
 
     interface IConfig {}
    "#,
@@ -1435,7 +1435,7 @@ forgetest_init!(can_use_absolute_imports, |prj: TestProject, mut cmd: TestComman
         .add_lib(
             "myDepdendency/src/Config.sol",
             r#"
-    pragma solidity ^0.8.10;
+    pragma solidity ^1.1.0;
     import "src/interfaces/IConfig.sol";
 
     contract Config {}
@@ -1447,7 +1447,7 @@ forgetest_init!(can_use_absolute_imports, |prj: TestProject, mut cmd: TestComman
         .add_source(
             "Greeter",
             r#"
-    pragma solidity ^0.8.10;
+    pragma solidity ^1.1.0;
     import "myDepdendency/src/Config.sol";
 
     contract Greeter {}
@@ -1468,7 +1468,7 @@ forgetest_init!(
             .add_script(
                 "IMyScript.sol",
                 r#"
-    pragma solidity ^0.8.10;
+    pragma solidity ^1.1.0;
 
     interface IMyScript {}
    "#,
@@ -1479,7 +1479,7 @@ forgetest_init!(
             .add_script(
                 "MyScript.sol",
                 r#"
-    pragma solidity ^0.8.10;
+    pragma solidity ^1.1.0;
     import "script/IMyScript.sol";
 
     contract MyScript is IMyScript {}
@@ -1491,7 +1491,7 @@ forgetest_init!(
             .add_test(
                 "IMyTest.sol",
                 r#"
-    pragma solidity ^0.8.10;
+    pragma solidity ^1.1.0;
 
     interface IMyTest {}
    "#,
@@ -1502,7 +1502,7 @@ forgetest_init!(
             .add_test(
                 "MyTest.sol",
                 r#"
-    pragma solidity ^0.8.10;
+    pragma solidity ^1.1.0;
     import "test/IMyTest.sol";
 
     contract MyTest is IMyTest {}
@@ -1556,8 +1556,8 @@ forgetest_init!(can_install_missing_deps_build, |prj: TestProject, mut cmd: Test
 
 // checks that extra output works
 forgetest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
-    // explicitly set to run with 0.8.17 for consistent output
-    let config = Config { ylem: Some("0.8.17".into()), ..Default::default() };
+    // explicitly set to run with 1.1.0 for consistent output
+    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
 
     // only builds the single template contract `src/*`
@@ -1575,15 +1575,15 @@ forgetest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestComman
 });
 
 forgetest_init!(can_build_skip_glob, |prj: TestProject, mut cmd: TestCommand| {
-    // explicitly set to run with 0.8.17 for consistent output
-    let config = Config { ylem: Some("0.8.17".into()), ..Default::default() };
+    // explicitly set to run with 1.1.0 for consistent output
+    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
     prj.inner()
         .add_test(
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.17;
+pragma solidity 1.1.0;
 contract TestDemo {
 function test_run() external {}
 }"#,

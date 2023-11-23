@@ -23,7 +23,7 @@ cast = { path = "../cast" }
 ui = { path = "../ui" }
 
 # eth
-corebc = {workspace = true, features = ["rustls"]}
+corebc = {workspace = true, features = ["rustls", "ws", "ipc"]}
 solang-parser.workspace = true
 
 # cli

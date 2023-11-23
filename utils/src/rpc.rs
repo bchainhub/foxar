@@ -7,8 +7,11 @@ pub fn http_rpc_endpoint() -> String {
 }
 
 pub fn rpc_endpoint(network: Network) -> String {
-    let client = Client::new(network).unwrap();
-    client.blockindex_api_url().as_str().to_string()
+    match network {
+        Network::Mainnet => String::from("http://127.0.0.1:8565/"),
+        Network::Devin => String::from("https://xcbapi.corecoin.cc/"),
+        _ => panic!("Invalid Network. Only devin and mainnet are availible"),
+    }
 }
 
 /// Returns endpoint that has access to archive state

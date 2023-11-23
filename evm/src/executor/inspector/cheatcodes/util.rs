@@ -32,9 +32,9 @@ use std::{collections::VecDeque, str::FromStr};
 
 const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/60'/0'/0/";
 
-/// Address of the default CREATE2 deployer 0x4e59b44847b379578588920ca78fbf26c0b4956c
+/// Address of the default CREATE2 deployer cb914e59b44847b379578588920ca78fbf26c0b4956c
 pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
-    0, 0, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149,
+    203, 145, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149,
     108,
 ]);
 

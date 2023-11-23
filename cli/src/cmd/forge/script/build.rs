@@ -114,7 +114,7 @@ impl ScriptArgs {
             eyre::bail!("Network is not provided. Please specify the network with `--network {{network_id}}`")
         };
         let network_config = self.evm_opts.env.network_id.unwrap();
-        let network = CorebcNetwork::try_from(network_config.id()).unwrap();
+        let network = CorebcNetwork::try_from(network_config).unwrap();
 
         foundry_utils::link_with_nonce_or_address(
             contracts.clone(),

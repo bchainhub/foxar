@@ -116,7 +116,7 @@ impl SendTxArgs {
             // only check current chain id if it was specified in the config
             if let Some(config_chain) = config.network_id {
                 let current_network_id = provider.get_networkid().await?.as_u64();
-                let config_network_id = config_chain.id();
+                let config_network_id = u64::from(current_network_id);
                 // switch chain if current chain id is not the same as the one specified in the
                 // config
                 if config_network_id != current_network_id {
@@ -156,7 +156,7 @@ impl SendTxArgs {
         // enough information to sign and we must bail.
         } else {
             // Retrieve the signer, and bail if it can't be constructed.
-            let signer = eth.wallet.signer(network.id()).await?;
+            let signer = eth.wallet.signer(u64::from(network)).await?;
             let from = signer.address();
 
             // prevent misconfigured hwlib from sending a transaction that defies

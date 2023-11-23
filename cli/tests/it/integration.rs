@@ -7,7 +7,7 @@ forgetest_external!(solady, "Vectorized/solady");
 forgetest_external!(
     geb,
     "reflexer-labs/geb",
-    &["--chain-id", "99", "--sender", "0x00a329c0648769A73afAc7F9381E08FB43dBEA72"]
+    &["--chain-id", "99", "--sender", "0x000000a329c0648769a73afac7f9381e08fb43dbea72"]
 );
 forgetest_external!(stringutils, "Arachnid/solidity-stringutils");
 forgetest_external!(lootloose, "gakonst/lootloose");
@@ -29,7 +29,7 @@ mod fork_integration {
         drai,
         "mds1/drai",
         13633752,
-        &["--chain-id", "99", "--sender", "0x00a329c0648769A73afAc7F9381E08FB43dBEA72"]
+        &["--chain-id", "99", "--sender", "0x000000a329c0648769a73afac7f9381e08fb43dbea72"]
     );
     forgetest_external!(gunilev, "hexonaut/guni-lev", 13633752);
     forgetest_external!(convex, "mds1/convex-shutdown-simulation", 14445961);

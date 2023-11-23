@@ -55,7 +55,7 @@ forgetest!(can_execute_script_command2, |prj: TestProject, mut cmd: TestCommand|
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract Demo {
     event log_string(string);
     function run() external {
@@ -81,7 +81,7 @@ forgetest!(can_execute_script_command_fqn, |prj: TestProject, mut cmd: TestComma
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract Demo {
     event log_string(string);
     function run() external {
@@ -107,7 +107,7 @@ forgetest!(can_execute_script_command_with_sig, |prj: TestProject, mut cmd: Test
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract Demo {
     event log_string(string);
     function myFunction() external {
@@ -136,7 +136,7 @@ forgetest_async!(
                 "Foo",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "forge-std/Script.sol";
 
 contract GasWaster {
@@ -196,7 +196,7 @@ forgetest_async!(
                 "Foo",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "forge-std/Script.sol";
 
 contract GasWaster {
@@ -253,7 +253,7 @@ forgetest!(can_execute_script_command_with_args, |prj: TestProject, mut cmd: Tes
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract Demo {
     event log_string(string);
     event log_uint(uint);
@@ -282,7 +282,7 @@ forgetest!(can_execute_script_command_with_returned, |prj: TestProject, mut cmd:
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 contract Demo {
     event log_string(string);
     function run() external returns (uint256 result, uint8) {
@@ -310,7 +310,7 @@ forgetest_async!(
                 "DeployScript",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "forge-std/Script.sol";
 
 contract HashChecker {
@@ -367,14 +367,14 @@ contract DeployScript is Script {
         let run_log =
             std::fs::read_to_string("broadcast/DeployScript.sol/1/run-latest.json").unwrap();
         let run_object: Value = serde_json::from_str(&run_log).unwrap();
-        let contract_address = &ethers::prelude::H160::from_str(
+        let contract_address = corebc::prelude::H176::from_str(
             run_object["receipts"][0]["contractAddress"].as_str().unwrap(),
         )
         .unwrap();
 
         let run_code = r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
+pragma solidity 1.1.0;
 import "forge-std/Script.sol";
 import { HashChecker } from "./DeployScript.sol";
 
@@ -391,7 +391,7 @@ contract RunScript is Script {
         }
     }
 }"#
-        .replace("CONTRACT_ADDRESS", &contract_address);
+        .replace("CONTRACT_ADDRESS", &contract_address.to_string().as_str());
 
         let run_script = prj.inner().add_source("RunScript", run_code).unwrap();
         let run_contract = run_script.display().to_string() + ":RunScript";
@@ -606,7 +606,7 @@ forgetest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| a
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
     // Prepare CREATE2 Deployer
-    let addr = Address::from_str("0x4e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
+    let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
     let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
     api.anvil_set_code(addr, code).await.unwrap();
 
@@ -692,7 +692,7 @@ forgetest_async!(
         let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
         // Prepare CREATE2 Deployer
-        let addr = Address::from_str("0x4e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
+        let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
         let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
         api.anvil_set_code(addr, code).await.unwrap();
 
@@ -805,7 +805,7 @@ forgetest_async!(
             .add_script(
                 "Counter.s.sol",
                 r#"
-pragma solidity ^0.8.15;
+pragma solidity ^1.1.0;
 
 import "forge-std/Script.sol";
 
@@ -845,7 +845,7 @@ contract Script0 is Script {
             "--tc",
             "Script0",
             "--sender",
-            "0x00a329c0648769A73afAc7F9381E08FB43dBEA72",
+            "0x000000a329c0648769a73afac7f9381e08fb43dbea72",
             "--rpc-url",
             handle.http_endpoint().as_str(),
         ]);
@@ -865,7 +865,7 @@ contract Script0 is Script {
         assert_eq!(
             transactions[0].arguments,
             vec![
-                "0x00a329c0648769A73afAc7F9381E08FB43dBEA72".to_string(),
+                "0x000000a329c0648769a73afac7f9381e08fb43dbea72".to_string(),
                 "4294967296".to_string(),
                 "-4294967296".to_string(),
                 "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6".to_string(),
@@ -892,7 +892,7 @@ forgetest_async!(
             .add_script(
                 "Counter.s.sol",
                 r#"
-pragma solidity ^0.8.13;
+pragma solidity ^1.1.0;
 
 import "forge-std/Script.sol";
 
@@ -936,7 +936,7 @@ contract Script0 is Script {
             "--tc",
             "Script0",
             "--sender",
-            "0x00a329c0648769A73afAc7F9381E08FB43dBEA72",
+            "0x000000a329c0648769a73afac7f9381e08fb43dbea72",
             "--rpc-url",
             handle.http_endpoint().as_str(),
         ]);
@@ -956,7 +956,7 @@ contract Script0 is Script {
         assert_eq!(
             transactions[0].arguments,
             vec![
-                "0x00a329c0648769A73afAc7F9381E08FB43dBEA72".to_string(),
+                "0x000000a329c0648769a73afac7f9381e08fb43dbea72".to_string(),
                 "4294967296".to_string(),
                 "-4294967296".to_string(),
                 "0xb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6".to_string(),
@@ -970,8 +970,8 @@ contract Script0 is Script {
 
 // checks that skipping build
 forgetest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
-    // explicitly set to run with 0.8.17 for consistent output
-    let config = Config { ylem: Some("0.8.17".into()), ..Default::default() };
+    // explicitly set to run with 1.1.0 for consistent output
+    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
 
     let script = prj
@@ -980,7 +980,7 @@ forgetest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cm
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.17;
+pragma solidity 1.1.0;
 contract Demo {
     event log_string(string);
     function run() external returns (uint256 result, uint8) {
@@ -1025,7 +1025,7 @@ forgetest_async!(
             .add_script(
                 "ScriptTxOrigin.s.sol",
                 r#"
-pragma solidity ^0.8.13;
+pragma solidity ^1.1.0;
 
 import { Script } from "forge-std/Script.sol";
 
@@ -1093,7 +1093,7 @@ forgetest_async!(
             .add_script(
                 "ScriptTxOrigin.s.sol",
                 r#"
-pragma solidity ^0.8.17;
+pragma solidity ^1.1.0;
 
 import {Script, console} from "forge-std/Script.sol";
 

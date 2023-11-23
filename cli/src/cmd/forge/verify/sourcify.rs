@@ -82,7 +82,7 @@ impl VerificationProvider for SourcifyVerificationProvider {
                         "{}check-by-addresses?addresses={}&chainIds={}",
                         args.verifier.verifier_url.as_deref().unwrap_or(SOURCIFY_URL),
                         args.id,
-                        args.etherscan.network.unwrap_or_default().id(),
+                        u64::from(args.network.unwrap_or_default()),
                     );
 
                     let response = reqwest::get(url).await?;
@@ -161,7 +161,7 @@ metadata output can be enabled via `extra_output = ["metadata"]` in `foundry.tom
 
         let req = SourcifyVerifyRequest {
             address: format!("{:?}", args.address),
-            chain: args.etherscan.network.unwrap_or_default().id().to_string(),
+            chain: u64::from(args.network.unwrap_or_default()).to_string(),
             files,
             chosen_contract: None,
         };
