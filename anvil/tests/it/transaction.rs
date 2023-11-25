@@ -866,7 +866,6 @@ async fn test_reject_energy_too_low() {
     let resp = provider.send_transaction(tx, None).await;
 
     let err = resp.unwrap_err().to_string();
-    println!("{:?}", err);
     assert!(err.contains("intrinsic energy too low"));
 }
 

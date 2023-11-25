@@ -211,7 +211,6 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
     type Item = TransactionExecutionOutcome;
 
     fn next(&mut self) -> Option<Self::Item> {
-        println!("Executing");
         let transaction = self.pending.next()?;
         let sender = *transaction.pending_transaction.sender();
         let account = match self.db.basic(h176_to_b176(sender)).map(|acc| acc.unwrap_or_default()) {
@@ -251,7 +250,6 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
             Ok(exec_result) => exec_result,
             Err(err) => {
                 warn!(target: "backend", "[{:?}] failed to execute: {:?}", transaction.hash(), err);
-                println!("RECEIVED AN ERROR WHILE Executing: {:?}", err);
                 match err {
                     EVMError::Database(err) => {
                         return Some(TransactionExecutionOutcome::DatabaseError(transaction, err))
@@ -300,9 +298,6 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
             logs: logs.unwrap_or_default().into_iter().map(Into::into).collect(),
             traces: inspector.tracer.unwrap_or_default().traces.arena,
         };
-
-        println!("Executed successfuly");
-
 
         Some(TransactionExecutionOutcome::Executed(tx))
     }
