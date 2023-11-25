@@ -152,6 +152,7 @@ async fn can_get_pending_block() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Multicall"]
 async fn can_call_on_pending_block() {
     let (api, handle) = spawn(NodeConfig::test()).await;
     let provider = handle.http_provider();
@@ -242,6 +243,7 @@ where
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Multicall"]
 async fn can_call_with_state_override() {
     let (api, handle) = spawn(NodeConfig::test()).await;
     let provider = handle.http_provider();

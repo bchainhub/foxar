@@ -440,7 +440,7 @@ impl Backend {
         self.env.read().block.coinbase.into()
     }
 
-    /// Returns the client coinbase address.
+    /// Returns the client networkId
     pub fn chain_id(&self) -> U256 {
         U256::from(self.env.read().cfg.network_id)
     }

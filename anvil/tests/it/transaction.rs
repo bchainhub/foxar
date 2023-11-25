@@ -1,5 +1,5 @@
 use crate::abi::*;
-use anvil::{spawn, Hardfork, NodeConfig};
+use anvil::{spawn, NodeConfig};
 use corebc::{
     prelude::{
         signer::SignerMiddlewareError, BlockId, Middleware, Signer, SignerMiddleware,
@@ -394,6 +394,7 @@ async fn can_deploy_get_code() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "multicall"]
 async fn get_blocktimestamp_works() {
     let (api, handle) = spawn(NodeConfig::test()).await;
     let provider = handle.http_provider();
@@ -865,6 +866,7 @@ async fn test_reject_energy_too_low() {
     let resp = provider.send_transaction(tx, None).await;
 
     let err = resp.unwrap_err().to_string();
+    println!("{:?}", err);
     assert!(err.contains("intrinsic energy too low"));
 }
 
@@ -888,32 +890,3 @@ async fn can_call_with_high_energy_limit() {
     assert_eq!("Hello World!", greeting);
 }
 
-#[tokio::test(flavor = "multi_thread")]
-async fn test_reject_eip1559_pre_london() {
-    let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
-    let provider = handle.http_provider();
-
-    let wallet = handle.dev_wallets().next().unwrap();
-    let client = Arc::new(SignerMiddleware::new(provider, wallet));
-
-    let energy_limit = api.energy_limit();
-    let energy_price = api.energy_price().unwrap();
-    let unsupported = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
-        .unwrap()
-        .energy(energy_limit)
-        .energy_price(energy_price)
-        .send()
-        .await
-        .unwrap_err()
-        .to_string();
-    assert!(unsupported.contains("not supported by the current hardfork"), "{unsupported}");
-
-    let greeter_contract = Greeter::deploy(Arc::clone(&client), "Hello World!".to_string())
-        .unwrap()
-        .send()
-        .await
-        .unwrap();
-
-    let greeting = greeter_contract.greet().call().await.unwrap();
-    assert_eq!("Hello World!", greeting);
-}

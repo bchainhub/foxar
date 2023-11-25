@@ -59,8 +59,12 @@ pub struct EthTransactionRequest {
     /// Transaction nonce
     pub nonce: Option<U256>,
     /// chain id
-    #[cfg_attr(feature = "serde", serde(default))]
+    #[cfg_attr(feature = "serde", serde(default = "default_network_id"))]
     pub network_id: U64,
+}
+
+pub fn default_network_id() -> U64 {
+    U64::from(1)
 }
 
 // == impl EthTransactionRequest ==

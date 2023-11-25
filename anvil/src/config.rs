@@ -21,8 +21,7 @@ use corebc::{
     prelude::{rand::thread_rng, Wallet, U256},
     providers::Middleware,
     signers::{
-        coins_bip39::{English, Mnemonic},
-        MnemonicBuilder, Signer,
+        coins_bip39::{English, Mnemonic}, Signer,
     },
     types::BlockNumber,
     utils::{format_core, hex, to_checksum, WEI_IN_CORE},

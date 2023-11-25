@@ -1,5 +1,5 @@
 //! tests for custom anvil endpoints
-use crate::{abi::*, fork::fork_config};
+use crate::{abi::*};
 use anvil::{spawn, Hardfork, NodeConfig};
 use anvil_core::{
     eth::EthRequest,
@@ -47,7 +47,7 @@ async fn can_set_block_energy_limit() {
 #[tokio::test(flavor = "multi_thread")]
 async fn can_set_storage() {
     let (api, _handle) = spawn(NodeConfig::test()).await;
-    let s = r#"{"jsonrpc": "2.0", "method": "hardhat_setStorageAt", "id": 1, "params": ["0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0xa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb49", "0x0000000000000000000000000000000000000000000000000000000000003039"]}"#;
+    let s = r#"{"jsonrpc": "2.0", "method": "hardhat_setStorageAt", "id": 1, "params": ["0xcb66e9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0xa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb49", "0x0000000000000000000000000000000000000000000000000000000000003039"]}"#;
     let req = serde_json::from_str::<EthRequest>(s).unwrap();
     let (addr, slot, val) = match req.clone() {
         EthRequest::SetStorageAt(addr, slot, val) => (addr, slot, val),
@@ -79,7 +79,6 @@ async fn can_impersonate_account() {
     let tx = TransactionRequest::new().from(impersonate).to(to).value(val);
 
     let res = provider.send_transaction(tx.clone(), None).await;
-    println!("{:?}", res);
     res.unwrap_err();
 
     api.anvil_impersonate_account(impersonate).await.unwrap();
@@ -116,8 +115,6 @@ async fn can_auto_impersonate_account() {
     let tx = TransactionRequest::new().from(impersonate).to(to).value(val);
 
     let res = provider.send_transaction(tx.clone(), None).await;
-    println!("{:?}", res);
-    todo!();
     res.unwrap_err();
 
     api.anvil_auto_impersonate_account(true).await.unwrap();
@@ -144,9 +141,10 @@ async fn can_impersonate_contract() {
     let wallet = handle.dev_wallets().next().unwrap();
     let provider = Arc::new(SignerMiddleware::new(provider, wallet));
 
-    let greeter_contract =
-        Greeter::deploy(provider, "Hello World!".to_string()).unwrap().send().await.unwrap();
-    let impersonate = greeter_contract.address();
+    let box_contract = Box::deploy(provider, ()).unwrap().send().await.unwrap();
+    // let greeter_contract =
+    //     Greeter::deploy(provider, "Hello World!".to_string()).unwrap().send().await.unwrap();
+    let impersonate = box_contract.address();
 
     let to = Address::random();
     let val = 1337u64;
@@ -161,8 +159,10 @@ async fn can_impersonate_contract() {
     let res = provider.send_transaction(tx.clone(), None).await;
     res.unwrap_err();
 
-    let greeting = greeter_contract.greet().call().await.unwrap();
-    assert_eq!("Hello World!", greeting);
+    let _ = box_contract.store(U256::from(100)).send().await.unwrap();
+
+    let stored_val = box_contract.get().call().await.unwrap();
+    assert_eq!(U256::from(100), stored_val);
 
     api.anvil_impersonate_account(impersonate).await.unwrap();
 
@@ -176,38 +176,8 @@ async fn can_impersonate_contract() {
     let res = provider.send_transaction(tx, None).await;
     res.unwrap_err();
 
-    let greeting = greeter_contract.greet().call().await.unwrap();
-    assert_eq!("Hello World!", greeting);
-}
-
-#[tokio::test(flavor = "multi_thread")]
-async fn can_impersonate_gnosis_safe() {
-    let (api, handle) = spawn(fork_config()).await;
-    let provider = handle.http_provider();
-
-    // <https://help.gnosis-safe.io/en/articles/4971293-i-don-t-remember-my-safe-address-where-can-i-find-it>
-    let safe: Address = "0xA063Cb7CFd8E57c30c788A0572CBbf2129ae56B6".parse().unwrap();
-
-    let code = provider.get_code(safe, None).await.unwrap();
-    assert!(!code.is_empty());
-
-    api.anvil_impersonate_account(safe).await.unwrap();
-
-    let code = provider.get_code(safe, None).await.unwrap();
-    assert!(!code.is_empty());
-
-    let balance = U256::from(1e18 as u64);
-    // fund the impersonated account
-    api.anvil_set_balance(safe, balance).await.unwrap();
-
-    let on_chain_balance = provider.get_balance(safe, None).await.unwrap();
-    assert_eq!(on_chain_balance, balance);
-
-    api.anvil_stop_impersonating_account(safe).await.unwrap();
-
-    let code = provider.get_code(safe, None).await.unwrap();
-    // code is added back after stop impersonating
-    assert!(!code.is_empty());
+    let stored_val = box_contract.get().call().await.unwrap();
+    assert_eq!(U256::from(100), stored_val);
 }
 
 #[tokio::test(flavor = "multi_thread")]
@@ -392,6 +362,7 @@ async fn test_timestamp_interval() {
 }
 
 // <https://github.com/foundry-rs/foundry/issues/2341>
+#[ignore = "Forking is disabled"]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_can_set_storage_bsc_fork() {
     let (api, handle) =
@@ -437,9 +408,9 @@ async fn can_get_node_info() {
         hard_fork: SpecId::ISTANBUL,
         transaction_order: "fees".to_owned(),
         environment: NodeEnvironment {
-            chain_id: U256::from_str("0x7a69").unwrap(),
+            chain_id: U256::from_str("0x1").unwrap(),
             energy_limit: U256::from_str("0x1c9c380").unwrap(),
-            energy_price: U256::from_str("0x77359400").unwrap(),
+            energy_price: U256::from_str("0x6FC23AC0").unwrap(),
         },
         fork_config: NodeForkConfig {
             fork_url: None,

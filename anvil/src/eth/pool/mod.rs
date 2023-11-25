@@ -72,6 +72,13 @@ impl Pool {
 
     /// Returns the _pending_ transaction for that `hash` if it exists in the mempool
     pub fn get_transaction(&self, hash: TxHash) -> Option<PendingTransaction> {
+        println!();
+        println!();
+        println!();
+        println!("POOL: {:#?}", self.inner.read());
+        println!();
+        println!();
+        println!();
         self.inner.read().get_transaction(hash)
     }
 

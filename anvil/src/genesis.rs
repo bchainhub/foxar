@@ -215,7 +215,6 @@ pub struct CliqueConfig {
 pub mod secret_key {
     use corebc::{core::libgoldilocks::SecretKey, signers::LocalWallet, types::Bytes};
     use serde::{
-        de::{self},
         Deserialize, Deserializer, Serialize, Serializer,
     };
 

@@ -16,6 +16,7 @@ pub struct ValueChanged {
 }
 
 abigen!(Greeter, "test-data/greeter.json");
+abigen!(Box, "test-data/box.json");
 abigen!(SimpleStorage, "test-data/SimpleStorage.json");
 abigen!(MulticallContract, "test-data/multicall.json");
 abigen!(

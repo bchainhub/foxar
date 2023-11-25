@@ -738,18 +738,22 @@ impl EthApi {
     /// Handler for ETH RPC call: `eth_sendTransaction`
     pub async fn send_transaction(&self, request: EthTransactionRequest) -> Result<TxHash> {
         node_info!("xcb_sendTransaction");
+        println!("REQUEST: {:#?}", request);
 
         let from = request.from.map(Ok).unwrap_or_else(|| {
             self.accounts()?.get(0).cloned().ok_or(BlockchainError::NoSignerAvailable)
         })?;
 
+        // Request the nonce of the transaction
         let (nonce, on_chain_nonce) = self.request_nonce(&request, from).await?;
 
         let request = self.build_typed_tx_request(request, nonce)?;
 
         // if the sender is currently impersonated we need to "bypass" signing
         let pending_transaction = if self.is_impersonated(from) {
+            println!("IMPERSONATED");
             let bypass_signature = self.backend.cheats().bypass_signature();
+            println!("bypass signature: {:?}", bypass_signature);
             let transaction = sign::build_typed_transaction(request, bypass_signature)?;
             self.ensure_typed_transaction_supported(&transaction)?;
             trace!(target : "node", ?from, "eth_sendTransaction: impersonating");
@@ -882,6 +886,7 @@ impl EthApi {
     pub async fn transaction_by_hash(&self, hash: H256) -> Result<Option<Transaction>> {
         node_info!("eth_getTransactionByHash");
         let mut tx = self.pool.get_transaction(hash).map(|pending| {
+            println!("Pending: {:?}", pending);
             let from = *pending.sender();
             let mut tx = transaction_build(Some(*pending.hash()), pending.transaction, None, None);
             // we set the from field here explicitly to the set sender of the pending transaction,
@@ -2077,6 +2082,7 @@ impl EthApi {
     ) -> Result<TxHash> {
         let from = *pending_transaction.sender();
         let priority = self.transaction_priority(&pending_transaction.transaction);
+        println!("PRIORITTY: {:?}", priority);
         let pool_transaction =
             PoolTransaction { requires, provides, pending_transaction, priority };
         let tx = self.pool.add_transaction(pool_transaction)?;
