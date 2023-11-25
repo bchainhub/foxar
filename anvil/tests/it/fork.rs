@@ -171,7 +171,6 @@ async fn test_fork_eth_get_nonce() {
     assert_eq!(api_nonce, provider_nonce);
 }
 
-
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "Forking is disabled"]
 async fn test_fork_reset() {
@@ -549,8 +548,6 @@ async fn test_fork_can_send_opensea_tx() {
     let tx = provider.send_transaction(tx, None).await.unwrap().await.unwrap().unwrap();
     assert_eq!(tx.status, Some(1u64.into()));
 }
-
-
 
 #[tokio::test(flavor = "multi_thread")]
 #[ignore = "Forking is disabled"]

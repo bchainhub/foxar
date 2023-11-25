@@ -1,5 +1,5 @@
 //! tests for custom anvil endpoints
-use crate::{abi::*};
+use crate::abi::*;
 use anvil::{spawn, Hardfork, NodeConfig};
 use anvil_core::{
     eth::EthRequest,
@@ -8,10 +8,7 @@ use anvil_core::{
 use corebc::{
     abi::{ethereum_types::BigEndianHash, AbiDecode},
     prelude::{Middleware, SignerMiddleware},
-    types::{
-        Address, BlockNumber, 
-        TransactionRequest, H256, U256, U64,
-    },
+    types::{Address, BlockNumber, TransactionRequest, H256, U256, U64},
     utils::hex,
 };
 use forge::revm::primitives::SpecId;
@@ -421,4 +418,3 @@ async fn can_get_node_info() {
 
     assert_eq!(node_info, expected_node_info);
 }
-

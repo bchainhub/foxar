@@ -15,7 +15,8 @@ async fn geth_txpool() {
     let account = provider.get_accounts().await.unwrap()[0];
     let value: u64 = 42;
     let energy_price: U256 = 221435145689u64.into();
-    let tx = TransactionRequest::new().to(account).from(account).value(value).energy_price(energy_price);
+    let tx =
+        TransactionRequest::new().to(account).from(account).value(value).energy_price(energy_price);
 
     // send a few transactions
     let mut txs = Vec::new();

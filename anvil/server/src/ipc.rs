@@ -49,7 +49,7 @@ impl<Handler: PubSubRpcHandler> IpcEndpoint<Handler> {
             Ok(connections) => connections,
             Err(err) => {
                 error!(?err, "Failed to create ipc listener");
-                return Err(err);
+                return Err(err)
             }
         };
 
@@ -155,11 +155,9 @@ impl tokio_util::codec::Decoder for JsonRpcCodec {
             if depth == 0 && idx != start_idx && idx - start_idx + 1 > whitespaces {
                 let bts = buf.split_to(idx + 1);
                 return match String::from_utf8(bts.as_ref().to_vec()) {
-                    Ok(val) => {
-                        Ok(Some(val))
-                    }
+                    Ok(val) => Ok(Some(val)),
                     Err(_) => Ok(None),
-                };
+                }
             }
         }
         Ok(None)

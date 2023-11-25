@@ -214,9 +214,7 @@ pub struct CliqueConfig {
 
 pub mod secret_key {
     use corebc::{core::libgoldilocks::SecretKey, signers::LocalWallet, types::Bytes};
-    use serde::{
-        Deserialize, Deserializer, Serialize, Serializer,
-    };
+    use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
     pub fn serialize<S>(value: &Option<LocalWallet>, serializer: S) -> Result<S::Ok, S::Error>
     where
@@ -235,7 +233,7 @@ pub mod secret_key {
     {
         if let Some(s) = Option::<Bytes>::deserialize(deserializer)? {
             if s.is_empty() {
-                return Ok(None);
+                return Ok(None)
             }
 
             Ok(Some(SecretKey::from_bytes(s.as_ref().into()).into()))

@@ -10,7 +10,7 @@ use anvil_core::eth::proof::{AccountProof, BasicAccount};
 
 use crate::proof::eip1186::verify_proof;
 use anvil_core::eth::trie::ExtensionLayout;
-use corebc::utils::{sha3, rlp};
+use corebc::utils::{rlp, sha3};
 use foundry_evm::revm::primitives::SHA3_EMPTY;
 
 mod eip1186;

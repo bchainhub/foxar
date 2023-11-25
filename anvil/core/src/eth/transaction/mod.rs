@@ -50,7 +50,7 @@ pub struct EthTransactionRequest {
     /// legacy, energy Price
     #[cfg_attr(feature = "serde", serde(default))]
     pub energy_price: Option<U256>,
-    ///energy 
+    ///energy
     pub energy: Option<U256>,
     /// value of th tx in wei
     pub value: Option<U256>,
@@ -72,7 +72,9 @@ pub fn default_network_id() -> U64 {
 impl EthTransactionRequest {
     /// Converts the request into a [TypedTransactionRequest]
     pub fn into_typed_request(self) -> Option<TypedTransactionRequest> {
-        let EthTransactionRequest { to, energy_price, energy, value, data, nonce, network_id, .. } = self;
+        let EthTransactionRequest {
+            to, energy_price, energy, value, data, nonce, network_id, ..
+        } = self;
         match energy_price {
             Some(_) => Some(TypedTransactionRequest::Legacy(LegacyTransactionRequest {
                 nonce: nonce.unwrap_or(U256::zero()),
@@ -250,7 +252,7 @@ impl MaybeImpersonatedTransaction {
     #[cfg(feature = "impersonated-tx")]
     pub fn recover(&self) -> Result<Address, SignatureError> {
         if let Some(sender) = self.impersonated_sender {
-            return Ok(sender);
+            return Ok(sender)
         }
         self.transaction.recover()
     }
@@ -263,7 +265,7 @@ impl MaybeImpersonatedTransaction {
     pub fn hash(&self) -> H256 {
         if self.transaction.is_impersonated() {
             if let Some(sender) = self.impersonated_sender {
-                return self.transaction.impersonated_hash(sender);
+                return self.transaction.impersonated_hash(sender)
             }
         }
         self.transaction.hash()
@@ -562,7 +564,7 @@ impl Encodable for LegacyTransaction {
 impl Decodable for LegacyTransaction {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         if rlp.item_count()? != 8 {
-            return Err(DecoderError::RlpIncorrectListLen);
+            return Err(DecoderError::RlpIncorrectListLen)
         }
 
         Ok(Self {
@@ -701,7 +703,7 @@ impl TransactionInfo {
     pub fn trace_address(&self, idx: usize) -> Vec<usize> {
         if idx == 0 {
             // root call has empty traceAddress
-            return vec![];
+            return vec![]
         }
         let mut graph = vec![];
         let mut node = &self.traces.arena[idx];

@@ -3,8 +3,8 @@ use anvil::{spawn, NodeConfig};
 use corebc::{
     contract::ContractInstance,
     prelude::{
-        Action, ContractFactory, GoCoreTrace, GoCoreTraceFrame, Middleware, Signer, SignerMiddleware,
-        TransactionRequest,
+        Action, ContractFactory, GoCoreTrace, GoCoreTraceFrame, Middleware, Signer,
+        SignerMiddleware, TransactionRequest,
     },
     types::{ActionType, Address, GoCoreDebugTracingCallOptions, Trace},
     utils::hex,

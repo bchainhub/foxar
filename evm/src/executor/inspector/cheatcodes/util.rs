@@ -9,8 +9,8 @@ use crate::{
 };
 use bytes::{BufMut, Bytes, BytesMut};
 use corebc::{
-    core::libgoldilocks::SigningKey,
     abi::{AbiEncode, Address, ParamType, Token},
+    core::libgoldilocks::SigningKey,
     prelude::{LocalWallet, Signer, H176, *},
     signers::{
         coins_bip39::{

@@ -5,9 +5,7 @@ use corebc::{
         signer::SignerMiddlewareError, BlockId, Middleware, Signer, SignerMiddleware,
         TransactionRequest,
     },
-    types::{
-        Address, BlockNumber, Transaction, TransactionReceipt, H256, U256,
-    },
+    types::{Address, BlockNumber, Transaction, TransactionReceipt, H256, U256},
 };
 use futures::{future::join_all, FutureExt, StreamExt};
 use std::{collections::HashSet, sync::Arc, time::Duration};
@@ -69,7 +67,8 @@ async fn can_order_transactions() {
     let tx_lower = provider.send_transaction(tx, None).await.unwrap();
 
     // craft the tx with higher price
-    let tx = TransactionRequest::new().to(from).from(to).value(amount).energy_price(energy_price + 1);
+    let tx =
+        TransactionRequest::new().to(from).from(to).value(amount).energy_price(energy_price + 1);
     let tx_higher = provider.send_transaction(tx, None).await.unwrap();
 
     // manually mine the block with the transactions
@@ -211,11 +210,14 @@ async fn can_reject_underpriced_replacement() {
     let tx = TransactionRequest::new().to(to).value(amount).from(from).nonce(nonce);
 
     // send transaction with higher energy price
-    let higher_priced_pending_tx =
-        provider.send_transaction(tx.clone().energy_price(energy_price + 1u64), None).await.unwrap();
+    let higher_priced_pending_tx = provider
+        .send_transaction(tx.clone().energy_price(energy_price + 1u64), None)
+        .await
+        .unwrap();
 
     // send the same transaction with lower energy price
-    let lower_priced_pending_tx = provider.send_transaction(tx.energy_price(energy_price), None).await;
+    let lower_priced_pending_tx =
+        provider.send_transaction(tx.energy_price(energy_price), None).await;
 
     let replacement_err = lower_priced_pending_tx.unwrap_err();
     assert!(replacement_err.to_string().contains("replacement transaction underpriced"));
@@ -501,7 +503,8 @@ async fn can_handle_multiple_concurrent_transfers_with_same_nonce() {
     let nonce = provider.get_transaction_count(from, None).await.unwrap();
 
     // explicitly set the nonce
-    let tx = TransactionRequest::new().to(to).value(100u64).from(from).nonce(nonce).energy(21_000u64);
+    let tx =
+        TransactionRequest::new().to(to).value(100u64).from(from).nonce(nonce).energy(21_000u64);
     let mut tasks = Vec::new();
     for _ in 0..10 {
         let provider = provider.clone();
@@ -824,7 +827,6 @@ async fn can_stream_pending_transactions() {
     }
 }
 
-
 // ensures that the energy estimate is running on pending block by default
 #[tokio::test(flavor = "multi_thread")]
 async fn estimates_energy_on_pending_by_default() {
@@ -888,4 +890,3 @@ async fn can_call_with_high_energy_limit() {
     let greeting = greeter_contract.greet().energy(60_000_000u64).call().await.unwrap();
     assert_eq!("Hello World!", greeting);
 }
-
