@@ -73,6 +73,8 @@ casttest!(wallet_address_keystore_with_password_file, |_: TestProject, mut cmd: 
     cmd.args([
         "wallet",
         "address",
+        "--wallet-network",
+        "1",
         "--keystore",
         keystore_dir
             .join(
@@ -92,7 +94,7 @@ casttest!(cast_wallet_sign_message_utf8_data, |_: TestProject, mut cmd: TestComm
     cmd.args([
         "wallet",
         "sign",
-        "--network",
+        "--wallet-network",
         "1",
         "--private-key",
         "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
@@ -107,7 +109,7 @@ casttest!(cast_wallet_sign_message_hex_data, |_: TestProject, mut cmd: TestComma
     cmd.args([
         "wallet",
         "sign",
-        "--network",
+        "--wallet-network",
         "1",
         "--private-key",
         "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001",
@@ -122,7 +124,7 @@ casttest!(cast_wallet_sign_typed_data_string, |_: TestProject, mut cmd: TestComm
     cmd.args([
         "wallet",
         "sign",
-        "--network",
+        "--wallet-network",
         "1",
         "--private-key",
         "168956d1b5cc0ff15c8705e25b93a64e81b195f4fb8fa959d91c8d4d9045486af00e24cc2498c450178642517d7b27333c137e434353f1f02f",
@@ -138,7 +140,7 @@ casttest!(cast_wallet_sign_typed_data_file, |_: TestProject, mut cmd: TestComman
     cmd.args([
         "wallet",
         "sign",
-        "--network",
+        "--wallet-network",
         "1",
         "--private-key",
         "168956d1b5cc0ff15c8705e25b93a64e81b195f4fb8fa959d91c8d4d9045486af00e24cc2498c450178642517d7b27333c137e434353f1f02f",
@@ -316,22 +318,22 @@ casttest!(calldata_array, |_: TestProject, mut cmd: TestCommand| {
     );
 });
 
-//Todo:error2215 run archive node
+
 // <https://github.com/foundry-rs/foundry/issues/2705>
-// casttest!(cast_run_succeeds, |_: TestProject, mut cmd: TestCommand| {
-//     let rpc = http_rpc_endpoint();
-//     cmd.args([
-//         "run",
-//         "-v",
-//         "0xcedb08f67df469cbb947390a4aef71b950d192d98c68005abb23f0ce8652c37d",
-//         "--quick",
-//         "--rpc-url",
-//         rpc.as_str(),
-//     ]);
-//     let output = cmd.stdout_lossy();
-//     assert!(output.contains("Transaction successfully executed"));
-//     assert!(!output.contains("Revert"));
-// });
+casttest!(cast_run_succeeds, |_: TestProject, mut cmd: TestCommand| {
+    let rpc = http_rpc_endpoint();
+    cmd.args([
+        "run",
+        "-v",
+        "0xcedb08f67df469cbb947390a4aef71b950d192d98c68005abb23f0ce8652c37d",
+        "--quick",
+        "--rpc-url",
+        rpc.as_str(),
+    ]);
+    let output = cmd.stdout_lossy();
+    assert!(output.contains("Transaction successfully executed"));
+    assert!(!output.contains("Revert"));
+});
 
 // tests that `cast --to-base` commands are working correctly.
 casttest!(cast_to_base, |_: TestProject, mut cmd: TestCommand| {
@@ -395,7 +397,7 @@ casttest!(parse_bytes32_address, |_: TestProject, mut cmd: TestCommand| {
         "0x000000000000000000000000d8da6bf26964af9d7eed9e03e53415d37aa96045",
     ]);
     let output = cmd.stdout_lossy();
-    assert_eq!(output.trim(), "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045")
+    assert_eq!(output.trim(), "0000d8da6bf26964af9d7eed9e03e53415d37aa96045")
 });
 
 casttest!(cast_logs_topics, |_: TestProject, mut cmd: TestCommand| {

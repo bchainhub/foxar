@@ -2,7 +2,7 @@
 use crate::constants::TEMPLATE_CONTRACT;
 use anvil::{spawn, NodeConfig};
 use cast::SimpleCast;
-use corebc::abi::Address;
+use corebc::{abi::Address, types::Network};
 use foundry_cli_test_utils::{
     forgetest, forgetest_async, forgetest_init,
     util::{OutputExt, TestCommand, TestProject},
@@ -41,7 +41,7 @@ contract ContractScript is Script {
             )
             .unwrap();
 
-        let rpc = foundry_utils::rpc::next_http_rpc_endpoint();
+        let rpc = foundry_utils::rpc::next_http_rpc_endpoint(Network::Mainnet);
 
         cmd.arg("script").arg(script).args(["--fork-url", rpc.as_str(), "-vvvv"]);
     }
@@ -158,7 +158,7 @@ contract DeployScript is Script {
         let deploy_contract = deploy_script.display().to_string() + ":DeployScript";
 
         let node_config = NodeConfig::test()
-            .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint()))
+            .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)))
             .silent();
         let (_api, handle) = spawn(node_config).await;
         let dev = handle.dev_accounts().next().unwrap();
@@ -218,7 +218,7 @@ contract DeployScript is Script {
         let deploy_contract = deploy_script.display().to_string() + ":DeployScript";
 
         let node_config = NodeConfig::test()
-            .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint()))
+            .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)))
             .silent();
         let (_api, handle) = spawn(node_config).await;
         let private_key =
@@ -337,7 +337,7 @@ contract DeployScript is Script {
         let deploy_contract = deploy_script.display().to_string() + ":DeployScript";
 
         let node_config = NodeConfig::test()
-            .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint()))
+            .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)))
             .silent();
         let (_api, handle) = spawn(node_config).await;
         let private_key =
@@ -480,7 +480,7 @@ forgetest_async!(
         let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
         tester
-            .sender("0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".parse().unwrap())
+            .sender("cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85".parse().unwrap())
             .unlocked()
             .add_sig("BroadcastTest", "deployOther()")
             .simulate(ScriptOutcome::OkSimulation)
@@ -1032,44 +1032,44 @@ import { Script } from "forge-std/Script.sol";
 contract ScriptTxOrigin is Script {
     function run() public {
         uint256 pk = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
-        vm.startBroadcast(pk); // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+        vm.startBroadcast(pk); // cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85
 
         ContractA contractA = new ContractA();
         ContractB contractB = new ContractB();
 
         contractA.test(address(contractB));
-        contractB.method(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
+        contractB.method(cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
 
-        require(tx.origin == 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38);
+        require(tx.origin == 0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38);
         vm.stopBroadcast();
     }
 }
 
 contract ContractA {
     function test(address _contractB) public {
-        require(msg.sender == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
-        require(tx.origin == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
+        require(msg.sender == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
+        require(tx.origin == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
         ContractB contractB = ContractB(_contractB);
         ContractC contractC = new ContractC();
-        require(msg.sender == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
-        require(tx.origin == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
+        require(msg.sender == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
+        require(tx.origin == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
         contractB.method(address(this));
         contractC.method(address(this));
-        require(msg.sender == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
-        require(tx.origin == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
+        require(msg.sender == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
+        require(tx.origin == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
     }
 }
 
 contract ContractB {
     function method(address sender) public view {
         require(msg.sender == sender);
-        require(tx.origin == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
+        require(tx.origin == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
     }
 }
 contract ContractC {
     function method(address sender) public view {
         require(msg.sender == sender);
-        require(tx.origin == 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
+        require(tx.origin == cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85);
     }
 }
    "#,

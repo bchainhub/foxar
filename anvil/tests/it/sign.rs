@@ -77,11 +77,11 @@ async fn can_sign_typed_data() {
 
     let typed_data: TypedData = serde_json::from_value(json).unwrap();
 
-    // `curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method": "eth_signTypedData_v4", "params": ["0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", {"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}],"Person":[{"name":"name","type":"string"},{"name":"wallet","type":"address"}],"Mail":[{"name":"from","type":"Person"},{"name":"to","type":"Person"},{"name":"contents","type":"string"}]},"primaryType":"Mail","domain":{"name":"Ether Mail","version":"1","chainId":1,"verifyingContract":"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"},"message":{"from":{"name":"Cow","wallet":"0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"},"to":{"name":"Bob","wallet":"0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"},"contents":"Hello, Bob!"}}],"id":67}' http://localhost:8545`
+    // `curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method": "eth_signTypedData_v4", "params": ["cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85", {"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}],"Person":[{"name":"name","type":"string"},{"name":"wallet","type":"address"}],"Mail":[{"name":"from","type":"Person"},{"name":"to","type":"Person"},{"name":"contents","type":"string"}]},"primaryType":"Mail","domain":{"name":"Ether Mail","version":"1","chainId":1,"verifyingContract":"0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"},"message":{"from":{"name":"Cow","wallet":"0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"},"to":{"name":"Bob","wallet":"0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"},"contents":"Hello, Bob!"}}],"id":67}' http://localhost:8545`
 
     let signature = api
         .sign_typed_data_v4(
-            "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266".parse().unwrap(),
+            "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85".parse().unwrap(),
             &typed_data,
         )
         .await
@@ -221,7 +221,7 @@ async fn can_sign_typed_data_os() {
         "verifyingContract": "0x00000000006c3852cbEf3e08E8dF289169EdE581"
       },
       "message": {
-        "offerer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "offerer": "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85",
         "offer": [
           {
             "itemType": "3",
@@ -238,7 +238,7 @@ async fn can_sign_typed_data_os() {
             "identifierOrCriteria": "0",
             "startAmount": "487500000000000000",
             "endAmount": "487500000000000000",
-            "recipient": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+            "recipient": "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85"
           },
           {
             "itemType": "0",
@@ -264,11 +264,11 @@ async fn can_sign_typed_data_os() {
 
     let typed_data: TypedData = serde_json::from_value(json).unwrap();
 
-    // `curl -X POST http://localhost:8545 -d '{"jsonrpc": "2.0", "method": "eth_signTypedData_v4", "params": ["0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", {"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}],"OrderComponents":[{"name":"offerer","type":"address"},{"name":"zone","type":"address"},{"name":"offer","type":"OfferItem[]"},{"name":"consideration","type":"ConsiderationItem[]"},{"name":"orderType","type":"uint8"},{"name":"startTime","type":"uint256"},{"name":"endTime","type":"uint256"},{"name":"zoneHash","type":"bytes32"},{"name":"salt","type":"uint256"},{"name":"conduitKey","type":"bytes32"},{"name":"counter","type":"uint256"}],"OfferItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"}],"ConsiderationItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"},{"name":"recipient","type":"address"}]},"primaryType":"OrderComponents","domain":{"name":"Seaport","version":"1.1","chainId":"1","verifyingContract":"0x00000000006c3852cbEf3e08E8dF289169EdE581"},"message":{"offerer":"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266","offer":[{"itemType":"3","token":"0xA604060890923Ff400e8c6f5290461A83AEDACec","identifierOrCriteria":"110194434039389003190498847789203126033799499726478230611233094448886344768909","startAmount":"1","endAmount":"1"}],"consideration":[{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"487500000000000000","endAmount":"487500000000000000","recipient":"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"},{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"12500000000000000","endAmount":"12500000000000000","recipient":"0x8De9C5A032463C561423387a9648c5C7BCC5BC90"}],"startTime":"1658645591","endTime":"1659250386","orderType":"3","zone":"0x004C00500000aD104D7DBd00e3ae0A5C00560C00","zoneHash":"0x0000000000000000000000000000000000000000000000000000000000000000","salt":"16178208897136618","conduitKey":"0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000","totalOriginalConsiderationItems":"2","counter":"0"}}], "id": "1"}' -H "Content-Type: application/json"`
+    // `curl -X POST http://localhost:8545 -d '{"jsonrpc": "2.0", "method": "eth_signTypedData_v4", "params": ["cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85", {"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"version","type":"string"},{"name":"chainId","type":"uint256"},{"name":"verifyingContract","type":"address"}],"OrderComponents":[{"name":"offerer","type":"address"},{"name":"zone","type":"address"},{"name":"offer","type":"OfferItem[]"},{"name":"consideration","type":"ConsiderationItem[]"},{"name":"orderType","type":"uint8"},{"name":"startTime","type":"uint256"},{"name":"endTime","type":"uint256"},{"name":"zoneHash","type":"bytes32"},{"name":"salt","type":"uint256"},{"name":"conduitKey","type":"bytes32"},{"name":"counter","type":"uint256"}],"OfferItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"}],"ConsiderationItem":[{"name":"itemType","type":"uint8"},{"name":"token","type":"address"},{"name":"identifierOrCriteria","type":"uint256"},{"name":"startAmount","type":"uint256"},{"name":"endAmount","type":"uint256"},{"name":"recipient","type":"address"}]},"primaryType":"OrderComponents","domain":{"name":"Seaport","version":"1.1","chainId":"1","verifyingContract":"0x00000000006c3852cbEf3e08E8dF289169EdE581"},"message":{"offerer":"cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85","offer":[{"itemType":"3","token":"0xA604060890923Ff400e8c6f5290461A83AEDACec","identifierOrCriteria":"110194434039389003190498847789203126033799499726478230611233094448886344768909","startAmount":"1","endAmount":"1"}],"consideration":[{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"487500000000000000","endAmount":"487500000000000000","recipient":"cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85"},{"itemType":"0","token":"0x0000000000000000000000000000000000000000","identifierOrCriteria":"0","startAmount":"12500000000000000","endAmount":"12500000000000000","recipient":"0x8De9C5A032463C561423387a9648c5C7BCC5BC90"}],"startTime":"1658645591","endTime":"1659250386","orderType":"3","zone":"0x004C00500000aD104D7DBd00e3ae0A5C00560C00","zoneHash":"0x0000000000000000000000000000000000000000000000000000000000000000","salt":"16178208897136618","conduitKey":"0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000","totalOriginalConsiderationItems":"2","counter":"0"}}], "id": "1"}' -H "Content-Type: application/json"`
 
     let signature = api
         .sign_typed_data_v4(
-            "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266".parse().unwrap(),
+            "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85".parse().unwrap(),
             &typed_data,
         )
         .await
@@ -435,7 +435,7 @@ async fn can_sign_typed_seaport_data() {
         "verifyingContract": "0x00000000006c3852cbEf3e08E8dF289169EdE581"
       },
       "message": {
-        "offerer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "offerer": "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85",
         "offer": [
           {
             "itemType": "3",
@@ -452,7 +452,7 @@ async fn can_sign_typed_seaport_data() {
             "identifierOrCriteria": "0",
             "startAmount": "487500000000000000",
             "endAmount": "487500000000000000",
-            "recipient": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+            "recipient": "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85"
           },
           {
             "itemType": "0",
@@ -478,11 +478,11 @@ async fn can_sign_typed_seaport_data() {
 
     let typed_data: TypedData = serde_json::from_value(json).unwrap();
 
-    // `curl -X POST http://localhost:8545 -d '{"jsonrpc": "2.0", "method": "eth_signTypedData_v4", "params": ["0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266", "{\"types\":{\"EIP712Domain\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"version\",\"type\":\"string\"},{\"name\":\"chainId\",\"type\":\"uint256\"},{\"name\":\"verifyingContract\",\"type\":\"address\"}],\"OrderComponents\":[{\"name\":\"offerer\",\"type\":\"address\"},{\"name\":\"zone\",\"type\":\"address\"},{\"name\":\"offer\",\"type\":\"OfferItem[]\"},{\"name\":\"consideration\",\"type\":\"ConsiderationItem[]\"},{\"name\":\"orderType\",\"type\":\"uint8\"},{\"name\":\"startTime\",\"type\":\"uint256\"},{\"name\":\"endTime\",\"type\":\"uint256\"},{\"name\":\"zoneHash\",\"type\":\"bytes32\"},{\"name\":\"salt\",\"type\":\"uint256\"},{\"name\":\"conduitKey\",\"type\":\"bytes32\"},{\"name\":\"counter\",\"type\":\"uint256\"}],\"OfferItem\":[{\"name\":\"itemType\",\"type\":\"uint8\"},{\"name\":\"token\",\"type\":\"address\"},{\"name\":\"identifierOrCriteria\",\"type\":\"uint256\"},{\"name\":\"startAmount\",\"type\":\"uint256\"},{\"name\":\"endAmount\",\"type\":\"uint256\"}],\"ConsiderationItem\":[{\"name\":\"itemType\",\"type\":\"uint8\"},{\"name\":\"token\",\"type\":\"address\"},{\"name\":\"identifierOrCriteria\",\"type\":\"uint256\"},{\"name\":\"startAmount\",\"type\":\"uint256\"},{\"name\":\"endAmount\",\"type\":\"uint256\"},{\"name\":\"recipient\",\"type\":\"address\"}]},\"primaryType\":\"OrderComponents\",\"domain\":{\"name\":\"Seaport\",\"version\":\"1.1\",\"chainId\":\"137\",\"verifyingContract\":\"0x00000000006c3852cbEf3e08E8dF289169EdE581\"},\"message\":{\"offerer\":\"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\",\"offer\":[{\"itemType\":\"3\",\"token\":\"0xA604060890923Ff400e8c6f5290461A83AEDACec\",\"identifierOrCriteria\":\"110194434039389003190498847789203126033799499726478230611233094448886344768909\",\"startAmount\":\"1\",\"endAmount\":\"1\"}],\"consideration\":[{\"itemType\":\"0\",\"token\":\"0x0000000000000000000000000000000000000000\",\"identifierOrCriteria\":\"0\",\"startAmount\":\"487500000000000000\",\"endAmount\":\"487500000000000000\",\"recipient\":\"0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266\"},{\"itemType\":\"0\",\"token\":\"0x0000000000000000000000000000000000000000\",\"identifierOrCriteria\":\"0\",\"startAmount\":\"12500000000000000\",\"endAmount\":\"12500000000000000\",\"recipient\":\"0x8De9C5A032463C561423387a9648c5C7BCC5BC90\"}],\"startTime\":\"1658645591\",\"endTime\":\"1659250386\",\"orderType\":\"3\",\"zone\":\"0x004C00500000aD104D7DBd00e3ae0A5C00560C00\",\"zoneHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"salt\":\"16178208897136618\",\"conduitKey\":\"0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000\",\"totalOriginalConsiderationItems\":\"2\",\"counter\":\"0\"}}"], "id": "1"}' -H "Content-Type: application/json"`
+    // `curl -X POST http://localhost:8545 -d '{"jsonrpc": "2.0", "method": "eth_signTypedData_v4", "params": ["cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85", "{\"types\":{\"EIP712Domain\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"version\",\"type\":\"string\"},{\"name\":\"chainId\",\"type\":\"uint256\"},{\"name\":\"verifyingContract\",\"type\":\"address\"}],\"OrderComponents\":[{\"name\":\"offerer\",\"type\":\"address\"},{\"name\":\"zone\",\"type\":\"address\"},{\"name\":\"offer\",\"type\":\"OfferItem[]\"},{\"name\":\"consideration\",\"type\":\"ConsiderationItem[]\"},{\"name\":\"orderType\",\"type\":\"uint8\"},{\"name\":\"startTime\",\"type\":\"uint256\"},{\"name\":\"endTime\",\"type\":\"uint256\"},{\"name\":\"zoneHash\",\"type\":\"bytes32\"},{\"name\":\"salt\",\"type\":\"uint256\"},{\"name\":\"conduitKey\",\"type\":\"bytes32\"},{\"name\":\"counter\",\"type\":\"uint256\"}],\"OfferItem\":[{\"name\":\"itemType\",\"type\":\"uint8\"},{\"name\":\"token\",\"type\":\"address\"},{\"name\":\"identifierOrCriteria\",\"type\":\"uint256\"},{\"name\":\"startAmount\",\"type\":\"uint256\"},{\"name\":\"endAmount\",\"type\":\"uint256\"}],\"ConsiderationItem\":[{\"name\":\"itemType\",\"type\":\"uint8\"},{\"name\":\"token\",\"type\":\"address\"},{\"name\":\"identifierOrCriteria\",\"type\":\"uint256\"},{\"name\":\"startAmount\",\"type\":\"uint256\"},{\"name\":\"endAmount\",\"type\":\"uint256\"},{\"name\":\"recipient\",\"type\":\"address\"}]},\"primaryType\":\"OrderComponents\",\"domain\":{\"name\":\"Seaport\",\"version\":\"1.1\",\"chainId\":\"137\",\"verifyingContract\":\"0x00000000006c3852cbEf3e08E8dF289169EdE581\"},\"message\":{\"offerer\":\"cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85\",\"offer\":[{\"itemType\":\"3\",\"token\":\"0xA604060890923Ff400e8c6f5290461A83AEDACec\",\"identifierOrCriteria\":\"110194434039389003190498847789203126033799499726478230611233094448886344768909\",\"startAmount\":\"1\",\"endAmount\":\"1\"}],\"consideration\":[{\"itemType\":\"0\",\"token\":\"0x0000000000000000000000000000000000000000\",\"identifierOrCriteria\":\"0\",\"startAmount\":\"487500000000000000\",\"endAmount\":\"487500000000000000\",\"recipient\":\"cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85\"},{\"itemType\":\"0\",\"token\":\"0x0000000000000000000000000000000000000000\",\"identifierOrCriteria\":\"0\",\"startAmount\":\"12500000000000000\",\"endAmount\":\"12500000000000000\",\"recipient\":\"0x8De9C5A032463C561423387a9648c5C7BCC5BC90\"}],\"startTime\":\"1658645591\",\"endTime\":\"1659250386\",\"orderType\":\"3\",\"zone\":\"0x004C00500000aD104D7DBd00e3ae0A5C00560C00\",\"zoneHash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"salt\":\"16178208897136618\",\"conduitKey\":\"0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000\",\"totalOriginalConsiderationItems\":\"2\",\"counter\":\"0\"}}"], "id": "1"}' -H "Content-Type: application/json"`
 
     let signature = api
         .sign_typed_data_v4(
-            "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266".parse().unwrap(),
+            "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85".parse().unwrap(),
             &typed_data,
         )
         .await

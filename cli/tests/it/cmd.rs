@@ -76,8 +76,8 @@ forgetest!(
         assert!(output_lines[0].starts_with("-️ mainnet ("));
         assert!(output_lines[1].starts_with("\t-️ Block Explorer ("));
         assert_eq!(output_lines[2], "");
-        assert!(output_lines[3].starts_with("\t-️ Block 100 ("));
-        assert!(output_lines[4].starts_with("\t-️ Block 101 ("));
+        assert!(output_lines[3].starts_with("\t-️ Block 101 ("));
+        assert!(output_lines[4].starts_with("\t-️ Block 100 ("));
         assert_eq!(output_lines[5], "");
 
         Config::clean_foundry_cache().unwrap();
@@ -752,7 +752,7 @@ forgetest!(
             .to_string();
         println!("project root: \"{root}\"");
 
-        let eth_rpc_url = foundry_utils::rpc::next_http_archive_rpc_endpoint();
+        let eth_rpc_url = foundry_utils::rpc::next_http_archive_rpc_endpoint(Network::Mainnet);
         let dss_exec_lib = "src/DssSpell.sol:DssExecLib:0xfD88CeE74f7D78697775aBDAE53f9Da1559728E4";
 
         cmd.args([

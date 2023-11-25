@@ -1252,16 +1252,12 @@ impl SimpleCast {
             eyre::bail!("expected 64 byte hex-string, got {s}");
         }
 
-        let s = if let Some(stripped) = s.strip_prefix("000000000000000000000000") {
+        let s = if let Some(stripped) = s.strip_prefix("00000000000000000000") {
             stripped
         } else {
             return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"))
         };
-
-        let lowercase_address_string = format!("0x{s}");
-        let lowercase_address = Address::from_str(&lowercase_address_string)?;
-
-        Ok(corebc_core::utils::to_checksum(&lowercase_address, None))
+        Ok(s.to_string())
     }
 
     /// Decodes abi-encoded hex input or output

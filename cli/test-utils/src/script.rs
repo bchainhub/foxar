@@ -48,14 +48,14 @@ impl ScriptTester {
 
         ScriptTester {
             accounts_pub: vec![
-                Address::from_str("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266").unwrap(),
-                Address::from_str("0x70997970C51812dc3A010C7d01b50e0d17dc79C8").unwrap(),
-                Address::from_str("0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC").unwrap(),
+                Address::from_str("cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85").unwrap(),
+                Address::from_str("cb03a85892a318bae5f33989cb94e29c1b8764e33bbd").unwrap(),
+                Address::from_str("cb1248c8b5a65616428e7e5860b43f0a9846fee81a3d").unwrap(),
             ],
             accounts_priv: vec![
-                "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80".to_string(),
-                "59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d".to_string(),
-                "5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a".to_string(),
+                "f9a1a196869719f760352eb91b871658deddc94c571007ae86be622bb97f7bff2bccd691375c6393ff6950e9be97a9f5ecc68dfd7ea65ea101".to_string(),
+                "8dc21a30df8eb30ab0c773c8f3e8530b27336a73d836e0d29b98dbcb8b2ea6f574fcfaaeff3eea5fe270d42caa3d0f6b258bb3e0d5bdd23b3e".to_string(),
+                "281f0bcee2292c78ad12a8ba034b9f56ee4317f221a1d9f2473d136da141568348dca46dc119a9fa68b1e79d80939f87d22eca9023bf4e410f".to_string(),
             ],
             provider,
             nonces: BTreeMap::default(),

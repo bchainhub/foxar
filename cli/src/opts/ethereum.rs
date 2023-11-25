@@ -116,7 +116,7 @@ impl_figment_convert_cast!(EthereumOpts);
 
 impl EthereumOpts {
     pub async fn signer(&self) -> Result<WalletSigner> {
-        self.wallet.signer(u64::from(self.wallet.wallet_network.unwrap_or_default())).await
+        self.wallet.signer(u64::from(self.wallet.wallet_network.unwrap())).await
     }
 }
 

@@ -31,12 +31,12 @@ optimizer = true
 optimizer_runs = 200
 out = 'out'
 remappings = ['ds-test/=lib/ds-test/src/']
-sender = '000000a329c0648769a73afac7f9381e08fb43dbea72'
+sender = '0xcb5400a329c0648769a73afac7f9381e08fb43dbea72'
 sizes = false
 sparse_mode = false
 src = 'src'
 test = 'test'
-tx_origin = '000000a329c0648769a73afac7f9381e08fb43dbea72'
+tx_origin = '0xcb5400a329c0648769a73afac7f9381e08fb43dbea72'
 verbosity = 0
 via_ir = false
 fs_permissions = [{ access = "read-write", path = "./" }]

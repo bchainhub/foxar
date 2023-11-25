@@ -53,7 +53,7 @@ impl LocalFork {
 
 pub fn fork_config() -> NodeConfig {
     NodeConfig::test()
-        .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint()))
+        .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)))
         .with_fork_block_number(Some(BLOCK_NUMBER))
         .silent()
 }
@@ -538,13 +538,13 @@ async fn test_fork_can_send_opensea_tx() {
 #[tokio::test(flavor = "multi_thread")]
 async fn test_reset_fork_on_new_blocks() {
     let (api, handle) = spawn(
-        NodeConfig::test().with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint())).silent(),
+        NodeConfig::test().with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet))).silent(),
     )
     .await;
 
     let anvil_provider = handle.http_provider();
 
-    let endpoint = next_http_rpc_endpoint();
+    let endpoint = next_http_rpc_endpoint(Network::Mainnet);
     let provider = Arc::new(get_http_provider(&endpoint).interval(Duration::from_secs(2)));
 
     let current_block = anvil_provider.get_block_number().await.unwrap();
@@ -569,7 +569,7 @@ async fn test_fork_call() {
     let to: Address = "0x99d1Fa417f94dcD62BfE781a1213c092a47041Bc".parse().unwrap();
     let block_number = 14746300u64;
 
-    let provider = Provider::<Http>::try_from(rpc::next_http_archive_rpc_endpoint()).unwrap();
+    let provider = Provider::<Http>::try_from(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)).unwrap();
     let mut tx = TypedTransaction::default();
     tx.set_to(to).set_data(input.clone());
     let res0 =

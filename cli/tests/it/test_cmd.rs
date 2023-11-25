@@ -1,4 +1,5 @@
 //! Contains various tests for checking `forge test`
+use corebc::types::Network;
 use foundry_cli_test_utils::{
     forgetest, forgetest_init,
     util::{OutputExt, TestCommand, TestProject},
@@ -334,7 +335,7 @@ contract Contract {
         )
         .unwrap();
 
-    let endpoint = rpc::next_http_archive_rpc_endpoint();
+    let endpoint = rpc::next_http_archive_rpc_endpoint(Network::Mainnet);
 
     prj.inner()
         .add_test(

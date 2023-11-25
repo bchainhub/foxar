@@ -341,7 +341,7 @@ contract TestInitialBalance is DSTest {
 
     function runCustomSender() public {
         // Make sure we're testing a different caller than the default one.
-        assert(msg.sender != address(0x000000a329c0648769a73afac7f9381e08fb43dbea72));
+        assert(msg.sender != address(0xcb5400a329c0648769a73afac7f9381e08fb43dbea72));
 
         // NodeConfig::test() sets the balance of the address used in this test to 100 ether.
         assert(msg.sender.balance == 100 ether);

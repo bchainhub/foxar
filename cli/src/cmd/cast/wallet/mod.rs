@@ -86,10 +86,6 @@ pub enum WalletSubcommands {
 
         #[clap(flatten)]
         wallet: Wallet,
-
-        /// Network to use for address prefix validation.
-        #[clap(short, long)]
-        network: Network,
     },
 
     /// Verify the signature of a message.
@@ -131,13 +127,8 @@ impl WalletSubcommands {
                         rpassword::prompt_password("Enter secret: ")?
                     };
 
-                    let (wallet, uuid) = LocalWallet::new_keystore(
-                        &path,
-                        &mut rng,
-                        password,
-                        None,
-                        network,
-                    )?;
+                    let (wallet, uuid) =
+                        LocalWallet::new_keystore(&path, &mut rng, password, None, network)?;
 
                     println!("Created new encrypted keystore file: {}", path.join(uuid).display());
                     println!("Address: {}", wallet.address());
@@ -152,16 +143,22 @@ impl WalletSubcommands {
                 cmd.run()?;
             }
             WalletSubcommands::Address { wallet, private_key_override } => {
+                if wallet.wallet_network.is_none() {
+                    eyre::bail!("--wallet.network is required");
+                }
                 let wallet = private_key_override
                     .map(|pk| Wallet { private_key: Some(pk), ..Default::default() })
-                    .unwrap_or(wallet)
-                    .signer(0)
+                    .unwrap_or(wallet.clone())
+                    .signer(u64::from(wallet.wallet_network.unwrap()))
                     .await?;
                 let addr = wallet.address();
                 println!("{}", addr);
             }
-            WalletSubcommands::Sign { message, data, from_file, wallet, network } => {
-                let wallet = wallet.signer(u64::from(network)).await?;
+            WalletSubcommands::Sign { message, data, from_file, wallet } => {
+                if wallet.wallet_network.is_none() {
+                    eyre::bail!("--wallet.network is required");
+                }
+                let wallet = wallet.signer(u64::from(wallet.wallet_network.unwrap())).await?;
                 let sig = if data {
                     let typed_data: TypedData = if from_file {
                         // data is a file name, read json from file

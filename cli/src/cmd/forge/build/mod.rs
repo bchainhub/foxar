@@ -11,6 +11,7 @@ use corebc::ylem::{Project, ProjectCompileOutput};
 use foundry_common::{
     compile,
     compile::{ProjectCompiler, SkipBuildFilter},
+    shell::println,
 };
 use foundry_config::{
     figment::{
@@ -96,7 +97,7 @@ impl Cmd for BuildArgs {
             config = self.load_config();
             project = config.project()?;
         }
-
+        println!("{:#?}", project);
         let filters = self.skip.unwrap_or_default();
 
         if self.args.silent {

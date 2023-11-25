@@ -117,7 +117,7 @@ impl FromStr for Dependency {
         } else {
             (None, None, None)
         };
-
+        println!("url: {:?}, name: {:?}, tag: {:?}", url, name, tag)
         Ok(Dependency { name: name.or_else(|| alias.clone()).unwrap(), url, tag, alias })
     }
 }
