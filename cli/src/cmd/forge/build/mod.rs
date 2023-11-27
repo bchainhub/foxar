@@ -97,7 +97,6 @@ impl Cmd for BuildArgs {
             config = self.load_config();
             project = config.project()?;
         }
-        println!("{:#?}", project);
         let filters = self.skip.unwrap_or_default();
 
         if self.args.silent {
