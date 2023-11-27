@@ -882,13 +882,13 @@ forgetest!(can_install_and_remove, |prj: TestProject, mut cmd: TestCommand| {
     let forge_std_mod = git_mod.join("forge-std");
 
     let install = |cmd: &mut TestCommand| {
-        cmd.forge_fuse().args(["install", "foundry-rs/forge-std", "--no-commit"]);
+        cmd.forge_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
         cmd.assert_non_empty_stdout();
         assert!(forge_std.exists());
         assert!(forge_std_mod.exists());
 
         let submods = read_string(&git_mod_file);
-        assert!(submods.contains("https://github.com/foundry-rs/forge-std"));
+        assert!(submods.contains("https://github.com/bchainhub/forge-std"));
     };
 
     let remove = |cmd: &mut TestCommand, target: &str| {
@@ -897,7 +897,7 @@ forgetest!(can_install_and_remove, |prj: TestProject, mut cmd: TestCommand| {
         assert!(!forge_std.exists());
         assert!(!forge_std_mod.exists());
         let submods = read_string(&git_mod_file);
-        assert!(!submods.contains("https://github.com/foundry-rs/forge-std"));
+        assert!(!submods.contains("https://github.com/bchainhub/forge-std"));
     };
 
     install(&mut cmd);
@@ -920,13 +920,13 @@ forgetest!(can_reinstall_after_manual_remove, |prj: TestProject, mut cmd: TestCo
     let forge_std_mod = git_mod.join("forge-std");
 
     let install = |cmd: &mut TestCommand| {
-        cmd.forge_fuse().args(["install", "foundry-rs/forge-std", "--no-commit"]);
+        cmd.forge_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
         cmd.assert_non_empty_stdout();
         assert!(forge_std.exists());
         assert!(forge_std_mod.exists());
 
         let submods = read_string(&git_mod_file);
-        assert!(submods.contains("https://github.com/foundry-rs/forge-std"));
+        assert!(submods.contains("https://github.com/bchainhub/forge-std"));
     };
 
     install(&mut cmd);
@@ -940,7 +940,7 @@ forgetest!(can_reinstall_after_manual_remove, |prj: TestProject, mut cmd: TestCo
 forgetest!(can_install_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
-    cmd.forge_fuse().args(["install", "foundry-rs/forge-std"]);
+    cmd.forge_fuse().args(["install", "bchainhub/forge-std"]);
     for _ in 0..3 {
         cmd.assert_success();
     }

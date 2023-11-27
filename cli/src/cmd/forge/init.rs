@@ -134,7 +134,7 @@ impl Cmd for InitArgs {
                     self.opts.install(&mut config, vec![])?;
                 } else {
                     let dep =
-                        "https:///github.com/bchainhub/forge-std/tree/fix/core_changes".parse()?;
+                        "https://github.com/bchainhub/forge-std".parse()?;
                     self.opts.install(&mut config, vec![dep])?;
                 }
             }

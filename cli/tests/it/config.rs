@@ -66,8 +66,8 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         },
         invariant: InvariantConfig { runs: 256, ..Default::default() },
         ffi: true,
-        sender: "000000a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
-        tx_origin: "000000a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
+        sender: "cb5400a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
+        tx_origin: "cb5400a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
         initial_balance: U256::from(0xffffffffffffffffffffffffu128),
         block_number: 10,
         fork_block_number: Some(200),
@@ -500,7 +500,7 @@ forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
     let init = Config { libs: vec!["node_modules".into()], ..Default::default() };
     prj.write_config(init);
 
-    cmd.args(["install", "foundry-rs/forge-std", "--no-commit"]);
+    cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let config = cmd.forge_fuse().config();
@@ -521,7 +521,7 @@ forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
 forgetest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
-    cmd.args(["install", "foundry-rs/forge-std", "--no-commit"]);
+    cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let faulty_toml = r#"[default]
