@@ -1,6 +1,6 @@
 //! cli arguments for configuring the evm settings
 use clap::{ArgAction, Parser};
-use corebc_core::types::{Address, Network, H256, U256};
+use corebc_core::types::{Address, Network, U256};
 use eyre::ContextCompat;
 use foundry_config::{
     figment::{

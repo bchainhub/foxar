@@ -1,5 +1,4 @@
 use corebc_addressbook::Network;
-use corebc_blockindex::Client;
 
 /// Returns _mainnet_ rpc endpoint in inline
 pub fn http_rpc_endpoint() -> String {

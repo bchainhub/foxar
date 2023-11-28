@@ -281,6 +281,7 @@ hash                    {}
 input                   {}
 nonce                   {}
 to                      {}
+transactionIndex        {}
 value                   {}
 signature               {}
 network_id              {}",
@@ -293,6 +294,7 @@ network_id              {}",
             self.input.pretty(),
             self.nonce.pretty(),
             self.to.pretty(),
+            self.transaction_index.pretty(),
             self.value.pretty(),
             self.sig.pretty(),
             self.network_id.pretty(),
@@ -322,6 +324,7 @@ pub fn get_pretty_tx_attr(transaction: &Transaction, attr: &str) -> Option<Strin
         "network_id" => Some(transaction.network_id.pretty()),
         "to" => Some(transaction.to.pretty()),
         "value" => Some(transaction.value.pretty()),
+        "transactionIndex" | "transaction_index" => Some(transaction.transaction_index.pretty()),
         _ => None,
     }
 }
@@ -405,6 +408,7 @@ hash                    0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858
 input                   0xd294f093
 nonce                   162
 to                      ab36393ecaa2d3209cee16ce9b2360e327ed3c923347
+transactionIndex        3
 value                   512
 signature               0xdead…adbe
 network_id              3
@@ -426,6 +430,7 @@ hash                    0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858
 input                   0xd294f093
 nonce                   162
 to                      ab36393ecaa2d3209cee16ce9b2360e327ed3c923347
+transactionIndex        3
 value                   512
 signature               0xdead…adbe
 network_id              3".to_string();
@@ -510,6 +515,10 @@ network_id              3".to_string();
         assert_eq!(
             Some("ab36393ecaa2d3209cee16ce9b2360e327ed3c923347".into()),
             get_pretty_tx_attr(&block.transactions[0], "to")
+        );
+        assert_eq!(
+            Some("3".to_string()),
+            get_pretty_tx_attr(&block.transactions[0], "transactionIndex")
         );
         assert_eq!(Some("512".to_string()), get_pretty_tx_attr(&block.transactions[0], "value"));
         assert_eq!(
