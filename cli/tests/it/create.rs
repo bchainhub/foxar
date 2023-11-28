@@ -130,19 +130,14 @@ fn create_on_chain<F>(
     }
 }
 
-// tests `forge` create on goerli if correct env vars are set
+// tests `forge` create on devin if correct env vars are set
 forgetest!(can_create_simple_on_goerli, |prj: TestProject, cmd: TestCommand| {
-    create_on_chain(EnvExternalities::goerli(), prj, cmd, setup_with_simple_remapping);
+    create_on_chain(EnvExternalities::devin(), prj, cmd, setup_with_simple_remapping);
 });
 
-// tests `forge` create on goerli if correct env vars are set
+// tests `forge` create on devin if correct env vars are set
 forgetest!(can_create_oracle_on_goerli, |prj: TestProject, cmd: TestCommand| {
-    create_on_chain(EnvExternalities::goerli(), prj, cmd, setup_oracle);
-});
-
-// tests `forge` create on mumbai if correct env vars are set
-forgetest!(can_create_oracle_on_mumbai, |prj: TestProject, cmd: TestCommand| {
-    create_on_chain(EnvExternalities::mumbai(), prj, cmd, setup_oracle);
+    create_on_chain(EnvExternalities::devin(), prj, cmd, setup_oracle);
 });
 
 // tests that we can deploy the template contract
@@ -165,7 +160,7 @@ forgetest_async!(
             "create",
             format!("./src/{TEMPLATE_CONTRACT}.sol:{TEMPLATE_CONTRACT}").as_str(),
             "--use",
-            "solc:1.1.0",
+            "ylem:1.1.0",
             "--rpc-url",
             rpc.as_str(),
             "--private-key",
@@ -203,7 +198,7 @@ forgetest_async!(
             "create",
             format!("./src/{TEMPLATE_CONTRACT}.sol:{TEMPLATE_CONTRACT}").as_str(),
             "--use",
-            "solc:1.1.0",
+            "ylem:1.1.0",
             "--rpc-url",
             rpc.as_str(),
             "--from",

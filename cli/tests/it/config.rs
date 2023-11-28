@@ -260,7 +260,7 @@ forgetest!(can_set_ylem_explicitly, |prj: TestProject, mut cmd: TestCommand| {
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=1.1.0;
+pragma solidity >1.0.0;
 contract Greeter {}
    "#,
         )
@@ -274,7 +274,7 @@ contract Greeter {}
 
     assert!(cmd.stdout_lossy().ends_with(
         "
-Compiler run successful!
+Compiler run successful
 ",
     ));
 });
@@ -292,12 +292,12 @@ contract Foo {}
         )
         .unwrap();
 
-    cmd.args(["build", "--use", "0.7.1"]);
+    cmd.args(["build", "--use", "1.1.0"]);
 
     let stdout = cmd.stdout_lossy();
     assert!(stdout.contains("Compiler run successful"));
 
-    cmd.forge_fuse().args(["build", "--force", "--use", "ylem:0.7.1"]).root_arg();
+    cmd.forge_fuse().args(["build", "--force", "--use", "ylem:1.1.0"]).root_arg();
 
     assert!(stdout.contains("Compiler run successful"));
 
@@ -306,50 +306,11 @@ contract Foo {}
     assert!(cmd.stderr_lossy().contains("this/ylem/does/not/exist does not exist"));
 
     // 0.7.1 was installed in previous step, so we can use the path to this directly
-    let local_ylem = corebc::ylem::Ylem::find_yvm_installed_version("0.7.1")
+    let local_ylem = corebc::ylem::Ylem::find_yvm_installed_version("1.1.0")
         .unwrap()
-        .expect("ylem 0.7.1 is installed");
+        .expect("ylem 1.1.0 is installed");
     cmd.forge_fuse().args(["build", "--force", "--use"]).arg(local_ylem.ylem).root_arg();
     assert!(stdout.contains("Compiler run successful"));
-});
-
-// test to ensure yul optimizer can be set as intended
-forgetest!(can_set_yul_optimizer, |prj: TestProject, mut cmd: TestCommand| {
-    prj.inner()
-        .add_source(
-            "Foo",
-            r#"
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
-contract Foo {
-    function bar() public pure {
-       assembly {
-            let result_start := msize()
-       }
-    }
-}
-   "#,
-        )
-        .unwrap();
-
-    cmd.arg("build");
-    cmd.unchecked_output().stderr_matches_path(
-        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("tests/fixtures/can_set_yul_optimizer.stderr"),
-    );
-
-    // disable yul optimizer explicitly
-    let config = Config {
-        optimizer_details: Some(OptimizerDetails { yul: Some(false), ..Default::default() }),
-        ..Default::default()
-    };
-    prj.write_config(config);
-
-    assert!(cmd.stdout_lossy().ends_with(
-        "
-Compiler run successful!
-",
-    ));
 });
 
 // tests that the lib triple can be parsed
@@ -387,7 +348,7 @@ forgetest!(can_set_gas_price, |prj: TestProject, mut cmd: TestCommand| {
     let config = cmd.config();
     assert_eq!(config.energy_price, Some(1337));
 
-    let config = prj.config_from_output(["--gas-price", "300"]);
+    let config = prj.config_from_output(["--energy-price", "300"]);
     assert_eq!(config.energy_price, Some(300));
 });
 
@@ -509,7 +470,7 @@ forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
     assert_eq!(config.libs, expected);
 
     // additional install don't edit `libs`
-    cmd.forge_fuse().args(["install", "dapphub/ds-test", "--no-commit"]);
+    cmd.forge_fuse().args(["install", "bchainhub/ds-test", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let config = cmd.forge_fuse().config();

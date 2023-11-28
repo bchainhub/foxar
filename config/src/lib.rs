@@ -1001,7 +1001,7 @@ impl Config {
             metadata: Some(SettingsMetadata {
                 use_literal_content: Some(self.use_literal_content),
                 bytecode_hash: Some(self.bytecode_hash),
-                cbor_metadata: Some(self.cbor_metadata),
+                cbor_metadata: None,
             }),
             debug: self.revert_strings.map(|revert_strings| DebuggingSettings {
                 revert_strings: Some(revert_strings),
@@ -1783,7 +1783,7 @@ impl Default for Config {
             no_rpc_rate_limit: false,
             use_literal_content: false,
             bytecode_hash: BytecodeHash::Ipfs,
-            cbor_metadata: true,
+            cbor_metadata: false,
             revert_strings: None,
             sparse_mode: false,
             build_info: false,
