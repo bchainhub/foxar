@@ -50,7 +50,7 @@ pub struct EthTransactionRequest {
     /// legacy, energy Price
     #[cfg_attr(feature = "serde", serde(default))]
     pub energy_price: Option<U256>,
-    ///energy 
+    ///energy
     pub energy: Option<U256>,
     /// value of th tx in wei
     pub value: Option<U256>,
@@ -59,8 +59,12 @@ pub struct EthTransactionRequest {
     /// Transaction nonce
     pub nonce: Option<U256>,
     /// chain id
-    #[cfg_attr(feature = "serde", serde(default))]
+    #[cfg_attr(feature = "serde", serde(default = "default_network_id"))]
     pub network_id: U64,
+}
+
+pub fn default_network_id() -> U64 {
+    U64::from(1)
 }
 
 // == impl EthTransactionRequest ==
@@ -68,7 +72,9 @@ pub struct EthTransactionRequest {
 impl EthTransactionRequest {
     /// Converts the request into a [TypedTransactionRequest]
     pub fn into_typed_request(self) -> Option<TypedTransactionRequest> {
-        let EthTransactionRequest { to, energy_price, energy, value, data, nonce, network_id, .. } = self;
+        let EthTransactionRequest {
+            to, energy_price, energy, value, data, nonce, network_id, ..
+        } = self;
         match energy_price {
             Some(_) => Some(TypedTransactionRequest::Legacy(LegacyTransactionRequest {
                 nonce: nonce.unwrap_or(U256::zero()),
@@ -246,7 +252,7 @@ impl MaybeImpersonatedTransaction {
     #[cfg(feature = "impersonated-tx")]
     pub fn recover(&self) -> Result<Address, SignatureError> {
         if let Some(sender) = self.impersonated_sender {
-            return Ok(sender);
+            return Ok(sender)
         }
         self.transaction.recover()
     }
@@ -259,7 +265,7 @@ impl MaybeImpersonatedTransaction {
     pub fn hash(&self) -> H256 {
         if self.transaction.is_impersonated() {
             if let Some(sender) = self.impersonated_sender {
-                return self.transaction.impersonated_hash(sender);
+                return self.transaction.impersonated_hash(sender)
             }
         }
         self.transaction.hash()
@@ -558,7 +564,7 @@ impl Encodable for LegacyTransaction {
 impl Decodable for LegacyTransaction {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         if rlp.item_count()? != 8 {
-            return Err(DecoderError::RlpIncorrectListLen);
+            return Err(DecoderError::RlpIncorrectListLen)
         }
 
         Ok(Self {
@@ -697,7 +703,7 @@ impl TransactionInfo {
     pub fn trace_address(&self, idx: usize) -> Vec<usize> {
         if idx == 0 {
             // root call has empty traceAddress
-            return vec![];
+            return vec![]
         }
         let mut graph = vec![];
         let mut node = &self.traces.arena[idx];
@@ -871,7 +877,6 @@ mod tests {
     fn test_recover_legacy_tx() {
         let raw_tx = "f90171030a82c3500196cb08095e7baea6a6c7c4c2dfeb977efac326af552d870ab8a427dc297e800332e506f28f49a13c1edf087bdd6482d6cb3abdf2a4c455642aef1e98fc240000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000002d7b22444149223a313439332e37342c2254555344223a313438392e36362c2255534443223a313439322e34387d00000000000000000000000000000000000000b8ab0fbac47922e6e0649343400231a15e26f4f5ab1490fa5e243470de6ca26fd3583b7fa03170600a37b29d214fa618a32d6c2a121552f556578097176bf2ccb9dee0f37e8547d8f5981b6b998f99bf24c92e08b61ca5a7da5ab3da43986881356af9ad55e9b9481432cb1194a7c1302bc72500ba277941fcb9ac8063a9b6ed64fbc86c51dd5ae6cf1f01f7bcf533cf0b0cfc5dc3fdc5bc7eaa99366ada5e7127331b862586a46c12a85f9580";
         let tx: TypedTransaction = rlp::decode(&hex::decode(raw_tx).unwrap()).unwrap();
-        // println!("{:#?}", tx);
         let recovered = tx.recover().unwrap();
         let expected: Address = "cb8238748ee459bc0c1d86eab1d3f6d83bb433cdad9c".parse().unwrap();
         assert_eq!(expected, recovered);

@@ -1,5 +1,5 @@
 use corebc::types::BlockNumber;
-use ethereum_forkid::{ForkId, ForkHash};
+use ethereum_forkid::{ForkHash, ForkId};
 use foundry_evm::revm::primitives::SpecId;
 use std::str::FromStr;
 
@@ -29,11 +29,8 @@ impl Hardfork {
 
     pub fn fork_id(&self) -> ForkId {
         match self {
-            _  => {
-                ForkId { hash: ForkHash([0x87, 0x9d, 0x6e, 0x30]), next: 0 }
-            }
+            _ => ForkId { hash: ForkHash([0x87, 0x9d, 0x6e, 0x30]), next: 0 },
         }
-
     }
 }
 
@@ -93,7 +90,6 @@ mod tests {
     use corebc::utils::hex;
     use crc::{Crc, CRC_32_ISO_HDLC};
 
-
     #[test]
     // this test checks that the fork hash assigned to forks accurately map to the fork_id method
     fn test_forkhash_from_fork_blocks() {
@@ -128,8 +124,8 @@ mod tests {
         //
         // // now loop through each hardfork, conducting each forkhash test
         // for hardfork in hardforks {
-        //     // this could also be done with frontier_forkhash.next, but fork_block is used for more
-        //     // coverage
+        //     // this could also be done with frontier_forkhash.next, but fork_block is used for
+        // more     // coverage
         //     let fork_block = hardfork.fork_block().to_be_bytes();
         //     crc_digest.update(&fork_block);
         //     let fork_hash = u32::from_be_bytes(hardfork.fork_id().hash.0);

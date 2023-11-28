@@ -147,10 +147,10 @@ pub enum InvalidTransactionError {
     GasUintOverflow,
     /// returned if the transaction is specified to use less gas than required to start the
     /// invocation.
-    #[error("intrinsic gas too low")]
+    #[error("intrinsic energy too low")]
     GasTooLow,
     /// returned if the transaction gas exceeds the limit
-    #[error("intrinsic gas too high")]
+    #[error("intrinsic energy too high")]
     GasTooHigh,
     /// Thrown to ensure no one is able to specify a transaction with a tip higher than the total
     /// fee cap.
