@@ -657,8 +657,12 @@ mod tests {
         let args: NodeArgs = NodeArgs::parse_from(["anvil", "--disable-block-energy-limit"]);
         assert!(args.evm_opts.disable_block_energy_limit);
 
-        let args =
-            NodeArgs::try_parse_from(["anvil", "--disable-block-energy-limit", "--energy-limit", "100"]);
+        let args = NodeArgs::try_parse_from([
+            "anvil",
+            "--disable-block-energy-limit",
+            "--energy-limit",
+            "100",
+        ]);
         assert!(args.is_err());
     }
 }

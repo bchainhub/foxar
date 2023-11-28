@@ -60,16 +60,16 @@ async fn can_sign_typed_data() {
         "name": "Ether Mail",
         "version": "1",
         "chainId": 1,
-        "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
+        "verifyingContract": "0xccccCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
       },
       "message": {
         "from": {
           "name": "Cow",
-          "wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"
+          "wallet": "0xcb66CD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"
         },
         "to": {
           "name": "Bob",
-          "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"
+          "wallet": "0xbbbbbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"
         },
         "contents": "Hello, Bob!"
       }
@@ -81,7 +81,7 @@ async fn can_sign_typed_data() {
 
     let signature = api
         .sign_typed_data_v4(
-            "cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85".parse().unwrap(),
+            "0xcb66f39Fd6e51aad88F6F4ce6aB8827279cffFb92266".parse().unwrap(),
             &typed_data,
         )
         .await

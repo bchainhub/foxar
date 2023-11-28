@@ -479,7 +479,8 @@ impl ReadyTransactions {
                 // (addr + nonce) then we check for energy price
                 if to_remove.provides() == tx.provides {
                     // check if underpriced
-                    if tx.pending_transaction.transaction.energy_price() <= to_remove.energy_price() {
+                    if tx.pending_transaction.transaction.energy_price() <= to_remove.energy_price()
+                    {
                         warn!(target: "txpool", "ready replacement transaction underpriced [{:?}]", tx.hash());
                         return Err(PoolError::ReplacementUnderpriced(Box::new(tx.clone())))
                     } else {

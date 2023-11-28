@@ -653,8 +653,7 @@ mod tests {
 
     //     let decoded =
     //         decode_event_topic("7e1db2a1cd12f0506ecd806dba508035b290666b84b096a87af2fd2a1516ede6"
-    // )             .await;
-    //     assert_eq!(decoded.unwrap()[0], "updateAuthority(address,uint8)".to_string());
+    // ) .await; assert_eq!(decoded.unwrap()[0], "updateAuthority(address,uint8)".to_string());
 
     //     let decoded = decode_event_topic(
     //         "0xb7009613e63fb13fd59a2fa4c206a992c1f090a44e5d530be255aa17fed0b3dd",
@@ -664,7 +663,6 @@ mod tests {
 
     //     let decoded =
     //         decode_event_topic("b7009613e63fb13fd59a2fa4c206a992c1f090a44e5d530be255aa17fed0b3dd"
-    // )             .await;
-    //     assert_eq!(decoded.unwrap()[0], "canCall(address,address,bytes4)".to_string());
+    // ) .await; assert_eq!(decoded.unwrap()[0], "canCall(address,address,bytes4)".to_string());
     // }
 }

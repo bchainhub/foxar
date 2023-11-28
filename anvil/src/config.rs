@@ -22,7 +22,7 @@ use corebc::{
     providers::Middleware,
     signers::{
         coins_bip39::{English, Mnemonic},
-        MnemonicBuilder, Signer,
+        Signer,
     },
     types::BlockNumber,
     utils::{format_core, hex, to_checksum, WEI_IN_CORE},
@@ -705,7 +705,7 @@ impl NodeConfig {
             .expect("Failed writing json");
         }
         if self.silent {
-            return;
+            return
         }
 
         println!("{}", self.as_string(fork))
@@ -716,7 +716,7 @@ impl NodeConfig {
     /// See also [ Config::foundry_block_cache_file()]
     pub fn block_cache_path(&self, block: u64) -> Option<PathBuf> {
         if self.no_storage_caching || self.eth_rpc_url.is_none() {
-            return None;
+            return None
         }
         let chain_id = self.get_network_id();
 
@@ -1036,12 +1036,12 @@ impl AccountGenerator {
         for i in 1..=self.amount {
             let mut priv_key = [0u8; 57];
             priv_key[56] = i as u8;
-            let wallet = Wallet::from_bytes(&priv_key, corebc::types::Network::from(self.chain_id)).unwrap();
+            let wallet =
+                Wallet::from_bytes(&priv_key, corebc::types::Network::from(self.chain_id)).unwrap();
             wallets.push(wallet);
         }
 
         wallets
-
     }
 }
 
@@ -1067,7 +1067,7 @@ async fn find_latest_fork_block<M: Middleware>(provider: M) -> Result<u64, M::Er
     for _ in 0..2 {
         if let Some(block) = provider.get_block(num).await? {
             if block.hash.is_some() {
-                break;
+                break
             }
         }
         // block not actually finalized, so we try the block before

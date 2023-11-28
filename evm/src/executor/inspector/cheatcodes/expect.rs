@@ -300,7 +300,7 @@ fn expect_call(
             );
             expecteds.insert(
                 calldata,
-                (ExpectedCallData { value, energy: energy, min_energy: min_energy, count, call_type }, 0),
+                (ExpectedCallData { value, energy, min_energy, count, call_type }, 0),
             );
             Ok(Bytes::new())
         }
@@ -319,16 +319,7 @@ fn expect_call(
                 // If it does not exist, then create it.
                 expecteds.insert(
                     calldata,
-                    (
-                        ExpectedCallData {
-                            value,
-                            energy: energy,
-                            min_energy: min_energy,
-                            count,
-                            call_type,
-                        },
-                        0,
-                    ),
+                    (ExpectedCallData { value, energy, min_energy, count, call_type }, 0),
                 );
             }
             Ok(Bytes::new())
@@ -426,8 +417,8 @@ pub fn apply<DB: DatabaseExt>(
         ),
         HEVMCalls::ExpectCall4(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
-            // to ensure that the basic fallback function can be called.
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300
+            // energy to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
             expect_call(
@@ -443,8 +434,8 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::ExpectCall5(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
-            // to ensure that the basic fallback function can be called.
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300
+            // energy to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
             expect_call(
@@ -460,8 +451,8 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::ExpectCallMinGas0(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
-            // to ensure that the basic fallback function can be called.
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300
+            // energy to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
             expect_call(
@@ -477,8 +468,8 @@ pub fn apply<DB: DatabaseExt>(
         }
         HEVMCalls::ExpectCallMinGas1(inner) => {
             let value = inner.1;
-            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300 energy
-            // to ensure that the basic fallback function can be called.
+            // If the value of the transaction is non-zero, the EVM adds a call stipend of 2300
+            // energy to ensure that the basic fallback function can be called.
             let positive_value_cost_stipend = if value > U256::zero() { 2300 } else { 0 };
 
             expect_call(

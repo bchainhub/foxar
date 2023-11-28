@@ -126,7 +126,7 @@ impl Encodable for TypedReceipt {
 impl Decodable for TypedReceipt {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         if rlp.is_list() {
-            return Ok(TypedReceipt::Legacy(Decodable::decode(rlp)?));
+            return Ok(TypedReceipt::Legacy(Decodable::decode(rlp)?))
         }
 
         Err(DecoderError::Custom("unknown receipt type"))
