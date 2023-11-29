@@ -1,8 +1,8 @@
 Compiling 1 files with 1.1.0
-Solc 1.1.0 
-Compiler run successful!
+Ylem 1.1.0 
+Compiler run successful
 Script ran successfully.
-Gas used: 22900
+Energy used: 22900
 
 == Return ==
 result: uint256 255

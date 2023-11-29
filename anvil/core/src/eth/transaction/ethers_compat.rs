@@ -55,7 +55,7 @@ fn to_ethers_transaction_with_hash_and_sender(
             nonce: t.nonce,
             block_hash: None,
             block_number: None,
-            // transaction_index: None,
+            transaction_index: None,
             from,
             to: None,
             value: t.value,

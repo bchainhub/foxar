@@ -77,7 +77,7 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
             .unwrap_or_else(|| panic!("Failed to parse deployer {out}"));
 
         cmd.forge_fuse().arg("verify-contract").root_arg().args([
-            "--chain-id".to_string(),
+            "--network-id".to_string(),
             info.chain.to_string(),
             address,
             contract_path.to_string(),
@@ -108,7 +108,7 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
         cmd.forge_fuse()
             .arg("verify-check")
             .arg(guid)
-            .arg("--chain-id")
+            .arg("--network-id")
             .arg(info.chain.to_string())
             .arg("--verifier")
             .arg(info.verifier);

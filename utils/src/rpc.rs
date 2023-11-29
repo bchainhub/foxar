@@ -16,7 +16,7 @@ pub fn next_http_archive_rpc_endpoint(network: Network) -> String {
 
 pub fn next_http_rpc_endpoint(network: Network) -> String {
     match network {
-        Network::Mainnet => String::from("https://xcbapi.coreblockchain.net/"),
+        Network::Mainnet => String::from("http://127.0.0.1:9586/"),
         Network::Devin => String::from("https://xcbapi.corecoin.cc/"),
         _ => panic!("Invalid Network. Only devin and mainnet are availible"),
     }

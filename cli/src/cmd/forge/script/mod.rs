@@ -716,11 +716,11 @@ mod tests {
             "foundry-cli",
             "Contract.sol",
             "--sig",
-            "0x522bb704000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfFFb92266",
+            "0x522bb70400000000000000000000cb58e5dd06163a480c22d540ec763325a0b5860fb56c",
         ]);
         assert_eq!(
             args.sig,
-            "522bb704000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfFFb92266"
+            "522bb70400000000000000000000cb58e5dd06163a480c22d540ec763325a0b5860fb56c"
         );
     }
 

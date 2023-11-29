@@ -1753,7 +1753,7 @@ impl Default for Config {
             initial_balance: U256::from(0xffffffffffffffffffffffffu128),
             block_number: 1,
             fork_block_number: None,
-            network_id: None,
+            network_id: Some(Network::Mainnet),
             energy_limit: i64::MAX.into(),
             code_size_limit: None,
             energy_price: None,

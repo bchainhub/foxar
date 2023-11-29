@@ -2,7 +2,7 @@ use anvil::{spawn, NodeConfig};
 use corebc::{
     prelude::{Middleware, SignerMiddleware},
     signers::Signer,
-    types::{transaction::eip712::TypedData, Address, Network, TransactionRequest},
+    types::{transaction::cip712::TypedData, Address, Network, TransactionRequest},
 };
 
 #[tokio::test(flavor = "multi_thread")]

@@ -2041,7 +2041,7 @@ pub fn transaction_build(
 
     transaction.block_number = block.as_ref().map(|block| block.header.number.as_u64().into());
 
-    // transaction.transaction_index = info.as_ref().map(|status| status.transaction_index.into());
+    transaction.transaction_index = info.as_ref().map(|status| status.transaction_index.into());
 
     // need to check if the signature of the transaction is impersonated, if so then we
     // can't recover the sender, instead we use the sender from the executed transaction and set the

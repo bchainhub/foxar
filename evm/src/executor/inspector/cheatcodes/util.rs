@@ -388,15 +388,13 @@ fn parse_bytes(s: &str) -> Result<Vec<u8>, String> {
 
 pub fn parse_private_key_from_str(private_key: &str) -> Result<SigningKey> {
     let private_key = private_key.replace("0x", "");
-    ensure!(private_key.len() == 57, "Wrong private key length");
+    ensure!(private_key.len() == 114, "Wrong private key length");
 
-    let private_key = U456::from_str_radix(&private_key, 16);
+    let private_key = H456::from_str(&private_key);
     ensure!(private_key.is_ok(), "Couldn't parse private key");
     let private_key = private_key.unwrap();
 
-    let mut bytes = [0u8; 57];
-    private_key.to_big_endian(&mut bytes);
-    SigningKey::from_bytes(&bytes).map_err(|e| Error::CorebcSignature(e.into()))
+    SigningKey::from_bytes(private_key.as_bytes()).map_err(|e| Error::CorebcSignature(e.into()))
 }
 
 // pub fn parse_private_key(private_key: U256) -> Result<SigningKey> {

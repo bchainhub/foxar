@@ -63,7 +63,7 @@ pub static COMPILED_WITH_LIBS: Lazy<ProjectCompileOutput> = Lazy::new(|| {
 pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         energy_limit: 18446744073709551615,
-        network_id: Some(1),
+        network_id: Some(corebc::types::Network::Mainnet),
         tx_origin: Config::DEFAULT_SENDER,
         block_number: 1,
         block_timestamp: 1,

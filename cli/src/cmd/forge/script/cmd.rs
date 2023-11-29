@@ -5,7 +5,7 @@ use crate::cmd::{
 };
 use corebc::{
     prelude::Signer,
-    types::{transaction::eip2718::TypedTransaction, U256},
+    types::{transaction::eip2718::TypedTransaction, U256, Network},
 };
 use foundry_common::{contracts::flatten_contracts, try_get_http_provider};
 use std::sync::Arc;
@@ -249,7 +249,7 @@ impl ScriptArgs {
             &script_config.config,
             &self.sig,
             script_config.target_contract(),
-            network,
+            Network::from(network),
             broadcasted,
         ) {
             Ok(seq) => seq,
@@ -259,7 +259,7 @@ impl ScriptArgs {
                 &script_config.config,
                 &self.sig,
                 script_config.target_contract(),
-                network,
+                Network::from(network),
                 false,
             )?,
             Err(err) => eyre::bail!(err),

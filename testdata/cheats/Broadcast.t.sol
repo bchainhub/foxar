@@ -37,9 +37,9 @@ contract BroadcastTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
     // 1st anvil account
-    address public ACCOUNT_A = 0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266;
+    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
     // 2nd anvil account
-    address public ACCOUNT_B = 0xcb3270997970c51812dc3a010c7d01b50e0d17dc79c8;
+    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deploy() public {
         cheats.broadcast(ACCOUNT_A);
@@ -57,7 +57,7 @@ contract BroadcastTest is DSTest {
         string memory mnemonic = "test test test test test test test test test test test junk";
 
         uint256 privateKey = cheats.deriveKey(mnemonic, 3);
-        assertEq(privateKey, 0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6);
+        assertEq(privateKey, 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004);
 
         cheats.broadcast(privateKey);
         Test test = new Test();
@@ -71,7 +71,7 @@ contract BroadcastTest is DSTest {
         string memory mnemonic = "test test test test test test test test test test test junk";
 
         uint256 privateKey = cheats.deriveKey(mnemonic, 3);
-        assertEq(privateKey, 0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6);
+        assertEq(privateKey, 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004);
 
         address thisAddress = cheats.rememberKey(privateKey);
         assertEq(thisAddress, 0xcb6690f79bf6eb2c4f870365e785982e1f101e93b906);
@@ -184,10 +184,10 @@ contract BroadcastTestNoLinking is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266;
+    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb3270997970c51812dc3a010c7d01b50e0d17dc79c8;
+    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deployDoesntPanic() public {
         cheats.broadcast(address(ACCOUNT_A));
@@ -233,10 +233,10 @@ contract BroadcastMix is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266;
+    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb3270997970c51812dc3a010c7d01b50e0d17dc79c8;
+    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
 
     function more() internal {
         cheats.broadcast();
@@ -245,7 +245,7 @@ contract BroadcastMix is DSTest {
 
     function deployMix() public {
         address user = msg.sender;
-        assert(user == address(0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266));
+        assert(user == address(0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c));
 
         NoLink no = new NoLink();
 
@@ -365,10 +365,10 @@ contract MultiChainBroadcastNoLink is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266;
+    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb3270997970c51812dc3a010c7d01b50e0d17dc79c8;
+    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deploy(string memory sforkA, string memory sforkB) public {
         uint256 forkA = cheats.createFork(sforkA);
@@ -410,10 +410,10 @@ contract MultiChainBroadcastLink is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb69f39fd6e51aad88f6f4ce6ab8827279cfffb92266;
+    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb3270997970c51812dc3a010c7d01b50e0d17dc79c8;
+    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deploy(string memory sforkA, string memory sforkB) public {
         uint256 forkA = cheats.createFork(sforkA);

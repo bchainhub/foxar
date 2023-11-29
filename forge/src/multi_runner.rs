@@ -295,7 +295,7 @@ impl MultiContractRunnerBuilder {
             },
             Network::from(env.cfg.network_id),
         )?;
-        println!("331111");
+
         let execution_info = known_contracts.flatten();
         Ok(MultiContractRunner {
             contracts: deployable_contracts,

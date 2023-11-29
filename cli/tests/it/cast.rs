@@ -320,7 +320,10 @@ casttest!(calldata_array, |_: TestProject, mut cmd: TestCommand| {
 
 
 // <https://github.com/foundry-rs/foundry/issues/2705>
-casttest!(cast_run_succeeds, |_: TestProject, mut cmd: TestCommand| {
+casttest!(
+    //todo:error2215 need an archive node
+    #[ignore]
+    cast_run_succeeds, |_: TestProject, mut cmd: TestCommand| {
     let rpc = http_rpc_endpoint();
     cmd.args([
         "run",

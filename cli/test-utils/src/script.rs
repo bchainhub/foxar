@@ -38,6 +38,8 @@ impl ScriptTester {
             "--root",
             project_root.to_str().unwrap(),
             "-vvvvv",
+            "--network",
+            "mainnet",
         ]);
 
         let mut provider = None;
@@ -48,14 +50,14 @@ impl ScriptTester {
 
         ScriptTester {
             accounts_pub: vec![
-                Address::from_str("cb77531c365fa0f1d46d65440e95c3ba6a2d21a62d85").unwrap(),
-                Address::from_str("cb03a85892a318bae5f33989cb94e29c1b8764e33bbd").unwrap(),
-                Address::from_str("cb1248c8b5a65616428e7e5860b43f0a9846fee81a3d").unwrap(),
+                Address::from_str("cb58e5dd06163a480c22d540ec763325a0b5860fb56c").unwrap(),
+                Address::from_str("cb732536ad1a311f40a2f2cd1871246685d572afe700").unwrap(),
+                Address::from_str("cb671298e5136e4f115805d292170a8c66b4d595fda9").unwrap(),
             ],
             accounts_priv: vec![
-                "f9a1a196869719f760352eb91b871658deddc94c571007ae86be622bb97f7bff2bccd691375c6393ff6950e9be97a9f5ecc68dfd7ea65ea101".to_string(),
-                "8dc21a30df8eb30ab0c773c8f3e8530b27336a73d836e0d29b98dbcb8b2ea6f574fcfaaeff3eea5fe270d42caa3d0f6b258bb3e0d5bdd23b3e".to_string(),
-                "281f0bcee2292c78ad12a8ba034b9f56ee4317f221a1d9f2473d136da141568348dca46dc119a9fa68b1e79d80939f87d22eca9023bf4e410f".to_string(),
+                "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001".to_string(),
+                "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002".to_string(),
+                "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003".to_string(),
             ],
             provider,
             nonces: BTreeMap::default(),

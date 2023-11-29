@@ -81,7 +81,7 @@ impl EvmOpts {
             &provider,
             self.memory_limit,
             self.env.energy_price,
-            self.env.network_id,
+            self.env.network_id.map_or(None, |f| Some(u64::from(f))),
             self.fork_block_number,
             self.sender,
         )
@@ -102,7 +102,7 @@ impl EvmOpts {
                 energy_limit: u256_to_ru256(self.energy_limit()),
             },
             cfg: CfgEnv {
-                network_id: self.env.network_id.unwrap_or(foundry_common::DEV_CHAIN_ID),
+                network_id: u64::from(self.env.network_id.unwrap_or(Network::from(foundry_common::DEV_CHAIN_ID))),
                 spec_id: SpecId::LATEST,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
@@ -148,7 +148,7 @@ impl EvmOpts {
     ///   - mainnet otherwise
     pub fn get_chain_id(&self) -> u64 {
         if let Some(id) = self.env.network_id {
-            return id
+            return u64::from(id)
         }
         self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), u64::from)
     }
@@ -194,7 +194,7 @@ pub struct Env {
     pub energy_limit: u64,
 
     /// the networkid opcode value
-    pub network_id: Option<u64>,
+    pub network_id: Option<Network>,
 
     /// the tx.energyprice value during EVM execution
     ///
