@@ -204,7 +204,7 @@ impl<'a> ContractRunner<'a> {
                 )]
                 .into(),
                 warnings,
-            )
+            );
         }
 
         let has_invariants = self.contract.functions().any(|func| func.is_invariant_test());
@@ -239,7 +239,7 @@ impl<'a> ContractRunner<'a> {
                 )]
                 .into(),
                 warnings,
-            )
+            );
         }
 
         let mut test_results = self
@@ -435,7 +435,7 @@ impl<'a> ContractRunner<'a> {
                 labeled_addresses,
                 kind: TestKind::Standard(0),
                 ..Default::default()
-            }]
+            }];
         };
 
         let mut evm = InvariantExecutor::new(
@@ -452,7 +452,7 @@ impl<'a> ContractRunner<'a> {
         let Ok(InvariantFuzzTestResult { invariants, cases, reverts, mut last_call_results }) =
             evm.invariant_fuzz(invariant_contract)
         else {
-            return vec![]
+            return vec![];
         };
 
         invariants
@@ -556,7 +556,7 @@ impl<'a> ContractRunner<'a> {
                 labeled_addresses,
                 kind: TestKind::Standard(0),
                 ..Default::default()
-            }
+            };
         }
 
         let kind = TestKind::Fuzz {

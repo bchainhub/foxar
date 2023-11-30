@@ -1344,7 +1344,7 @@ mod tests {
                 // address
                 ("address", Address),
                 ("address(0)", Address),
-                ("0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990", Address),
+                ("0x0000690B9A9E9aa1C9dB991C7721a92d351Db4FaC990", Address),
                 ("payable(0)", Address),
                 ("payable(address(0))", Address),
                 //

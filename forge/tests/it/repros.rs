@@ -79,11 +79,11 @@ macro_rules! run_test_repro {
 //     test_repro!("Issue2723");
 // }
 // */
-// // <https://github.com/foundry-rs/foundry/issues/2898>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_2898() {
-//     test_repro!("Issue2898");
-// }
+// <https://github.com/foundry-rs/foundry/issues/2898>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_2898() {
+    test_repro!("Issue2898");
+}
 
 // /* todo:error2215 fix tests after forking will be implemented for core blockchain
 // // <https://github.com/foundry-rs/foundry/issues/2956>
@@ -110,11 +110,11 @@ macro_rules! run_test_repro {
 //     test_repro!("Issue3077");
 // }
 // */
-// // <https://github.com/foundry-rs/foundry/issues/3055>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3055() {
-//     test_repro_fail!("Issue3055");
-// }
+// <https://github.com/foundry-rs/foundry/issues/3055>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3055() {
+    test_repro_fail!("Issue3055");
+}
 
 // /* todo:error2215 fix tests after forking will be implemented for core blockchain
 // // <https://github.com/foundry-rs/foundry/issues/3192>
@@ -129,11 +129,11 @@ macro_rules! run_test_repro {
 //     test_repro!("Issue3110");
 // }
 // */
-// // <https://github.com/foundry-rs/foundry/issues/3189>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3189() {
-//     test_repro_fail!("Issue3189");
-// }
+// <https://github.com/foundry-rs/foundry/issues/3189>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3189() {
+    test_repro_fail!("Issue3189");
+}
 
 // /* todo:error2215 fix tests after forking will be implemented for core blockchain
 // // <https://github.com/foundry-rs/foundry/issues/3119>
@@ -142,11 +142,11 @@ macro_rules! run_test_repro {
 //     test_repro!("Issue3119");
 // }
 // */
-// // <https://github.com/foundry-rs/foundry/issues/3190>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3190() {
-//     test_repro!("Issue3190");
-// }
+// <https://github.com/foundry-rs/foundry/issues/3190>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3190() {
+    test_repro!("Issue3190");
+}
 
 // /* todo:error2215 fix tests after forking will be implemented for core blockchain
 // // <https://github.com/foundry-rs/foundry/issues/3221>
@@ -176,40 +176,40 @@ macro_rules! run_test_repro {
 //     test_repro!("Issue3220");
 // }
 // */
-// // <https://github.com/foundry-rs/foundry/issues/3347>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3347() {
-//     let mut res = run_test_repro!("Issue3347");
-//     let mut res = res.remove("repros/Issue3347.sol:Issue3347Test").unwrap();
-//     let test = res.test_results.remove("test()").unwrap();
-//     assert_eq!(test.logs.len(), 1);
-//     let event = Event {
-//         name: "log2".to_string(),
-//         inputs: vec![
-//             EventParam { name: "x".to_string(), kind: ParamType::Uint(256), indexed: false },
-//             EventParam { name: "y".to_string(), kind: ParamType::Uint(256), indexed: false },
-//         ],
-//         anonymous: false,
-//     };
-//     let raw_log =
-//         RawLog { topics: test.logs[0].topics.clone(), data: test.logs[0].data.clone().to_vec() };
-//     let log = event.parse_log(raw_log).unwrap();
-//     assert_eq!(
-//         log,
-//         Log {
-//             params: vec![
-//                 LogParam { name: "x".to_string(), value: Token::Uint(1u64.into()) },
-//                 LogParam { name: "y".to_string(), value: Token::Uint(2u64.into()) }
-//             ]
-//         }
-//     );
-// }
+// <https://github.com/foundry-rs/foundry/issues/3347>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3347() {
+    let mut res = run_test_repro!("Issue3347");
+    let mut res = res.remove("repros/Issue3347.sol:Issue3347Test").unwrap();
+    let test = res.test_results.remove("test()").unwrap();
+    assert_eq!(test.logs.len(), 1);
+    let event = Event {
+        name: "log2".to_string(),
+        inputs: vec![
+            EventParam { name: "x".to_string(), kind: ParamType::Uint(256), indexed: false },
+            EventParam { name: "y".to_string(), kind: ParamType::Uint(256), indexed: false },
+        ],
+        anonymous: false,
+    };
+    let raw_log =
+        RawLog { topics: test.logs[0].topics.clone(), data: test.logs[0].data.clone().to_vec() };
+    let log = event.parse_log(raw_log).unwrap();
+    assert_eq!(
+        log,
+        Log {
+            params: vec![
+                LogParam { name: "x".to_string(), value: Token::Uint(1u64.into()) },
+                LogParam { name: "y".to_string(), value: Token::Uint(2u64.into()) }
+            ]
+        }
+    );
+}
 
-// // <https://github.com/foundry-rs/foundry/issues/3685>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3685() {
-//     test_repro!("Issue3685");
-// }
+// <https://github.com/foundry-rs/foundry/issues/3685>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3685() {
+    test_repro!("Issue3685");
+}
 // /* todo:error2215 fix tests after forking will be implemented for core blockchain
 // // <https://github.com/foundry-rs/foundry/issues/3653>
 // #[tokio::test(flavor = "multi_thread")]
@@ -217,17 +217,17 @@ macro_rules! run_test_repro {
 //     test_repro!("Issue3653");
 // }
 // */
-// // <https://github.com/foundry-rs/foundry/issues/3596>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3596() {
-//     test_repro!("Issue3596", true, None);
-// }
+// <https://github.com/foundry-rs/foundry/issues/3596>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3596() {
+    test_repro!("Issue3596", true, None);
+}
 
-// // <https://github.com/foundry-rs/foundry/issues/3661>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3661() {
-//     test_repro!("Issue3661");
-// }
+// <https://github.com/foundry-rs/foundry/issues/3661>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3661() {
+    test_repro!("Issue3661");
+}
 
 // /* todo:error2215 fix tests after forking will be implemented for core blockchain
 // // <https://github.com/foundry-rs/foundry/issues/3674>
@@ -245,17 +245,17 @@ macro_rules! run_test_repro {
 //     test_repro!("Issue3703");
 // }
 // */
-// // <https://github.com/foundry-rs/foundry/issues/3753>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3753() {
-//     test_repro!("Issue3753");
-// }
+// <https://github.com/foundry-rs/foundry/issues/3753>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3753() {
+    test_repro!("Issue3753");
+}
 
-// // <https://github.com/foundry-rs/foundry/issues/4630>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_4630() {
-//     test_repro!("Issue4630");
-// }
+// <https://github.com/foundry-rs/foundry/issues/4630>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_4630() {
+    test_repro!("Issue4630");
+}
 
 /* todo:error2215 fix tests after forking will be implemented for core blockchain
 // <https://github.com/foundry-rs/foundry/issues/4586>
@@ -265,7 +265,7 @@ async fn test_issue_4586() {
 }
 */
 // <https://github.com/foundry-rs/foundry/issues/5038>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_5038() {
-//     test_repro!("Issue5038");
-// }
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_5038() {
+    test_repro!("Issue5038");
+}

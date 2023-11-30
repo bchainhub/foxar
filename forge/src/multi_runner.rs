@@ -264,7 +264,7 @@ impl MultiContractRunnerBuilder {
                     if let Some(b) = contract.bytecode.expect("No bytecode").object.into_bytes() {
                         b
                     } else {
-                        return Ok(())
+                        return Ok(());
                     };
 
                 let abi = contract.abi.expect("We should have an abi by now");

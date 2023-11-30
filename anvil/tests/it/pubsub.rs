@@ -234,7 +234,7 @@ async fn test_subscriptions() {
 
     // Subscribing requires sending the sub request and then subscribing to
     // the returned sub_id
-    let sub_id: U256 = ws.request("eth_subscribe", ["newHeads"]).await.unwrap();
+    let sub_id: U256 = ws.request("xcb_subscribe", ["newHeads"]).await.unwrap();
     let mut stream = ws.subscribe(sub_id).unwrap();
 
     let mut blocks = Vec::new();

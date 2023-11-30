@@ -5,46 +5,46 @@ use corebc::types::U256;
 use forge::result::{SuiteResult, TestStatus};
 use std::collections::BTreeMap;
 
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_fuzz() {
-//     let mut runner = runner().await;
+#[tokio::test(flavor = "multi_thread")]
+async fn test_fuzz() {
+    let mut runner = runner().await;
 
-//     let suite_result = runner
-//         .test(
-//             &Filter::new(".*", ".*", ".*fuzz/")
-//                 
-// .exclude_tests(r"invariantCounter|testIncrement\(address\)|testNeedle\(uint256\)")               
-// .exclude_paths("invariant"),             None,
-//             test_opts(),
-//         )
-//         .await;
+    let suite_result = runner
+        .test(
+            &Filter::new(".*", ".*", ".*fuzz/")
+                .exclude_tests(r"invariantCounter|testIncrement\(address\)|testNeedle\(uint256\)")
+                .exclude_paths("invariant"),
+            None,
+            test_opts(),
+        )
+        .await;
 
-//     assert!(!suite_result.is_empty());
+    assert!(!suite_result.is_empty());
 
-//     for (_, SuiteResult { test_results, .. }) in suite_result {
-//         for (test_name, result) in test_results {
-//             match test_name.as_str() {
-//                 "testPositive(uint256)" |
-//                 "testPositive(int256)" |
-//                 "testSuccessfulFuzz(uint128,uint128)" |
-//                 "testToStringFuzz(bytes32)" => assert!(
-//                     result.status == TestStatus::Success,
-//                     "Test {} did not pass as expected.\nReason: {:?}\nLogs:\n{}",
-//                     test_name,
-//                     result.reason,
-//                     result.decoded_logs.join("\n")
-//                 ),
-//                 _ => assert!(
-//                     result.status == TestStatus::Failure,
-//                     "Test {} did not fail as expected.\nReason: {:?}\nLogs:\n{}",
-//                     test_name,
-//                     result.reason,
-//                     result.decoded_logs.join("\n")
-//                 ),
-//             }
-//         }
-//     }
-// }
+    for (_, SuiteResult { test_results, .. }) in suite_result {
+        for (test_name, result) in test_results {
+            match test_name.as_str() {
+                "testPositive(uint256)" |
+                "testPositive(int256)" |
+                "testSuccessfulFuzz(uint128,uint128)" |
+                "testToStringFuzz(bytes32)" => assert!(
+                    result.status == TestStatus::Success,
+                    "Test {} did not pass as expected.\nReason: {:?}\nLogs:\n{}",
+                    test_name,
+                    result.reason,
+                    result.decoded_logs.join("\n")
+                ),
+                _ => assert!(
+                    result.status == TestStatus::Failure,
+                    "Test {} did not fail as expected.\nReason: {:?}\nLogs:\n{}",
+                    test_name,
+                    result.reason,
+                    result.decoded_logs.join("\n")
+                ),
+            }
+        }
+    }
+}
 
 /// Test that showcases PUSH collection on normal fuzzing. Ignored until we collect them in a
 /// smarter way.
