@@ -381,6 +381,11 @@ impl ScriptArgs {
                 .map(|btx| {
                     let mut tx = TransactionWithMetadata::from_typed_transaction(btx.transaction);
                     tx.rpc = btx.rpc;
+
+                    //TODO:error2215 without this lines tx has None energy and None energy_price. Should we place them manually if no onchain simulation?
+                    tx.transaction.set_energy(1000000);
+                    tx.transaction.set_energy_price(1);
+                    
                     tx
                 })
                 .collect()

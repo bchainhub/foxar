@@ -219,14 +219,14 @@ fn build_filter_topics(topics: Vec<String>) -> Result<TopicFilter, eyre::Error> 
 
 #[cfg(test)]
 mod tests {
-    use corebc::types::H160;
+    use corebc::types::H176;
 
     use super::*;
 
-    const ADDRESS: &str = "0x4D1A2e2bB4F88F0250f26Ffff098B0b30B26BF38";
+    const ADDRESS: &str = "cb564d1a2e2bb4f88f0250f26ffff098b0b30b26bf38";
     const TRANSFER_SIG: &str = "Transfer(address indexed,address indexed,uint256)";
     const TRANSFER_TOPIC: &str =
-        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+        "0xc17a9d92b89f27cb79cc390f23a1a5d302fefab8c7911075ede952ac2b5607a1";
     #[test]
     fn test_build_filter_basic() {
         let from_block = Some(BlockNumber::from(1337));
@@ -278,7 +278,7 @@ mod tests {
             address: None,
             topics: [
                 Some(H256::from_str(TRANSFER_TOPIC).unwrap().into()),
-                Some(H160::from_str(ADDRESS).unwrap().into()),
+                Some(H176::from_str(ADDRESS).unwrap().into()),
                 None,
                 None,
             ],
@@ -302,7 +302,7 @@ mod tests {
             topics: [
                 Some(H256::from_str(TRANSFER_TOPIC).unwrap().into()),
                 None,
-                Some(H160::from_str(ADDRESS).unwrap().into()),
+                Some(H176::from_str(ADDRESS).unwrap().into()),
                 None,
             ],
         };

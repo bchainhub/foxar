@@ -1,4 +1,4 @@
-pragma solidity >=0.4.24;
+pragma solidity 1.1.0;
 
 contract SimpleStorage {
 

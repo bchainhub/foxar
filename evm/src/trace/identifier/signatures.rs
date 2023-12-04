@@ -162,6 +162,7 @@ mod tests {
     use super::*;
 
     #[tokio::test(flavor = "multi_thread")]
+    #[ignore = "We don't yet have any registery for function selectors, fix once we do"]
     async fn can_query_signatures() {
         let tmp = tempfile::tempdir().unwrap();
         {

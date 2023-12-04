@@ -9,14 +9,14 @@ use corebc::{
     providers::{Http, Provider},
     signers::Signer,
     types::{
-        transaction::eip2718::TypedTransaction, Address, BlockNumber, Chain, TransactionRequest,
+        transaction::eip2718::TypedTransaction, Address, BlockNumber, Network, TransactionRequest,
         U256,
     },
 };
 use forge::utils::h176_to_b176;
 use foundry_common::get_http_provider;
 use foundry_config::Config;
-use foundry_utils::{rpc, rpc::next_http_rpc_endpoint};
+use foundry_utils::{rpc, rpc::next_http_rpc_endpoint, types::ToRuint};
 use futures::StreamExt;
 use std::{sync::Arc, time::Duration};
 
@@ -53,12 +53,13 @@ impl LocalFork {
 
 pub fn fork_config() -> NodeConfig {
     NodeConfig::test()
-        .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint()))
+        .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)))
         .with_fork_block_number(Some(BLOCK_NUMBER))
         .silent()
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_spawn_fork() {
     let (api, _handle) = spawn(fork_config()).await;
     assert!(api.is_fork());
@@ -68,6 +69,7 @@ async fn test_spawn_fork() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_eth_get_balance() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -81,6 +83,7 @@ async fn test_fork_eth_get_balance() {
 
 // <https://github.com/foundry-rs/foundry/issues/4082>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_eth_get_balance_after_mine() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -105,6 +108,7 @@ async fn test_fork_eth_get_balance_after_mine() {
 
 // <https://github.com/foundry-rs/foundry/issues/4082>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_eth_get_code_after_mine() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -124,6 +128,7 @@ async fn test_fork_eth_get_code_after_mine() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_eth_get_code() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -134,7 +139,7 @@ async fn test_fork_eth_get_code() {
         assert_eq!(code, provider_code)
     }
 
-    for address in utils::contract_addresses(Chain::Mainnet) {
+    for address in utils::contract_addresses(Network::Mainnet) {
         let prev_code = api
             .get_code(address, Some(BlockNumber::Number((BLOCK_NUMBER - 10).into()).into()))
             .await
@@ -148,6 +153,7 @@ async fn test_fork_eth_get_code() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_eth_get_nonce() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -166,16 +172,7 @@ async fn test_fork_eth_get_nonce() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn test_fork_eth_fee_history() {
-    let (api, handle) = spawn(fork_config()).await;
-    let provider = handle.http_provider();
-
-    let count = 10u64;
-    let _history = api.fee_history(count.into(), BlockNumber::Latest, vec![]).await.unwrap();
-    let _provider_history = provider.fee_history(count, BlockNumber::Latest, &[]).await.unwrap();
-}
-
-#[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_reset() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -224,6 +221,7 @@ async fn test_fork_reset() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_snapshotting() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -263,6 +261,7 @@ async fn test_fork_snapshotting() {
 /// changes don't make into the read only Database that holds the remote state, which is flushed to
 /// a cache file.
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_separate_states() {
     let (api, handle) = spawn(fork_config().with_fork_block_number(Some(14723772u64))).await;
     let provider = handle.http_provider();
@@ -280,10 +279,11 @@ async fn test_separate_states() {
     let fork_db = fork.database.read().await;
     let acc = fork_db.inner().db().accounts.read().get(&h176_to_b176(addr)).cloned().unwrap();
 
-    assert_eq!(acc.balance, remote_balance.into())
+    assert_eq!(acc.balance, remote_balance.to_ruint())
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn can_deploy_greeter_on_fork() {
     let (_api, handle) = spawn(fork_config().with_fork_block_number(Some(14723772u64))).await;
     let provider = handle.http_provider();
@@ -308,6 +308,7 @@ async fn can_deploy_greeter_on_fork() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn can_reset_properly() {
     let (origin_api, origin_handle) = spawn(NodeConfig::test()).await;
     let account = origin_handle.dev_accounts().next().unwrap();
@@ -345,6 +346,7 @@ async fn can_reset_properly() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_timestamp() {
     let start = std::time::Instant::now();
 
@@ -407,6 +409,7 @@ async fn test_fork_timestamp() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_set_empty_code() {
     let (api, _handle) = spawn(fork_config()).await;
     let addr = "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984".parse().unwrap();
@@ -418,11 +421,12 @@ async fn test_fork_set_empty_code() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_can_send_tx() {
     let (api, handle) =
         spawn(fork_config().with_blocktime(Some(std::time::Duration::from_millis(800)))).await;
 
-    let wallet = LocalWallet::new(&mut rand::thread_rng());
+    let wallet = LocalWallet::new(&mut rand::thread_rng(), Network::Mainnet);
 
     api.anvil_set_balance(wallet.address(), U256::from(1e18 as u64)).await.unwrap();
 
@@ -441,6 +445,7 @@ async fn test_fork_can_send_tx() {
 
 // <https://github.com/foundry-rs/foundry/issues/1920>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_nft_set_approve_all() {
     let (api, handle) = spawn(
         fork_config()
@@ -451,7 +456,7 @@ async fn test_fork_nft_set_approve_all() {
     .await;
 
     // create and fund a random wallet
-    let wallet = LocalWallet::new(&mut rand::thread_rng());
+    let wallet = LocalWallet::new(&mut rand::thread_rng(), Network::Mainnet);
     api.anvil_set_balance(wallet.address(), U256::from(1000e18 as u64)).await.unwrap();
 
     let provider = Arc::new(SignerMiddleware::new(handle.http_provider(), wallet.clone()));
@@ -488,6 +493,7 @@ async fn test_fork_nft_set_approve_all() {
 
 // <https://github.com/foundry-rs/foundry/issues/2261>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_with_custom_chain_id() {
     // spawn a forked node with some random chainId
     let (api, handle) = spawn(
@@ -513,6 +519,7 @@ async fn test_fork_with_custom_chain_id() {
 
 // <https://github.com/foundry-rs/foundry/issues/1920>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_can_send_opensea_tx() {
     let (api, handle) = spawn(
         fork_config()
@@ -535,61 +542,24 @@ async fn test_fork_can_send_opensea_tx() {
         .to(to)
         .value(20000000000000000u64)
         .data(input)
-        .gas_price(22180711707u64)
-        .gas(150_000u64);
+        .energy_price(22180711707u64)
+        .energy(150_000u64);
 
     let tx = provider.send_transaction(tx, None).await.unwrap().await.unwrap().unwrap();
     assert_eq!(tx.status, Some(1u64.into()));
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn test_fork_base_fee() {
-    let (api, handle) = spawn(fork_config()).await;
-
-    let accounts: Vec<_> = handle.dev_wallets().collect();
-    let from = accounts[0].address();
-
-    let provider = handle.http_provider();
-
-    api.anvil_set_next_block_base_fee_per_gas(U256::zero()).await.unwrap();
-
-    let addr = Address::random();
-    let val = 1337u64;
-    let tx = TransactionRequest::new().from(from).to(addr).value(val);
-
-    let _res = provider.send_transaction(tx, None).await.unwrap().await.unwrap().unwrap();
-}
-
-#[tokio::test(flavor = "multi_thread")]
-async fn test_fork_init_base_fee() {
-    let (api, handle) = spawn(fork_config().with_fork_block_number(Some(13184859u64))).await;
-
-    let provider = handle.http_provider();
-
-    let block = provider.get_block(BlockNumber::Latest).await.unwrap().unwrap();
-    // <https://etherscan.io/block/13184859>
-    assert_eq!(block.number.unwrap().as_u64(), 13184859u64);
-    let init_base_fee = block.base_fee_per_gas.unwrap();
-    assert_eq!(init_base_fee, 63739886069u64.into());
-
-    api.mine_one().await;
-
-    let block = provider.get_block(BlockNumber::Latest).await.unwrap().unwrap();
-
-    let next_base_fee = block.base_fee_per_gas.unwrap();
-    assert!(next_base_fee < init_base_fee);
-}
-
-#[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_reset_fork_on_new_blocks() {
     let (api, handle) = spawn(
-        NodeConfig::test().with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint())).silent(),
+        NodeConfig::test().with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet))).silent(),
     )
     .await;
 
     let anvil_provider = handle.http_provider();
 
-    let endpoint = next_http_rpc_endpoint();
+    let endpoint = next_http_rpc_endpoint(Network::Mainnet);
     let provider = Arc::new(get_http_provider(&endpoint).interval(Duration::from_secs(2)));
 
     let current_block = anvil_provider.get_block_number().await.unwrap();
@@ -599,7 +569,7 @@ async fn test_reset_fork_on_new_blocks() {
     let mut stream = provider.watch_blocks().await.unwrap();
     // the http watcher may fetch multiple blocks at once, so we set a timeout here to offset edge
     // cases where the stream immediately returns a block
-    tokio::time::sleep(Chain::Mainnet.average_blocktime_hint().unwrap()).await;
+    tokio::time::sleep(Network::Mainnet.average_blocktime_hint().unwrap()).await;
     stream.next().await.unwrap();
     stream.next().await.unwrap();
 
@@ -609,12 +579,13 @@ async fn test_reset_fork_on_new_blocks() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_call() {
     let input: Bytes = "0x77c7b8fc".parse().unwrap();
     let to: Address = "0x99d1Fa417f94dcD62BfE781a1213c092a47041Bc".parse().unwrap();
     let block_number = 14746300u64;
 
-    let provider = Provider::<Http>::try_from(rpc::next_http_archive_rpc_endpoint()).unwrap();
+    let provider = Provider::<Http>::try_from(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)).unwrap();
     let mut tx = TypedTransaction::default();
     tx.set_to(to).set_data(input.clone());
     let res0 =
@@ -635,6 +606,7 @@ async fn test_fork_call() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_block_timestamp() {
     let (api, _) = spawn(fork_config()).await;
 
@@ -646,6 +618,7 @@ async fn test_fork_block_timestamp() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_snapshot_block_timestamp() {
     let (api, _) = spawn(fork_config()).await;
 
@@ -661,6 +634,7 @@ async fn test_fork_snapshot_block_timestamp() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_uncles_fetch() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -699,6 +673,7 @@ async fn test_fork_uncles_fetch() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_fork_block_transaction_count() {
     let (api, handle) = spawn(fork_config()).await;
     let provider = handle.http_provider();
@@ -711,7 +686,7 @@ async fn test_fork_block_transaction_count() {
     // transfer: impersonate real sender
     api.anvil_impersonate_account(sender).await.unwrap();
 
-    let tx = TransactionRequest::new().from(sender).value(42u64).gas(100_000);
+    let tx = TransactionRequest::new().from(sender).value(42u64).energy(100_000);
     provider.send_transaction(tx, None).await.unwrap();
 
     let pending_txs =
@@ -751,6 +726,7 @@ async fn test_fork_block_transaction_count() {
 
 // <https://github.com/foundry-rs/foundry/issues/2931>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn can_impersonate_in_fork() {
     let (api, handle) = spawn(fork_config().with_fork_block_number(Some(15347924u64))).await;
     let provider = handle.http_provider();
@@ -783,6 +759,7 @@ async fn can_impersonate_in_fork() {
 
 // <https://etherscan.io/block/14608400>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_total_difficulty_fork() {
     let (api, handle) = spawn(fork_config()).await;
 
@@ -806,6 +783,7 @@ async fn test_total_difficulty_fork() {
 
 // <https://etherscan.io/block/14608400>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn test_transaction_receipt() {
     let (api, _) = spawn(fork_config()).await;
 
@@ -829,6 +807,7 @@ async fn test_transaction_receipt() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[ignore = "Forking is disabled"]
 async fn can_override_fork_chain_id() {
     let chain_id_override = 5u64;
     let (_api, handle) = spawn(
@@ -858,6 +837,6 @@ async fn can_override_fork_chain_id() {
     assert_eq!("Hello World!", greeting);
 
     let provider = handle.http_provider();
-    let chain_id = provider.get_chainid().await.unwrap();
+    let chain_id = provider.get_networkid().await.unwrap();
     assert_eq!(chain_id.as_u64(), chain_id_override);
 }

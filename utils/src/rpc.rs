@@ -1,5 +1,4 @@
 use corebc_addressbook::Network;
-use corebc_blockindex::Client;
 
 /// Returns _mainnet_ rpc endpoint in inline
 pub fn http_rpc_endpoint() -> String {
@@ -7,15 +6,20 @@ pub fn http_rpc_endpoint() -> String {
 }
 
 pub fn rpc_endpoint(network: Network) -> String {
-    let client = Client::new(network).unwrap();
-    client.blockindex_api_url().as_str().to_string()
+    next_http_rpc_endpoint(network)
 }
 
 /// Returns endpoint that has access to archive state
-pub fn next_http_archive_rpc_endpoint() -> String {
-    // TODO:error2215 add a blockindex api url that has access to archive state
-    let client = Client::new(Network::Mainnet).unwrap();
-    client.blockindex_api_url().as_str().to_string()
+pub fn next_http_archive_rpc_endpoint(network: Network) -> String {
+    next_http_rpc_endpoint(network)
+}
+
+pub fn next_http_rpc_endpoint(network: Network) -> String {
+    match network {
+        Network::Mainnet => String::from("http://127.0.0.1:9586/"),
+        Network::Devin => String::from("https://xcbapi.corecoin.cc/"),
+        _ => panic!("Invalid Network. Only devin and mainnet are availible"),
+    }
 }
 
 #[cfg(test)]

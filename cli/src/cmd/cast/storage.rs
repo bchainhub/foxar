@@ -122,7 +122,7 @@ impl StorageArgs {
 
         let chain = utils::get_network(config.network_id, &provider).await?;
         // let api_key = config.get_etherscan_api_key(Some(chain)).unwrap_or_default();
-        let client = Client::new(chain.named()?)?;
+        let client = Client::new(chain)?;
         let source = find_source(client, address).await?;
         let metadata = source.items.first().unwrap();
         let version = metadata.compiler_version()?;

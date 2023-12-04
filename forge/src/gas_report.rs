@@ -47,7 +47,7 @@ impl GasReport {
         let trace = &node.trace;
 
         if trace.address == CHEATCODE_ADDRESS || trace.address == HARDHAT_CONSOLE_ADDRESS {
-            return
+            return;
         }
 
         if let Some(name) = &trace.contract {
@@ -119,7 +119,7 @@ impl Display for GasReport {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
         for (name, contract) in self.contracts.iter() {
             if contract.functions.is_empty() {
-                continue
+                continue;
             }
 
             let mut table = Table::new();

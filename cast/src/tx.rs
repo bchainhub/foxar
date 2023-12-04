@@ -2,13 +2,13 @@ use crate::errors::FunctionSignatureError;
 use corebc_core::{
     abi::Function,
     types::{
-        transaction::eip2718::TypedTransaction, NameOrAddress, TransactionRequest, H176, U256,
+        transaction::eip2718::TypedTransaction, NameOrAddress, Network, TransactionRequest, H176,
+        U256,
     },
 };
 use corebc_providers::Middleware;
 use eyre::{eyre, Result};
 use foundry_common::abi::{encode_args, get_func, get_func_blockindex};
-use foundry_config::Network;
 use futures::future::join_all;
 
 use crate::strip_0x;
@@ -30,7 +30,7 @@ pub type TxBuilderPeekOutput<'a> = (&'a TypedTransaction, &'a Option<Function>);
 ///   use corebc_core::types::{Network, U256};
 ///   use cast::TxBuilder;
 ///   let provider = corebc_providers::test_provider::MAINNET.provider();
-///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet, false).await?;
+///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet).await?;
 ///   builder
 ///       .energy(Some(U256::from(1)));
 ///   let (tx, _) = builder.build();
@@ -54,12 +54,11 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
         let from_addr = resolve_ens(provider, from).await?;
 
         let mut tx: TypedTransaction =
-            TransactionRequest::new().from(from_addr).network_id(network.id()).into();
+            TransactionRequest::new().from(from_addr).network_id(network).into();
 
         let to_addr = if let Some(to) = to {
             let addr =
-                resolve_ens(provider, foundry_utils::resolve_addr(to, network.try_into().ok())?)
-                    .await?;
+                resolve_ens(provider, foundry_utils::resolve_addr(to, Some(network))?).await?;
             tx.set_to(addr);
             Some(addr)
         } else {
@@ -161,15 +160,11 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
             // if only calldata is provided, returning a dummy function
             get_func("x()")?
         } else {
-            let chain = self
-                .chain
-                .try_into()
-                .map_err(|_| FunctionSignatureError::UnknownChain(self.chain))?;
             get_func_blockindex(
                 sig,
                 self.to.ok_or(FunctionSignatureError::MissingToAddress)?,
                 &args,
-                chain,
+                self.chain,
             )
             .await?
         };
@@ -249,9 +244,7 @@ async fn resolve_name_args<M: Middleware>(args: &[String], provider: &M) -> Vec<
 mod tests {
     use crate::TxBuilder;
     use async_trait::async_trait;
-    use corebc_core::types::{
-        transaction::eip2718::TypedTransaction, Address, NameOrAddress, Network, H160, U256,
-    };
+    use corebc_core::types::{transaction::eip2718::TypedTransaction, Address, Network};
     use corebc_providers::{JsonRpcClient, Middleware, ProviderError};
     use serde::{de::DeserializeOwned, Serialize};
     use std::str::FromStr;
@@ -305,9 +298,6 @@ mod tests {
         let (tx, _) = builder.build();
         match tx {
             TypedTransaction::Legacy(_) => {}
-            _ => {
-                panic!("Wrong tx type");
-            }
         }
         Ok(())
     }

@@ -14,7 +14,7 @@ use crate::{
     tasks::TaskManager,
 };
 use corebc::{
-    core::k256::ecdsa::SigningKey,
+    core::libgoldilocks::SigningKey,
     prelude::Wallet,
     providers::{Http, Provider, Ws},
     signers::Signer,
@@ -282,9 +282,9 @@ impl NodeHandle {
         self.config.genesis_balance
     }
 
-    /// Default gas price for all txs
-    pub fn gas_price(&self) -> U256 {
-        self.config.get_gas_price()
+    /// Default energy price for all txs
+    pub fn energy_price(&self) -> U256 {
+        self.config.get_energy_price()
     }
 
     /// Returns the shutdown signal

@@ -256,7 +256,7 @@ impl SessionSource {
             .with_config(env)
             .with_chisel_state(final_pc)
             .set_tracing(true)
-            .with_spec(foundry_evm::utils::evm_spec(&self.config.foundry_config.evm_version))
+            .with_spec(foundry_evm::utils::evm_spec(&self.config.foundry_config.cvm_version))
             .with_energy_limit(self.config.evm_opts.energy_limit())
             .with_cheatcodes(CheatsConfig::new(&self.config.foundry_config, &self.config.evm_opts))
             .build(backend);
@@ -509,7 +509,7 @@ impl Type {
             pt::Expression::Negate(_, inner) => Self::from_expression(inner).map(Self::invert_int),
 
             // int if either operand is int
-            // TODO: will need an update for Solidity v0.8.18 user defined operators:
+            // TODO: will need an update for Solidity v1.1.0 user defined operators:
             // https://github.com/ethereum/solidity/issues/13718#issuecomment-1341058649
             pt::Expression::Add(_, lhs, rhs) |
             pt::Expression::Subtract(_, lhs, rhs) |
@@ -1208,7 +1208,7 @@ impl<'a> Iterator for InstructionIter<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use corebc_ylem::{error::YlemIoError, Ylem};
+    use corebc_ylem::{error::{YlemIoError, YlemError}, Ylem};
     use once_cell::sync::Lazy;
     use std::sync::Mutex;
 
@@ -1344,7 +1344,7 @@ mod tests {
                 // address
                 ("address", Address),
                 ("address(0)", Address),
-                ("0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990", Address),
+                ("0x0000690B9A9E9aa1C9dB991C7721a92d351Db4FaC990", Address),
                 ("payable(0)", Address),
                 ("payable(address(0))", Address),
                 //

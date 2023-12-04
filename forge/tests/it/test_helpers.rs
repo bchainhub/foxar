@@ -63,10 +63,12 @@ pub static COMPILED_WITH_LIBS: Lazy<ProjectCompileOutput> = Lazy::new(|| {
 pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         energy_limit: 18446744073709551615,
-        network_id: None,
+        network_id: Some(corebc::types::Network::Mainnet),
         tx_origin: Config::DEFAULT_SENDER,
         block_number: 1,
         block_timestamp: 1,
+        block_coinbase: Address::from_str("0xcb540000000000000000000000000000000000000000")
+            .unwrap(),
         ..Default::default()
     },
     sender: Config::DEFAULT_SENDER,
@@ -157,7 +159,7 @@ pub mod filter {
             let test_name = test_name.as_ref();
             if let Some(ref exclude) = self.exclude_tests {
                 if exclude.is_match(test_name) {
-                    return false
+                    return false;
                 }
             }
             self.test_regex.is_match(test_name)
@@ -171,7 +173,7 @@ pub mod filter {
             let path = path.as_ref();
             if let Some(ref exclude) = self.exclude_paths {
                 if exclude.is_match(path) {
-                    return false
+                    return false;
                 }
             }
             self.path_regex.is_match(path)

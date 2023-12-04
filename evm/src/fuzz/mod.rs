@@ -56,7 +56,7 @@ impl<'a> FuzzedExecutor<'a> {
     /// If `should_fail` is set to `true`, then it will stop only when there's a success
     /// test case.
     ///
-    /// Returns a list of all the consumed gas and calldata of every fuzz case
+    /// Returns a list of all the consumed energy and calldata of every fuzz case
     pub fn fuzz(
         &self,
         func: &Function,
@@ -67,8 +67,8 @@ impl<'a> FuzzedExecutor<'a> {
         // Stores the first Fuzzcase
         let first_case: RefCell<Option<FuzzCase>> = RefCell::default();
 
-        // gas usage per case
-        let gas_by_case: RefCell<Vec<(u64, u64)>> = RefCell::default();
+        // energy usage per case
+        let energy_by_case: RefCell<Vec<(u64, u64)>> = RefCell::default();
 
         // Stores the result and calldata of the last failed call, if any.
         let counterexample: RefCell<(Bytes, RawCallResult)> = RefCell::default();
@@ -87,16 +87,16 @@ impl<'a> FuzzedExecutor<'a> {
         };
 
         let mut weights = vec![];
-        let network = &Network::try_from(self.executor.env().cfg.network.as_u64()).unwrap();
+        let network = Network::from(self.executor.env().cfg.network_id);
 
         let dictionary_weight = self.config.dictionary.dictionary_weight.min(100);
         if self.config.dictionary.dictionary_weight < 100 {
-            weights.push((100 - dictionary_weight, fuzz_calldata(func.clone(), network)));
+            weights.push((100 - dictionary_weight, fuzz_calldata(func.clone(), &network)));
         }
         if dictionary_weight > 0 {
             weights.push((
                 self.config.dictionary.dictionary_weight,
-                fuzz_calldata_from_state(func.clone(), state.clone(), network),
+                fuzz_calldata_from_state(func.clone(), state.clone(), &network),
             ));
         }
 
@@ -137,11 +137,11 @@ impl<'a> FuzzedExecutor<'a> {
                 if first_case.is_none() {
                     first_case.replace(FuzzCase {
                         calldata,
-                        gas: call.energy_used,
+                        energy: call.energy_used,
                         stipend: call.stipend,
                     });
                 }
-                gas_by_case.borrow_mut().push((call.energy_used, call.stipend));
+                energy_by_case.borrow_mut().push((call.energy_used, call.stipend));
 
                 traces.replace(call.traces);
 
@@ -171,11 +171,10 @@ impl<'a> FuzzedExecutor<'a> {
                 ))
             }
         });
-
         let (calldata, call) = counterexample.into_inner();
         let mut result = FuzzTestResult {
             first_case: first_case.take().unwrap_or_default(),
-            gas_by_case: gas_by_case.take(),
+            energy_by_case: energy_by_case.take(),
             success: run_result.is_ok(),
             reason: None,
             counterexample: None,
@@ -309,8 +308,8 @@ impl fmt::Display for BaseCounterExample {
 pub struct FuzzTestResult {
     /// we keep this for the debugger
     pub first_case: FuzzCase,
-    /// Gas usage (gas_used, call_stipend) per cases
-    pub gas_by_case: Vec<(u64, u64)>,
+    /// Energy usage (energy_used, call_stipend) per cases
+    pub energy_by_case: Vec<(u64, u64)>,
     /// Whether the test case was successful. This means that the transaction executed
     /// properly, or that there was a revert and that the test was expected to fail
     /// (prefixed with `testFail`)
@@ -344,24 +343,24 @@ pub struct FuzzTestResult {
 }
 
 impl FuzzTestResult {
-    /// Returns the median gas of all test cases
-    pub fn median_gas(&self, with_stipend: bool) -> u64 {
-        let mut values = self.gas_values(with_stipend);
+    /// Returns the median energy of all test cases
+    pub fn median_energy(&self, with_stipend: bool) -> u64 {
+        let mut values = self.energy_values(with_stipend);
         values.sort_unstable();
         calc::median_sorted(&values)
     }
 
-    /// Returns the average gas use of all test cases
-    pub fn mean_gas(&self, with_stipend: bool) -> u64 {
-        let mut values = self.gas_values(with_stipend);
+    /// Returns the average energy use of all test cases
+    pub fn mean_energy(&self, with_stipend: bool) -> u64 {
+        let mut values = self.energy_values(with_stipend);
         values.sort_unstable();
         calc::mean(&values).as_u64()
     }
 
-    fn gas_values(&self, with_stipend: bool) -> Vec<u64> {
-        self.gas_by_case
+    fn energy_values(&self, with_stipend: bool) -> Vec<u64> {
+        self.energy_by_case
             .iter()
-            .map(|gas| if with_stipend { gas.0 } else { gas.0.saturating_sub(gas.1) })
+            .map(|energy| if with_stipend { energy.0 } else { energy.0.saturating_sub(energy.1) })
             .collect()
     }
 }
@@ -375,7 +374,7 @@ pub struct FuzzedCases {
 
 impl FuzzedCases {
     pub fn new(mut cases: Vec<FuzzCase>) -> Self {
-        cases.sort_by_key(|c| c.gas);
+        cases.sort_by_key(|c| c.energy);
         Self { cases }
     }
 
@@ -392,47 +391,47 @@ impl FuzzedCases {
         self.cases.last()
     }
 
-    /// Returns the median gas of all test cases
-    pub fn median_gas(&self, with_stipend: bool) -> u64 {
-        let mut values = self.gas_values(with_stipend);
+    /// Returns the median energy of all test cases
+    pub fn median_energy(&self, with_stipend: bool) -> u64 {
+        let mut values = self.energy_values(with_stipend);
         values.sort_unstable();
         calc::median_sorted(&values)
     }
 
-    /// Returns the average gas use of all test cases
-    pub fn mean_gas(&self, with_stipend: bool) -> u64 {
-        let mut values = self.gas_values(with_stipend);
+    /// Returns the average energy use of all test cases
+    pub fn mean_energy(&self, with_stipend: bool) -> u64 {
+        let mut values = self.energy_values(with_stipend);
         values.sort_unstable();
         calc::mean(&values).as_u64()
     }
 
-    fn gas_values(&self, with_stipend: bool) -> Vec<u64> {
+    fn energy_values(&self, with_stipend: bool) -> Vec<u64> {
         self.cases
             .iter()
-            .map(|c| if with_stipend { c.gas } else { c.gas.saturating_sub(c.stipend) })
+            .map(|c| if with_stipend { c.energy } else { c.energy.saturating_sub(c.stipend) })
             .collect()
     }
 
-    /// Returns the case with the highest gas usage
+    /// Returns the case with the highest energy usage
     pub fn highest(&self) -> Option<&FuzzCase> {
         self.cases.last()
     }
 
-    /// Returns the case with the lowest gas usage
+    /// Returns the case with the lowest energy usage
     pub fn lowest(&self) -> Option<&FuzzCase> {
         self.cases.first()
     }
 
-    /// Returns the highest amount of gas spent on a fuzz case
-    pub fn highest_gas(&self, with_stipend: bool) -> u64 {
+    /// Returns the highest amount of energy spent on a fuzz case
+    pub fn highest_energy(&self, with_stipend: bool) -> u64 {
         self.highest()
-            .map(|c| if with_stipend { c.gas } else { c.gas - c.stipend })
+            .map(|c| if with_stipend { c.energy } else { c.energy - c.stipend })
             .unwrap_or_default()
     }
 
-    /// Returns the lowest amount of gas spent on a fuzz case
-    pub fn lowest_gas(&self) -> u64 {
-        self.lowest().map(|c| c.gas).unwrap_or_default()
+    /// Returns the lowest amount of energy spent on a fuzz case
+    pub fn lowest_energy(&self) -> u64 {
+        self.lowest().map(|c| c.energy).unwrap_or_default()
     }
 }
 
@@ -441,8 +440,8 @@ impl FuzzedCases {
 pub struct FuzzCase {
     /// The calldata used for this fuzz test
     pub calldata: Bytes,
-    /// Consumed gas
-    pub gas: u64,
-    /// The initial gas stipend for the transaction
+    /// Consumed energy
+    pub energy: u64,
+    /// The initial energy stipend for the transaction
     pub stipend: u64,
 }

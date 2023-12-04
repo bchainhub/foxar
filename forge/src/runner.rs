@@ -204,7 +204,7 @@ impl<'a> ContractRunner<'a> {
                 )]
                 .into(),
                 warnings,
-            )
+            );
         }
 
         let has_invariants = self.contract.functions().any(|func| func.is_invariant_test());
@@ -239,7 +239,7 @@ impl<'a> ContractRunner<'a> {
                 )]
                 .into(),
                 warnings,
-            )
+            );
         }
 
         let mut test_results = self
@@ -435,7 +435,7 @@ impl<'a> ContractRunner<'a> {
                 labeled_addresses,
                 kind: TestKind::Standard(0),
                 ..Default::default()
-            }]
+            }];
         };
 
         let mut evm = InvariantExecutor::new(
@@ -452,7 +452,7 @@ impl<'a> ContractRunner<'a> {
         let Ok(InvariantFuzzTestResult { invariants, cases, reverts, mut last_call_results }) =
             evm.invariant_fuzz(invariant_contract)
         else {
-            return vec![]
+            return vec![];
         };
 
         invariants
@@ -556,14 +556,14 @@ impl<'a> ContractRunner<'a> {
                 labeled_addresses,
                 kind: TestKind::Standard(0),
                 ..Default::default()
-            }
+            };
         }
 
         let kind = TestKind::Fuzz {
-            median_gas: result.median_gas(false),
-            mean_gas: result.mean_gas(false),
+            median_gas: result.median_energy(false),
+            mean_gas: result.mean_energy(false),
             first_case: result.first_case,
-            runs: result.gas_by_case.len(),
+            runs: result.energy_by_case.len(),
         };
 
         // Record logs, labels and traces

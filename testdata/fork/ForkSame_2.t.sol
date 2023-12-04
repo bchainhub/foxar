@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
 contract ForkTest is DSTest {
-    address constant WETH_TOKEN_ADDR = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address constant WETH_TOKEN_ADDR = 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
     uint256 forkA;
 

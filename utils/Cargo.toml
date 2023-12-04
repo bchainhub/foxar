@@ -14,7 +14,7 @@ corebc-contract = { workspace = true, features = ["abigen"]}
 corebc-blockindex = { workspace = true}
 corebc-addressbook = { workspace = true}
 corebc-providers = { workspace = true}
-corebc-ylem = { workspace = true}
+corebc-ylem = { workspace = true }
 
 revm = { workspace = true, features = ["std"] }
 
@@ -34,5 +34,5 @@ tracing = "0.1"
 
 [dev-dependencies]
 foundry-common = { path = "./../common" }
-corebc = { workspace = true, features = ["ylem-full"]}
+corebc = { workspace = true, features = ["ylem-full", "corebc-ylem"]}
 pretty_assertions = "1.3.0"

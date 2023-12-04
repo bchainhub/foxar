@@ -102,13 +102,13 @@ impl SessionSourceConfig {
             YlemReq::Version(version) => {
                 // We now need to verify if the ylem version provided is supported by the evm
                 // version set. If not, we bail and ask the user to provide a newer version.
-                // 1. Do we need ylem 0.8.18 or higher?
-                let evm_version = self.foundry_config.evm_version;
-                // 2. Check if the version provided is less than 0.8.18 and bail,
+                // 1. Do we need ylem 1.1.0 or higher?
+                let evm_version = self.foundry_config.cvm_version;
+                // 2. Check if the version provided is less than 1.1.0 and bail,
                 // or leave it as-is if we don't need a post merge ylem version or the version we
                 // have is good enough.
                 let v = if version < Version::new(0, 8, 18) {
-                    eyre::bail!("ylem {version} is not supported by the set evm version: {evm_version}. Please install and use a version of ylem higher or equal to 0.8.18.
+                    eyre::bail!("ylem {version} is not supported by the set evm version: {evm_version}. Please install and use a version of ylem higher or equal to 1.1.0.
 You can also set the ylem version in your foundry.toml.")
                 } else {
                     version.to_string()
@@ -331,7 +331,7 @@ impl SessionSource {
             .collect();
 
         // We also need to enforce the EVM version that the user has specified.
-        compiler_input.settings.evm_version = Some(self.config.foundry_config.evm_version);
+        compiler_input.settings.evm_version = Some(self.config.foundry_config.cvm_version);
 
         compiler_input
     }
@@ -481,7 +481,7 @@ import {{Cheats}} from "forge-std/Vm.sol";
 {}
 
 contract {} {{
-    Cheats internal constant vm = Cheats(address(uint176(uint256(sha3("hevm cheat code")))));
+    Cheats internal constant vm = Cheats(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
     {}
   
     /// @notice REPL contract entry point

@@ -485,7 +485,6 @@ mod tests {
             .filter(|(i, _)| contract_names.contains(&i.slug().as_str()))
             .map(|(id, c)| (id, c.into_contract_bytecode()))
             .collect::<ArtifactContracts>();
-
         let mut known_contracts = ContractsByArtifact::default();
         let mut deployable_contracts: BTreeMap<String, (Abi, Bytes, Vec<Bytes>)> =
             Default::default();
@@ -571,19 +570,19 @@ mod tests {
     fn test_resolve_addr() {
         use std::str::FromStr;
 
-        // DAI:mainnet exists in corebc-addressbook (0x6b175474e89094c44da98b954eedeac495271d0f)
+        // DAI:mainnet exists in corebc-addressbook (0x00006b175474e89094c44da98b954eedeac495271d0f)
         assert_eq!(
             resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Mainnet)).ok(),
             Some(NameOrAddress::Address(
-                Address::from_str("0x6b175474e89094c44da98b954eedeac495271d0f").unwrap()
+                Address::from_str("0x00006b175474e89094c44da98b954eedeac495271d0f").unwrap()
             ))
         );
 
-        // DAI:devin exists in corebc-adddressbook (0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844)
+        // weth:devin exists in corebc-adddressbook (0x0000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
         assert_eq!(
-            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Devin)).ok(),
+            resolve_addr(NameOrAddress::Name("weth".to_string()), Some(Network::Devin)).ok(),
             Some(NameOrAddress::Address(
-                Address::from_str("0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844").unwrap()
+                Address::from_str("0x0000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48").unwrap()
             ))
         );
 

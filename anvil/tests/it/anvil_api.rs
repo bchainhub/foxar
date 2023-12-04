@@ -1,5 +1,5 @@
 //! tests for custom anvil endpoints
-use crate::{abi::*, fork::fork_config};
+use crate::abi::*;
 use anvil::{spawn, Hardfork, NodeConfig};
 use anvil_core::{
     eth::EthRequest,
@@ -8,10 +8,7 @@ use anvil_core::{
 use corebc::{
     abi::{ethereum_types::BigEndianHash, AbiDecode},
     prelude::{Middleware, SignerMiddleware},
-    types::{
-        transaction::eip2718::TypedTransaction, Address, BlockNumber, Eip1559TransactionRequest,
-        TransactionRequest, H256, U256, U64,
-    },
+    types::{Address, BlockNumber, TransactionRequest, H256, U256, U64},
     utils::hex,
 };
 use forge::revm::primitives::SpecId;
@@ -22,32 +19,32 @@ use std::{
 };
 
 #[tokio::test(flavor = "multi_thread")]
-async fn can_set_gas_price() {
-    let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Berlin))).await;
+async fn can_set_energy_price() {
+    let (api, handle) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
     let provider = handle.http_provider();
 
-    let gas_price = 1337u64.into();
-    api.anvil_set_min_gas_price(gas_price).await.unwrap();
-    assert_eq!(gas_price, provider.get_gas_price().await.unwrap());
+    let energy_price = 1337u64.into();
+    api.anvil_set_min_energy_price(energy_price).await.unwrap();
+    assert_eq!(energy_price, provider.get_energy_price().await.unwrap());
 }
 
 #[tokio::test(flavor = "multi_thread")]
-async fn can_set_block_gas_limit() {
-    let (api, _) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Berlin))).await;
+async fn can_set_block_energy_limit() {
+    let (api, _) = spawn(NodeConfig::test().with_hardfork(Some(Hardfork::Istanbul))).await;
 
-    let block_gas_limit = 1337u64.into();
-    assert!(api.evm_set_block_gas_limit(block_gas_limit).unwrap());
-    // Mine a new block, and check the new block gas limit
+    let block_energy_limit = 1337u64.into();
+    assert!(api.evm_set_block_energy_limit(block_energy_limit).unwrap());
+    // Mine a new block, and check the new block energy limit
     api.mine_one().await;
     let latest_block = api.block_by_number(BlockNumber::Latest).await.unwrap().unwrap();
-    assert_eq!(block_gas_limit, latest_block.gas_limit);
+    assert_eq!(block_energy_limit, latest_block.energy_limit);
 }
 
 // Ref <https://github.com/foundry-rs/foundry/issues/2341>
 #[tokio::test(flavor = "multi_thread")]
 async fn can_set_storage() {
     let (api, _handle) = spawn(NodeConfig::test()).await;
-    let s = r#"{"jsonrpc": "2.0", "method": "hardhat_setStorageAt", "id": 1, "params": ["0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0xa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb49", "0x0000000000000000000000000000000000000000000000000000000000003039"]}"#;
+    let s = r#"{"jsonrpc": "2.0", "method": "hardhat_setStorageAt", "id": 1, "params": ["0xcb66e9e7CEA3DedcA5984780Bafc599bD69ADd087D56", "0xa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb49", "0x0000000000000000000000000000000000000000000000000000000000003039"]}"#;
     let req = serde_json::from_str::<EthRequest>(s).unwrap();
     let (addr, slot, val) = match req.clone() {
         EthRequest::SetStorageAt(addr, slot, val) => (addr, slot, val),
@@ -141,9 +138,10 @@ async fn can_impersonate_contract() {
     let wallet = handle.dev_wallets().next().unwrap();
     let provider = Arc::new(SignerMiddleware::new(provider, wallet));
 
-    let greeter_contract =
-        Greeter::deploy(provider, "Hello World!".to_string()).unwrap().send().await.unwrap();
-    let impersonate = greeter_contract.address();
+    let box_contract = Box::deploy(provider, ()).unwrap().send().await.unwrap();
+    // let greeter_contract =
+    //     Greeter::deploy(provider, "Hello World!".to_string()).unwrap().send().await.unwrap();
+    let impersonate = box_contract.address();
 
     let to = Address::random();
     let val = 1337u64;
@@ -158,8 +156,10 @@ async fn can_impersonate_contract() {
     let res = provider.send_transaction(tx.clone(), None).await;
     res.unwrap_err();
 
-    let greeting = greeter_contract.greet().call().await.unwrap();
-    assert_eq!("Hello World!", greeting);
+    let _ = box_contract.store(U256::from(100)).send().await.unwrap();
+
+    let stored_val = box_contract.get().call().await.unwrap();
+    assert_eq!(U256::from(100), stored_val);
 
     api.anvil_impersonate_account(impersonate).await.unwrap();
 
@@ -173,38 +173,8 @@ async fn can_impersonate_contract() {
     let res = provider.send_transaction(tx, None).await;
     res.unwrap_err();
 
-    let greeting = greeter_contract.greet().call().await.unwrap();
-    assert_eq!("Hello World!", greeting);
-}
-
-#[tokio::test(flavor = "multi_thread")]
-async fn can_impersonate_gnosis_safe() {
-    let (api, handle) = spawn(fork_config()).await;
-    let provider = handle.http_provider();
-
-    // <https://help.gnosis-safe.io/en/articles/4971293-i-don-t-remember-my-safe-address-where-can-i-find-it>
-    let safe: Address = "0xA063Cb7CFd8E57c30c788A0572CBbf2129ae56B6".parse().unwrap();
-
-    let code = provider.get_code(safe, None).await.unwrap();
-    assert!(!code.is_empty());
-
-    api.anvil_impersonate_account(safe).await.unwrap();
-
-    let code = provider.get_code(safe, None).await.unwrap();
-    assert!(!code.is_empty());
-
-    let balance = U256::from(1e18 as u64);
-    // fund the impersonated account
-    api.anvil_set_balance(safe, balance).await.unwrap();
-
-    let on_chain_balance = provider.get_balance(safe, None).await.unwrap();
-    assert_eq!(on_chain_balance, balance);
-
-    api.anvil_stop_impersonating_account(safe).await.unwrap();
-
-    let code = provider.get_code(safe, None).await.unwrap();
-    // code is added back after stop impersonating
-    assert!(!code.is_empty());
+    let stored_val = box_contract.get().call().await.unwrap();
+    assert_eq!(U256::from(100), stored_val);
 }
 
 #[tokio::test(flavor = "multi_thread")]
@@ -389,6 +359,7 @@ async fn test_timestamp_interval() {
 }
 
 // <https://github.com/foundry-rs/foundry/issues/2341>
+#[ignore = "Forking is disabled"]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_can_set_storage_bsc_fork() {
     let (api, handle) =
@@ -431,13 +402,12 @@ async fn can_get_node_info() {
         current_block_number: U64([0]),
         current_block_timestamp: 1,
         current_block_hash: block.hash.unwrap(),
-        hard_fork: SpecId::SHANGHAI,
+        hard_fork: SpecId::ISTANBUL,
         transaction_order: "fees".to_owned(),
         environment: NodeEnvironment {
-            base_fee: U256::from_str("0x3b9aca00").unwrap(),
-            chain_id: U256::from_str("0x7a69").unwrap(),
-            gas_limit: U256::from_str("0x1c9c380").unwrap(),
-            gas_price: U256::from_str("0x77359400").unwrap(),
+            chain_id: U256::from_str("0x1").unwrap(),
+            energy_limit: U256::from_str("0x1c9c380").unwrap(),
+            energy_price: U256::from_str("0x6FC23AC0").unwrap(),
         },
         fork_config: NodeForkConfig {
             fork_url: None,
@@ -447,34 +417,4 @@ async fn can_get_node_info() {
     };
 
     assert_eq!(node_info, expected_node_info);
-}
-
-#[tokio::test(flavor = "multi_thread")]
-async fn test_get_transaction_receipt() {
-    let (api, handle) = spawn(NodeConfig::test()).await;
-    let provider = handle.http_provider();
-
-    // set the base fee
-    let new_base_fee = U256::from(1_000);
-    api.anvil_set_next_block_base_fee_per_gas(new_base_fee).await.unwrap();
-
-    // send a EIP-1559 transaction
-    let tx =
-        TypedTransaction::Eip1559(Eip1559TransactionRequest::new().gas(U256::from(30_000_000)));
-    let receipt =
-        provider.send_transaction(tx.clone(), None).await.unwrap().await.unwrap().unwrap();
-
-    // the block should have the new base fee
-    let block = provider.get_block(BlockNumber::Latest).await.unwrap().unwrap();
-    assert_eq!(block.base_fee_per_gas.unwrap().as_u64(), new_base_fee.as_u64());
-
-    // mine block
-    api.evm_mine(None).await.unwrap();
-
-    // the transaction receipt should have the original effective gas price
-    let new_receipt = provider.get_transaction_receipt(receipt.transaction_hash).await.unwrap();
-    assert_eq!(
-        receipt.effective_gas_price.unwrap().as_u64(),
-        new_receipt.unwrap().effective_gas_price.unwrap().as_u64()
-    );
 }

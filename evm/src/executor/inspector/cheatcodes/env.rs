@@ -17,7 +17,7 @@ use corebc::{
 };
 use foundry_config::Config;
 use revm::{
-    primitives::{Bytecode, Network, SHA3_EMPTY},
+    primitives::{Bytecode, SHA3_EMPTY},
     Database, EVMData,
 };
 use std::collections::BTreeMap;
@@ -131,7 +131,7 @@ fn broadcast(
 /// iff broadcast is successful
 fn broadcast_key(
     state: &mut Cheatcodes,
-    private_key: U256,
+    private_key: &str,
     original_caller: Address,
     original_origin: Address,
     network_id: U256,
@@ -139,7 +139,7 @@ fn broadcast_key(
     single_call: bool,
 ) -> Result {
     //TODO:error2215 implement Ed448 keys and ICAN Addresses?
-    let key = super::util::parse_private_key(private_key)?;
+    let key = super::util::parse_private_key_from_str(private_key)?;
     let wallet = LocalWallet::from(key).with_network_id(network_id.as_u64());
     let new_origin = wallet.address();
 
@@ -509,8 +509,8 @@ pub fn apply<DB: DatabaseExt>(
             abi::encode(&[Token::Uint(account.info.nonce.into())]).into()
         }
         HEVMCalls::ChainId(inner) => {
-            ensure!(inner.0 <= U256::from(u64::MAX), "Chain ID must be less than 2^64 - 1");
-            data.env.cfg.network = Network::from(inner.0.as_u64());
+            ensure!(inner.0 <= U256::from(u64::MAX), "Network ID must be less than 2^64 - 1");
+            data.env.cfg.network_id = inner.0.as_u64();
             Bytes::new()
         }
         HEVMCalls::TxGasPrice(inner) => {
@@ -558,10 +558,10 @@ pub fn apply<DB: DatabaseExt>(
             )?;
             broadcast_key(
                 state,
-                inner.0,
+                &inner.0,
                 caller,
                 b176_to_h176(data.env.tx.caller),
-                ru256_to_u256(data.env.cfg.network.as_u256()),
+                U256::from(data.env.cfg.network_id),
                 data.journaled_state.depth(),
                 true,
             )?
@@ -607,10 +607,10 @@ pub fn apply<DB: DatabaseExt>(
             )?;
             broadcast_key(
                 state,
-                inner.0,
+                &inner.0,
                 caller,
                 b176_to_h176(data.env.tx.caller),
-                ru256_to_u256(data.env.cfg.network.as_u256()),
+                U256::from(data.env.cfg.network_id),
                 data.journaled_state.depth(),
                 false,
             )?

@@ -14,12 +14,12 @@ use corebc::{
         Client,
     },
     prelude::errors::BlockindexError,
-    types::Network as CorebcNetwork,
+    types::Network,
     ylem::{artifacts::CompactContract, cache::CacheEntry, Project, Ylem},
 };
 use eyre::{eyre, Context};
 use foundry_common::abi::encode_args;
-use foundry_config::{Config, Network, YlemReq};
+use foundry_config::{Config, YlemReq};
 use foundry_utils::Retry;
 use futures::FutureExt;
 use once_cell::sync::Lazy;
@@ -154,7 +154,7 @@ impl VerificationProvider for EtherscanVerificationProvider {
     async fn check(&self, args: VerifyCheckArgs) -> eyre::Result<()> {
         let config = args.try_load_config_emit_warnings()?;
         let etherscan = self.client(
-            args.etherscan.network.unwrap_or_default(),
+            args.network.unwrap_or_default(),
             args.verifier.verifier_url.as_deref(),
             &config,
         )?;
@@ -240,7 +240,7 @@ impl EtherscanVerificationProvider {
     ) -> eyre::Result<(Client, VerifyContract)> {
         let config = args.try_load_config_emit_warnings()?;
         let etherscan = self.client(
-            args.etherscan.network.unwrap_or_default(),
+            args.network.unwrap_or_default(),
             args.verifier.verifier_url.as_deref(),
             &config,
         )?;
@@ -274,7 +274,7 @@ impl EtherscanVerificationProvider {
         verifier_url: Option<&str>,
         config: &Config,
     ) -> eyre::Result<Client> {
-        let etherscan_config = config.get_etherscan_config_with_network(Some(network))?;
+        let etherscan_config = config.get_etherscan_config_with_network(Some(network.clone()))?;
 
         let api_url =
             verifier_url.or_else(|| etherscan_config.as_ref().map(|c| c.api_url.as_str()));
@@ -288,9 +288,7 @@ impl EtherscanVerificationProvider {
         builder = if let Some(api_url) = api_url {
             builder.with_api_url(api_url)?.with_url(base_url.unwrap_or(api_url))?
         } else {
-            let network_id = network.to_owned().id();
-            let network = CorebcNetwork::try_from(network_id);
-            builder.network(network.unwrap())?
+            builder.network(network)?
         };
 
         builder.build().wrap_err("Failed to create etherscan client")
@@ -484,7 +482,7 @@ mod tests {
                 [profile.default]
 
                 [etherscan]
-                mumbai = { key = "dummykey", network = 80001, url = "https://api-testnet.polygonscan.com/" }
+                devin = { key = "dummykey", network = 80001, url = "https://api-testnet.polygonscan.com/" }
             "#;
 
         let toml_file = root.join(Config::FILE_NAME);
@@ -492,10 +490,10 @@ mod tests {
 
         let args: VerifyArgs = VerifyArgs::parse_from([
             "foundry-cli",
-            "0xd8509bee9c9bf012282ad33aba0d87241baf5064",
+            "cb94d8509bee9c9bf012282ad33aba0d87241baf5064",
             "src/Counter.sol:Counter",
             "--network",
-            "mumbai",
+            "devin",
             "--root",
             root.as_os_str().to_str().unwrap(),
         ]);
@@ -505,21 +503,19 @@ mod tests {
         let etherscan = EtherscanVerificationProvider::default();
         let client = etherscan
             .client(
-                args.etherscan.network.unwrap_or_default(),
+                args.network.unwrap_or_default(),
                 args.verifier.verifier_url.as_deref(),
                 &config,
             )
             .unwrap();
-        assert_eq!(client.etherscan_api_url().as_str(), "https://api-testnet.polygonscan.com/");
-
-        assert!(format!("{client:?}").contains("dummykey"));
+        assert_eq!(client.blockindex_api_url().as_str(), "https://devin.blockindex.net/api/v2/");
 
         let args: VerifyArgs = VerifyArgs::parse_from([
             "foundry-cli",
-            "0xd8509bee9c9bf012282ad33aba0d87241baf5064",
+            "cb94d8509bee9c9bf012282ad33aba0d87241baf5064",
             "src/Counter.sol:Counter",
             "--network",
-            "mumbai",
+            "devin",
             "--verifier-url",
             "https://verifier-url.com/",
             "--root",
@@ -531,13 +527,12 @@ mod tests {
         let etherscan = EtherscanVerificationProvider::default();
         let client = etherscan
             .client(
-                args.etherscan.network.unwrap_or_default(),
+                args.network.unwrap_or_default(),
                 args.verifier.verifier_url.as_deref(),
                 &config,
             )
             .unwrap();
-        assert_eq!(client.etherscan_api_url().as_str(), "https://verifier-url.com/");
-        assert!(format!("{client:?}").contains("dummykey"));
+        assert_eq!(client.blockindex_api_url().as_str(), "https://verifier-url.com/");
     }
 
     #[tokio::test(flavor = "multi_thread")]
@@ -554,7 +549,7 @@ mod tests {
         let toml_file = root.join(Config::FILE_NAME);
         fs::write(toml_file, config).unwrap();
 
-        let address = "0xd8509bee9c9bf012282ad33aba0d87241baf5064";
+        let address = "cb94d8509bee9c9bf012282ad33aba0d87241baf5064";
         let contract_name = "Counter";
         let src_dir = "src";
         fs::create_dir_all(root.join(src_dir)).unwrap();
@@ -598,7 +593,7 @@ mod tests {
             "--constructor-args-path",
             ".",
             "--compiler-version",
-            "0.8.15",
+            "0.0.14",
             "--root",
             root_path,
         ]);

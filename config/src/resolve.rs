@@ -68,13 +68,13 @@ mod tests {
 
     #[test]
     fn can_find_placeholder() {
-        let val = "https://eth-mainnet.alchemyapi.io/v2/346273846238426342";
+        let val = "https://blockindex.net/api/v2/346273846238426342";
         assert!(!RE_PLACEHOLDER.is_match(val));
 
         let val = "${RPC_ENV}";
         assert!(RE_PLACEHOLDER.is_match(val));
 
-        let val = "https://eth-mainnet.alchemyapi.io/v2/${API_KEY}";
+        let val = "https://blockindex.net/api/v2/${API_KEY}";
         assert!(RE_PLACEHOLDER.is_match(val));
 
         let cap = RE_PLACEHOLDER.captures(val).unwrap();

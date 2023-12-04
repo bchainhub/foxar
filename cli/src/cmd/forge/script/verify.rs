@@ -12,10 +12,11 @@ use crate::{
 };
 use corebc::{
     abi::Address,
+    core::types::Network,
     ylem::{info::ContractInfo, Project},
 };
 use foundry_common::ContractsByArtifact;
-use foundry_config::{Config, Network};
+use foundry_config::Config;
 use semver::Version;
 
 /// Data struct to help `ScriptSequence` verify contracts on `etherscan`.
@@ -63,14 +64,6 @@ impl VerifyBundle {
         }
     }
 
-    /// Configures the chain and sets the etherscan key, if available
-    pub fn set_network(&mut self, network: Network) {
-        // If dealing with multiple chains, we need to be able to change inbetween the config
-        // network_id.
-        // self.etherscan.key = config.get_etherscan_api_key(Some(network));
-        self.etherscan.network = Some(network);
-    }
-
     /// Given a `VerifyBundle` and contract details, it tries to generate a valid `VerifyArgs` to
     /// use against the `contract_address`.
     pub fn get_verify_args(
@@ -79,6 +72,7 @@ impl VerifyBundle {
         create2_offset: usize,
         data: &[u8],
         libraries: &[String],
+        network: &Network,
     ) -> Option<VerifyArgs> {
         for (artifact, (_contract, bytecode)) in self.known_contracts.iter() {
             // If it's a CREATE2, the tx.data comes with a 32-byte salt in the beginning
@@ -95,14 +89,15 @@ impl VerifyBundle {
 
                 // We strip the build metadadata information, since it can lead to
                 // etherscan not identifying it correctly. eg:
-                // `v0.8.10+commit.fc410830.Linux.gcc` != `v0.8.10+commit.fc410830`
+                // `v1.1.0+commit.fc410830.Linux.gcc` != `v1.1.0+commit.fc410830`
                 let version = Version::new(
                     artifact.version.major,
                     artifact.version.minor,
                     artifact.version.patch,
                 );
 
-                let verify = VerifyArgs {
+                let verify: VerifyArgs = VerifyArgs {
+                    network: Some(*network), 
                     address: contract_address,
                     contract,
                     compiler_version: Some(version.to_string()),

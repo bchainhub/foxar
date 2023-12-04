@@ -9,7 +9,7 @@ use crate::cmd::forge::{
 use corebc::{
     abi::Address,
     prelude::{artifacts::Libraries, ArtifactId, TransactionReceipt, TxHash},
-    types::transaction::eip2718::TypedTransaction,
+    types::{transaction::eip2718::TypedTransaction, Network},
 };
 use eyre::{ContextCompat, WrapErr};
 use foundry_common::{fs, shell, SELECTOR_LEN};
@@ -41,7 +41,7 @@ pub struct ScriptSequence {
     pub sensitive_path: PathBuf,
     pub returns: HashMap<String, NestedValue>,
     pub timestamp: u64,
-    pub network: u64,
+    pub network: Network,
     /// If `True`, the sequence belongs to a `MultiChainSequence` and won't save to disk as usual.
     pub multi: bool,
     pub commit: Option<String>,
@@ -81,7 +81,7 @@ impl ScriptSequence {
         broadcasted: bool,
         is_multi: bool,
     ) -> eyre::Result<Self> {
-        let chain = config.network_id.unwrap_or_default().id();
+        let chain = config.network_id.unwrap_or_default();
 
         let (path, sensitive_path) = ScriptSequence::get_paths(
             &config.broadcast,
@@ -117,7 +117,7 @@ impl ScriptSequence {
         config: &Config,
         sig: &str,
         target: &ArtifactId,
-        network_id: u64,
+        network_id: Network,
         broadcasted: bool,
     ) -> eyre::Result<Self> {
         let (path, sensitive_path) = ScriptSequence::get_paths(
@@ -230,7 +230,7 @@ impl ScriptSequence {
         cache: &Path,
         sig: &str,
         target: &ArtifactId,
-        chain_id: u64,
+        chain_id: Network,
         broadcasted: bool,
     ) -> eyre::Result<(PathBuf, PathBuf)> {
         let mut broadcast = broadcast.to_path_buf();
@@ -268,8 +268,6 @@ impl ScriptSequence {
     ) -> eyre::Result<()> {
         trace!(target: "script", "verifying {} contracts [{}]", verify.known_contracts.len(), self.network);
 
-        verify.set_network(self.network.into());
-
         trace!(target: "script", "prepare future verifications");
 
         let mut future_verifications = Vec::with_capacity(self.receipts.len());
@@ -289,7 +287,7 @@ impl ScriptSequence {
 
             // Verify contract created directly from the transaction
             if let (Some(address), Some(data)) = (receipt.contract_address, tx.typed_tx().data()) {
-                match verify.get_verify_args(address, offset, &data.0, &self.libraries) {
+                match verify.get_verify_args(address, offset, &data.0, &self.libraries, &Network::from(self.network)) {
                     Some(verify) => future_verifications.push(verify.run()),
                     None => unverifiable_contracts.push(address),
                 };
@@ -297,7 +295,7 @@ impl ScriptSequence {
 
             // Verify potential contracts created during the transaction execution
             for AdditionalContract { address, init_code, .. } in &tx.additional_contracts {
-                match verify.get_verify_args(*address, 0, init_code, &self.libraries) {
+                match verify.get_verify_args(*address, 0, init_code, &self.libraries, &Network::from(self.network)) {
                     Some(verify) => future_verifications.push(verify.run()),
                     None => unverifiable_contracts.push(*address),
                 };
@@ -393,7 +391,7 @@ mod tests {
         assert_eq!(sig_to_file_name("run()").as_str(), "run");
         assert_eq!(
             sig_to_file_name(
-                "522bb704000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfFFb92266"
+                "522bb70400000000000000000000cb58e5dd06163a480c22d540ec763325a0b5860fb56c"
             )
             .as_str(),
             "522bb704"

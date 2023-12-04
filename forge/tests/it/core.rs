@@ -94,20 +94,8 @@ async fn test_logs() {
             (
                 "logs/DebugLogs.t.sol:DebugLogsTest",
                 vec![
-                    (
-                        "test1()",
-                        true,
-                        None,
-                        Some(vec!["0".into(), "1".into(), "2".into()]),
-                        None,
-                    ),
-                    (
-                        "test2()",
-                        true,
-                        None,
-                        Some(vec!["0".into(), "1".into(), "3".into()]),
-                        None,
-                    ),
+                    ("test1()", true, None, Some(vec!["0".into(), "1".into(), "2".into()]), None),
+                    ("test2()", true, None, Some(vec!["0".into(), "1".into(), "3".into()]), None),
                     (
                         "testFailWithRequire()",
                         true,
@@ -143,7 +131,7 @@ async fn test_logs() {
                         Some(vec![
                             "0".into(),
                             "1".into(),
-                            "0x0000000000000000000000000000000000000001".into(),
+                            "00000000000000000000000000000000000000000001".into(),
                         ]),
                         None,
                     ),
@@ -154,7 +142,8 @@ async fn test_logs() {
                         Some(vec![
                             "0".into(),
                             "1".into(),
-                            "0x6162636400000000000000000000000000000000000000000000000000000000".into()]),
+                            "0x6162636400000000000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
@@ -185,7 +174,8 @@ async fn test_logs() {
                         Some(vec![
                             "0".into(),
                             "1".into(),
-                            "address: 0x0000000000000000000000000000000000000001".into()]),
+                            "address: 00000000000000000000000000000000000000000001".into(),
+                        ]),
                         None,
                     ),
                     (
@@ -195,67 +185,50 @@ async fn test_logs() {
                         Some(vec![
                             "0".into(),
                             "1".into(),
-                            "abcd: 0x6162636400000000000000000000000000000000000000000000000000000000".into()]),
+                            "abcd: 0x6162636400000000000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogNamedDecimalInt()",
                         true,
                         None,
-                        Some(vec![
-                            "0".into(),
-                            "1".into(),
-                            "amount: -0.000000000000031337".into()]),
+                        Some(vec!["0".into(), "1".into(), "amount: -0.000000000000031337".into()]),
                         None,
                     ),
                     (
                         "testLogNamedDecimalUint()",
                         true,
                         None,
-                        Some(vec![
-                            "0".into(),
-                            "1".into(),
-                            "amount: 1.000000000000000000".into()]),
+                        Some(vec!["0".into(), "1".into(), "amount: 1.000000000000000000".into()]),
                         None,
                     ),
                     (
                         "testLogNamedInt()",
                         true,
                         None,
-                        Some(vec![
-                            "0".into(),
-                            "1".into(),
-                            "amount: -31337".into()]),
+                        Some(vec!["0".into(), "1".into(), "amount: -31337".into()]),
                         None,
                     ),
                     (
                         "testLogNamedUint()",
                         true,
                         None,
-                        Some(vec![
-                            "0".into(),
-                            "1".into(),
-                            "amount: 1000000000000000000".into()]),
+                        Some(vec!["0".into(), "1".into(), "amount: 1000000000000000000".into()]),
                         None,
                     ),
                     (
                         "testLogNamedBytes()",
                         true,
                         None,
-                        Some(vec![
-                            "0".into(),
-                            "1".into(),
-                            "abcd: 0x61626364".into()]),
+                        Some(vec!["0".into(), "1".into(), "abcd: 0x61626364".into()]),
                         None,
                     ),
                     (
                         "testLogNamedString()",
                         true,
                         None,
-                        Some(vec![
-                            "0".into(),
-                            "1".into(),
-                            "key: val".into()]),
+                        Some(vec!["0".into(), "1".into(), "key: val".into()]),
                         None,
                     ),
                 ],
@@ -282,7 +255,7 @@ async fn test_logs() {
                         None,
                         Some(vec![
                             "constructor".into(),
-                            "testMisc 0x0000000000000000000000000000000000000001".into(),
+                            "testMisc 00000000000000000000000000000000000000000001".into(),
                             "testMisc 42".into(),
                         ]),
                         None,
@@ -333,7 +306,10 @@ async fn test_logs() {
                         "testLogAddress()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x0000000000000000000000000000000000000001".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "cb270000000000000000000000000000000000000001".into(),
+                        ]),
                         None,
                     ),
                     (
@@ -452,119 +428,172 @@ async fn test_logs() {
                         "testLogBytes16()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x61000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x61000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes17()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x6100000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x6100000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes18()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x610000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x610000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes19()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x61000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x61000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes20()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x6100000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x6100000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes21()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x610000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x610000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes22()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x61000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x61000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes23()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x6100000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x6100000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes24()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x610000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x610000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes25()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x61000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x61000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes26()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x6100000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x6100000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes27()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x610000000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x610000000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes28()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x61000000000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x61000000000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes29()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x6100000000000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x6100000000000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes30()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x610000000000000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x610000000000000000000000000000000000000000000000000000000000".into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes31()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x61000000000000000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x61000000000000000000000000000000000000000000000000000000000000"
+                                .into(),
+                        ]),
                         None,
                     ),
                     (
                         "testLogBytes32()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x6100000000000000000000000000000000000000000000000000000000000000".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "0x6100000000000000000000000000000000000000000000000000000000000000"
+                                .into(),
+                        ]),
                         None,
                     ),
                     (
@@ -592,7 +621,10 @@ async fn test_logs() {
                         "testConsoleLogAddress()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "0x0000000000000000000000000000000000000001".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "cb270000000000000000000000000000000000000001".into(),
+                        ]),
                         None,
                     ),
                     (
@@ -613,7 +645,11 @@ async fn test_logs() {
                         "testConsoleLogFormatAddress()",
                         true,
                         None,
-                        Some(vec!["constructor".into(), "formatted log addr=0x0000000000000000000000000000000000000001".into()]),
+                        Some(vec![
+                            "constructor".into(),
+                            "formatted log addr=cb270000000000000000000000000000000000000001"
+                                .into(),
+                        ]),
                         None,
                     ),
                     (

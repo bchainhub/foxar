@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 import "./Cheats.sol";
@@ -11,7 +11,7 @@ contract DeriveTest is DSTest {
         string memory mnemonic = "test test test test test test test test test test test junk";
 
         uint256 privateKey = cheats.deriveKey(mnemonic, 0);
-        assertEq(privateKey, 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80);
+        assertEq(privateKey, 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001);
 
         uint256 privateKeyDerivationPathChanged = cheats.deriveKey(mnemonic, "m/44'/60'/0'/1/", 0);
         assertEq(privateKeyDerivationPathChanged, 0x6abb89895f93b02c1b9470db0fa675297f6cca832a5fc66d5dfd7661a42b37be);
@@ -51,7 +51,7 @@ contract DeriveTest is DSTest {
             0x533bbfc4a21d5cc6ca8ac3a4b6b1dc76e15804e078b0d53d72ba698ca0733a5d,
             0x3ed7268b64e326a75fd4e894a979eed93cc1480f1badebc869542d8508168fe8,
             0x56ab29e6a8d77caeb67976faf95980ee5bbd672a6ae98cac507e8a0cb252b47c,
-            0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80,
+            0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001,
             0xcdb159305d67bfba6096f47090c34895a75b8f9cc96b6d7e01b99f271e039586,
             0x9976dba80160dd3b89735ea2af8e2b474011972fc92883f4100dd3955f8d921d,
             0xff0bda7ec337713c62b948f307d8197f1a7f95db93b739b0c354654395005b7f,

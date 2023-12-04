@@ -11,7 +11,7 @@ pub use hevm::*;
 )]
 pub mod hevm {
     #[rustfmt::skip]
-    const __ABI: &str = "[\nstruct Log { bytes32[] topics; bytes data; }\nstruct Rpc { string name; string url; }\nstruct DirEntry { string errorMessage; string path; uint64 depth; bool isDir; bool isSymlink; }\nstruct FsMetadata { bool isDir; bool isSymlink; uint256 length; bool readOnly; uint256 modified; uint256 accessed; uint256 created; }\n\nallowCheatcodes(address)\n\nffi(string[])(bytes)\n\nbreakpoint(string)\nbreakpoint(string,bool)\n\nroll(uint256)\nwarp(uint256)\ndifficulty(uint256)\nprevrandao(bytes32)\nfee(uint256)\ncoinbase(address)\nstore(address,bytes32,bytes32)\nload(address,bytes32)(bytes32)\n\nsetEnv(string,string)\nenvBool(string)(bool)\nenvUint(string)(uint256)\nenvInt(string)(int256)\nenvAddress(string)(address)\nenvBytes32(string)(bytes32)\nenvString(string)(string)\nenvBytes(string)(bytes)\nenvBool(string,string)(bool[])\nenvUint(string,string)(uint256[])\nenvInt(string,string)(int256[])\nenvAddress(string,string)(address[])\nenvBytes32(string,string)(bytes32[])\nenvString(string,string)(string[])\nenvBytes(string,string)(bytes[])\nenvOr(string,bool)(bool)\nenvOr(string,uint256)(uint256)\nenvOr(string,int256)(int256)\nenvOr(string,address)(address)\nenvOr(string,bytes32)(bytes32)\nenvOr(string,string)(string)\nenvOr(string,bytes)(bytes)\nenvOr(string,string,bool[])(bool[])\nenvOr(string,string,uint256[])(uint256[])\nenvOr(string,string,int256[])(int256[])\nenvOr(string,string,address[])(address[])\nenvOr(string,string,bytes32[])(bytes32[])\nenvOr(string,string,string[])(string[])\nenvOr(string,string,bytes[])(bytes[])\n\naddr(uint256)(address)\nsign(uint256,bytes32)(uint8,bytes32,bytes32)\nderiveKey(string,uint32)(uint256)\nderiveKey(string,string,uint32)(uint256)\nderiveKey(string,uint32,string)(uint256)\nderiveKey(string,string,uint32,string)(uint256)\nrememberKey(uint256)(address)\n\nprank(address)\nprank(address,address)\nreadCallers()(uint256,address,address)\nstartPrank(address)\nstartPrank(address,address)\nstopPrank()\n\ndeal(address,uint256)\netch(address,bytes)\nexpectRevert()\nexpectRevert(bytes)\nexpectRevert(bytes4)\nrecord()\naccesses(address)(bytes32[],bytes32[])\nskip(bool)\n\nrecordLogs()\ngetRecordedLogs()(Log[])\n\nexpectEmit()\nexpectEmit(address)\nexpectEmit(bool,bool,bool,bool)\nexpectEmit(bool,bool,bool,bool,address)\n\nmockCall(address,bytes,bytes)\nmockCall(address,uint256,bytes,bytes)\nmockCallRevert(address,bytes,bytes)\nmockCallRevert(address,uint256,bytes,bytes)\nclearMockedCalls()\n\nexpectCall(address,bytes)\nexpectCall(address,bytes,uint64)\nexpectCall(address,uint256,bytes)\nexpectCall(address,uint256,bytes,uint64)\nexpectCall(address,uint256,uint64,bytes)\nexpectCall(address,uint256,uint64,bytes,uint64)\nexpectCallMinGas(address,uint256,uint64,bytes)\nexpectCallMinGas(address,uint256,uint64,bytes,uint64)\nexpectSafeMemory(uint64,uint64)\nexpectSafeMemoryCall(uint64,uint64)\n\ngetCode(string)\ngetDeployedCode(string)\nlabel(address,string)\ngetLabel(address)(string)\nassume(bool)\nsetNonce(address,uint64)\ngetNonce(address)\nresetNonce(address)\nsetNonceUnsafe(address,uint64)\nchainId(uint256)\ntxGasPrice(uint256)\n\nbroadcast()\nbroadcast(address)\nbroadcast(uint256)\nstartBroadcast()\nstartBroadcast(address)\nstartBroadcast(uint256)\nstopBroadcast()\n\nprojectRoot()(string)\nreadFile(string)(string)\nreadFileBinary(string)(bytes)\nwriteFile(string,string)\nwriteFileBinary(string,bytes)\nopenFile(string)\nreadLine(string)(string)\nwriteLine(string,string)\ncloseFile(string)\nremoveFile(string)\ncreateDir(string, bool)\nremoveDir(string, bool)\nreadDir(string)(DirEntry[])\nreadDir(string, uint64)(DirEntry[])\nreadDir(string, uint64, bool)(DirEntry[])\nreadLink(string)(string)\nfsMetadata(string)(FsMetadata)\n\ntoString(bytes)\ntoString(address)\ntoString(uint256)\ntoString(int256)\ntoString(bytes32)\ntoString(bool)\nparseBytes(string)(bytes)\nparseAddress(string)(address)\nparseUint(string)(uint256)\nparseInt(string)(int256)\nparseBytes32(string)(bytes32)\nparseBool(string)(bool)\n\nsnapshot()(uint256)\nrevertTo(uint256)(bool)\ncreateFork(string,uint256)(uint256)\ncreateFork(string,bytes32)(uint256)\ncreateFork(string)(uint256)\ncreateSelectFork(string,uint256)(uint256)\ncreateSelectFork(string,bytes32)(uint256)\ncreateSelectFork(string)(uint256)\nselectFork(uint256)\nactiveFork()(uint256)\ntransact(bytes32)\ntransact(uint256,bytes32)\nmakePersistent(address)\nmakePersistent(address,address)\nmakePersistent(address,address,address)\nmakePersistent(address[])\nrevokePersistent(address)\nrevokePersistent(address[])\nisPersistent(address)(bool)\nrollFork(uint256)\nrollFork(bytes32)\nrollFork(uint256,uint256)\nrollFork(uint256,bytes32)\nrpcUrl(string)(string)\nrpcUrls()(string[2][])\nrpcUrlStructs()(Rpc[])\n\nwriteJson(string, string)\nwriteJson(string, string, string)\nparseJson(string)(bytes)\nparseJson(string, string)(bytes)\nparseJsonUint(string, string)(uint256)\nparseJsonUintArray(string, string)(uint256[])\nparseJsonInt(string, string)(int256)\nparseJsonIntArray(string, string)(int256[])\nparseJsonString(string, string)(string)\nparseJsonStringArray(string, string)(string[])\nparseJsonAddress(string, string)(address)\nparseJsonAddressArray(string, string)(address[])\nparseJsonBool(string, string)(bool)\nparseJsonBoolArray(string, string)(bool[])\nparseJsonBytes(string, string)(bytes)\nparseJsonBytesArray(string, string)(bytes[])\nparseJsonBytes32(string, string)(bytes32)\nparseJsonBytes32Array(string, string)(bytes32[])\nserializeBool(string,string,bool)(string)\nserializeBool(string,string,bool[])(string)\nserializeUint(string,string,uint256)(string)\nserializeUint(string,string,uint256[])(string)\nserializeInt(string,string,int256)(string)\nserializeInt(string,string,int256[])(string)\nserializeAddress(string,string,address)(string)\nserializeAddress(string,string,address[])(string)\nserializeBytes32(string,string,bytes32)(string)\nserializeBytes32(string,string,bytes32[])(string)\nserializeString(string,string,string)(string)\nserializeString(string,string,string[])(string)\nserializeBytes(string,string,bytes)(string)\nserializeBytes(string,string,bytes[])(string)\n\npauseGasMetering()\nresumeGasMetering()\n\n]";
+    const __ABI: &str = "[\nstruct Log { bytes32[] topics; bytes data; }\nstruct Rpc { string name; string url; }\nstruct DirEntry { string errorMessage; string path; uint64 depth; bool isDir; bool isSymlink; }\nstruct FsMetadata { bool isDir; bool isSymlink; uint256 length; bool readOnly; uint256 modified; uint256 accessed; uint256 created; }\n\nallowCheatcodes(address)\n\nffi(string[])(bytes)\n\nbreakpoint(string)\nbreakpoint(string,bool)\n\nroll(uint256)\nwarp(uint256)\ndifficulty(uint256)\nfee(uint256)\ncoinbase(address)\nstore(address,bytes32,bytes32)\nload(address,bytes32)(bytes32)\n\nsetEnv(string,string)\nenvBool(string)(bool)\nenvUint(string)(uint256)\nenvInt(string)(int256)\nenvAddress(string)(address)\nenvBytes32(string)(bytes32)\nenvString(string)(string)\nenvBytes(string)(bytes)\nenvBool(string,string)(bool[])\nenvUint(string,string)(uint256[])\nenvInt(string,string)(int256[])\nenvAddress(string,string)(address[])\nenvBytes32(string,string)(bytes32[])\nenvString(string,string)(string[])\nenvBytes(string,string)(bytes[])\nenvOr(string,bool)(bool)\nenvOr(string,uint256)(uint256)\nenvOr(string,int256)(int256)\nenvOr(string,address)(address)\nenvOr(string,bytes32)(bytes32)\nenvOr(string,string)(string)\nenvOr(string,bytes)(bytes)\nenvOr(string,string,bool[])(bool[])\nenvOr(string,string,uint256[])(uint256[])\nenvOr(string,string,int256[])(int256[])\nenvOr(string,string,address[])(address[])\nenvOr(string,string,bytes32[])(bytes32[])\nenvOr(string,string,string[])(string[])\nenvOr(string,string,bytes[])(bytes[])\n\naddr(string)(address)\nsign(string,bytes32)(bytes)\nderiveKey(string,uint32)(uint256)\nderiveKey(string,string,uint32)(uint256)\nderiveKey(string,uint32,string)(uint256)\nderiveKey(string,string,uint32,string)(uint256)\nrememberKey(string)(address)\n\nprank(address)\nprank(address,address)\nreadCallers()(uint256,address,address)\nstartPrank(address)\nstartPrank(address,address)\nstopPrank()\n\ndeal(address,uint256)\netch(address,bytes)\nexpectRevert()\nexpectRevert(bytes)\nexpectRevert(bytes4)\nrecord()\naccesses(address)(bytes32[],bytes32[])\nskip(bool)\n\nrecordLogs()\ngetRecordedLogs()(Log[])\n\nexpectEmit()\nexpectEmit(address)\nexpectEmit(bool,bool,bool,bool)\nexpectEmit(bool,bool,bool,bool,address)\n\nmockCall(address,bytes,bytes)\nmockCall(address,uint256,bytes,bytes)\nmockCallRevert(address,bytes,bytes)\nmockCallRevert(address,uint256,bytes,bytes)\nclearMockedCalls()\n\nexpectCall(address,bytes)\nexpectCall(address,bytes,uint64)\nexpectCall(address,uint256,bytes)\nexpectCall(address,uint256,bytes,uint64)\nexpectCall(address,uint256,uint64,bytes)\nexpectCall(address,uint256,uint64,bytes,uint64)\nexpectCallMinGas(address,uint256,uint64,bytes)\nexpectCallMinGas(address,uint256,uint64,bytes,uint64)\nexpectSafeMemory(uint64,uint64)\nexpectSafeMemoryCall(uint64,uint64)\n\ngetCode(string)\ngetDeployedCode(string)\nlabel(address,string)\ngetLabel(address)(string)\nassume(bool)\nsetNonce(address,uint64)\ngetNonce(address)\nresetNonce(address)\nsetNonceUnsafe(address,uint64)\nchainId(uint256)\ntxGasPrice(uint256)\n\nbroadcast()\nbroadcast(address)\nbroadcast(string)\nstartBroadcast()\nstartBroadcast(address)\nstartBroadcast(string)\nstopBroadcast()\n\nprojectRoot()(string)\nreadFile(string)(string)\nreadFileBinary(string)(bytes)\nwriteFile(string,string)\nwriteFileBinary(string,bytes)\nopenFile(string)\nreadLine(string)(string)\nwriteLine(string,string)\ncloseFile(string)\nremoveFile(string)\ncreateDir(string, bool)\nremoveDir(string, bool)\nreadDir(string)(DirEntry[])\nreadDir(string, uint64)(DirEntry[])\nreadDir(string, uint64, bool)(DirEntry[])\nreadLink(string)(string)\nfsMetadata(string)(FsMetadata)\n\ntoString(bytes)\ntoString(address)\ntoString(uint256)\ntoString(int256)\ntoString(bytes32)\ntoString(bool)\nparseBytes(string)(bytes)\nparseAddress(string)(address)\nparseUint(string)(uint256)\nparseInt(string)(int256)\nparseBytes32(string)(bytes32)\nparseBool(string)(bool)\n\nsnapshot()(uint256)\nrevertTo(uint256)(bool)\ncreateFork(string,uint256)(uint256)\ncreateFork(string,bytes32)(uint256)\ncreateFork(string)(uint256)\ncreateSelectFork(string,uint256)(uint256)\ncreateSelectFork(string,bytes32)(uint256)\ncreateSelectFork(string)(uint256)\nselectFork(uint256)\nactiveFork()(uint256)\ntransact(bytes32)\ntransact(uint256,bytes32)\nmakePersistent(address)\nmakePersistent(address,address)\nmakePersistent(address,address,address)\nmakePersistent(address[])\nrevokePersistent(address)\nrevokePersistent(address[])\nisPersistent(address)(bool)\nrollFork(uint256)\nrollFork(bytes32)\nrollFork(uint256,uint256)\nrollFork(uint256,bytes32)\nrpcUrl(string)(string)\nrpcUrls()(string[2][])\nrpcUrlStructs()(Rpc[])\n\nwriteJson(string, string)\nwriteJson(string, string, string)\nparseJson(string)(bytes)\nparseJson(string, string)(bytes)\nparseJsonUint(string, string)(uint256)\nparseJsonUintArray(string, string)(uint256[])\nparseJsonInt(string, string)(int256)\nparseJsonIntArray(string, string)(int256[])\nparseJsonString(string, string)(string)\nparseJsonStringArray(string, string)(string[])\nparseJsonAddress(string, string)(address)\nparseJsonAddressArray(string, string)(address[])\nparseJsonBool(string, string)(bool)\nparseJsonBoolArray(string, string)(bool[])\nparseJsonBytes(string, string)(bytes)\nparseJsonBytesArray(string, string)(bytes[])\nparseJsonBytes32(string, string)(bytes32)\nparseJsonBytes32Array(string, string)(bytes32[])\nserializeBool(string,string,bool)(string)\nserializeBool(string,string,bool[])(string)\nserializeUint(string,string,uint256)(string)\nserializeUint(string,string,uint256[])(string)\nserializeInt(string,string,int256)(string)\nserializeInt(string,string,int256[])(string)\nserializeAddress(string,string,address)(string)\nserializeAddress(string,string,address[])(string)\nserializeBytes32(string,string,bytes32)(string)\nserializeBytes32(string,string,bytes32[])(string)\nserializeString(string,string,string)(string)\nserializeString(string,string,string[])(string)\nserializeBytes(string,string,bytes)(string)\nserializeBytes(string,string,bytes[])(string)\n\npauseGasMetering()\nresumeGasMetering()\n\n]";
     ///The parsed human-readable ABI of the contract.
     pub static HEVM_ABI: ::corebc_contract::Lazy<::corebc_core::abi::Abi> = ::corebc_contract::Lazy::new(||
     ::corebc_core::abi::parse_abi_str(__ABI).expect("ABI is always valid"));
@@ -72,16 +72,16 @@ pub mod hevm {
                 .method_hash([42, 151, 140, 88], ())
                 .expect("method not found (this should never happen)")
         }
-        ///Calls the contract's `addr` (0x9cd82504) function
+        ///Calls the contract's `addr` (0xf91daf04) function
         pub fn addr(
             &self,
-            p0: ::corebc_core::types::U256,
+            p0: ::std::string::String,
         ) -> ::corebc_contract::builders::ContractCall<
             M,
             ::corebc_core::types::Address,
         > {
             self.0
-                .method_hash([156, 216, 37, 4], p0)
+                .method_hash([249, 29, 175, 4], p0)
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `allowCheatcodes` (0x21bd8ec4) function
@@ -136,13 +136,13 @@ pub mod hevm {
                 .method_hash([58, 236, 82, 97], p0)
                 .expect("method not found (this should never happen)")
         }
-        ///Calls the contract's `broadcast` (0x708095c3) function
+        ///Calls the contract's `broadcast` (0x85b0a416) function
         pub fn broadcast_2(
             &self,
-            p0: ::corebc_core::types::U256,
+            p0: ::std::string::String,
         ) -> ::corebc_contract::builders::ContractCall<M, ()> {
             self.0
-                .method_hash([112, 128, 149, 195], p0)
+                .method_hash([133, 176, 164, 22], p0)
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `chainId` (0x5858cd87) function
@@ -1286,15 +1286,6 @@ pub mod hevm {
                 .method_hash([92, 60, 83, 135], (p0, p1))
                 .expect("method not found (this should never happen)")
         }
-        ///Calls the contract's `prevrandao` (0xcfc48655) function
-        pub fn prevrandao(
-            &self,
-            p0: [u8; 32],
-        ) -> ::corebc_contract::builders::ContractCall<M, ()> {
-            self.0
-                .method_hash([207, 196, 134, 85], p0)
-                .expect("method not found (this should never happen)")
-        }
         ///Calls the contract's `projectRoot` (0x6e197bfb) function
         pub fn project_root(
             &self,
@@ -1411,16 +1402,16 @@ pub mod hevm {
                 .method_hash([154, 189, 160, 145], ())
                 .expect("method not found (this should never happen)")
         }
-        ///Calls the contract's `rememberKey` (0x834f10d9) function
+        ///Calls the contract's `rememberKey` (0x40eac48c) function
         pub fn remember_key(
             &self,
-            p0: ::corebc_core::types::U256,
+            p0: ::std::string::String,
         ) -> ::corebc_contract::builders::ContractCall<
             M,
             ::corebc_core::types::Address,
         > {
             self.0
-                .method_hash([131, 79, 16, 217], p0)
+                .method_hash([64, 234, 196, 140], p0)
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `removeDir` (0x45febd7d) function
@@ -1757,14 +1748,14 @@ pub mod hevm {
                 .method_hash([220, 57, 89, 144], (p0, p1))
                 .expect("method not found (this should never happen)")
         }
-        ///Calls the contract's `sign` (0x06fdf90a) function
+        ///Calls the contract's `sign` (0xd0c67f5f) function
         pub fn sign(
             &self,
-            p0: ::corebc_core::types::U256,
+            p0: ::std::string::String,
             p1: [u8; 32],
-        ) -> ::corebc_contract::builders::ContractCall<M, (u8, [u8; 32], [u8; 32])> {
+        ) -> ::corebc_contract::builders::ContractCall<M, ::corebc_core::types::Bytes> {
             self.0
-                .method_hash([6, 253, 249, 10], (p0, p1))
+                .method_hash([208, 198, 127, 95], (p0, p1))
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `skip` (0xe6365bdc) function
@@ -1801,13 +1792,13 @@ pub mod hevm {
                 .method_hash([20, 210, 113, 75], p0)
                 .expect("method not found (this should never happen)")
         }
-        ///Calls the contract's `startBroadcast` (0xb4919ed6) function
+        ///Calls the contract's `startBroadcast` (0x09b04225) function
         pub fn start_broadcast_2(
             &self,
-            p0: ::corebc_core::types::U256,
+            p0: ::std::string::String,
         ) -> ::corebc_contract::builders::ContractCall<M, ()> {
             self.0
-                .method_hash([180, 145, 158, 214], p0)
+                .method_hash([9, 176, 66, 37], p0)
                 .expect("method not found (this should never happen)")
         }
         ///Calls the contract's `startPrank` (0xf1236596) function
@@ -2029,7 +2020,7 @@ pub mod hevm {
     )]
     #[ethcall(name = "activeFork", abi = "activeFork()")]
     pub struct ActiveForkCall;
-    ///Container type for all input parameters for the `addr` function with signature `addr(uint256)` and selector `0x9cd82504`
+    ///Container type for all input parameters for the `addr` function with signature `addr(string)` and selector `0xf91daf04`
     #[derive(
         Clone,
         ::corebc_contract::EthCall,
@@ -2040,8 +2031,8 @@ pub mod hevm {
         Eq,
         Hash
     )]
-    #[ethcall(name = "addr", abi = "addr(uint256)")]
-    pub struct AddrCall(pub ::corebc_core::types::U256);
+    #[ethcall(name = "addr", abi = "addr(string)")]
+    pub struct AddrCall(pub ::std::string::String);
     ///Container type for all input parameters for the `allowCheatcodes` function with signature `allowCheatcodes(address)` and selector `0x21bd8ec4`
     #[derive(
         Clone,
@@ -2120,7 +2111,7 @@ pub mod hevm {
     )]
     #[ethcall(name = "broadcast", abi = "broadcast(address)")]
     pub struct Broadcast1Call(pub ::corebc_core::types::Address);
-    ///Container type for all input parameters for the `broadcast` function with signature `broadcast(uint256)` and selector `0x708095c3`
+    ///Container type for all input parameters for the `broadcast` function with signature `broadcast(string)` and selector `0x85b0a416`
     #[derive(
         Clone,
         ::corebc_contract::EthCall,
@@ -2131,8 +2122,8 @@ pub mod hevm {
         Eq,
         Hash
     )]
-    #[ethcall(name = "broadcast", abi = "broadcast(uint256)")]
-    pub struct Broadcast2Call(pub ::corebc_core::types::U256);
+    #[ethcall(name = "broadcast", abi = "broadcast(string)")]
+    pub struct Broadcast2Call(pub ::std::string::String);
     ///Container type for all input parameters for the `chainId` function with signature `chainId(uint256)` and selector `0x5858cd87`
     #[derive(
         Clone,
@@ -3713,19 +3704,6 @@ pub mod hevm {
         pub ::corebc_core::types::Address,
         pub ::corebc_core::types::Address,
     );
-    ///Container type for all input parameters for the `prevrandao` function with signature `prevrandao(bytes32)` and selector `0xcfc48655`
-    #[derive(
-        Clone,
-        ::corebc_contract::EthCall,
-        ::corebc_contract::EthDisplay,
-        Default,
-        Debug,
-        PartialEq,
-        Eq,
-        Hash
-    )]
-    #[ethcall(name = "prevrandao", abi = "prevrandao(bytes32)")]
-    pub struct PrevrandaoCall(pub [u8; 32]);
     ///Container type for all input parameters for the `projectRoot` function with signature `projectRoot()` and selector `0x6e197bfb`
     #[derive(
         Clone,
@@ -3869,7 +3847,7 @@ pub mod hevm {
     )]
     #[ethcall(name = "recordLogs", abi = "recordLogs()")]
     pub struct RecordLogsCall;
-    ///Container type for all input parameters for the `rememberKey` function with signature `rememberKey(uint256)` and selector `0x834f10d9`
+    ///Container type for all input parameters for the `rememberKey` function with signature `rememberKey(string)` and selector `0x40eac48c`
     #[derive(
         Clone,
         ::corebc_contract::EthCall,
@@ -3880,8 +3858,8 @@ pub mod hevm {
         Eq,
         Hash
     )]
-    #[ethcall(name = "rememberKey", abi = "rememberKey(uint256)")]
-    pub struct RememberKeyCall(pub ::corebc_core::types::U256);
+    #[ethcall(name = "rememberKey", abi = "rememberKey(string)")]
+    pub struct RememberKeyCall(pub ::std::string::String);
     ///Container type for all input parameters for the `removeDir` function with signature `removeDir(string,bool)` and selector `0x45febd7d`
     #[derive(
         Clone,
@@ -4382,7 +4360,7 @@ pub mod hevm {
     )]
     #[ethcall(name = "setNonceUnsafe", abi = "setNonceUnsafe(address,uint64)")]
     pub struct SetNonceUnsafeCall(pub ::corebc_core::types::Address, pub u64);
-    ///Container type for all input parameters for the `sign` function with signature `sign(uint256,bytes32)` and selector `0x06fdf90a`
+    ///Container type for all input parameters for the `sign` function with signature `sign(string,bytes32)` and selector `0xd0c67f5f`
     #[derive(
         Clone,
         ::corebc_contract::EthCall,
@@ -4393,8 +4371,8 @@ pub mod hevm {
         Eq,
         Hash
     )]
-    #[ethcall(name = "sign", abi = "sign(uint256,bytes32)")]
-    pub struct SignCall(pub ::corebc_core::types::U256, pub [u8; 32]);
+    #[ethcall(name = "sign", abi = "sign(string,bytes32)")]
+    pub struct SignCall(pub ::std::string::String, pub [u8; 32]);
     ///Container type for all input parameters for the `skip` function with signature `skip(bool)` and selector `0xe6365bdc`
     #[derive(
         Clone,
@@ -4447,7 +4425,7 @@ pub mod hevm {
     )]
     #[ethcall(name = "startBroadcast", abi = "startBroadcast(address)")]
     pub struct StartBroadcast1Call(pub ::corebc_core::types::Address);
-    ///Container type for all input parameters for the `startBroadcast` function with signature `startBroadcast(uint256)` and selector `0xb4919ed6`
+    ///Container type for all input parameters for the `startBroadcast` function with signature `startBroadcast(string)` and selector `0x09b04225`
     #[derive(
         Clone,
         ::corebc_contract::EthCall,
@@ -4458,8 +4436,8 @@ pub mod hevm {
         Eq,
         Hash
     )]
-    #[ethcall(name = "startBroadcast", abi = "startBroadcast(uint256)")]
-    pub struct StartBroadcast2Call(pub ::corebc_core::types::U256);
+    #[ethcall(name = "startBroadcast", abi = "startBroadcast(string)")]
+    pub struct StartBroadcast2Call(pub ::std::string::String);
     ///Container type for all input parameters for the `startPrank` function with signature `startPrank(address)` and selector `0xf1236596`
     #[derive(
         Clone,
@@ -4851,7 +4829,6 @@ pub mod hevm {
         PauseGasMetering(PauseGasMeteringCall),
         Prank0(Prank0Call),
         Prank1(Prank1Call),
-        Prevrandao(PrevrandaoCall),
         ProjectRoot(ProjectRootCall),
         ReadCallers(ReadCallersCall),
         ReadDir0(ReadDir0Call),
@@ -5519,11 +5496,6 @@ pub mod hevm {
             ) {
                 return Ok(Self::Prank1(decoded));
             }
-            if let Ok(decoded) = <PrevrandaoCall as ::corebc_core::abi::AbiDecode>::decode(
-                data,
-            ) {
-                return Ok(Self::Prevrandao(decoded));
-            }
             if let Ok(decoded) = <ProjectRootCall as ::corebc_core::abi::AbiDecode>::decode(
                 data,
             ) {
@@ -6163,9 +6135,6 @@ pub mod hevm {
                 }
                 Self::Prank0(element) => ::corebc_core::abi::AbiEncode::encode(element),
                 Self::Prank1(element) => ::corebc_core::abi::AbiEncode::encode(element),
-                Self::Prevrandao(element) => {
-                    ::corebc_core::abi::AbiEncode::encode(element)
-                }
                 Self::ProjectRoot(element) => {
                     ::corebc_core::abi::AbiEncode::encode(element)
                 }
@@ -6481,7 +6450,6 @@ pub mod hevm {
                 Self::PauseGasMetering(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Prank0(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Prank1(element) => ::core::fmt::Display::fmt(element, f),
-                Self::Prevrandao(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ProjectRoot(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ReadCallers(element) => ::core::fmt::Display::fmt(element, f),
                 Self::ReadDir0(element) => ::core::fmt::Display::fmt(element, f),
@@ -7146,11 +7114,6 @@ pub mod hevm {
             Self::Prank1(value)
         }
     }
-    impl ::core::convert::From<PrevrandaoCall> for HEVMCalls {
-        fn from(value: PrevrandaoCall) -> Self {
-            Self::Prevrandao(value)
-        }
-    }
     impl ::core::convert::From<ProjectRootCall> for HEVMCalls {
         fn from(value: ProjectRootCall) -> Self {
             Self::ProjectRoot(value)
@@ -7533,7 +7496,7 @@ pub mod hevm {
         Hash
     )]
     pub struct ActiveForkReturn(pub ::corebc_core::types::U256);
-    ///Container type for all return fields from the `addr` function with signature `addr(uint256)` and selector `0x9cd82504`
+    ///Container type for all return fields from the `addr` function with signature `addr(string)` and selector `0xf91daf04`
     #[derive(
         Clone,
         ::corebc_contract::EthAbiType,
@@ -8477,7 +8440,7 @@ pub mod hevm {
         Hash
     )]
     pub struct ReadLinkReturn(pub ::std::string::String);
-    ///Container type for all return fields from the `rememberKey` function with signature `rememberKey(uint256)` and selector `0x834f10d9`
+    ///Container type for all return fields from the `rememberKey` function with signature `rememberKey(string)` and selector `0x40eac48c`
     #[derive(
         Clone,
         ::corebc_contract::EthAbiType,
@@ -8707,7 +8670,7 @@ pub mod hevm {
         Hash
     )]
     pub struct SerializeUint1Return(pub ::std::string::String);
-    ///Container type for all return fields from the `sign` function with signature `sign(uint256,bytes32)` and selector `0x06fdf90a`
+    ///Container type for all return fields from the `sign` function with signature `sign(string,bytes32)` and selector `0xd0c67f5f`
     #[derive(
         Clone,
         ::corebc_contract::EthAbiType,
@@ -8718,7 +8681,7 @@ pub mod hevm {
         Eq,
         Hash
     )]
-    pub struct SignReturn(pub u8, pub [u8; 32], pub [u8; 32]);
+    pub struct SignReturn(pub ::corebc_core::types::Bytes);
     ///Container type for all return fields from the `snapshot` function with signature `snapshot()` and selector `0x843c63f8`
     #[derive(
         Clone,

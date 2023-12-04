@@ -1,6 +1,6 @@
 //! cli arguments for configuring the evm settings
 use clap::{ArgAction, Parser};
-use corebc_core::types::{Address, H256, U256};
+use corebc_core::types::{Address, Network, U256};
 use eyre::ContextCompat;
 use foundry_config::{
     figment::{
@@ -9,7 +9,7 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile, Provider,
     },
-    Config, Network,
+    Config,
 };
 use serde::Serialize;
 use std::collections::HashMap;
@@ -174,10 +174,10 @@ impl Provider for EvmArgs {
 #[derive(Debug, Clone, Default, Parser, Serialize)]
 #[clap(next_help_heading = "Executor environment config")]
 pub struct EnvArgs {
-    /// The block gas limit.
-    #[clap(long, value_name = "GAS_LIMIT")]
+    /// The block energy limit.
+    #[clap(long, value_name = "ENERGY_LIMIT")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gas_limit: Option<u64>,
+    pub energy_limit: Option<u64>,
 
     /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests. By
     /// default, it is 0x6000 (~25kb).
@@ -191,14 +191,9 @@ pub struct EnvArgs {
     pub network_id: Option<Network>,
 
     /// The gas price.
-    #[clap(long, value_name = "GAS_PRICE")]
+    #[clap(long, value_name = "ENERGY_PRICE")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub gas_price: Option<u64>,
-
-    /// The base fee in a block.
-    #[clap(long, visible_alias = "base-fee", value_name = "FEE")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_base_fee_per_gas: Option<u64>,
+    pub energy_price: Option<u64>,
 
     /// The transaction origin.
     #[clap(long, value_name = "ADDRESS")]
@@ -225,15 +220,10 @@ pub struct EnvArgs {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_difficulty: Option<u64>,
 
-    /// The block prevrandao value. NOTE: Before merge this field was mix_hash.
-    #[clap(long, value_name = "PREVRANDAO")]
+    /// The block energy limit.
+    #[clap(long, value_name = "ENERGY_LIMIT")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_prevrandao: Option<H256>,
-
-    /// The block gas limit.
-    #[clap(long, value_name = "GAS_LIMIT")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub block_gas_limit: Option<u64>,
+    pub block_energy_limit: Option<u64>,
 
     /// The memory limit of the EVM in bytes (32 MB by default)
     #[clap(long, value_name = "MEMORY_LIMIT")]
@@ -255,26 +245,20 @@ mod tests {
     #[test]
     fn can_parse_network_id() {
         let args = EvmArgs {
-            env: EnvArgs {
-                network_id: Some(corebc_core::types::Network::Mainnet.into()),
-                ..Default::default()
-            },
+            env: EnvArgs { network_id: Some(Network::Mainnet), ..Default::default() },
             ..Default::default()
         };
         let config = Config::from_provider(Config::figment().merge(args));
-        assert_eq!(config.network_id, Some(corebc_core::types::Network::Mainnet.into()));
+        assert_eq!(config.network_id, Some(Network::Mainnet));
 
-        let env = EnvArgs::parse_from(["foundry-common", "--chain-id", "devin"]);
-        assert_eq!(env.network_id, Some(corebc_core::types::Network::Devin.into()));
+        let env = EnvArgs::parse_from(["foundry-common", "--network-id", "3"]);
+        assert_eq!(env.network_id, Some(Network::Devin));
     }
 
     #[test]
     fn test_memory_limit() {
         let args = EvmArgs {
-            env: EnvArgs {
-                network_id: Some(corebc_core::types::Network::Mainnet.into()),
-                ..Default::default()
-            },
+            env: EnvArgs { network_id: Some(Network::Mainnet), ..Default::default() },
             ..Default::default()
         };
         let config = Config::from_provider(Config::figment().merge(args));

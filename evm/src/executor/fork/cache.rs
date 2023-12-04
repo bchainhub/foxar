@@ -170,9 +170,9 @@ impl<'de> Deserialize<'de> for BlockchainDbMeta {
                     if !obj.contains_key(key) {
                         obj.insert(key.to_string(), true.into());
                     }
-                    // additional field `disable_block_gas_limit` enabled by the
-                    // `optional_block_gas_limit` feature
-                    let key = "disable_block_gas_limit";
+                    // additional field `disable_block_energy_limit` enabled by the
+                    // `optional_block_energy_limit` feature
+                    let key = "disable_block_energy_limit";
                     if !obj.contains_key(key) {
                         // keep default value
                         obj.insert(key.to_string(), false.into());
@@ -457,7 +457,7 @@ mod tests {
         let s = r#"{
     "meta": {
         "cfg_env": {
-            "chain_id": "0x539",
+            "network_id": 539,
             "spec_id": "LATEST",
             "perf_all_precompiles_have_balance": false,
             "perf_analyse_created_bytecodes": "Analyse",
@@ -466,18 +466,17 @@ mod tests {
         },
         "block_env": {
             "number": "0xed3ddf",
-            "coinbase": "0x0000000000000000000000000000000000000000",
+            "coinbase": "cb540000000000000000000000000000000000000000",
             "timestamp": "0x6324bc3f",
             "difficulty": "0x0",
-            "basefee": "0x2e5fda223",
-            "gas_limit": "0x1c9c380"
+            "energy_limit": "0x1c9c380"
         },
         "hosts": [
             "eth-mainnet.alchemyapi.io"
         ]
     },
     "accounts": {
-        "0xb8ffc3cd6e7cf5a098a1c92f48009765b24088dc": {
+        "0x0000b8ffc3cd6e7cf5a098a1c92f48009765b24088dc": {
             "balance": "0x0",
             "nonce": 10,
             "code_hash": "0x3ac64c95eedf82e5d821696a12daac0e1b22c8ee18a9fd688b00cfaf14550aad",
@@ -493,7 +492,7 @@ mod tests {
         }
     },
     "storage": {
-        "0xa354f35829ae975e850e23e9615b11da1b3dc4de": {
+        "0x0000a354f35829ae975e850e23e9615b11da1b3dc4de": {
             "0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e564": "0x5553444320795661756c74000000000000000000000000000000000000000000",
             "0x10": "0x37fd60ff8346",
             "0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563": "0xb",

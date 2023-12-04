@@ -39,7 +39,7 @@ pub struct ExecutedTransaction {
     transaction: Arc<PoolTransaction>,
     exit_reason: InstructionResult,
     out: Option<Output>,
-    gas_used: u64,
+    energy_used: u64,
     logs: Vec<Log>,
     traces: Vec<CallTraceNode>,
 }
@@ -49,7 +49,7 @@ pub struct ExecutedTransaction {
 impl ExecutedTransaction {
     /// Creates the receipt for the transaction
     fn create_receipt(&self) -> TypedReceipt {
-        let used_gas: U256 = self.gas_used.into();
+        let used_energy: U256 = self.energy_used.into();
         let mut bloom = Bloom::default();
         logs_bloom(self.logs.clone(), &mut bloom);
         let logs = self.logs.clone();
@@ -59,7 +59,7 @@ impl ExecutedTransaction {
         match &self.transaction.pending_transaction.transaction.transaction {
             TypedTransaction::Legacy(_) => TypedReceipt::Legacy(EIP658Receipt {
                 status_code,
-                gas_used: used_gas,
+                energy_used: used_energy,
                 logs_bloom: bloom,
                 logs,
             }),
@@ -90,8 +90,8 @@ pub struct TransactionExecutor<'a, Db: ?Sized, Validator: TransactionValidator> 
     pub block_env: BlockEnv,
     pub cfg_env: CfgEnv,
     pub parent_hash: H256,
-    /// Cumulative gas used by all executed transactions
-    pub gas_used: U256,
+    /// Cumulative energy used by all executed transactions
+    pub energy_used: U256,
     pub enable_steps_tracing: bool,
 }
 
@@ -102,10 +102,10 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
         let mut transaction_infos = Vec::new();
         let mut receipts = Vec::new();
         let mut bloom = Bloom::default();
-        let mut cumulative_gas_used = U256::zero();
+        let mut cumulative_energy_used = U256::zero();
         let mut invalid = Vec::new();
         let mut included = Vec::new();
-        let gas_limit = self.block_env.energy_limit;
+        let energy_limit = self.block_env.energy_limit;
         let parent_hash = self.parent_hash;
         let block_number = self.block_env.number;
         let difficulty = self.block_env.difficulty;
@@ -131,7 +131,7 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
                 }
             };
             let receipt = tx.create_receipt();
-            cumulative_gas_used = cumulative_gas_used.saturating_add(receipt.gas_used());
+            cumulative_energy_used = cumulative_energy_used.saturating_add(receipt.energy_used());
             let ExecutedTransaction { transaction, logs, out, traces, exit_reason: exit, .. } = tx;
             logs_bloom(logs.clone(), &mut bloom);
 
@@ -176,11 +176,10 @@ impl<'a, DB: Db + ?Sized, Validator: TransactionValidator> TransactionExecutor<'
             logs_bloom: bloom,
             difficulty: difficulty.to_ethers_u256(),
             number: block_number.to_ethers_u256(),
-            gas_limit: gas_limit.to_ethers_u256(),
-            gas_used: cumulative_gas_used,
+            energy_limit: energy_limit.to_ethers_u256(),
+            energy_used: cumulative_energy_used,
             timestamp,
             extra_data: Default::default(),
-            mix_hash: Default::default(),
             nonce: Default::default(),
         };
 
@@ -200,7 +199,7 @@ pub enum TransactionExecutionOutcome {
     Executed(ExecutedTransaction),
     /// Invalid transaction not executed
     Invalid(Arc<PoolTransaction>, InvalidTransactionError),
-    /// Execution skipped because could exceed gas limit
+    /// Execution skipped because could exceed energy limit
     Exhausted(Arc<PoolTransaction>),
     /// When an error occurred during execution
     DatabaseError(Arc<PoolTransaction>, DatabaseError),
@@ -219,9 +218,9 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
             Err(err) => return Some(TransactionExecutionOutcome::DatabaseError(transaction, err)),
         };
         let env = self.env_for(&transaction.pending_transaction);
-        // check that we comply with the block's gas limit
-        let max_gas = self.gas_used.saturating_add(U256::from(env.tx.energy_limit));
-        if max_gas > env.block.energy_limit.to_ethers_u256() {
+        // check that we comply with the block's energy limit
+        let max_energy = self.energy_used.saturating_add(U256::from(env.tx.energy_limit));
+        if max_energy > env.block.energy_limit.to_ethers_u256() {
             return Some(TransactionExecutionOutcome::Exhausted(transaction))
         }
 
@@ -268,7 +267,7 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
         };
         inspector.print_logs();
 
-        let (exit_reason, gas_used, out, logs) = match exec_result {
+        let (exit_reason, energy_used, out, logs) = match exec_result {
             ExecutionResult::Success { reason, energy_used, logs, output, .. } => {
                 (eval_to_instruction_result(reason), energy_used, Some(output), Some(logs))
             }
@@ -282,20 +281,20 @@ impl<'a, 'b, DB: Db + ?Sized, Validator: TransactionValidator> Iterator
 
         if exit_reason == InstructionResult::OutOfEnergy {
             // this currently useful for debugging estimations
-            warn!(target: "backend", "[{:?}] executed with out of gas", transaction.hash())
+            warn!(target: "backend", "[{:?}] executed with out of energy", transaction.hash())
         }
 
-        trace!(target: "backend", ?exit_reason, ?gas_used, "[{:?}] executed with out={:?}", transaction.hash(), out);
+        trace!(target: "backend", ?exit_reason, ?energy_used, "[{:?}] executed with out={:?}", transaction.hash(), out);
 
-        self.gas_used.saturating_add(U256::from(gas_used));
+        self.energy_used.saturating_add(U256::from(energy_used));
 
-        trace!(target: "backend::executor", "transacted [{:?}], result: {:?} gas {}", transaction.hash(), exit_reason, gas_used);
+        trace!(target: "backend::executor", "transacted [{:?}], result: {:?} energy {}", transaction.hash(), exit_reason, energy_used);
 
         let tx = ExecutedTransaction {
             transaction,
             exit_reason,
             out,
-            gas_used,
+            energy_used,
             logs: logs.unwrap_or_default().into_iter().map(Into::into).collect(),
             traces: inspector.tracer.unwrap_or_default().traces.arena,
         };

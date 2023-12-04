@@ -163,11 +163,7 @@ where
         let nonce = data.journaled_state.account(call.caller).info.nonce;
         self.enter(
             data.journaled_state.depth() as usize,
-            get_create_address(
-                call,
-                nonce,
-                &Network::try_from(data.env.cfg.network.as_u64()).unwrap(),
-            ),
+            get_create_address(call, nonce, &Network::from(data.env.cfg.network_id)),
             CallKind::Create,
         );
 

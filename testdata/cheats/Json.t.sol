@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 import "./Cheats.sol";
@@ -50,14 +50,14 @@ contract ParseJson is DSTest {
     function test_address() public {
         bytes memory data = cheats.parseJson(json, ".address");
         address decodedData = abi.decode(data, (address));
-        assertEq(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, decodedData);
+        assertEq(0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c, decodedData);
     }
 
     function test_addressArray() public {
         bytes memory data = cheats.parseJson(json, ".addressArray");
         address[] memory decodedData = abi.decode(data, (address[]));
-        assertEq(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, decodedData[0]);
-        assertEq(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D, decodedData[1]);
+        assertEq(0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c, decodedData[0]);
+        assertEq(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, decodedData[1]);
     }
 
     function test_H160ButNotaddress() public {
@@ -257,7 +257,7 @@ contract WriteJson is DSTest {
         assertEq(decodedData.b, "test");
 
         // replace a single value to key b
-        address ex = address(0xBEEF);
+        address ex = address(0xcb92000000000000000000000000000000000000beef);
         vm.writeJson(vm.toString(ex), path, ".b");
         json = vm.readFile(path);
         data = vm.parseJson(json, ".b");

@@ -1,16 +1,16 @@
-pragma solidity >0.8.13;
+pragma solidity >= 1.1.0;
 
 import "ds-test/test.sol";
 
 contract Contract {
-    address public addr = address(0xbeef);
+    address public addr = address(0xcb92000000000000000000000000000000000000beef);
     string public str = "hello";
     uint256 public num = 1337;
     uint256 public pushNum;
 
     function changeAddress(address _addr) public {
         if (_addr == addr) {
-            addr = address(0);
+            addr = address(0xcb540000000000000000000000000000000000000000);
         }
     }
 
@@ -41,7 +41,7 @@ contract InvariantStorageTest is DSTest {
     }
 
     function invariantChangeAddress() public {
-        require(c.addr() == address(0xbeef), "changedAddr");
+        require(c.addr() == address(0xcb92000000000000000000000000000000000000beef), "changedAddr");
     }
 
     function invariantChangeString() public {

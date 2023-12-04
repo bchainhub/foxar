@@ -250,11 +250,8 @@ impl Cheatcodes {
             .get(&inputs.caller)
             .map(|acc| acc.info.nonce)
             .unwrap_or_default();
-        let created_address = get_create_address(
-            inputs,
-            old_nonce,
-            &Network::try_from(data.env.cfg.network.as_u64()).unwrap(),
-        );
+        let created_address =
+            get_create_address(inputs, old_nonce, &Network::from(data.env.cfg.network_id));
 
         if data.journaled_state.depth > 1 &&
             !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))

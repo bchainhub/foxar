@@ -1,5 +1,4 @@
 //! Helper types for working with [revm](foundry_evm::revm)
-
 use crate::{mem::state::trie_hash_db, revm::primitives::AccountInfo, U256};
 use anvil_core::eth::trie::KeccakHasher;
 use corebc::{

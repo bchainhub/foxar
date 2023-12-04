@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
@@ -26,7 +26,7 @@ contract Issue3703Test is DSTest {
     }
 
     function testStatePool1() public {
-        poolState(0x847b64f9d3A95e977D157866447a5C0A5dFa0Ee5, 1076133273204200901840477866344, 1221531661829);
+        poolState(0xcb48847b64f9d3a95e977d157866447a5c0a5dfa0ee5, 1076133273204200901840477866344, 1221531661829);
     }
 }
 

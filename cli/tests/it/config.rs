@@ -33,11 +33,11 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         cache_path: "test-cache".into(),
         broadcast: "broadcast".into(),
         force: true,
-        evm_version: CvmVersion::Nucleus,
-        gas_reports: vec!["Contract".to_string()],
-        gas_reports_ignore: vec![],
-        ylem: Some(YlemReq::Local(PathBuf::from("custom-solc"))),
-        auto_detect_solc: false,
+        cvm_version: CvmVersion::Nucleus,
+        energy_reports: vec!["Contract".to_string()],
+        energy_reports_ignore: vec![],
+        ylem: Some(YlemReq::Local(PathBuf::from("custom-ylem"))),
+        auto_detect_ylem: false,
         auto_detect_remappings: true,
         offline: true,
         optimizer: false,
@@ -66,21 +66,19 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         },
         invariant: InvariantConfig { runs: 256, ..Default::default() },
         ffi: true,
-        sender: "00a329c0648769A73afAc7F9381D08FB43dBEA72".parse().unwrap(),
-        tx_origin: "00a329c0648769A73afAc7F9F81E08FB43dBEA72".parse().unwrap(),
+        sender: "cb5400a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
+        tx_origin: "cb5400a329c0648769a73afac7f9381e08fb43dbea72".parse().unwrap(),
         initial_balance: U256::from(0xffffffffffffffffffffffffu128),
         block_number: 10,
         fork_block_number: Some(200),
-        network_id: Some(9999.into()),
-        gas_limit: 99_000_000u64.into(),
+        network_id: Some(corebc::types::Network::Mainnet),
+        energy_limit: 99_000_000u64.into(),
         code_size_limit: Some(100000),
-        gas_price: Some(999),
-        block_base_fee_per_gas: 10,
+        energy_price: Some(999),
         block_coinbase: Address::random(),
         block_timestamp: 10,
         block_difficulty: 10,
-        block_prevrandao: H256::random(),
-        block_gas_limit: Some(100u64.into()),
+        block_energy_limit: Some(100u64.into()),
         memory_limit: 2u64.pow(25),
         eth_rpc_url: Some("localhost".to_string()),
         etherscan_api_key: None,
@@ -214,19 +212,19 @@ forgetest_init!(
     |prj: TestProject, _cmd: TestCommand| {
         let url = "http://127.0.0.1:8545";
         let config = prj.config_from_output(["--no-auto-detect", "--rpc-url", url]);
-        assert!(!config.auto_detect_solc);
+        assert!(!config.auto_detect_ylem);
         assert_eq!(config.eth_rpc_url, Some(url.to_string()));
 
         let mut config = Config::load_with_root(prj.root());
         config.eth_rpc_url = Some("http://127.0.0.1:8545".to_string());
-        config.auto_detect_solc = false;
+        config.auto_detect_ylem = false;
         // write to `foundry.toml`
         prj.create_file(
             Config::FILE_NAME,
             &config.to_string_pretty().unwrap().replace("eth_rpc_url", "eth-rpc-url"),
         );
         let config = prj.config_from_output(["--force"]);
-        assert!(!config.auto_detect_solc);
+        assert!(!config.auto_detect_ylem);
         assert_eq!(config.eth_rpc_url, Some(url.to_string()));
     }
 );
@@ -255,103 +253,64 @@ forgetest_init!(can_set_config_values, |prj: TestProject, _cmd: TestCommand| {
     assert!(config.via_ir);
 });
 
-// tests that solc can be explicitly set
-forgetest!(can_set_solc_explicitly, |prj: TestProject, mut cmd: TestCommand| {
+// tests that ylem can be explicitly set
+forgetest!(can_set_ylem_explicitly, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >0.8.9;
+pragma solidity >1.0.0;
 contract Greeter {}
    "#,
         )
         .unwrap();
 
-    // explicitly set to run with 0.8.10
-    let config = Config { ylem: Some("0.8.10".into()), ..Default::default() };
+    // explicitly set to run with 1.1.0
+    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
 
     cmd.arg("build");
 
     assert!(cmd.stdout_lossy().ends_with(
         "
-Compiler run successful!
+Compiler run successful
 ",
     ));
 });
 
-// tests that `--use <solc>` works
-forgetest!(can_use_solc, |prj: TestProject, mut cmd: TestCommand| {
+// tests that `--use <ylem>` works
+forgetest!(can_use_ylem, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.7.0;
+pragma solidity >=1.1.0;
 contract Foo {}
    "#,
         )
         .unwrap();
 
-    cmd.args(["build", "--use", "0.7.1"]);
+    cmd.args(["build", "--use", "1.1.0"]);
 
     let stdout = cmd.stdout_lossy();
     assert!(stdout.contains("Compiler run successful"));
 
-    cmd.forge_fuse().args(["build", "--force", "--use", "solc:0.7.1"]).root_arg();
+    cmd.forge_fuse().args(["build", "--force", "--use", "ylem:1.1.0"]).root_arg();
 
     assert!(stdout.contains("Compiler run successful"));
 
-    // fails to use solc that does not exist
-    cmd.forge_fuse().args(["build", "--use", "this/solc/does/not/exist"]);
-    assert!(cmd.stderr_lossy().contains("this/solc/does/not/exist does not exist"));
+    // fails to use ylem that does not exist
+    cmd.forge_fuse().args(["build", "--use", "this/ylem/does/not/exist"]);
+    assert!(cmd.stderr_lossy().contains("this/ylem/does/not/exist does not exist"));
 
     // 0.7.1 was installed in previous step, so we can use the path to this directly
-    let local_solc = ethers::solc::Solc::find_svm_installed_version("0.7.1")
+    let local_ylem = corebc::ylem::Ylem::find_yvm_installed_version("1.1.0")
         .unwrap()
-        .expect("solc 0.7.1 is installed");
-    cmd.forge_fuse().args(["build", "--force", "--use"]).arg(local_solc.solc).root_arg();
+        .expect("ylem 1.1.0 is installed");
+    cmd.forge_fuse().args(["build", "--force", "--use"]).arg(local_ylem.ylem).root_arg();
     assert!(stdout.contains("Compiler run successful"));
-});
-
-// test to ensure yul optimizer can be set as intended
-forgetest!(can_set_yul_optimizer, |prj: TestProject, mut cmd: TestCommand| {
-    prj.inner()
-        .add_source(
-            "Foo",
-            r#"
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.10;
-contract Foo {
-    function bar() public pure {
-       assembly {
-            let result_start := msize()
-       }
-    }
-}
-   "#,
-        )
-        .unwrap();
-
-    cmd.arg("build");
-    cmd.unchecked_output().stderr_matches_path(
-        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("tests/fixtures/can_set_yul_optimizer.stderr"),
-    );
-
-    // disable yul optimizer explicitly
-    let config = Config {
-        optimizer_details: Some(OptimizerDetails { yul: Some(false), ..Default::default() }),
-        ..Default::default()
-    };
-    prj.write_config(config);
-
-    assert!(cmd.stdout_lossy().ends_with(
-        "
-Compiler run successful!
-",
-    ));
 });
 
 // tests that the lib triple can be parsed
@@ -383,14 +342,14 @@ forgetest!(can_set_optimizer_runs, |prj: TestProject, mut cmd: TestCommand| {
 // test that gas_price can be set
 forgetest!(can_set_gas_price, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set gas_price
-    let config = Config { gas_price: Some(1337), ..Default::default() };
+    let config = Config { energy_price: Some(1337), ..Default::default() };
     prj.write_config(config);
 
     let config = cmd.config();
-    assert_eq!(config.gas_price, Some(1337));
+    assert_eq!(config.energy_price, Some(1337));
 
-    let config = prj.config_from_output(["--gas-price", "300"]);
-    assert_eq!(config.gas_price, Some(300));
+    let config = prj.config_from_output(["--energy-price", "300"]);
+    assert_eq!(config.energy_price, Some(300));
 });
 
 // test that optimizer runs works
@@ -502,7 +461,7 @@ forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
     let init = Config { libs: vec!["node_modules".into()], ..Default::default() };
     prj.write_config(init);
 
-    cmd.args(["install", "foundry-rs/forge-std", "--no-commit"]);
+    cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let config = cmd.forge_fuse().config();
@@ -511,7 +470,7 @@ forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
     assert_eq!(config.libs, expected);
 
     // additional install don't edit `libs`
-    cmd.forge_fuse().args(["install", "dapphub/ds-test", "--no-commit"]);
+    cmd.forge_fuse().args(["install", "bchainhub/ds-test", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let config = cmd.forge_fuse().config();
@@ -523,7 +482,7 @@ forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
 forgetest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
-    cmd.args(["install", "foundry-rs/forge-std", "--no-commit"]);
+    cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let faulty_toml = r#"[default]

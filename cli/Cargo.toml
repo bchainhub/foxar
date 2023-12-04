@@ -23,7 +23,7 @@ cast = { path = "../cast" }
 ui = { path = "../ui" }
 
 # eth
-corebc = {workspace = true, features = ["rustls"]}
+corebc = {workspace = true, features = ["rustls", "ws", "ipc"]}
 solang-parser.workspace = true
 
 # cli
@@ -36,6 +36,8 @@ tracing-subscriber = { version = "0.3", features = ["registry", "env-filter", "f
 tracing = "0.1"
 console = "0.15"
 watchexec = "2"
+watchexec-events = "=1.0.0"
+watchexec-signals = "=1.0.0"
 is-terminal = "0.4"
 comfy-table = "6"
 reqwest = { version = "0.11", default-features = false, features = [
@@ -87,7 +89,7 @@ pretty_assertions = "1"
 toml = "0.7"
 serial_test = "2"
 criterion = "0.4"
-svm = { package = "svm-rs", version = "0.2", default-features = false, features = ["rustls"] }
+yvm = { package = "yvm-rs", git = "https://github.com/core-coin/yvm-rs.git", default-features = false, features = ["rustls"] }
 globset = "0.4"
 
 [features]

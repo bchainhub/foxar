@@ -1,6 +1,6 @@
 //! Errors for this crate
 
-use foundry_config::Network;
+use corebc_core::types::Network;
 use std::fmt;
 
 /// An error thrown when resolving a function via signature failed

@@ -1,4 +1,4 @@
-use corebc::prelude::{Http, Middleware, Provider, RetryClient, U256};
+use corebc::{prelude::{Http, Middleware, Provider, RetryClient, U256}, types::Network};
 use eyre::WrapErr;
 use foundry_common::{get_http_provider, RpcUrl};
 
@@ -39,7 +39,7 @@ impl Deref for ProvidersManager {
 #[derive(Debug)]
 pub struct ProviderInfo {
     pub provider: Arc<Provider<RetryClient<Http>>>,
-    pub network: u64,
+    pub network: Network,
     pub energy_price: EnergyPrice,
 }
 
@@ -52,13 +52,13 @@ pub enum EnergyPrice {
 impl ProviderInfo {
     pub async fn new(rpc: &str) -> eyre::Result<ProviderInfo> {
         let provider = Arc::new(get_http_provider(rpc));
-        let network = provider.get_networkid().await?.as_u64();
+        let network = Network::from(provider.get_networkid().await?.as_u64());
 
         let energy_price =
             provider.get_energy_price().await.wrap_err("Failed to get legacy energy price");
         if energy_price.is_ok() {
             let energy_price = EnergyPrice::Legacy(energy_price);
-            return Ok(ProviderInfo { provider, network, energy_price })
+            return Ok(ProviderInfo { provider, network ,energy_price })
         }
         Err(eyre::eyre!("{}", energy_price.unwrap_err()))
     }

@@ -28,7 +28,7 @@ pub struct EstimateArgs {
         short,
         long,
         value_parser = NameOrAddress::from_str,
-        default_value = "0x0000000000000000000000000000000000000000",
+        default_value = "0xcb656dadee521bea601692312454a655a0f49051ddc9",
         env = "ETH_FROM",
     )]
     from: NameOrAddress,

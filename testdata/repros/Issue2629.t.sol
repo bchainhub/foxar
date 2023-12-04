@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.18;
+pragma solidity 1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
@@ -9,7 +9,7 @@ contract Issue2629Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
     function testSelectFork() public {
-        address coinbase = 0x0193d941b50d91BE6567c7eE1C0Fe7AF498b4137;
+        address coinbase = 0xcb740193d941b50d91be6567c7ee1c0fe7af498b4137;
 
         uint256 f1 = vm.createSelectFork("rpcAlias", 9);
         vm.selectFork(f1);

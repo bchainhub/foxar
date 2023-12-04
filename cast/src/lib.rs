@@ -76,7 +76,7 @@ where
     ///
     /// ```no_run
     /// use cast::{Cast, TxBuilder};
-    /// use corebc_core::types::{Address, Chain};
+    /// use corebc_core::types::{Address, Network};
     /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
@@ -85,7 +85,7 @@ where
     /// let to = Address::from_str("0xB3C95ff08316fb2F2e3E52Ee82F8e7b605Aa1304")?;
     /// let sig = "function greeting(uint256 i) public returns (string)";
     /// let args = vec!["5".to_owned()];
-    /// let mut builder = TxBuilder::new(&provider, Address::zero(), Some(to), Chain::Mainnet, false).await?;
+    /// let mut builder = TxBuilder::new(&provider, Address::zero(), Some(to), Network::Mainnet).await?;
     /// builder
     ///     .set_args(sig, args).await?;
     /// let builder_output = builder.build();
@@ -154,23 +154,23 @@ where
     ///
     /// ```no_run
     /// use cast::{Cast, TxBuilder};
-    /// use corebc_core::types::{Address, Chain, U256};
+    /// use corebc_core::types::{Address, Network, U256};
     /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
     /// let from = "vitalik.eth";
-    /// let to = Address::from_str("0xB3C95ff08316fb2F2e3E52Ee82F8e7b605Aa1304")?;
+    /// let to = Address::from_str("0x0000B3C95ff08316fb2F2e3E52Ee82F8e7b605Aa1304")?;
     /// let sig = "greet(string)()";
     /// let args = vec!["hello".to_owned()];
     /// let gas = U256::from_str("200000").unwrap();
     /// let value = U256::from_str("1").unwrap();
     /// let nonce = U256::from_str("1").unwrap();
-    /// let mut builder = TxBuilder::new(&provider, Address::zero(), Some(to), Chain::Mainnet, false).await?;
+    /// let mut builder = TxBuilder::new(&provider, Address::zero(), Some(to), Network::Mainnet).await?;
     /// builder
     ///     .set_args(sig, args).await?
-    ///     .set_gas(gas)
+    ///     .set_energy(gas)
     ///     .set_value(value)
     ///     .set_nonce(nonce);
     /// let builder_output = builder.build();
@@ -223,7 +223,7 @@ where
     ///
     /// ```no_run
     /// use cast::{Cast, TxBuilder};
-    /// use corebc_core::types::{Address, Chain, U256};
+    /// use corebc_core::types::{Address, Network, U256};
     /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
@@ -234,7 +234,7 @@ where
     /// let sig = "greet(string)()";
     /// let args = vec!["5".to_owned()];
     /// let value = U256::from_str("1").unwrap();
-    /// let mut builder = TxBuilder::new(&provider, from, Some(to), Chain::Mainnet, false).await?;
+    /// let mut builder = TxBuilder::new(&provider, from, Some(to), Network::Mainnet).await?;
     /// builder
     ///     .set_value(value)
     ///     .set_args(sig, args).await?;
@@ -508,7 +508,7 @@ where
     /// ```no_run
     /// use cast::Cast;
     /// use corebc_providers::{Provider, Http};
-    /// use corebc_core::types::Address;
+    /// use corebc_core::types::{Address, Network};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -516,9 +516,9 @@ where
     /// let cast = Cast::new(provider);
     /// let addr = Address::from_str("0x7eD52863829AB99354F3a0503A622e82AcD5F7d3")?;
     /// let nonce = cast.nonce(addr, None).await? + 5;
-    /// let computed_address = cast.compute_address(addr, Some(nonce)).await?;
+    /// let computed_address = cast.compute_address(addr, Some(nonce), &Network::Mainnet).await?;
     /// println!("Computed address for address {} with nonce {}: {}", addr, nonce, computed_address);
-    /// let computed_address_no_nonce = cast.compute_address(addr, None).await?;
+    /// let computed_address_no_nonce = cast.compute_address(addr, None, &Network::Mainnet).await?;
     /// println!("Computed address for address {} with nonce {}: {}", addr, nonce, computed_address_no_nonce);
     /// # Ok(())
     /// # }
@@ -1252,16 +1252,12 @@ impl SimpleCast {
             eyre::bail!("expected 64 byte hex-string, got {s}");
         }
 
-        let s = if let Some(stripped) = s.strip_prefix("000000000000000000000000") {
+        let s = if let Some(stripped) = s.strip_prefix("00000000000000000000") {
             stripped
         } else {
             return Err(eyre::eyre!("Not convertible to address, there are non-zero bytes"))
         };
-
-        let lowercase_address_string = format!("0x{s}");
-        let lowercase_address = Address::from_str(&lowercase_address_string)?;
-
-        Ok(corebc_core::utils::to_checksum(&lowercase_address, None))
+        Ok(s.to_string())
     }
 
     /// Decodes abi-encoded hex input or output
@@ -1290,7 +1286,7 @@ impl SimpleCast {
     ///     let decoded = decoded.iter().map(ToString::to_string).collect::<Vec<_>>();
     ///     assert_eq!(
     ///         decoded,
-    ///         vec!["8dbd1b711dc621e1404633da156fcc779e1c6f3e", "d9f3c9cc99548bf3b44a43e0a2d07399eb918adc", "2a", "1", ""]
+    ///         vec!["00008dbd1b711dc621e1404633da156fcc779e1c6f3e", "0000d9f3c9cc99548bf3b44a43e0a2d07399eb918adc", "2a", "1", ""]
     ///     );
     ///
     ///
@@ -1320,13 +1316,13 @@ impl SimpleCast {
     ///     assert_eq!(decoded, "1");
     ///
     ///     // Passing `input = true` will decode the data with the input function signature.
-    ///     let data = "0xf242432a0000000000000000000000008dbd1b711dc621e1404633da156fcc779e1c6f3e000000000000000000000000d9f3c9cc99548bf3b44a43e0a2d07399eb918adc000000000000000000000000000000000000000000000000000000000000002a000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000";
+    ///     let data = "0xabfbcbd50000000000000000000000008dbd1b711dc621e1404633da156fcc779e1c6f3e000000000000000000000000d9f3c9cc99548bf3b44a43e0a2d07399eb918adc000000000000000000000000000000000000000000000000000000000000002a000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000";
     ///     let sig = "safeTransferFrom(address, address, uint256, uint256, bytes)";
     ///     let decoded = Cast::calldata_decode(sig, data, true)?;
     ///     let decoded = decoded.iter().map(ToString::to_string).collect::<Vec<_>>();
     ///     assert_eq!(
     ///         decoded,
-    ///         vec!["8dbd1b711dc621e1404633da156fcc779e1c6f3e", "d9f3c9cc99548bf3b44a43e0a2d07399eb918adc", "2a", "1", ""]
+    ///         vec!["00008dbd1b711dc621e1404633da156fcc779e1c6f3e", "0000d9f3c9cc99548bf3b44a43e0a2d07399eb918adc", "2a", "1", ""]
     ///     );
     ///
     ///
@@ -1396,7 +1392,7 @@ impl SimpleCast {
     ///
     /// # fn main() -> eyre::Result<()> {
     ///     assert_eq!(
-    ///         "0xb3de648b0000000000000000000000000000000000000000000000000000000000000001",
+    ///         "0x6a6f4c680000000000000000000000000000000000000000000000000000000000000001",
     ///         Cast::calldata_encode("f(uint a)", &["1"]).unwrap().as_str()
     ///     );
     /// #    Ok(())
@@ -1489,15 +1485,15 @@ impl SimpleCast {
     ///
     /// # fn main() -> eyre::Result<()> {
     ///
-    ///    assert_eq!(Cast::index("address", "0xD0074F4E6490ae3f888d1d4f7E3E43326bD3f0f5" ,"2").unwrap().as_str(),"0x9525a448a9000053a4d151336329d6563b7e80b24f8e628e95527f218e8ab5fb");
-    ///    assert_eq!(Cast::index("uint256","42" ,"6").unwrap().as_str(),"0xfc808b0f31a1e6b9cf25ff6289feae9b51017b392cc8e25620a94a38dcdafcc1");
+    ///    assert_eq!(Cast::index("address", "0x0000D0074F4E6490ae3f888d1d4f7E3E43326bD3f0f5" ,"2").unwrap().as_str(),"0x0a334937675f50ee43f99d31cbd28697db98472cee27165471589c95989131d6");
+    ///    assert_eq!(Cast::index("uint256","42" ,"6").unwrap().as_str(),"0xef68ff66695636cf6e6d2e15f3949d71b20be722147c7ea2c53478d504623c49");
     /// #    Ok(())
     /// # }
     /// ```
     pub fn index(from_type: &str, from_value: &str, slot_number: &str) -> Result<String> {
         let sig = format!("x({from_type},uint256)");
         let encoded = Self::abi_encode(&sig, &[from_value, slot_number])?;
-        let location: String = Self::sha(&encoded)?;
+        let location: String = Self::sha3(&encoded)?;
         Ok(location)
     }
 
@@ -1512,9 +1508,9 @@ impl SimpleCast {
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::namehash("")?, "0x0000000000000000000000000000000000000000000000000000000000000000");
-    ///     assert_eq!(Cast::namehash("eth")?, "0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae");
-    ///     assert_eq!(Cast::namehash("foo.eth")?, "0xde9b09fd7c5f901e23a3f19fecc54828e9c848539801e86591bd9801b019f84f");
-    ///     assert_eq!(Cast::namehash("sub.foo.eth")?, "0x500d86f9e663479e5aaa6e99276e55fc139c597211ee47d17e1e92da16a83402");
+    ///     assert_eq!(Cast::namehash("eth")?, "0x2f76c451b22a76caba77f6102bc541ef54f443340fea5924b8ba3d6f2e84e0c7");
+    ///     assert_eq!(Cast::namehash("foo.eth")?, "0x9321c247b82b8e06384ae3d6f01d489e9d03982a6df01f20578b939677a531fd");
+    ///     assert_eq!(Cast::namehash("sub.foo.eth")?, "0x734979202b3615e02b4d68e3d9a52c8fc8d6f5d3ecaa89a45b23aab1a8c2cfe0");
     ///
     ///     Ok(())
     /// }
@@ -1548,15 +1544,15 @@ impl SimpleCast {
     /// use cast::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
-    ///     assert_eq!(Cast::sha("foo")?, "0x41b1a0649752af1b28b3dc29a1556eee781e4a4c3a1f7f53f90fa834de098c4d");
-    ///     assert_eq!(Cast::sha("123abc")?, "0xb1f1c74a1ba56f07a892ea1110a39349d40f66ca01d245e704621033cb7046a4");
-    ///     assert_eq!(Cast::sha("0x12")?, "0x5fa2358263196dbbf23d1ca7a509451f7a2f64c15837bfbb81298b1e3e24e4fa");
-    ///     assert_eq!(Cast::sha("12")?, "0x7f8b6b088b6d74c2852fc86c796dca07b44eed6fb3daf5e6b59f7c364db14528");
+    ///     assert_eq!(Cast::sha3("foo")?, "0x76d3bc41c9f588f7fcd0d5bf4718f8f84b1c41b20882703100b9eb9413807c01");
+    ///     assert_eq!(Cast::sha3("123abc")?, "0xb1b6a3de29ab907153614683d357b2db943a317d036ff25f7022d4707109005a");
+    ///     assert_eq!(Cast::sha3("0x12")?, "0xbf931c9eed1d7d81c3ab815ea4150d5f9efe357f32dbece862c15cf4ed92ed67");
+    ///     assert_eq!(Cast::sha3("12")?, "0x1a9a118cb653759c3fcb3bd5060e6f9910c8c27008dd11fe4315f4635c9caa98");
     ///
     ///     Ok(())
     /// }
     /// ```
-    pub fn sha(data: &str) -> Result<String> {
+    pub fn sha3(data: &str) -> Result<String> {
         let hash = match data.as_bytes() {
             // 0x prefix => read as hex data
             [b'0', b'x', rest @ ..] => sha3(hex::decode(rest)?),
@@ -1633,14 +1629,14 @@ impl SimpleCast {
     ///
     /// ```
     /// # use cast::SimpleCast as Cast;
-    /// # use corebc_core::types::Chain;
+    /// # use corebc_core::types::Network;
     ///
     /// # async fn foo() -> eyre::Result<()> {
     ///     assert_eq!(
     ///             "/*
     ///             - Bytecode Verification performed was compared on second iteration -
     ///             This file is part of the DAO.....",
-    ///         Cast::etherscan_source(Chain::Mainnet, "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413".to_string(), "<etherscan_api_key>".to_string()).await.unwrap().as_str()
+    ///         Cast::etherscan_source(Network::Mainnet, "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413".to_string(), "<etherscan_api_key>".to_string()).await.unwrap().as_str()
     ///     );
     /// #    Ok(())
     /// # }
@@ -1663,11 +1659,11 @@ impl SimpleCast {
     ///
     /// ```
     /// # use cast::SimpleCast as Cast;
-    /// # use corebc_core::types::Chain;
+    /// # use corebc_core::types::Network;
     /// # use std::path::PathBuf;
     ///
     /// # async fn expand() -> eyre::Result<()> {
-    ///      Cast::expand_etherscan_source_to_directory(Chain::Mainnet, "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413".to_string(), "<etherscan_api_key>".to_string(), PathBuf::from("output_dir")).await?;
+    ///      Cast::expand_etherscan_source_to_directory(Network::Mainnet, "0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413".to_string(), "<etherscan_api_key>".to_string(), PathBuf::from("output_dir")).await?;
     /// #    Ok(())
     /// # }
     /// ```
@@ -1712,7 +1708,7 @@ impl SimpleCast {
     /// use cast::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
-    ///     assert_eq!(Cast::get_selector("foo(address,uint256)", None)?.0, String::from("0xbd0d639f"));
+    ///     assert_eq!(Cast::get_selector("foo(address,uint256)", None)?.0, String::from("0xe041c8d8"));
     ///
     ///     Ok(())
     /// }
@@ -1772,7 +1768,7 @@ mod tests {
     #[test]
     fn calldata_uint() {
         assert_eq!(
-            "0xb3de648b0000000000000000000000000000000000000000000000000000000000000001",
+            "0x6a6f4c680000000000000000000000000000000000000000000000000000000000000001",
             Cast::calldata_encode("f(uint a)", &["1"]).unwrap().as_str()
         );
     }
@@ -1781,7 +1777,7 @@ mod tests {
     #[test]
     fn calldata_array() {
         assert_eq!(
-            "0xcde2baba0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000",
+            "0xdfbd84700000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000",
             Cast::calldata_encode("propose(string[])", &["[\"\"]"]).unwrap().as_str()
         );
     }
@@ -1789,7 +1785,7 @@ mod tests {
     #[test]
     fn calldata_bool() {
         assert_eq!(
-            "0x6fae94120000000000000000000000000000000000000000000000000000000000000000",
+            "0xf02e41eb0000000000000000000000000000000000000000000000000000000000000000",
             Cast::calldata_encode("bar(bool)", &["false"]).unwrap().as_str()
         );
     }
@@ -1800,15 +1796,15 @@ mod tests {
         let sig = "balanceOf(address, uint256)(uint256)";
         assert_eq!("1", Cast::abi_decode(sig, data, false).unwrap()[0].to_string());
 
-        let data = "0x0000000000000000000000008dbd1b711dc621e1404633da156fcc779e1c6f3e000000000000000000000000d9f3c9cc99548bf3b44a43e0a2d07399eb918adc000000000000000000000000000000000000000000000000000000000000002a000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000";
+        let data = "0x00000000000000000000cb668dbd1b711dc621e1404633da156fcc779e1c6f3e00000000000000000000cb66d9f3c9cc99548bf3b44a43e0a2d07399eb918adc000000000000000000000000000000000000000000000000000000000000002a000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000";
         let sig = "safeTransferFrom(address,address,uint256,uint256,bytes)";
         let decoded = Cast::abi_decode(sig, data, true).unwrap();
         let decoded = decoded.iter().map(ToString::to_string).collect::<Vec<_>>();
         assert_eq!(
             decoded,
             vec![
-                "8dbd1b711dc621e1404633da156fcc779e1c6f3e",
-                "d9f3c9cc99548bf3b44a43e0a2d07399eb918adc",
+                "cb668dbd1b711dc621e1404633da156fcc779e1c6f3e",
+                "cb66d9f3c9cc99548bf3b44a43e0a2d07399eb918adc",
                 "2a",
                 "1",
                 ""
@@ -1825,15 +1821,15 @@ mod tests {
 
         // Passing `input = true` will decode the data with the input function signature.
         // We exclude the "prefixed" function selector from the data field (the first 4 bytes).
-        let data = "0xf242432a0000000000000000000000008dbd1b711dc621e1404633da156fcc779e1c6f3e000000000000000000000000d9f3c9cc99548bf3b44a43e0a2d07399eb918adc000000000000000000000000000000000000000000000000000000000000002a000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000";
+        let data = "0xf242432a00000000000000000000cb668dbd1b711dc621e1404633da156fcc779e1c6f3e00000000000000000000cb66d9f3c9cc99548bf3b44a43e0a2d07399eb918adc000000000000000000000000000000000000000000000000000000000000002a000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000";
         let sig = "safeTransferFrom(address, address, uint256, uint256, bytes)";
         let decoded = Cast::calldata_decode(sig, data, true).unwrap();
         let decoded = decoded.iter().map(ToString::to_string).collect::<Vec<_>>();
         assert_eq!(
             decoded,
             vec![
-                "8dbd1b711dc621e1404633da156fcc779e1c6f3e",
-                "d9f3c9cc99548bf3b44a43e0a2d07399eb918adc",
+                "cb668dbd1b711dc621e1404633da156fcc779e1c6f3e",
+                "cb66d9f3c9cc99548bf3b44a43e0a2d07399eb918adc",
                 "2a",
                 "1",
                 ""

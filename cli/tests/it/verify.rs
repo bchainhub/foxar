@@ -18,7 +18,7 @@ fn add_unique(prj: &TestProject) {
             format!(
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.4.0;
+pragma solidity >=1.1.0;
 
 contract Unique {{
     uint public _timestamp = {timestamp};
@@ -35,7 +35,7 @@ fn add_verify_target(prj: &TestProject) {
             "Verify.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =0.8.10;
+pragma solidity =1.1.0;
 import {Unique} from "./unique.sol";
 contract Verify is Unique {
 function doStuff() external {}
@@ -77,11 +77,10 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
             .unwrap_or_else(|| panic!("Failed to parse deployer {out}"));
 
         cmd.forge_fuse().arg("verify-contract").root_arg().args([
-            "--chain-id".to_string(),
+            "--network-id".to_string(),
             info.chain.to_string(),
             address,
             contract_path.to_string(),
-            info.etherscan.to_string(),
             "--verifier".to_string(),
             info.verifier.to_string(),
         ]);
@@ -109,10 +108,8 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
         cmd.forge_fuse()
             .arg("verify-check")
             .arg(guid)
-            .arg("--chain-id")
+            .arg("--network-id")
             .arg(info.chain.to_string())
-            .arg("--etherscan-key")
-            .arg(info.etherscan)
             .arg("--verifier")
             .arg(info.verifier);
 
@@ -122,10 +119,6 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
 
 // tests `create && contract-verify && verify-check` on Fantom testnet if correct env vars are set
 forgetest!(can_verify_random_contract_fantom_testnet, |prj: TestProject, cmd: TestCommand| {
-    verify_on_chain(EnvExternalities::ftm_testnet(), prj, cmd);
+    verify_on_chain(EnvExternalities::devin(), prj, cmd);
 });
 
-// tests `create && contract-verify && verify-check` on Optimism kovan if correct env vars are set
-forgetest!(can_verify_random_contract_optimism_kovan, |prj: TestProject, cmd: TestCommand| {
-    verify_on_chain(EnvExternalities::optimism_kovan(), prj, cmd);
-});

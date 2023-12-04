@@ -117,7 +117,6 @@ impl FromStr for Dependency {
         } else {
             (None, None, None)
         };
-
         Ok(Dependency { name: name.or_else(|| alias.clone()).unwrap(), url, tag, alias })
     }
 }

@@ -13,6 +13,7 @@ use corebc::{
     abi::{Abi, Constructor, Token},
     prelude::{artifacts::BytecodeObject, ContractFactory, Middleware, MiddlewareBuilder},
     ylem::{info::ContractInfo, utils::canonicalized},
+    types::Network,
 };
 use eyre::Context;
 use foundry_common::{abi::parse_tokens, compile};
@@ -155,7 +156,7 @@ impl CreateArgs {
             constructor_args,
             constructor_args_path: None,
             num_of_optimizations: None,
-            etherscan: EtherscanOpts { network: Some(chain.into()) },
+            etherscan: EtherscanOpts {},
             flatten: false,
             force: false,
             watch: true,
@@ -164,6 +165,7 @@ impl CreateArgs {
             root: None,
             verifier: self.verifier.clone(),
             show_standard_json_input: false,
+            network: Some(Network::from(chain)),
         };
         verify.verification_provider()?.preflight_check(verify).await?;
         Ok(())
@@ -272,7 +274,7 @@ impl CreateArgs {
             constructor_args,
             constructor_args_path: None,
             num_of_optimizations,
-            etherscan: EtherscanOpts { network: Some(chain.into()) },
+            etherscan: EtherscanOpts {},
             flatten: false,
             force: false,
             watch: true,
@@ -281,6 +283,7 @@ impl CreateArgs {
             root: None,
             verifier: self.verifier,
             show_standard_json_input: false,
+            network: Some(Network::from(chain)),
         };
         println!("Waiting for {} to detect contract deployment...", verify.verifier.verifier);
         verify.run().await

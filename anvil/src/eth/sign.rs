@@ -3,12 +3,12 @@ use anvil_core::eth::transaction::{
     LegacyTransaction, LegacyTransactionRequest, TypedTransaction, TypedTransactionRequest,
 };
 use corebc::{
-    core::k256::ecdsa::SigningKey,
+    core::libgoldilocks::SigningKey,
     prelude::{Address, Wallet},
     signers::Signer as EthersSigner,
     types::{
         transaction::{
-            eip2718::TypedTransaction as EthersTypedTransactionRequest, eip712::TypedData,
+            cip712::TypedData, eip2718::TypedTransaction as EthersTypedTransactionRequest,
         },
         Signature,
     },
@@ -29,7 +29,7 @@ pub trait Signer: Send + Sync {
     /// Returns the signature
     async fn sign(&self, address: Address, message: &[u8]) -> Result<Signature, BlockchainError>;
 
-    /// Encodes and signs the typed data according EIP-712. Payload must implement Eip712 trait.
+    /// Encodes and signs the typed data according EIP-712. Payload must implement Cip712 trait.
     async fn sign_typed_data(
         &self,
         address: Address,
@@ -107,12 +107,20 @@ pub fn build_typed_transaction(
     let tx = match request {
         TypedTransactionRequest::Legacy(tx) => {
             let LegacyTransactionRequest {
-                nonce, gas_price, gas_limit, kind, value, input, ..
+                nonce,
+                energy_price,
+                energy_limit,
+                kind,
+                value,
+                input,
+                network_id,
+                ..
             } = tx;
             TypedTransaction::Legacy(LegacyTransaction {
                 nonce,
-                gas_price,
-                gas_limit,
+                energy_price,
+                energy_limit,
+                network_id,
                 kind,
                 value,
                 input,

@@ -7,10 +7,11 @@ use foundry_config::{
         value::{Dict, Map, Value},
         Metadata, Profile,
     },
-    impl_figment_convert_cast, Config, Network,
+    impl_figment_convert_cast, Config,
 };
 use serde::Serialize;
 use std::borrow::Cow;
+use corebc::types::Network;
 
 const FLASHBOTS_URL: &str = "https://rpc.flashbots.net";
 
@@ -60,15 +61,15 @@ impl RpcOpts {
 
 #[derive(Clone, Debug, Default, Parser, Serialize)]
 pub struct EtherscanOpts {
-    /// The Etherscan (or equivalent) API key
+    // /// The Etherscan (or equivalent) API key
     // #[clap(short = 'e', long = "etherscan-api-key", alias = "api-key", env =
     // "ETHERSCAN_API_KEY")] #[serde(rename = "etherscan_api_key", skip_serializing_if =
     // "Option::is_none")] pub key: Option<String>,
 
-    /// The network name or EIP-155 network ID
-    #[clap(short, long, alias = "network-id", env = "NETWORK")]
-    #[serde(rename = "network_id", skip_serializing_if = "Option::is_none")]
-    pub network: Option<Network>,
+    // /// The network name or EIP-155 network ID
+    // #[clap(short, long, alias = "network-id", env = "NETWORK")]
+    // #[serde(rename = "network_id", skip_serializing_if = "Option::is_none")]
+    // pub network: Option<Network>,
 }
 
 impl_figment_convert_cast!(EtherscanOpts);
@@ -115,7 +116,7 @@ impl_figment_convert_cast!(EthereumOpts);
 
 impl EthereumOpts {
     pub async fn signer(&self) -> Result<WalletSigner> {
-        self.wallet.signer(self.etherscan.network.unwrap_or_default().id()).await
+        self.wallet.signer(u64::from(self.wallet.wallet_network.unwrap())).await
     }
 }
 

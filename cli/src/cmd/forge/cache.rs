@@ -5,7 +5,7 @@ use cache::Cache;
 use clap::{Parser, Subcommand};
 use corebc::prelude::Network;
 use eyre::Result;
-use foundry_config::{cache, Config, Network as FoundryConfigNetwork};
+use foundry_config::{cache, Config};
 use std::str::FromStr;
 
 /// CLI arguments for `forge cache`.
@@ -113,10 +113,10 @@ impl FromStr for NetworkOrAll {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let Ok(network) = corebc::prelude::Network::from_str(s) {
-            Ok(NetworkOrAll::Network(network))
-        } else if s == "all" {
+        if s == "all"  {
             Ok(NetworkOrAll::All)
+        } else if let Ok(network) = corebc::prelude::Network::from_str(s)  {
+            Ok(NetworkOrAll::Network(network))
         } else {
             Err(format!("Expected known network or all, found: {s}"))
         }
@@ -124,7 +124,7 @@ impl FromStr for NetworkOrAll {
 }
 
 fn clean_network_cache(
-    network: impl Into<FoundryConfigNetwork>,
+    network: impl Into<Network>,
     blocks: Vec<u64>,
     etherscan: bool,
 ) -> Result<()> {

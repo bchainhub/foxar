@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =0.8.16;
+pragma solidity =1.1.0;
 
 import {Unique} from "./unique.sol";
 
@@ -63,7 +63,7 @@ contract InnerContracts is Unique {
 
 contract ScriptVerify {
     function run() public {
-        address vm = address(bytes20(uint160(uint256(keccak256("hevm cheat code")))));
+        address vm = address(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
         HEVM(vm).startBroadcast();
         new Hello();
         InnerContracts contracts = new InnerContracts(1);

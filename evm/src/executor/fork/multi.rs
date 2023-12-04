@@ -498,7 +498,7 @@ async fn create_fork(
 
     // determine the cache path if caching is enabled
     let cache_path = if fork.enable_caching {
-        Config::foundry_block_cache_dir(meta.cfg_env.network.as_u64(), number)
+        Config::foundry_block_cache_dir(meta.cfg_env.network_id, number)
     } else {
         None
     };

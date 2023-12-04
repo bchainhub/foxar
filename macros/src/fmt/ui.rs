@@ -33,6 +33,13 @@ impl UIfmt for U256 {
         self.to_string()
     }
 }
+
+impl UIfmt for H1368 {
+    fn pretty(&self) -> String {
+        self.to_string()
+    }
+}
+
 impl UIfmt for I256 {
     fn pretty(&self) -> String {
         self.to_string()
@@ -201,7 +208,6 @@ energyUsed              {}
 hash                    {}
 logsBloom               {}
 miner                   {}
-mixHash                 {}
 nonce                   {}
 number                  {}
 parentHash              {}
@@ -219,7 +225,6 @@ totalDifficulty         {}",
         block.hash.pretty(),
         block.logs_bloom.pretty(),
         block.author.pretty(),
-        block.mix_hash.pretty(),
         block.nonce.pretty(),
         block.number.pretty(),
         block.parent_hash.pretty(),
@@ -275,12 +280,11 @@ energyPrice             {}
 hash                    {}
 input                   {}
 nonce                   {}
-r                       {}
-s                       {}
 to                      {}
 transactionIndex        {}
-v                       {}
-value                   {}",
+value                   {}
+signature               {}
+network_id              {}",
             self.block_hash.pretty(),
             self.block_number.pretty(),
             self.from.pretty(),
@@ -289,12 +293,11 @@ value                   {}",
             self.hash.pretty(),
             self.input.pretty(),
             self.nonce.pretty(),
-            to_bytes(self.r).pretty(),
-            to_bytes(self.s).pretty(),
             self.to.pretty(),
             self.transaction_index.pretty(),
-            self.v.pretty(),
             self.value.pretty(),
+            self.sig.pretty(),
+            self.network_id.pretty(),
         )
     }
 }
@@ -317,12 +320,11 @@ pub fn get_pretty_tx_attr(transaction: &Transaction, attr: &str) -> Option<Strin
         "hash" => Some(transaction.hash.pretty()),
         "input" => Some(transaction.input.pretty()),
         "nonce" => Some(transaction.nonce.pretty()),
-        "s" => Some(to_bytes(transaction.s).pretty()),
-        "r" => Some(to_bytes(transaction.r).pretty()),
+        "signature" => Some(transaction.sig.pretty()),
+        "network_id" => Some(transaction.network_id.pretty()),
         "to" => Some(transaction.to.pretty()),
-        "transactionIndex" | "transaction_index" => Some(transaction.transaction_index.pretty()),
-        "v" => Some(transaction.v.pretty()),
         "value" => Some(transaction.value.pretty()),
+        "transactionIndex" | "transaction_index" => Some(transaction.transaction_index.pretty()),
         _ => None,
     }
 }
@@ -337,7 +339,6 @@ pub fn get_pretty_block_attr<TX>(block: &Block<TX>, attr: &str) -> Option<String
         "hash" => Some(block.hash.pretty()),
         "logsBloom" | "logs_bloom" => Some(block.logs_bloom.pretty()),
         "miner" | "author" => Some(block.author.pretty()),
-        "mixHash" | "mix_hash" => Some(block.mix_hash.pretty()),
         "nonce" => Some(block.nonce.pretty()),
         "number" => Some(block.number.pretty()),
         "parentHash" | "parent_hash" => Some(block.parent_hash.pretty()),
@@ -373,81 +374,66 @@ mod tests {
     }
 
     #[test]
-    fn can_pretty_print_optimism_tx() {
+    fn can_pretty_print_tx() {
         let s = r#"
         {
         "blockHash": "0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae",
         "blockNumber": "0x1b4",
         "from": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
         "energy": "0x11cbbdc",
-        "energyPrice": "0x0",
+        "energyPrice": "0x22",
         "hash": "0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f",
         "input": "0xd294f093",
         "nonce": "0xa2",
-        "to": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
-        "transactionIndex": "0x0",
-        "value": "0x0",
-        "v": "0x38",
-        "r": "0x6fca94073a0cf3381978662d46cf890602d3e9ccf6a31e4b69e8ecbd995e2bee",
-        "s": "0xe804161a2b56a37ca1f6f4c4b8bce926587afa0d9b1acc5165e6556c959d583",
-        "queueOrigin": "sequencer",
-        "txType": "",
-        "l1TxOrigin": null,
-        "l1BlockNumber": "0xc1a65c",
-        "l1Timestamp": "0x60d34b60",
+        "to": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923347",
+        "transactionIndex": "0x3",
+        "value": "0x200",
         "index": "0x1b3",
-        "queueIndex": null,
+        "network_id": "0x3",
+        "signature": "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbe",
         "rawTransaction": "0xf86681a28084011cbbdc944a16a42407aa491564643e1dfc1fd50af29794ef8084d294f09338a06fca94073a0cf3381978662d46cf890602d3e9ccf6a31e4b69e8ecbd995e2beea00e804161a2b56a37ca1f6f4c4b8bce926587afa0d9b1acc5165e6556c959d583"
     }
         "#;
 
         let tx: Transaction = serde_json::from_str(s).unwrap();
-        assert_eq!(tx.pretty().trim(),
-                   r#"
-blockHash            0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae
-blockNumber          436
-from                 ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
+        assert_eq!(
+            tx.pretty().trim(),
+            r#"
+blockHash               0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae
+blockNumber             436
+from                    ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
 energy                  18660316
-energyPrice             0
-hash                 0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f
-input                0xd294f093
-nonce                162
-r                    0x6fca94073a0cf3381978662d46cf890602d3e9ccf6a31e4b69e8ecbd995e2bee
-s                    0x0e804161a2b56a37ca1f6f4c4b8bce926587afa0d9b1acc5165e6556c959d583
-to                   ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
-transactionIndex     0
-v                    56
-value                0
-index                435
-l1BlockNumber        12691036
-l1Timestamp          1624460128
-l1TxOrigin           null
-queueIndex           null
-queueOrigin          sequencer
-rawTransaction       0xf86681a28084011cbbdc944a16a42407aa491564643e1dfc1fd50af29794ef8084d294f09338a06fca94073a0cf3381978662d46cf890602d3e9ccf6a31e4b69e8ecbd995e2beea00e804161a2b56a37ca1f6f4c4b8bce926587afa0d9b1acc5165e6556c959d583
-txType
-"#.trim()
+energyPrice             34
+hash                    0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f
+input                   0xd294f093
+nonce                   162
+to                      ab36393ecaa2d3209cee16ce9b2360e327ed3c923347
+transactionIndex        3
+value                   512
+signature               0xdead…adbe
+network_id              3
+"#
+            .trim()
         );
     }
 
     #[test]
     fn print_block_w_txs() {
-        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"0x0000000000000000000000000000000000000000","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","energyLimit":"0x6691b7","energyUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","energy":"0x15f90","energyPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
+        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","energyLimit":"0x6691b7","energyUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"blockHash": "0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae","blockNumber": "0x1b4","from": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","energy": "0x11cbbdc","energyPrice": "0x22","hash": "0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f","input": "0xd294f093","nonce": "0xa2","to": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923347","transactionIndex": "0x3","value": "0x200","index": "0x1b3","network_id": "0x3","signature": "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbe"}],"uncles":[]}"#;
         let block: Block<Transaction> = serde_json::from_str(block).unwrap();
-        let output ="\nblockHash            0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972
-blockNumber          3
-from                 0xFdCeDC3bFca10eCb0890337fbdD1977aba84807a
-energy                  90000
-energyPrice             20000000000
-hash                 0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067
-input                0x
-nonce                2
-r                    0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88
-s                    0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e
-to                   0xdca8ce283150AB773BCbeB8d38289bdB5661dE1e
-transactionIndex     0
-v                    37
-value                0".to_string();
+        let output ="\nblockHash               0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae
+blockNumber             436
+from                    ab36393ecaa2d3209cee16ce9b2360e327ed3c923346
+energy                  18660316
+energyPrice             34
+hash                    0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f
+input                   0xd294f093
+nonce                   162
+to                      ab36393ecaa2d3209cee16ce9b2360e327ed3c923347
+transactionIndex        3
+value                   512
+signature               0xdead…adbe
+network_id              3".to_string();
         let generated = block.transactions[0].pretty();
         assert_eq!(generated.as_str(), output.as_str());
     }
@@ -497,62 +483,58 @@ value                0".to_string();
     }
     #[test]
     fn test_pretty_tx_attr() {
-        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","mixHash":"0x0000000000000000000000000000000000000000000000000000000000000000","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","energyLimit":"0x6691b7","energyUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"hash":"0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067","nonce":"0x2","blockHash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","blockNumber":"0x3","transactionIndex":"0x0","from":"0xfdcedc3bfca10ecb0890337fbdd1977aba84807a","to":"0xdca8ce283150ab773bcbeb8d38289bdb5661de1e","value":"0x0","energy":"0x15f90","energyPrice":"0x4a817c800","input":"0x","v":"0x25","r":"0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88","s":"0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e"}],"uncles":[]}"#;
+        let block = r#"{"number":"0x3","hash":"0xda53da08ef6a3cbde84c33e51c04f68c3853b6a3731f10baa2324968eee63972","parentHash":"0x689c70c080ca22bc0e681694fa803c1aba16a69c8b6368fed5311d279eb9de90","nonce":"0x0000000000000000","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","transactionsRoot":"0x7270c1c4440180f2bd5215809ee3d545df042b67329499e1ab97eb759d31610d","stateRoot":"0x29f32984517a7d25607da485b23cefabfd443751422ca7e603395e1de9bc8a4b","receiptsRoot":"0x056b23fbba480696b65fe5a59b8f2148a1299103c4f57df839233af2cf4ca2d2","miner":"ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","difficulty":"0x0","totalDifficulty":"0x0","extraData":"0x","size":"0x3e8","energyLimit":"0x6691b7","energyUsed":"0x5208","timestamp":"0x5ecedbb9","transactions":[{"blockHash": "0x02b853cf50bc1c335b70790f93d5a390a35a166bea9c895e685cc866e4961cae","blockNumber": "0x1b4","from": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346","energy": "0x11cbbdc","energyPrice": "0x22","hash": "0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f","input": "0xd294f093","nonce": "0xa2","to": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923347","transactionIndex": "0x3","value": "0x200","index": "0x1b3","network_id": "0x3","signature": "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbe"}],"uncles":[]}"#;
         let block: Block<Transaction> = serde_json::from_str(block).unwrap();
         assert_eq!(None, get_pretty_tx_attr(&block.transactions[0], ""));
         assert_eq!(
-            Some("3".to_string()),
+            Some("436".to_string()),
             get_pretty_tx_attr(&block.transactions[0], "blockNumber")
         );
         assert_eq!(
-            Some("0xFdCeDC3bFca10eCb0890337fbdD1977aba84807a".to_string()),
+            Some("ab36393ecaa2d3209cee16ce9b2360e327ed3c923346".to_string()),
             get_pretty_tx_attr(&block.transactions[0], "from")
         );
-        assert_eq!(Some("90000".to_string()), get_pretty_tx_attr(&block.transactions[0], "energy"));
         assert_eq!(
-            Some("20000000000".to_string()),
+            Some("18660316".to_string()),
+            get_pretty_tx_attr(&block.transactions[0], "energy")
+        );
+        assert_eq!(
+            Some("34".to_string()),
             get_pretty_tx_attr(&block.transactions[0], "energyPrice")
         );
         assert_eq!(
-            Some("0xc3c5f700243de37ae986082fd2af88d2a7c2752a0c0f7b9d6ac47c729d45e067".to_string()),
+            Some("0x2642e960d3150244e298d52b5b0f024782253e6d0b2c9a01dd4858f7b4665a3f".to_string()),
             get_pretty_tx_attr(&block.transactions[0], "hash")
         );
-        assert_eq!(Some("0x".to_string()), get_pretty_tx_attr(&block.transactions[0], "input"));
-        assert_eq!(Some("2".to_string()), get_pretty_tx_attr(&block.transactions[0], "nonce"));
         assert_eq!(
-            Some("0x19f2694eb9113656dbea0b925e2e7ceb43df83e601c4116aee9c0dd99130be88".to_string()),
-            get_pretty_tx_attr(&block.transactions[0], "r")
+            Some("0xd294f093".to_string()),
+            get_pretty_tx_attr(&block.transactions[0], "input")
         );
+        assert_eq!(Some("162".to_string()), get_pretty_tx_attr(&block.transactions[0], "nonce"));
+        assert_eq!(Some("3".to_string()), get_pretty_tx_attr(&block.transactions[0], "network_id"));
         assert_eq!(
-            Some("0x73e5764b324a4f7679d890a198ba658ba1c8cd36983ff9797e10b1b89dbb448e".to_string()),
-            get_pretty_tx_attr(&block.transactions[0], "s")
-        );
-        assert_eq!(
-            Some("0xdca8ce283150AB773BCbeB8d38289bdB5661dE1e".into()),
+            Some("ab36393ecaa2d3209cee16ce9b2360e327ed3c923347".into()),
             get_pretty_tx_attr(&block.transactions[0], "to")
         );
         assert_eq!(
-            Some("0".to_string()),
+            Some("3".to_string()),
             get_pretty_tx_attr(&block.transactions[0], "transactionIndex")
         );
-        assert_eq!(Some("37".to_string()), get_pretty_tx_attr(&block.transactions[0], "v"));
-        assert_eq!(Some("0".to_string()), get_pretty_tx_attr(&block.transactions[0], "value"));
+        assert_eq!(Some("512".to_string()), get_pretty_tx_attr(&block.transactions[0], "value"));
+        assert_eq!(
+            Some("0xdead…adbe".to_string()),
+            get_pretty_tx_attr(&block.transactions[0], "signature")
+        );
     }
     #[test]
     fn test_pretty_block_attr() {
         let json = serde_json::json!(
         {
-            "baseFeePerEnergy": "0x7",
             "miner": "ab36393ecaa2d3209cee16ce9b2360e327ed3c923346",
             "number": "0x1b4",
             "hash": "0x0e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
             "parentHash": "0x9646252be9520f6e71339a8df9c55e4d7619deeb018d2a3f2d21fc165dde5eb5",
-            "mixHash": "0x1010101010101010101010101010101010101010101010101010101010101010",
             "nonce": "0x0000000000000000",
-            "sealFields": [
-              "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
-              "0x0000000000000042"
-            ],
             "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
             "logsBloom":  "0x0e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331",
             "transactionsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
@@ -563,7 +545,6 @@ value                0".to_string();
             "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
             "size": "0x27f07",
             "energyLimit": "0x9f759",
-            "minEnergyPrice": "0x9f759",
             "energyUsed": "0x9f759",
             "timestamp": "0x54e34e8e",
             "transactions": [],
@@ -574,7 +555,6 @@ value                0".to_string();
         let block: Block<()> = serde_json::from_value(json).unwrap();
 
         assert_eq!(None, get_pretty_block_attr(&block, ""));
-        assert_eq!(Some("7".to_string()), get_pretty_block_attr(&block, "baseFeePerEnergy"));
         assert_eq!(Some("163591".to_string()), get_pretty_block_attr(&block, "difficulty"));
         assert_eq!(
             Some("0x0000000000000000000000000000000000000000000000000000000000000000".to_string()),
@@ -588,12 +568,8 @@ value                0".to_string();
         );
         assert_eq!(Some("0x0e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d15273310e670ec64341771606e55d6b4ca35a1a6b75ee3d5145a99d05921026d1527331".to_string()),  get_pretty_block_attr(&block, "logsBloom"));
         assert_eq!(
-            Some("0x0000000000000000000000000000000000000001".to_string()),
+            Some("ab36393ecaa2d3209cee16ce9b2360e327ed3c923346".to_string()),
             get_pretty_block_attr(&block, "miner")
-        );
-        assert_eq!(
-            Some("0x1010101010101010101010101010101010101010101010101010101010101010".to_string()),
-            get_pretty_block_attr(&block, "mixHash")
         );
         assert_eq!(Some("0x0000000000000000".to_string()), get_pretty_block_attr(&block, "nonce"));
         assert_eq!(Some("436".to_string()), get_pretty_block_attr(&block, "number"));

@@ -41,7 +41,7 @@ async fn test_sub_logs_legacy() {
 
     let msg = "First Message".to_string();
     let contract =
-        EmitLogs::deploy(Arc::clone(&client), msg.clone()).unwrap().legacy().send().await.unwrap();
+        EmitLogs::deploy(Arc::clone(&client), msg.clone()).unwrap().send().await.unwrap();
 
     let val = contract.get_value().call().await.unwrap();
     assert_eq!(val, msg);
@@ -53,7 +53,6 @@ async fn test_sub_logs_legacy() {
     // send a tx triggering an event
     let receipt = contract
         .set_value("Next Message".to_string())
-        .legacy()
         .send()
         .await
         .unwrap()
@@ -160,7 +159,7 @@ async fn test_filters_legacy() {
 
     let msg = "First Message".to_string();
     let contract =
-        EmitLogs::deploy(Arc::clone(&client), msg.clone()).unwrap().legacy().send().await.unwrap();
+        EmitLogs::deploy(Arc::clone(&client), msg.clone()).unwrap().send().await.unwrap();
 
     let filter = contract.value_changed_filter();
     let mut stream = filter.stream().await.unwrap();
@@ -168,7 +167,6 @@ async fn test_filters_legacy() {
     // send a tx triggering an event
     let _receipt = contract
         .set_value("Next Message".to_string())
-        .legacy()
         .send()
         .await
         .unwrap()
@@ -236,7 +234,7 @@ async fn test_subscriptions() {
 
     // Subscribing requires sending the sub request and then subscribing to
     // the returned sub_id
-    let sub_id: U256 = ws.request("eth_subscribe", ["newHeads"]).await.unwrap();
+    let sub_id: U256 = ws.request("xcb_subscribe", ["newHeads"]).await.unwrap();
     let mut stream = ws.subscribe(sub_id).unwrap();
 
     let mut blocks = Vec::new();

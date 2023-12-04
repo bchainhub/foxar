@@ -3,7 +3,7 @@
 use crate::cmd::Cmd;
 use clap::{builder::TypedValueParser, Parser};
 use corebc::{
-    core::{k256::ecdsa::SigningKey, rand::thread_rng},
+    core::{libgoldilocks::SigningKey, rand::thread_rng},
     prelude::{LocalWallet, Signer},
     types::{Network, H160, U256},
     utils::{get_contract_address, get_contract_h160_address, secret_key_to_h160_address},
@@ -39,7 +39,7 @@ pub struct VanityArgs {
 
     /// Network to use for address prefix validation.
     #[clap(short, long)]
-    pub network: Option<Network>,
+    pub network: Network,
 }
 
 impl Cmd for VanityArgs {
@@ -124,7 +124,7 @@ impl Cmd for VanityArgs {
             if nonce.is_some() { "\nContract address: " } else { "" },
         );
         if nonce.is_some() {
-            print!("{}", get_contract_address(wallet.address(), nonce.unwrap(), &network.unwrap()));
+            print!("{}", get_contract_address(wallet.address(), nonce.unwrap(), &network));
         }
         println!(
             "Address: {}\nPrivate Key: 0x{}",
@@ -283,7 +283,7 @@ impl VanityMatcher for RegexMatcher {
     }
 }
 
-/// Parse 40 byte addresses
+/// Parse 44 byte addresses
 #[derive(Copy, Clone, Debug, Default)]
 pub struct HexAddressValidator;
 
@@ -315,25 +315,25 @@ mod tests {
 
     #[test]
     fn find_simple_vanity_start() {
-        let args: VanityArgs = VanityArgs::parse_from(["foundry-cli", "--starts-with", "00"]);
+        let args: VanityArgs = VanityArgs::parse_from(["foundry-cli", "--starts-with", "00", "--network", "mainnet"]);
         let wallet = args.run().unwrap();
         let addr = wallet.address();
         let addr = format!("{addr:x}");
-        assert!(addr.starts_with("00"));
+        assert!(addr[4..].starts_with("00"));
     }
 
     #[test]
     fn find_simple_vanity_start2() {
-        let args: VanityArgs = VanityArgs::parse_from(["foundry-cli", "--starts-with", "9"]);
+        let args: VanityArgs = VanityArgs::parse_from(["foundry-cli", "--starts-with", "9", "--network", "1"]);
         let wallet = args.run().unwrap();
         let addr = wallet.address();
         let addr = format!("{addr:x}");
-        assert!(addr.starts_with('9'));
+        assert!(addr[4..].starts_with('9'));
     }
 
     #[test]
     fn find_simple_vanity_end() {
-        let args: VanityArgs = VanityArgs::parse_from(["foundry-cli", "--ends-with", "00"]);
+        let args: VanityArgs = VanityArgs::parse_from(["foundry-cli", "--ends-with", "00", "--network", "mainnet"]);
         let wallet = args.run().unwrap();
         let addr = wallet.address();
         let addr = format!("{addr:x}");

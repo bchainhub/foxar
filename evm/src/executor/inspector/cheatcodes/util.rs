@@ -10,11 +10,8 @@ use crate::{
 use bytes::{BufMut, Bytes, BytesMut};
 use corebc::{
     abi::{AbiEncode, Address, ParamType, Token},
-    core::k256::elliptic_curve::Curve,
-    prelude::{
-        k256::{ecdsa::SigningKey, elliptic_curve::bigint::Encoding, Secp256k1},
-        LocalWallet, Signer, H176, *,
-    },
+    core::libgoldilocks::SigningKey,
+    prelude::{LocalWallet, Signer, H176, *},
     signers::{
         coins_bip39::{
             ChineseSimplified, ChineseTraditional, Czech, English, French, Italian, Japanese,
@@ -35,9 +32,9 @@ use std::{collections::VecDeque, str::FromStr};
 
 const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/60'/0'/0/";
 
-/// Address of the default CREATE2 deployer 0x4e59b44847b379578588920ca78fbf26c0b4956c
+/// Address of the default CREATE2 deployer cb914e59b44847b379578588920ca78fbf26c0b4956c
 pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
-    0, 0, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149,
+    203, 145, 78, 89, 180, 72, 71, 179, 121, 87, 133, 136, 146, 12, 167, 143, 191, 38, 192, 180, 149,
     108,
 ]);
 
@@ -83,28 +80,27 @@ where
     Ok(f(account))
 }
 //TODO:error2215 change crypto
-fn addr(private_key: U256, network: &Network) -> Result {
-    let key = parse_private_key(private_key)?;
+fn addr(private_key: &str, network: &Network) -> Result {
+    let key = parse_private_key_from_str(private_key)?;
     let addr = utils::secret_key_to_address(&key, network);
     Ok(addr.encode().into())
 }
 
-fn sign(private_key: U256, digest: H256, chain_id: U256) -> Result {
-    let key = parse_private_key(private_key)?;
-    let wallet = LocalWallet::from(key).with_network_id(chain_id.as_u64());
+fn sign(private_key: &str, digest: H256, network_id: U256) -> Result {
+    let key = parse_private_key_from_str(private_key)?;
+    let network_id = network_id.as_u64();
+    let wallet = LocalWallet::from(key).with_network_id(network_id);
+    let network = Network::from(network_id);
 
     // The `ecrecover` precompile does not use EIP-155
     let sig = wallet.sign_hash(digest)?;
-    let recovered = sig.recover(digest)?;
+    let recovered = sig.recover(digest, &network)?;
 
     assert_eq!(recovered, wallet.address());
 
-    let mut r_bytes = [0u8; 32];
-    let mut s_bytes = [0u8; 32];
-    sig.r.to_big_endian(&mut r_bytes);
-    sig.s.to_big_endian(&mut s_bytes);
+    let sig_bytes = sig.sig.to_fixed_bytes();
 
-    Ok((sig.v, r_bytes, s_bytes).encode().into())
+    Ok(sig_bytes.encode().into())
 }
 
 enum WordlistLang {
@@ -170,8 +166,8 @@ fn derive_key_with_wordlist(mnemonic: &str, path: &str, index: u32, lang: &str) 
     }
 }
 
-fn remember_key(state: &mut Cheatcodes, private_key: U256, chain_id: U256) -> Result {
-    let key = parse_private_key(private_key)?;
+fn remember_key(state: &mut Cheatcodes, private_key: &str, chain_id: U256) -> Result {
+    let key = parse_private_key_from_str(private_key)?;
     let wallet = LocalWallet::from(key).with_network_id(chain_id.as_u64());
     let address = wallet.address();
 
@@ -190,7 +186,6 @@ pub fn skip(state: &mut Cheatcodes, depth: u64, skip: bool) -> Result {
     if !skip {
         return Ok(b"".into())
     }
-
     // Skip should not work if called deeper than at test level.
     // As we're not returning the magic skip bytes, this will cause a test failure.
     if depth > 1 {
@@ -208,11 +203,9 @@ pub fn apply<DB: Database>(
     call: &HEVMCalls,
 ) -> Option<Result> {
     Some(match call {
-        HEVMCalls::Addr(inner) => {
-            addr(inner.0, &Network::try_from(data.env.cfg.network.as_u64()).unwrap())
-        }
+        HEVMCalls::Addr(inner) => addr(&inner.0, &Network::from(data.env.cfg.network_id)),
         HEVMCalls::Sign(inner) => {
-            sign(inner.0, inner.1.into(), ru256_to_u256(data.env.cfg.network.as_u256()))
+            sign(&inner.0, inner.1.into(), U256::from(data.env.cfg.network_id))
         }
         HEVMCalls::DeriveKey0(inner) => {
             derive_key::<English>(&inner.0, DEFAULT_DERIVATION_PATH_PREFIX, inner.1)
@@ -225,7 +218,7 @@ pub fn apply<DB: Database>(
             derive_key_with_wordlist(&inner.0, &inner.1, inner.2, &inner.3)
         }
         HEVMCalls::RememberKey(inner) => {
-            remember_key(state, inner.0, ru256_to_u256(data.env.cfg.network.as_u256()))
+            remember_key(state, &inner.0, U256::from(data.env.cfg.network_id))
         }
         HEVMCalls::Label(inner) => {
             state.labels.insert(inner.0, inner.1.clone());
@@ -393,17 +386,28 @@ fn parse_bytes(s: &str) -> Result<Vec<u8>, String> {
     hex::decode(s.strip_prefix("0x").unwrap_or(s)).map_err(|e| e.to_string())
 }
 
-pub fn parse_private_key(private_key: U256) -> Result<SigningKey> {
-    ensure!(!private_key.is_zero(), "Private key cannot be 0.");
-    ensure!(
-        private_key < U256::from_big_endian(&Secp256k1::ORDER.to_be_bytes()),
-        "Private key must be less than the secp256k1 curve order \
-        (115792089237316195423570985008687907852837564279074904382605163141518161494337).",
-    );
-    let mut bytes: [u8; 32] = [0; 32];
-    private_key.to_big_endian(&mut bytes);
-    SigningKey::from_bytes((&bytes).into()).map_err(Into::into)
+pub fn parse_private_key_from_str(private_key: &str) -> Result<SigningKey> {
+    let private_key = private_key.replace("0x", "");
+    ensure!(private_key.len() == 114, "Wrong private key length");
+
+    let private_key = H456::from_str(&private_key);
+    ensure!(private_key.is_ok(), "Couldn't parse private key");
+    let private_key = private_key.unwrap();
+
+    SigningKey::from_bytes(private_key.as_bytes()).map_err(|e| Error::CorebcSignature(e.into()))
 }
+
+// pub fn parse_private_key(private_key: U256) -> Result<SigningKey> {
+//     ensure!(!private_key.is_zero(), "Private key cannot be 0.");
+//     ensure!(
+//         private_key < U256::from_big_endian(&Secp256k1::ORDER.to_be_bytes()),
+//         "Private key must be less than the secp256k1 curve order \
+//         (115792089237316195423570985008687907852837564279074904382605163141518161494337).",
+//     );
+//     let mut bytes: [u8; 32] = [0; 32];
+//     private_key.to_big_endian(&mut bytes);
+//     SigningKey::from_bytes((&bytes).into()).map_err(Into::into)
+// }
 
 // Determines if the energy limit on a given call was manually set in the script and should
 // therefore not be overwritten by later estimations

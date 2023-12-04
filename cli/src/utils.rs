@@ -3,10 +3,10 @@ use corebc::{
     abi::token::{LenientTokenizer, Tokenizer},
     prelude::TransactionReceipt,
     providers::Middleware,
-    types::U256,
+    types::{Network, U256},
 };
 use eyre::Result;
-use foundry_config::{Config, Network};
+use foundry_config::Config;
 use std::{
     ffi::OsStr,
     future::Future,
@@ -104,7 +104,7 @@ where
 {
     match network {
         Some(network) => Ok(network),
-        None => Ok(Network::Id(provider.get_networkid().await?.as_u64())),
+        None => Ok(Network::from(provider.get_networkid().await?)),
     }
 }
 

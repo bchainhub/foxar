@@ -5,7 +5,7 @@ use clap::Parser;
 use corebc::{
     signers::{coins_bip39::English, LocalWallet, MnemonicBuilder, Signer, WalletError},
     types::{
-        transaction::{eip2718::TypedTransaction, eip712::Eip712},
+        transaction::{cip712::Cip712, eip2718::TypedTransaction},
         Address, Network, Signature,
     },
 };
@@ -131,8 +131,8 @@ pub struct Wallet {
     // /// Use AWS Key Management Service.
     // #[clap(long, help_heading = "Wallet options - AWS KMS")]
     // pub aws: bool,
-    #[clap(short, long)]
-    pub network: Option<Network>,
+    #[clap(long)]
+    pub wallet_network: Option<Network>,
 }
 
 impl Wallet {
@@ -291,7 +291,7 @@ pub trait WalletTrait {
                         ensure_not_env(private_key)?;
                         return Err(PrivateKeyError::InvalidHex(err).into())
                     }
-                    WalletError::EcdsaError(_) => {
+                    WalletError::ED448Error(_) => {
                         ensure_not_env(private_key)?;
                     }
                     _ => {}
@@ -393,7 +393,7 @@ impl WalletTrait for Wallet {
     }
 
     fn network(&self) -> Option<Network> {
-        self.network
+        self.wallet_network
     }
 }
 
@@ -467,7 +467,7 @@ impl Signer for WalletSigner {
         delegate!(self, inner => inner.sign_transaction(message).await.map_err(Into::into))
     }
 
-    async fn sign_typed_data<T: Eip712 + Send + Sync>(
+    async fn sign_typed_data<T: Cip712 + Send + Sync>(
         &self,
         payload: &T,
     ) -> Result<Signature, Self::Error> {
@@ -507,7 +507,7 @@ impl Signer for &WalletSigner {
         (*self).sign_transaction(message).await
     }
 
-    async fn sign_typed_data<T: Eip712 + Send + Sync>(
+    async fn sign_typed_data<T: Cip712 + Send + Sync>(
         &self,
         payload: &T,
     ) -> Result<Signature, Self::Error> {
@@ -541,12 +541,13 @@ mod tests {
     #[test]
     fn find_keystore() {
         let keystore = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/keystore");
-        let keystore_file = keystore
-            .join("UTC--2022-10-30T06-51-20.130356000Z--560d246fcddc9ea98a8b032c9a2f474efb493c28");
+        let keystore_file = keystore.join(
+            "UTC--2020-07-20T17-37-08.515483762Z--cb27de521e43741cf785cbad450d5649187b9612018f",
+        );
         let wallet: Wallet = Wallet::parse_from([
             "foundry-cli",
             "--from",
-            "560d246fcddc9ea98a8b032c9a2f474efb493c28",
+            "cb27de521e43741cf785cbad450d5649187b9612018f",
         ]);
         let file = wallet.find_keystore_file(&keystore_file).unwrap();
         assert_eq!(file, keystore_file);
@@ -565,7 +566,7 @@ mod tests {
             mnemonic_passphrase: None,
             hd_path: None,
             mnemonic_index: 0,
-            network: Some(Network::Mainnet),
+            wallet_network: Some(Network::Mainnet),
         };
         match wallet.private_key() {
             Ok(_) => {

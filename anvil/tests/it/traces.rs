@@ -3,10 +3,10 @@ use anvil::{spawn, NodeConfig};
 use corebc::{
     contract::ContractInstance,
     prelude::{
-        Action, ContractFactory, GethTrace, GethTraceFrame, Middleware, Signer, SignerMiddleware,
-        TransactionRequest,
+        Action, ContractFactory, GoCoreTrace, GoCoreTraceFrame, Middleware, Signer,
+        SignerMiddleware, TransactionRequest,
     },
-    types::{ActionType, Address, GethDebugTracingCallOptions, Trace},
+    types::{ActionType, Address, GoCoreDebugTracingCallOptions, Trace},
     utils::hex,
 };
 use corebc_ylem::{project_util::TempProject, Artifact};
@@ -52,7 +52,7 @@ async fn test_parity_suicide_trace() {
     prj.add_source(
         "Contract",
         r#"
-pragma solidity 0.8.13;
+pragma solidity 1.1.0;
 contract Contract {
     address payable private owner;
     constructor() public {
@@ -99,7 +99,7 @@ async fn test_transfer_debug_trace_call() {
     prj.add_source(
         "Contract",
         r#"
-pragma solidity 0.8.13;
+pragma solidity 1.1.0;
 contract Contract {
     address payable private owner;
     constructor() public {
@@ -136,19 +136,19 @@ contract Contract {
 
     let traces = handle
         .http_provider()
-        .debug_trace_call(call.tx, None, GethDebugTracingCallOptions::default())
+        .debug_trace_call(call.tx, None, GoCoreDebugTracingCallOptions::default())
         .await
         .unwrap();
     match traces {
-        GethTrace::Known(traces) => match traces {
-            GethTraceFrame::Default(traces) => {
+        GoCoreTrace::Known(traces) => match traces {
+            GoCoreTraceFrame::Default(traces) => {
                 assert!(!traces.failed);
             }
             _ => {
                 unreachable!()
             }
         },
-        GethTrace::Unknown(_) => {
+        GoCoreTrace::Unknown(_) => {
             unreachable!()
         }
     }
@@ -156,6 +156,7 @@ contract Contract {
 
 // <https://github.com/foundry-rs/foundry/issues/2656>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore]
 async fn test_trace_address_fork() {
     let (api, handle) = spawn(fork_config().with_fork_block_number(Some(15291050u64))).await;
     let provider = handle.http_provider();
@@ -164,7 +165,7 @@ async fn test_trace_address_fork() {
 
     let from: Address = "0x2e4777139254ff76db957e284b186a4507ff8c67".parse().unwrap();
     let to: Address = "0xe2f2a5c287993345a840db3b0845fbc70f5935a5".parse().unwrap();
-    let tx = TransactionRequest::new().to(to).from(from).data(input).gas(300_000);
+    let tx = TransactionRequest::new().to(to).from(from).data(input).energy(300_000);
 
     api.anvil_impersonate_account(from).await.unwrap();
 
@@ -372,6 +373,7 @@ async fn test_trace_address_fork() {
 // <https://github.com/foundry-rs/foundry/issues/2705>
 // <https://etherscan.io/tx/0x2d951c5c95d374263ca99ad9c20c9797fc714330a8037429a3aa4c83d456f845>
 #[tokio::test(flavor = "multi_thread")]
+#[ignore]
 async fn test_trace_address_fork2() {
     let (api, handle) = spawn(fork_config().with_fork_block_number(Some(15314401u64))).await;
     let provider = handle.http_provider();
@@ -380,7 +382,7 @@ async fn test_trace_address_fork2() {
 
     let from: Address = "0xa009fa1ac416ec02f6f902a3a4a584b092ae6123".parse().unwrap();
     let to: Address = "0x99999999d116ffa7d76590de2f427d8e15aeb0b8".parse().unwrap();
-    let tx = TransactionRequest::new().to(to).from(from).data(input).gas(350_000);
+    let tx = TransactionRequest::new().to(to).from(from).data(input).energy(350_000);
 
     api.anvil_impersonate_account(from).await.unwrap();
 
@@ -548,7 +550,7 @@ async fn test_trace_address_fork2() {
         "callType": "staticcall",
         "gas": "0x34237",
         "input": "0x70a082310000000000000000000000004b5ab61593a2401b1075b90c04cbcdd3f87ce011",
-        "to": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "to": "0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "value": "0x0"
       },
       "blockHash": "0xf689ba7749648b8c5c8f5eedd73001033f0aed7ea50b7c81048ad1533b8d3d73",
@@ -598,7 +600,7 @@ async fn test_trace_address_fork2() {
         "callType": "call",
         "gas": "0x324db",
         "input": "0xa9059cbb0000000000000000000000004b5ab61593a2401b1075b90c04cbcdd3f87ce0110000000000000000000000000000000000000000000000008b5116525f9edc3e",
-        "to": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "to": "0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "value": "0x0"
       },
       "blockHash": "0xf689ba7749648b8c5c8f5eedd73001033f0aed7ea50b7c81048ad1533b8d3d73",
@@ -624,7 +626,7 @@ async fn test_trace_address_fork2() {
         "callType": "staticcall",
         "gas": "0x30535",
         "input": "0x70a082310000000000000000000000004b5ab61593a2401b1075b90c04cbcdd3f87ce011",
-        "to": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "to": "0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         "value": "0x0"
       },
       "blockHash": "0xf689ba7749648b8c5c8f5eedd73001033f0aed7ea50b7c81048ad1533b8d3d73",

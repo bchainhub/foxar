@@ -1,6 +1,6 @@
 //! Support types for configuring storage caching
 
-use crate::network::Network;
+use corebc_core::types::Network;
 use number_prefix::NumberPrefix;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{fmt, fmt::Formatter, str::FromStr};
@@ -47,7 +47,7 @@ impl CachedNetworks {
         match self {
             CachedNetworks::All => true,
             CachedNetworks::None => false,
-            CachedNetworks::Networks(networks) => networks.iter().any(|c| c.id() == network),
+            CachedNetworks::Networks(networks) => networks.iter().any(|c| u64::from(*c) == network),
         }
     }
 }
@@ -252,16 +252,16 @@ mod tests {
             }
         );
 
-        let s = r#"rpc_storage_caching = { networks = [1, "devin", 999999], endpoints = "all"}"#;
+        let s = r#"rpc_storage_caching = { networks = ["1", "devin", 999999], endpoints = "all"}"#;
         let w: Wrapper = toml::from_str(s).unwrap();
 
         assert_eq!(
             w.rpc_storage_caching,
             StorageCachingConfig {
                 networks: CachedNetworks::Networks(vec![
-                    Network::Named(corebc_core::types::Network::Devin),
-                    Network::Named(corebc_core::types::Network::Mainnet),
-                    Network::Id(999999)
+                    Network::Mainnet,
+                    Network::Devin,
+                    Network::Private(999999)
                 ]),
                 endpoints: CachedEndpoints::All
             }
@@ -288,7 +288,7 @@ mod tests {
                     block_explorer: 4230000,
                 },
                 NetworkCache {
-                    name: "mumbai".to_string(),
+                    name: "9".to_string(),
                     blocks: vec![("1".to_string(), 1), ("2".to_string(), 2)],
                     block_explorer: 0,
                 },
@@ -308,7 +308,7 @@ mod tests {
                 -️ Block Explorer (4.2 MB)\n\n\t\
                 -️ Block 1 (1.0 kB)\n\t\
                 -️ Block 2 (2.0 MB)\n\
-            -️ mumbai (3.0 B)\n\t\
+            -️ 9 (3.0 B)\n\t\
                 -️ Block Explorer (0.0 B)\n\n\t\
                 -️ Block 1 (1.0 B)\n\t\
                 -️ Block 2 (2.0 B)\n";

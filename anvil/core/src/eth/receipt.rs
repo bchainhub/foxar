@@ -63,7 +63,7 @@ impl Decodable for Log {
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct EIP658Receipt {
     pub status_code: u8,
-    pub gas_used: U256,
+    pub energy_used: U256,
     pub logs_bloom: Bloom,
     pub logs: Vec<Log>,
 }
@@ -72,7 +72,7 @@ impl Encodable for EIP658Receipt {
     fn rlp_append(&self, stream: &mut RlpStream) {
         stream.begin_list(4);
         stream.append(&self.status_code);
-        stream.append(&self.gas_used);
+        stream.append(&self.energy_used);
         stream.append(&self.logs_bloom);
         stream.append_list(&self.logs);
     }
@@ -82,7 +82,7 @@ impl Decodable for EIP658Receipt {
     fn decode(rlp: &Rlp) -> Result<Self, DecoderError> {
         let result = EIP658Receipt {
             status_code: rlp.val_at(0)?,
-            gas_used: rlp.val_at(1)?,
+            energy_used: rlp.val_at(1)?,
             logs_bloom: rlp.val_at(2)?,
             logs: rlp.list_at(3)?,
         };
@@ -100,14 +100,14 @@ pub enum TypedReceipt {
 // == impl TypedReceipt ==
 
 impl TypedReceipt {
-    /// Returns the gas used by the transactions
-    pub fn gas_used(&self) -> U256 {
+    /// Returns the energy used by the transactions
+    pub fn energy_used(&self) -> U256 {
         match self {
-            TypedReceipt::Legacy(r) => r.gas_used,
+            TypedReceipt::Legacy(r) => r.energy_used,
         }
     }
 
-    /// Returns the gas used by the transactions
+    /// Returns the energy used by the transactions
     pub fn logs_bloom(&self) -> &Bloom {
         match self {
             TypedReceipt::Legacy(r) => &r.logs_bloom,
@@ -171,34 +171,21 @@ mod tests {
         use std::str::FromStr;
 
         use corebc_core::{
-            types::{Bytes, H160, H256},
+            types::{Bytes, H176, H256},
             utils::hex,
         };
         use open_fastrlp::Encodable;
 
         use crate::eth::receipt::{EIP658Receipt, Log, TypedReceipt};
 
-        let expected = hex::decode("f901668001b9010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f85ff85d940000000000000000000000000000000000000011f842a0000000000000000000000000000000000000000000000000000000000000deada0000000000000000000000000000000000000000000000000000000000000beef830100ff").unwrap();
+        let expected = hex::decode("f901060180b9010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0").unwrap();
 
         let mut data = vec![];
         let receipt = TypedReceipt::Legacy(EIP658Receipt {
             logs_bloom: [0; 256].into(),
-            gas_used: 0x1u64.into(),
-            logs: vec![Log {
-                address: H160::from_str("0000000000000000000000000000000000000011").unwrap(),
-                topics: vec![
-                    H256::from_str(
-                        "000000000000000000000000000000000000000000000000000000000000dead",
-                    )
-                    .unwrap(),
-                    H256::from_str(
-                        "000000000000000000000000000000000000000000000000000000000000beef",
-                    )
-                    .unwrap(),
-                ],
-                data: Bytes::from_str("0100ff").unwrap(),
-            }],
-            status_code: 0,
+            energy_used: 0.into(),
+            logs: Vec::new(),
+            status_code: 1,
         });
         receipt.encode(&mut data);
 
@@ -214,33 +201,20 @@ mod tests {
         use std::str::FromStr;
 
         use corebc_core::{
-            types::{Bytes, H160, H256},
+            types::{Bytes, H176, H256},
             utils::hex,
         };
         use open_fastrlp::Decodable;
 
         use crate::eth::receipt::{EIP658Receipt, Log, TypedReceipt};
 
-        let data = hex::decode("f901668001b9010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f85ff85d940000000000000000000000000000000000000011f842a0000000000000000000000000000000000000000000000000000000000000deada0000000000000000000000000000000000000000000000000000000000000beef830100ff").unwrap();
+        let data = hex::decode("f901060180b9010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0").unwrap();
 
         let expected = TypedReceipt::Legacy(EIP658Receipt {
             logs_bloom: [0; 256].into(),
-            gas_used: 0x1u64.into(),
-            logs: vec![Log {
-                address: H160::from_str("0000000000000000000000000000000000000011").unwrap(),
-                topics: vec![
-                    H256::from_str(
-                        "000000000000000000000000000000000000000000000000000000000000dead",
-                    )
-                    .unwrap(),
-                    H256::from_str(
-                        "000000000000000000000000000000000000000000000000000000000000beef",
-                    )
-                    .unwrap(),
-                ],
-                data: Bytes::from_str("0100ff").unwrap(),
-            }],
-            status_code: 0,
+            energy_used: 0.into(),
+            logs: Vec::new(),
+            status_code: 1,
         });
 
         let receipt = TypedReceipt::decode(&mut &data[..]).unwrap();

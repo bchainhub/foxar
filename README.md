@@ -4,20 +4,20 @@
 
 #### Tests:
 **Before working on any crate please write your name next to it, so we won't do duplicate work**
-- [ ] abi
-- [ ] anvil - David(First I will have to implement our new signatures, then fix the tests)
-- [ ] binder
-- [ ] cast
-- [ ] chisel
-- [ ] cli
-- [ ] common
-- [ ] config
-- [ ] evm
-- [ ] fmt
-- [ ] forge
-- [ ] macros - In work (Misha)
-- [ ] ui
-- [ ] utils
+- [x] abi 
+- [ ] anvil 
+- [x] binder
+- [x] cast
+- [ ] chisel - David
+- [ ] cli - Misha
+- [x] common
+- [x] config - Misha
+- [x] evm - David 
+- [x] fmt
+- [x] forge - Misha
+- [x] macros
+- [x] ui
+- [x] utils - Misha
 
 #### Compiles:
 - [x] abi -> Compiles

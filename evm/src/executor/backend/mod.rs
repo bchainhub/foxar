@@ -712,7 +712,7 @@ impl Backend {
                     env.tx.caller,
                     h256_to_b256(code_hash),
                     salt,
-                    &env.cfg.network,
+                    env.cfg.network_id,
                 )
             }
         };

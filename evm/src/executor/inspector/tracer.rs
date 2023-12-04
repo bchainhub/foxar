@@ -255,11 +255,7 @@ where
         let nonce = data.journaled_state.account(inputs.caller).info.nonce;
         self.start_trace(
             data.journaled_state.depth() as usize,
-            get_create_address(
-                inputs,
-                nonce,
-                &Network::try_from(data.env.cfg.network.as_u64()).unwrap(),
-            ),
+            get_create_address(inputs, nonce, &Network::from(data.env.cfg.network_id)),
             inputs.init_code.to_vec(),
             ru256_to_u256(inputs.value),
             inputs.scheme.into(),

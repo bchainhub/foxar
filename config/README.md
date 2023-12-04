@@ -29,7 +29,7 @@ The following is an example of what such a file might look like. This can also b
 src = "src"
 out = "out"
 libs = ["lib"]
-solc = "0.8.10" # to use a specific local solc install set the path as `solc = "<path to solc>/solc"`
+ylem = "0.8.10" # to use a specific local ylem install set the path as `ylem = "<path to ylem>/ylem"`
 eth-rpc-url = "https://mainnet.infura.io"
 
 ## set only when the `hardhat` profile is selected
@@ -73,17 +73,17 @@ libraries = []
 cache = true
 cache_path = 'cache'
 broadcast = 'broadcast'
-# additional solc allow paths
+# additional ylem allow paths
 allow_paths = []
-# additional solc include paths
+# additional ylem include paths
 include_paths = []
 force = false
-evm_version = 'shanghai'
-gas_reports = ['*']
-gas_reports_ignore = []
-## Sets the concrete solc version to use, this overrides the `auto_detect_solc` value
-# solc = '0.8.10'
-auto_detect_solc = true
+cvm_version = 'shanghai'
+energy_reports = ['*']
+energy_reports_ignore = []
+## Sets the concrete ylem version to use, this overrides the `auto_detect_ylem` value
+# ylem = '0.8.10'
+auto_detect_ylem = true
 offline = false
 optimizer = true
 optimizer_runs = 200
@@ -101,7 +101,7 @@ verbosity = 0
 eth_rpc_url = "https://example.com/"
 # Setting this option enables decoding of error traces from mainnet deployed / verfied contracts via etherscan
 etherscan_api_key = "YOURETHERSCANAPIKEY"
-# ignore solc warnings for missing license and exceeded contract size
+# ignore ylem warnings for missing license and exceeded contract size
 # known error codes are: ["unreachable", "unused-return", "unused-param", "unused-var", "code-size", "shadowing", "func-mutability", "license", "pragma-solidity", "virtual-interfaces", "same-varname"]
 # additional warnings can be added using their numeric error code: ["license", 1337]
 ignored_error_codes = ["license", "code-size"]
@@ -114,22 +114,21 @@ match_path = "*/Foo*"
 no_match_path = "*/Bar*"
 ffi = false
 # These are the default callers, generated using `address(uint160(uint256(keccak256("foundry default caller"))))`
-sender = '0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38'
-tx_origin = '0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38'
+sender = '0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38'
+tx_origin = '0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38'
 initial_balance = '0xffffffffffffffffffffffff'
 block_number = 0
 fork_block_number = 0
 chain_id = 1
-# NOTE due to a toml-rs limitation, this value needs to be a string if the desired gas limit exceeds `i64::MAX` (9223372036854775807)
-# `gas_limit = "Max"` is equivalent to `gas_limit = "18446744073709551615"`
-gas_limit = 9223372036854775807
-gas_price = 0
-block_base_fee_per_gas = 0
+# NOTE due to a toml-rs limitation, this value needs to be a string if the desired energy limit exceeds `i64::MAX` (9223372036854775807)
+# `energy_limit = "Max"` is equivalent to `energy_limit = "18446744073709551615"`
+energy_limit = 9223372036854775807
+energy_price = 0
 block_coinbase = '0x0000000000000000000000000000000000000000'
 block_timestamp = 0
 block_difficulty = 0
 block_prevrandao = '0x0000000000000000000000000000000000000000'
-block_gas_limit = 30000000
+block_energy_limit = 30000000
 memory_limit = 33554432
 extra_output = ["metadata"]
 extra_output_files = []
@@ -145,7 +144,7 @@ rpc_storage_caching = { chains = "all", endpoints = "all" }
 no_storage_caching = false
 # Whether to store the referenced sources in the metadata as literal data.
 use_literal_content = false
-# use ipfs method to generate the metadata hash, solc's default.
+# use ipfs method to generate the metadata hash, ylem's default.
 # To not include the metadata hash, to allow for deterministic code: https://docs.soliditylang.org/en/latest/metadata.html, use "none"
 bytecode_hash = "ipfs"
 # Whether to append the metadata hash to the bytecode
@@ -157,7 +156,7 @@ cbor_metadata = true
 # "debug" injects strings for compiler-generated internal reverts, implemented for ABI encoders V1 and V2 for now.
 # "verboseDebug" even appends further information to user-supplied revert strings (not yet implemented)
 revert_strings = "default"
-# If this option is enabled, Solc is instructed to generate output (bytecode) only for the required contracts
+# If this option is enabled, Ylem is instructed to generate output (bytecode) only for the required contracts
 # this can reduce compile time for `forge test` a bit but is considered experimental at this point.
 sparse_mode = false
 build_info = true
@@ -260,7 +259,7 @@ is an opt-in module that can be enabled via the `ModelChecker` object.
 See [Compiler Input Description `settings.modelChecker`](https://docs.soliditylang.org/en/latest/using-the-compiler.html#compiler-input-and-output-json-description)
 and [the model checker's options](https://docs.soliditylang.org/en/latest/smtchecker.html#smtchecker-options-and-tuning).
 
-The module is available in `solc` release binaries for OSX and Linux.
+The module is available in `ylem` release binaries for OSX and Linux.
 The latter requires the z3 library version [4.8.8, 4.8.14] to be installed
 in the system (SO version 4.8).
 

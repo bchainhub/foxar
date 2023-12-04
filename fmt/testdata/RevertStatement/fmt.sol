@@ -30,10 +30,14 @@ contract RevertStatement {
         revert( /* comment7 */ /* comment8 */ message /* comment9 */ ); /* comment10 */ // comment11
 
         revert(
-            string.concat(
-                message,
-                someVeryLongFunctionNameToGetDynamicErrorMessageString(
-                    /* comment12 */
+            string(
+                bytes.concat(
+                    bytes(message),
+                    bytes(
+                        someVeryLongFunctionNameToGetDynamicErrorMessageString(
+                            /* comment12 */
+                        )
+                    )
                 )
             )
         );
