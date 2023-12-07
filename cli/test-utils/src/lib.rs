@@ -9,5 +9,6 @@ pub mod script;
 pub use script::{ScriptOutcome, ScriptTester};
 
 // re-exports for convenience
+pub use corebc_addressbook;
 pub use corebc_ylem;
 pub use tempfile;

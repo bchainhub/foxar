@@ -12,6 +12,7 @@ foundry-common = { path = "../../common" }
 
 corebc = { workspace = true}
 corebc-ylem = { workspace = true, features = ["project-util"]}
+corebc-addressbook = { workspace = true }
 
 eyre = "0.6"
 is-terminal = "0.4"

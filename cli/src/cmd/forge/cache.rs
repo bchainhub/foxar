@@ -113,9 +113,9 @@ impl FromStr for NetworkOrAll {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s == "all"  {
+        if s == "all" {
             Ok(NetworkOrAll::All)
-        } else if let Ok(network) = corebc::prelude::Network::from_str(s)  {
+        } else if let Ok(network) = corebc::prelude::Network::from_str(s) {
             Ok(NetworkOrAll::Network(network))
         } else {
             Err(format!("Expected known network or all, found: {s}"))

@@ -102,7 +102,9 @@ impl EvmOpts {
                 energy_limit: u256_to_ru256(self.energy_limit()),
             },
             cfg: CfgEnv {
-                network_id: u64::from(self.env.network_id.unwrap_or(Network::from(foundry_common::DEV_CHAIN_ID))),
+                network_id: u64::from(
+                    self.env.network_id.unwrap_or(Network::from(foundry_common::DEV_CHAIN_ID)),
+                ),
                 spec_id: SpecId::LATEST,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,

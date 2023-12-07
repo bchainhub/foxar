@@ -1,4 +1,7 @@
-use corebc::{prelude::{Http, Middleware, Provider, RetryClient, U256}, types::Network};
+use corebc::{
+    prelude::{Http, Middleware, Provider, RetryClient, U256},
+    types::Network,
+};
 use eyre::WrapErr;
 use foundry_common::{get_http_provider, RpcUrl};
 
@@ -58,7 +61,7 @@ impl ProviderInfo {
             provider.get_energy_price().await.wrap_err("Failed to get legacy energy price");
         if energy_price.is_ok() {
             let energy_price = EnergyPrice::Legacy(energy_price);
-            return Ok(ProviderInfo { provider, network ,energy_price })
+            return Ok(ProviderInfo { provider, network, energy_price })
         }
         Err(eyre::eyre!("{}", energy_price.unwrap_err()))
     }

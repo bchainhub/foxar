@@ -318,25 +318,26 @@ casttest!(calldata_array, |_: TestProject, mut cmd: TestCommand| {
     );
 });
 
-
 // <https://github.com/foundry-rs/foundry/issues/2705>
 casttest!(
     //todo:error2215 need an archive node
     #[ignore]
-    cast_run_succeeds, |_: TestProject, mut cmd: TestCommand| {
-    let rpc = http_rpc_endpoint();
-    cmd.args([
-        "run",
-        "-v",
-        "0xcedb08f67df469cbb947390a4aef71b950d192d98c68005abb23f0ce8652c37d",
-        "--quick",
-        "--rpc-url",
-        rpc.as_str(),
-    ]);
-    let output = cmd.stdout_lossy();
-    assert!(output.contains("Transaction successfully executed"));
-    assert!(!output.contains("Revert"));
-});
+    cast_run_succeeds,
+    |_: TestProject, mut cmd: TestCommand| {
+        let rpc = http_rpc_endpoint();
+        cmd.args([
+            "run",
+            "-v",
+            "0xcedb08f67df469cbb947390a4aef71b950d192d98c68005abb23f0ce8652c37d",
+            "--quick",
+            "--rpc-url",
+            rpc.as_str(),
+        ]);
+        let output = cmd.stdout_lossy();
+        assert!(output.contains("Transaction successfully executed"));
+        assert!(!output.contains("Revert"));
+    }
+);
 
 // tests that `cast --to-base` commands are working correctly.
 casttest!(cast_to_base, |_: TestProject, mut cmd: TestCommand| {

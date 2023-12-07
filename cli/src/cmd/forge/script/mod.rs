@@ -750,12 +750,8 @@ mod tests {
 
     #[test]
     fn can_merge_script_config() {
-        let args: ScriptArgs = ScriptArgs::parse_from([
-            "foundry-cli",
-            "Contract.sol",
-            "--cvm-version",
-            "nucleus",
-        ]);
+        let args: ScriptArgs =
+            ScriptArgs::parse_from(["foundry-cli", "Contract.sol", "--cvm-version", "nucleus"]);
         let config = args.load_config();
         assert_eq!(config.cvm_version.to_string(), "nucleus".to_string());
     }
@@ -810,9 +806,6 @@ mod tests {
         std::env::set_var("_CAN_EXTRACT_RPC_ALIAS", "123456");
         let (config, evm_opts) = args.load_config_and_evm_opts().unwrap();
         assert_eq!(config.eth_rpc_url, Some("devin".to_string()));
-        assert_eq!(
-            evm_opts.fork_url,
-            Some("https://devin.com/v2/123456".to_string())
-        );
+        assert_eq!(evm_opts.fork_url, Some("https://devin.com/v2/123456".to_string()));
     }
 }

@@ -9,11 +9,11 @@ use crate::{
     opts::EtherscanOpts,
 };
 use clap::{Parser, ValueHint};
-use corebc::{abi::Address, ylem::info::ContractInfo, types::Network};
+use corebc::{abi::Address, types::Network, ylem::info::ContractInfo};
 use foundry_config::{figment, impl_figment_convert, impl_figment_convert_cast, Config};
 use provider::VerificationProviderType;
 use reqwest::Url;
-use serde::{Serialize};
+use serde::Serialize;
 use std::path::PathBuf;
 
 mod etherscan;
@@ -104,7 +104,7 @@ pub struct VerifyArgs {
 
     /// The network name or EIP-155 network ID
     #[clap(short, long, alias = "network-id", alias = "network_id", env = "NETWORK")]
-    pub network: Option<Network>,    
+    pub network: Option<Network>,
 }
 
 impl_figment_convert!(VerifyArgs);

@@ -1,5 +1,6 @@
 use super::{Wallet, WalletSigner};
 use clap::Parser;
+use corebc::types::Network;
 use eyre::Result;
 use foundry_config::{
     figment::{
@@ -11,7 +12,6 @@ use foundry_config::{
 };
 use serde::Serialize;
 use std::borrow::Cow;
-use corebc::types::Network;
 
 const FLASHBOTS_URL: &str = "https://rpc.flashbots.net";
 

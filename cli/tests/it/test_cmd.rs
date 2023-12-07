@@ -278,19 +278,19 @@ contract ContractTest is DSTest {
         prj.write_config(config);
 
         cmd.arg("test");
-        cmd.unchecked_output()
-            .stdout_matches_path(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(
-                "tests/fixtures/runs_tests_exactly_once_with_changed_versions.1.1.0.stdout",
-            ));
+        cmd.unchecked_output().stdout_matches_path(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("tests/fixtures/runs_tests_exactly_once_with_changed_versions.1.1.0.stdout"),
+        );
 
         // pin version
         let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
         prj.write_config(config);
 
-        cmd.unchecked_output()
-            .stdout_matches_path(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(
-                "tests/fixtures/runs_tests_exactly_once_with_changed_versions.1.1.0.stdout",
-            ));
+        cmd.unchecked_output().stdout_matches_path(
+            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("tests/fixtures/runs_tests_exactly_once_with_changed_versions.1.1.0.stdout"),
+        );
     }
 );
 

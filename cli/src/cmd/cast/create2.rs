@@ -172,7 +172,7 @@ impl Create2Args {
 mod tests {
     use std::str::FromStr;
 
-    use corebc::{abi::AbiEncode, utils::get_create2_address, types::H176};
+    use corebc::{abi::AbiEncode, types::H176, utils::get_create2_address};
 
     use super::*;
 
@@ -180,7 +180,8 @@ mod tests {
 
     #[test]
     fn basic_create2() {
-        let args = Create2Args::parse_from(["foundry-cli", "--starts-with", "babe", "--network", "1"]);
+        let args =
+            Create2Args::parse_from(["foundry-cli", "--starts-with", "babe", "--network", "1"]);
         let create2_out = args.run().unwrap();
         let address = create2_out.address;
         let address = format!("{address:x}");
@@ -194,7 +195,8 @@ mod tests {
             "foundry-cli",
             "--matching",
             "babeXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-            "--network", "1"
+            "--network",
+            "1",
         ]);
         let create2_out = args.run().unwrap();
         let address = create2_out.address;
@@ -212,7 +214,8 @@ mod tests {
             "babe",
             "--init-code",
             init_code,
-            "--network", "1"
+            "--network",
+            "1",
         ]);
         let create2_out = args.run().unwrap();
         let address = create2_out.address;
@@ -233,7 +236,8 @@ mod tests {
             "babe",
             "--init-code-hash",
             init_code_hash,
-            "--network", "1"
+            "--network",
+            "1",
         ]);
         let create2_out = args.run().unwrap();
         let address = create2_out.address;
@@ -251,7 +255,8 @@ mod tests {
     #[test]
     fn verify_helpers() {
         // https://eips.ethereum.org/EIPS/eip-1014
-        let eip_address = Address::from_str("cb52a55032de3186cea55fdef3fdb0dbd45b18bba964").unwrap();
+        let eip_address =
+            Address::from_str("cb52a55032de3186cea55fdef3fdb0dbd45b18bba964").unwrap();
 
         let deployer = Address::from_str("00000000000000000000000000000000000000000000").unwrap();
         let salt =
@@ -277,6 +282,6 @@ mod tests {
 
     fn verify_create2_hash(deployer: Address, salt: U256, init_code_hash: Vec<u8>) -> Address {
         let addr = get_create2_h160_address_from_hash(deployer, salt.encode(), init_code_hash);
-        to_ican(&addr, &corebc::types::Network::Mainnet)    
+        to_ican(&addr, &corebc::types::Network::Mainnet)
     }
 }
