@@ -356,7 +356,7 @@ impl ScriptArgs {
         }
         if let Some(wallets) = self.wallets.private_keys()? {
             if wallets.len() == 1 {
-                script_config.evm_opts.sender = wallets.get(0).unwrap().address()
+                script_config.evm_opts.sender = wallets.first().unwrap().address()
             }
         }
         Ok(())

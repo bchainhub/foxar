@@ -93,7 +93,7 @@ impl Cmd for LsArgs {
         for network_or_all in networks {
             match network_or_all {
                 NetworkOrAll::Network(network) => {
-                    cache.networks.push(Config::list_foundry_network_cache(network.into())?)
+                    cache.networks.push(Config::list_foundry_network_cache(network)?)
                 }
                 NetworkOrAll::All => cache = Config::list_foundry_cache()?,
             }

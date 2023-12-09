@@ -274,7 +274,7 @@ impl EtherscanVerificationProvider {
         verifier_url: Option<&str>,
         config: &Config,
     ) -> eyre::Result<Client> {
-        let etherscan_config = config.get_etherscan_config_with_network(Some(network.clone()))?;
+        let etherscan_config = config.get_etherscan_config_with_network(Some(network))?;
 
         let api_url =
             verifier_url.or_else(|| etherscan_config.as_ref().map(|c| c.api_url.as_str()));

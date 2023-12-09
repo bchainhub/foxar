@@ -467,7 +467,7 @@ impl ScriptArgs {
                 }
             }
 
-            config.network_id = Some(provider_info.network.into());
+            config.network_id = Some(provider_info.network);
             let sequence = ScriptSequence::new(
                 new_sequence,
                 returns.clone(),

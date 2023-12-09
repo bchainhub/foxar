@@ -1107,7 +1107,7 @@ impl<'a, W: Write> Formatter<'a, W> {
     fn visit_list<T>(
         &mut self,
         prefix: &str,
-        items: &mut Vec<T>,
+        items: &mut [T],
         start_offset: Option<usize>,
         end_offset: Option<usize>,
         paren_required: bool,
@@ -1150,7 +1150,7 @@ impl<'a, W: Write> Formatter<'a, W> {
     fn visit_block<T>(
         &mut self,
         loc: Loc,
-        statements: &mut Vec<T>,
+        statements: &mut [T],
         attempt_single_line: bool,
         attempt_omit_braces: bool,
     ) -> Result<bool>
@@ -1204,7 +1204,7 @@ impl<'a, W: Write> Formatter<'a, W> {
             Statement::Block { loc, statements, .. } => {
                 self.visit_block(*loc, statements, attempt_single_line, true)
             }
-            _ => self.visit_block(stmt.loc(), &mut vec![stmt], attempt_single_line, true),
+            _ => self.visit_block(stmt.loc(), &mut [stmt], attempt_single_line, true),
         }
     }
 

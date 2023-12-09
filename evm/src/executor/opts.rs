@@ -81,7 +81,7 @@ impl EvmOpts {
             &provider,
             self.memory_limit,
             self.env.energy_price,
-            self.env.network_id.map_or(None, |f| Some(u64::from(f))),
+            self.env.network_id.map(u64::from),
             self.fork_block_number,
             self.sender,
         )
@@ -181,7 +181,7 @@ impl EvmOpts {
                 .unwrap_or_else(|_| panic!("Failed to establish provider to {url}"));
 
             if let Ok(id) = RuntimeOrHandle::new().block_on(provider.get_networkid()) {
-                return Network::try_from(id.as_u64()).ok()
+                return Some(Network::from(id.as_u64()));
             }
         }
 

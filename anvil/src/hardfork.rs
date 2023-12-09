@@ -28,9 +28,7 @@ impl Hardfork {
     }
 
     pub fn fork_id(&self) -> ForkId {
-        match self {
-            _ => ForkId { hash: ForkHash([0x87, 0x9d, 0x6e, 0x30]), next: 0 },
-        }
+        ForkId { hash: ForkHash([0x87, 0x9d, 0x6e, 0x30]), next: 0 }
     }
 }
 

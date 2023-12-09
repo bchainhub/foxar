@@ -1,6 +1,5 @@
 use super::{Wallet, WalletSigner};
 use clap::Parser;
-use corebc::types::Network;
 use eyre::Result;
 use foundry_config::{
     figment::{

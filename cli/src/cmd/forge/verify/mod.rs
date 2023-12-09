@@ -13,7 +13,6 @@ use corebc::{abi::Address, types::Network, ylem::info::ContractInfo};
 use foundry_config::{figment, impl_figment_convert, impl_figment_convert_cast, Config};
 use provider::VerificationProviderType;
 use reqwest::Url;
-use serde::Serialize;
 use std::path::PathBuf;
 
 mod etherscan;
