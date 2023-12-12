@@ -6,7 +6,7 @@ FOUNDRY_DIR=${FOUNDRY_DIR:-"$BASE_DIR/.foundry"}
 FOUNDRY_BIN_DIR="$FOUNDRY_DIR/bin"
 FOUNDRY_MAN_DIR="$FOUNDRY_DIR/share/man/man1"
 
-BINS=(forge cast shuttle chisel)
+BINS=(spark cast shuttle chisel)
 
 export RUSTFLAGS="-C target-cpu=native"
 
@@ -136,7 +136,7 @@ main() {
     MAN_TARBALL_URL="${RELEASE_URL}foundry_man_${FOUNDRYUP_VERSION}.tar.gz"
 
     # Download and extract the binaries archive
-    say "downloading latest forge, cast, shuttle, and chisel"
+    say "downloading latest spark, cast, shuttle, and chisel"
     if [ "$PLATFORM" = "win32" ]; then
       tmp="$(mktemp -d 2>/dev/null || echo ".")/foundry.zip"
       ensure download "$BIN_ARCHIVE_URL" "$tmp"

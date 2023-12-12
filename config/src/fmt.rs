@@ -1,4 +1,4 @@
-//! Configuration specific to the `forge fmt` command and the `forge_fmt` package
+//! Configuration specific to the `spark fmt` command and the `spark_fmt` package
 
 use serde::{Deserialize, Serialize};
 

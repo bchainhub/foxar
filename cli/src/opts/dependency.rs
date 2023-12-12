@@ -77,7 +77,7 @@ impl FromStr for Dependency {
             // GitHub repository name, then we assume this is the alias.
             //
             // This is to allow for conveniently removing aliased dependencies
-            // using `forge remove <alias>`
+            // using `spark remove <alias>`
             if GH_REPO_REGEX.is_match(dependency) {
                 Some(format!("https://{GITHUB}/{dependency}"))
             } else {

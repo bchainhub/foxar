@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use forge_fmt::solang_ext::SafeUnwrap;
+use spark_fmt::solang_ext::SafeUnwrap;
 
 use super::{Preprocessor, PreprocessorId};
 use crate::{

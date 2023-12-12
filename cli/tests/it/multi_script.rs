@@ -1,12 +1,12 @@
-//! Contains various tests related to forge script
+//! Contains various tests related to spark script
 use foundry_cli_test_utils::{
-    forgetest_async,
+    sparktest_async,
     util::{TestCommand, TestProject},
     ScriptOutcome, ScriptTester,
 };
 use shuttle::{spawn, NodeConfig};
 
-forgetest_async!(
+sparktest_async!(
     can_deploy_multi_chain_script_without_lib,
     |prj: TestProject, cmd: TestCommand| async move {
         let (api1, handle1) = spawn(NodeConfig::test()).await;
@@ -28,7 +28,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(
+sparktest_async!(
     can_not_deploy_multi_chain_script_with_lib,
     |prj: TestProject, cmd: TestCommand| async move {
         let (_, handle1) = spawn(NodeConfig::test()).await;
@@ -45,7 +45,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(
+sparktest_async!(
     can_not_change_fork_during_broadcast,
     |prj: TestProject, cmd: TestCommand| async move {
         let (_, handle1) = spawn(NodeConfig::test()).await;

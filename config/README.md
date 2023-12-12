@@ -7,7 +7,7 @@ sensible set of defaults.
 
 Configurations can be arbitrarily namespaced by profiles. Foundry's default config is also named `default`, but can
 arbitrarily name and configure profiles as you like and set the `FOUNDRY_PROFILE` environment variable to the selected
-profile's name. This results in foundry's tools (forge) preferring the values in the profile with the named that's set
+profile's name. This results in foundry's tools (spark) preferring the values in the profile with the named that's set
 in `FOUNDRY_PROFILE`. But all custom profiles inherit from the `default` profile.
 
 ## foundry.toml
@@ -21,7 +21,7 @@ takes place and the absolute path is used directly.
 In `foundry.toml` you can define multiple profiles, therefore the file is assumed to be _nested_, so each top-level key
 declares a profile and its values configure the profile.
 
-The following is an example of what such a file might look like. This can also be obtained with `forge config`
+The following is an example of what such a file might look like. This can also be obtained with `spark config`
 
 ```toml
 ## defaults for _all_ profiles
@@ -157,7 +157,7 @@ cbor_metadata = true
 # "verboseDebug" even appends further information to user-supplied revert strings (not yet implemented)
 revert_strings = "default"
 # If this option is enabled, Ylem is instructed to generate output (bytecode) only for the required contracts
-# this can reduce compile time for `forge test` a bit but is considered experimental at this point.
+# this can reduce compile time for `spark test` a bit but is considered experimental at this point.
 sparse_mode = false
 build_info = true
 build_info_path = "build-info"
@@ -284,7 +284,7 @@ It is also important to set a proper timeout (given in milliseconds), since the
 default time given to the underlying solvers may not be enough.
 If no verification targets are given, only assertions will be checked.
 
-The model checker will run when `forge build` is invoked, and will show
+The model checker will run when `spark build` is invoked, and will show
 findings as warnings if any.
 
 ## Environment Variables

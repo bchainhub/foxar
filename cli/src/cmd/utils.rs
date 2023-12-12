@@ -10,9 +10,9 @@ use corebc::{
     },
 };
 use eyre::WrapErr;
-use forge::executor::opts::EvmOpts;
 use foundry_common::{cli_warn, fs, TestFunctionExt};
 use foundry_config::{error::ExtractConfigError, figment::Figment, Config};
+use spark::executor::opts::EvmOpts;
 use std::{fmt::Write, path::PathBuf};
 use tracing::trace;
 use yansi::Paint;
@@ -165,7 +165,7 @@ macro_rules! update_progress {
 /// Helpers for loading configuration.
 ///
 /// This is usually implicitly implemented on a "&CmdArgs" struct via impl macros defined in
-/// `forge_config` (See [`forge_config::impl_figment_convert`] for more details) and the impl
+/// `spark_config` (See [`spark_config::impl_figment_convert`] for more details) and the impl
 /// definition on `T: Into<Config> + Into<Figment>` below.
 ///
 /// Each function also has an `emit_warnings` form which does the same thing as its counterpart but
@@ -219,7 +219,7 @@ where
 
         // update the fork url if it was an alias
         if let Some(fork_url) = config.get_rpc_url() {
-            trace!(target: "forge::config", ?fork_url, "Update EvmOpts fork url");
+            trace!(target: "spark::config", ?fork_url, "Update EvmOpts fork url");
             evm_opts.fork_url = Some(fork_url?.into_owned());
         }
 

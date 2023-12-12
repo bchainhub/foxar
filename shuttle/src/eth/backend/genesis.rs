@@ -8,10 +8,6 @@ use corebc::{
     abi::ethereum_types::BigEndianHash,
     types::{Address, H256},
 };
-use forge::{
-    revm::primitives::{B256, SHA3_EMPTY, U256},
-    utils::b176_to_h176,
-};
 use foundry_evm::{
     executor::{
         backend::{snapshot::StateSnapshot, DatabaseError, DatabaseResult},
@@ -21,6 +17,10 @@ use foundry_evm::{
 };
 use foundry_utils::types::{ToEthersU256, ToRuint};
 use parking_lot::Mutex;
+use spark::{
+    revm::primitives::{B256, SHA3_EMPTY, U256},
+    utils::b176_to_h176,
+};
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::RwLockWriteGuard;
 

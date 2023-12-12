@@ -56,12 +56,21 @@ contract ParseJson is DSTest {
     function test_addressArray() public {
         bytes memory data = cheats.parseJson(json, ".addressArray");
         address[] memory decodedData = abi.decode(data, (address[]));
-        assertEq(0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c, decodedData[0]);
-        assertEq(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8, decodedData[1]);
+        assertEq(
+            0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c,
+            decodedData[0]
+        );
+        assertEq(
+            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            decodedData[1]
+        );
     }
 
     function test_H160ButNotaddress() public {
-        string memory data = abi.decode(cheats.parseJson(json, ".H160NotAddress"), (string));
+        string memory data = abi.decode(
+            cheats.parseJson(json, ".H160NotAddress"),
+            (string)
+        );
         assertEq("0000000000000000000000000000000000001337", data);
     }
 
@@ -73,7 +82,10 @@ contract ParseJson is DSTest {
     function test_nestedObject() public {
         bytes memory data = cheats.parseJson(json, ".nestedObject");
         Nested memory nested = abi.decode(data, (Nested));
-        assertEq(nested.number, 115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        assertEq(
+            nested.number,
+            115792089237316195423570985008687907853269984665640564039457584007913129639935
+        );
         assertEq(nested.str, "NEST");
     }
 
@@ -84,7 +96,7 @@ contract ParseJson is DSTest {
     }
 
     function test_wholeObject() public {
-        // we need to make the path relative to the crate that's running tests for it (forge crate)
+        // we need to make the path relative to the crate that's running tests for it (spark crate)
         string memory path = "../testdata/fixtures/Json/wholeJson.json";
         console.log(path);
         json = cheats.readFile(path);
@@ -108,10 +120,19 @@ contract ParseJson is DSTest {
         uint256 number = cheats.parseJsonUint(json, ".hexUint");
         assertEq(number, 1231232);
         number = cheats.parseJsonUint(json, ".stringUint");
-        assertEq(number, 115792089237316195423570985008687907853269984665640564039457584007913129639935);
+        assertEq(
+            number,
+            115792089237316195423570985008687907853269984665640564039457584007913129639935
+        );
         number = cheats.parseJsonUint(json, ".numberUint");
-        assertEq(number, 115792089237316195423570985008687907853269984665640564039457584007913129639935);
-        uint256[] memory numbers = cheats.parseJsonUintArray(json, ".arrayUint");
+        assertEq(
+            number,
+            115792089237316195423570985008687907853269984665640564039457584007913129639935
+        );
+        uint256[] memory numbers = cheats.parseJsonUintArray(
+            json,
+            ".arrayUint"
+        );
         assertEq(numbers[0], 1231232);
         assertEq(numbers[1], 1231232);
         assertEq(numbers[2], 1231232);
@@ -127,7 +148,10 @@ contract ParseJson is DSTest {
     function test_coercionBool() public {
         bool boolean = cheats.parseJsonBool(json, ".booleanString");
         assertEq(boolean, true);
-        bool[] memory booleans = cheats.parseJsonBoolArray(json, ".booleanArray");
+        bool[] memory booleans = cheats.parseJsonBoolArray(
+            json,
+            ".booleanArray"
+        );
         assert(booleans[0]);
         assert(!booleans[1]);
     }
@@ -223,7 +247,8 @@ contract WriteJson is DSTest {
 
     function test_serializeNotSimpleJson() public {
         string memory json3 = "json3";
-        string memory path = "../testdata/fixtures/Json/write_complex_test.json";
+        string
+            memory path = "../testdata/fixtures/Json/write_complex_test.json";
         vm.serializeUint(json3, "a", uint256(123));
         string memory semiFinal = vm.serializeString(json3, "b", "test");
         string memory finalJson = vm.serializeString(json3, "c", semiFinal);

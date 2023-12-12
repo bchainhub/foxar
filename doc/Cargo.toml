@@ -1,5 +1,5 @@
 [package]
-name = "forge-doc"
+name = "spark-doc"
 version = "0.1.0"
 edition = "2021"
 description = """
@@ -11,7 +11,7 @@ readme = "README.md"
 [dependencies]
 # foundry internal
 foundry-common = { path = "../common" }
-forge-fmt = { path = "../fmt" }
+spark-fmt = { path = "../fmt" }
 foundry-config = { path = "../config" }
 foundry-utils = { path = "../utils" }
 

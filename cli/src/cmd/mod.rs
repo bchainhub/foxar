@@ -6,7 +6,7 @@
 //! [`foundry_config::Config`].
 
 pub mod cast;
-pub mod forge;
+pub mod spark;
 
 // Re-export our shared utilities
 mod retry;

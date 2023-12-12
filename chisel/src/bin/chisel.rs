@@ -9,7 +9,7 @@ use chisel::{
 };
 use clap::Parser;
 use foundry_cli::{
-    cmd::{forge::build::BuildArgs, LoadConfig},
+    cmd::{spark::build::BuildArgs, LoadConfig},
     utils,
 };
 use foundry_common::evm::EvmArgs;

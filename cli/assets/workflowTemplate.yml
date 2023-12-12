@@ -24,11 +24,11 @@ jobs:
 
       - name: Run Forge build
         run: |
-          forge --version
-          forge build --sizes
+          spark --version
+          spark build --sizes
         id: build
 
       - name: Run Forge tests
         run: |
-          forge test -vvv
+          spark test -vvv
         id: test

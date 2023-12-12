@@ -1,36 +1,36 @@
-use foundry_cli_test_utils::{forgetest_external, util::setup_forge_remote};
+use foundry_cli_test_utils::{sparktest_external, util::setup_spark_remote};
 
-// forgetest_external!(solmate, "transmissions11/solmate");
-// forgetest_external!(prb_math, "PaulRBerg/prb-math");
-// forgetest_external!(prb_proxy, "PaulRBerg/prb-proxy");
-// forgetest_external!(solady, "Vectorized/solady");
-// forgetest_external!(
+// sparktest_external!(solmate, "transmissions11/solmate");
+// sparktest_external!(prb_math, "PaulRBerg/prb-math");
+// sparktest_external!(prb_proxy, "PaulRBerg/prb-proxy");
+// sparktest_external!(solady, "Vectorized/solady");
+// sparktest_external!(
 //     geb,
 //     "reflexer-labs/geb",
 //     &["--chain-id", "99", "--sender", "0xcb5400a329c0648769a73afac7f9381e08fb43dbea72"]
 // );
-// forgetest_external!(stringutils, "Arachnid/solidity-stringutils");
-// forgetest_external!(lootloose, "gakonst/lootloose");
-// forgetest_external!(lil_web3, "m1guelpf/lil-web3");
+// sparktest_external!(stringutils, "Arachnid/solidity-stringutils");
+// sparktest_external!(lootloose, "gakonst/lootloose");
+// sparktest_external!(lil_web3, "m1guelpf/lil-web3");
 
 /// clone + build in one step
 #[test]
 #[ignore]
 fn can_checkout_build() {
-    let (_prj, _cmd) = setup_forge_remote("transmissions11/solmate");
+    let (_prj, _cmd) = setup_spark_remote("transmissions11/solmate");
 }
 
 /// Forking tests
 mod fork_integration {
-    // use foundry_cli_test_utils::forgetest_external;
+    // use foundry_cli_test_utils::sparktest_external;
 
-    // forgetest_external!(multicall, "makerdao/multicall", &["--block-number", "1"]);
-    // forgetest_external!(
+    // sparktest_external!(multicall, "makerdao/multicall", &["--block-number", "1"]);
+    // sparktest_external!(
     //     drai,
     //     "mds1/drai",
     //     13633752,
     //     &["--chain-id", "99", "--sender", "0xcb5400a329c0648769a73afac7f9381e08fb43dbea72"]
     // );
-    // forgetest_external!(gunilev, "hexonaut/guni-lev", 13633752);
-    // forgetest_external!(convex, "mds1/convex-shutdown-simulation", 14445961);
+    // sparktest_external!(gunilev, "hexonaut/guni-lev", 13633752);
+    // sparktest_external!(convex, "mds1/convex-shutdown-simulation", 14445961);
 }

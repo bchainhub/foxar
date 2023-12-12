@@ -18,11 +18,11 @@ COPY . .
 RUN --mount=type=cache,target=/root/.cargo/registry --mount=type=cache,target=/root/.cargo/git --mount=type=cache,target=/opt/foundry/target \
     source $HOME/.profile && cargo build --release \
     && mkdir out \
-    && mv target/release/forge out/forge \
+    && mv target/release/spark out/spark \
     && mv target/release/cast out/cast \
     && mv target/release/shuttle out/shuttle \
     && mv target/release/chisel out/chisel \
-    && strip out/forge \
+    && strip out/spark \
     && strip out/cast \
     && strip out/chisel \
     && strip out/shuttle;
@@ -31,7 +31,7 @@ FROM docker.io/frolvlad/alpine-glibc:alpine-3.16_glibc-2.34 as foundry-client
 
 RUN apk add --no-cache linux-headers git
 
-COPY --from=build-environment /opt/foundry/out/forge /usr/local/bin/forge
+COPY --from=build-environment /opt/foundry/out/spark /usr/local/bin/spark
 COPY --from=build-environment /opt/foundry/out/cast /usr/local/bin/cast
 COPY --from=build-environment /opt/foundry/out/shuttle /usr/local/bin/shuttle
 COPY --from=build-environment /opt/foundry/out/chisel /usr/local/bin/chisel

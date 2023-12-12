@@ -8,17 +8,17 @@ use crate::prelude::{
     SolidityHelper,
 };
 use corebc::{contract::Lazy, utils::hex};
-use forge::{
+use foundry_config::{Config, RpcEndpoint};
+use regex::Regex;
+use reqwest::Url;
+use solang_parser::diagnostics::Diagnostic;
+use spark::{
     decode::decode_console_logs,
     trace::{
         identifier::SignaturesIdentifier, CallTraceDecoder, CallTraceDecoderBuilder, TraceKind,
     },
 };
-use forge_fmt::FormatterConfig;
-use foundry_config::{Config, RpcEndpoint};
-use regex::Regex;
-use reqwest::Url;
-use solang_parser::diagnostics::Diagnostic;
+use spark_fmt::FormatterConfig;
 use std::{borrow::Cow, error::Error, io::Write, path::PathBuf, process::Command};
 use strum::IntoEnumIterator;
 use yansi::Paint;
@@ -99,11 +99,11 @@ pub enum DispatchResult {
 
 /// Helper function that formats solidity source with the given [FormatterConfig]
 pub fn format_source(source: &str, config: FormatterConfig) -> eyre::Result<String> {
-    match forge_fmt::parse(source) {
+    match spark_fmt::parse(source) {
         Ok(parsed) => {
             let mut formatted_source = String::default();
 
-            if forge_fmt::format(&mut formatted_source, parsed, config).is_err() {
+            if spark_fmt::format(&mut formatted_source, parsed, config).is_err() {
                 eyre::bail!("Could not format source!");
             }
 

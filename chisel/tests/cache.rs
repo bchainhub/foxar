@@ -2,9 +2,9 @@ use std::path::Path;
 
 use chisel::session::ChiselSession;
 use corebc_ylem::CvmVersion;
-use forge::executor::opts::EvmOpts;
 use foundry_config::Config;
 use serial_test::serial;
+use spark::executor::opts::EvmOpts;
 
 #[test]
 #[serial]

@@ -1,4 +1,4 @@
-//! Configuration specific to the `forge doc` command and the `forge_doc` package
+//! Configuration specific to the `spark doc` command and the `spark_doc` package
 
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;

@@ -199,7 +199,7 @@ Dockerfile
 docs
 evm
 fmt
-forge
+spark
 foundryup
 LICENSE-APACHE
 LICENSE-MIT

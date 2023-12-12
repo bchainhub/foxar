@@ -1,14 +1,13 @@
-//! Contains various tests for checking forge commands related to config values
-use crate::forge_utils;
+//! Contains various tests for checking spark commands related to config values
+use crate::spark_utils;
 use corebc::{
     prelude::artifacts::YulDetails,
     types::{Address, H256, U256},
     ylem::{artifacts::RevertStrings, CvmVersion},
 };
-use forge::executor::opts::EvmOpts;
 use foundry_cli_test_utils::{
     corebc_ylem::{remappings::Remapping, YlemVersion},
-    forgetest, forgetest_init, pretty_eq,
+    pretty_eq, sparktest, sparktest_init,
     util::{pretty_err, OutputExt, TestCommand, TestProject},
 };
 use foundry_config::{
@@ -16,10 +15,11 @@ use foundry_config::{
     Config, FuzzConfig, InvariantConfig, OptimizerDetails, YlemReq,
 };
 use path_slash::PathBufExt;
+use spark::executor::opts::EvmOpts;
 use std::{fs, path::PathBuf, str::FromStr};
 
 // tests all config values that are in use
-forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set all values
     let input = Config {
         profile: Config::DEFAULT_PROFILE,
@@ -119,7 +119,7 @@ forgetest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
 });
 
 // tests config gets printed to std out
-forgetest!(
+sparktest!(
     #[serial_test::serial]
     can_show_config,
     |prj: TestProject, mut cmd: TestCommand| {
@@ -134,7 +134,7 @@ forgetest!(
 // - foundry.toml is properly generated
 // - paths are resolved properly
 // - config supports overrides from env, and cli
-forgetest_init!(
+sparktest_init!(
     #[serial_test::serial]
     can_override_config,
     |prj: TestProject, mut cmd: TestCommand| {
@@ -160,7 +160,7 @@ forgetest_init!(
         // remappings work
         let remappings_txt =
             prj.create_file("remappings.txt", "ds-test/=lib/forge-std/lib/ds-test/from-file/");
-        let config = forge_utils::load_config_with_root(Some(prj.root().into()));
+        let config = spark_utils::load_config_with_root(Some(prj.root().into()));
         assert_eq!(
             format!(
                 "ds-test/={}/",
@@ -171,7 +171,7 @@ forgetest_init!(
 
         // env vars work
         std::env::set_var("DAPP_REMAPPINGS", "ds-test/=lib/forge-std/lib/ds-test/from-env/");
-        let config = forge_utils::load_config_with_root(Some(prj.root().into()));
+        let config = spark_utils::load_config_with_root(Some(prj.root().into()));
         assert_eq!(
             format!(
                 "ds-test/={}/",
@@ -200,13 +200,13 @@ forgetest_init!(
         std::env::remove_var("DAPP_REMAPPINGS");
         pretty_err(&remappings_txt, fs::remove_file(&remappings_txt));
 
-        cmd.set_cmd(prj.forge_bin()).args(["config", "--basic"]);
+        cmd.set_cmd(prj.spark_bin()).args(["config", "--basic"]);
         let expected = profile.into_basic().to_string_pretty().unwrap();
         pretty_eq!(expected.trim().to_string(), cmd.stdout().trim().to_string());
     }
 );
 
-forgetest_init!(
+sparktest_init!(
     #[serial_test::serial]
     can_detect_config_vals,
     |prj: TestProject, _cmd: TestCommand| {
@@ -230,7 +230,7 @@ forgetest_init!(
 );
 
 // checks that `clean` removes dapptools style paths
-forgetest_init!(
+sparktest_init!(
     #[serial_test::serial]
     can_get_evm_opts,
     |prj: TestProject, _cmd: TestCommand| {
@@ -248,13 +248,13 @@ forgetest_init!(
 );
 
 // checks that we can set various config values
-forgetest_init!(can_set_config_values, |prj: TestProject, _cmd: TestCommand| {
+sparktest_init!(can_set_config_values, |prj: TestProject, _cmd: TestCommand| {
     let config = prj.config_from_output(["--via-ir"]);
     assert!(config.via_ir);
 });
 
 // tests that ylem can be explicitly set
-forgetest!(can_set_ylem_explicitly, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_set_ylem_explicitly, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
@@ -280,7 +280,7 @@ Compiler run successful
 });
 
 // tests that `--use <ylem>` works
-forgetest!(can_use_ylem, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_use_ylem, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
@@ -297,24 +297,24 @@ contract Foo {}
     let stdout = cmd.stdout_lossy();
     assert!(stdout.contains("Compiler run successful"));
 
-    cmd.forge_fuse().args(["build", "--force", "--use", "ylem:1.1.0"]).root_arg();
+    cmd.spark_fuse().args(["build", "--force", "--use", "ylem:1.1.0"]).root_arg();
 
     assert!(stdout.contains("Compiler run successful"));
 
     // fails to use ylem that does not exist
-    cmd.forge_fuse().args(["build", "--use", "this/ylem/does/not/exist"]);
+    cmd.spark_fuse().args(["build", "--use", "this/ylem/does/not/exist"]);
     assert!(cmd.stderr_lossy().contains("this/ylem/does/not/exist does not exist"));
 
     // 0.7.1 was installed in previous step, so we can use the path to this directly
     let local_ylem = corebc::ylem::Ylem::find_yvm_installed_version("1.1.0")
         .unwrap()
         .expect("ylem 1.1.0 is installed");
-    cmd.forge_fuse().args(["build", "--force", "--use"]).arg(local_ylem.ylem).root_arg();
+    cmd.spark_fuse().args(["build", "--force", "--use"]).arg(local_ylem.ylem).root_arg();
     assert!(stdout.contains("Compiler run successful"));
 });
 
 // tests that the lib triple can be parsed
-forgetest_init!(can_parse_dapp_libraries, |_prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_parse_dapp_libraries, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.set_env(
         "DAPP_LIBRARIES",
         "src/DssSpell.sol:DssExecLib:0x8De6DDbCd5053d32292AAA0D2105A32d108484a6",
@@ -327,7 +327,7 @@ forgetest_init!(can_parse_dapp_libraries, |_prj: TestProject, mut cmd: TestComma
 });
 
 // test that optimizer runs works
-forgetest!(can_set_optimizer_runs, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_set_optimizer_runs, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set optimizer runs
     let config = Config { optimizer_runs: 1337, ..Default::default() };
     prj.write_config(config);
@@ -340,7 +340,7 @@ forgetest!(can_set_optimizer_runs, |prj: TestProject, mut cmd: TestCommand| {
 });
 
 // test that gas_price can be set
-forgetest!(can_set_gas_price, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_set_gas_price, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set gas_price
     let config = Config { energy_price: Some(1337), ..Default::default() };
     prj.write_config(config);
@@ -353,7 +353,7 @@ forgetest!(can_set_gas_price, |prj: TestProject, mut cmd: TestCommand| {
 });
 
 // test that optimizer runs works
-forgetest_init!(can_detect_lib_foundry_toml, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_detect_lib_foundry_toml, |prj: TestProject, mut cmd: TestCommand| {
     let config = cmd.config();
     let remappings = config.remappings.iter().cloned().map(Remapping::from).collect::<Vec<_>>();
     pretty_assertions::assert_eq!(
@@ -425,7 +425,7 @@ forgetest_init!(can_detect_lib_foundry_toml, |prj: TestProject, mut cmd: TestCom
 
 // test remappings with closer paths are prioritised
 // so that `dep/=lib/a/src` will take precedent over  `dep/=lib/a/lib/b/src`
-forgetest_init!(
+sparktest_init!(
     #[serial_test::serial]
     can_prioritise_closer_lib_remappings,
     |prj: TestProject, mut cmd: TestCommand| {
@@ -454,7 +454,7 @@ forgetest_init!(
 );
 
 // test to check that foundry.toml libs section updates on install
-forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
     // explicitly set gas_price
@@ -464,22 +464,22 @@ forgetest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
     cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
-    let config = cmd.forge_fuse().config();
+    let config = cmd.spark_fuse().config();
     // `lib` was added automatically
     let expected = vec![PathBuf::from("node_modules"), PathBuf::from("lib")];
     assert_eq!(config.libs, expected);
 
     // additional install don't edit `libs`
-    cmd.forge_fuse().args(["install", "bchainhub/ds-test", "--no-commit"]);
+    cmd.spark_fuse().args(["install", "bchainhub/ds-test", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
-    let config = cmd.forge_fuse().config();
+    let config = cmd.spark_fuse().config();
     assert_eq!(config.libs, expected);
 });
 
 // test to check that loading the config emits warnings on the root foundry.toml and
 // is silent for any libs
-forgetest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
     cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
@@ -493,7 +493,7 @@ forgetest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
     fs::write(prj.root().join("foundry.toml"), faulty_toml).unwrap();
     fs::write(prj.root().join("lib").join("forge-std").join("foundry.toml"), faulty_toml).unwrap();
 
-    cmd.forge_fuse().args(["config"]);
+    cmd.spark_fuse().args(["config"]);
     let output = cmd.execute();
     assert!(output.status.success());
     assert_eq!(
@@ -505,7 +505,7 @@ forgetest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
     )
 });
 
-forgetest_init!(can_skip_remappings_auto_detection, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_skip_remappings_auto_detection, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set remapping and libraries
     let config = Config {
         remappings: vec![Remapping::from_str("remapping/=lib/remapping/").unwrap().into()],

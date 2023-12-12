@@ -61,7 +61,7 @@ impl DisabledRange {
 /// An inline config. Keeps track of disabled ranges.
 ///
 /// This is a list of Inline Config items for locations in a source file. This is
-/// usually acquired by parsing the comments for an `forgefmt:` items. See
+/// usually acquired by parsing the comments for an `sparkfmt:` items. See
 /// [`Comments::parse_inline_config_items`] for details.
 #[derive(Default, Debug)]
 pub struct InlineConfig {

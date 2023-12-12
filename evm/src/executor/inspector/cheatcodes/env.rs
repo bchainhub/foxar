@@ -635,7 +635,7 @@ pub fn apply<DB: DatabaseExt>(
     Ok(Some(result))
 }
 
-/// When using `forge script`, the script method is called using the address from `--sender`.
+/// When using `spark script`, the script method is called using the address from `--sender`.
 /// That leads to its nonce being incremented by `call_raw`. In a `broadcast` scenario this is
 /// undesirable. Therefore, we make sure to fix the sender's nonce **once**.
 fn correct_sender_nonce<DB: Database>(

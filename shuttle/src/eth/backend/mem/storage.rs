@@ -10,7 +10,6 @@ use corebc::{
     prelude::{BlockId, BlockNumber, DefaultFrame, Trace, H256, H256 as TxHash, U64},
     types::{ActionType, Bytes, GoCoreDebugTracingOptions, TransactionReceipt, U256},
 };
-use forge::revm::{interpreter::InstructionResult, primitives::Env};
 use foundry_utils::types::ToEthersU256;
 use parking_lot::RwLock;
 use shuttle_core::eth::{
@@ -18,6 +17,7 @@ use shuttle_core::eth::{
     receipt::TypedReceipt,
     transaction::{MaybeImpersonatedTransaction, TransactionInfo},
 };
+use spark::revm::{interpreter::InstructionResult, primitives::Env};
 use std::{
     collections::{HashMap, VecDeque},
     fmt,
@@ -415,11 +415,11 @@ mod tests {
     use super::*;
     use crate::eth::backend::db::Db;
     use corebc::{abi::ethereum_types::BigEndianHash, types::Address};
-    use forge::revm::{
+    use foundry_evm::executor::backend::MemDb;
+    use spark::revm::{
         db::DatabaseRef,
         primitives::{AccountInfo, U256 as rU256},
     };
-    use foundry_evm::executor::backend::MemDb;
 
     #[test]
     fn test_interval_update() {

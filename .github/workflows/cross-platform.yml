@@ -45,7 +45,7 @@ jobs:
             - name: Install nextest
               uses: taiki-e/install-action@nextest
 
-            # Required for forge commands that use git
+            # Required for spark commands that use git
             - name: Setup git
               run: |
                   git config --global user.name "GitHub Actions Bot"
@@ -109,7 +109,7 @@ jobs:
                       target: x86_64-pc-windows-msvc
                 nextest:
                     - name: non-forking
-                      filter: "!test(~fork) & !test(~live) & !test(~forge_std) & !test(~deploy_and_simulate)"
+                      filter: "!test(~fork) & !test(~live) & !test(~spark_std) & !test(~deploy_and_simulate)"
         env:
             ETH_RPC_URL: https://eth-mainnet.alchemyapi.io/v2/C3JEvfW6VgtqZQa-Qp1E-2srEiIc02sD
         steps:
@@ -163,9 +163,9 @@ jobs:
                 nextest:
                     - name: non-forking
                       # skip fork,verify,forge-std and script tests that use heavy simulation
-                      filter: "!test(~fork) & !test(~live) & !test(~forge_std) & !test(~deploy_and_simulate)"
+                      filter: "!test(~fork) & !test(~live) & !test(~spark_std) & !test(~deploy_and_simulate)"
                       # the aarch64-apple-darwin runner is particularly slow with script related tests
-                      macos-aarch-filter: "!test(~fork) & !test(~live) & !test(~forge_std) & !test(~deploy_)"
+                      macos-aarch-filter: "!test(~fork) & !test(~live) & !test(~spark_std) & !test(~deploy_)"
         env:
             ETH_RPC_URL: https://eth-mainnet.alchemyapi.io/v2/C3JEvfW6VgtqZQa-Qp1E-2srEiIc02sD
         steps:

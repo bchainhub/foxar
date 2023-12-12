@@ -8,11 +8,11 @@ use corebc::{
     types::{Bytes, Log},
 };
 use eyre::Result;
-use forge::{
+use revm::interpreter::{return_ok, InstructionResult};
+use spark::{
     executor::{DeployResult, Executor, RawCallResult},
     trace::{CallTraceArena, TraceKind},
 };
-use revm::interpreter::{return_ok, InstructionResult};
 use std::collections::BTreeMap;
 
 /// The function selector of the REPL contract's entrypoint, the `run()` function.
@@ -20,8 +20,8 @@ static RUN_SELECTOR: [u8; 4] = [0x3b, 0x21, 0xbc, 0x14];
 
 /// The Chisel Runner
 ///
-/// Based off of foundry's forge cli runner for scripting.
-/// See: [runner](cli::cmd::forge::script::runner.rs)
+/// Based off of foundry's spark cli runner for scripting.
+/// See: [runner](cli::cmd::spark::script::runner.rs)
 #[derive(Debug)]
 pub struct ChiselRunner {
     /// The Executor
@@ -123,7 +123,7 @@ impl ChiselRunner {
     /// This will return _estimated_ energy instead of the precise energy the call would consume, so
     /// it can be used as `energy_limit`.
     ///
-    /// Taken from [Forge's Script Runner](https://github.com/foundry-rs/foundry/blob/master/cli/src/cmd/forge/script/runner.rs)
+    /// Taken from [Forge's Script Runner](https://github.com/foundry-rs/foundry/blob/master/cli/src/cmd/spark/script/runner.rs)
     fn call(
         &mut self,
         from: Address,

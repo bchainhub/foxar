@@ -17,6 +17,6 @@ Debug logs are printed with
 verbosity level via the
 [`RUST_LOG`](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#filtering-events-with-environment-variables)
 environment variable, on a per package level,
-e.g.:`RUST_LOG=forge,foundry_evm forge test`
+e.g.:`RUST_LOG=spark,foundry_evm spark test`
 
 [foundry-book]: https://book.getfoundry.sh

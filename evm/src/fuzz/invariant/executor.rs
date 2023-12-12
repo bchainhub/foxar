@@ -168,7 +168,7 @@ impl<'a> InvariantExecutor<'a> {
                         targeted_contracts.clone(),
                         &mut created_contracts,
                     ) {
-                        warn!(target: "forge::test", "{error}");
+                        warn!(target: "spark::test", "{error}");
                     }
 
                     // Commit changes to the database.
@@ -220,7 +220,7 @@ impl<'a> InvariantExecutor<'a> {
             });
         }
 
-        trace!(target: "forge::test::invariant::dictionary", "{:?}", fuzz_state.read().values().iter().map(hex::encode).collect::<Vec<_>>());
+        trace!(target: "spark::test::invariant::dictionary", "{:?}", fuzz_state.read().values().iter().map(hex::encode).collect::<Vec<_>>());
 
         let (reverts, invariants) = failures.into_inner().into_inner();
 

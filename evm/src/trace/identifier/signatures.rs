@@ -28,7 +28,7 @@ pub struct SignaturesIdentifier {
 }
 
 impl SignaturesIdentifier {
-    #[instrument(target = "forge::signatures")]
+    #[instrument(target = "spark::signatures")]
     pub fn new(
         cache_path: Option<PathBuf>,
         offline: bool,
@@ -68,7 +68,7 @@ impl SignaturesIdentifier {
         Ok(Arc::new(RwLock::new(identifier)))
     }
 
-    #[instrument(target = "forge::signatures", skip(self))]
+    #[instrument(target = "spark::signatures", skip(self))]
     pub fn save(&self) {
         if let Some(cached_path) = &self.cached_path {
             if let Some(parent) = cached_path.parent() {

@@ -1,9 +1,9 @@
 use chisel::session_source::{SessionSource, SessionSourceConfig};
 use corebc_ylem::Ylem;
 use criterion::{criterion_group, Criterion};
-use forge::executor::opts::EvmOpts;
 use foundry_config::Config;
 use once_cell::sync::Lazy;
+use spark::executor::opts::EvmOpts;
 use std::hint::black_box;
 use tokio::runtime::Runtime;
 

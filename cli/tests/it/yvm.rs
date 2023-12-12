@@ -1,6 +1,6 @@
 //! yvm sanity checks
 
-use foundry_cli_test_utils::{forgetest_init, TestCommand, TestProject};
+use foundry_cli_test_utils::{sparktest_init, TestCommand, TestProject};
 use semver::Version;
 use yvm::{self, Platform};
 
@@ -44,7 +44,7 @@ ensure_yvm_releases!(
 );
 
 // Ensures we can always test with the latest solc build
-forgetest_init!(can_test_with_latest_solc, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_test_with_latest_solc, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_test(
             "Counter",

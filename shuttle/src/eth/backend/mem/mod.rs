@@ -38,14 +38,6 @@ use corebc::{
     utils::{hex, rlp, sha3},
 };
 use flate2::{read::GzDecoder, write::GzEncoder, Compression};
-use forge::{
-    hashbrown,
-    revm::{
-        interpreter::return_ok,
-        primitives::{BlockEnv, ExecutionResult},
-    },
-    utils::{eval_to_instruction_result, halt_to_instruction_result},
-};
 use foundry_evm::{
     decode::{decode_custom_error_args, decode_revert},
     executor::backend::{DatabaseError, DatabaseResult},
@@ -77,6 +69,14 @@ use shuttle_core::{
     types::{Forking, Index},
 };
 use shuttle_rpc::error::RpcError;
+use spark::{
+    hashbrown,
+    revm::{
+        interpreter::return_ok,
+        primitives::{BlockEnv, ExecutionResult},
+    },
+    utils::{eval_to_instruction_result, halt_to_instruction_result},
+};
 use std::{
     collections::HashMap,
     io::{Read, Write},

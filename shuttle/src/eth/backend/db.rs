@@ -5,7 +5,6 @@ use corebc::{
     types::H256,
     utils::sha3,
 };
-use forge::revm::primitives::{B256, SHA3_EMPTY, U256 as rU256};
 use foundry_common::errors::FsPathError;
 use foundry_evm::{
     executor::{
@@ -24,6 +23,7 @@ use hash_db::HashDB;
 use revm::primitives::B176;
 use serde::{Deserialize, Serialize};
 use shuttle_core::eth::trie::KeccakHasher;
+use spark::revm::primitives::{B256, SHA3_EMPTY, U256 as rU256};
 use std::{collections::BTreeMap, fmt, path::Path};
 
 /// Type alias for the `HashDB` representation of the Database

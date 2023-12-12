@@ -1,9 +1,9 @@
-//! Contains various tests for checking forge commands related to verifying contracts on etherscan
+//! Contains various tests for checking spark commands related to verifying contracts on etherscan
 //! and sourcify
 
 use crate::utils::{self, EnvExternalities};
 use foundry_cli_test_utils::{
-    forgetest,
+    sparktest,
     util::{TestCommand, TestProject},
 };
 use foundry_utils::Retry;
@@ -76,7 +76,7 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
         let address = utils::parse_deployed_address(out.as_str())
             .unwrap_or_else(|| panic!("Failed to parse deployer {out}"));
 
-        cmd.forge_fuse().arg("verify-contract").root_arg().args([
+        cmd.spark_fuse().arg("verify-contract").root_arg().args([
             "--network-id".to_string(),
             info.chain.to_string(),
             address,
@@ -105,7 +105,7 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
         };
 
         // verify-check
-        cmd.forge_fuse()
+        cmd.spark_fuse()
             .arg("verify-check")
             .arg(guid)
             .arg("--network-id")
@@ -118,6 +118,6 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
 }
 
 // tests `create && contract-verify && verify-check` on Fantom testnet if correct env vars are set
-forgetest!(can_verify_random_contract_fantom_testnet, |prj: TestProject, cmd: TestCommand| {
+sparktest!(can_verify_random_contract_fantom_testnet, |prj: TestProject, cmd: TestCommand| {
     verify_on_chain(EnvExternalities::devin(), prj, cmd);
 });

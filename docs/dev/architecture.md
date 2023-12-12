@@ -16,4 +16,4 @@ Includes all of foundry's settings and how to get them
 
 ### `cli/`
 
-The core `forge` and `cast` cli implementation. Includes all subcommands.
+The core `spark` and `cast` cli implementation. Includes all subcommands.

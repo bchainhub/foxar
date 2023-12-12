@@ -9,8 +9,8 @@ use crate::{
     Address, U256,
 };
 use corebc::prelude::H256;
-use forge::utils::h176_to_b176;
 use foundry_utils::types::{ToEthersU256, ToRuint};
+use spark::utils::h176_to_b176;
 use tracing::{trace, warn};
 
 // reexport for convenience
@@ -125,9 +125,9 @@ mod tests {
     };
     use bytes::Bytes;
     use corebc::types::U256;
-    use forge::revm::primitives::{Bytecode, SHA3_EMPTY, U256 as rU256};
     use foundry_evm::executor::{backend::MemDb, DatabaseRef};
     use foundry_utils::types::ToRuint;
+    use spark::revm::primitives::{Bytecode, SHA3_EMPTY, U256 as rU256};
     use std::{collections::BTreeMap, str::FromStr};
 
     // verifies that all substantial aspects of a loaded account remain the state after an account

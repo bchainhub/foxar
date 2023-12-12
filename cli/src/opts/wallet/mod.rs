@@ -241,7 +241,7 @@ impl Wallet {
             eyre::eyre!(
                 "\
 Error accessing local wallet. Did you set a private key, mnemonic or keystore?
-Run `cast send --help` or `forge create --help` and use the corresponding CLI
+Run `cast send --help` or `spark create --help` and use the corresponding CLI
 flag to set your key via:
 --private-key, --mnemonic-path, --aws, --interactive, --trezor or --ledger.
 Alternatively, if you're using a local node with unlocked accounts,

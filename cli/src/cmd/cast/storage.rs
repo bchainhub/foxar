@@ -1,5 +1,5 @@
 use crate::{
-    cmd::forge::build,
+    cmd::spark::build,
     opts::{cast::parse_slot, EtherscanOpts, RpcOpts},
     utils,
 };
@@ -98,7 +98,7 @@ impl StorageArgs {
             eyre::bail!("Provided address has no deployed code and thus no storage");
         }
 
-        // Check if we're in a forge project and if we can find the address' code
+        // Check if we're in a spark project and if we can find the address' code
         let mut project = build.project()?;
         if project.paths.has_input_files() {
             // Find in artifacts and pretty print
@@ -116,7 +116,7 @@ impl StorageArgs {
             }
         }
 
-        // Not a forge project or artifact not found
+        // Not a spark project or artifact not found
         // Get code from Etherscan
         eprintln!("No matching artifacts found, fetching source code from Etherscan...");
 

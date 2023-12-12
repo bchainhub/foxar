@@ -1,4 +1,4 @@
-use forge_fmt::solang_ext::SafeUnwrap;
+use spark_fmt::solang_ext::SafeUnwrap;
 
 use super::{Preprocessor, PreprocessorId};
 use crate::{document::DocumentContent, Document, ParseSource, PreprocessorOutput};

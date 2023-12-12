@@ -22,7 +22,7 @@ shuttle-rpc = { path = "rpc" }
 shuttle-server = { path = "server" }
 foundry-utils = { path = "../utils" }
 foundry-common = { path = "../common", optional = true }
-forge = { path = "../forge", optional = true }
+spark = { path = "../spark", optional = true }
 foundry-config = { path = "../config" }
 
 # evm support
@@ -76,5 +76,5 @@ crc = "3.0.1"
 
 [features]
 default = ["cli"]
-cmd = ["foundry-common", "forge", "clap", "clap_complete", "ctrlc", "shuttle-server/clap"]
+cmd = ["foundry-common", "spark", "clap", "clap_complete", "ctrlc", "shuttle-server/clap"]
 cli = ["tokio/full", "cmd", "fdlimit"]

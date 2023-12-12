@@ -1,5 +1,5 @@
-use forge_fmt::{format, parse, solang_ext::AstEq, FormatterConfig};
 use itertools::Itertools;
+use spark_fmt::{format, parse, solang_ext::AstEq, FormatterConfig};
 use std::{fs, path::PathBuf};
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
 

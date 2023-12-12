@@ -1,22 +1,22 @@
 pragma    solidity     ^0.5.2;
 
-// forgefmt: disable-next-line
+// sparkfmt: disable-next-line
 pragma    solidity     ^0.5.2;
 
 import {symbol1 as alias1, symbol2 as alias2, symbol3 as alias3, symbol4} from 'File2.sol';
 
-// forgefmt: disable-next-line
+// sparkfmt: disable-next-line
 import {symbol1 as alias1, symbol2 as alias2, symbol3 as alias3, symbol4} from 'File2.sol';
 
 enum States { State1, State2, State3, State4, State5, State6, State7, State8, State9 }
 
-// forgefmt: disable-next-line
+// sparkfmt: disable-next-line
 enum States { State1, State2, State3, State4, State5, State6, State7, State8, State9 }
 
-// forgefmt: disable-next-line
+// sparkfmt: disable-next-line
 bytes32 constant private BYTES = 0x035aff83d86937d35b32e04f0ddc6ff469290eef2f1b692d8a815c89404d4749;
 
-// forgefmt: disable-start
+// sparkfmt: disable-start
 
 // comment1
 
@@ -35,55 +35,55 @@ bytes32 constant private BYTES = 0x035aff83d86937d35b32e04f0ddc6ff469290eef2f1b6
   */
 
 
-// forgefmt: disable-end
+// sparkfmt: disable-end
 
-// forgefmt: disable-start
+// sparkfmt: disable-start
 
 function test1() {}
 
 function test2() {}
 
-// forgefmt: disable-end
+// sparkfmt: disable-end
 
 contract Constructors is Ownable, Changeable {
-    //forgefmt: disable-next-item
+    //sparkfmt: disable-next-item
     function Constructors(variable1) public Changeable(variable1) Ownable() onlyOwner {
     }
 
-    //forgefmt: disable-next-item
+    //sparkfmt: disable-next-item
     constructor(variable1, variable2, variable3, variable4, variable5, variable6, variable7) public Changeable(variable1, variable2, variable3, variable4, variable5, variable6, variable7) Ownable() onlyOwner {}
 }
 
 function test() {
     uint256 pi_approx = 666    /    212;
-    uint256 pi_approx = /* forgefmt: disable-start */ 666    /    212; /* forgefmt: disable-end */
+    uint256 pi_approx = /* sparkfmt: disable-start */ 666    /    212; /* sparkfmt: disable-end */
 
-    // forgefmt: disable-next-item
+    // sparkfmt: disable-next-item
     uint256 pi_approx = 666 /
         212;
 
-    uint256 test_postfix = 1; // forgefmt: disable-start
+    uint256 test_postfix = 1; // sparkfmt: disable-start
                               // comment1
                               // comment2
                               // comment3
-                              // forgefmt: disable-end
+                              // sparkfmt: disable-end
 }
 
-// forgefmt: disable-next-item
+// sparkfmt: disable-next-item
 function testFunc(uint256   num, bytes32 data  ,    address receiver)
     public payable    attr1   Cool( "hello"   ) {}
 
 function testAttrs(uint256   num, bytes32 data  ,    address receiver)
-    // forgefmt: disable-next-line
+    // sparkfmt: disable-next-line
     public payable    attr1   Cool( "hello"   ) {}
 
-// forgefmt: disable-next-line
+// sparkfmt: disable-next-line
 function testParams(uint256   num, bytes32 data  ,    address receiver)
     public payable    attr1   Cool( "hello"   ) {}
 
 
 function testDoWhile() external {
-    //forgefmt: disable-start
+    //sparkfmt: disable-start
     uint256 i;
     do { "test"; } while (i != 0);
 
@@ -102,11 +102,11 @@ someVeryVeryLongCondition);
     do i++; while(i < 10);
 
     do do i++; while (i < 30); while(i < 20);
-    //forgefmt: disable-end
+    //sparkfmt: disable-end
 }
 
 function forStatement() {
-    //forgefmt: disable-start
+    //sparkfmt: disable-start
         for
     (uint256 i1
         ; i1 < 10;      i1++)
@@ -134,11 +134,11 @@ function forStatement() {
         for (uint256 i5; ;)
             for (uint256 i6 = 10; i6 > i5; i6--)
                 i5++;
-    //forgefmt: disable-end
+    //sparkfmt: disable-end
 }
 
 function callArgTest() {
-    //forgefmt: disable-start
+    //sparkfmt: disable-start
         target.run{ gas: gasleft(), value: 1 wei };
 
         target.run{gas:1,value:0x00}();
@@ -164,24 +164,24 @@ function callArgTest() {
             value: 1,
             // comment6
             gas: gasleft()};
-    //forgefmt: disable-end
+    //sparkfmt: disable-end
 }
 
 function ifTest() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
     if (condition)
             execute();
         else
             executeElse();
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 
-    /* forgefmt: disable-next-line */
+    /* sparkfmt: disable-next-line */
     if (condition   &&   anotherLongCondition ) {
             execute(); }
 }
 
 function yulTest() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         assembly {
             let payloadSize := sub(calldatasize(), 4)
             calldatacopy(0, 4, payloadSize)
@@ -196,11 +196,11 @@ function yulTest() {
             case 0 { revert(0, returndatasize()) }
             default { return(0, returndatasize()) }
         }
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function literalTest() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
 
         true;
             0x123_456;
@@ -208,15 +208,15 @@ function literalTest() {
     "foobar";
             hex"001122FF";
         0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 
-    // forgefmt: disable-next-line
+    // sparkfmt: disable-next-line
     bytes memory bytecode = 
         hex"ff";
 }
 
 function returnTest() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         if (val == 0) {
         return // return single 1
         0x00;
@@ -242,11 +242,11 @@ function returnTest() {
             return /* return mul 4 */
             (
                 987654321, 1234567890,/* return mul 5 */ false);
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function namedFuncCall() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         SimpleStruct memory simple = SimpleStruct({ val: 0 });
 
         ComplexStruct memory complex = ComplexStruct({ val: 1, anotherVal: 2, flag: true, timestamp: block.timestamp });
@@ -259,11 +259,11 @@ function namedFuncCall() {
     
     }
         );
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function revertTest() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         revert ({ });
 
         revert EmptyError({});
@@ -281,11 +281,11 @@ function revertTest() {
 
         revert // comment1 
         ({});
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function testTernary() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         bool condition;
         bool someVeryVeryLongConditionUsedInTheTernaryExpression;
 
@@ -301,11 +301,11 @@ function testTernary() {
         :
         // comment7
         0; // comment8
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function thisTest() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         this.someFunc();
         this.someVeryVeryVeryLongVariableNameThatWillBeAccessedByThisKeyword();
         this // comment1
@@ -316,11 +316,11 @@ function thisTest() {
             // comment2
              /* comment3 */ this // comment 4
         );
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function tryTest() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         try unknown.empty() {} catch {}
 
         try unknown.lookup() returns (uint256) {} catch Error(string memory) {}
@@ -355,11 +355,11 @@ function tryTest() {
              unknown.handleError();
         }
         catch {}
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function testArray() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         msg.data[
             // comment1
             4:];
@@ -370,11 +370,11 @@ function testArray() {
         // comment4 
         4 // comment5
         :msg.data.length /* comment6 */];
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function testUnit() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         uint256 timestamp;
         timestamp = 1 seconds;
         timestamp = 1 minutes;
@@ -394,11 +394,11 @@ function testUnit() {
         value = 1 // comment3
         // comment4
         ether; // comment5
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 contract UsingExampleContract {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
     using  UsingExampleLibrary      for   *  ;
         using UsingExampleLibrary for uint;
     using Example.UsingExampleLibrary  for  uint;
@@ -406,21 +406,21 @@ contract UsingExampleContract {
     using UsingExampleLibrary for   uint  global;
     using { These, Are, MultipleLibraries, ThatNeedToBePut, OnSeparateLines } for uint;
     using { This.isareally.longmember.access.expression.that.needs.to.besplit.into.lines } for uint;
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function testAssignment() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         (, uint256 second) = (1, 2);
         (uint256 listItem001) = 1;
         (uint256 listItem002, uint256 listItem003) = (10, 20);
         (uint256 listItem004, uint256 listItem005, uint256 listItem006) =
             (10, 20, 30);
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function testWhile() {
-    // forgefmt: disable-start
+    // sparkfmt: disable-start
         uint256 i1;
             while (  i1 <  10 ) {
             i1++;
@@ -447,15 +447,15 @@ function testWhile() {
         while (
             someLongVariableName < 10 && someLongVariableName < 11 && someLongVariableName < 12
         ) { someLongVariableName ++; } someLongVariableName++;
-    // forgefmt: disable-end
+    // sparkfmt: disable-end
 }
 
 function   testLine(   ) { } 
-function   /* forgefmt: disable-line */ testLine(   ) { }  
+function   /* sparkfmt: disable-line */ testLine(   ) { }  
 function   testLine(   ) { } 
-function   testLine(   ) { }  // forgefmt: disable-line
+function   testLine(   ) { }  // sparkfmt: disable-line
 
-// forgefmt: disable-start
+// sparkfmt: disable-start
 
     type Hello is uint256;
 
@@ -466,4 +466,4 @@ error TopLevelCustomErrorArgWithoutName  (string);
 
     event Event1(uint256 indexed a, uint256 indexed a, uint256 indexed a, uint256 indexed a, uint256 indexed a, uint256 indexed a, uint256 indexed a, uint256 indexed a, uint256 indexed a, uint256 indexed a);
 
-// forgefmt: disable-stop
+// sparkfmt: disable-stop

@@ -160,9 +160,9 @@ mod tests {
         assert_eq!(
             config_lines,
             vec![
-                "forge-config:default.fuzz.runs=600".to_string(),
-                "forge-config:ci.fuzz.runs=500".to_string(),
-                "forge-config:default.invariant.runs=1".to_string()
+                "spark-config:default.fuzz.runs=600".to_string(),
+                "spark-config:ci.fuzz.runs=500".to_string(),
+                "spark-config:default.invariant.runs=1".to_string()
             ]
         )
     }
@@ -175,8 +175,8 @@ mod tests {
         assert_eq!(
             config_lines,
             vec![
-                "forge-config:default.fuzz.runs=600".to_string(),
-                "forge-config:default.invariant.runs=1".to_string()
+                "spark-config:default.fuzz.runs=600".to_string(),
+                "spark-config:default.invariant.runs=1".to_string()
             ]
         );
     }
@@ -190,8 +190,8 @@ mod tests {
         assert_eq!(
             config_lines,
             vec![
-                "forge-config:default.fuzz.runs=600".to_string(),
-                "forge-config:default.invariant.runs=1".to_string()
+                "spark-config:default.fuzz.runs=600".to_string(),
+                "spark-config:default.invariant.runs=1".to_string()
             ]
         )
     }
@@ -199,7 +199,7 @@ mod tests {
     #[test]
     fn can_handle_unavailable_src_line_with_fallback() {
         let mut fn_data: BTreeMap<String, Value> = BTreeMap::new();
-        let doc_withouth_src_field = json!({ "text":  "forge-config:default.fuzz.runs=600" });
+        let doc_withouth_src_field = json!({ "text":  "spark-config:default.fuzz.runs=600" });
         fn_data.insert("documentation".into(), doc_withouth_src_field);
         let (_, src_line) = get_fn_docs(&fn_data).expect("Some docs");
         assert_eq!(src_line, "<no-src-line-available>".to_string());
@@ -209,7 +209,7 @@ mod tests {
     fn can_handle_available_src_line() {
         let mut fn_data: BTreeMap<String, Value> = BTreeMap::new();
         let doc_withouth_src_field =
-            json!({ "text":  "forge-config:default.fuzz.runs=600", "src": "73:21:12" });
+            json!({ "text":  "spark-config:default.fuzz.runs=600", "src": "73:21:12" });
         fn_data.insert("documentation".into(), doc_withouth_src_field);
         let (_, src_line) = get_fn_docs(&fn_data).expect("Some docs");
         assert_eq!(src_line, "73:21:12".to_string());
@@ -217,15 +217,15 @@ mod tests {
 
     fn natspec() -> NatSpec {
         let conf = r#"
-        forge-config: default.fuzz.runs = 600 
-        forge-config: ci.fuzz.runs = 500 
+        spark-config: default.fuzz.runs = 600 
+        spark-config: ci.fuzz.runs = 500 
         ========= SOME NOISY TEXT =============
          䩹𧀫Jx닧Ʀ̳盅K擷􅟽Ɂw첊}ꏻk86ᖪk-檻ܴ렝[ǲ𐤬oᘓƤ
         ꣖ۻ%Ƅ㪕ς:(饁΍av/烲ڻ̛߉橞㗡𥺃̹M봓䀖ؿ̄󵼁)𯖛d􂽰񮍃
         ϊ&»ϿЏ񊈞2򕄬񠪁鞷砕eߥH󶑶J粊񁼯머?槿ᴴጅ𙏑ϖ뀓򨙺򷃅Ӽ츙4󍔹
         醤㭊r􎜕󷾸𶚏 ܖ̹灱녗V*竅􋹲⒪苏贗񾦼=숽ؓ򗋲бݧ󫥛𛲍ʹ園Ьi
         =======================================
-        forge-config: default.invariant.runs = 1
+        spark-config: default.invariant.runs = 1
         "#;
 
         NatSpec {

@@ -29,10 +29,10 @@ contract InvariantInlineConf is DSTest {
         inv = new InvariantBreaker();
     }
 
-    /// forge-config: default.invariant.runs = 333
-    /// forge-config: default.invariant.depth = 32
-    /// forge-config: default.invariant.fail-on-revert = false
-    /// forge-config: default.invariant.call-override = true
+    /// spark-config: default.invariant.runs = 333
+    /// spark-config: default.invariant.depth = 32
+    /// spark-config: default.invariant.fail-on-revert = false
+    /// spark-config: default.invariant.call-override = true
     function invariant_neverFalse() public {
         require(true, "this is not going to revert");
     }
@@ -45,7 +45,7 @@ contract InvariantInlineConf2 is DSTest {
         inv = new InvariantBreaker();
     }
 
-    /// forge-config: default.invariant.runs = 42
+    /// spark-config: default.invariant.runs = 42
     function invariant_neverFalse() public {
         require(true, "this is not going to revert");
     }

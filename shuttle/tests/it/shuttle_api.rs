@@ -6,12 +6,12 @@ use corebc::{
     types::{Address, BlockNumber, TransactionRequest, H256, U256, U64},
     utils::hex,
 };
-use forge::revm::primitives::SpecId;
 use shuttle::{spawn, Hardfork, NodeConfig};
 use shuttle_core::{
     eth::EthRequest,
     types::{NodeEnvironment, NodeForkConfig, NodeInfo},
 };
+use spark::revm::primitives::SpecId;
 use std::{
     str::FromStr,
     sync::Arc,

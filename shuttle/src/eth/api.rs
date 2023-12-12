@@ -40,7 +40,6 @@ use corebc::{
     },
     utils::rlp,
 };
-use forge::{executor::DatabaseRef, revm::primitives::BlockEnv};
 use foundry_common::ProviderBuilder;
 use foundry_evm::{
     executor::backend::DatabaseError,
@@ -63,6 +62,7 @@ use shuttle_core::{
     types::{EvmMineOptions, Forking, Index, NodeEnvironment, NodeForkConfig, NodeInfo, Work},
 };
 use shuttle_rpc::{error::RpcError, response::ResponseResult};
+use spark::{executor::DatabaseRef, revm::primitives::BlockEnv};
 use std::{sync::Arc, time::Duration};
 use tracing::{trace, warn};
 

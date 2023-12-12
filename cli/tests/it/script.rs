@@ -1,9 +1,9 @@
-//! Contains various tests related to forge script
+//! Contains various tests related to spark script
 use crate::constants::TEMPLATE_CONTRACT;
 use cast::SimpleCast;
 use corebc::{abi::Address, types::Network};
 use foundry_cli_test_utils::{
-    forgetest, forgetest_async, forgetest_init,
+    sparktest, sparktest_async, sparktest_init,
     util::{OutputExt, TestCommand, TestProject},
     ScriptOutcome, ScriptTester,
 };
@@ -15,7 +15,7 @@ use shuttle::{spawn, NodeConfig};
 use std::{env, path::PathBuf, str::FromStr};
 
 // Tests that fork cheat codes can be used in script
-forgetest_init!(
+sparktest_init!(
     #[ignore]
     can_use_fork_cheat_codes_in_script,
     |prj: TestProject, mut cmd: TestCommand| {
@@ -48,7 +48,7 @@ contract ContractScript is Script {
 );
 
 // Tests that the `run` command works correctly
-forgetest!(can_execute_script_command2, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_execute_script_command2, |prj: TestProject, mut cmd: TestCommand| {
     let script = prj
         .inner()
         .add_source(
@@ -74,7 +74,7 @@ contract Demo {
 });
 
 // Tests that the `run` command works correctly when path *and* script name is specified
-forgetest!(can_execute_script_command_fqn, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_execute_script_command_fqn, |prj: TestProject, mut cmd: TestCommand| {
     let script = prj
         .inner()
         .add_source(
@@ -100,7 +100,7 @@ contract Demo {
 });
 
 // Tests that the run command can run arbitrary functions
-forgetest!(can_execute_script_command_with_sig, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_execute_script_command_with_sig, |prj: TestProject, mut cmd: TestCommand| {
     let script = prj
         .inner()
         .add_source(
@@ -126,7 +126,7 @@ contract Demo {
 });
 
 // Tests that the manually specified gas limit is used when using the --unlocked option
-forgetest_async!(
+sparktest_async!(
     can_execute_script_command_with_manual_gas_limit_unlocked,
     |prj: TestProject, mut cmd: TestCommand| async move {
         foundry_cli_test_utils::util::initialize(prj.root());
@@ -188,7 +188,7 @@ contract DeployScript is Script {
 );
 
 // Tests that the manually specified gas limit is used.
-forgetest_async!(
+sparktest_async!(
     can_execute_script_command_with_manual_gas_limit,
     |prj: TestProject, mut cmd: TestCommand| async move {
         foundry_cli_test_utils::util::initialize(prj.root());
@@ -250,7 +250,7 @@ contract DeployScript is Script {
 );
 
 // Tests that the run command can run functions with arguments
-forgetest!(can_execute_script_command_with_args, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_execute_script_command_with_args, |prj: TestProject, mut cmd: TestCommand| {
     let script = prj
         .inner()
         .add_source(
@@ -285,7 +285,7 @@ contract Demo {
 });
 
 // Tests that the run command can run functions with return values
-forgetest!(can_execute_script_command_with_returned, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_execute_script_command_with_returned, |prj: TestProject, mut cmd: TestCommand| {
     let script = prj
         .inner()
         .add_source(
@@ -309,7 +309,7 @@ contract Demo {
     );
 });
 
-forgetest_async!(
+sparktest_async!(
     can_broadcast_script_skipping_simulation,
     |prj: TestProject, mut cmd: TestCommand| async move {
         foundry_cli_test_utils::util::initialize(prj.root());
@@ -408,7 +408,7 @@ contract RunScript is Script {
         let run_script = prj.inner().add_source("RunScript", run_code).unwrap();
         let run_contract = run_script.display().to_string() + ":RunScript";
 
-        cmd.forge_fuse();
+        cmd.spark_fuse();
         cmd.set_current_dir(prj.root());
         cmd.args([
             "script",
@@ -435,7 +435,7 @@ contract RunScript is Script {
     }
 );
 
-forgetest_async!(can_deploy_script_without_lib, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(can_deploy_script_without_lib, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -449,7 +449,7 @@ forgetest_async!(can_deploy_script_without_lib, |prj: TestProject, cmd: TestComm
         .await;
 });
 
-forgetest_async!(can_deploy_script_with_lib, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(can_deploy_script_with_lib, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -463,7 +463,7 @@ forgetest_async!(can_deploy_script_with_lib, |prj: TestProject, cmd: TestCommand
         .await;
 });
 
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     //todo:error2215 deriving key do not work for now
     #[ignore]
@@ -489,7 +489,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     can_deploy_unlocked,
     |prj: TestProject, cmd: TestCommand| async move {
@@ -505,7 +505,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     //todo:error2215 deriving key do not work for now
     #[ignore]
@@ -531,7 +531,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     //todo:error2215 deriving key do not work for now
     #[ignore]
@@ -564,7 +564,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(can_resume_script, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(can_resume_script, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -582,7 +582,7 @@ forgetest_async!(can_resume_script, |prj: TestProject, cmd: TestCommand| async m
         .await;
 });
 
-forgetest_async!(can_deploy_broadcast_wrap, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(can_deploy_broadcast_wrap, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -597,7 +597,7 @@ forgetest_async!(can_deploy_broadcast_wrap, |prj: TestProject, cmd: TestCommand|
         .await;
 });
 
-forgetest_async!(panic_no_deployer_set, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(panic_no_deployer_set, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -609,7 +609,7 @@ forgetest_async!(panic_no_deployer_set, |prj: TestProject, cmd: TestCommand| asy
         .broadcast(ScriptOutcome::MissingSender);
 });
 
-forgetest_async!(can_deploy_no_arg_broadcast, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(can_deploy_no_arg_broadcast, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -624,7 +624,7 @@ forgetest_async!(can_deploy_no_arg_broadcast, |prj: TestProject, cmd: TestComman
         .await;
 });
 
-forgetest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| async move {
     let (api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -646,7 +646,7 @@ forgetest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| a
         .run(ScriptOutcome::FailedScript);
 });
 
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     can_deploy_and_simulate_25_txes_concurrently,
     |prj: TestProject, cmd: TestCommand| async move {
@@ -664,7 +664,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     can_deploy_and_simulate_mixed_broadcast_modes,
     |prj: TestProject, cmd: TestCommand| async move {
@@ -682,7 +682,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(deploy_with_setup, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(deploy_with_setup, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -696,7 +696,7 @@ forgetest_async!(deploy_with_setup, |prj: TestProject, cmd: TestCommand| async m
         .await;
 });
 
-forgetest_async!(fail_broadcast_staticcall, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(fail_broadcast_staticcall, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -707,7 +707,7 @@ forgetest_async!(fail_broadcast_staticcall, |prj: TestProject, cmd: TestCommand|
         .simulate(ScriptOutcome::StaticCallNotAllowed);
 });
 
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     check_broadcast_log,
     |prj: TestProject, cmd: TestCommand| async move {
@@ -783,7 +783,7 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(test_default_sender_balance, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(test_default_sender_balance, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -793,7 +793,7 @@ forgetest_async!(test_default_sender_balance, |prj: TestProject, cmd: TestComman
         .simulate(ScriptOutcome::OkSimulation);
 });
 
-forgetest_async!(test_custom_sender_balance, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(test_custom_sender_balance, |prj: TestProject, cmd: TestCommand| async move {
     let (_api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -815,12 +815,12 @@ struct Transaction {
 }
 
 // test we output arguments <https://github.com/foundry-rs/foundry/issues/3053>
-forgetest_async!(
+sparktest_async!(
     can_execute_script_with_arguments,
     |prj: TestProject, mut cmd: TestCommand| async move {
         cmd.args(["init", "--force"]).arg(prj.root());
         cmd.assert_non_empty_stdout();
-        cmd.forge_fuse();
+        cmd.spark_fuse();
 
         let (_api, handle) = spawn(NodeConfig::test()).await;
         let script = prj
@@ -904,12 +904,12 @@ contract Script0 is Script {
 );
 
 // test we output arguments <https://github.com/foundry-rs/foundry/issues/3053>
-forgetest_async!(
+sparktest_async!(
     can_execute_script_with_arguments_nested_deploy,
     |prj: TestProject, mut cmd: TestCommand| async move {
         cmd.args(["init", "--force"]).arg(prj.root());
         cmd.assert_non_empty_stdout();
-        cmd.forge_fuse();
+        cmd.spark_fuse();
 
         let (_api, handle) = spawn(NodeConfig::test()).await;
         let script = prj
@@ -996,7 +996,7 @@ contract Script0 is Script {
 );
 
 // checks that skipping build
-forgetest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 1.1.0 for consistent output
     let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
@@ -1032,7 +1032,7 @@ contract Demo {
     );
 });
 
-forgetest_async!(
+sparktest_async!(
     can_run_script_with_empty_setup,
     |prj: TestProject, cmd: TestCommand| async move {
         let mut tester = ScriptTester::new_broadcast_without_endpoint(cmd, prj.root());
@@ -1041,18 +1041,18 @@ forgetest_async!(
     }
 );
 
-forgetest_async!(does_script_override_correctly, |prj: TestProject, cmd: TestCommand| async move {
+sparktest_async!(does_script_override_correctly, |prj: TestProject, cmd: TestCommand| async move {
     let mut tester = ScriptTester::new_broadcast_without_endpoint(cmd, prj.root());
 
     tester.add_sig("CheckOverrides", "run()").simulate(ScriptOutcome::OkNoEndpoint);
 });
 
-forgetest_async!(
+sparktest_async!(
     assert_tx_origin_is_not_overritten,
     |prj: TestProject, mut cmd: TestCommand| async move {
         cmd.args(["init", "--force"]).arg(prj.root());
         cmd.assert_non_empty_stdout();
-        cmd.forge_fuse();
+        cmd.spark_fuse();
 
         let script = prj
             .inner()
@@ -1115,12 +1115,12 @@ contract ContractC {
     }
 );
 
-forgetest_async!(
+sparktest_async!(
     assert_can_create_multiple_contracts_with_correct_nonce,
     |prj: TestProject, mut cmd: TestCommand| async move {
         cmd.args(["init", "--force"]).arg(prj.root());
         cmd.assert_non_empty_stdout();
-        cmd.forge_fuse();
+        cmd.spark_fuse();
 
         let script = prj
             .inner()

@@ -754,8 +754,6 @@ dependencies = [
  "criterion",
  "dirs 5.0.1",
  "eyre",
- "forge",
- "forge-fmt",
  "foundry-cli",
  "foundry-common",
  "foundry-config",
@@ -770,6 +768,8 @@ dependencies = [
  "serde_json",
  "serial_test",
  "solang-parser 0.3.0",
+ "spark",
+ "spark-fmt",
  "strum 0.25.0",
  "time",
  "tokio",
@@ -2269,80 +2269,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 
 [[package]]
-name = "forge"
-version = "0.2.0"
-dependencies = [
- "comfy-table",
- "corebc",
- "eyre",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "foundry-utils",
- "glob",
- "hex",
- "once_cell",
- "parking_lot",
- "proptest",
- "rayon",
- "regex",
- "rlp 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "yansi 0.5.1",
-]
-
-[[package]]
-name = "forge-doc"
-version = "0.1.0"
-dependencies = [
- "auto_impl",
- "clap 4.4.8",
- "corebc-core",
- "corebc-ylem",
- "derive_more",
- "eyre",
- "forge-fmt",
- "foundry-common",
- "foundry-config",
- "foundry-utils",
- "futures-util",
- "itertools",
- "mdbook",
- "once_cell",
- "rayon",
- "serde",
- "serde_json",
- "solang-parser 0.3.0",
- "thiserror",
- "tokio",
- "toml 0.7.8",
- "tracing",
- "warp",
-]
-
-[[package]]
-name = "forge-fmt"
-version = "0.2.0"
-dependencies = [
- "ariadne",
- "corebc-core",
- "foundry-config",
- "itertools",
- "pretty_assertions",
- "semver 1.0.20",
- "solang-parser 0.3.0",
- "thiserror",
- "toml 0.7.8",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "form_urlencoded"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2398,9 +2324,6 @@ dependencies = [
  "dotenvy",
  "dunce",
  "eyre",
- "forge",
- "forge-doc",
- "forge-fmt",
  "foundry-cli-test-utils",
  "foundry-common",
  "foundry-config",
@@ -2429,6 +2352,9 @@ dependencies = [
  "shuttle",
  "similar",
  "solang-parser 0.3.0",
+ "spark",
+ "spark-doc",
+ "spark-fmt",
  "strsim",
  "strum 0.25.0",
  "tempfile",
@@ -2596,7 +2522,6 @@ dependencies = [
  "corebc-providers",
  "corebc-ylem",
  "eyre",
- "forge-fmt",
  "foundry-common",
  "futures",
  "glob",
@@ -2610,6 +2535,7 @@ dependencies = [
  "rustc-hex",
  "serde",
  "serde_json",
+ "spark-fmt",
  "tokio",
  "tracing",
 ]
@@ -6091,7 +6017,6 @@ dependencies = [
  "ethereum-forkid",
  "fdlimit",
  "flate2",
- "forge",
  "foundry-common",
  "foundry-config",
  "foundry-evm",
@@ -6108,6 +6033,7 @@ dependencies = [
  "shuttle-core",
  "shuttle-rpc",
  "shuttle-server",
+ "spark",
  "tempfile",
  "thiserror",
  "tokio",
@@ -6302,6 +6228,80 @@ dependencies = [
  "phf 0.11.2",
  "thiserror",
  "unicode-xid",
+]
+
+[[package]]
+name = "spark"
+version = "0.2.0"
+dependencies = [
+ "comfy-table",
+ "corebc",
+ "eyre",
+ "foundry-common",
+ "foundry-config",
+ "foundry-evm",
+ "foundry-utils",
+ "glob",
+ "hex",
+ "once_cell",
+ "parking_lot",
+ "proptest",
+ "rayon",
+ "regex",
+ "rlp 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "yansi 0.5.1",
+]
+
+[[package]]
+name = "spark-doc"
+version = "0.1.0"
+dependencies = [
+ "auto_impl",
+ "clap 4.4.8",
+ "corebc-core",
+ "corebc-ylem",
+ "derive_more",
+ "eyre",
+ "foundry-common",
+ "foundry-config",
+ "foundry-utils",
+ "futures-util",
+ "itertools",
+ "mdbook",
+ "once_cell",
+ "rayon",
+ "serde",
+ "serde_json",
+ "solang-parser 0.3.0",
+ "spark-fmt",
+ "thiserror",
+ "tokio",
+ "toml 0.7.8",
+ "tracing",
+ "warp",
+]
+
+[[package]]
+name = "spark-fmt"
+version = "0.2.0"
+dependencies = [
+ "ariadne",
+ "corebc-core",
+ "foundry-config",
+ "itertools",
+ "pretty_assertions",
+ "semver 1.0.20",
+ "solang-parser 0.3.0",
+ "thiserror",
+ "toml 0.7.8",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -7164,10 +7164,10 @@ dependencies = [
  "corebc",
  "crossterm 0.26.1",
  "eyre",
- "forge",
  "foundry-common",
  "hex",
  "revm",
+ "spark",
  "tui",
 ]
 

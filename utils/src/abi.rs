@@ -128,7 +128,7 @@ pub fn abi_to_solidity(contract_abi: &RawAbi, mut contract_name: &str) -> eyre::
             ),
         }
     };
-    forge_fmt::fmt(&sol).map_err(|err| eyre::eyre!(err.to_string()))
+    spark_fmt::fmt(&sol).map_err(|err| eyre::eyre!(err.to_string()))
 }
 
 /// returns the Tokenstream for the corresponding rust type of the param

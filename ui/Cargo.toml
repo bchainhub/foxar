@@ -8,7 +8,7 @@ repository = "https://github.com/foundry-rs/foundry"
 keywords = ["ethereum", "web3", "evm", "debugger"]
 
 [dependencies]
-forge = { path = "../forge" }
+spark = { path = "../spark" }
 foundry-common = { path = "../common" }
 
 corebc = { workspace = true}

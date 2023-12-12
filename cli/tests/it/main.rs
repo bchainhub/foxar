@@ -22,10 +22,10 @@ mod utils;
 mod verify;
 mod yvm;
 
-// import forge utils as mod
+// import spark utils as mod
 #[allow(unused)]
 #[path = "../../src/utils.rs"]
-pub(crate) mod forge_utils;
+pub(crate) mod spark_utils;
 
 #[cfg(feature = "external-integration-tests")]
 mod integration;

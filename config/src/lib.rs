@@ -267,7 +267,7 @@ pub struct Config {
     /// such as "ir", "devdoc", "storageLayout", etc.
     /// See [Ylem Compiler Api](https://docs.soliditylang.org/en/latest/using-the-compiler.html#compiler-api)
     ///
-    /// The following values are always set because they're required by `forge`
+    /// The following values are always set because they're required by `spark`
     //{
     //   "*": [
     //       "abi",
@@ -335,9 +335,9 @@ pub struct Config {
     pub build_info: bool,
     /// The path to the `build-info` directory that contains the build info json files.
     pub build_info_path: Option<PathBuf>,
-    /// Configuration for `forge fmt`
+    /// Configuration for `spark fmt`
     pub fmt: FormatterConfig,
-    /// Configuration for `forge doc`
+    /// Configuration for `spark doc`
     pub doc: DocConfig,
     /// Configures the permissions of cheat codes that touch the file system.
     ///
@@ -346,7 +346,7 @@ pub struct Config {
     /// The root path where the config detection started from, `Config::with_root`
     #[doc(hidden)]
     //  We're skipping serialization here, so it won't be included in the [`Config::to_string()`]
-    // representation, but will be deserialized from the `Figment` so that forge commands can
+    // representation, but will be deserialized from the `Figment` so that spark commands can
     // override it.
     #[serde(rename = "root", default, skip_serializing)]
     pub __root: RootPath,

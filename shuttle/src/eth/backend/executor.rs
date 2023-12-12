@@ -11,10 +11,6 @@ use corebc::{
     types::{Bloom, H256, U256},
     utils::rlp,
 };
-use forge::{
-    revm::primitives::{EVMError, ExecutionResult},
-    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result},
-};
 use foundry_evm::{
     executor::backend::DatabaseError,
     revm,
@@ -30,6 +26,10 @@ use shuttle_core::eth::{
     receipt::{EIP658Receipt, Log, TypedReceipt},
     transaction::{PendingTransaction, TransactionInfo, TypedTransaction},
     trie,
+};
+use spark::{
+    revm::primitives::{EVMError, ExecutionResult},
+    utils::{b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result},
 };
 use std::sync::Arc;
 use tracing::{trace, warn};

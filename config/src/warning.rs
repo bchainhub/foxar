@@ -53,7 +53,7 @@ impl fmt::Display for Warning {
         match self {
             Self::UnknownSection { unknown_section, source } => {
                 let source = source.as_ref().map(|src| format!(" in {src}")).unwrap_or_default();
-                f.write_fmt(format_args!("Unknown section [{unknown_section}] found{source}. This notation for profiles has been deprecated and may result in the profile not being registered in future versions. Please use [profile.{unknown_section}] instead or run `forge config --fix`."))
+                f.write_fmt(format_args!("Unknown section [{unknown_section}] found{source}. This notation for profiles has been deprecated and may result in the profile not being registered in future versions. Please use [profile.{unknown_section}] instead or run `spark config --fix`."))
             }
             Self::NoLocalToml(tried) => {
                 let path = tried.display();

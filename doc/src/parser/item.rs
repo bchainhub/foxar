@@ -1,11 +1,11 @@
 use crate::{error::ParserResult, Comments};
-use forge_fmt::{
-    solang_ext::SafeUnwrap, Comments as FmtComments, Formatter, FormatterConfig, InlineConfig,
-    Visitor,
-};
 use solang_parser::pt::{
     ContractDefinition, ContractTy, EnumDefinition, ErrorDefinition, EventDefinition,
     FunctionDefinition, StructDefinition, TypeDefinition, VariableDefinition,
+};
+use spark_fmt::{
+    solang_ext::SafeUnwrap, Comments as FmtComments, Formatter, FormatterConfig, InlineConfig,
+    Visitor,
 };
 
 /// The parsed item.

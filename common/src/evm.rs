@@ -31,7 +31,7 @@ pub type Breakpoints = HashMap<char, (Address, usize)>;
 ///
 /// ```ignore
 /// use foundry_config::Config;
-/// use forge::executor::opts::EvmOpts;
+/// use spark::executor::opts::EvmOpts;
 /// use foundry_common::evm::EvmArgs;
 /// # fn t(args: EvmArgs) {
 /// let figment = Config::figment_with_root(".").merge(args);

@@ -9,7 +9,7 @@ use std::{collections::BTreeMap, path::Path, str::FromStr};
 
 pub const BROADCAST_TEST_PATH: &str = "src/Broadcast.t.sol";
 
-/// A helper struct to test forge script scenarios
+/// A helper struct to test spark script scenarios
 pub struct ScriptTester {
     pub accounts_pub: Vec<Address>,
     pub accounts_priv: Vec<String>,
@@ -238,7 +238,7 @@ impl ScriptTester {
     }
 }
 
-/// Various `forge` script results
+/// Various `spark` script results
 #[derive(Debug)]
 pub enum ScriptOutcome {
     OkNoEndpoint,

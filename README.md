@@ -14,7 +14,7 @@
 - [x] config - Misha
 - [x] evm - David 
 - [x] fmt
-- [x] forge - Misha
+- [x] spark - Misha
 - [x] macros
 - [x] ui
 - [x] utils - Misha
@@ -30,7 +30,7 @@
 - [x] config - Compiles
 - [x] evm -> Compiles
 - [x] fmt -> Compiles
-- [x] forge -> Compiles
+- [x] spark -> Compiles
 - [ ] foundryup
 - [x] macros -> Compiles
 - [x] ui -> Compiles
@@ -50,7 +50,7 @@
 
 Foundry consists of:
 
--   [**Forge**](./forge): Ethereum testing framework (like Truffle, Hardhat and DappTools).
+-   [**Forge**](./spark): Ethereum testing framework (like Truffle, Hardhat and DappTools).
 -   [**Cast**](./cast): Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
 -   [**Anvil**](./shuttle): Local Ethereum node, akin to Ganache, Hardhat Network.
 -   [**Chisel**](./chisel): Fast, utilitarian, and verbose solidity REPL.
@@ -121,11 +121,11 @@ Configuration can be arbitrarily namespaced by profiles. The default profile is 
 
 You can select another profile using the `FOUNDRY_PROFILE` environment variable. You can also override parts of your configuration using `FOUNDRY_` or `DAPP_` prefixed environment variables, like `FOUNDRY_SRC`.
 
-`forge init` creates a basic, extendable `foundry.toml` file.
+`spark init` creates a basic, extendable `foundry.toml` file.
 
-To see your current configuration, run `forge config`. To see only basic options (as set with `forge init`), run `forge config --basic`. This can be used to create a new `foundry.toml` file with `forge config --basic > foundry.toml`.
+To see your current configuration, run `spark config`. To see only basic options (as set with `spark init`), run `spark config --basic`. This can be used to create a new `foundry.toml` file with `spark config --basic > foundry.toml`.
 
-By default `forge config` shows the currently selected foundry profile and its values. It also accepts the same arguments as `forge build`.
+By default `spark config` shows the currently selected foundry profile and its values. It also accepts the same arguments as `spark build`.
 
 ### DappTools Compatibility
 

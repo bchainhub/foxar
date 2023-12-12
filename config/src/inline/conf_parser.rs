@@ -30,12 +30,12 @@ pub enum InlineConfigParserError {
 ///
 /// ```solidity
 /// contract MyTest is Test {
-/// /// forge-config: default.fuzz.runs = 100
-/// /// forge-config: ci.fuzz.runs = 500
+/// /// spark-config: default.fuzz.runs = 100
+/// /// spark-config: ci.fuzz.runs = 500
 /// function test_SimpleFuzzTest(uint256 x) public {...}
 ///
-/// /// forge-config: default.fuzz.runs = 500
-/// /// forge-config: ci.fuzz.runs = 10000
+/// /// spark-config: default.fuzz.runs = 500
+/// /// spark-config: ci.fuzz.runs = 10000
 /// function test_ImportantFuzzTest(uint256 x) public {...}
 /// }
 /// ```
@@ -62,10 +62,10 @@ where
     ///
     /// i.e. Given the `invariant` config key and a natspec comment of the form,
     /// ```solidity
-    /// /// forge-config: default.invariant.runs = 500
-    /// /// forge-config: default.invariant.depth = 500
-    /// /// forge-config: ci.invariant.depth = 500
-    /// /// forge-config: ci.fuzz.runs = 10
+    /// /// spark-config: default.invariant.runs = 500
+    /// /// spark-config: default.invariant.depth = 500
+    /// /// spark-config: ci.invariant.depth = 500
+    /// /// spark-config: ci.fuzz.runs = 10
     /// ```
     /// would validate the whole `invariant` configuration.
     fn validate_configs(natspec: &NatSpec) -> Result<(), InlineConfigError> {
@@ -91,10 +91,10 @@ where
     /// i.e. Given the `invariant` config key and a vector of config lines
     /// ```rust
     /// let _config_lines = vec![
-    ///     "forge-config: default.invariant.runs = 500",
-    ///     "forge-config: default.invariant.depth = 500",
-    ///     "forge-config: ci.invariant.depth = 500",
-    ///     "forge-config: ci.fuzz.runs = 10"
+    ///     "spark-config: default.invariant.runs = 500",
+    ///     "spark-config: default.invariant.depth = 500",
+    ///     "spark-config: ci.invariant.depth = 500",
+    ///     "spark-config: ci.fuzz.runs = 10"
     /// ];
     /// ```
     /// would return the whole set of `invariant` configs.
@@ -136,7 +136,7 @@ where
 /// ```rust
 /// let _profiles = vec!["ci", "default"];
 /// ```
-/// A configuration like `forge-config: ciii.invariant.depth = 1` would result
+/// A configuration like `spark-config: ciii.invariant.depth = 1` would result
 /// in an error.
 pub fn validate_profiles(natspec: &NatSpec, profiles: &[String]) -> Result<(), InlineConfigError> {
     for config in natspec.config_lines() {
@@ -176,8 +176,8 @@ mod tests {
             function: Default::default(),
             line: Default::default(),
             docs: r#"
-            forge-config: ciii.invariant.depth = 1 
-            forge-config: default.invariant.depth = 1
+            spark-config: ciii.invariant.depth = 1 
+            spark-config: default.invariant.depth = 1
             "#
             .into(),
         };
@@ -194,8 +194,8 @@ mod tests {
             function: Default::default(),
             line: Default::default(),
             docs: r#"
-            forge-config: ci.invariant.depth = 1 
-            forge-config: default.invariant.depth = 1
+            spark-config: ci.invariant.depth = 1 
+            spark-config: default.invariant.depth = 1
             "#
             .into(),
         };

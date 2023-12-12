@@ -29,13 +29,13 @@ name = "chisel"
 path = "src/bin/chisel.rs"
 
 [dependencies]
-# forge
+# spark
 foundry-evm = { path = "../evm" }
-forge = { path = "../forge" }
+spark = { path = "../spark" }
 foundry-config = { path = "../config" }
 foundry-cli = { path = "../cli" }
 foundry-common = { path = "../common" }
-forge-fmt = { path = "../fmt" }
+spark-fmt = { path = "../fmt" }
 
 # corebc
 corebc = { workspace = true }

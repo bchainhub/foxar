@@ -284,14 +284,14 @@ impl Comments {
     }
 
     /// Parse all comments to return a list of inline config items. This will return an iterator of
-    /// results of parsing comments which start with `forgefmt:`
+    /// results of parsing comments which start with `sparkfmt:`
     pub fn parse_inline_config_items(
         &self,
     ) -> impl Iterator<Item = Result<(Loc, InlineConfigItem), (Loc, InvalidInlineConfigItem)>> + '_
     {
         self.iter()
             .filter_map(|comment| {
-                Some((comment, comment.contents().trim_start().strip_prefix("forgefmt:")?.trim()))
+                Some((comment, comment.contents().trim_start().strip_prefix("sparkfmt:")?.trim()))
             })
             .map(|(comment, item)| {
                 let loc = comment.loc;

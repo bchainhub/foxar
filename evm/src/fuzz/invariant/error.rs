@@ -105,7 +105,7 @@ impl InvariantFuzzError {
         if self.shrink {
             let _ = self.try_shrinking(calls, &executor);
         } else {
-            trace!(target: "forge::test", "Shrinking disabled.");
+            trace!(target: "spark::test", "Shrinking disabled.");
         }
 
         // We want traces for a failed case.
@@ -214,7 +214,7 @@ impl InvariantFuzzError {
         let mut anchor = 0;
         let mut removed_calls = vec![];
         let mut shrunk = calls.iter().collect::<Vec<_>>();
-        trace!(target: "forge::test", "Shrinking.");
+        trace!(target: "spark::test", "Shrinking.");
 
         while anchor != calls.len() {
             // Get the latest removed element, so we know which one to remove next.

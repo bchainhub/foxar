@@ -7,14 +7,6 @@ use corebc::{
     types::H256,
     utils::{rlp, rlp::RlpStream},
 };
-use forge::{
-    executor::DatabaseRef,
-    revm::{
-        db::{CacheDB, DbAccount},
-        primitives::{Bytecode, U256 as rU256},
-    },
-    utils::{b176_to_h176, b256_to_h256, ru256_to_u256, u256_to_ru256},
-};
 use foundry_evm::{
     executor::backend::DatabaseError,
     revm::primitives::{AccountInfo, Log},
@@ -24,6 +16,14 @@ use foundry_utils::types::{ToEthersU256, ToRuint};
 use memory_db::HashKey;
 use revm::primitives::B176;
 use shuttle_core::eth::{state::StateOverride, trie::RefSecTrieDBMut};
+use spark::{
+    executor::DatabaseRef,
+    revm::{
+        db::{CacheDB, DbAccount},
+        primitives::{Bytecode, U256 as rU256},
+    },
+    utils::{b176_to_h176, b256_to_h256, ru256_to_u256, u256_to_ru256},
+};
 use trie_db::TrieMut;
 
 /// Returns the log hash for all `logs`

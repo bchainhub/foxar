@@ -12,10 +12,10 @@ vergen = { version = "8", default-features = false, features = ["build", "git", 
 
 [dependencies]
 # foundry internal
-forge-fmt = { path = "../fmt" }
-forge-doc = { path = "../doc" }
+spark-fmt = { path = "../fmt" }
+spark-doc = { path = "../doc" }
 foundry-utils = { path = "../utils" }
-forge = { path = "../forge" }
+spark = { path = "../spark" }
 foundry-config = { path = "../config" }
 foundry-common = { path = "../common" }
 foundry-evm = { path = "../evm" }
@@ -106,12 +106,12 @@ path = "src/cast.rs"
 doc = false
 
 [[bin]]
-name = "forge"
-path = "src/forge.rs"
+name = "spark"
+path = "src/spark.rs"
 doc = false
 
 [[bench]]
-name = "forge_test"
+name = "spark_test"
 harness = false
 
 [[bench]]

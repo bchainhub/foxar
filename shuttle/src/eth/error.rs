@@ -7,7 +7,6 @@ use corebc::{
     signers::WalletError,
     types::{Bytes, SignatureError, U256},
 };
-use forge::revm::{self, primitives::EVMError};
 use foundry_common::SELECTOR_LEN;
 use foundry_evm::{executor::backend::DatabaseError, revm::interpreter::InstructionResult};
 use serde::Serialize;
@@ -15,6 +14,7 @@ use shuttle_rpc::{
     error::{ErrorCode, RpcError},
     response::ResponseResult,
 };
+use spark::revm::{self, primitives::EVMError};
 use tracing::error;
 
 pub(crate) type Result<T> = std::result::Result<T, BlockchainError>;
