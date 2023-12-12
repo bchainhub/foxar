@@ -1,9 +1,9 @@
-//! cast wallet subcommand
+//! probe wallet subcommand
 
 pub mod vanity;
 
 use crate::{
-    cmd::{cast::wallet::vanity::VanityArgs, Cmd},
+    cmd::{probe::wallet::vanity::VanityArgs, Cmd},
     opts::Wallet,
 };
 use clap::Parser;
@@ -14,7 +14,7 @@ use corebc::{
 };
 use eyre::Context;
 
-/// CLI arguments for `cast wallet`.
+/// CLI arguments for `probe wallet`.
 #[derive(Debug, Parser)]
 pub enum WalletSubcommands {
     /// Create a new random keypair.

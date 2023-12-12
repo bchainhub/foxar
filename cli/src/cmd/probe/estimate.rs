@@ -1,16 +1,16 @@
-// cast estimate subcommands
+// probe estimate subcommands
 use crate::{
     opts::{EtherscanOpts, RpcOpts},
     utils::{self, parse_ether_value},
 };
-use cast::{Cast, TxBuilder};
 use clap::Parser;
 use corebc::types::{NameOrAddress, U256};
 use eyre::Result;
 use foundry_config::{figment::Figment, Config};
+use probe::{Cast, TxBuilder};
 use std::str::FromStr;
 
-/// CLI arguments for `cast estimate`.
+/// CLI arguments for `probe estimate`.
 #[derive(Debug, Parser)]
 pub struct EstimateArgs {
     /// The destination of the transaction.

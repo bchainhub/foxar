@@ -1,9 +1,8 @@
 use crate::{
     cmd::spark::build,
-    opts::{cast::parse_slot, EtherscanOpts, RpcOpts},
+    opts::{probe::parse_slot, EtherscanOpts, RpcOpts},
     utils,
 };
-use cast::Cast;
 use clap::Parser;
 use comfy_table::{presets::ASCII_MARKDOWN, Table};
 use corebc::{
@@ -18,9 +17,10 @@ use foundry_common::{
 };
 use foundry_config::{
     figment::{self, value::Dict, Metadata, Profile},
-    impl_figment_convert_cast, Config,
+    impl_figment_convert_probe, Config,
 };
 use futures::future::join_all;
+use probe::Cast;
 use semver::Version;
 use std::str::FromStr;
 
@@ -29,7 +29,7 @@ use std::str::FromStr;
 /// https://github.com/ethereum/solidity/blob/develop/Changelog.md#065-2020-04-06
 const MIN_YLEM: Version = Version::new(1, 1, 0);
 
-/// CLI arguments for `cast storage`.
+/// CLI arguments for `probe storage`.
 #[derive(Debug, Clone, Parser)]
 pub struct StorageArgs {
     /// The contract address.
@@ -56,7 +56,7 @@ pub struct StorageArgs {
     build: build::CoreBuildArgs,
 }
 
-impl_figment_convert_cast!(StorageArgs);
+impl_figment_convert_probe!(StorageArgs);
 
 impl figment::Provider for StorageArgs {
     fn metadata(&self) -> Metadata {
@@ -86,8 +86,8 @@ impl StorageArgs {
 
         // Slot was provided, perform a simple RPC call
         if let Some(slot) = slot {
-            let cast = Cast::new(provider);
-            println!("{}", cast.storage(address, slot, block).await?);
+            let probe = Cast::new(provider);
+            println!("{}", probe.storage(address, slot, block).await?);
             return Ok(())
         }
 

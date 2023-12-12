@@ -1,13 +1,13 @@
-// cast estimate subcommands
+// probe estimate subcommands
 use crate::{
     opts::{EthereumOpts, TransactionOpts},
     utils::{self, parse_ether_value},
 };
-use cast::{Cast, TxBuilder};
 use clap::Parser;
 use corebc::types::{BlockId, NameOrAddress, U256};
 use eyre::WrapErr;
 use foundry_config::Config;
+use probe::{Cast, TxBuilder};
 use std::str::FromStr;
 
 #[derive(Debug, Parser)]

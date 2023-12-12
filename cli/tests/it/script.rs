@@ -1,6 +1,5 @@
 //! Contains various tests related to spark script
 use crate::constants::TEMPLATE_CONTRACT;
-use cast::SimpleCast;
 use corebc::{abi::Address, types::Network};
 use foundry_cli_test_utils::{
     sparktest, sparktest_async, sparktest_init,
@@ -9,6 +8,7 @@ use foundry_cli_test_utils::{
 };
 use foundry_config::Config;
 use foundry_utils::rpc;
+use probe::SimpleCast;
 use regex::Regex;
 use serde_json::Value;
 use shuttle::{spawn, NodeConfig};

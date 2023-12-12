@@ -1,9 +1,9 @@
-// // cast estimate subcommands
+// // probe estimate subcommands
 // use crate::{
 //     opts::{EthereumOpts, TransactionOpts},
 //     utils::{self},
 // };
-// use cast::{Cast, TxBuilder};
+// use probe::{Cast, TxBuilder};
 // use clap::Parser;
 // use corebc::{
 //     providers::Middleware,
@@ -13,7 +13,7 @@
 // use foundry_config::{Config, Network};
 // use std::str::FromStr;
 
-// /// CLI arguments for `cast access-list`.
+// /// CLI arguments for `probe access-list`.
 // #[derive(Debug, Parser)]
 // pub struct AccessListArgs {
 //     /// The destination of the transaction.
@@ -106,9 +106,9 @@
 
 //     let builder_output = builder.peek();
 
-//     let cast = Cast::new(&provider);
+//     let probe = Cast::new(&provider);
 
-//     let access_list: String = cast.access_list(builder_output, block, to_json).await?;
+//     let access_list: String = probe.access_list(builder_output, block, to_json).await?;
 
 //     println!("{}", access_list);
 

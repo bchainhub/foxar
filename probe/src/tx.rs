@@ -28,7 +28,7 @@ pub type TxBuilderPeekOutput<'a> = (&'a TypedTransaction, &'a Option<Function>);
 /// ```
 /// async fn foo() -> eyre::Result<()> {
 ///   use corebc_core::types::{Network, U256};
-///   use cast::TxBuilder;
+///   use probe::TxBuilder;
 ///   let provider = corebc_providers::test_provider::MAINNET.provider();
 ///   let mut builder = TxBuilder::new(&provider, "a.eth", Some("b.eth"), Network::Mainnet).await?;
 ///   builder

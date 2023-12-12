@@ -19,7 +19,7 @@ spark = { path = "../spark" }
 foundry-config = { path = "../config" }
 foundry-common = { path = "../common" }
 foundry-evm = { path = "../evm" }
-cast = { path = "../cast" }
+probe = { path = "../probe" }
 ui = { path = "../ui" }
 
 # eth
@@ -101,8 +101,8 @@ openssl = ["corebc/openssl"]
 external-integration-tests = []
 
 [[bin]]
-name = "cast"
-path = "src/cast.rs"
+name = "probe"
+path = "src/probe.rs"
 doc = false
 
 [[bin]]
@@ -115,5 +115,5 @@ name = "spark_test"
 harness = false
 
 [[bench]]
-name = "cast"
+name = "probe"
 harness = false

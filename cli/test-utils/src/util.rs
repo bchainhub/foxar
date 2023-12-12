@@ -178,12 +178,12 @@ pub fn try_setup_spark_remote(
     Ok((prj, cmd))
 }
 
-pub fn setup_cast(name: &str, style: PathStyle) -> (TestProject, TestCommand) {
-    setup_cast_project(TestProject::new(name, style))
+pub fn setup_probe(name: &str, style: PathStyle) -> (TestProject, TestCommand) {
+    setup_probe_project(TestProject::new(name, style))
 }
 
-pub fn setup_cast_project(test: TestProject) -> (TestProject, TestCommand) {
-    let cmd = test.cast_command();
+pub fn setup_probe_project(test: TestProject) -> (TestProject, TestCommand) {
+    let cmd = test.probe_command();
     (test, cmd)
 }
 
@@ -362,9 +362,9 @@ impl TestProject {
         }
     }
 
-    /// Creates a new command that is set to use the cast executable for this project
-    pub fn cast_command(&self) -> TestCommand {
-        let mut cmd = self.cast_bin();
+    /// Creates a new command that is set to use the probe executable for this project
+    pub fn probe_command(&self) -> TestCommand {
+        let mut cmd = self.probe_bin();
         cmd.current_dir(self.inner.root());
         let _lock = CURRENT_DIR_LOCK.lock();
         TestCommand {
@@ -385,10 +385,10 @@ impl TestProject {
         cmd
     }
 
-    /// Returns the path to the cast executable.
-    pub fn cast_bin(&self) -> process::Command {
-        let cast = self.root.join(format!("../cast{}", env::consts::EXE_SUFFIX));
-        let mut cmd = process::Command::new(cast);
+    /// Returns the path to the probe executable.
+    pub fn probe_bin(&self) -> process::Command {
+        let probe = self.root.join(format!("../probe{}", env::consts::EXE_SUFFIX));
+        let mut cmd = process::Command::new(probe);
         cmd.env("NO_COLOR", "1");
         cmd
     }
@@ -485,8 +485,8 @@ impl TestCommand {
         self.set_cmd(self.project.spark_bin())
     }
 
-    pub fn cast_fuse(&mut self) -> &mut TestCommand {
-        self.set_cmd(self.project.cast_bin())
+    pub fn probe_fuse(&mut self) -> &mut TestCommand {
+        self.set_cmd(self.project.probe_bin())
     }
 
     /// Sets the current working directory

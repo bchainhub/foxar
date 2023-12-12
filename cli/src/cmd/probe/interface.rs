@@ -1,11 +1,11 @@
 use crate::opts::EtherscanOpts;
-use cast::{AbiPath, SimpleCast};
 use clap::Parser;
 use foundry_common::fs;
 use foundry_config::Config;
+use probe::{AbiPath, SimpleCast};
 use std::path::{Path, PathBuf};
 
-/// CLI arguments for `cast interface`.
+/// CLI arguments for `probe interface`.
 #[derive(Debug, Clone, Parser)]
 pub struct InterfaceArgs {
     /// The contract address, or the path to an ABI file.

@@ -1,4 +1,4 @@
-//! cast create2 subcommand
+//! probe create2 subcommand
 
 use crate::cmd::Cmd;
 use clap::Parser;
@@ -12,7 +12,7 @@ use rayon::prelude::*;
 use regex::RegexSetBuilder;
 use std::time::Instant;
 
-/// CLI arguments for `cast create2`.
+/// CLI arguments for `probe create2`.
 #[derive(Debug, Clone, Parser)]
 pub struct Create2Args {
     /// Prefix for the contract address.

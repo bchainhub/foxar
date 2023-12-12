@@ -1,9 +1,8 @@
-// cast send subcommands
+// probe send subcommands
 use crate::{
     opts::{EthereumOpts, TransactionOpts},
     utils,
 };
-use cast::{Cast, TxBuilder};
 use clap::Parser;
 use corebc::{
     core::types::Network, prelude::MiddlewareBuilder, providers::Middleware, signers::Signer,
@@ -11,14 +10,15 @@ use corebc::{
 };
 use foundry_common::cli_warn;
 use foundry_config::Config;
+use probe::{Cast, TxBuilder};
 use std::str::FromStr;
 
-/// CLI arguments for `cast send`.
+/// CLI arguments for `probe send`.
 #[derive(Debug, Parser)]
 pub struct SendTxArgs {
     /// The destination of the transaction.
     ///
-    /// If not provided, you must use cast send --create.
+    /// If not provided, you must use probe send --create.
     #[clap(value_parser = NameOrAddress::from_str)]
     to: Option<NameOrAddress>,
 
@@ -29,8 +29,8 @@ pub struct SendTxArgs {
     args: Vec<String>,
 
     /// Only print the transaction hash and exit immediately.
-    #[clap(name = "async", long = "async", alias = "cast-async", env = "CAST_ASYNC")]
-    cast_async: bool,
+    #[clap(name = "async", long = "async", alias = "probe-async", env = "CAST_ASYNC")]
+    probe_async: bool,
 
     #[clap(flatten)]
     tx: TransactionOpts,
@@ -80,7 +80,7 @@ impl SendTxArgs {
             eth,
             to,
             sig,
-            cast_async,
+            probe_async,
             mut args,
             mut tx,
             confirmations,
@@ -136,7 +136,7 @@ impl SendTxArgs {
                 tx.nonce = Some(provider.get_transaction_count(config.sender, None).await?);
             }
 
-            cast_send(
+            probe_send(
                 provider,
                 config.sender,
                 to,
@@ -145,7 +145,7 @@ impl SendTxArgs {
                 tx,
                 network,
                 // api_key,
-                cast_async,
+                probe_async,
                 confirmations,
                 to_json,
             )
@@ -179,7 +179,7 @@ corresponds to the sender, or let foundry automatically detect it by not specify
 
             let provider = provider.with_signer(signer);
 
-            cast_send(
+            probe_send(
                 provider,
                 from,
                 to,
@@ -188,7 +188,7 @@ corresponds to the sender, or let foundry automatically detect it by not specify
                 tx,
                 network,
                 // api_key,
-                cast_async,
+                probe_async,
                 confirmations,
                 to_json,
             )
@@ -198,7 +198,7 @@ corresponds to the sender, or let foundry automatically detect it by not specify
 }
 
 #[allow(clippy::too_many_arguments)]
-async fn cast_send<M: Middleware, F: Into<NameOrAddress>, T: Into<NameOrAddress>>(
+async fn probe_send<M: Middleware, F: Into<NameOrAddress>, T: Into<NameOrAddress>>(
     provider: M,
     from: F,
     to: Option<T>,
@@ -207,7 +207,7 @@ async fn cast_send<M: Middleware, F: Into<NameOrAddress>, T: Into<NameOrAddress>
     tx: TransactionOpts,
     chain: Network,
     // etherscan_api_key: Option<String>,
-    cast_async: bool,
+    probe_async: bool,
     confs: usize,
     to_json: bool,
 ) -> eyre::Result<()>
@@ -238,15 +238,15 @@ where
     };
     let builder_output = builder.build();
 
-    let cast = Cast::new(provider);
+    let probe = Cast::new(provider);
 
-    let pending_tx = cast.send(builder_output).await?;
+    let pending_tx = probe.send(builder_output).await?;
     let tx_hash = *pending_tx;
 
-    if cast_async {
+    if probe_async {
         println!("{tx_hash:#x}");
     } else {
-        let receipt = cast.receipt(format!("{tx_hash:#x}"), None, confs, false, to_json).await?;
+        let receipt = probe.receipt(format!("{tx_hash:#x}"), None, confs, false, to_json).await?;
         println!("{receipt}");
     }
 

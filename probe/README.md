@@ -1,8 +1,8 @@
-# `cast`
+# `probe`
 
-**Need help with Cast? Read the [📖 Foundry Book (Cast Guide)][foundry-book-cast-guide] (WIP)!**
+**Need help with Cast? Read the [📖 Foundry Book (Cast Guide)][foundry-book-probe-guide] (WIP)!**
 
-[foundry-book-cast-guide]: https://book.getfoundry.sh/cast/index.html
+[foundry-book-probe-guide]: https://book.getfoundry.sh/probe/index.html
 
 ## Features
 

@@ -5,7 +5,7 @@
 //! implement `figment::Provider` which allows the subcommand to override the config's defaults, see
 //! [`foundry_config::Config`].
 
-pub mod cast;
+pub mod probe;
 pub mod spark;
 
 // Re-export our shared utilities

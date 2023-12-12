@@ -6,7 +6,7 @@ members = [
     "shuttle/server",
     "abi",
     "binder",
-    "cast",
+    "probe",
     "chisel",
     "cli",
     "cli/test-utils",

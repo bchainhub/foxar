@@ -1,15 +1,15 @@
-// cast estimate subcommands
+// probe estimate subcommands
 use crate::{
     opts::EthereumOpts,
     utils::{self},
 };
-use cast::Cast;
 use clap::Parser;
 use corebc::{
     abi::{Address, Event, RawTopicFilter, Topic, TopicFilter},
     providers::Middleware,
     types::{BlockId, BlockNumber, Filter, FilterBlockOption, NameOrAddress, ValueOrArray, H256},
 };
+use probe::Cast;
 
 use foundry_common::abi::{get_event, parse_tokens};
 use foundry_config::Config;
@@ -18,7 +18,7 @@ use itertools::Itertools;
 
 use std::str::FromStr;
 
-/// CLI arguments for `cast logs`.
+/// CLI arguments for `probe logs`.
 #[derive(Debug, Parser)]
 pub struct LogsArgs {
     #[clap(flatten)]
@@ -80,11 +80,11 @@ impl LogsArgs {
         let from_block = convert_block_number(&provider, from_block).await?;
         let to_block = convert_block_number(&provider, to_block).await?;
 
-        let cast = Cast::new(&provider);
+        let probe = Cast::new(&provider);
 
         let filter = build_filter(from_block, to_block, address, sig_or_topic, topics_or_args)?;
 
-        let logs = cast.filter_logs(filter, json).await?;
+        let logs = probe.filter_logs(filter, json).await?;
 
         println!("{}", logs);
 

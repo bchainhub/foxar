@@ -1,9 +1,9 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use foundry_cli::cmd::cast::wallet::vanity::*;
+use foundry_cli::cmd::probe::wallet::vanity::*;
 use rayon::prelude::*;
 use std::{hint::black_box, time::Duration};
 
-/// Benches `cast wallet vanity`
+/// Benches `probe wallet vanity`
 ///
 /// Left or right matchers, with or without nonce do not change the outcome.
 ///

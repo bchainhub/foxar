@@ -189,7 +189,7 @@ shuttle
 binder
 Cargo.lock
 Cargo.toml
-cast
+probe
 chisel
 cli
 common

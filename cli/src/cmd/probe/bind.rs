@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 static DEFAULT_CRATE_NAME: &str = "foundry-contracts";
 static DEFAULT_CRATE_VERSION: &str = "0.0.1";
 
-/// CLI arguments for `cast bind`.
+/// CLI arguments for `probe bind`.
 #[derive(Debug, Clone, Parser)]
 pub struct BindArgs {
     /// The contract address, or the path to an ABI Directory

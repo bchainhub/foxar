@@ -6,7 +6,6 @@ use crate::{
     },
     suggestions, utils,
 };
-use cast::fuzz::CounterExample;
 use clap::Parser;
 use corebc::types::U256;
 use foundry_common::{
@@ -15,6 +14,7 @@ use foundry_common::{
     get_contract_name, get_file_name,
 };
 use foundry_config::{figment, get_available_profiles, Config};
+use probe::fuzz::CounterExample;
 use regex::Regex;
 use spark::{
     decode::decode_console_logs,

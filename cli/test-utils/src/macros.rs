@@ -64,15 +64,15 @@ macro_rules! sparktest_async {
 }
 
 #[macro_export]
-macro_rules! casttest {
+macro_rules! probetest {
     ($(#[$meta:meta])* $test:ident, $fun:expr) => {
-        $crate::casttest!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
+        $crate::probetest!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
     };
     ($(#[$meta:meta])* $test:ident, $style:expr, $fun:expr) => {
         #[test]
         $(#[$meta])*
         fn $test() {
-            let (prj, cmd) = $crate::util::setup_cast(stringify!($test), $style);
+            let (prj, cmd) = $crate::util::setup_probe(stringify!($test), $style);
             let f = $fun;
             f(prj, cmd);
         }

@@ -1,12 +1,5 @@
 //! script command
 use crate::{cmd::spark::build::BuildArgs, opts::MultiWallet, utils::parse_ether_value};
-use cast::{
-    decode,
-    executor::inspector::{
-        cheatcodes::{util::BroadcastableTransactions, BroadcastableTransaction},
-        DEFAULT_CREATE2_DEPLOYER,
-    },
-};
 use clap::{Parser, ValueHint};
 use corebc::{
     abi::{Abi, Function, HumanReadableParser},
@@ -30,6 +23,13 @@ use foundry_common::{
     shell, ContractsByArtifact, RpcUrl, CONTRACT_MAX_SIZE, SELECTOR_LEN,
 };
 use foundry_config::{figment, Config};
+use probe::{
+    decode,
+    executor::inspector::{
+        cheatcodes::{util::BroadcastableTransactions, BroadcastableTransaction},
+        DEFAULT_CREATE2_DEPLOYER,
+    },
+};
 use spark::{
     debug::DebugArena,
     decode::decode_console_logs,

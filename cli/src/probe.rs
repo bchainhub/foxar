@@ -1,4 +1,3 @@
-use cast::{Cast, SimpleCast};
 use clap::{CommandFactory, Parser};
 use clap_complete::generate;
 use corebc::{
@@ -10,7 +9,7 @@ use corebc::{
 use foundry_cli::{
     cmd::Cmd,
     handler,
-    opts::cast::{Opts, Subcommands, ToBaseArgs},
+    opts::probe::{Opts, Subcommands, ToBaseArgs},
     prompt, stdin, utils,
 };
 use foundry_common::{
@@ -22,6 +21,7 @@ use foundry_common::{
     },
 };
 use foundry_config::Config;
+use probe::{Cast, SimpleCast};
 use rustc_hex::ToHex;
 use std::time::Instant;
 
@@ -317,14 +317,14 @@ async fn main() -> eyre::Result<()> {
         // Calls & transactions
         Subcommands::Call(cmd) => cmd.run().await?,
         Subcommands::Estimate(cmd) => cmd.run().await?,
-        Subcommands::PublishTx { raw_tx, cast_async, rpc } => {
+        Subcommands::PublishTx { raw_tx, probe_async, rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
-            let cast = Cast::new(&provider);
-            let pending_tx = cast.publish(raw_tx).await?;
+            let probe = Cast::new(&provider);
+            let pending_tx = probe.publish(raw_tx).await?;
             let tx_hash = *pending_tx;
 
-            if cast_async {
+            if probe_async {
                 println!("{tx_hash:#x}");
             } else {
                 let receipt =
@@ -332,13 +332,13 @@ async fn main() -> eyre::Result<()> {
                 println!("{}", serde_json::json!(receipt));
             }
         }
-        Subcommands::Receipt { tx_hash, field, json, cast_async, confirmations, rpc } => {
+        Subcommands::Receipt { tx_hash, field, json, probe_async, confirmations, rpc } => {
             let config = Config::from(&rpc);
             let provider = utils::get_provider(&config)?;
             println!(
                 "{}",
                 Cast::new(provider)
-                    .receipt(tx_hash, field, confirmations, cast_async, json)
+                    .receipt(tx_hash, field, confirmations, probe_async, json)
                     .await?
             );
         }
@@ -485,12 +485,12 @@ async fn main() -> eyre::Result<()> {
         }
         Subcommands::Wallet { command } => command.run().await?,
         Subcommands::Completions { shell } => {
-            generate(shell, &mut Opts::command(), "cast", &mut std::io::stdout())
+            generate(shell, &mut Opts::command(), "probe", &mut std::io::stdout())
         }
         Subcommands::GenerateFigSpec => clap_complete::generate(
             clap_complete_fig::Fig,
             &mut Opts::command(),
-            "cast",
+            "probe",
             &mut std::io::stdout(),
         ),
         Subcommands::Logs(cmd) => cmd.run().await?,

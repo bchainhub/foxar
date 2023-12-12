@@ -7,7 +7,7 @@
 - [x] abi 
 - [ ] shuttle 
 - [x] binder
-- [x] cast
+- [x] probe
 - [ ] chisel - David
 - [ ] cli - Misha
 - [x] common
@@ -23,7 +23,7 @@
 - [x] abi -> Compiles
 - [x] shuttle -> Compiles
 - [x] binder -> Compiles
-- [x] cast  -> Compiles
+- [x] probe  -> Compiles
 - [x] chisel -> Compiles
 - [x] cli - Compiles
 - [x] common -> Compiles
@@ -51,7 +51,7 @@
 Foundry consists of:
 
 -   [**Forge**](./spark): Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   [**Cast**](./cast): Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
+-   [**Cast**](./probe): Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
 -   [**Anvil**](./shuttle): Local Ethereum node, akin to Ganache, Hardhat Network.
 -   [**Chisel**](./chisel): Fast, utilitarian, and verbose solidity REPL.
 
@@ -109,7 +109,7 @@ _Note: In the above benchmarks, compilation was always skipped_
 
 Cast is a swiss army knife for interacting with Ethereum applications from the command line.
 
-More documentation can be found in the [cast package](./cast).
+More documentation can be found in the [probe package](./probe).
 
 ## Configuration
 

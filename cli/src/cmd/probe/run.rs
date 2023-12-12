@@ -1,8 +1,4 @@
 use crate::{init_progress, opts::RpcOpts, update_progress, utils};
-use cast::{
-    executor::{EvmError, ExecutionErr},
-    trace::{identifier::SignaturesIdentifier, CallTraceDecoder, Traces},
-};
 use clap::Parser;
 use corebc::{
     abi::Address,
@@ -13,6 +9,10 @@ use eyre::WrapErr;
 use foundry_config::{find_project_root_path, Config};
 use foundry_evm::utils::evm_spec;
 use foundry_utils::types::ToRuint;
+use probe::{
+    executor::{EvmError, ExecutionErr},
+    trace::{identifier::SignaturesIdentifier, CallTraceDecoder, Traces},
+};
 use spark::{
     debug::DebugArena,
     executor::{
@@ -32,7 +32,7 @@ const ARBITRUM_SENDER: H176 = H176([
     0x00, 0x00, 0x00, 0x0a, 0x4b, 0x05,
 ]);
 
-/// CLI arguments for `cast run`.
+/// CLI arguments for `probe run`.
 #[derive(Debug, Clone, Parser)]
 pub struct RunArgs {
     /// The transaction hash.

@@ -6,11 +6,13 @@ import "./DssExecLib.sol";
 
 interface Cheats {
     function store(address account, bytes32 slot, bytes32 value) external;
+
     function activeFork() external returns (uint256);
 }
 
 interface IWETH {
     function deposit() external payable;
+
     function balanceOf(address) external view returns (uint256);
 }
 
@@ -24,8 +26,10 @@ contract DummyContract {
 }
 
 contract ForkTest is DSTest {
-    address constant DAI_TOKEN_ADDR = 0xcb916b175474e89094c44da98b954eedeac495271d0f;
-    address constant WETH_TOKEN_ADDR = 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
+    address constant DAI_TOKEN_ADDR =
+        0xcb916b175474e89094c44da98b954eedeac495271d0f;
+    address constant WETH_TOKEN_ADDR =
+        0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
 
     // checks that we can retrieve the fork we launched with
     function testActiveFork() public {
@@ -37,7 +41,11 @@ contract ForkTest is DSTest {
 
     function testReadState() public {
         ERC20 DAI = ERC20(DAI_TOKEN_ADDR);
-        assertEq(uint256(DAI.decimals()), uint256(18), "Failed to read DAI token decimals.");
+        assertEq(
+            uint256(DAI.decimals()),
+            uint256(18),
+            "Failed to read DAI token decimals."
+        );
     }
 
     function testDeployContract() public {
@@ -47,8 +55,16 @@ contract ForkTest is DSTest {
         assembly {
             size := extcodesize(DummyAddress)
         }
-        assertGt(size, 0, "Deploying dummy contract failed. Deployed size of zero");
-        assertEq(dummy.deployer(), address(this), "Calling the Dummy contract failed to return expected value");
+        assertGt(
+            size,
+            0,
+            "Deploying dummy contract failed. Deployed size of zero"
+        );
+        assertEq(
+            dummy.deployer(),
+            address(this),
+            "Calling the Dummy contract failed to return expected value"
+        );
     }
 
     function testCheatcode() public {
@@ -56,7 +72,7 @@ contract ForkTest is DSTest {
         IWETH WETH = IWETH(WETH_TOKEN_ADDR);
         bytes32 value = bytes32(uint256(1));
         // "0x3617319a054d772f909f7c479a2cebe5066e836a939412e32403c99029b92eff" is the slot storing the balance of zero address for the weth contract
-        // `cast index address uint 0xcb540000000000000000000000000000000000000000 3`
+        // `probe index address uint 0xcb540000000000000000000000000000000000000000 3`
         bytes32 zero_address_balance_slot = 0x3617319a054d772f909f7c479a2cebe5066e836a939412e32403c99029b92eff;
         cheatvm.store(WETH_TOKEN_ADDR, zero_address_balance_slot, value);
         assertEq(
@@ -67,12 +83,20 @@ contract ForkTest is DSTest {
     }
 
     function testPredeployedLibrary() public {
-        assertEq(DssExecLib.dai(), DAI_TOKEN_ADDR, "Failed to read state from predeployed library");
+        assertEq(
+            DssExecLib.dai(),
+            DAI_TOKEN_ADDR,
+            "Failed to read state from predeployed library"
+        );
     }
 
     function testDepositWeth() public {
         IWETH WETH = IWETH(WETH_TOKEN_ADDR);
         WETH.deposit{value: 1000}();
-        assertEq(WETH.balanceOf(address(this)), 1000, "WETH balance is not equal to deposited amount.");
+        assertEq(
+            WETH.balanceOf(address(this)),
+            1000,
+            "WETH balance is not equal to deposited amount."
+        );
     }
 }

@@ -1,8 +1,6 @@
 #[cfg(not(feature = "external-integration-tests"))]
 mod cache;
 #[cfg(not(feature = "external-integration-tests"))]
-mod cast;
-#[cfg(not(feature = "external-integration-tests"))]
 mod cmd;
 #[cfg(not(feature = "external-integration-tests"))]
 mod config;
@@ -12,6 +10,8 @@ mod create;
 mod doc;
 #[cfg(not(feature = "external-integration-tests"))]
 mod multi_script;
+#[cfg(not(feature = "external-integration-tests"))]
+mod probe;
 #[cfg(not(feature = "external-integration-tests"))]
 mod script;
 #[cfg(not(feature = "external-integration-tests"))]

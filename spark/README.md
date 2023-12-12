@@ -164,7 +164,7 @@ which implements the following methods:
 -   `function stopPrank()`: Stop calling smart contracts with the address set at `startPrank`
 
 -   `function expectRevert(<overloaded> expectedError)`:
-    Tells the evm to expect that the next call reverts with specified error bytes. Valid input types: `bytes`, and `bytes4`. Implicitly, strings get converted to bytes except when shorter than 4, in which case you will need to cast explicitly to `bytes`.
+    Tells the evm to expect that the next call reverts with specified error bytes. Valid input types: `bytes`, and `bytes4`. Implicitly, strings get converted to bytes except when shorter than 4, in which case you will need to probe explicitly to `bytes`.
 -   `function expectEmit(bool,bool,bool,bool) external`: Expects the next emitted event. Params check topic 1, topic 2, topic 3 and data are the same.
 
 -   `function expectEmit(bool,bool,bool,bool,address) external`: Expects the next emitted event. Params check topic 1, topic 2, topic 3 and data are the same. Also checks supplied address against address of originating contract.

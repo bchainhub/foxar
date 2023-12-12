@@ -1,6 +1,6 @@
 //! Cast
 //!
-//! Contains core function implementation for `cast`
+//! Contains core function implementation for `probe`
 
 use crate::rlp_converter::Item;
 use base::{Base, NumberWithBase, ToBase};
@@ -57,12 +57,12 @@ where
     /// # Example
     ///
     /// ```
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// # Ok(())
     /// # }
     /// ```
@@ -75,7 +75,7 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::{Cast, TxBuilder};
+    /// use probe::{Cast, TxBuilder};
     /// use corebc_core::types::{Address, Network};
     /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
@@ -89,8 +89,8 @@ where
     /// builder
     ///     .set_args(sig, args).await?;
     /// let builder_output = builder.build();
-    /// let cast = Cast::new(provider);
-    /// let data = cast.call(builder_output, None).await?;
+    /// let probe = Cast::new(provider);
+    /// let data = probe.call(builder_output, None).await?;
     /// println!("{}", data);
     /// # Ok(())
     /// # }
@@ -153,7 +153,7 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::{Cast, TxBuilder};
+    /// use probe::{Cast, TxBuilder};
     /// use corebc_core::types::{Address, Network, U256};
     /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
@@ -174,8 +174,8 @@ where
     ///     .set_value(value)
     ///     .set_nonce(nonce);
     /// let builder_output = builder.build();
-    /// let cast = Cast::new(provider);
-    /// let data = cast.send(builder_output).await?;
+    /// let probe = Cast::new(provider);
+    /// let data = probe.send(builder_output).await?;
     /// println!("{}", *data);
     /// # Ok(())
     /// # }
@@ -195,13 +195,13 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
-    /// let res = cast.publish("0x1234".to_string()).await?;
+    /// let probe = Cast::new(provider);
+    /// let res = probe.publish("0x1234".to_string()).await?;
     /// println!("{:?}", res);
     /// # Ok(())
     /// # }
@@ -222,7 +222,7 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::{Cast, TxBuilder};
+    /// use probe::{Cast, TxBuilder};
     /// use corebc_core::types::{Address, Network, U256};
     /// use corebc_providers::{Provider, Http};
     /// use std::{str::FromStr, convert::TryFrom};
@@ -239,8 +239,8 @@ where
     ///     .set_value(value)
     ///     .set_args(sig, args).await?;
     /// let builder_output = builder.peek();
-    /// let cast = Cast::new(&provider);
-    /// let data = cast.estimate(builder_output).await?;
+    /// let probe = Cast::new(&provider);
+    /// let data = probe.estimate(builder_output).await?;
     /// println!("{}", data);
     /// # Ok(())
     /// # }
@@ -256,13 +256,13 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
-    /// let block = cast.block(5, true, None, false).await?;
+    /// let probe = Cast::new(provider);
+    /// let block = probe.block(5, true, None, false).await?;
     /// println!("{}", block);
     /// # Ok(())
     /// # }
@@ -423,16 +423,16 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let addr = Address::from_str("0x7eD52863829AB99354F3a0503A622e82AcD5F7d3")?;
-    /// let nonce = cast.nonce(addr, None).await?;
+    /// let nonce = probe.nonce(addr, None).await?;
     /// println!("{}", nonce);
     /// # Ok(())
     /// # }
@@ -448,16 +448,16 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let addr = Address::from_str("0x7eD52863829AB99354F3a0503A622e82AcD5F7d3")?;
-    /// let implementation = cast.implementation(addr, None).await?;
+    /// let implementation = probe.implementation(addr, None).await?;
     /// println!("{}", implementation);
     /// # Ok(())
     /// # }
@@ -477,16 +477,16 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let addr = Address::from_str("0x7eD52863829AB99354F3a0503A622e82AcD5F7d3")?;
-    /// let admin = cast.admin(addr, None).await?;
+    /// let admin = probe.admin(addr, None).await?;
     /// println!("{}", admin);
     /// # Ok(())
     /// # }
@@ -506,19 +506,19 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     /// use corebc_core::types::{Address, Network};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let addr = Address::from_str("0x7eD52863829AB99354F3a0503A622e82AcD5F7d3")?;
-    /// let nonce = cast.nonce(addr, None).await? + 5;
-    /// let computed_address = cast.compute_address(addr, Some(nonce), &Network::Mainnet).await?;
+    /// let nonce = probe.nonce(addr, None).await? + 5;
+    /// let computed_address = probe.compute_address(addr, Some(nonce), &Network::Mainnet).await?;
     /// println!("Computed address for address {} with nonce {}: {}", addr, nonce, computed_address);
-    /// let computed_address_no_nonce = cast.compute_address(addr, None, &Network::Mainnet).await?;
+    /// let computed_address_no_nonce = probe.compute_address(addr, None, &Network::Mainnet).await?;
     /// println!("Computed address for address {} with nonce {}: {}", addr, nonce, computed_address_no_nonce);
     /// # Ok(())
     /// # }
@@ -541,16 +541,16 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let addr = Address::from_str("0x00000000219ab540356cbb839cbe05303d7705fa")?;
-    /// let code = cast.code(addr, None, false).await?;
+    /// let code = probe.code(addr, None, false).await?;
     /// println!("{}", code);
     /// # Ok(())
     /// # }
@@ -572,16 +572,16 @@ where
     /// Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     /// use corebc_core::types::Address;
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let addr = Address::from_str("0x00000000219ab540356cbb839cbe05303d7705fa")?;
-    /// let codesize = cast.codesize(addr, None).await?;
+    /// let codesize = probe.codesize(addr, None).await?;
     /// println!("{}", codesize);
     /// # Ok(())
     /// # }
@@ -598,14 +598,14 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let tx_hash = "0xf8d1713ea15a81482958fb7ddf884baee8d3bcc478c5f2f604e008dc788ee4fc";
-    /// let tx = cast.transaction(tx_hash.to_string(), None, false).await?;
+    /// let tx = probe.transaction(tx_hash.to_string(), None, false).await?;
     /// println!("{}", tx);
     /// # Ok(())
     /// # }
@@ -637,14 +637,14 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let tx_hash = "0xf8d1713ea15a81482958fb7ddf884baee8d3bcc478c5f2f604e008dc788ee4fc";
-    /// let receipt = cast.receipt(tx_hash.to_string(), None, 1, false, false).await?;
+    /// let receipt = probe.receipt(tx_hash.to_string(), None, 1, false, false).await?;
     /// println!("{}", receipt);
     /// # Ok(())
     /// # }
@@ -654,7 +654,7 @@ where
         tx_hash: String,
         field: Option<String>,
         confs: usize,
-        cast_async: bool,
+        probe_async: bool,
         to_json: bool,
     ) -> Result<String> {
         let tx_hash = H256::from_str(&tx_hash).wrap_err("invalid tx hash")?;
@@ -665,7 +665,7 @@ where
                 None => {
                     // if the async flag is provided, immediately exit if no tx is found, otherwise
                     // try to poll for it
-                    if cast_async {
+                    if probe_async {
                         eyre::bail!("tx not found: {:?}", tx_hash)
                     } else {
                         let tx = PendingTransaction::new(tx_hash, self.provider.provider());
@@ -699,13 +699,13 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
-    /// let result = cast.rpc("eth_getBalance", &["0xc94770007dda54cF92009BFF0dE90c06F603a09f", "latest"])
+    /// let probe = Cast::new(provider);
+    /// let result = probe.rpc("eth_getBalance", &["0xc94770007dda54cF92009BFF0dE90c06F603a09f", "latest"])
     ///     .await?;
     /// println!("{}", result);
     /// # Ok(())
@@ -724,17 +724,17 @@ where
     /// # Example
     ///
     /// ```no_run
-    /// use cast::Cast;
+    /// use probe::Cast;
     /// use corebc_providers::{Provider, Http};
     /// use corebc_core::types::{Address, H256};
     /// use std::{str::FromStr, convert::TryFrom};
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let provider = Provider::<Http>::try_from("http://localhost:8545")?;
-    /// let cast = Cast::new(provider);
+    /// let probe = Cast::new(provider);
     /// let addr = Address::from_str("0x00000000006c3852cbEf3e08E8dF289169EdE581")?;
     /// let slot = H256::zero();
-    /// let storage = cast.storage(addr, slot, None).await?;
+    /// let storage = probe.storage(addr, slot, None).await?;
     /// println!("{}", storage);
     /// # Ok(())
     /// # }
@@ -788,7 +788,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// # use cast::SimpleCast;
+    /// # use probe::SimpleCast;
     /// # use corebc_core::types::{I256, U256};
     /// assert_eq!(SimpleCast::max_int("uint256")?, format!("{}", U256::MAX));
     /// assert_eq!(SimpleCast::max_int("int256")?, format!("{}", I256::MAX));
@@ -804,7 +804,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// # use cast::SimpleCast;
+    /// # use probe::SimpleCast;
     /// # use corebc_core::types::{I256, U256};
     /// assert_eq!(SimpleCast::min_int("uint256")?, "0");
     /// assert_eq!(SimpleCast::min_int("int256")?, format!("{}", I256::MIN));
@@ -849,7 +849,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::from_utf8("yo"), "0x796f");
@@ -869,7 +869,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_ascii("0x796f")?, "yo");
@@ -891,7 +891,7 @@ impl SimpleCast {
 
     /// Converts fixed point number into specified number of decimals
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     /// use corebc_core::types::U256;
     ///
     /// fn main() -> eyre::Result<()> {
@@ -918,7 +918,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     /// use corebc_core::types::U256;
     ///
     /// fn main() -> eyre::Result<()> {
@@ -963,7 +963,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::concat_hex(["0x00", "0x01"]), "0x0001");
@@ -986,7 +986,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_uint256("100")?, "0x0000000000000000000000000000000000000000000000000000000000000064");
@@ -1009,7 +1009,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_int256("0")?, "0x0000000000000000000000000000000000000000000000000000000000000000");
@@ -1039,7 +1039,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_unit("1 wei", "wei")?, "1");
@@ -1070,7 +1070,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::from_wei("1", "gwei")?, "0.000000001");
@@ -1096,7 +1096,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_wei("1", "")?, "1000000000000000000");
@@ -1120,7 +1120,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::from_rlp("0xc0".to_string()).unwrap(), "[]");
@@ -1143,7 +1143,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::to_rlp("[]").unwrap(),"0xc0".to_string());
@@ -1165,7 +1165,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     /// use corebc_core::types::{I256, U256};
     ///
     /// fn main() -> eyre::Result<()> {
@@ -1200,7 +1200,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// # fn main() -> eyre::Result<()> {
     /// let bytes = Cast::to_bytes32("1234")?;
@@ -1267,7 +1267,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     // Passing `input = false` will decode the data as the output type.
@@ -1304,7 +1304,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     // Passing `input = false` will decode the data as the output type.
@@ -1339,7 +1339,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// # use cast::SimpleCast as Cast;
+    /// # use probe::SimpleCast as Cast;
     ///
     /// # fn main() -> eyre::Result<()> {
     ///     assert_eq!(
@@ -1388,7 +1388,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// # use cast::SimpleCast as Cast;
+    /// # use probe::SimpleCast as Cast;
     ///
     /// # fn main() -> eyre::Result<()> {
     ///     assert_eq!(
@@ -1408,8 +1408,8 @@ impl SimpleCast {
     /// Etherscan. It returns a vector of [`InterfaceSource`] structs that contain the source of the
     /// interface and their name.
     /// ```no_run
-    /// use cast::SimpleCast as Cast;
-    /// use cast::AbiPath;
+    /// use probe::SimpleCast as Cast;
+    /// use probe::AbiPath;
     /// # async fn foo() -> eyre::Result<()> {
     /// let path = AbiPath::Local {
     ///     path: "utils/testdata/interfaceTestABI.json".to_owned(),
@@ -1481,7 +1481,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// # use cast::SimpleCast as Cast;
+    /// # use probe::SimpleCast as Cast;
     ///
     /// # fn main() -> eyre::Result<()> {
     ///
@@ -1504,7 +1504,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::namehash("")?, "0x0000000000000000000000000000000000000000000000000000000000000000");
@@ -1541,7 +1541,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::sha3("foo")?, "0x76d3bc41c9f588f7fcd0d5bf4718f8f84b1c41b20882703100b9eb9413807c01");
@@ -1568,7 +1568,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::left_shift("16", "10", Some("10".to_string()), "hex")?, "0x4000");
@@ -1598,7 +1598,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::right_shift("0x4000", "10", None, "dec")?, "16");
@@ -1628,7 +1628,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// # use cast::SimpleCast as Cast;
+    /// # use probe::SimpleCast as Cast;
     /// # use corebc_core::types::Network;
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -1658,7 +1658,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// # use cast::SimpleCast as Cast;
+    /// # use probe::SimpleCast as Cast;
     /// # use corebc_core::types::Network;
     /// # use std::path::PathBuf;
     ///
@@ -1686,7 +1686,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```no_run
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// # async fn foo() -> eyre::Result<()> {
     /// let bytecode = "0x608060405260043610603f57600035";
@@ -1705,7 +1705,7 @@ impl SimpleCast {
     /// # Example
     ///
     /// ```
-    /// use cast::SimpleCast as Cast;
+    /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
     ///     assert_eq!(Cast::get_selector("foo(address,uint256)", None)?.0, String::from("0xe041c8d8"));

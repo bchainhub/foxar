@@ -4,7 +4,7 @@ This is a working document intended to outline some commands contributors can us
 
 ### Logs
 
-All crates use [tracing](https://docs.rs/tracing/latest/tracing/) for logging. An console formatter is installed in each binary (`cast`, `spark`, `shuttle`).
+All crates use [tracing](https://docs.rs/tracing/latest/tracing/) for logging. An console formatter is installed in each binary (`probe`, `spark`, `shuttle`).
 
 By setting `RUST_LOG=<filter>` you can get a lot more info out of Forge and Cast. For example, running Forge with `RUST_LOG=spark` will emit all logs of the `cli` crate, same for Cast.
 

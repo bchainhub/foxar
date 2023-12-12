@@ -1,14 +1,14 @@
-//! cast find-block subcommand
+//! probe find-block subcommand
 
 use crate::{opts::RpcOpts, utils};
-use cast::Cast;
 use clap::Parser;
 use corebc::prelude::*;
 use eyre::Result;
 use foundry_config::Config;
 use futures::join;
+use probe::Cast;
 
-/// CLI arguments for `cast find-block`.
+/// CLI arguments for `probe find-block`.
 #[derive(Debug, Clone, Parser)]
 pub struct FindBlockArgs {
     /// The UNIX timestamp to search for, in seconds.
@@ -27,9 +27,9 @@ impl FindBlockArgs {
         let provider = utils::get_provider(&config)?;
 
         let last_block_num = provider.get_block_number().await?;
-        let cast_provider = Cast::new(provider);
+        let probe_provider = Cast::new(provider);
 
-        let res = join!(cast_provider.timestamp(last_block_num), cast_provider.timestamp(1));
+        let res = join!(probe_provider.timestamp(last_block_num), probe_provider.timestamp(1));
         let ts_block_latest = res.0?;
         let ts_block_1 = res.1?;
 
@@ -53,7 +53,7 @@ impl FindBlockArgs {
                     .checked_div(U64::from(2_u64))
                     .unwrap();
                 let mid_block = high_block.checked_sub(high_minus_low_over_2).unwrap();
-                let ts_mid_block = cast_provider.timestamp(mid_block).await?;
+                let ts_mid_block = probe_provider.timestamp(mid_block).await?;
 
                 // Check if we've found a match or should keep searching
                 if ts_mid_block == ts_target {
@@ -62,8 +62,8 @@ impl FindBlockArgs {
                     // The target timestamp is in between these blocks. This rounds to the
                     // highest block if timestamp is equidistant between blocks
                     let res = join!(
-                        cast_provider.timestamp(high_block),
-                        cast_provider.timestamp(low_block)
+                        probe_provider.timestamp(high_block),
+                        probe_provider.timestamp(low_block)
                     );
                     let ts_high = res.0.unwrap();
                     let ts_low = res.1.unwrap();

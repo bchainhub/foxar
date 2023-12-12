@@ -186,7 +186,7 @@ macro_rules! merge_impl_figment_convert {
 
 /// A macro to implement converters from a type to [`Config`] and [`figment::Figment`]
 #[macro_export]
-macro_rules! impl_figment_convert_cast {
+macro_rules! impl_figment_convert_probe {
     ($name:ty) => {
         impl<'a> From<&'a $name> for $crate::figment::Figment {
             fn from(args: &'a $name) -> Self {

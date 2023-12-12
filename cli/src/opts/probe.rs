@@ -1,6 +1,6 @@
 use super::{EtherscanOpts, RpcOpts};
 use crate::{
-    cmd::cast::{
+    cmd::probe::{
         bind::BindArgs, call::CallArgs, create2::Create2Args, estimate::EstimateArgs,
         find_block::FindBlockArgs, interface::InterfaceArgs, logs::LogsArgs, rpc::RpcArgs,
         run::RunArgs, send::SendTxArgs, storage::StorageArgs, wallet::WalletSubcommands,
@@ -15,7 +15,7 @@ use corebc::{
 use std::{path::PathBuf, str::FromStr};
 
 #[derive(Debug, Parser)]
-#[clap(name = "cast", version = crate::utils::VERSION_MESSAGE)]
+#[clap(name = "probe", version = crate::utils::VERSION_MESSAGE)]
 pub struct Opts {
     #[clap(subcommand)]
     pub sub: Subcommands,
@@ -24,7 +24,7 @@ pub struct Opts {
 /// Perform Ethereum RPC calls from the comfort of your command line.
 #[derive(Debug, Subcommand)]
 #[clap(
-    after_help = "Find more information in the book: http://book.getfoundry.sh/reference/cast/cast.html",
+    after_help = "Find more information in the book: http://book.getfoundry.sh/reference/probe/probe.html",
     next_display_order = None
 )]
 pub enum Subcommands {
@@ -409,8 +409,8 @@ pub enum Subcommands {
         confirmations: usize,
 
         /// Exit immediately if the transaction was not found.
-        #[clap(long = "async", env = "CAST_ASYNC", name = "async", alias = "cast-async")]
-        cast_async: bool,
+        #[clap(long = "async", env = "CAST_ASYNC", name = "async", alias = "probe-async")]
+        probe_async: bool,
 
         /// Print as JSON.
         #[clap(long, short, help_heading = "Display options")]
@@ -431,8 +431,8 @@ pub enum Subcommands {
         raw_tx: String,
 
         /// Only print the transaction hash and exit immediately.
-        #[clap(long = "async", env = "CAST_ASYNC", name = "async", alias = "cast-async")]
-        cast_async: bool,
+        #[clap(long = "async", env = "CAST_ASYNC", name = "async", alias = "probe-async")]
+        probe_async: bool,
 
         #[clap(flatten)]
         rpc: RpcOpts,
@@ -847,7 +847,7 @@ pub enum Subcommands {
     },
 }
 
-/// CLI arguments for `cast --to-base`.
+/// CLI arguments for `probe --to-base`.
 #[derive(Debug, Parser)]
 pub struct ToBaseArgs {
     /// The value to convert.

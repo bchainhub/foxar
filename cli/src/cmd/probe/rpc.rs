@@ -1,11 +1,11 @@
 use crate::{opts::RpcOpts, utils};
-use cast::Cast;
 use clap::Parser;
 use eyre::Result;
 use foundry_config::Config;
 use itertools::Itertools;
+use probe::Cast;
 
-/// CLI arguments for `cast rpc`.
+/// CLI arguments for `probe rpc`.
 #[derive(Debug, Clone, Parser)]
 pub struct RpcArgs {
     /// RPC method name
@@ -15,7 +15,7 @@ pub struct RpcArgs {
     ///
     /// Interpreted as JSON:
     ///
-    /// cast rpc eth_getBlockByNumber 0x123 false
+    /// probe rpc eth_getBlockByNumber 0x123 false
     /// => {"method": "eth_getBlockByNumber", "params": ["0x123", false] ... }
     params: Vec<String>,
 
@@ -24,7 +24,7 @@ pub struct RpcArgs {
     /// The first param will be interpreted as a raw JSON array of params.
     /// If no params are given, stdin will be used. For example:
     ///
-    /// cast rpc eth_getBlockByNumber '["0x123", false]' --raw
+    /// probe rpc eth_getBlockByNumber '["0x123", false]' --raw
     ///     => {"method": "eth_getBlockByNumber", "params": ["0x123", false] ... }
     #[clap(long, short = 'w')]
     raw: bool,
