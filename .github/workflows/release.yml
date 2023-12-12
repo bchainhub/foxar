@@ -141,16 +141,16 @@ jobs:
                   VERSION_NAME: ${{ (env.IS_NIGHTLY && 'nightly') || needs.prepare.outputs.tag_name }}
               run: |
                   if [ "$PLATFORM_NAME" == "linux" ]; then
-                    tar -czvf "foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.tar.gz" -C ./target/${TARGET}/release spark probe shuttle chisel
+                    tar -czvf "foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.tar.gz" -C ./target/${TARGET}/release spark probe shuttle pilot
                     echo "::set-output name=file_name::foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.tar.gz"
                   elif [ "$PLATFORM_NAME" == "darwin" ]; then
                     # We need to use gtar here otherwise the archive is corrupt.
                     # See: https://github.com/actions/virtual-environments/issues/2619
-                    gtar -czvf "foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.tar.gz" -C ./target/${TARGET}/release spark probe shuttle chisel
+                    gtar -czvf "foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.tar.gz" -C ./target/${TARGET}/release spark probe shuttle pilot
                     echo "::set-output name=file_name::foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.tar.gz"
                   else
                     cd ./target/${TARGET}/release
-                    7z a -tzip "foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.zip" spark.exe probe.exe shuttle.exe chisel.exe
+                    7z a -tzip "foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.zip" spark.exe probe.exe shuttle.exe pilot.exe
                     mv "foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.zip" ../../../
                     echo "::set-output name=file_name::foundry_${VERSION_NAME}_${PLATFORM_NAME}_${ARCH}.zip"
                   fi
@@ -168,12 +168,12 @@ jobs:
                   help2man -N ./target/${TARGET}/release/spark > spark.1
                   help2man -N ./target/${TARGET}/release/probe > probe.1
                   help2man -N ./target/${TARGET}/release/shuttle > shuttle.1
-                  help2man -N ./target/${TARGET}/release/chisel > chisel.1
+                  help2man -N ./target/${TARGET}/release/pilot > pilot.1
                   gzip spark.1
                   gzip probe.1
                   gzip shuttle.1
-                  gzip chisel.1
-                  tar -czvf "foundry_man_${VERSION_NAME}.tar.gz" spark.1.gz probe.1.gz shuttle.1.gz chisel.1.gz
+                  gzip pilot.1
+                  tar -czvf "foundry_man_${VERSION_NAME}.tar.gz" spark.1.gz probe.1.gz shuttle.1.gz pilot.1.gz
                   echo "::set-output name=foundry_man::foundry_man_${VERSION_NAME}.tar.gz"
               shell: bash
 

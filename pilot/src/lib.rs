@@ -27,7 +27,7 @@ pub mod executor;
 /// A Solidity Helper module for rustyline
 pub mod solidity_helper;
 
-/// Prelude of all chisel modules
+/// Prelude of all pilot modules
 pub mod prelude {
     pub use crate::{
         cmd::*, dispatcher::*, runner::*, session::*, session_source::*, solidity_helper::*,

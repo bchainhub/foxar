@@ -304,7 +304,7 @@ impl ChiselDispatcher {
             ChiselCommand::ClearCache => match ChiselSession::clear_cache() {
                 Ok(_) => {
                     self.session.id = None;
-                    DispatchResult::CommandSuccess(Some(String::from("Cleared chisel cache!")))
+                    DispatchResult::CommandSuccess(Some(String::from("Cleared pilot cache!")))
                 }
                 Err(_) => DispatchResult::CommandFailed(Self::make_error("Failed to clear cache!")),
             },
@@ -662,7 +662,7 @@ impl ChiselDispatcher {
                 if let Some(session_source) = self.session.session_source.as_mut() {
                     // create a temp file with the content of the run code
                     let mut temp_file_path = std::env::temp_dir();
-                    temp_file_path.push("chisel-tmp.sol");
+                    temp_file_path.push("pilot-tmp.sol");
                     let result = std::fs::File::create(&temp_file_path)
                         .map(|mut file| file.write_all(session_source.run_code.as_bytes()));
                     if let Err(e) = result {
@@ -989,7 +989,7 @@ impl ChiselDispatcher {
         Ok(())
     }
 
-    /// Format a type that implements [fmt::Display] as a chisel error string.
+    /// Format a type that implements [fmt::Display] as a pilot error string.
     ///
     /// ### Takes
     ///

@@ -714,40 +714,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "chisel"
-version = "0.1.1"
-dependencies = [
- "bytes",
- "clap 4.4.8",
- "corebc",
- "corebc-ylem",
- "criterion",
- "dirs 5.0.1",
- "eyre",
- "foundry-cli",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "once_cell",
- "regex",
- "reqwest",
- "revm",
- "rustyline",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "serial_test",
- "solang-parser 0.3.0",
- "spark",
- "spark-fmt",
- "strum 0.25.0",
- "time",
- "tokio",
- "vergen",
- "yansi 0.5.1",
-]
-
-[[package]]
 name = "chrono"
 version = "0.4.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4673,6 +4639,40 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90fcb95eef784c2ac79119d1dd819e162b5da872ce6f3c3abe1e8ca1c082f72b"
 dependencies = [
  "siphasher",
+]
+
+[[package]]
+name = "pilot"
+version = "0.1.1"
+dependencies = [
+ "bytes",
+ "clap 4.4.8",
+ "corebc",
+ "corebc-ylem",
+ "criterion",
+ "dirs 5.0.1",
+ "eyre",
+ "foundry-cli",
+ "foundry-common",
+ "foundry-config",
+ "foundry-evm",
+ "once_cell",
+ "regex",
+ "reqwest",
+ "revm",
+ "rustyline",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "serial_test",
+ "solang-parser 0.3.0",
+ "spark",
+ "spark-fmt",
+ "strum 0.25.0",
+ "time",
+ "tokio",
+ "vergen",
+ "yansi 0.5.1",
 ]
 
 [[package]]

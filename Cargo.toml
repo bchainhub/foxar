@@ -7,7 +7,7 @@ members = [
     "abi",
     "binder",
     "probe",
-    "chisel",
+    "pilot",
     "cli",
     "cli/test-utils",
     "common",

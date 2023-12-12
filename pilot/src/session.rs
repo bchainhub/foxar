@@ -89,7 +89,7 @@ impl ChiselSession {
         let cache_file_name = match self.id.as_ref() {
             Some(id) => {
                 // ID is already set- use the existing cache file.
-                format!("{cache_dir}chisel-{id}.json")
+                format!("{cache_dir}pilot-{id}.json")
             }
             None => {
                 // Get the next session cache ID / file
@@ -106,7 +106,7 @@ impl ChiselSession {
         std::fs::write(&cache_file_name, serialized_contents)?;
 
         // Return the full cache file path
-        // Ex: /home/user/.foundry/cache/chisel/chisel-0.json
+        // Ex: /home/user/.foundry/cache/pilot/pilot-0.json
         Ok(cache_file_name)
     }
 
@@ -119,11 +119,11 @@ impl ChiselSession {
         let cache_dir = Self::cache_dir()?;
         let mut entries = std::fs::read_dir(&cache_dir)?;
 
-        // If there are no existing cached sessions, just create the first one: "chisel-0.json"
+        // If there are no existing cached sessions, just create the first one: "pilot-0.json"
         let mut latest = if let Some(e) = entries.next() {
             e?
         } else {
-            return Ok((String::from("0"), format!("{cache_dir}chisel-0.json")))
+            return Ok((String::from("0"), format!("{cache_dir}pilot-0.json")))
         };
 
         let mut session_num = 1;
@@ -138,19 +138,19 @@ impl ChiselSession {
             session_num += 1;
         }
 
-        Ok((format!("{session_num}"), format!("{cache_dir}chisel-{session_num}.json")))
+        Ok((format!("{session_num}"), format!("{cache_dir}pilot-{session_num}.json")))
     }
 
     /// The Chisel Cache Directory
     ///
     /// ### Returns
     ///
-    /// Optionally, the directory of the chisel cache.
+    /// Optionally, the directory of the pilot cache.
     pub fn cache_dir() -> Result<String> {
         let home_dir = dirs::home_dir().ok_or(eyre::eyre!("Failed to grab home directory"))?;
         let home_dir_str =
             home_dir.to_str().ok_or(eyre::eyre!("Failed to convert home directory to string"))?;
-        Ok(format!("{home_dir_str}/.foundry/cache/chisel/"))
+        Ok(format!("{home_dir_str}/.foundry/cache/pilot/"))
     }
 
     /// Create the cache directory if it does not exist
@@ -204,19 +204,19 @@ impl ChiselSession {
     ///
     /// ### Takes
     ///
-    /// The ID of the chisel session that you wish to load.
+    /// The ID of the pilot session that you wish to load.
     ///
     /// ### Returns
     ///
-    /// Optionally, an owned instance of the loaded chisel session.
+    /// Optionally, an owned instance of the loaded pilot session.
     pub fn load(id: &str) -> Result<Self> {
         let cache_dir = ChiselSession::cache_dir()?;
-        let contents = std::fs::read_to_string(Path::new(&format!("{cache_dir}chisel-{id}.json")))?;
-        let chisel_env: ChiselSession = serde_json::from_str(&contents)?;
-        Ok(chisel_env)
+        let contents = std::fs::read_to_string(Path::new(&format!("{cache_dir}pilot-{id}.json")))?;
+        let pilot_env: ChiselSession = serde_json::from_str(&contents)?;
+        Ok(pilot_env)
     }
 
-    /// Gets the most recent chisel session from the cache dir
+    /// Gets the most recent pilot session from the cache dir
     ///
     /// ### Returns
     ///
@@ -242,8 +242,8 @@ impl ChiselSession {
     pub fn latest() -> Result<Self> {
         let last_session = Self::latest_cached_session()?;
         let last_session_contents = std::fs::read_to_string(Path::new(&last_session))?;
-        let chisel_env: ChiselSession = serde_json::from_str(&last_session_contents)?;
-        Ok(chisel_env)
+        let pilot_env: ChiselSession = serde_json::from_str(&last_session_contents)?;
+        Ok(pilot_env)
     }
 }
 

@@ -200,7 +200,7 @@ impl ChiselRunner {
             res = self.executor.call_raw_committing(from, to, calldata.0, value)?;
         }
 
-        let RawCallResult { result, reverted, logs, traces, labels, chisel_state, .. } = res;
+        let RawCallResult { result, reverted, logs, traces, labels, pilot_state, .. } = res;
 
         Ok(ChiselResult {
             returned: result,
@@ -210,14 +210,14 @@ impl ChiselRunner {
             traces: traces
                 .map(|traces| {
                     // Manually adjust energy for the trace to add back the stipend/real used energy
-                    // TODO: For chisel, we may not want to perform this adjustment.
+                    // TODO: For pilot, we may not want to perform this adjustment.
                     // traces.arena[0].trace.energy_cost = energy_used;
                     vec![(TraceKind::Execution, traces)]
                 })
                 .unwrap_or_default(),
             labeled_addresses: labels,
             address: None,
-            state: chisel_state,
+            state: pilot_state,
         })
     }
 }

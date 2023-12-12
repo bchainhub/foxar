@@ -47,7 +47,7 @@ Set FontSize 16
 Set Width 1920
 Set Height 1080
 
-Type "chisel"
+Type "pilot"
 Enter
 Sleep 500ms
 

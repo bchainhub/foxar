@@ -1,4 +1,4 @@
-# `chisel`
+# `pilot`
 
 Chisel is a fast, utilitarian, and verbose solidity REPL. It is heavily inspired by the incredible work done in [soli](https://github.com/jpopesculian/soli) and [solidity-shell](https://github.com/tintinweb/solidity-shell)!
 
@@ -37,11 +37,11 @@ Chisel aims to improve upon existing Solidity REPLs by integrating with foundry 
 ### Migrating from [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell)
 
 Migration from existing Solidity REPLs such as [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell) is as
-simple as installing Chisel via `foundryup`. For information on features, usage, and configuration, see the [Usage](#usage) section as well as the chisel manpage (`man chisel` or `chisel --help`).
+simple as installing Chisel via `foundryup`. For information on features, usage, and configuration, see the [Usage](#usage) section as well as the pilot manpage (`man pilot` or `pilot --help`).
 
 ## Installation
 
-To install `chisel`, simply run `foundryup`!
+To install `pilot`, simply run `foundryup`!
 
 If you do not have `foundryup` installed, reference the Foundry [installation guide](../README.md#installation).
 
@@ -62,7 +62,7 @@ Session
         !save [id] | !s [id] - Save the current session to cache
         !load <id> | !l <id> - Load a previous session ID from cache
         !list | !ls - List all cached sessions
-        !clearcache | !cc - Clear the chisel cache of all stored sessions
+        !clearcache | !cc - Clear the pilot cache of all stored sessions
         !export | !ex - Export the current session source to a script file
         !fetch <addr> <name> | !fe <addr> <name> - Fetch the interface of a verified contract on Etherscan
 
@@ -77,12 +77,12 @@ Debug
 
 ### Cache Session
 
-While chisel sessions are not persistent by default, they can be saved to the cache via the builtin `save` command from within the REPL.
+While pilot sessions are not persistent by default, they can be saved to the cache via the builtin `save` command from within the REPL.
 
 Sessions can also be named by supplying a single argument to the `save` command, i.e. `!save my_session`.
 
 ```text
-$ chisel
+$ pilot
 ➜ uint a = 1;
 ➜ uint b = a << 0x08;
 ➜ !save
@@ -93,18 +93,18 @@ Saved session to cache with ID = 0.
 
 Chisel allows you to load a previous session from your history.
 
-To view your history, you can run `chisel list` or `!list`. This will print a list of your previous sessions, identifiable by their index.
+To view your history, you can run `pilot list` or `!list`. This will print a list of your previous sessions, identifiable by their index.
 
-You can also run `chisel view <id>` or `!view <id>` to view the contents of a specific session.
+You can also run `pilot view <id>` or `!view <id>` to view the contents of a specific session.
 
-To load a session, run `chisel load <id>` or use the `!load <id>` where `<id>` is a valid session index (eg 2 in the example below).
+To load a session, run `pilot load <id>` or use the `!load <id>` where `<id>` is a valid session index (eg 2 in the example below).
 
 ```text
-$ chisel list
+$ pilot list
 ⚒️ Chisel Sessions
-"2022-10-27 14:46:29" - chisel-0.json
-"2022-10-27 14:46:29" - chisel-1.json
-$ chisel view 1
+"2022-10-27 14:46:29" - pilot-0.json
+"2022-10-27 14:46:29" - pilot-1.json
+$ pilot view 1
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.17;
 
@@ -115,24 +115,24 @@ contract REPL {
       emit KeccakEvent(keccak256(abi.encode("Hello, world!")));
     }
 }
-$ chisel load 1
+$ pilot load 1
 ➜ ...
 ```
 
 ### Clearing the Cache
 
-To clear Chisel's cache (stored in `~/.foundry/cache/chisel`), use the `chisel clear-cache` or `!clearcache` command.
+To clear Chisel's cache (stored in `~/.foundry/cache/pilot`), use the `pilot clear-cache` or `!clearcache` command.
 
 ```text
 ➜ !clearcache
-Cleared chisel cache!
+Cleared pilot cache!
 ```
 
 ### Toggling Traces
 
 By default, traces will only be shown if an input causes the call to the REPL contract to revert. To turn traces on
 regardless of the call result, use the `!traces` command or pass in a verbosity option of any level (`-v<vvvv>`) to
-the chisel binary.
+the pilot binary.
 
 ```text
 ➜ uint a
@@ -161,9 +161,9 @@ Type: uint
 
 ### Forking a Network
 
-To fork a network within your chisel session, use the `!fork <rpc-url>` command or supply a `--fork-url <url>` flag
-to the chisel binary. The `!fork` command also accepts aliases from the `[rpc_endpoints]` section of your `foundry.toml`
-if chisel was launched in the root of a foundry project (ex. `!fork mainnet`), as well as interpolated environment variables
+To fork a network within your pilot session, use the `!fork <rpc-url>` command or supply a `--fork-url <url>` flag
+to the pilot binary. The `!fork` command also accepts aliases from the `[rpc_endpoints]` section of your `foundry.toml`
+if pilot was launched in the root of a foundry project (ex. `!fork mainnet`), as well as interpolated environment variables
 (ex. `!fork https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`).
 
 ### Fetching an Interface of a Verified Contract
@@ -190,7 +190,7 @@ binder
 Cargo.lock
 Cargo.toml
 probe
-chisel
+pilot
 cli
 common
 config

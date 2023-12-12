@@ -3,10 +3,6 @@
 //! This module contains the core readline loop for the Chisel CLI as well as the
 //! executable's `main` function.
 
-use chisel::{
-    history::chisel_history_file,
-    prelude::{ChiselCommand, ChiselDispatcher, DispatchResult, SolidityHelper},
-};
 use clap::Parser;
 use foundry_cli::{
     cmd::{spark::build::BuildArgs, LoadConfig},
@@ -19,6 +15,10 @@ use foundry_config::{
         Metadata, Profile, Provider,
     },
     Config,
+};
+use pilot::{
+    history::pilot_history_file,
+    prelude::{ChiselCommand, ChiselDispatcher, DispatchResult, SolidityHelper},
 };
 use rustyline::{config::Configurer, error::ReadlineError, Editor};
 use yansi::Paint;
@@ -38,7 +38,7 @@ pub(crate) const VERSION_MESSAGE: &str = concat!(
 
 /// Chisel is a fast, utilitarian, and verbose solidity REPL.
 #[derive(Debug, Parser)]
-#[clap(name = "chisel", version = VERSION_MESSAGE)]
+#[clap(name = "pilot", version = VERSION_MESSAGE)]
 pub struct ChiselParser {
     #[clap(flatten)]
     pub opts: BuildArgs,
@@ -68,7 +68,7 @@ pub enum ChiselParserSub {
         id: String,
     },
 
-    /// Clear all cached chisel sessions from the cache directory
+    /// Clear all cached pilot sessions from the cache directory
     ClearCache,
 }
 
@@ -91,7 +91,7 @@ async fn main() -> eyre::Result<()> {
     let (config, evm_opts) = args.load_config_and_evm_opts()?;
 
     // Create a new cli dispatcher
-    let mut dispatcher = ChiselDispatcher::new(chisel::session_source::SessionSourceConfig {
+    let mut dispatcher = ChiselDispatcher::new(pilot::session_source::SessionSourceConfig {
         // Enable traces if any level of verbosity was passed
         traces: config.verbosity > 0,
         foundry_config: config,
@@ -100,7 +100,7 @@ async fn main() -> eyre::Result<()> {
         calldata: None,
     })?;
 
-    // Check for chisel subcommands
+    // Check for pilot subcommands
     match &args.sub {
         Some(ChiselParserSub::List) => {
             let sessions = dispatcher.dispatch_command(ChiselCommand::ListSessions, &[]).await;
@@ -143,7 +143,7 @@ async fn main() -> eyre::Result<()> {
             }
             return Ok(())
         }
-        None => { /* No chisel subcommand present; Continue */ }
+        None => { /* No pilot subcommand present; Continue */ }
     }
 
     // Create a new rustyline Editor
@@ -154,8 +154,8 @@ async fn main() -> eyre::Result<()> {
     rl.set_auto_add_history(true);
 
     // load history
-    if let Some(chisel_history) = chisel_history_file() {
-        let _ = rl.load_history(&chisel_history);
+    if let Some(pilot_history) = pilot_history_file() {
+        let _ = rl.load_history(&pilot_history);
     }
 
     // Print welcome header
@@ -208,8 +208,8 @@ async fn main() -> eyre::Result<()> {
         }
     }
 
-    if let Some(chisel_history) = chisel_history_file() {
-        let _ = rl.save_history(&chisel_history);
+    if let Some(pilot_history) = pilot_history_file() {
+        let _ = rl.save_history(&pilot_history);
     }
 
     Ok(())

@@ -254,7 +254,7 @@ impl SessionSource {
         // Build a new executor
         let executor = ExecutorBuilder::default()
             .with_config(env)
-            .with_chisel_state(final_pc)
+            .with_pilot_state(final_pc)
             .set_tracing(true)
             .with_spec(foundry_evm::utils::evm_spec(&self.config.foundry_config.cvm_version))
             .with_energy_limit(self.config.evm_opts.energy_limit())

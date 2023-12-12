@@ -1,5 +1,5 @@
 [package]
-name = "chisel"
+name = "pilot"
 version = "0.1.1"
 edition = "2021"
 authors = [
@@ -7,7 +7,7 @@ authors = [
   "asnared <https://github.com/abigger87>",
 ]
 description = "Solidity REPL"
-repository = "https://github.com/foundry-rs/foundry/tree/main/chisel"
+repository = "https://github.com/foundry-rs/foundry/tree/main/pilot"
 license = "MIT"
 keywords = [
   "Rust",
@@ -20,13 +20,13 @@ keywords = [
 ]
 
 [lib]
-name = "chisel"
+name = "pilot"
 path = "src/lib.rs"
 doctest = false
 
 [[bin]]
-name = "chisel"
-path = "src/bin/chisel.rs"
+name = "pilot"
+path = "src/bin/pilot.rs"
 
 [dependencies]
 # spark

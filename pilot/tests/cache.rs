@@ -1,8 +1,8 @@
 use std::path::Path;
 
-use chisel::session::ChiselSession;
 use corebc_ylem::CvmVersion;
 use foundry_config::Config;
+use pilot::session::ChiselSession;
 use serial_test::serial;
 use spark::executor::opts::EvmOpts;
 
@@ -10,12 +10,12 @@ use spark::executor::opts::EvmOpts;
 #[serial]
 fn test_cache_directory() {
     // Get the cache dir
-    // Should be ~/.foundry/cache/chisel
+    // Should be ~/.foundry/cache/pilot
     let cache_dir = ChiselSession::cache_dir().unwrap();
 
     // Validate the cache directory
     let home_dir = dirs::home_dir().unwrap();
-    assert_eq!(cache_dir, format!("{}/.foundry/cache/chisel/", home_dir.to_str().unwrap()));
+    assert_eq!(cache_dir, format!("{}/.foundry/cache/pilot/", home_dir.to_str().unwrap()));
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn test_write_session() {
     let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
-    let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config,
         evm_opts: EvmOpts::default(),
         backend: None,
@@ -59,7 +59,7 @@ fn test_write_session() {
     num_items = if num_items > 0 { num_items - 1 } else { 0 };
 
     // Validate the session
-    assert_eq!(cached_session_name, format!("{cache_dir}chisel-{num_items}.json"));
+    assert_eq!(cached_session_name, format!("{cache_dir}pilot-{num_items}.json"));
 }
 
 #[test]
@@ -73,7 +73,7 @@ fn test_write_session_with_name() {
     let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
-    let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config,
         ..Default::default()
     })
@@ -84,7 +84,7 @@ fn test_write_session_with_name() {
     let cached_session_name = env.write().unwrap();
 
     // Validate the session
-    assert_eq!(cached_session_name, format!("{cache_dir}chisel-test.json"));
+    assert_eq!(cached_session_name, format!("{cache_dir}pilot-test.json"));
 }
 
 #[test]
@@ -97,7 +97,7 @@ fn test_clear_cache() {
     let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     ChiselSession::create_cache_dir().unwrap();
-    let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config,
         ..Default::default()
     })
@@ -123,7 +123,7 @@ fn test_list_sessions() {
     let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
-    let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config,
         ..Default::default()
     })
@@ -136,7 +136,7 @@ fn test_list_sessions() {
 
     // Validate the sessions
     assert_eq!(sessions.len(), 1);
-    assert_eq!(sessions[0].1, "chisel-0.json");
+    assert_eq!(sessions[0].1, "pilot-0.json");
 }
 
 #[test]
@@ -150,7 +150,7 @@ fn test_load_cache() {
     let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
-    let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config,
         ..Default::default()
     })
@@ -181,7 +181,7 @@ fn test_write_same_session_multiple_times() {
     let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
-    let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config,
         ..Default::default()
     })
@@ -204,7 +204,7 @@ fn test_load_latest_cache() {
     let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create sessions
-    let mut env = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config: foundry_config.clone(),
         ..Default::default()
     })
@@ -214,7 +214,7 @@ fn test_load_latest_cache() {
     let wait_time = std::time::Duration::from_millis(100);
     std::thread::sleep(wait_time);
 
-    let mut env2 = ChiselSession::new(chisel::session_source::SessionSourceConfig {
+    let mut env2 = ChiselSession::new(pilot::session_source::SessionSourceConfig {
         foundry_config,
         ..Default::default()
     })

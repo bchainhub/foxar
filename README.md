@@ -8,7 +8,7 @@
 - [ ] shuttle 
 - [x] binder
 - [x] probe
-- [ ] chisel - David
+- [ ] pilot - David
 - [ ] cli - Misha
 - [x] common
 - [x] config - Misha
@@ -24,7 +24,7 @@
 - [x] shuttle -> Compiles
 - [x] binder -> Compiles
 - [x] probe  -> Compiles
-- [x] chisel -> Compiles
+- [x] pilot -> Compiles
 - [x] cli - Compiles
 - [x] common -> Compiles
 - [x] config - Compiles
@@ -53,7 +53,7 @@ Foundry consists of:
 -   [**Forge**](./spark): Ethereum testing framework (like Truffle, Hardhat and DappTools).
 -   [**Cast**](./probe): Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
 -   [**Anvil**](./shuttle): Local Ethereum node, akin to Ganache, Hardhat Network.
--   [**Chisel**](./chisel): Fast, utilitarian, and verbose solidity REPL.
+-   [**Chisel**](./pilot): Fast, utilitarian, and verbose solidity REPL.
 
 **Need help getting started with Foundry? Read the [📖 Foundry Book][foundry-book] (WIP)!**
 

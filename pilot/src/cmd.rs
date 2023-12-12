@@ -7,10 +7,10 @@ use crate::prelude::ChiselDispatcher;
 use std::{error::Error, str::FromStr};
 use strum::EnumIter;
 
-/// Builtin chisel command variants
+/// Builtin pilot command variants
 #[derive(Debug, EnumIter)]
 pub enum ChiselCommand {
-    /// Print helpful information about chisel
+    /// Print helpful information about pilot
     Help,
     /// Quit the REPL
     Quit,
@@ -131,7 +131,7 @@ impl From<ChiselCommand> for CmdDescriptor {
             ChiselCommand::Save => (&["save [id]", "s [id]"], "Save the current session to cache", CmdCategory::Session),
             ChiselCommand::Load => (&["load <id>", "l <id>"], "Load a previous session ID from cache", CmdCategory::Session),
             ChiselCommand::ListSessions => (&["list", "ls"], "List all cached sessions", CmdCategory::Session),
-            ChiselCommand::ClearCache => (&["clearcache", "cc"], "Clear the chisel cache of all stored sessions", CmdCategory::Session),
+            ChiselCommand::ClearCache => (&["clearcache", "cc"], "Clear the pilot cache of all stored sessions", CmdCategory::Session),
             ChiselCommand::Export => (&["export", "ex"], "Export the current session source to a script file", CmdCategory::Session),
             //todo:error2215 commented out (waiting for blockindex implementation)
             // ChiselCommand::Fetch => (&["fetch <addr> <name>", "fe <addr> <name>"], "Fetch the interface of a verified contract on Etherscan", CmdCategory::Session),
