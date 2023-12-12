@@ -1411,57 +1411,62 @@ contract ContractThreeTest is DSTest {
 });
 
 forgetest_init!(
-    // todo:error2215 - not working :(
+    // todo:error2215 - we do not support remapping for now :(
     #[ignore]
-    can_use_absolute_imports, |prj: TestProject, mut cmd: TestCommand| {
-    let remapping = prj.paths().libraries[0].join("myDepdendency");
-    let config = Config {
-        remappings: vec![Remapping::from_str(&format!("myDepdendency/={}", remapping.display()))
+    can_use_absolute_imports,
+    |prj: TestProject, mut cmd: TestCommand| {
+        let remapping = prj.paths().libraries[0].join("myDepdendency");
+        let config = Config {
+            remappings: vec![Remapping::from_str(&format!(
+                "myDepdendency/={}",
+                remapping.display()
+            ))
             .unwrap()
             .into()],
-        ..Default::default()
-    };
-    prj.write_config(config);
+            ..Default::default()
+        };
+        prj.write_config(config);
 
-    prj.inner()
-        .add_lib(
-            "myDepdendency/src/interfaces/IConfig.sol",
-            r#"
+        prj.inner()
+            .add_lib(
+                "myDepdendency/src/interfaces/IConfig.sol",
+                r#"
     pragma solidity ^1.1.0;
 
     interface IConfig {}
    "#,
-        )
-        .unwrap();
+            )
+            .unwrap();
 
-    prj.inner()
-        .add_lib(
-            "myDepdendency/src/Config.sol",
-            r#"
+        prj.inner()
+            .add_lib(
+                "myDepdendency/src/Config.sol",
+                r#"
     pragma solidity ^1.1.0;
     import "src/interfaces/IConfig.sol";
 
     contract Config {}
    "#,
-        )
-        .unwrap();
+            )
+            .unwrap();
 
-    prj.inner()
-        .add_source(
-            "Greeter",
-            r#"
+        prj.inner()
+            .add_source(
+                "Greeter",
+                r#"
     pragma solidity ^1.1.0;
     import "myDepdendency/src/Config.sol";
 
     contract Greeter {}
    "#,
-        )
-        .unwrap();
+            )
+            .unwrap();
 
-    cmd.arg("build");
-    let stdout = cmd.stdout_lossy();
-    assert!(stdout.contains("Compiler run successful"));
-});
+        cmd.arg("build");
+        let stdout = cmd.stdout_lossy();
+        assert!(stdout.contains("Compiler run successful"));
+    }
+);
 
 // <https://github.com/foundry-rs/foundry/issues/3440>
 forgetest_init!(

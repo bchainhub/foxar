@@ -201,6 +201,7 @@ impl ScriptArgs {
                     decoder,
                     created_contracts,
                     is_fixed_energy_limit,
+                    &self.evm_opts.env.network_id.unwrap(),
                 )?;
 
                 Ok((Some(tx), result.traces))

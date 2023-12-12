@@ -321,7 +321,7 @@ fn serialize_json(
 
 /// Converts an array to it's stringified version, adding the appropriate quotes around it's
 /// ellements. This is to signify that the elements of the array are string themselves.
-fn array_str_to_str<T: UIfmt>(array: &Vec<T>) -> String {
+fn array_str_to_str<T: UIfmt>(array: &[T]) -> String {
     format!(
         "[{}]",
         array
@@ -341,7 +341,7 @@ fn array_str_to_str<T: UIfmt>(array: &Vec<T>) -> String {
 /// Converts an array to it's stringified version. It will not add quotes around the values of the
 /// array, enabling serde_json to parse the values of the array as types (e.g numbers, booleans,
 /// etc.)
-fn array_eval_to_str<T: UIfmt>(array: &Vec<T>) -> String {
+fn array_eval_to_str<T: UIfmt>(array: &[T]) -> String {
     format!(
         "[{}]",
         array

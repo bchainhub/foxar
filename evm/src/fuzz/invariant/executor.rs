@@ -316,7 +316,6 @@ impl<'a> InvariantExecutor<'a> {
                 "targetArtifactSelectors",
             )
             .into_iter()
-            .map(|(contract, functions)| (contract, functions))
             .collect::<BTreeMap<_, _>>();
 
         // Insert them into the executor `targeted_abi`.

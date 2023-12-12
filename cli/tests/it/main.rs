@@ -14,13 +14,13 @@ mod doc;
 mod multi_script;
 #[cfg(not(feature = "external-integration-tests"))]
 mod script;
-mod yvm;
 #[cfg(not(feature = "external-integration-tests"))]
 mod test_cmd;
 #[cfg(not(feature = "external-integration-tests"))]
 mod utils;
 #[cfg(not(feature = "external-integration-tests"))]
 mod verify;
+mod yvm;
 
 // import forge utils as mod
 #[allow(unused)]

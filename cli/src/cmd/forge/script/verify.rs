@@ -97,7 +97,7 @@ impl VerifyBundle {
                 );
 
                 let verify: VerifyArgs = VerifyArgs {
-                    network: Some(*network), 
+                    network: Some(*network),
                     address: contract_address,
                     contract,
                     compiler_version: Some(version.to_string()),

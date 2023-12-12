@@ -130,6 +130,7 @@ impl ProviderBuilder {
 
     /// Same as [`Self:build()`] but also retrieves the `networkId` in order to derive an
     /// appropriate interval
+    #[allow(clippy::unnecessary_fallible_conversions)]
     pub async fn connect(self) -> eyre::Result<RetryProvider> {
         let mut provider = self.build()?;
         if let Some(blocktime) = provider.get_networkid().await.ok().and_then(|id| {

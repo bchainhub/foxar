@@ -236,7 +236,7 @@ pub mod secret_key {
                 return Ok(None)
             }
 
-            Ok(Some(SecretKey::from_bytes(s.as_ref().into()).into()))
+            Ok(Some(SecretKey::from_bytes(s.as_ref()).into()))
         } else {
             Ok(None)
         }

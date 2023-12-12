@@ -11,7 +11,6 @@ use corebc::ylem::{Project, ProjectCompileOutput};
 use foundry_common::{
     compile,
     compile::{ProjectCompiler, SkipBuildFilter},
-    shell::println,
 };
 use foundry_config::{
     figment::{

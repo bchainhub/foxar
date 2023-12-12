@@ -189,7 +189,7 @@ pub fn get_available_profiles(toml_path: impl AsRef<Path>) -> eyre::Result<Vec<S
     let doc = read_toml(toml_path)?;
 
     if let Some(Item::Table(profiles)) = doc.as_table().get(Config::PROFILE_SECTION) {
-        for (_, (profile, _)) in profiles.iter().enumerate() {
+        for (profile, _) in profiles.iter() {
             let p = profile.to_string();
             if !result.contains(&p) {
                 result.push(p);
@@ -209,6 +209,7 @@ fn read_toml(path: impl AsRef<Path>) -> eyre::Result<Document> {
 }
 
 /// Deserialize stringified percent. The value must be between 0 and 100 inclusive.
+#[allow(clippy::unnecessary_fallible_conversions)]
 pub(crate) fn deserialize_stringified_percent<'de, D>(deserializer: D) -> Result<u32, D::Error>
 where
     D: Deserializer<'de>,

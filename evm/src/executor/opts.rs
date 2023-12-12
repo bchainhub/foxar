@@ -81,7 +81,7 @@ impl EvmOpts {
             &provider,
             self.memory_limit,
             self.env.energy_price,
-            self.env.network_id.map_or(None, |f| Some(u64::from(f))),
+            self.env.network_id.map(u64::from),
             self.fork_block_number,
             self.sender,
         )
@@ -102,7 +102,9 @@ impl EvmOpts {
                 energy_limit: u256_to_ru256(self.energy_limit()),
             },
             cfg: CfgEnv {
-                network_id: u64::from(self.env.network_id.unwrap_or(Network::from(foundry_common::DEV_CHAIN_ID))),
+                network_id: u64::from(
+                    self.env.network_id.unwrap_or(Network::from(foundry_common::DEV_CHAIN_ID)),
+                ),
                 spec_id: SpecId::LATEST,
                 limit_contract_code_size: self.env.code_size_limit.or(Some(usize::MAX)),
                 memory_limit: self.memory_limit,
@@ -179,7 +181,7 @@ impl EvmOpts {
                 .unwrap_or_else(|_| panic!("Failed to establish provider to {url}"));
 
             if let Ok(id) = RuntimeOrHandle::new().block_on(provider.get_networkid()) {
-                return Network::try_from(id.as_u64()).ok()
+                return Some(Network::from(id.as_u64()));
             }
         }
 

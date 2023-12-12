@@ -12,8 +12,8 @@ use clap::{Parser, ValueHint};
 use corebc::{
     abi::{Abi, Constructor, Token},
     prelude::{artifacts::BytecodeObject, ContractFactory, Middleware, MiddlewareBuilder},
-    ylem::{info::ContractInfo, utils::canonicalized},
     types::Network,
+    ylem::{info::ContractInfo, utils::canonicalized},
 };
 use eyre::Context;
 use foundry_common::{abi::parse_tokens, compile};

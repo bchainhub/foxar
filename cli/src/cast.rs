@@ -274,7 +274,7 @@ async fn main() -> eyre::Result<()> {
             let address: Address = stdin::unwrap_line(address)?.parse()?;
             let network = provider.get_networkid().await?;
             let computed = Cast::new(&provider)
-                .compute_address(address, nonce, &Network::try_from(network.as_u64()).unwrap())
+                .compute_address(address, nonce, &Network::from(network.as_u64()))
                 .await?;
             println!("Computed Address: {}", computed);
         }
@@ -368,7 +368,7 @@ async fn main() -> eyre::Result<()> {
 
             let sig = match sigs.len() {
                 0 => eyre::bail!("No signatures found"),
-                1 => sigs.get(0).unwrap(),
+                1 => sigs.first().unwrap(),
                 _ => {
                     let i: usize = prompt!("Select a function signature by number: ")?;
                     sigs.get(i - 1).ok_or_else(|| eyre::eyre!("Invalid signature index"))?

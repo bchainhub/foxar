@@ -121,4 +121,3 @@ fn verify_on_chain(info: Option<EnvExternalities>, prj: TestProject, mut cmd: Te
 forgetest!(can_verify_random_contract_fantom_testnet, |prj: TestProject, cmd: TestCommand| {
     verify_on_chain(EnvExternalities::devin(), prj, cmd);
 });
-

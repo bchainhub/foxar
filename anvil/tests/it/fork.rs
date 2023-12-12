@@ -553,7 +553,9 @@ async fn test_fork_can_send_opensea_tx() {
 #[ignore = "Forking is disabled"]
 async fn test_reset_fork_on_new_blocks() {
     let (api, handle) = spawn(
-        NodeConfig::test().with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet))).silent(),
+        NodeConfig::test()
+            .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)))
+            .silent(),
     )
     .await;
 
@@ -585,7 +587,8 @@ async fn test_fork_call() {
     let to: Address = "0x99d1Fa417f94dcD62BfE781a1213c092a47041Bc".parse().unwrap();
     let block_number = 14746300u64;
 
-    let provider = Provider::<Http>::try_from(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)).unwrap();
+    let provider =
+        Provider::<Http>::try_from(rpc::next_http_archive_rpc_endpoint(Network::Mainnet)).unwrap();
     let mut tx = TypedTransaction::default();
     tx.set_to(to).set_data(input.clone());
     let res0 =

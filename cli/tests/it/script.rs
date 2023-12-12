@@ -178,7 +178,7 @@ contract DeployScript is Script {
             "--broadcast",
             "--unlocked",
             "--network",
-             "1"
+            "1",
         ]);
 
         let output = cmd.stdout_lossy();
@@ -240,7 +240,7 @@ contract DeployScript is Script {
             "--private-key",
             &private_key,
             "--network",
-            "1"
+            "1",
         ]);
 
         let output = cmd.stdout_lossy();
@@ -271,7 +271,13 @@ contract Demo {
         )
         .unwrap();
 
-    cmd.arg("script").arg(script).arg("--sig").arg("run(uint256,uint256)").arg("1").arg("2").args(["--network", "1"]);
+    cmd.arg("script")
+        .arg(script)
+        .arg("--sig")
+        .arg("run(uint256,uint256)")
+        .arg("1")
+        .arg("2")
+        .args(["--network", "1"]);
     cmd.unchecked_output().stdout_matches_path(
         PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/can_execute_script_command_with_args.stdout"),
@@ -362,7 +368,7 @@ contract DeployScript is Script {
             "--private-key",
             &private_key,
             "--network",
-            "1"
+            "1",
         ]);
 
         let output = cmd.stdout_lossy();
@@ -420,7 +426,7 @@ contract RunScript is Script {
             "--private-key",
             &private_key,
             "--network",
-            "1"
+            "1",
         ]);
 
         let output = cmd.stdout_lossy();
@@ -467,9 +473,10 @@ forgetest_async!(
         let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
         tester
-            .load_addresses(vec![
-                Address::from_str("0xcb08e6a7393b65db5cd1b8ff97d74beaff8fc6dec06a").unwrap()
-            ])
+            .load_addresses(vec![Address::from_str(
+                "0xcb08e6a7393b65db5cd1b8ff97d74beaff8fc6dec06a",
+            )
+            .unwrap()])
             .await
             .add_sig("BroadcastTest", "deployPrivateKey()")
             .simulate(ScriptOutcome::OkSimulation)
@@ -508,9 +515,10 @@ forgetest_async!(
         let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
         tester
-            .load_addresses(vec![
-                Address::from_str("0xcb08e6a7393b65db5cd1b8ff97d74beaff8fc6dec06a").unwrap()
-            ])
+            .load_addresses(vec![Address::from_str(
+                "0xcb08e6a7393b65db5cd1b8ff97d74beaff8fc6dec06a",
+            )
+            .unwrap()])
             .await
             .add_sig("BroadcastTest", "deployRememberKey()")
             .simulate(ScriptOutcome::OkSimulation)
@@ -534,9 +542,10 @@ forgetest_async!(
 
         tester
             .add_deployer(0)
-            .load_addresses(vec![
-                Address::from_str("0xcb08e6a7393b65db5cd1b8ff97d74beaff8fc6dec06a").unwrap()
-            ])
+            .load_addresses(vec![Address::from_str(
+                "0xcb08e6a7393b65db5cd1b8ff97d74beaff8fc6dec06a",
+            )
+            .unwrap()])
             .await
             .add_sig("BroadcastTest", "deployRememberKeyResume()")
             .simulate(ScriptOutcome::OkSimulation)
@@ -615,10 +624,7 @@ forgetest_async!(can_deploy_no_arg_broadcast, |prj: TestProject, cmd: TestComman
         .await;
 });
 
-forgetest_async!(
-    //todo:error2215 do not work :(
-    #[ignore]
-    can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| async move {
+forgetest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| async move {
     let (api, handle) = spawn(NodeConfig::test()).await;
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
@@ -866,7 +872,7 @@ contract Script0 is Script {
             "--rpc-url",
             handle.http_endpoint().as_str(),
             "--network",
-            "1"
+            "1",
         ]);
 
         assert!(cmd.stdout_lossy().contains("SIMULATION COMPLETE"));
@@ -959,7 +965,7 @@ contract Script0 is Script {
             "--rpc-url",
             handle.http_endpoint().as_str(),
             "--network",
-            "1"
+            "1",
         ]);
 
         assert!(cmd.stdout_lossy().contains("SIMULATION COMPLETE"));
@@ -1011,7 +1017,14 @@ contract Demo {
 }"#,
         )
         .unwrap();
-    cmd.arg("script").arg(script).args(["--skip", "tests", "--skip", TEMPLATE_CONTRACT, "--network", "1"]);
+    cmd.arg("script").arg(script).args([
+        "--skip",
+        "tests",
+        "--skip",
+        TEMPLATE_CONTRACT,
+        "--network",
+        "1",
+    ]);
 
     cmd.unchecked_output().stdout_matches_path(
         PathBuf::from(env!("CARGO_MANIFEST_DIR"))

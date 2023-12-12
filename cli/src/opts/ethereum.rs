@@ -11,7 +11,6 @@ use foundry_config::{
 };
 use serde::Serialize;
 use std::borrow::Cow;
-use corebc::types::Network;
 
 const FLASHBOTS_URL: &str = "https://rpc.flashbots.net";
 

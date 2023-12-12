@@ -4,7 +4,8 @@ use corebc::{
     abi,
     abi::Address,
     prelude::{NameOrAddress, H256 as TxHash},
-    types::transaction::eip2718::TypedTransaction,
+    types::{transaction::eip2718::TypedTransaction, Network, H160},
+    utils::to_ican,
 };
 use eyre::{ContextCompat, WrapErr};
 use foundry_common::{abi::format_token_raw, RpcUrl, SELECTOR_LEN};
@@ -61,6 +62,7 @@ impl TransactionWithMetadata {
         Self { transaction, ..Default::default() }
     }
 
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         transaction: TypedTransaction,
         rpc: Option<RpcUrl>,
@@ -69,18 +71,15 @@ impl TransactionWithMetadata {
         decoder: &CallTraceDecoder,
         additional_contracts: Vec<AdditionalContract>,
         is_fixed_energy_limit: bool,
+        network: &Network,
     ) -> eyre::Result<Self> {
         let mut metadata = Self { transaction, rpc, is_fixed_energy_limit, ..Default::default() };
 
         // Specify if any contract was directly created with this transaction
         if let Some(NameOrAddress::Address(to)) = metadata.transaction.to().cloned() {
             if to == DEFAULT_CREATE2_DEPLOYER {
-                metadata.set_create(
-                    true,
-                    Address::from_slice(&result.returned),
-                    local_contracts,
-                    decoder,
-                )?;
+                let address = to_ican(&H160::from_slice(&result.returned), network);
+                metadata.set_create(true, address, local_contracts, decoder)?;
             } else {
                 metadata
                     .set_call(to, local_contracts, decoder)
