@@ -185,7 +185,7 @@ Shell commands can be executed within Chisel with the `!exec` / `!e` command.
 
 ```text
 ➜ !e ls
-anvil
+shuttle
 binder
 Cargo.lock
 Cargo.toml

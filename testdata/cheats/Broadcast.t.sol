@@ -20,7 +20,11 @@ contract Test is DSTest {
         changed += 1;
     }
 
-    function multiple_arguments(uint256 a, address b, uint256[] memory c) public returns (uint256) {}
+    function multiple_arguments(
+        uint256 a,
+        address b,
+        uint256[] memory c
+    ) public returns (uint256) {}
 
     function echoSender() public view returns (address) {
         return msg.sender;
@@ -36,9 +40,9 @@ library F {
 contract BroadcastTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
 
-    // 1st anvil account
+    // 1st shuttle account
     address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
-    // 2nd anvil account
+    // 2nd shuttle account
     address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deploy() public {
@@ -54,10 +58,14 @@ contract BroadcastTest is DSTest {
     }
 
     function deployPrivateKey() public {
-        string memory mnemonic = "test test test test test test test test test test test junk";
+        string
+            memory mnemonic = "test test test test test test test test test test test junk";
 
         uint256 privateKey = cheats.deriveKey(mnemonic, 3);
-        assertEq(privateKey, 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004);
+        assertEq(
+            privateKey,
+            0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004
+        );
 
         cheats.broadcast(privateKey);
         Test test = new Test();
@@ -68,10 +76,14 @@ contract BroadcastTest is DSTest {
     }
 
     function deployRememberKey() public {
-        string memory mnemonic = "test test test test test test test test test test test junk";
+        string
+            memory mnemonic = "test test test test test test test test test test test junk";
 
         uint256 privateKey = cheats.deriveKey(mnemonic, 3);
-        assertEq(privateKey, 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004);
+        assertEq(
+            privateKey,
+            0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004
+        );
 
         address thisAddress = cheats.rememberKey(privateKey);
         assertEq(thisAddress, 0xcb6690f79bf6eb2c4f870365e785982e1f101e93b906);
@@ -84,7 +96,8 @@ contract BroadcastTest is DSTest {
         cheats.broadcast(ACCOUNT_A);
         Test test = new Test();
 
-        string memory mnemonic = "test test test test test test test test test test test junk";
+        string
+            memory mnemonic = "test test test test test test test test test test test junk";
 
         uint256 privateKey = cheats.deriveKey(mnemonic, 3);
         address thisAddress = cheats.rememberKey(privateKey);
@@ -341,7 +354,10 @@ contract TestInitialBalance is DSTest {
 
     function runCustomSender() public {
         // Make sure we're testing a different caller than the default one.
-        assert(msg.sender != address(0xcb5400a329c0648769a73afac7f9381e08fb43dbea72));
+        assert(
+            msg.sender !=
+                address(0xcb5400a329c0648769a73afac7f9381e08fb43dbea72)
+        );
 
         // NodeConfig::test() sets the balance of the address used in this test to 100 ether.
         assert(msg.sender.balance == 100 ether);
@@ -352,7 +368,10 @@ contract TestInitialBalance is DSTest {
 
     function runDefaultSender() public {
         // Make sure we're testing with the default caller.
-        assert(msg.sender == address(0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38));
+        assert(
+            msg.sender ==
+                address(0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38)
+        );
 
         assert(msg.sender.balance == type(uint256).max);
 
@@ -477,7 +496,9 @@ contract CheckOverrides is DSTest {
         // `script_caller` can be set by `--private-key ...` or `--sender ...`
         // Otherwise it will take the default value of 0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38
         address script_caller = msg.sender;
-        require(script_caller == 0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38);
+        require(
+            script_caller == 0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38
+        );
         require(tx.origin == script_caller);
 
         // startBroadcast(script_caller)

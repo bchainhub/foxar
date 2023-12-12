@@ -1,6 +1,5 @@
 //! Contains various tests related to forge script
 use crate::constants::TEMPLATE_CONTRACT;
-use anvil::{spawn, NodeConfig};
 use cast::SimpleCast;
 use corebc::{abi::Address, types::Network};
 use foundry_cli_test_utils::{
@@ -12,6 +11,7 @@ use foundry_config::Config;
 use foundry_utils::rpc;
 use regex::Regex;
 use serde_json::Value;
+use shuttle::{spawn, NodeConfig};
 use std::{env, path::PathBuf, str::FromStr};
 
 // Tests that fork cheat codes can be used in script
@@ -631,7 +631,7 @@ forgetest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| a
     // Prepare CREATE2 Deployer
     let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
     let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
-    api.anvil_set_code(addr, code).await.unwrap();
+    api.shuttle_set_code(addr, code).await.unwrap();
 
     tester
         .add_deployer(0)
@@ -717,7 +717,7 @@ forgetest_async!(
         // Prepare CREATE2 Deployer
         let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
         let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
-        api.anvil_set_code(addr, code).await.unwrap();
+        api.shuttle_set_code(addr, code).await.unwrap();
 
         tester
             .load_private_keys(vec![0])

@@ -1,9 +1,9 @@
 [workspace]
 members = [
-    "anvil",
-    "anvil/core",
-    "anvil/rpc",
-    "anvil/server",
+    "shuttle",
+    "shuttle/core",
+    "shuttle/rpc",
+    "shuttle/server",
     "abi",
     "binder",
     "cast",

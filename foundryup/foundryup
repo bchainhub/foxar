@@ -6,7 +6,7 @@ FOUNDRY_DIR=${FOUNDRY_DIR:-"$BASE_DIR/.foundry"}
 FOUNDRY_BIN_DIR="$FOUNDRY_DIR/bin"
 FOUNDRY_MAN_DIR="$FOUNDRY_DIR/share/man/man1"
 
-BINS=(forge cast anvil chisel)
+BINS=(forge cast shuttle chisel)
 
 export RUSTFLAGS="-C target-cpu=native"
 
@@ -136,7 +136,7 @@ main() {
     MAN_TARBALL_URL="${RELEASE_URL}foundry_man_${FOUNDRYUP_VERSION}.tar.gz"
 
     # Download and extract the binaries archive
-    say "downloading latest forge, cast, anvil, and chisel"
+    say "downloading latest forge, cast, shuttle, and chisel"
     if [ "$PLATFORM" = "win32" ]; then
       tmp="$(mktemp -d 2>/dev/null || echo ".")/foundry.zip"
       ensure download "$BIN_ARCHIVE_URL" "$tmp"
@@ -206,8 +206,8 @@ EOF
     # Build the repo and install the binaries locally to the .foundry bin directory.
     # --root appends /bin to the directory it is given, so we pass FOUNDRY_DIR.
     ensure cargo install --path ./cli --bins --locked --force --root "$FOUNDRY_DIR"
-    # install anvil
-    ensure cargo install --path ./anvil --bin anvil --locked --force --root "$FOUNDRY_DIR"
+    # install shuttle
+    ensure cargo install --path ./shuttle --bin shuttle --locked --force --root "$FOUNDRY_DIR"
     # install chisel
     ensure cargo install --path ./chisel --bin chisel --locked --force --root "$FOUNDRY_DIR"
 

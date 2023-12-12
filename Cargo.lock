@@ -164,104 +164,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anvil"
-version = "0.1.0"
-dependencies = [
- "anvil-core",
- "anvil-rpc",
- "anvil-server",
- "async-trait",
- "auto_impl",
- "axum",
- "bytes",
- "chrono",
- "clap 4.4.8",
- "clap_complete",
- "clap_complete_fig",
- "corebc",
- "corebc-ylem",
- "crc 3.0.1",
- "ctrlc",
- "ethereum-forkid",
- "fdlimit",
- "flate2",
- "forge",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "foundry-utils",
- "futures",
- "hash-db",
- "hyper",
- "memory-db",
- "parking_lot",
- "pretty_assertions",
- "revm",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "tokio",
- "tower",
- "tower-http 0.4.4",
- "tracing",
- "tracing-subscriber",
- "trie-db",
- "vergen",
- "yansi 0.5.1",
-]
-
-[[package]]
-name = "anvil-core"
-version = "0.1.0"
-dependencies = [
- "bytes",
- "corebc-core",
- "foundry-evm",
- "foundry-utils",
- "hash-db",
- "hash256-std-hasher",
- "keccak-hasher",
- "open-fastrlp",
- "reference-trie",
- "revm",
- "serde",
- "serde_json",
- "triehash",
-]
-
-[[package]]
-name = "anvil-rpc"
-version = "0.1.0"
-dependencies = [
- "rand 0.8.5",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "anvil-server"
-version = "0.1.0"
-dependencies = [
- "anvil-rpc",
- "async-trait",
- "axum",
- "bytes",
- "clap 4.4.8",
- "futures",
- "hyper",
- "parity-tokio-ipc",
- "parking_lot",
- "pin-project",
- "serde",
- "serde_json",
- "thiserror",
- "tokio-util",
- "tower-http 0.4.4",
- "tracing",
-]
-
-[[package]]
 name = "anyhow"
 version = "1.0.75"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2481,7 +2383,6 @@ dependencies = [
 name = "foundry-cli"
 version = "0.2.0"
 dependencies = [
- "anvil",
  "async-trait",
  "bytes",
  "cast 0.2.0",
@@ -2525,6 +2426,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serial_test",
+ "shuttle",
  "similar",
  "solang-parser 0.3.0",
  "strsim",
@@ -6169,6 +6071,104 @@ name = "shlex"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7cee0529a6d40f580e7a5e6c495c8fbfe21b7b52795ed4bb5e62cdf92bc6380"
+
+[[package]]
+name = "shuttle"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "auto_impl",
+ "axum",
+ "bytes",
+ "chrono",
+ "clap 4.4.8",
+ "clap_complete",
+ "clap_complete_fig",
+ "corebc",
+ "corebc-ylem",
+ "crc 3.0.1",
+ "ctrlc",
+ "ethereum-forkid",
+ "fdlimit",
+ "flate2",
+ "forge",
+ "foundry-common",
+ "foundry-config",
+ "foundry-evm",
+ "foundry-utils",
+ "futures",
+ "hash-db",
+ "hyper",
+ "memory-db",
+ "parking_lot",
+ "pretty_assertions",
+ "revm",
+ "serde",
+ "serde_json",
+ "shuttle-core",
+ "shuttle-rpc",
+ "shuttle-server",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tower",
+ "tower-http 0.4.4",
+ "tracing",
+ "tracing-subscriber",
+ "trie-db",
+ "vergen",
+ "yansi 0.5.1",
+]
+
+[[package]]
+name = "shuttle-core"
+version = "0.1.0"
+dependencies = [
+ "bytes",
+ "corebc-core",
+ "foundry-evm",
+ "foundry-utils",
+ "hash-db",
+ "hash256-std-hasher",
+ "keccak-hasher",
+ "open-fastrlp",
+ "reference-trie",
+ "revm",
+ "serde",
+ "serde_json",
+ "triehash",
+]
+
+[[package]]
+name = "shuttle-rpc"
+version = "0.1.0"
+dependencies = [
+ "rand 0.8.5",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "shuttle-server"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "bytes",
+ "clap 4.4.8",
+ "futures",
+ "hyper",
+ "parity-tokio-ipc",
+ "parking_lot",
+ "pin-project",
+ "serde",
+ "serde_json",
+ "shuttle-rpc",
+ "thiserror",
+ "tokio-util",
+ "tower-http 0.4.4",
+ "tracing",
+]
 
 [[package]]
 name = "signal-hook"

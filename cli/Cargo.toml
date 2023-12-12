@@ -82,7 +82,7 @@ indicatif = "0.17"
 parking_lot = "0.12"
 
 [dev-dependencies]
-anvil = { path = "../anvil" }
+shuttle = { path = "../shuttle" }
 foundry-utils = { path = "./../utils" }
 foundry-cli-test-utils = { path = "./test-utils" }
 pretty_assertions = "1"

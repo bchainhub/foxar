@@ -14,7 +14,7 @@ use crate::executor::snapshot::Snapshots;
 /// See `EmptyDBWrapper`
 pub type FoundryEvmInMemoryDB = CacheDB<EmptyDBWrapper>;
 
-/// In memory Database for anvil
+/// In memory Database for shuttle
 ///
 /// This acts like a wrapper type for [InMemoryDB] but is capable of applying snapshots
 #[derive(Debug)]

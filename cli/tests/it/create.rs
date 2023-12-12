@@ -4,7 +4,6 @@ use crate::{
     constants::*,
     utils::{self, EnvExternalities},
 };
-use anvil::{spawn, NodeConfig};
 use corebc::{
     types::Address,
     ylem::{artifacts::BytecodeHash, remappings::Remapping},
@@ -14,6 +13,7 @@ use foundry_cli_test_utils::{
     util::{OutputExt, TestCommand, TestProject},
 };
 use foundry_config::Config;
+use shuttle::{spawn, NodeConfig};
 use std::{path::PathBuf, str::FromStr};
 
 /// This will insert _dummy_ contract that uses a library

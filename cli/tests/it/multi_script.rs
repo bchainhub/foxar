@@ -1,10 +1,10 @@
 //! Contains various tests related to forge script
-use anvil::{spawn, NodeConfig};
 use foundry_cli_test_utils::{
     forgetest_async,
     util::{TestCommand, TestProject},
     ScriptOutcome, ScriptTester,
 };
+use shuttle::{spawn, NodeConfig};
 
 forgetest_async!(
     can_deploy_multi_chain_script_without_lib,

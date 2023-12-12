@@ -5,7 +5,7 @@
 #### Tests:
 **Before working on any crate please write your name next to it, so we won't do duplicate work**
 - [x] abi 
-- [ ] anvil 
+- [ ] shuttle 
 - [x] binder
 - [x] cast
 - [ ] chisel - David
@@ -21,7 +21,7 @@
 
 #### Compiles:
 - [x] abi -> Compiles
-- [x] anvil -> Compiles
+- [x] shuttle -> Compiles
 - [x] binder -> Compiles
 - [x] cast  -> Compiles
 - [x] chisel -> Compiles
@@ -52,7 +52,7 @@ Foundry consists of:
 
 -   [**Forge**](./forge): Ethereum testing framework (like Truffle, Hardhat and DappTools).
 -   [**Cast**](./cast): Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   [**Anvil**](./anvil): Local Ethereum node, akin to Ganache, Hardhat Network.
+-   [**Anvil**](./shuttle): Local Ethereum node, akin to Ganache, Hardhat Network.
 -   [**Chisel**](./chisel): Fast, utilitarian, and verbose solidity REPL.
 
 **Need help getting started with Foundry? Read the [📖 Foundry Book][foundry-book] (WIP)!**
