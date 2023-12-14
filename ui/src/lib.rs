@@ -8,7 +8,7 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use eyre::Result;
-use foundry_common::evm::Breakpoints;
+use orbitalis_common::evm::Breakpoints;
 use revm::{interpreter::opcode, primitives::SpecId};
 use spark::{
     debug::{DebugStep, Instruction},

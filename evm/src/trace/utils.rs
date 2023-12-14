@@ -2,7 +2,7 @@
 
 use crate::decode;
 use corebc::abi::{Abi, Address, Function, ParamType, Token};
-use foundry_common::{abi::format_token, SELECTOR_LEN};
+use orbitalis_common::{abi::format_token, SELECTOR_LEN};
 use std::collections::HashMap;
 
 /// Returns the label for the given `token`

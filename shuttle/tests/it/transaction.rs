@@ -871,7 +871,7 @@ async fn test_reject_energy_too_low() {
     assert!(err.contains("intrinsic energy too low"));
 }
 
-// <https://github.com/foundry-rs/foundry/issues/3783>
+// <https://github.com/orbitalis-rs/orbitalis/issues/3783>
 #[tokio::test(flavor = "multi_thread")]
 async fn can_call_with_high_energy_limit() {
     let (_api, handle) =

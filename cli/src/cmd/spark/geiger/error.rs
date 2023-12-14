@@ -1,6 +1,6 @@
 //! errors related to the command
 
-use foundry_common::errors::FsPathError;
+use orbitalis_common::errors::FsPathError;
 use solang_parser::diagnostics::Diagnostic;
 use std::path::PathBuf;
 

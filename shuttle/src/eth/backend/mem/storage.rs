@@ -10,7 +10,7 @@ use corebc::{
     prelude::{BlockId, BlockNumber, DefaultFrame, Trace, H256, H256 as TxHash, U64},
     types::{ActionType, Bytes, GoCoreDebugTracingOptions, TransactionReceipt, U256},
 };
-use foundry_utils::types::ToEthersU256;
+use orbitalis_utils::types::ToEthersU256;
 use parking_lot::RwLock;
 use shuttle_core::eth::{
     block::{Block, PartialHeader},
@@ -415,7 +415,7 @@ mod tests {
     use super::*;
     use crate::eth::backend::db::Db;
     use corebc::{abi::ethereum_types::BigEndianHash, types::Address};
-    use foundry_evm::executor::backend::MemDb;
+    use orbitalis_evm::executor::backend::MemDb;
     use spark::revm::{
         db::DatabaseRef,
         primitives::{AccountInfo, U256 as rU256},

@@ -15,8 +15,8 @@ use corebc::{
     core::types::Network,
     ylem::{info::ContractInfo, Project},
 };
-use foundry_common::ContractsByArtifact;
-use foundry_config::Config;
+use orbitalis_common::ContractsByArtifact;
+use orbitalis_config::Config;
 use semver::Version;
 
 /// Data struct to help `ScriptSequence` verify contracts on `etherscan`.

@@ -26,16 +26,16 @@ use corebc::{
     types::BlockNumber,
     utils::{format_core, hex, to_checksum, WEI_IN_CORE},
 };
-use foundry_common::{
+use orbitalis_common::{
     ProviderBuilder, ALCHEMY_FREE_TIER_CUPS, NON_ARCHIVE_NODE_WARNING, REQUEST_TIMEOUT,
 };
-use foundry_config::Config;
-use foundry_evm::{
+use orbitalis_config::Config;
+use orbitalis_evm::{
     executor::fork::{BlockchainDb, BlockchainDbMeta, SharedBackend},
     revm,
     revm::primitives::{BlockEnv, CfgEnv, TxEnv, U256 as rU256},
 };
-use foundry_utils::types::ToRuint;
+use orbitalis_utils::types::ToRuint;
 use parking_lot::RwLock;
 use serde_json::{json, to_writer, Value};
 use shuttle_server::ServerConfig;
@@ -164,7 +164,7 @@ impl NodeConfig {
         let _ = write!(
             config_string,
             "\n    {}",
-            Paint::green("https://github.com/foundry-rs/foundry")
+            Paint::green("https://github.com/orbitalis-rs/orbitalis")
         );
 
         let _ = write!(
@@ -714,14 +714,14 @@ impl NodeConfig {
 
     /// Returns the path where the cache file should be stored
     ///
-    /// See also [ Config::foundry_block_cache_file()]
+    /// See also [ Config::orbitalis_block_cache_file()]
     pub fn block_cache_path(&self, block: u64) -> Option<PathBuf> {
         if self.no_storage_caching || self.eth_rpc_url.is_none() {
             return None
         }
         let chain_id = self.get_network_id();
 
-        Config::foundry_block_cache_file(chain_id, block)
+        Config::orbitalis_block_cache_file(chain_id, block)
     }
 
     /// Configures everything related to env, backend and database and returns the
@@ -813,7 +813,7 @@ latest block number: {latest_block}"
                     panic!("Failed to get block for block number: {fork_block_number}")
                 };
 
-                // we only use the energy limit value of the block if it is non-zero, since there are networks where this is not used and is always `0x0` which would inevitably result in `OutOfGas` errors as soon as the evm is about to record energy, See also <https://github.com/foundry-rs/foundry/issues/3247>
+                // we only use the energy limit value of the block if it is non-zero, since there are networks where this is not used and is always `0x0` which would inevitably result in `OutOfGas` errors as soon as the evm is about to record energy, See also <https://github.com/orbitalis-rs/orbitalis/issues/3247>
 
                 let energy_limit = if block.energy_limit.is_zero() {
                     env.block.energy_limit
@@ -1046,12 +1046,12 @@ impl AccountGenerator {
     }
 }
 
-/// Returns the path to shuttle dir `~/.foundry/shuttle`
+/// Returns the path to shuttle dir `~/.orbitalis/shuttle`
 pub fn shuttle_dir() -> Option<PathBuf> {
-    Config::foundry_dir().map(|p| p.join("shuttle"))
+    Config::orbitalis_dir().map(|p| p.join("shuttle"))
 }
 
-/// Returns the root path to shuttle's temporary storage `~/.foundry/shuttle/`
+/// Returns the root path to shuttle's temporary storage `~/.orbitalis/shuttle/`
 pub fn shuttle_tmp_dir() -> Option<PathBuf> {
     shuttle_dir().map(|p| p.join("tmp"))
 }
@@ -1059,7 +1059,7 @@ pub fn shuttle_tmp_dir() -> Option<PathBuf> {
 /// Finds the latest appropriate block to fork
 ///
 /// This fetches the "latest" block and checks whether the `Block` is fully populated (`hash` field
-/// is present). This prevents edge cases where shuttle forks the "latest" block but `eth_getBlockByNumber` still returns a pending block, <https://github.com/foundry-rs/foundry/issues/2036>
+/// is present). This prevents edge cases where shuttle forks the "latest" block but `eth_getBlockByNumber` still returns a pending block, <https://github.com/orbitalis-rs/orbitalis/issues/2036>
 async fn find_latest_fork_block<M: Middleware>(provider: M) -> Result<u64, M::Error> {
     let mut num = provider.get_block_number().await?.as_u64();
 

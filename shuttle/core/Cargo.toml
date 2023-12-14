@@ -5,9 +5,9 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-# foundry internal
-foundry-evm = { path = "../../evm" }
-foundry-utils = { path = "../../utils" }
+# orbitalis internal
+orbitalis-evm = { path = "../../evm" }
+orbitalis-utils = { path = "../../utils" }
 revm = { workspace = true, default-features = false, features = ["std", "serde", "memory_limit"] }
 
 corebc-core = { workspace = true}

@@ -13,8 +13,8 @@ use corebc::{
     utils::format_units,
 };
 use eyre::{bail, ContextCompat, Result, WrapErr};
-use foundry_common::{shell, try_get_http_provider, RetryProvider};
 use futures::StreamExt;
+use orbitalis_common::{shell, try_get_http_provider, RetryProvider};
 use std::{cmp::min, collections::HashSet, ops::Mul, sync::Arc};
 use tracing::trace;
 
@@ -208,7 +208,7 @@ impl ScriptArgs {
         let from = tx.from().expect("no sender");
 
         if sequential_broadcast {
-            let nonce = foundry_utils::next_nonce(*from, fork_url, None)
+            let nonce = orbitalis_utils::next_nonce(*from, fork_url, None)
                 .await
                 .map_err(|_| eyre::eyre!("Not able to query the EOA nonce."))?;
 

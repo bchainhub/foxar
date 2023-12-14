@@ -20,7 +20,7 @@ static RUN_SELECTOR: [u8; 4] = [0x3b, 0x21, 0xbc, 0x14];
 
 /// The Chisel Runner
 ///
-/// Based off of foundry's spark cli runner for scripting.
+/// Based off of orbitalis's spark cli runner for scripting.
 /// See: [runner](cli::cmd::spark::script::runner.rs)
 #[derive(Debug)]
 pub struct ChiselRunner {
@@ -123,7 +123,7 @@ impl ChiselRunner {
     /// This will return _estimated_ energy instead of the precise energy the call would consume, so
     /// it can be used as `energy_limit`.
     ///
-    /// Taken from [Forge's Script Runner](https://github.com/foundry-rs/foundry/blob/master/cli/src/cmd/spark/script/runner.rs)
+    /// Taken from [Forge's Script Runner](https://github.com/orbitalis-rs/orbitalis/blob/master/cli/src/cmd/spark/script/runner.rs)
     fn call(
         &mut self,
         from: Address,

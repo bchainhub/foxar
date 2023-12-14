@@ -6,13 +6,13 @@ use corebc::{
     types::{Address, Network},
     utils::sha3,
 };
-use foundry_cli::{
+use orbitalis_cli::{
     cmd::Cmd,
     handler,
     opts::probe::{Opts, Subcommands, ToBaseArgs},
     prompt, stdin, utils,
 };
-use foundry_common::{
+use orbitalis_common::{
     abi::{format_tokens, get_event},
     fs,
     selectors::{
@@ -20,7 +20,7 @@ use foundry_common::{
         parse_signatures, pretty_calldata, ParsedSignatures, SelectorImportData,
     },
 };
-use foundry_config::Config;
+use orbitalis_config::Config;
 use probe::{Cast, SimpleCast};
 use rustc_hex::ToHex;
 use std::time::Instant;

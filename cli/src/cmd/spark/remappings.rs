@@ -2,7 +2,7 @@
 
 use crate::cmd::{Cmd, LoadConfig};
 use clap::{Parser, ValueHint};
-use foundry_config::impl_figment_convert_basic;
+use orbitalis_config::impl_figment_convert_basic;
 use std::path::PathBuf;
 
 /// CLI arguments for `spark remappings`.

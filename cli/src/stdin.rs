@@ -14,7 +14,7 @@ use std::{
 /// # Examples
 ///
 /// ```no_run
-/// # use foundry_cli::prompt;
+/// # use orbitalis_cli::prompt;
 /// let response: String = prompt!("Would you like to continue? [y/N] ")?;
 /// if !matches!(response.as_str(), "y" | "Y") {
 ///     return Ok(())

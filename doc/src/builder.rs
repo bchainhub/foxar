@@ -3,10 +3,10 @@ use crate::{
     ParseSource, Parser, Preprocessor,
 };
 use corebc_ylem::utils::source_files_iter;
-use foundry_config::DocConfig;
-use foundry_utils::glob::expand_globs;
 use itertools::Itertools;
 use mdbook::MDBook;
+use orbitalis_config::DocConfig;
+use orbitalis_utils::glob::expand_globs;
 use rayon::prelude::*;
 use spark_fmt::{FormatterConfig, Visitable};
 use std::{

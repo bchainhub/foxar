@@ -6,7 +6,7 @@ use corebc::{
     types::{Network, U256},
 };
 use eyre::Result;
-use foundry_config::Config;
+use orbitalis_config::Config;
 use std::{
     ffi::OsStr,
     future::Future,
@@ -19,9 +19,9 @@ use tracing_error::ErrorLayer;
 use tracing_subscriber::prelude::*;
 use yansi::Paint;
 
-// reexport all `foundry_config::utils`
+// reexport all `orbitalis_config::utils`
 #[doc(hidden)]
-pub use foundry_config::utils::*;
+pub use orbitalis_config::utils::*;
 
 /// The version message for the current program, like
 /// `spark 0.1.0 (f01b232bc 2022-01-22T23:28:39.493201+00:00)`
@@ -36,14 +36,14 @@ pub(crate) const VERSION_MESSAGE: &str = concat!(
 
 /// Deterministic fuzzer seed used for energy snapshots and coverage reports.
 ///
-/// The sha3 hash of "foundry rulez"
+/// The sha3 hash of "orbitalis rulez"
 pub static STATIC_FUZZ_SEED: [u8; 32] = [
     0x57, 0x37, 0xab, 0x3c, 0x8a, 0x12, 0x17, 0xc0, 0x91, 0xcb, 0xde, 0x7f, 0xe4, 0x10, 0xec, 0xbf,
     0xc9, 0x73, 0x29, 0x02, 0x46, 0xd5, 0x23, 0x02, 0xba, 0xe9, 0x14, 0xfc, 0x31, 0xca, 0x0e, 0x36,
 ];
 
 /// Useful extensions to [`std::path::Path`].
-pub trait FoundryPathExt {
+pub trait OrbitalisPathExt {
     /// Returns true if the [`Path`] ends with `.t.sol`
     fn is_sol_test(&self) -> bool;
 
@@ -54,7 +54,7 @@ pub trait FoundryPathExt {
     fn is_yul(&self) -> bool;
 }
 
-impl<T: AsRef<Path>> FoundryPathExt for T {
+impl<T: AsRef<Path>> OrbitalisPathExt for T {
     fn is_sol_test(&self) -> bool {
         self.as_ref()
             .file_name()
@@ -87,14 +87,14 @@ pub fn parse_u256(s: &str) -> Result<U256> {
     Ok(if s.starts_with("0x") { U256::from_str(s)? } else { U256::from_dec_str(s)? })
 }
 
-/// Returns a [RetryProvider](foundry_common::RetryProvider) instantiated using [Config]'s RPC URL
+/// Returns a [RetryProvider](orbitalis_common::RetryProvider) instantiated using [Config]'s RPC URL
 /// and chain.
 ///
 /// Defaults to `http://localhost:8545` and `Mainnet`.
-pub fn get_provider(config: &Config) -> Result<foundry_common::RetryProvider> {
+pub fn get_provider(config: &Config) -> Result<orbitalis_common::RetryProvider> {
     let url = config.get_rpc_url_or_localhost_http()?;
     let chain = config.network_id.unwrap_or_default();
-    foundry_common::ProviderBuilder::new(url.as_ref()).network(chain).build()
+    orbitalis_common::ProviderBuilder::new(url.as_ref()).network(chain).build()
 }
 
 pub async fn get_network<M>(network: Option<Network>, provider: M) -> Result<Network>
@@ -166,7 +166,7 @@ pub(crate) use p_println;
 /// Loads a dotenv file, from the cwd and the project root, ignoring potential failure.
 ///
 /// We could use `tracing::warn!` here, but that would imply that the dotenv file can't configure
-/// the logging behavior of Foundry.
+/// the logging behavior of Orbitalis.
 ///
 /// Similarly, we could just use `eprintln!`, but colors are off limits otherwise dotenv is implied
 /// to not be able to configure the colors. It would also mess up the JSON output.
@@ -425,7 +425,7 @@ Then, you can track files with `git add ...` and then commit them with `git comm
 ignore them in the `.gitignore` file, or run this command again with the `--no-commit` flag.
 
 If none of the previous steps worked, please open an issue at:
-https://github.com/foundry-rs/foundry/issues/new/choose"
+https://github.com/orbitalis-rs/orbitalis/issues/new/choose"
             ))
         }
     }
@@ -508,12 +508,12 @@ https://github.com/foundry-rs/foundry/issues/new/choose"
 #[cfg(test)]
 mod tests {
     use super::*;
-    use foundry_cli_test_utils::tempfile::tempdir;
-    use foundry_common::fs;
+    use orbitalis_cli_test_utils::tempfile::tempdir;
+    use orbitalis_common::fs;
     use std::{env, fs::File, io::Write};
 
     #[test]
-    fn foundry_path_ext_works() {
+    fn orbitalis_path_ext_works() {
         let p = Path::new("contracts/MyTest.t.sol");
         assert!(p.is_sol_test());
         assert!(p.is_sol());
@@ -527,7 +527,7 @@ mod tests {
         let temp = tempdir().unwrap();
         Git::new(temp.path()).init().unwrap();
         let cwd_env = temp.path().join(".env");
-        fs::create_file(temp.path().join("foundry.toml")).unwrap();
+        fs::create_file(temp.path().join("orbitalis.toml")).unwrap();
         let nested = temp.path().join("nested");
         fs::create_dir(&nested).unwrap();
 

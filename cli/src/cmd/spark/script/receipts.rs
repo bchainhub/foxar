@@ -7,8 +7,8 @@ use corebc::{
     providers::Middleware,
     types::TransactionReceipt,
 };
-use foundry_common::RetryProvider;
 use futures::StreamExt;
+use orbitalis_common::RetryProvider;
 use std::sync::Arc;
 use tracing::{trace, warn};
 

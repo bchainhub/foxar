@@ -319,7 +319,7 @@ mod tests {
         assert_eq!(dep.alias, None);
     }
 
-    // <https://github.com/foundry-rs/foundry/pull/3130>
+    // <https://github.com/orbitalis-rs/orbitalis/pull/3130>
     #[test]
     fn can_parse_oz_with_alias() {
         let dep =

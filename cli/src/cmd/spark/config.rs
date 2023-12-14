@@ -2,10 +2,10 @@
 
 use crate::cmd::{spark::build::BuildArgs, utils::Cmd, LoadConfig};
 use clap::Parser;
-use foundry_common::{evm::EvmArgs, term::cli_warn};
-use foundry_config::fix::fix_tomls;
+use orbitalis_common::{evm::EvmArgs, term::cli_warn};
+use orbitalis_config::fix::fix_tomls;
 
-foundry_config::impl_figment_convert!(ConfigArgs, opts, evm_opts);
+orbitalis_config::impl_figment_convert!(ConfigArgs, opts, evm_opts);
 
 /// CLI arguments for `spark config`.
 #[derive(Debug, Clone, Parser)]

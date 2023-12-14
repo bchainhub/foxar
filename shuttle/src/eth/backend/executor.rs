@@ -11,7 +11,7 @@ use corebc::{
     types::{Bloom, H256, U256},
     utils::rlp,
 };
-use foundry_evm::{
+use orbitalis_evm::{
     executor::backend::DatabaseError,
     revm,
     revm::{
@@ -20,7 +20,7 @@ use foundry_evm::{
     },
     trace::{node::CallTraceNode, CallTraceArena},
 };
-use foundry_utils::types::ToEthersU256;
+use orbitalis_utils::types::ToEthersU256;
 use shuttle_core::eth::{
     block::{Block, BlockInfo, Header, PartialHeader},
     receipt::{EIP658Receipt, Log, TypedReceipt},

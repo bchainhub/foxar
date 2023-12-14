@@ -38,7 +38,9 @@ use corebc::{
     utils::{hex, rlp, sha3},
 };
 use flate2::{read::GzDecoder, write::GzEncoder, Compression};
-use foundry_evm::{
+use futures::channel::mpsc::{unbounded, UnboundedSender};
+use hash_db::HashDB;
+use orbitalis_evm::{
     decode::{decode_custom_error_args, decode_revert},
     executor::backend::{DatabaseError, DatabaseResult},
     revm::{
@@ -50,9 +52,7 @@ use foundry_evm::{
     },
     utils::u256_to_h256_be,
 };
-use foundry_utils::types::*;
-use futures::channel::mpsc::{unbounded, UnboundedSender};
-use hash_db::HashDB;
+use orbitalis_utils::types::*;
 use parking_lot::{Mutex, RwLock};
 use shuttle_core::{
     eth::{
@@ -101,7 +101,7 @@ pub const MIN_TRANSACTION_GAS: U256 = U256([21_000, 0, 0, 0]);
 // Gas per transaction creating a contract.
 pub const MIN_CREATE_GAS: U256 = U256([53_000, 0, 0, 0]);
 
-pub type State = foundry_evm::HashMap<Address, Account>;
+pub type State = orbitalis_evm::HashMap<Address, Account>;
 
 /// A block request, which includes the Pool Transactions if it's Pending
 #[derive(Debug)]

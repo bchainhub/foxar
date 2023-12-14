@@ -7,7 +7,7 @@ use corebc::{
     abi::{AbiDecode, Token},
     types::{Log, H256},
 };
-use foundry_macros::ConsoleFmt;
+use orbitalis_macros::ConsoleFmt;
 use revm::{
     interpreter::{CallInputs, Energy, InstructionResult},
     primitives::{B176, B256},

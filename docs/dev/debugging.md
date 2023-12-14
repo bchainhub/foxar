@@ -1,6 +1,6 @@
-## Debugging Foundry tools
+## Debugging Orbitalis tools
 
-This is a working document intended to outline some commands contributors can use to debug various parts of Foundry.
+This is a working document intended to outline some commands contributors can use to debug various parts of Orbitalis.
 
 ### Logs
 

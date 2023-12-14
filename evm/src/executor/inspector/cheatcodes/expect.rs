@@ -4,7 +4,7 @@ use corebc::{
     abi::{AbiDecode, RawLog},
     types::{Address, Bytes, H176, U256},
 };
-use foundry_utils::error::{ERROR_PREFIX, REVERT_PREFIX};
+use orbitalis_utils::error::{ERROR_PREFIX, REVERT_PREFIX};
 use revm::{
     interpreter::{return_ok, InstructionResult},
     primitives::Bytecode,

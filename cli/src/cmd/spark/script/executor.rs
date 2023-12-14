@@ -11,9 +11,9 @@ use corebc::{
     types::{transaction::eip2718::TypedTransaction, Address, U256},
     ylem::artifacts::CompactContractBytecode,
 };
-use foundry_common::{shell, RpcUrl};
-use foundry_evm::utils::evm_spec;
 use futures::future::join_all;
+use orbitalis_common::{shell, RpcUrl};
+use orbitalis_evm::utils::evm_spec;
 use parking_lot::RwLock;
 use spark::{
     executor::{

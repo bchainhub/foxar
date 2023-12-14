@@ -1,7 +1,7 @@
 use std::path::Path;
 
 use corebc_ylem::CvmVersion;
-use foundry_config::Config;
+use orbitalis_config::Config;
 use pilot::session::ChiselSession;
 use serial_test::serial;
 use spark::executor::opts::EvmOpts;
@@ -10,12 +10,12 @@ use spark::executor::opts::EvmOpts;
 #[serial]
 fn test_cache_directory() {
     // Get the cache dir
-    // Should be ~/.foundry/cache/pilot
+    // Should be ~/.orbitalis/cache/pilot
     let cache_dir = ChiselSession::cache_dir().unwrap();
 
     // Validate the cache directory
     let home_dir = dirs::home_dir().unwrap();
-    assert_eq!(cache_dir, format!("{}/.foundry/cache/pilot/", home_dir.to_str().unwrap()));
+    assert_eq!(cache_dir, format!("{}/.orbitalis/cache/pilot/", home_dir.to_str().unwrap()));
 }
 
 #[test]
@@ -39,11 +39,11 @@ fn test_write_session() {
     ChiselSession::create_cache_dir().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
+    let orbitalis_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config,
+        orbitalis_config,
         evm_opts: EvmOpts::default(),
         backend: None,
         traces: false,
@@ -70,11 +70,11 @@ fn test_write_session_with_name() {
     ChiselSession::create_cache_dir().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
+    let orbitalis_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config,
+        orbitalis_config,
         ..Default::default()
     })
     .unwrap_or_else(|e| panic!("Failed to create ChiselSession! {}", e));
@@ -94,11 +94,11 @@ fn test_clear_cache() {
     let cache_dir = ChiselSession::cache_dir().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
+    let orbitalis_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     ChiselSession::create_cache_dir().unwrap();
     let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config,
+        orbitalis_config,
         ..Default::default()
     })
     .unwrap_or_else(|_| panic!("Failed to create ChiselSession!"));
@@ -120,11 +120,11 @@ fn test_list_sessions() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
+    let orbitalis_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config,
+        orbitalis_config,
         ..Default::default()
     })
     .unwrap_or_else(|e| panic!("Failed to create ChiselSession! {}", e));
@@ -147,11 +147,11 @@ fn test_load_cache() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
+    let orbitalis_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config,
+        orbitalis_config,
         ..Default::default()
     })
     .unwrap_or_else(|e| panic!("Failed to create ChiselSession! {}", e));
@@ -178,11 +178,11 @@ fn test_write_same_session_multiple_times() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
+    let orbitalis_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create a new session
     let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config,
+        orbitalis_config,
         ..Default::default()
     })
     .unwrap_or_else(|e| panic!("Failed to create ChiselSession! {}", e));
@@ -201,11 +201,11 @@ fn test_load_latest_cache() {
     ChiselSession::clear_cache().unwrap();
 
     // Force the ylem version to be 1.1.0
-    let foundry_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
+    let orbitalis_config = Config { cvm_version: CvmVersion::Nucleus, ..Default::default() };
 
     // Create sessions
     let mut env = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config: foundry_config.clone(),
+        orbitalis_config: orbitalis_config.clone(),
         ..Default::default()
     })
     .unwrap_or_else(|e| panic!("Failed to create ChiselSession! {}", e));
@@ -215,7 +215,7 @@ fn test_load_latest_cache() {
     std::thread::sleep(wait_time);
 
     let mut env2 = ChiselSession::new(pilot::session_source::SessionSourceConfig {
-        foundry_config,
+        orbitalis_config,
         ..Default::default()
     })
     .unwrap_or_else(|e| panic!("Failed to create ChiselSession! {}", e));

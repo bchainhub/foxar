@@ -1,7 +1,7 @@
 use super::{Wallet, WalletSigner};
 use clap::Parser;
 use eyre::Result;
-use foundry_config::{
+use orbitalis_config::{
     figment::{
         self,
         value::{Dict, Map, Value},

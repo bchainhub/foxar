@@ -2,7 +2,7 @@ use corebc::types::{Address, Selector, H176};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
-pub use foundry_abi::{
+pub use orbitalis_abi::{
     console::{self, ConsoleEvents, CONSOLE_ABI},
     hardhat_console::{self, HardhatConsoleCalls, HARDHATCONSOLE_ABI as HARDHAT_CONSOLE_ABI},
     hevm::{self, HEVMCalls, HEVM_ABI},

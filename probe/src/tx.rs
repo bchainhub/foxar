@@ -8,8 +8,8 @@ use corebc_core::{
 };
 use corebc_providers::Middleware;
 use eyre::{eyre, Result};
-use foundry_common::abi::{encode_args, get_func, get_func_blockindex};
 use futures::future::join_all;
+use orbitalis_common::abi::{encode_args, get_func, get_func_blockindex};
 
 use crate::strip_0x;
 
@@ -58,7 +58,7 @@ impl<'a, M: Middleware> TxBuilder<'a, M> {
 
         let to_addr = if let Some(to) = to {
             let addr =
-                resolve_ens(provider, foundry_utils::resolve_addr(to, Some(network))?).await?;
+                resolve_ens(provider, orbitalis_utils::resolve_addr(to, Some(network))?).await?;
             tx.set_to(addr);
             Some(addr)
         } else {

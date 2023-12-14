@@ -4,7 +4,7 @@ use crate::{config::*, test_helpers::filter::Filter};
 
 use spark::result::SuiteResult;
 
-use foundry_evm::trace::TraceKind;
+use orbitalis_evm::trace::TraceKind;
 use std::{collections::BTreeMap, env};
 
 #[tokio::test(flavor = "multi_thread")]
@@ -686,8 +686,8 @@ async fn test_env_vars() {
     // test `setEnv` first, and confirm that it can correctly set environment variables,
     // so that we can use it in subsequent `env*` tests
     runner.test(&Filter::new("testSetEnv", ".*", ".*"), None, test_opts()).await;
-    let env_var_key = "_foundryCheatcodeSetEnvTestKey";
-    let env_var_val = "_foundryCheatcodeSetEnvTestVal";
+    let env_var_key = "_orbitalisCheatcodeSetEnvTestKey";
+    let env_var_val = "_orbitalisCheatcodeSetEnvTestVal";
     let res = env::var(env_var_key);
     assert!(
         res.is_ok() && res.unwrap() == env_var_val,

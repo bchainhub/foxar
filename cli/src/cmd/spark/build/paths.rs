@@ -1,6 +1,6 @@
 use clap::{Parser, ValueHint};
 use corebc::ylem::remappings::Remapping;
-use foundry_config::{
+use orbitalis_config::{
     figment,
     figment::{
         error::Kind::InvalidType,
@@ -82,7 +82,7 @@ impl ProjectPathsArgs {
     }
 }
 
-foundry_config::impl_figment_convert!(ProjectPathsArgs);
+orbitalis_config::impl_figment_convert!(ProjectPathsArgs);
 
 // Make this args a `figment::Provider` so that it can be merged into the `Config`
 impl Provider for ProjectPathsArgs {

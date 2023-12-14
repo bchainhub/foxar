@@ -1,16 +1,16 @@
 //! yvm sanity checks
 
-use foundry_cli_test_utils::{sparktest_init, TestCommand, TestProject};
+use orbitalis_cli_test_utils::{sparktest_init, TestCommand, TestProject};
 use semver::Version;
 use yvm::{self, Platform};
 
 /// The latest solc release
 ///
-/// solc to foundry release process:
+/// solc to orbitalis release process:
 ///     1. new solc release
 ///     2. yvm updated with all build info
 ///     3. yvm bumped in ethers-rs
-///     4. ethers bumped in foundry + update the `LATEST_SOLC`
+///     4. ethers bumped in orbitalis + update the `LATEST_SOLC`
 const LATEST_SOLC: Version = Version::new(1, 1, 0);
 
 macro_rules! ensure_yvm_releases {

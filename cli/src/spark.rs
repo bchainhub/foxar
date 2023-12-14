@@ -1,6 +1,6 @@
 use clap::{CommandFactory, Parser};
 use clap_complete::generate;
-use foundry_cli::{
+use orbitalis_cli::{
     cmd::{
         spark::{cache::CacheSubcommands, watch},
         Cmd,
@@ -28,7 +28,7 @@ fn main() -> eyre::Result<()> {
         }
         Subcommands::Script(cmd) => {
             // install the shell before executing the command
-            foundry_common::shell::set_shell(foundry_common::shell::Shell::from_args(
+            orbitalis_common::shell::set_shell(orbitalis_common::shell::Shell::from_args(
                 cmd.opts.args.silent,
                 cmd.json,
             ))?;

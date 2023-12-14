@@ -10,8 +10,8 @@ use corebc::{
     },
 };
 use eyre::WrapErr;
-use foundry_common::{cli_warn, fs, TestFunctionExt};
-use foundry_config::{error::ExtractConfigError, figment::Figment, Config};
+use orbitalis_common::{cli_warn, fs, TestFunctionExt};
+use orbitalis_config::{error::ExtractConfigError, figment::Figment, Config};
 use spark::executor::opts::EvmOpts;
 use std::{fmt::Write, path::PathBuf};
 use tracing::trace;

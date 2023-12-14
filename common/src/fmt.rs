@@ -2,7 +2,7 @@
 
 use crate::TransactionReceiptWithRevertReason;
 
-pub use foundry_macros::fmt::*;
+pub use orbitalis_macros::fmt::*;
 
 impl UIfmt for TransactionReceiptWithRevertReason {
     fn pretty(&self) -> String {

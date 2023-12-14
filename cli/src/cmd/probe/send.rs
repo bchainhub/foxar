@@ -8,8 +8,8 @@ use corebc::{
     core::types::Network, prelude::MiddlewareBuilder, providers::Middleware, signers::Signer,
     types::NameOrAddress,
 };
-use foundry_common::cli_warn;
-use foundry_config::Config;
+use orbitalis_common::cli_warn;
+use orbitalis_config::Config;
 use probe::{Cast, TxBuilder};
 use std::str::FromStr;
 
@@ -168,7 +168,7 @@ impl SendTxArgs {
 The specified sender via CLI/env vars does not match the sender configured via
 the hardware wallet's HD Path.
 Please use the `--hd-path <PATH>` parameter to specify the BIP32 Path which
-corresponds to the sender, or let foundry automatically detect it by not specifying any sender address."
+corresponds to the sender, or let orbitalis automatically detect it by not specifying any sender address."
                     )
                 }
             }

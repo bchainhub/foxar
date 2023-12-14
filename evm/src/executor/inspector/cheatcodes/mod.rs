@@ -21,9 +21,9 @@ use corebc::{
         TransactionRequest, U256,
     },
 };
-use foundry_common::evm::Breakpoints;
-use foundry_utils::error::SolError;
 use itertools::Itertools;
+use orbitalis_common::evm::Breakpoints;
+use orbitalis_utils::error::SolError;
 use revm::{
     interpreter::{opcode, CallInputs, CreateInputs, Energy, InstructionResult, Interpreter},
     primitives::{BlockEnv, TransactTo, B176, B256},
@@ -89,7 +89,7 @@ pub type ExpectedCallTracker = BTreeMap<Address, BTreeMap<Vec<u8>, (ExpectedCall
 /// `readFile` which can manipulate files of the filesystem. Therefore, several restrictions are
 /// implemented for these cheatcodes:
 ///
-///    - `ffi`, and file cheatcodes are _always_ opt-in (via foundry config) and never enabled by
+///    - `ffi`, and file cheatcodes are _always_ opt-in (via orbitalis config) and never enabled by
 ///      default: all respective cheatcode handlers implement the appropriate checks
 ///    - File cheatcodes require explicit permissions which paths are allowed for which operation,
 ///      see `Config.fs_permission`

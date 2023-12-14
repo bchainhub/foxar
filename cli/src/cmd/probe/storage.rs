@@ -10,16 +10,16 @@ use corebc::{
     ylem::artifacts::StorageLayout,
 };
 use eyre::Result;
-use foundry_common::{
+use futures::future::join_all;
+use orbitalis_common::{
     abi::find_source,
     compile::{compile, etherscan_project, suppress_compile},
     RetryProvider,
 };
-use foundry_config::{
+use orbitalis_config::{
     figment::{self, value::Dict, Metadata, Profile},
     impl_figment_convert_probe, Config,
 };
-use futures::future::join_all;
 use probe::Cast;
 use semver::Version;
 use std::str::FromStr;

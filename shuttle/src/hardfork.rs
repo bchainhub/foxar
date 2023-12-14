@@ -1,6 +1,6 @@
 use corebc::types::BlockNumber;
 use ethereum_forkid::{ForkHash, ForkId};
-use foundry_evm::revm::primitives::SpecId;
+use orbitalis_evm::revm::primitives::SpecId;
 use std::str::FromStr;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Default)]

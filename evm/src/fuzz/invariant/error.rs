@@ -11,7 +11,7 @@ use corebc::{
     types::{Address, U256},
 };
 use eyre::{Result, WrapErr};
-use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
+use orbitalis_common::contracts::{ContractsByAddress, ContractsByArtifact};
 use proptest::test_runner::TestError;
 
 #[derive(Debug, Clone)]

@@ -9,8 +9,8 @@ use corebc::{
         Transaction, TransactionReceipt, TxHash, H256, U256,
     },
 };
-use foundry_common::{ProviderBuilder, RetryProvider};
-use foundry_evm::utils::u256_to_h256_be;
+use orbitalis_common::{ProviderBuilder, RetryProvider};
+use orbitalis_evm::utils::u256_to_h256_be;
 use parking_lot::{
     lock_api::{RwLockReadGuard, RwLockWriteGuard},
     RawRwLock, RwLock,

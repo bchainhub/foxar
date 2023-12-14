@@ -42,7 +42,7 @@ pub use diagnostic::RevertDiagnostic;
 
 pub mod error;
 use crate::executor::{
-    backend::{error::NoCheatcodeAccessError, in_memory_db::FoundryEvmInMemoryDB},
+    backend::{error::NoCheatcodeAccessError, in_memory_db::OrbitalisEvmInMemoryDB},
     inspector::cheatcodes::util::configure_tx_env,
 };
 pub use error::{DatabaseError, DatabaseResult};
@@ -361,7 +361,7 @@ pub struct Backend {
     /// The access point for managing forks
     forks: MultiFork,
     // The default in memory db
-    mem_db: FoundryEvmInMemoryDB,
+    mem_db: OrbitalisEvmInMemoryDB,
     /// The journaled_state to use to initialize new forks with
     ///
     /// The way [`revm::JournaledState`] works is, that it holds the "hot" accounts loaded from the
@@ -626,7 +626,7 @@ impl Backend {
     }
 
     /// Returns the memory db used if not in forking mode
-    pub fn mem_db(&self) -> &FoundryEvmInMemoryDB {
+    pub fn mem_db(&self) -> &OrbitalisEvmInMemoryDB {
         &self.mem_db
     }
 
@@ -1377,7 +1377,7 @@ impl Database for Backend {
 #[derive(Debug, Clone)]
 pub enum BackendDatabaseSnapshot {
     /// Simple in-memory [revm::Database]
-    InMemory(FoundryEvmInMemoryDB),
+    InMemory(OrbitalisEvmInMemoryDB),
     /// Contains the entire forking mode database
     Forked(LocalForkId, ForkId, ForkLookupIndex, Box<Fork>),
 }

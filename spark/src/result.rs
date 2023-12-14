@@ -2,8 +2,8 @@
 
 use crate::Address;
 use corebc::prelude::Log;
-use foundry_common::evm::Breakpoints;
-use foundry_evm::{
+use orbitalis_common::evm::Breakpoints;
+use orbitalis_evm::{
     coverage::HitMaps,
     executor::EvmError,
     fuzz::{CounterExample, FuzzCase},

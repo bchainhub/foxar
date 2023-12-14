@@ -11,8 +11,8 @@ use corebc_core::{
         sha3,
     },
 };
-use foundry_evm::trace::CallTraceArena;
-use foundry_utils::types::ToRuint;
+use orbitalis_evm::trace::CallTraceArena;
+use orbitalis_utils::types::ToRuint;
 use revm::{
     interpreter::InstructionResult,
     primitives::{CreateScheme, TransactTo, TxEnv},
@@ -616,7 +616,7 @@ impl PendingTransaction {
     /// In order to prevent collisions from multiple different impersonated accounts, we update the
     /// transaction's hash with the address to make it unique.
     ///
-    /// See: <https://github.com/foundry-rs/foundry/issues/3759>
+    /// See: <https://github.com/orbitalis-rs/orbitalis/issues/3759>
     #[cfg(feature = "impersonated-tx")]
     pub fn with_impersonated(transaction: TypedTransaction, sender: Address) -> Self {
         let hash = transaction.impersonated_hash(sender);
@@ -636,7 +636,7 @@ impl PendingTransaction {
         &self.sender
     }
 
-    /// Converts the [PendingTransaction] into the [TxEnv] context that [`revm`](foundry_evm)
+    /// Converts the [PendingTransaction] into the [TxEnv] context that [`revm`](orbitalis_evm)
     /// expects.
     pub fn to_revm_tx_env(&self) -> TxEnv {
         fn transact_to(kind: &TransactionKind) -> TransactTo {

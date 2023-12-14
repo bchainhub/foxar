@@ -164,7 +164,7 @@ impl SignEthClient {
         }
 
         // using samczsun signature database over 4byte
-        // see https://github.com/foundry-rs/foundry/issues/1672
+        // see https://github.com/orbitalis-rs/orbitalis/issues/1672
         let url = match selector_type {
             SelectorType::Function => format!("{SELECTOR_DATABASE_URL}?function={selector}"),
             SelectorType::Event => format!("{SELECTOR_DATABASE_URL}?event={selector}"),
@@ -243,7 +243,7 @@ impl SignEthClient {
     ///
     /// ```no_run
     /// 
-    /// use foundry_common::selectors::SignEthClient;
+    /// use orbitalis_common::selectors::SignEthClient;
     ///
     /// # async fn foo() -> eyre::Result<()> {
     ///   let pretty_data = SignEthClient::new()?.pretty_calldata("0x70a08231000000000000000000000000d0074f4e6490ae3f888d1d4f7e3e43326bd3f0f5".to_string(), false).await?;
@@ -379,7 +379,7 @@ pub async fn decode_event_topic(topic: &str) -> eyre::Result<Vec<String>> {
 ///
 /// ```no_run
 /// 
-/// use foundry_common::selectors::pretty_calldata;
+/// use orbitalis_common::selectors::pretty_calldata;
 ///
 /// # async fn foo() -> eyre::Result<()> {
 ///   let pretty_data = pretty_calldata("0x70a08231000000000000000000000000d0074f4e6490ae3f888d1d4f7e3e43326bd3f0f5".to_string(), false).await?;

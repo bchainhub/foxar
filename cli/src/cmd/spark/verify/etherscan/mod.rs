@@ -18,11 +18,11 @@ use corebc::{
     ylem::{artifacts::CompactContract, cache::CacheEntry, Project, Ylem},
 };
 use eyre::{eyre, Context};
-use foundry_common::abi::encode_args;
-use foundry_config::{Config, YlemReq};
-use foundry_utils::Retry;
 use futures::FutureExt;
 use once_cell::sync::Lazy;
+use orbitalis_common::abi::encode_args;
+use orbitalis_config::{Config, YlemReq};
+use orbitalis_utils::Retry;
 use regex::Regex;
 use rustc_hex::ToHex;
 use semver::{BuildMetadata, Version};
@@ -359,7 +359,7 @@ impl EtherscanVerificationProvider {
     /// Parse the compiler version.
     /// The priority desc:
     ///     1. Through CLI arg `--compiler-version`
-    ///     2. `ylem` defined in foundry.toml
+    ///     2. `ylem` defined in orbitalis.toml
     ///     3. The version contract was last compiled with.
     fn compiler_version(
         &mut self,
@@ -383,7 +383,7 @@ impl EtherscanVerificationProvider {
         }
 
         let (_, entry, _) = self.cache_entry(project, &args.contract.name).wrap_err(
-            "If cache is disabled, compiler version must be either provided with `--compiler-version` option or set in foundry.toml"
+            "If cache is disabled, compiler version must be either provided with `--compiler-version` option or set in orbitalis.toml"
         )?;
         let artifacts = entry.artifacts_versions().collect::<Vec<_>>();
         if artifacts.len() == 1 {
@@ -402,7 +402,7 @@ impl EtherscanVerificationProvider {
             warn!("Ambiguous compiler versions found in cache: {}", versions.join(", "));
         }
 
-        eyre::bail!("Compiler version has to be set in `foundry.toml`. If the project was not deployed with foundry, specify the version through `--compiler-version` flag.")
+        eyre::bail!("Compiler version has to be set in `orbitalis.toml`. If the project was not deployed with orbitalis, specify the version through `--compiler-version` flag.")
     }
 
     /// Return the optional encoded constructor arguments. If the path to
@@ -470,8 +470,8 @@ mod tests {
     use super::*;
     use crate::cmd::LoadConfig;
     use clap::Parser;
-    use foundry_cli_test_utils::tempfile::tempdir;
-    use foundry_common::fs;
+    use orbitalis_cli_test_utils::tempfile::tempdir;
+    use orbitalis_common::fs;
 
     #[test]
     fn can_extract_etherscan_verify_config() {
@@ -489,7 +489,7 @@ mod tests {
         fs::write(toml_file, config).unwrap();
 
         let args: VerifyArgs = VerifyArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "cb94d8509bee9c9bf012282ad33aba0d87241baf5064",
             "src/Counter.sol:Counter",
             "--network",
@@ -511,7 +511,7 @@ mod tests {
         assert_eq!(client.blockindex_api_url().as_str(), "https://devin.blockindex.net/api/v2/");
 
         let args: VerifyArgs = VerifyArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "cb94d8509bee9c9bf012282ad33aba0d87241baf5064",
             "src/Counter.sol:Counter",
             "--network",
@@ -560,7 +560,7 @@ mod tests {
 
         // No compiler argument
         let args = VerifyArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             address,
             &format!("{contract_path}:{contract_name}"),
             "--root",
@@ -571,12 +571,12 @@ mod tests {
         assert!(result.is_err());
         assert_eq!(
             result.unwrap_err().to_string(),
-            "If cache is disabled, compiler version must be either provided with `--compiler-version` option or set in foundry.toml"
+            "If cache is disabled, compiler version must be either provided with `--compiler-version` option or set in orbitalis.toml"
         );
 
         // No contract path
         let args =
-            VerifyArgs::parse_from(["foundry-cli", address, contract_name, "--root", root_path]);
+            VerifyArgs::parse_from(["orbitalis-cli", address, contract_name, "--root", root_path]);
 
         let result = etherscan.preflight_check(args).await;
         assert!(result.is_err());
@@ -587,7 +587,7 @@ mod tests {
 
         // Constructor args path
         let args = VerifyArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             address,
             &format!("{contract_path}:{contract_name}"),
             "--constructor-args-path",

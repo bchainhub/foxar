@@ -7,8 +7,8 @@ use corebc::{
     signers::WalletError,
     types::{Bytes, SignatureError, U256},
 };
-use foundry_common::SELECTOR_LEN;
-use foundry_evm::{executor::backend::DatabaseError, revm::interpreter::InstructionResult};
+use orbitalis_common::SELECTOR_LEN;
+use orbitalis_evm::{executor::backend::DatabaseError, revm::interpreter::InstructionResult};
 use serde::Serialize;
 use shuttle_rpc::{
     error::{ErrorCode, RpcError},

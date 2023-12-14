@@ -2,11 +2,11 @@
 //! and sourcify
 
 use crate::utils::{self, EnvExternalities};
-use foundry_cli_test_utils::{
+use orbitalis_cli_test_utils::{
     sparktest,
     util::{TestCommand, TestProject},
 };
-use foundry_utils::Retry;
+use orbitalis_utils::Retry;
 
 /// Adds a `Unique` contract to the source directory of the project that can be imported as
 /// `import {Unique} from "./unique.sol";`

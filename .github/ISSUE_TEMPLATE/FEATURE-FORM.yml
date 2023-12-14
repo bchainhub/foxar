@@ -7,7 +7,7 @@ body:
           value: |
               Please ensure that the feature has not already been requested in the issue tracker.
 
-              Thanks for helping us improve Foundry!
+              Thanks for helping us improve Orbitalis!
     - type: dropdown
       attributes:
           label: Component
@@ -17,7 +17,7 @@ body:
               - Forge
               - Cast
               - Anvil
-              - Foundryup
+              - Orbitalisup
               - Chisel
               - Other (please describe)
       validations:

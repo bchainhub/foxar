@@ -1,24 +1,24 @@
 [package]
-name = "foundry-cli"
+name = "orbitalis-cli"
 version = "0.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/foundry-rs/foundry"
+repository = "https://github.com/orbitalis-rs/orbitalis"
 keywords = ["ethereum", "web3"]
 
 [build-dependencies]
 vergen = { version = "8", default-features = false, features = ["build", "git", "git2"] }
 
 [dependencies]
-# foundry internal
+# orbitalis internal
 spark-fmt = { path = "../fmt" }
 spark-doc = { path = "../doc" }
-foundry-utils = { path = "../utils" }
+orbitalis-utils = { path = "../utils" }
 spark = { path = "../spark" }
-foundry-config = { path = "../config" }
-foundry-common = { path = "../common" }
-foundry-evm = { path = "../evm" }
+orbitalis-config = { path = "../config" }
+orbitalis-common = { path = "../common" }
+orbitalis-evm = { path = "../evm" }
 probe = { path = "../probe" }
 ui = { path = "../ui" }
 
@@ -83,8 +83,8 @@ parking_lot = "0.12"
 
 [dev-dependencies]
 shuttle = { path = "../shuttle" }
-foundry-utils = { path = "./../utils" }
-foundry-cli-test-utils = { path = "./test-utils" }
+orbitalis-utils = { path = "./../utils" }
+orbitalis-cli-test-utils = { path = "./test-utils" }
 pretty_assertions = "1"
 toml = "0.7"
 serial_test = "2"

@@ -171,7 +171,7 @@ impl Serialize for CachedEndpoints {
     }
 }
 
-/// Content of the foundry cache folder
+/// Content of the orbitalis cache folder
 #[derive(Debug, Default)]
 pub struct Cache {
     /// The list of networks in the cache
@@ -215,7 +215,7 @@ impl fmt::Display for Cache {
     }
 }
 
-/// A representation of data for a given network in the foundry cache
+/// A representation of data for a given network in the orbitalis cache
 #[derive(Debug)]
 pub struct NetworkCache {
     /// The name of the network

@@ -1,5 +1,5 @@
 use corebc::ylem::ProjectCompileOutput;
-use foundry_config::{
+use orbitalis_config::{
     validate_profiles, Config, FuzzConfig, InlineConfig, InlineConfigError, InlineConfigParser,
     InvariantConfig, NatSpec,
 };
@@ -24,12 +24,12 @@ mod multi_runner;
 pub use multi_runner::{MultiContractRunner, MultiContractRunnerBuilder};
 
 /// reexport
-pub use foundry_common::traits::TestFilter;
+pub use orbitalis_common::traits::TestFilter;
 
 pub mod result;
 
 /// The Forge EVM backend
-pub use foundry_evm::*;
+pub use orbitalis_evm::*;
 
 /// Metadata on how to run fuzz/invariant tests
 #[derive(Debug, Clone, Default)]

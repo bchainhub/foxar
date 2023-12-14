@@ -13,8 +13,8 @@ use corebc::{
     },
 };
 use eyre::{Context, ContextCompat};
-use foundry_common::compile;
-use foundry_utils::PostLinkInput;
+use orbitalis_common::compile;
+use orbitalis_utils::PostLinkInput;
 use std::{collections::BTreeMap, fs, str::FromStr};
 use tracing::{trace, warn};
 
@@ -116,7 +116,7 @@ impl ScriptArgs {
         let network_config = self.evm_opts.env.network_id.unwrap();
         let network = network_config;
 
-        foundry_utils::link_with_nonce_or_address(
+        orbitalis_utils::link_with_nonce_or_address(
             contracts.clone(),
             &mut highlevel_known_contracts,
             libs,
@@ -225,7 +225,7 @@ impl ScriptArgs {
         }
 
         if !project.paths.has_input_files() {
-            eyre::bail!("The project doesn't have any input files. Make sure the `script` directory is configured properly in foundry.toml. Otherwise, provide the path to the file.")
+            eyre::bail!("The project doesn't have any input files. Make sure the `script` directory is configured properly in orbitalis.toml. Otherwise, provide the path to the file.")
         }
 
         let contract = ContractInfo::from_str(&self.path)?;

@@ -8,7 +8,7 @@ use crate::prelude::{
     SolidityHelper,
 };
 use corebc::{contract::Lazy, utils::hex};
-use foundry_config::{Config, RpcEndpoint};
+use orbitalis_config::{Config, RpcEndpoint};
 use regex::Regex;
 use reqwest::Url;
 use solang_parser::diagnostics::Diagnostic;
@@ -288,7 +288,7 @@ impl ChiselDispatcher {
                 if let Some(session_source) = self.session.session_source.as_ref() {
                     match format_source(
                         &session_source.to_repl_source(),
-                        session_source.config.foundry_config.fmt.clone(),
+                        session_source.config.orbitalis_config.fmt.clone(),
                     ) {
                         Ok(formatted_source) => DispatchResult::CommandSuccess(Some(
                             SolidityHelper::highlight(&formatted_source).into_owned(),
@@ -324,10 +324,10 @@ impl ChiselDispatcher {
                     let arg = *args.first().unwrap();
 
                     // If the argument is an RPC alias designated in the
-                    // `[rpc_endpoints]` section of the `foundry.toml` within
+                    // `[rpc_endpoints]` section of the `orbitalis.toml` within
                     // the pwd, use the URL matched to the key.
                     let endpoint = if let Some(endpoint) =
-                        session_source.config.foundry_config.rpc_endpoints.get(arg)
+                        session_source.config.orbitalis_config.rpc_endpoints.get(arg)
                     {
                         endpoint.clone()
                     } else {
@@ -456,8 +456,8 @@ impl ChiselDispatcher {
             ChiselCommand::Export => {
                 // Check if the current session inherits `Script.sol` before exporting
                 if let Some(session_source) = self.session.session_source.as_ref() {
-                    // Check if the pwd is a foundry project
-                    if PathBuf::from("foundry.toml").exists() {
+                    // Check if the pwd is a orbitalis project
+                    if PathBuf::from("orbitalis.toml").exists() {
                         // Create "script" dir if it does not already exist.
                         if !PathBuf::from("script").exists() {
                             if let Err(e) = std::fs::create_dir_all("script") {
@@ -469,7 +469,7 @@ impl ChiselDispatcher {
 
                         match format_source(
                             &session_source.to_script_source(),
-                            session_source.config.foundry_config.fmt.clone(),
+                            session_source.config.orbitalis_config.fmt.clone(),
                         ) {
                             Ok(formatted_source) => {
                                 // Write session source to `script/REPL.s.sol`
@@ -492,7 +492,7 @@ impl ChiselDispatcher {
                         }
                     } else {
                         DispatchResult::CommandFailed(Self::make_error(
-                            "Must be in a foundry project to export source to script.",
+                            "Must be in a orbitalis project to export source to script.",
                         ))
                     }
                 } else {
@@ -517,7 +517,7 @@ impl ChiselDispatcher {
             //             .as_ref()
             //             .unwrap()
             //             .config
-            //             .foundry_config
+            //             .orbitalis_config
             //             .etherscan_api_key
             //             .as_ref()
             //         {
@@ -939,7 +939,7 @@ impl ChiselDispatcher {
     ) -> eyre::Result<CallTraceDecoder> {
         //todo:error2215 commented out (waiting for blockindex implementation)
         // let mut etherscan_identifier = EtherscanIdentifier::new(
-        //     &session_config.foundry_config,
+        //     &session_config.orbitalis_config,
         //     session_config.evm_opts.get_remote_chain_id(),
         // )?;
 
@@ -947,8 +947,8 @@ impl ChiselDispatcher {
             CallTraceDecoderBuilder::new().with_labels(result.labeled_addresses.clone()).build();
 
         decoder.add_signature_identifier(SignaturesIdentifier::new(
-            Config::foundry_cache_dir(),
-            session_config.foundry_config.offline,
+            Config::orbitalis_cache_dir(),
+            session_config.orbitalis_config.offline,
         )?);
 
         for (_, _trace) in &mut result.traces {
@@ -974,7 +974,7 @@ impl ChiselDispatcher {
         result: &mut ChiselResult,
     ) -> eyre::Result<()> {
         if result.traces.is_empty() {
-            eyre::bail!("Unexpected error: No traces gathered. Please report this as a bug: https://github.com/foundry-rs/foundry/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
+            eyre::bail!("Unexpected error: No traces gathered. Please report this as a bug: https://github.com/orbitalis-rs/orbitalis/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
         }
 
         println!("{}", Paint::green("Traces:"));

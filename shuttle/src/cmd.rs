@@ -7,8 +7,8 @@ use crate::{
 use clap::Parser;
 use core::fmt;
 use corebc::{core::types::Network, utils::WEI_IN_CORE};
-use foundry_config::Config;
 use futures::FutureExt;
+use orbitalis_config::Config;
 use shuttle_server::ServerConfig;
 use std::{
     future::Future,
@@ -489,7 +489,7 @@ impl PeriodicStateDumper {
         trace!(path=?dump_state, "Dumping state on shutdown");
         match api.serialized_state().await {
             Ok(state) => {
-                if let Err(err) = foundry_common::fs::write_json_file(&dump_state, &state) {
+                if let Err(err) = orbitalis_common::fs::write_json_file(&dump_state, &state) {
                     error!(?err, "Failed to dump state");
                 } else {
                     trace!(path=?dump_state, "Dumped state on shutdown");

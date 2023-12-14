@@ -1,12 +1,12 @@
 use crate::{
     cmd::{Cmd, LoadConfig},
-    utils::FoundryPathExt,
+    utils::OrbitalisPathExt,
 };
 use clap::{Parser, ValueHint};
 use console::{style, Style};
-use foundry_common::{fs, term::cli_warn};
-use foundry_config::{impl_figment_convert_basic, Config};
-use foundry_utils::glob::expand_globs;
+use orbitalis_common::{fs, term::cli_warn};
+use orbitalis_config::{impl_figment_convert_basic, Config};
+use orbitalis_utils::glob::expand_globs;
 use rayon::prelude::*;
 use similar::{ChangeTag, TextDiff};
 use spark_fmt::{format, parse, print_diagnostics_report};

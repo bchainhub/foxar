@@ -14,7 +14,7 @@ pub mod solang_ext;
 mod string;
 pub mod visit;
 
-pub use foundry_config::fmt::*;
+pub use orbitalis_config::fmt::*;
 
 pub use comments::Comments;
 pub use formatter::{Formatter, FormatterError};

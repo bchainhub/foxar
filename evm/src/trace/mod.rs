@@ -7,9 +7,9 @@ use corebc::{
     types::{Bytes, DefaultFrame, GoCoreDebugTracingOptions, StructLog, H256, U256},
 };
 pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
-use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
 use hashbrown::HashMap;
 use node::CallTraceNode;
+use orbitalis_common::contracts::{ContractsByAddress, ContractsByArtifact};
 use revm::interpreter::{opcode, CallContext, InstructionResult, Memory, Stack};
 use serde::{Deserialize, Serialize};
 use std::{

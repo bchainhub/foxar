@@ -3,22 +3,22 @@ name: test
 on: workflow_dispatch
 
 env:
-  FOUNDRY_PROFILE: ci
+  ORBITALIS_PROFILE: ci
 
 jobs:
   check:
     strategy:
       fail-fast: true
 
-    name: Foundry project
+    name: Orbitalis project
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
+      - name: Install Orbitalis
+        uses: orbitalis-rs/orbitalis-toolchain@v1
         with:
           version: nightly
 

@@ -1,5 +1,5 @@
 //! Tests for various cache command
-use foundry_cli_test_utils::{
+use orbitalis_cli_test_utils::{
     sparktest,
     util::{TestCommand, TestProject},
 };

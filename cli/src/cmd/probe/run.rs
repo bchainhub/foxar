@@ -6,9 +6,9 @@ use corebc::{
     types::H176,
 };
 use eyre::WrapErr;
-use foundry_config::{find_project_root_path, Config};
-use foundry_evm::utils::evm_spec;
-use foundry_utils::types::ToRuint;
+use orbitalis_config::{find_project_root_path, Config};
+use orbitalis_evm::utils::evm_spec;
+use orbitalis_utils::types::ToRuint;
 use probe::{
     executor::{EvmError, ExecutionErr},
     trace::{identifier::SignaturesIdentifier, CallTraceDecoder, Traces},
@@ -223,7 +223,7 @@ impl RunArgs {
         let mut decoder = CallTraceDecoderBuilder::new().with_labels(labeled_addresses).build();
 
         decoder.add_signature_identifier(SignaturesIdentifier::new(
-            Config::foundry_cache_dir(),
+            Config::orbitalis_cache_dir(),
             config.offline,
         )?);
 
@@ -275,7 +275,7 @@ async fn print_traces(
     verbose: bool,
 ) -> eyre::Result<()> {
     if result.traces.is_empty() {
-        eyre::bail!("Unexpected error: No traces. Please report this as a bug: https://github.com/foundry-rs/foundry/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
+        eyre::bail!("Unexpected error: No traces. Please report this as a bug: https://github.com/orbitalis-rs/orbitalis/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
     }
 
     println!("Traces:");

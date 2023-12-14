@@ -11,8 +11,8 @@ use corebc::{
 };
 use probe::Cast;
 
-use foundry_common::abi::{get_event, parse_tokens};
-use foundry_config::Config;
+use orbitalis_common::abi::{get_event, parse_tokens};
+use orbitalis_config::Config;
 
 use itertools::Itertools;
 

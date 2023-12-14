@@ -22,7 +22,7 @@ use corebc::{
     types::{transaction::eip2718::TypedTransaction, NameOrAddress, H256, U256},
     utils,
 };
-use foundry_common::{fmt::*, RpcUrl};
+use orbitalis_common::{fmt::*, RpcUrl};
 use revm::{
     interpreter::CreateInputs,
     primitives::{Account, TransactTo},
@@ -38,7 +38,7 @@ pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
     149, 108,
 ]);
 
-pub const MAGIC_SKIP_BYTES: &[u8] = b"FOUNDRY::SKIP";
+pub const MAGIC_SKIP_BYTES: &[u8] = b"ORBITALIS::SKIP";
 
 /// Helps collecting transactions from different forks.
 #[derive(Debug, Clone, Default)]

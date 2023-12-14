@@ -24,9 +24,9 @@ use corebc::{
     types::Network,
 };
 use eyre::ContextCompat;
-use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
-use foundry_config::{FuzzDictionaryConfig, InvariantConfig};
 use hashbrown::HashMap;
+use orbitalis_common::contracts::{ContractsByAddress, ContractsByArtifact};
+use orbitalis_config::{FuzzDictionaryConfig, InvariantConfig};
 use parking_lot::{Mutex, RwLock};
 use proptest::{
     strategy::{BoxedStrategy, Strategy, ValueTree},

@@ -17,12 +17,12 @@ use corebc::{
 };
 use dialoguer::Confirm;
 use eyre::{ContextCompat, WrapErr};
-use foundry_common::{
+use orbitalis_common::{
     abi::format_token,
     evm::{Breakpoints, EvmArgs},
     shell, ContractsByArtifact, RpcUrl, CONTRACT_MAX_SIZE, SELECTOR_LEN,
 };
-use foundry_config::{figment, Config};
+use orbitalis_config::{figment, Config};
 use probe::{
     decode,
     executor::inspector::{
@@ -52,8 +52,8 @@ use yansi::Paint;
 
 mod build;
 use build::{filter_sources_and_artifacts, BuildOutput};
-use foundry_common::{abi::encode_args, contracts::get_contract_name, errors::UnlinkedByteCode};
-use foundry_config::figment::{
+use orbitalis_common::{abi::encode_args, contracts::get_contract_name, errors::UnlinkedByteCode};
+use orbitalis_config::figment::{
     value::{Dict, Map},
     Metadata, Profile, Provider,
 };
@@ -78,7 +78,7 @@ use crate::cmd::retry::RetryArgs;
 pub use transaction::TransactionWithMetadata;
 
 // Loads project's figment and merges the build cli arguments into it
-foundry_config::merge_impl_figment_convert!(ScriptArgs, opts, evm_opts);
+orbitalis_config::merge_impl_figment_convert!(ScriptArgs, opts, evm_opts);
 
 /// CLI arguments for `spark script`.
 #[derive(Debug, Clone, Parser, Default)]
@@ -102,7 +102,7 @@ pub struct ScriptArgs {
         long,
         short,
         default_value = "run()",
-        value_parser = foundry_common::clap_helpers::strip_0x_prefix
+        value_parser = orbitalis_common::clap_helpers::strip_0x_prefix
     )]
     pub sig: String,
 
@@ -214,7 +214,7 @@ impl ScriptArgs {
             .build();
 
         decoder.add_signature_identifier(SignaturesIdentifier::new(
-            Config::foundry_cache_dir(),
+            Config::orbitalis_cache_dir(),
             script_config.config.offline,
         )?);
 
@@ -279,7 +279,7 @@ impl ScriptArgs {
 
         if !result.success || verbosity > 3 {
             if result.traces.is_empty() {
-                eyre::bail!("Unexpected error: No traces despite verbosity level. Please report this as a bug: https://github.com/foundry-rs/foundry/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
+                eyre::bail!("Unexpected error: No traces despite verbosity level. Please report this as a bug: https://github.com/orbitalis-rs/orbitalis/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
             }
 
             shell::println("Traces:")?;
@@ -706,14 +706,14 @@ impl ScriptConfig {
 mod tests {
     use super::*;
     use crate::cmd::LoadConfig;
-    use foundry_cli_test_utils::tempfile::tempdir;
-    use foundry_config::UnresolvedEnvVarError;
+    use orbitalis_cli_test_utils::tempfile::tempdir;
+    use orbitalis_config::UnresolvedEnvVarError;
     use std::fs;
 
     #[test]
     fn can_parse_sig() {
         let args: ScriptArgs = ScriptArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "Contract.sol",
             "--sig",
             "0x522bb70400000000000000000000cb58e5dd06163a480c22d540ec763325a0b5860fb56c",
@@ -727,7 +727,7 @@ mod tests {
     #[test]
     fn can_parse_unlocked() {
         let args: ScriptArgs = ScriptArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "Contract.sol",
             "--sender",
             "cb914e59b44847b379578588920ca78fbf26c0b4956c",
@@ -737,7 +737,7 @@ mod tests {
 
         let key = U256::zero();
         let args = ScriptArgs::try_parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "Contract.sol",
             "--sender",
             "cb914e59b44847b379578588920ca78fbf26c0b4956c",
@@ -751,7 +751,7 @@ mod tests {
     #[test]
     fn can_merge_script_config() {
         let args: ScriptArgs =
-            ScriptArgs::parse_from(["foundry-cli", "Contract.sol", "--cvm-version", "nucleus"]);
+            ScriptArgs::parse_from(["orbitalis-cli", "Contract.sol", "--cvm-version", "nucleus"]);
         let config = args.load_config();
         assert_eq!(config.cvm_version.to_string(), "nucleus".to_string());
     }
@@ -759,7 +759,7 @@ mod tests {
     #[test]
     fn can_parse_verifier_url() {
         let args: ScriptArgs = ScriptArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "script",
             "script/Test.s.sol:TestScript",
             "--fork-url",
@@ -791,7 +791,7 @@ mod tests {
         let toml_file = root.join(Config::FILE_NAME);
         fs::write(toml_file, config).unwrap();
         let args: ScriptArgs = ScriptArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "DeployV1",
             "--rpc-url",
             "devin",

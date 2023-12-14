@@ -156,18 +156,18 @@ fn fix_toml_non_strict_profiles(
     results
 }
 
-/// Fix foundry.toml files. Making sure any implicit profile `[name]` becomes
+/// Fix orbitalis.toml files. Making sure any implicit profile `[name]` becomes
 /// `[profile.name]`. Return any warnings
 pub fn fix_tomls() -> Vec<Warning> {
     let mut warnings = vec![];
 
     let tomls = {
         let mut tomls = vec![];
-        if let Some(global_toml) = Config::foundry_dir_toml().filter(|p| p.exists()) {
+        if let Some(global_toml) = Config::orbitalis_dir_toml().filter(|p| p.exists()) {
             tomls.push(global_toml);
         }
         let local_toml = PathBuf::from(
-            Env::var("FOUNDRY_CONFIG").unwrap_or_else(|| Config::FILE_NAME.to_string()),
+            Env::var("ORBITALIS_CONFIG").unwrap_or_else(|| Config::FILE_NAME.to_string()),
         );
         if local_toml.exists() {
             tomls.push(local_toml);
@@ -227,7 +227,7 @@ mod tests {
                     // setup home directory,
                     // **Note** this only has an effect on unix, as [`dirs_next::home_dir()`] on windows uses `FOLDERID_Profile`
                     jail.set_env("HOME", jail.directory().display().to_string());
-                    std::fs::create_dir(jail.directory().join(".foundry")).unwrap();
+                    std::fs::create_dir(jail.directory().join(".orbitalis")).unwrap();
 
                     // define function type to allow implicit params / return
                     let f: Box<dyn FnOnce(&mut Jail) -> Result<(), figment::Error>> = Box::new($fun);
@@ -241,7 +241,7 @@ mod tests {
 
     fix_test!(test_implicit_profile_name_changed, |jail| {
         jail.create_file(
-            "foundry.toml",
+            "orbitalis.toml",
             r#"
                 [default]
                 src = "src"
@@ -253,7 +253,7 @@ mod tests {
         )?;
         fix_tomls();
         assert_eq!(
-            fs::read_to_string("foundry.toml").unwrap(),
+            fs::read_to_string("orbitalis.toml").unwrap(),
             r#"
                 [profile.default]
                 src = "src"
@@ -268,7 +268,7 @@ mod tests {
 
     fix_test!(test_leave_standalone_sections_alone, |jail| {
         jail.create_file(
-            "foundry.toml",
+            "orbitalis.toml",
             r#"
                 [default]
                 src = "src"
@@ -282,7 +282,7 @@ mod tests {
         )?;
         fix_tomls();
         assert_eq!(
-            fs::read_to_string("foundry.toml").unwrap(),
+            fs::read_to_string("orbitalis.toml").unwrap(),
             r#"
                 [profile.default]
                 src = "src"
@@ -303,14 +303,14 @@ mod tests {
         test_global_toml_is_edited,
         |jail| {
             jail.create_file(
-                "foundry.toml",
+                "orbitalis.toml",
                 r#"
                 [other]
                 src = "other-src"
             "#,
             )?;
             jail.create_file(
-                ".foundry/foundry.toml",
+                ".orbitalis/orbitalis.toml",
                 r#"
                 [default]
                 src = "src"
@@ -318,14 +318,14 @@ mod tests {
             )?;
             fix_tomls();
             assert_eq!(
-                fs::read_to_string("foundry.toml").unwrap(),
+                fs::read_to_string("orbitalis.toml").unwrap(),
                 r#"
                 [profile.other]
                 src = "other-src"
             "#
             );
             assert_eq!(
-                fs::read_to_string(".foundry/foundry.toml").unwrap(),
+                fs::read_to_string(".orbitalis/orbitalis.toml").unwrap(),
                 r#"
                 [profile.default]
                 src = "src"

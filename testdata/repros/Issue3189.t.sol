@@ -4,7 +4,7 @@ pragma solidity 1.1.0;
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
-// https://github.com/foundry-rs/foundry/issues/3189
+// https://github.com/orbitalis-rs/orbitalis/issues/3189
 contract MyContract {
     function foo(uint256 arg) public returns (uint256) {
         return arg + 2;

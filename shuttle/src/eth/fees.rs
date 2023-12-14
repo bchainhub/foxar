@@ -3,8 +3,8 @@ use crate::eth::{
     error::BlockchainError,
 };
 use corebc::types::{H256, U256};
-use foundry_evm::revm::primitives::SpecId;
 use futures::StreamExt;
+use orbitalis_evm::revm::primitives::SpecId;
 use parking_lot::{Mutex, RwLock};
 use shuttle_core::eth::transaction::TypedTransaction;
 use std::{

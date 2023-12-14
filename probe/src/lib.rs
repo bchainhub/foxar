@@ -20,8 +20,8 @@ use corebc_core::{
 use corebc_providers::{Middleware, PendingTransaction};
 use evm_disassembler::{disassemble_bytes, disassemble_str, format_operations};
 use eyre::{Context, Result};
-use foundry_common::{abi::encode_args, fmt::*, TransactionReceiptWithRevertReason};
-pub use foundry_evm::*;
+use orbitalis_common::{abi::encode_args, fmt::*, TransactionReceiptWithRevertReason};
+pub use orbitalis_evm::*;
 use rayon::prelude::*;
 pub use rusoto_core::{
     credential::ChainProvider as AwsChainProvider, region::Region as AwsRegion,
@@ -1294,7 +1294,7 @@ impl SimpleCast {
     /// }
     /// ```
     pub fn abi_decode(sig: &str, calldata: &str, input: bool) -> Result<Vec<Token>> {
-        foundry_common::abi::abi_decode(sig, calldata, input, false)
+        orbitalis_common::abi::abi_decode(sig, calldata, input, false)
     }
 
     /// Decodes calldata-encoded hex input or output
@@ -1330,7 +1330,7 @@ impl SimpleCast {
     /// }
     /// ```
     pub fn calldata_decode(sig: &str, calldata: &str, input: bool) -> Result<Vec<Token>> {
-        foundry_common::abi::abi_decode(sig, calldata, input, true)
+        orbitalis_common::abi::abi_decode(sig, calldata, input, true)
     }
 
     /// Performs ABI encoding based off of the function signature. Does not include
@@ -1467,7 +1467,7 @@ impl SimpleCast {
             .iter()
             .zip(contract_names)
             .map(|(contract_abi, name)| {
-                let source = foundry_utils::abi::abi_to_solidity(contract_abi, &name)?;
+                let source = orbitalis_utils::abi::abi_to_solidity(contract_abi, &name)?;
                 Ok(InterfaceSource { name, source })
             })
             .collect::<Result<Vec<InterfaceSource>>>()
@@ -1773,7 +1773,7 @@ mod tests {
         );
     }
 
-    // <https://github.com/foundry-rs/foundry/issues/2681>
+    // <https://github.com/orbitalis-rs/orbitalis/issues/2681>
     #[test]
     fn calldata_array() {
         assert_eq!(

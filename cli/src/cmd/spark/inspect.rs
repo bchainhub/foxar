@@ -17,7 +17,7 @@ use corebc::{
         utils::canonicalize,
     },
 };
-use foundry_common::compile;
+use orbitalis_common::compile;
 use serde_json::{to_value, Value};
 use std::fmt;
 use tracing::trace;

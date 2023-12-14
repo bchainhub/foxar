@@ -12,8 +12,8 @@ use corebc::{
     types::{transaction::eip2718::TypedTransaction, Network},
 };
 use eyre::{ContextCompat, WrapErr};
-use foundry_common::{fs, shell, SELECTOR_LEN};
-use foundry_config::Config;
+use orbitalis_common::{fs, shell, SELECTOR_LEN};
+use orbitalis_config::Config;
 use serde::{Deserialize, Serialize};
 use std::{
     collections::{HashMap, VecDeque},

@@ -16,9 +16,9 @@ use corebc::{
     ylem::{artifacts::contract::CompactContractBytecode, sourcemap::SourceMap},
 };
 use eyre::Context;
-use foundry_common::{compile::ProjectCompiler, evm::EvmArgs, fs};
-use foundry_config::Config;
-use foundry_evm::utils::evm_spec;
+use orbitalis_common::{compile::ProjectCompiler, evm::EvmArgs, fs};
+use orbitalis_config::Config;
+use orbitalis_evm::utils::evm_spec;
 use semver::Version;
 use spark::{
     coverage::{
@@ -35,7 +35,7 @@ use std::{collections::HashMap, sync::mpsc::channel};
 use tracing::trace;
 
 // Loads project's figment and merges the build cli arguments into it
-foundry_config::impl_figment_convert!(CoverageArgs, opts, evm_opts);
+orbitalis_config::impl_figment_convert!(CoverageArgs, opts, evm_opts);
 
 /// CLI arguments for `spark coverage`.
 #[derive(Debug, Clone, Parser)]

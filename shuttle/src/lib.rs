@@ -21,8 +21,8 @@ use corebc::{
     types::{Address, U256},
 };
 use eth::backend::fork::ClientFork;
-use foundry_evm::revm;
 use futures::{FutureExt, TryFutureExt};
+use orbitalis_evm::revm;
 use std::{
     future::Future,
     io,

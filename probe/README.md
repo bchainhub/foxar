@@ -1,8 +1,8 @@
 # `probe`
 
-**Need help with Cast? Read the [📖 Foundry Book (Cast Guide)][foundry-book-probe-guide] (WIP)!**
+**Need help with Cast? Read the [📖 Orbitalis Book (Cast Guide)][orbitalis-book-probe-guide] (WIP)!**
 
-[foundry-book-probe-guide]: https://book.getfoundry.sh/probe/index.html
+[orbitalis-book-probe-guide]: https://book.getorbitalis.sh/probe/index.html
 
 ## Features
 

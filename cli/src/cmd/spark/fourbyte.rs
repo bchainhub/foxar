@@ -1,11 +1,11 @@
 use crate::{
     cmd::spark::build::{CoreBuildArgs, ProjectPathsArgs},
     opts::spark::CompilerArgs,
-    utils::FoundryPathExt,
+    utils::OrbitalisPathExt,
 };
 use clap::Parser;
 use corebc::prelude::artifacts::output_selection::ContractOutputSelection;
-use foundry_common::{
+use orbitalis_common::{
     compile,
     selectors::{import_selectors, SelectorImportData},
     shell,

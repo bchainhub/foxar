@@ -7,13 +7,13 @@ use corebc::{
     types::H256,
     utils::{rlp, rlp::RlpStream},
 };
-use foundry_evm::{
+use memory_db::HashKey;
+use orbitalis_evm::{
     executor::backend::DatabaseError,
     revm::primitives::{AccountInfo, Log},
     HashMap as Map,
 };
-use foundry_utils::types::{ToEthersU256, ToRuint};
-use memory_db::HashKey;
+use orbitalis_utils::types::{ToEthersU256, ToRuint};
 use revm::primitives::B176;
 use shuttle_core::eth::{state::StateOverride, trie::RefSecTrieDBMut};
 use spark::{

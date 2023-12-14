@@ -1,5 +1,5 @@
 use corebc::{abi::Address, types::H176};
-use foundry_evm::revm::precompile::Precompiles;
+use orbitalis_evm::revm::precompile::Precompiles;
 use spark::revm::primitives::SpecId;
 use std::fmt;
 

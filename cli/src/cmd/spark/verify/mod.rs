@@ -10,7 +10,7 @@ use crate::{
 };
 use clap::{Parser, ValueHint};
 use corebc::{abi::Address, types::Network, ylem::info::ContractInfo};
-use foundry_config::{figment, impl_figment_convert, impl_figment_convert_probe, Config};
+use orbitalis_config::{figment, impl_figment_convert, impl_figment_convert_probe, Config};
 use provider::VerificationProviderType;
 use reqwest::Url;
 use std::path::PathBuf;

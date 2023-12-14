@@ -7,9 +7,9 @@ use crate::{
 };
 use clap::{Parser, ValueHint};
 use eyre::{Context, Result};
-use foundry_common::fs;
-use foundry_config::{impl_figment_convert_basic, Config};
 use once_cell::sync::Lazy;
+use orbitalis_common::fs;
+use orbitalis_config::{impl_figment_convert_basic, Config};
 use regex::Regex;
 use semver::Version;
 use std::{
@@ -163,7 +163,7 @@ impl DependencyInstallOpts {
                     }
 
                     // update .gitmodules which is at the root of the repo,
-                    // not necessarily at the root of the current Foundry project
+                    // not necessarily at the root of the current Orbitalis project
                     let root = Git::root_of(git.root)?;
                     git.root(&root).add(Some(".gitmodules"))?;
                 }
@@ -491,7 +491,7 @@ fn match_yn(input: String) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use foundry_cli_test_utils::tempfile::tempdir;
+    use orbitalis_cli_test_utils::tempfile::tempdir;
 
     #[test]
     fn get_oz_tags() {

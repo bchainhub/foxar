@@ -7,7 +7,7 @@ use corebc::{
     utils::to_ican,
 };
 use eyre::{ContextCompat, WrapErr};
-use foundry_common::{abi::format_token_raw, RpcUrl, SELECTOR_LEN};
+use orbitalis_common::{abi::format_token_raw, RpcUrl, SELECTOR_LEN};
 use probe::{executor::inspector::DEFAULT_CREATE2_DEPLOYER, trace::CallTraceDecoder, CallKind};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;

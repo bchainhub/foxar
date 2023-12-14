@@ -16,7 +16,7 @@ use corebc::{
     ylem::{info::ContractInfo, utils::canonicalized},
 };
 use eyre::Context;
-use foundry_common::{abi::parse_tokens, compile};
+use orbitalis_common::{abi::parse_tokens, compile};
 use rustc_hex::ToHex;
 use serde_json::json;
 use std::{path::PathBuf, sync::Arc};
@@ -312,7 +312,7 @@ mod tests {
     #[test]
     fn can_parse_create() {
         let args: CreateArgs = CreateArgs::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "src/Domains.sol:Domains",
             "--verify",
             "--retries",

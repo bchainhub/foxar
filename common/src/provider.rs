@@ -25,7 +25,7 @@ pub type RpcUrl = String;
 /// # Example
 ///
 /// ```
-/// use foundry_common::get_http_provider;
+/// use orbitalis_common::get_http_provider;
 /// # fn f() {
 ///  let retry_provider = get_http_provider("http://localhost:8545");
 /// # }

@@ -79,8 +79,8 @@ impl ProjectCompiler {
     /// # Example
     ///
     /// ```no_run
-    /// use foundry_common::compile::ProjectCompiler;
-    /// let config = foundry_config::Config::load();
+    /// use orbitalis_common::compile::ProjectCompiler;
+    /// let config = orbitalis_config::Config::load();
     /// ProjectCompiler::default()
     ///     .compile_with(&config.project().unwrap(), |prj| Ok(prj.compile()?)).unwrap();
     /// ```

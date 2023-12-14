@@ -3,7 +3,7 @@ use crate::cmd::{
     Cmd, LoadConfig,
 };
 use clap::{Parser, ValueHint};
-use foundry_common::fs;
+use orbitalis_common::fs;
 use std::path::PathBuf;
 
 /// CLI arguments for `spark flatten`.

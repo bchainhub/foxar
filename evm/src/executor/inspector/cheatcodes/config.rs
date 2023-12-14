@@ -1,8 +1,8 @@
 use super::{ensure, fmt_err, Result};
 use crate::executor::opts::EvmOpts;
 use corebc::ylem::{utils::canonicalize, ProjectPathsConfig};
-use foundry_common::fs::normalize_path;
-use foundry_config::{
+use orbitalis_common::fs::normalize_path;
+use orbitalis_config::{
     cache::StorageCachingConfig, fs_permissions::FsAccessKind, Config, FsPermissions,
     ResolvedRpcEndpoints,
 };
@@ -93,23 +93,23 @@ impl CheatsConfig {
         Ok(normalized)
     }
 
-    /// Returns true if the given `path` is the project's foundry.toml file
+    /// Returns true if the given `path` is the project's orbitalis.toml file
     ///
     /// Note: this should be called with normalized path
-    pub fn is_foundry_toml(&self, path: impl AsRef<Path>) -> bool {
+    pub fn is_orbitalis_toml(&self, path: impl AsRef<Path>) -> bool {
         // path methods that do not access the filesystem are such as [`Path::starts_with`], are
         // case-sensitive no matter the platform or filesystem. to make this case-sensitive
         // we convert the underlying `OssStr` to lowercase checking that `path` and
-        // `foundry.toml` are the same file by comparing the FD, because it may not exist
-        let foundry_toml = self.root.join(Config::FILE_NAME);
-        Path::new(&foundry_toml.to_string_lossy().to_lowercase())
+        // `orbitalis.toml` are the same file by comparing the FD, because it may not exist
+        let orbitalis_toml = self.root.join(Config::FILE_NAME);
+        Path::new(&orbitalis_toml.to_string_lossy().to_lowercase())
             .starts_with(Path::new(&path.as_ref().to_string_lossy().to_lowercase()))
     }
 
-    /// Same as [`Self::is_foundry_toml`] but returns an `Err` if [`Self::is_foundry_toml`] returns
-    /// true
-    pub fn ensure_not_foundry_toml(&self, path: impl AsRef<Path>) -> Result<()> {
-        ensure!(!self.is_foundry_toml(path), "Access to foundry.toml is not allowed.");
+    /// Same as [`Self::is_orbitalis_toml`] but returns an `Err` if [`Self::is_orbitalis_toml`]
+    /// returns true
+    pub fn ensure_not_orbitalis_toml(&self, path: impl AsRef<Path>) -> Result<()> {
+        ensure!(!self.is_orbitalis_toml(path), "Access to orbitalis.toml is not allowed.");
         Ok(())
     }
 
@@ -161,7 +161,7 @@ impl Default for CheatsConfig {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use foundry_config::fs_permissions::PathPermission;
+    use orbitalis_config::fs_permissions::PathPermission;
 
     fn config(root: &str, fs_permissions: FsPermissions) -> CheatsConfig {
         CheatsConfig::new(
@@ -184,17 +184,17 @@ mod tests {
     }
 
     #[test]
-    fn test_is_foundry_toml() {
+    fn test_is_orbitalis_toml() {
         let root = "/my/project/root/";
         let config = config(root, FsPermissions::new(vec![PathPermission::read_write("./")]));
 
-        let f = format!("{root}foundry.toml");
-        assert!(config.is_foundry_toml(f));
+        let f = format!("{root}orbitalis.toml");
+        assert!(config.is_orbitalis_toml(f));
 
-        let f = format!("{root}Foundry.toml");
-        assert!(config.is_foundry_toml(f));
+        let f = format!("{root}Orbitalis.toml");
+        assert!(config.is_orbitalis_toml(f));
 
-        let f = format!("{root}lib/other/foundry.toml");
-        assert!(!config.is_foundry_toml(f));
+        let f = format!("{root}lib/other/orbitalis.toml");
+        assert!(!config.is_orbitalis_toml(f));
     }
 }

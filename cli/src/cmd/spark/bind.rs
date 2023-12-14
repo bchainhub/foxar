@@ -4,8 +4,8 @@ use crate::cmd::{
 };
 use clap::{Parser, ValueHint};
 use corebc::contract::{Abigen, ContractFilter, ExcludeContracts, MultiAbigen, SelectContracts};
-use foundry_common::{compile, fs::json_files};
-use foundry_config::impl_figment_convert;
+use orbitalis_common::{compile, fs::json_files};
+use orbitalis_config::impl_figment_convert;
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -13,7 +13,7 @@ use std::{
 
 impl_figment_convert!(BindArgs, build_args);
 
-const DEFAULT_CRATE_NAME: &str = "foundry-contracts";
+const DEFAULT_CRATE_NAME: &str = "orbitalis-contracts";
 const DEFAULT_CRATE_VERSION: &str = "0.1.0";
 
 /// CLI arguments for `spark bind`.

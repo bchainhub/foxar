@@ -315,8 +315,13 @@ mod tests {
 
     #[test]
     fn find_simple_vanity_start() {
-        let args: VanityArgs =
-            VanityArgs::parse_from(["foundry-cli", "--starts-with", "00", "--network", "mainnet"]);
+        let args: VanityArgs = VanityArgs::parse_from([
+            "orbitalis-cli",
+            "--starts-with",
+            "00",
+            "--network",
+            "mainnet",
+        ]);
         let wallet = args.run().unwrap();
         let addr = wallet.address();
         let addr = format!("{addr:x}");
@@ -326,7 +331,7 @@ mod tests {
     #[test]
     fn find_simple_vanity_start2() {
         let args: VanityArgs =
-            VanityArgs::parse_from(["foundry-cli", "--starts-with", "9", "--network", "1"]);
+            VanityArgs::parse_from(["orbitalis-cli", "--starts-with", "9", "--network", "1"]);
         let wallet = args.run().unwrap();
         let addr = wallet.address();
         let addr = format!("{addr:x}");
@@ -336,7 +341,7 @@ mod tests {
     #[test]
     fn find_simple_vanity_end() {
         let args: VanityArgs =
-            VanityArgs::parse_from(["foundry-cli", "--ends-with", "00", "--network", "mainnet"]);
+            VanityArgs::parse_from(["orbitalis-cli", "--ends-with", "00", "--network", "mainnet"]);
         let wallet = args.run().unwrap();
         let addr = wallet.address();
         let addr = format!("{addr:x}");

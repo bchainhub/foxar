@@ -3,12 +3,12 @@ use std::fs::canonicalize;
 use crate::{
     cmd::spark::build::{CoreBuildArgs, ProjectPathsArgs},
     opts::spark::CompilerArgs,
-    utils::FoundryPathExt,
+    utils::OrbitalisPathExt,
 };
 use clap::Parser;
 use comfy_table::Table;
 use corebc::prelude::{artifacts::output_selection::ContractOutputSelection, info::ContractInfo};
-use foundry_common::{
+use orbitalis_common::{
     compile,
     selectors::{import_selectors, SelectorImportData},
 };

@@ -2,15 +2,15 @@
 name = "spark-fmt"
 version = "0.2.0"
 edition = "2021"
-description = "Foundry's solidity formatting and linting support"
+description = "Orbitalis's solidity formatting and linting support"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/foundry-rs/foundry"
+repository = "https://github.com/orbitalis-rs/orbitalis"
 keywords = ["ethereum", "web3", "solidity", "linter"]
 
 [dependencies]
-# foundry dep
-foundry-config = { path = "../config" }
+# orbitalis dep
+orbitalis-config = { path = "../config" }
 
 corebc-core = { workspace = true}
 

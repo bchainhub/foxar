@@ -1,8 +1,8 @@
-use crate::utils::FoundryPathExt;
+use crate::utils::OrbitalisPathExt;
 use clap::Parser;
 use corebc::ylem::{FileFilter, ProjectPathsConfig};
-use foundry_common::glob::GlobMatcher;
-use foundry_config::Config;
+use orbitalis_common::glob::GlobMatcher;
+use orbitalis_config::Config;
 use spark::TestFilter;
 use std::{fmt, path::Path};
 
@@ -86,7 +86,7 @@ impl FileFilter for FilterArgs {
     /// Returns true if the file regex pattern match the `file`
     ///
     /// If no file regex is set this returns true if the file ends with `.t.sol`, see
-    /// [FoundryPathExr::is_sol_test()]
+    /// [OrbitalisPathExr::is_sol_test()]
     fn is_match(&self, file: &Path) -> bool {
         if let Some(file) = file.as_os_str().to_str() {
             if let Some(ref glob) = self.path_pattern {
@@ -188,7 +188,7 @@ impl FileFilter for ProjectPathsAwareFilter {
     /// Returns true if the file regex pattern match the `file`
     ///
     /// If no file regex is set this returns true if the file ends with `.t.sol`, see
-    /// [FoundryPathExr::is_sol_test()]
+    /// [OrbitalisPathExr::is_sol_test()]
     fn is_match(&self, file: &Path) -> bool {
         self.args_filter.is_match(file)
     }

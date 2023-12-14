@@ -12,8 +12,8 @@ use crate::{
     visit::{Visitable, Visitor},
     FormatterConfig, InlineConfig, IntTypes, NumberUnderscore,
 };
-use foundry_config::fmt::{MultilineFuncHeaderStyle, SingleLineBlockStyle};
 use itertools::{Either, Itertools};
+use orbitalis_config::fmt::{MultilineFuncHeaderStyle, SingleLineBlockStyle};
 use std::fmt::Write;
 use thiserror::Error;
 

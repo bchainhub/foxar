@@ -2,10 +2,10 @@
 
 use crate::{
     cmd::spark::{build::BuildArgs, snapshot::SnapshotArgs, test::TestArgs},
-    utils::{self, FoundryPathExt},
+    utils::{self, OrbitalisPathExt},
 };
 use clap::Parser;
-use foundry_config::Config;
+use orbitalis_config::Config;
 use std::{collections::HashSet, convert::Infallible, path::PathBuf, sync::Arc};
 use tracing::trace;
 use watchexec::{

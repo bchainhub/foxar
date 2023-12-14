@@ -1,18 +1,18 @@
 [package]
-name = "foundry-evm"
+name = "orbitalis-evm"
 version = "0.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "../README.md"
-repository = "https://github.com/foundry-rs/foundry"
+repository = "https://github.com/orbitalis-rs/orbitalis"
 keywords = ["ethereum", "web3", "evm"]
 
 [dependencies]
-foundry-abi = { path = "../abi" }
-foundry-utils = { path = "../utils" }
-foundry-common = { path = "../common" }
-foundry-config = { path = "../config" }
-foundry-macros = { path = "../macros" }
+orbitalis-abi = { path = "../abi" }
+orbitalis-utils = { path = "../utils" }
+orbitalis-common = { path = "../common" }
+orbitalis-config = { path = "../config" }
+orbitalis-macros = { path = "../macros" }
 
 corebc = { workspace = true, features = ["corebc-ylem"]}
 
@@ -62,5 +62,5 @@ walkdir = "2"
 semver = "1"
 
 [dev-dependencies]
-foundry-utils = { path = "../utils" }
+orbitalis-utils = { path = "../utils" }
 tempfile = "3"

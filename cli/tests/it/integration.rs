@@ -1,4 +1,4 @@
-use foundry_cli_test_utils::{sparktest_external, util::setup_spark_remote};
+use orbitalis_cli_test_utils::{sparktest_external, util::setup_spark_remote};
 
 // sparktest_external!(solmate, "transmissions11/solmate");
 // sparktest_external!(prb_math, "PaulRBerg/prb-math");
@@ -22,7 +22,7 @@ fn can_checkout_build() {
 
 /// Forking tests
 mod fork_integration {
-    // use foundry_cli_test_utils::sparktest_external;
+    // use orbitalis_cli_test_utils::sparktest_external;
 
     // sparktest_external!(multicall, "makerdao/multicall", &["--block-number", "1"]);
     // sparktest_external!(

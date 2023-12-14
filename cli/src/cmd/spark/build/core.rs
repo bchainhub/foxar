@@ -6,7 +6,7 @@ use clap::{Parser, ValueHint};
 use corebc::ylem::{
     artifacts::RevertStrings, remappings::Remapping, utils::canonicalized, Project,
 };
-use foundry_config::{
+use orbitalis_config::{
     figment,
     figment::{
         error::Kind::InvalidType,
@@ -117,9 +117,9 @@ pub struct CoreBuildArgs {
 impl CoreBuildArgs {
     /// Returns the `Project` for the current workspace
     ///
-    /// This loads the `foundry_config::Config` for the current workspace (see
+    /// This loads the `orbitalis_config::Config` for the current workspace (see
     /// [`utils::find_project_root_path`] and merges the cli `BuildArgs` into it before returning
-    /// [`foundry_config::Config::project()`]
+    /// [`orbitalis_config::Config::project()`]
     pub fn project(&self) -> eyre::Result<Project> {
         let config = self.try_load_config_emit_warnings()?;
         Ok(config.project()?)
@@ -140,7 +140,7 @@ impl<'a> From<&'a CoreBuildArgs> for Figment {
                 panic!("error: config-path `{}` does not exist", config_path.display())
             }
             if !config_path.ends_with(Config::FILE_NAME) {
-                panic!("error: the config-path must be a path to a foundry.toml file")
+                panic!("error: the config-path must be a path to a orbitalis.toml file")
             }
             let config_path = canonicalized(config_path);
             Config::figment_with_root(config_path.parent().unwrap())

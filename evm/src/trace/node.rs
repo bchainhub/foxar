@@ -11,7 +11,7 @@ use corebc::{
     abi::{Abi, Function},
     types::{Action, Address, Call, CallResult, Create, CreateResult, Res, Suicide},
 };
-use foundry_common::SELECTOR_LEN;
+use orbitalis_common::SELECTOR_LEN;
 use revm::interpreter::InstructionResult;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

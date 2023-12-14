@@ -6,15 +6,15 @@ use corebc::{
     ylem::{contracts::ArtifactContracts, Artifact, ProjectCompileOutput},
 };
 use eyre::Result;
-use foundry_common::{ContractsByArtifact, TestFunctionExt};
-use foundry_evm::{
+use orbitalis_common::{ContractsByArtifact, TestFunctionExt};
+use orbitalis_evm::{
     executor::{
         backend::Backend, fork::CreateFork, inspector::CheatsConfig, opts::EvmOpts, Executor,
         ExecutorBuilder,
     },
     revm,
 };
-use foundry_utils::PostLinkInput;
+use orbitalis_utils::PostLinkInput;
 use rayon::prelude::*;
 use revm::primitives::SpecId;
 use std::{collections::BTreeMap, path::Path, sync::mpsc::Sender};
@@ -242,7 +242,7 @@ impl MultiContractRunnerBuilder {
         // create a mapping of name => (abi, deployment code, Vec<library deployment code>)
         let mut deployable_contracts = DeployableContracts::default();
 
-        foundry_utils::link_with_nonce_or_address(
+        orbitalis_utils::link_with_nonce_or_address(
             ArtifactContracts::from_iter(contracts),
             &mut known_contracts,
             Default::default(),

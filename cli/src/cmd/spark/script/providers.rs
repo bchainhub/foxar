@@ -3,7 +3,7 @@ use corebc::{
     types::Network,
 };
 use eyre::WrapErr;
-use foundry_common::{get_http_provider, RpcUrl};
+use orbitalis_common::{get_http_provider, RpcUrl};
 
 use std::{
     collections::{hash_map::Entry, HashMap},

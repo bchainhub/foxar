@@ -14,7 +14,7 @@ Chisel is a fully-functional Solidity REPL, allowing you to write, execute, and 
 
 Once you finish testing, Chisel even lets you export your code to a new solidity file!
 
-In this sense, Chisel even serves as a Foundry script generator.
+In this sense, Chisel even serves as a Orbitalis script generator.
 
 ## Feature Completion
 
@@ -26,24 +26,24 @@ In this sense, Chisel even serves as a Foundry script generator.
 - Forking remote chains
 - Session caching
 
-Chisel aims to improve upon existing Solidity REPLs by integrating with foundry as well as offering additional functionality:
+Chisel aims to improve upon existing Solidity REPLs by integrating with orbitalis as well as offering additional functionality:
 
 - More verbose variable / state inspection
 - Improved error messages
-- Foundry-style call traces
+- Orbitalis-style call traces
 - In-depth environment configuration
 - ... and many more future features!
 
 ### Migrating from [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell)
 
 Migration from existing Solidity REPLs such as [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell) is as
-simple as installing Chisel via `foundryup`. For information on features, usage, and configuration, see the [Usage](#usage) section as well as the pilot manpage (`man pilot` or `pilot --help`).
+simple as installing Chisel via `orbitalisup`. For information on features, usage, and configuration, see the [Usage](#usage) section as well as the pilot manpage (`man pilot` or `pilot --help`).
 
 ## Installation
 
-To install `pilot`, simply run `foundryup`!
+To install `pilot`, simply run `orbitalisup`!
 
-If you do not have `foundryup` installed, reference the Foundry [installation guide](../README.md#installation).
+If you do not have `orbitalisup` installed, reference the Orbitalis [installation guide](../README.md#installation).
 
 ## Usage
 
@@ -121,7 +121,7 @@ $ pilot load 1
 
 ### Clearing the Cache
 
-To clear Chisel's cache (stored in `~/.foundry/cache/pilot`), use the `pilot clear-cache` or `!clearcache` command.
+To clear Chisel's cache (stored in `~/.orbitalis/cache/pilot`), use the `pilot clear-cache` or `!clearcache` command.
 
 ```text
 ➜ !clearcache
@@ -162,8 +162,8 @@ Type: uint
 ### Forking a Network
 
 To fork a network within your pilot session, use the `!fork <rpc-url>` command or supply a `--fork-url <url>` flag
-to the pilot binary. The `!fork` command also accepts aliases from the `[rpc_endpoints]` section of your `foundry.toml`
-if pilot was launched in the root of a foundry project (ex. `!fork mainnet`), as well as interpolated environment variables
+to the pilot binary. The `!fork` command also accepts aliases from the `[rpc_endpoints]` section of your `orbitalis.toml`
+if pilot was launched in the root of a orbitalis project (ex. `!fork mainnet`), as well as interpolated environment variables
 (ex. `!fork https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`).
 
 ### Fetching an Interface of a Verified Contract
@@ -200,7 +200,7 @@ docs
 evm
 fmt
 spark
-foundryup
+orbitalisup
 LICENSE-APACHE
 LICENSE-MIT
 README.md

@@ -1,4 +1,4 @@
-# Foundry CLIs
+# Orbitalis CLIs
 
 The CLIs are written using [clap's](https://docs.rs/clap) [derive feature](https://github.com/clap-rs/clap/blob/master/examples/derive_ref/README.md).
 
@@ -8,7 +8,7 @@ See [Installation](../README.md#Installation).
 
 ## Usage
 
-Read the [📖 Foundry Book][foundry-book]
+Read the [📖 Orbitalis Book][orbitalis-book]
 
 ## Debugging
 
@@ -17,6 +17,6 @@ Debug logs are printed with
 verbosity level via the
 [`RUST_LOG`](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#filtering-events-with-environment-variables)
 environment variable, on a per package level,
-e.g.:`RUST_LOG=spark,foundry_evm spark test`
+e.g.:`RUST_LOG=spark,orbitalis_evm spark test`
 
-[foundry-book]: https://book.getfoundry.sh
+[orbitalis-book]: https://book.getorbitalis.sh

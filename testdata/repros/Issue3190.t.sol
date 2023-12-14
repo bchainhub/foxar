@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 import "../logs/console.sol";
 
-// https://github.com/foundry-rs/foundry/issues/3190
+// https://github.com/orbitalis-rs/orbitalis/issues/3190
 contract Issue3190Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 

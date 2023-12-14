@@ -40,13 +40,13 @@ use corebc::{
     },
     utils::rlp,
 };
-use foundry_common::ProviderBuilder;
-use foundry_evm::{
+use futures::channel::mpsc::Receiver;
+use orbitalis_common::ProviderBuilder;
+use orbitalis_evm::{
     executor::backend::DatabaseError,
     revm::interpreter::{return_ok, return_revert, InstructionResult},
 };
-use foundry_utils::types::ToEthersU256;
-use futures::channel::mpsc::Receiver;
+use orbitalis_utils::types::ToEthersU256;
 use parking_lot::RwLock;
 use shuttle_core::{
     eth::{

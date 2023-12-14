@@ -9,9 +9,9 @@ use corebc::{
     signers::LocalWallet,
 };
 use eyre::{ContextCompat, WrapErr};
-use foundry_common::{fs, get_http_provider};
-use foundry_config::Config;
 use futures::future::join_all;
+use orbitalis_common::{fs, get_http_provider};
+use orbitalis_config::Config;
 use serde::{Deserialize, Serialize};
 use std::{
     io::BufWriter,

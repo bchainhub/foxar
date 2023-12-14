@@ -8,12 +8,12 @@ use crate::{
 };
 use clap::Parser;
 use corebc::types::U256;
-use foundry_common::{
+use orbitalis_common::{
     compile::{self, ProjectCompiler},
     evm::EvmArgs,
     get_contract_name, get_file_name,
 };
-use foundry_config::{figment, get_available_profiles, Config};
+use orbitalis_config::{figment, get_available_profiles, Config};
 use probe::fuzz::CounterExample;
 use regex::Regex;
 use spark::{
@@ -34,15 +34,15 @@ use yansi::Paint;
 mod filter;
 use crate::cmd::spark::test::filter::ProjectPathsAwareFilter;
 pub use filter::FilterArgs;
-use foundry_common::shell;
-use foundry_config::figment::{
+use orbitalis_common::shell;
+use orbitalis_config::figment::{
     value::{Dict, Map},
     Metadata, Profile, Provider,
 };
-use foundry_evm::utils::evm_spec;
+use orbitalis_evm::utils::evm_spec;
 
 // Loads project's figment and merges the build cli arguments into it
-foundry_config::merge_impl_figment_convert!(TestArgs, opts, evm_opts);
+orbitalis_config::merge_impl_figment_convert!(TestArgs, opts, evm_opts);
 
 /// CLI arguments for `spark test`.
 #[derive(Debug, Clone, Parser)]
@@ -106,7 +106,7 @@ pub struct TestArgs {
     #[clap(long, value_parser = utils::parse_u256)]
     pub fuzz_seed: Option<U256>,
 
-    #[clap(long, env = "FOUNDRY_FUZZ_RUNS", value_name = "RUNS")]
+    #[clap(long, env = "ORBITALIS_FUZZ_RUNS", value_name = "RUNS")]
     pub fuzz_runs: Option<u64>,
 }
 
@@ -556,7 +556,7 @@ async fn test(
         let mut results: BTreeMap<String, SuiteResult> = BTreeMap::new();
         let mut gas_report = GasReport::new(config.energy_reports, config.energy_reports_ignore);
         let sig_identifier =
-            SignaturesIdentifier::new(Config::foundry_cache_dir(), config.offline)?;
+            SignaturesIdentifier::new(Config::orbitalis_cache_dir(), config.offline)?;
 
         let mut total_passed = 0;
         let mut total_failed = 0;

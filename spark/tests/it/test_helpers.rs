@@ -6,8 +6,8 @@ use corebc::{
     types::{Address, U256},
     ylem::{artifacts::Libraries, Project, ProjectPathsConfig},
 };
-use foundry_config::Config;
-use foundry_evm::{
+use orbitalis_config::Config;
+use orbitalis_evm::{
     executor::{
         backend::Backend,
         opts::{Env, EvmOpts},
@@ -93,7 +93,7 @@ pub const RE_PATH_SEPARATOR: &str = "/";
 
 pub mod filter {
     use super::*;
-    use foundry_common::TestFilter;
+    use orbitalis_common::TestFilter;
     use regex::Regex;
 
     pub struct Filter {

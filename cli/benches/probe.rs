@@ -1,5 +1,5 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use foundry_cli::cmd::probe::wallet::vanity::*;
+use orbitalis_cli::cmd::probe::wallet::vanity::*;
 use rayon::prelude::*;
 use std::{hint::black_box, time::Duration};
 
