@@ -4,7 +4,7 @@ pragma solidity 1.1.0;
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
-// https://github.com/foundry-rs/foundry/issues/4586
+// https://github.com/orbitalis-rs/orbitalis/issues/4586
 contract Issue4586Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
@@ -31,7 +31,8 @@ contract Issue4586Test is DSTest {
 }
 
 contract InvariantHandler {
-    address constant HEVM_ADDRESS = address(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
+    address constant HEVM_ADDRESS =
+        address(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
     uint256 public calledRollFork;

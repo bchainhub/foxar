@@ -12,15 +12,15 @@ use crate::executor::snapshot::Snapshots;
 /// Type alias for an in memory database
 ///
 /// See `EmptyDBWrapper`
-pub type FoundryEvmInMemoryDB = CacheDB<EmptyDBWrapper>;
+pub type OrbitalisEvmInMemoryDB = CacheDB<EmptyDBWrapper>;
 
-/// In memory Database for anvil
+/// In memory Database for shuttle
 ///
 /// This acts like a wrapper type for [InMemoryDB] but is capable of applying snapshots
 #[derive(Debug)]
 pub struct MemDb {
-    pub inner: FoundryEvmInMemoryDB,
-    pub snapshots: Snapshots<FoundryEvmInMemoryDB>,
+    pub inner: OrbitalisEvmInMemoryDB,
+    pub snapshots: Snapshots<OrbitalisEvmInMemoryDB>,
 }
 
 impl Default for MemDb {

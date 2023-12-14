@@ -79,12 +79,12 @@ impl ProjectCompiler {
     /// # Example
     ///
     /// ```no_run
-    /// use foundry_common::compile::ProjectCompiler;
-    /// let config = foundry_config::Config::load();
+    /// use orbitalis_common::compile::ProjectCompiler;
+    /// let config = orbitalis_config::Config::load();
     /// ProjectCompiler::default()
     ///     .compile_with(&config.project().unwrap(), |prj| Ok(prj.compile()?)).unwrap();
     /// ```
-    #[tracing::instrument(target = "forge::compile", skip_all)]
+    #[tracing::instrument(target = "spark::compile", skip_all)]
     pub fn compile_with<F>(self, project: &Project, f: F) -> Result<ProjectCompileOutput>
     where
         F: FnOnce(&Project) -> Result<ProjectCompileOutput>,
@@ -387,7 +387,7 @@ pub fn compile_target_with_filter(
     // Checking if it's a standalone script, or part of a project.
     if graph.files().get(target_path).is_none() {
         if verify {
-            eyre::bail!("You can only verify deployments from inside a project! Make sure it exists with `forge tree`.");
+            eyre::bail!("You can only verify deployments from inside a project! Make sure it exists with `spark tree`.");
         }
         return compile_files(project, vec![target_path.to_path_buf()], silent)
     }

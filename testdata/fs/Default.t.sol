@@ -6,8 +6,8 @@ import "../cheats/Cheats.sol";
 
 contract DefaultAccessTest is DSTest {
     Cheats constant cheats = Cheats(HEVM_ADDRESS);
-    bytes constant FOUNDRY_WRITE_ERR =
-        "The path \"../testdata/fixtures/File/write_file.txt\" is not allowed to be accessed for write operations.";
+    bytes constant ORBITALIS_WRITE_ERR =
+        'The path "../testdata/fixtures/File/write_file.txt" is not allowed to be accessed for write operations.';
 
     function testReadFile() public {
         string memory path = "../testdata/fixtures/File/read.txt";
@@ -24,7 +24,7 @@ contract DefaultAccessTest is DSTest {
     function testWriteFile() public {
         string memory path = "../testdata/fixtures/File/write_file.txt";
         string memory data = "hello writable world";
-        cheats.expectRevert(FOUNDRY_WRITE_ERR);
+        cheats.expectRevert(ORBITALIS_WRITE_ERR);
         cheats.writeFile(path, data);
 
         cheats.writeFileBinary(path, bytes(data));
@@ -33,13 +33,13 @@ contract DefaultAccessTest is DSTest {
     function testWriteLine() public {
         string memory path = "../testdata/fixtures/File/write_file.txt";
         string memory data = "hello writable world";
-        cheats.expectRevert(FOUNDRY_WRITE_ERR);
+        cheats.expectRevert(ORBITALIS_WRITE_ERR);
         cheats.writeLine(path, data);
     }
 
     function testRemoveFile() public {
         string memory path = "../testdata/fixtures/File/write_file.txt";
-        cheats.expectRevert(FOUNDRY_WRITE_ERR);
+        cheats.expectRevert(ORBITALIS_WRITE_ERR);
         cheats.removeFile(path);
     }
 }

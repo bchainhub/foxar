@@ -24,7 +24,7 @@ jobs:
                       flags: --workspace
                     - name: external-integration-tests
                       file: nextest-external-integration.tar.zst
-                      flags: -p foundry-cli --features external-integration-tests
+                      flags: -p orbitalis-cli --features external-integration-tests
         steps:
             - uses: actions/checkout@v3
             - uses: dtolnay/rust-toolchain@stable
@@ -80,7 +80,7 @@ jobs:
                   name: unit-tests
             - name: cargo nextest
               run: |
-                  # see https://github.com/foundry-rs/foundry/pull/3959
+                  # see https://github.com/orbitalis-rs/orbitalis/pull/3959
                   export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib"
                   cargo nextest run --retries 3 --archive-file nextest-unit.tar.zst -E '${{ matrix.job.filter }}'
 
@@ -109,7 +109,7 @@ jobs:
               uses: actions/cache@v3
               if: matrix.job.name != 'issue-repros'
               with:
-                  path: "$HOME/.foundry/cache"
+                  path: "$HOME/.orbitalis/cache"
                   key: rpc-cache-${{ hashFiles('cli/tests/rpc-cache-keyfile') }}
             - name: Setup git config
               run: |
@@ -118,19 +118,19 @@ jobs:
 
             - name: cargo nextest
               run: |
-                  # see https://github.com/foundry-rs/foundry/pull/3959
+                  # see https://github.com/orbitalis-rs/orbitalis/pull/3959
                   export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib"
                   cargo nextest run --partition count:${{ matrix.partition }}/2 --retries 3 --archive-file nextest-integration.tar.zst -E '${{ matrix.job.filter }}'
 
     forge-std-tests:
-        name: forge std tests / ${{ matrix.job.name }}
+        name: spark std tests / ${{ matrix.job.name }}
         runs-on: ubuntu-latest
         needs: build-tests
         strategy:
             matrix:
                 job:
                     - name: forge-std-test
-                      filter: "test(~forge_std)"
+                      filter: "test(~spark_std)"
         env:
             ETH_RPC_URL: https://eth-mainnet.alchemyapi.io/v2/C3JEvfW6VgtqZQa-Qp1E-2srEiIc02sD
         steps:
@@ -146,7 +146,7 @@ jobs:
               uses: actions/cache@v3
               if: matrix.job.name != 'forge-std-test'
               with:
-                  path: "$HOME/.foundry/cache"
+                  path: "$HOME/.orbitalis/cache"
                   key: rpc-cache-${{ hashFiles('cli/tests/rpc-cache-keyfile') }}
             - name: Setup git config
               run: |
@@ -155,7 +155,7 @@ jobs:
 
             - name: cargo nextest
               run: |
-                  # see https://github.com/foundry-rs/foundry/pull/3959
+                  # see https://github.com/orbitalis-rs/orbitalis/pull/3959
                   export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib"
                   cargo nextest run --retries 3 --archive-file nextest-integration.tar.zst -E '${{ matrix.job.filter }}'
 
@@ -167,7 +167,7 @@ jobs:
             matrix:
                 job:
                     - name: non-forking
-                      filter: "!test(~fork) & !test(~live) & !test(~issue) & !test(~forge_std)"
+                      filter: "!test(~fork) & !test(~live) & !test(~issue) & !test(~spark_std)"
                     - name: forking
                       filter: "test(~fork) & !test(~live)"
                 partition: [1, 2]
@@ -186,7 +186,7 @@ jobs:
               uses: actions/cache@v3
               if: matrix.job.name != 'non-forking'
               with:
-                  path: "$HOME/.foundry/cache"
+                  path: "$HOME/.orbitalis/cache"
                   key: rpc-cache-${{ hashFiles('cli/tests/rpc-cache-keyfile') }}
             - name: Setup git config
               run: |
@@ -195,7 +195,7 @@ jobs:
 
             - name: cargo nextest
               run: |
-                  # see https://github.com/foundry-rs/foundry/pull/3959
+                  # see https://github.com/orbitalis-rs/orbitalis/pull/3959
                   export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib"
                   cargo nextest run --partition count:${{ matrix.partition }}/2 --retries 3 --archive-file nextest-integration.tar.zst -E '${{ matrix.job.filter }}'
 
@@ -225,7 +225,7 @@ jobs:
               uses: actions/cache@v3
               if: matrix.job.name != 'non-forking'
               with:
-                  path: "$HOME/.foundry/cache"
+                  path: "$HOME/.orbitalis/cache"
                   key: rpc-cache-${{ hashFiles('cli/tests/rpc-cache-keyfile') }}
 
             - name: Setup git config
@@ -238,7 +238,7 @@ jobs:
 
             - name: cargo nextest
               run: |
-                  # see https://github.com/foundry-rs/foundry/pull/3959
+                  # see https://github.com/orbitalis-rs/orbitalis/pull/3959
                   export LD_LIBRARY_PATH="$(rustc --print sysroot)/lib"
                   cargo nextest run --retries 3 --archive-file nextest-external-integration.tar.zst -E '${{ matrix.job.filter }}'
 
@@ -281,13 +281,13 @@ jobs:
                   components: rustfmt
             - run: cargo fmt --all --check
 
-    forge-fmt:
-        name: forge fmt
+    spark-fmt:
+        name: spark fmt
         runs-on: ubuntu-latest
         timeout-minutes: 30
         steps:
             - uses: actions/checkout@v3
             - uses: dtolnay/rust-toolchain@stable
             - uses: Swatinem/rust-cache@v2
-            - name: forge fmt
-              run: cargo run --bin forge -- fmt --check testdata/
+            - name: spark fmt
+              run: cargo run --bin spark -- fmt --check testdata/

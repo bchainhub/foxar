@@ -1,12 +1,12 @@
-## Foundry Tests
+## Orbitalis Tests
 
-A test suite that tests different aspects of Foundry.
+A test suite that tests different aspects of Orbitalis.
 
 ### Structure
 
--   [`core`](core): Tests for fundamental aspects of Foundry
--   [`logs`](logs): Tests for Foundry logging capabilities
--   [`cheats`](cheats): Tests for Foundry cheatcodes
--   [`fuzz`](fuzz): Tests for the Foundry fuzzer
--   [`trace`](trace): Tests for the Foundry tracer
--   [`fork`](fork): Tests for Foundry forking capabilities
+-   [`core`](core): Tests for fundamental aspects of Orbitalis
+-   [`logs`](logs): Tests for Orbitalis logging capabilities
+-   [`cheats`](cheats): Tests for Orbitalis cheatcodes
+-   [`fuzz`](fuzz): Tests for the Orbitalis fuzzer
+-   [`trace`](trace): Tests for the Orbitalis tracer
+-   [`fork`](fork): Tests for Orbitalis forking capabilities

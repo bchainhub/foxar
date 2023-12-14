@@ -78,7 +78,7 @@ mod tests {
 
     #[test]
     fn unrecognized_property() {
-        let configs = &["forge-config: default.invariant.unknownprop = 200".to_string()];
+        let configs = &["spark-config: default.invariant.unknownprop = 200".to_string()];
         let base_config = InvariantConfig::default();
         if let Err(e) = base_config.try_merge(configs) {
             assert_eq!(e.to_string(), "'unknownprop' is an invalid config property");
@@ -89,7 +89,7 @@ mod tests {
 
     #[test]
     fn successful_merge() {
-        let configs = &["forge-config: default.invariant.runs = 42424242".to_string()];
+        let configs = &["spark-config: default.invariant.runs = 42424242".to_string()];
         let base_config = InvariantConfig::default();
         let merged: InvariantConfig = base_config.try_merge(configs).expect("No errors").unwrap();
         assert_eq!(merged.runs, 42424242);
@@ -105,7 +105,7 @@ mod tests {
 
     #[test]
     fn can_merge_unrelated_properties_into_config() {
-        let unrelated_configs = &["forge-config: default.fuzz.runs = 2".to_string()];
+        let unrelated_configs = &["spark-config: default.fuzz.runs = 2".to_string()];
         let base_config = InvariantConfig::default();
         let merged = base_config.try_merge(unrelated_configs).expect("No errors");
         assert!(merged.is_none());
@@ -114,9 +114,9 @@ mod tests {
     #[test]
     fn override_detection() {
         let configs = &[
-            "forge-config: default.fuzz.runs = 42424242".to_string(),
-            "forge-config: ci.fuzz.runs = 666666".to_string(),
-            "forge-config: default.invariant.runs = 2".to_string(),
+            "spark-config: default.fuzz.runs = 42424242".to_string(),
+            "spark-config: ci.fuzz.runs = 666666".to_string(),
+            "spark-config: default.invariant.runs = 2".to_string(),
         ];
         let variables = InvariantConfig::get_config_overrides(configs);
         assert_eq!(variables, vec![("runs".into(), "2".into())]);

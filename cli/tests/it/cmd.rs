@@ -1,4 +1,4 @@
-//! Contains various tests for checking forge's commands
+//! Contains various tests for checking spark's commands
 
 use crate::constants::*;
 use clap::CommandFactory;
@@ -10,13 +10,13 @@ use corebc::{
         ConfigurableContractArtifact,
     },
 };
-use foundry_cli::opts::forge::Opts;
-use foundry_cli_test_utils::{
+use orbitalis_cli::opts::spark::Opts;
+use orbitalis_cli_test_utils::{
     corebc_ylem::PathStyle,
-    forgetest, forgetest_init,
+    sparktest, sparktest_init,
     util::{pretty_err, read_string, OutputExt, TestCommand, TestProject},
 };
-use foundry_config::{parse_with_profile, BasicConfig, Config, SolidityErrorCode};
+use orbitalis_config::{parse_with_profile, BasicConfig, Config, SolidityErrorCode};
 use semver::Version;
 use std::{
     env, fs,
@@ -26,29 +26,29 @@ use std::{
 };
 
 // tests `--help` is printed to std out
-forgetest!(print_help, |_: TestProject, mut cmd: TestCommand| {
+sparktest!(print_help, |_: TestProject, mut cmd: TestCommand| {
     cmd.arg("--help");
     cmd.assert_non_empty_stdout();
 });
 
 // tests `--help` is printed to std out for all subcommands
-forgetest!(print_forge_subcommand_help, |_: TestProject, mut cmd: TestCommand| {
-    let forge = Opts::command();
-    for sub_command in forge.get_subcommands() {
-        cmd.forge_fuse().args([sub_command.get_name(), "--help"]);
+sparktest!(print_spark_subcommand_help, |_: TestProject, mut cmd: TestCommand| {
+    let spark = Opts::command();
+    for sub_command in spark.get_subcommands() {
+        cmd.spark_fuse().args([sub_command.get_name(), "--help"]);
         cmd.assert_non_empty_stdout();
     }
 });
 
 // checks that `clean` can be invoked even if out and cache don't exist
-forgetest!(can_clean_non_existing, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_clean_non_existing, |prj: TestProject, mut cmd: TestCommand| {
     cmd.arg("clean");
     cmd.assert_empty_stdout();
     prj.assert_cleaned();
 });
 
-// checks that `cache ls` can be invoked and displays the foundry cache
-forgetest!(
+// checks that `cache ls` can be invoked and displays the orbitalis cache
+sparktest!(
     #[ignore]
     can_cache_ls,
     |_: TestProject, mut cmd: TestCommand| {
@@ -56,11 +56,11 @@ forgetest!(
         let block1 = 100;
         let block2 = 101;
 
-        let block1_cache_dir = Config::foundry_block_cache_dir(chain, block1).unwrap();
-        let block1_file = Config::foundry_block_cache_file(chain, block1).unwrap();
-        let block2_cache_dir = Config::foundry_block_cache_dir(chain, block2).unwrap();
-        let block2_file = Config::foundry_block_cache_file(chain, block2).unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(chain).unwrap();
+        let block1_cache_dir = Config::orbitalis_block_cache_dir(chain, block1).unwrap();
+        let block1_file = Config::orbitalis_block_cache_file(chain, block1).unwrap();
+        let block2_cache_dir = Config::orbitalis_block_cache_dir(chain, block2).unwrap();
+        let block2_file = Config::orbitalis_block_cache_file(chain, block2).unwrap();
+        let etherscan_cache_dir = Config::orbitalis_etherscan_network_cache_dir(chain).unwrap();
         fs::create_dir_all(block1_cache_dir).unwrap();
         fs::write(block1_file, "{}").unwrap();
         fs::create_dir_all(block2_cache_dir).unwrap();
@@ -80,17 +80,17 @@ forgetest!(
         assert!(output_lines[4].starts_with("\t-️ Block 100 ("));
         assert_eq!(output_lines[5], "");
 
-        Config::clean_foundry_cache().unwrap();
+        Config::clean_orbitalis_cache().unwrap();
     }
 );
 
-// checks that `cache clean` can be invoked and cleans the foundry cache
+// checks that `cache clean` can be invoked and cleans the orbitalis cache
 // this test is not isolated and modifies ~ so it is ignored
-forgetest!(
+sparktest!(
     #[ignore]
     can_cache_clean,
     |_: TestProject, mut cmd: TestCommand| {
-        let cache_dir = Config::foundry_cache_dir().unwrap();
+        let cache_dir = Config::orbitalis_cache_dir().unwrap();
         let path = cache_dir.as_path();
         fs::create_dir_all(path).unwrap();
         cmd.args(["cache", "clean"]);
@@ -100,14 +100,14 @@ forgetest!(
     }
 );
 
-// checks that `cache clean --etherscan` can be invoked and only cleans the foundry etherscan cache
-// this test is not isolated and modifies ~ so it is ignored
-forgetest!(
+// checks that `cache clean --etherscan` can be invoked and only cleans the orbitalis etherscan
+// cache this test is not isolated and modifies ~ so it is ignored
+sparktest!(
     #[ignore]
     can_cache_clean_etherscan,
     |_: TestProject, mut cmd: TestCommand| {
-        let cache_dir = Config::foundry_cache_dir().unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_cache_dir().unwrap();
+        let cache_dir = Config::orbitalis_cache_dir().unwrap();
+        let etherscan_cache_dir = Config::orbitalis_etherscan_cache_dir().unwrap();
         let path = cache_dir.as_path();
         let etherscan_path = etherscan_cache_dir.as_path();
         fs::create_dir_all(etherscan_path).unwrap();
@@ -117,18 +117,18 @@ forgetest!(
         assert!(path.exists());
         assert!(!etherscan_path.exists());
 
-        Config::clean_foundry_cache().unwrap();
+        Config::clean_orbitalis_cache().unwrap();
     }
 );
 
-// checks that `cache clean all --etherscan` can be invoked and only cleans the foundry etherscan
+// checks that `cache clean all --etherscan` can be invoked and only cleans the orbitalis etherscan
 // cache. This test is not isolated and modifies ~ so it is ignored
-forgetest!(
+sparktest!(
     #[ignore]
     can_cache_clean_all_etherscan,
     |_: TestProject, mut cmd: TestCommand| {
-        let rpc_cache_dir = Config::foundry_rpc_cache_dir().unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_cache_dir().unwrap();
+        let rpc_cache_dir = Config::orbitalis_rpc_cache_dir().unwrap();
+        let etherscan_cache_dir = Config::orbitalis_etherscan_cache_dir().unwrap();
         let rpc_path = rpc_cache_dir.as_path();
         let etherscan_path = etherscan_cache_dir.as_path();
         fs::create_dir_all(rpc_path).unwrap();
@@ -139,19 +139,19 @@ forgetest!(
         assert!(rpc_path.exists());
         assert!(!etherscan_path.exists());
 
-        Config::clean_foundry_cache().unwrap();
+        Config::clean_orbitalis_cache().unwrap();
     }
 );
 
 // checks that `cache clean <chain>` can be invoked and cleans the chain cache
 // this test is not isolated and modifies ~ so it is ignored
-forgetest!(
+sparktest!(
     #[ignore]
     can_cache_clean_chain,
     |_: TestProject, mut cmd: TestCommand| {
         let chain = corebc::prelude::Network::Mainnet;
-        let cache_dir = Config::foundry_network_cache_dir(chain).unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(chain).unwrap();
+        let cache_dir = Config::orbitalis_network_cache_dir(chain).unwrap();
+        let etherscan_cache_dir = Config::orbitalis_etherscan_network_cache_dir(chain).unwrap();
         let path = cache_dir.as_path();
         let etherscan_path = etherscan_cache_dir.as_path();
         fs::create_dir_all(path).unwrap();
@@ -162,13 +162,13 @@ forgetest!(
         assert!(!path.exists());
         assert!(!etherscan_path.exists());
 
-        Config::clean_foundry_cache().unwrap();
+        Config::clean_orbitalis_cache().unwrap();
     }
 );
 
 // checks that `cache clean <chain> --blocks 100,101` can be invoked and cleans the chain block
 // caches this test is not isolated and modifies ~ so it is ignored
-forgetest!(
+sparktest!(
     #[ignore]
     can_cache_clean_blocks,
     |_: TestProject, mut cmd: TestCommand| {
@@ -176,10 +176,10 @@ forgetest!(
         let block1 = 100;
         let block2 = 101;
         let block3 = 102;
-        let block1_cache_dir = Config::foundry_block_cache_dir(chain, block1).unwrap();
-        let block2_cache_dir = Config::foundry_block_cache_dir(chain, block2).unwrap();
-        let block3_cache_dir = Config::foundry_block_cache_dir(chain, block3).unwrap();
-        let etherscan_cache_dir = Config::foundry_etherscan_network_cache_dir(chain).unwrap();
+        let block1_cache_dir = Config::orbitalis_block_cache_dir(chain, block1).unwrap();
+        let block2_cache_dir = Config::orbitalis_block_cache_dir(chain, block2).unwrap();
+        let block3_cache_dir = Config::orbitalis_block_cache_dir(chain, block3).unwrap();
+        let etherscan_cache_dir = Config::orbitalis_etherscan_network_cache_dir(chain).unwrap();
         let block1_path = block1_cache_dir.as_path();
         let block2_path = block2_cache_dir.as_path();
         let block3_path = block3_cache_dir.as_path();
@@ -196,20 +196,21 @@ forgetest!(
         assert!(block3_path.exists());
         assert!(etherscan_path.exists());
 
-        Config::clean_foundry_cache().unwrap();
+        Config::clean_orbitalis_cache().unwrap();
     }
 );
 
 // checks that `cache clean <chain> --etherscan` can be invoked and cleans the etherscan chain cache
 // this test is not isolated and modifies ~ so it is ignored
-forgetest!(
+sparktest!(
     #[ignore]
     can_cache_clean_chain_etherscan,
     |_: TestProject, mut cmd: TestCommand| {
         let cache_dir =
-            Config::foundry_network_cache_dir(corebc::prelude::Network::Mainnet).unwrap();
+            Config::orbitalis_network_cache_dir(corebc::prelude::Network::Mainnet).unwrap();
         let etherscan_cache_dir =
-            Config::foundry_etherscan_network_cache_dir(corebc::prelude::Network::Mainnet).unwrap();
+            Config::orbitalis_etherscan_network_cache_dir(corebc::prelude::Network::Mainnet)
+                .unwrap();
         let path = cache_dir.as_path();
         let etherscan_path = etherscan_cache_dir.as_path();
         fs::create_dir_all(path).unwrap();
@@ -220,24 +221,24 @@ forgetest!(
         assert!(path.exists());
         assert!(!etherscan_path.exists());
 
-        Config::clean_foundry_cache().unwrap();
+        Config::clean_orbitalis_cache().unwrap();
     }
 );
 
 // checks that init works
-forgetest!(can_init_repo_with_config, |prj: TestProject, mut cmd: TestCommand| {
-    let foundry_toml = prj.root().join(Config::FILE_NAME);
-    assert!(!foundry_toml.exists());
+sparktest!(can_init_repo_with_config, |prj: TestProject, mut cmd: TestCommand| {
+    let orbitalis_toml = prj.root().join(Config::FILE_NAME);
+    assert!(!orbitalis_toml.exists());
 
     cmd.args(["init", "--force"]).arg(prj.root());
     cmd.assert_non_empty_stdout();
 
-    let s = read_string(&foundry_toml);
+    let s = read_string(&orbitalis_toml);
     let _config: BasicConfig = parse_with_profile(&s).unwrap().unwrap().1;
 });
 
-// Checks that a forge project fails to initialise if dir is already git repo and dirty
-forgetest!(can_detect_dirty_git_status_on_init, |prj: TestProject, mut cmd: TestCommand| {
+// Checks that a spark project fails to initialise if dir is already git repo and dirty
+sparktest!(can_detect_dirty_git_status_on_init, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
 
     // initialize new git repo
@@ -260,8 +261,8 @@ forgetest!(can_detect_dirty_git_status_on_init, |prj: TestProject, mut cmd: Test
     assert!(!nested.read_dir().map(|mut i| i.next().is_some()).unwrap_or_default());
 });
 
-// Checks that a forge project can be initialized without creating a git repository
-forgetest!(can_init_no_git, |prj: TestProject, mut cmd: TestCommand| {
+// Checks that a spark project can be initialized without creating a git repository
+sparktest!(can_init_no_git, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
 
     cmd.arg("init").arg(prj.root()).arg("--no-git");
@@ -274,15 +275,15 @@ forgetest!(can_init_no_git, |prj: TestProject, mut cmd: TestCommand| {
 });
 
 // Checks that quiet mode does not print anything
-forgetest!(can_init_quiet, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_init_quiet, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
 
     cmd.arg("init").arg(prj.root()).arg("-q");
     let _ = cmd.output();
 });
 
-// `forge init foobar` works with dir argument
-forgetest!(can_init_with_dir, |prj: TestProject, mut cmd: TestCommand| {
+// `spark init foobar` works with dir argument
+sparktest!(can_init_with_dir, |prj: TestProject, mut cmd: TestCommand| {
     prj.create_file("README.md", "non-empty dir");
     cmd.args(["init", "foobar"]);
 
@@ -290,8 +291,8 @@ forgetest!(can_init_with_dir, |prj: TestProject, mut cmd: TestCommand| {
     assert!(prj.root().join("foobar").exists());
 });
 
-// `forge init --force` works on non-empty dirs
-forgetest!(can_init_non_empty, |prj: TestProject, mut cmd: TestCommand| {
+// `spark init --force` works on non-empty dirs
+sparktest!(can_init_non_empty, |prj: TestProject, mut cmd: TestCommand| {
     prj.create_file("README.md", "non-empty dir");
     cmd.arg("init").arg(prj.root());
     cmd.assert_err();
@@ -302,8 +303,8 @@ forgetest!(can_init_non_empty, |prj: TestProject, mut cmd: TestCommand| {
     assert!(prj.root().join("lib/forge-std").exists());
 });
 
-// `forge init --force` works on already initialized git repository
-forgetest!(can_init_in_empty_repo, |prj: TestProject, mut cmd: TestCommand| {
+// `spark init --force` works on already initialized git repository
+sparktest!(can_init_in_empty_repo, |prj: TestProject, mut cmd: TestCommand| {
     let root = prj.root();
 
     // initialize new git repo
@@ -325,8 +326,8 @@ forgetest!(can_init_in_empty_repo, |prj: TestProject, mut cmd: TestCommand| {
     assert!(root.join("lib/forge-std").exists());
 });
 
-// `forge init --force` works on already initialized git repository
-forgetest!(can_init_in_non_empty_repo, |prj: TestProject, mut cmd: TestCommand| {
+// `spark init --force` works on already initialized git repository
+sparktest!(can_init_in_non_empty_repo, |prj: TestProject, mut cmd: TestCommand| {
     let root = prj.root();
 
     // initialize new git repo
@@ -341,7 +342,7 @@ forgetest!(can_init_in_non_empty_repo, |prj: TestProject, mut cmd: TestCommand| 
     assert!(root.join(".git").exists());
 
     prj.create_file("README.md", "non-empty dir");
-    prj.create_file(".gitignore", "not foundry .gitignore");
+    prj.create_file(".gitignore", "not orbitalis .gitignore");
 
     cmd.arg("init").arg(root);
     cmd.assert_err();
@@ -353,11 +354,11 @@ forgetest!(can_init_in_non_empty_repo, |prj: TestProject, mut cmd: TestCommand| 
     // not overwritten
     let gitignore = root.join(".gitignore");
     let gitignore = fs::read_to_string(gitignore).unwrap();
-    assert_eq!(gitignore, "not foundry .gitignore");
+    assert_eq!(gitignore, "not orbitalis .gitignore");
 });
 
 // Checks that remappings.txt and .vscode/settings.json is generated
-forgetest!(can_init_vscode, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_init_vscode, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
 
     cmd.arg("init").arg(prj.root()).arg("--vscode");
@@ -380,27 +381,27 @@ forgetest!(can_init_vscode, |prj: TestProject, mut cmd: TestCommand| {
     assert_eq!(content, "ds-test/=lib/forge-std/lib/ds-test/src/\nforge-std/=lib/forge-std/src/",);
 });
 
-// checks that forge can init with template
-forgetest!(can_init_template, |prj: TestProject, mut cmd: TestCommand| {
+// checks that spark can init with template
+sparktest!(can_init_template, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
-    cmd.args(["init", "--template", "foundry-rs/forge-template"]).arg(prj.root());
+    cmd.args(["init", "--template", "orbitalis-rs/spark-template"]).arg(prj.root());
     cmd.assert_non_empty_stdout();
     assert!(prj.root().join(".git").exists());
-    assert!(prj.root().join("foundry.toml").exists());
+    assert!(prj.root().join("orbitalis.toml").exists());
     assert!(prj.root().join("lib/forge-std").exists());
     assert!(prj.root().join("src").exists());
     assert!(prj.root().join("test").exists());
 });
 
 // checks that init fails when the provided template doesn't exist
-forgetest!(fail_init_nonexistent_template, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(fail_init_nonexistent_template, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
     cmd.args(["init", "--template", "a"]).arg(prj.root());
     cmd.assert_non_empty_stderr();
 });
 
 // checks that `clean` removes dapptools style paths
-forgetest!(can_clean, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_clean, |prj: TestProject, mut cmd: TestCommand| {
     prj.assert_create_dirs_exists();
     prj.assert_style_paths_exist(PathStyle::Dapptools);
     cmd.arg("clean");
@@ -409,7 +410,7 @@ forgetest!(can_clean, |prj: TestProject, mut cmd: TestCommand| {
 });
 
 // checks that `clean` removes hardhat style paths
-forgetest!(can_clean_hardhat, PathStyle::HardHat, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_clean_hardhat, PathStyle::HardHat, |prj: TestProject, mut cmd: TestCommand| {
     prj.assert_create_dirs_exists();
     prj.assert_style_paths_exist(PathStyle::HardHat);
     cmd.arg("clean");
@@ -418,7 +419,7 @@ forgetest!(can_clean_hardhat, PathStyle::HardHat, |prj: TestProject, mut cmd: Te
 });
 
 // checks that `clean` also works with the "out" value set in Config
-forgetest_init!(can_clean_config, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_clean_config, |prj: TestProject, mut cmd: TestCommand| {
     let config = Config { out: "custom-out".into(), ..Default::default() };
     prj.write_config(config);
     cmd.arg("build");
@@ -428,13 +429,13 @@ forgetest_init!(can_clean_config, |prj: TestProject, mut cmd: TestCommand| {
     let artifact = prj.root().join(format!("custom-out/{TEMPLATE_TEST_CONTRACT_ARTIFACT_JSON}"));
     assert!(artifact.exists());
 
-    cmd.forge_fuse().arg("clean");
+    cmd.spark_fuse().arg("clean");
     cmd.output();
     assert!(!artifact.exists());
 });
 
 // checks that extra output works
-forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| {
     cmd.args(["build", "--extra-output", "metadata"]);
     cmd.assert_non_empty_stdout();
 
@@ -443,7 +444,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
         corebc::ylem::utils::read_json_file(artifact_path).unwrap();
     assert!(artifact.metadata.is_some());
 
-    cmd.forge_fuse().args(["build", "--extra-output-files", "metadata", "--force"]).root_arg();
+    cmd.spark_fuse().args(["build", "--extra-output-files", "metadata", "--force"]).root_arg();
     cmd.assert_non_empty_stdout();
 
     let metadata_path =
@@ -452,7 +453,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
 });
 
 // checks that extra output works
-forgetest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: TestCommand| {
     cmd.args(["build", "--extra-output", "metadata", "ir-optimized", "--extra-output", "ir"]);
     cmd.assert_non_empty_stdout();
 
@@ -463,7 +464,7 @@ forgetest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: Test
     assert!(artifact.ir.is_some());
     assert!(artifact.ir_optimized.is_some());
 
-    cmd.forge_fuse()
+    cmd.spark_fuse()
         .args([
             "build",
             "--extra-output-files",
@@ -487,7 +488,7 @@ forgetest_init!(can_emit_multiple_extra_output, |prj: TestProject, mut cmd: Test
     std::fs::read_to_string(sourcemap).unwrap();
 });
 
-forgetest!(can_print_warnings, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_print_warnings, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
@@ -535,7 +536,7 @@ warning[5667]: Warning: Unused function parameter. Remove or comment out the var
 // 15 |         FooLib.check2(this);
 //    |                       ^^^^
 #[cfg(not(target_os = "windows"))]
-forgetest!(can_handle_direct_imports_into_src, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_handle_direct_imports_into_src, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "Foo",
@@ -585,7 +586,7 @@ Compiler run successful
 });
 
 // tests that the `inspect` command works correctly
-forgetest!(can_execute_inspect_command, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_execute_inspect_command, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to include the ipfs bytecode hash
     let config = Config { bytecode_hash: BytecodeHash::Ipfs, ..Default::default() };
     prj.write_config(config);
@@ -622,12 +623,12 @@ contract Foo {
     check_output(cmd.stdout_lossy());
 
     let info = format!("src/{}:{}", path.file_name().unwrap().to_string_lossy(), contract_name);
-    cmd.forge_fuse().arg("inspect").arg(info).arg("bytecode");
+    cmd.spark_fuse().arg("inspect").arg(info).arg("bytecode");
     check_output(cmd.stdout_lossy());
 });
 
-// test that `forge snapshot` commands work
-forgetest!(
+// test that `spark snapshot` commands work
+sparktest!(
     #[serial_test::serial]
     can_check_snapshot,
     |prj: TestProject, mut cmd: TestCommand| {
@@ -661,8 +662,8 @@ contract ATest is DSTest {
     }
 );
 
-// test that `forge build` does not print `(with warnings)` if there arent any
-forgetest!(can_compile_without_warnings, |prj: TestProject, mut cmd: TestCommand| {
+// test that `spark build` does not print `(with warnings)` if there arent any
+sparktest!(can_compile_without_warnings, |prj: TestProject, mut cmd: TestCommand| {
     let config = Config {
         ignored_error_codes: vec![SolidityErrorCode::SpdxLicenseNotProvided],
         ..Default::default()
@@ -699,9 +700,9 @@ contract A {
     );
 });
 
-// test that `forge build` compiles when severity set to error, fails when set to warning, and
+// test that `spark build` compiles when severity set to error, fails when set to warning, and
 // handles ignored error codes as an exception
-forgetest!(can_fail_compile_with_warnings, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_fail_compile_with_warnings, |prj: TestProject, mut cmd: TestCommand| {
     let config = Config { ignored_error_codes: vec![], deny_warnings: false, ..Default::default() };
     prj.write_config(config);
     prj.inner()
@@ -741,18 +742,18 @@ contract A {
 });
 
 // test against a local checkout, useful to debug with local ethers-rs patch
-forgetest!(
+sparktest!(
     #[ignore]
     can_compile_local_spells,
     |_: TestProject, mut cmd: TestCommand| {
         let current_dir = std::env::current_dir().unwrap();
         let root = current_dir
-            .join("../../foundry-integration-tests/testdata/spells-mainnet")
+            .join("../../orbitalis-integration-tests/testdata/spells-mainnet")
             .to_string_lossy()
             .to_string();
         println!("project root: \"{root}\"");
 
-        let eth_rpc_url = foundry_utils::rpc::next_http_archive_rpc_endpoint(Network::Mainnet);
+        let eth_rpc_url = orbitalis_utils::rpc::next_http_archive_rpc_endpoint(Network::Mainnet);
         let dss_exec_lib = "src/DssSpell.sol:DssExecLib:0xfD88CeE74f7D78697775aBDAE53f9Da1559728E4";
 
         cmd.args([
@@ -771,8 +772,8 @@ forgetest!(
     }
 );
 
-// test that a failing `forge build` does not impact followup builds
-forgetest!(can_build_after_failure, |prj: TestProject, mut cmd: TestCommand| {
+// test that a failing `spark build` does not impact followup builds
+sparktest!(can_build_after_failure, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
 
     prj.inner()
@@ -825,7 +826,7 @@ contract CTest is DSTest {
     // introduce contract with syntax error
     prj.inner().add_source("CTest.t.sol", syntax_err).unwrap();
 
-    // `forge build --force` which should fail
+    // `spark build --force` which should fail
     cmd.arg("--force");
     cmd.assert_err();
 
@@ -834,7 +835,7 @@ contract CTest is DSTest {
     assert!(!prj.cache_path().exists());
 
     // still errors
-    cmd.forge_fuse().arg("build");
+    cmd.spark_fuse().arg("build");
     cmd.assert_err();
 
     // resolve the error by replacing the file
@@ -871,31 +872,31 @@ contract CTest is DSTest {
 });
 
 // test to check that install/remove works properly
-forgetest!(can_install_and_remove, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_install_and_remove, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
     let libs = prj.root().join("lib");
     let git_mod = prj.root().join(".git/modules/lib");
     let git_mod_file = prj.root().join(".gitmodules");
 
-    let forge_std = libs.join("forge-std");
-    let forge_std_mod = git_mod.join("forge-std");
+    let spark_std = libs.join("forge-std");
+    let spark_std_mod = git_mod.join("forge-std");
 
     let install = |cmd: &mut TestCommand| {
-        cmd.forge_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
+        cmd.spark_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
         cmd.assert_non_empty_stdout();
-        assert!(forge_std.exists());
-        assert!(forge_std_mod.exists());
+        assert!(spark_std.exists());
+        assert!(spark_std_mod.exists());
 
         let submods = read_string(&git_mod_file);
         assert!(submods.contains("https://github.com/bchainhub/forge-std"));
     };
 
     let remove = |cmd: &mut TestCommand, target: &str| {
-        cmd.forge_fuse().args(["remove", "--force", target]);
+        cmd.spark_fuse().args(["remove", "--force", target]);
         cmd.assert_non_empty_stdout();
-        assert!(!forge_std.exists());
-        assert!(!forge_std_mod.exists());
+        assert!(!spark_std.exists());
+        assert!(!spark_std_mod.exists());
         let submods = read_string(&git_mod_file);
         assert!(!submods.contains("https://github.com/bchainhub/forge-std"));
     };
@@ -909,38 +910,38 @@ forgetest!(can_install_and_remove, |prj: TestProject, mut cmd: TestCommand| {
 });
 
 // test to check that package can be reinstalled after manually removing the directory
-forgetest!(can_reinstall_after_manual_remove, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_reinstall_after_manual_remove, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
     let libs = prj.root().join("lib");
     let git_mod = prj.root().join(".git/modules/lib");
     let git_mod_file = prj.root().join(".gitmodules");
 
-    let forge_std = libs.join("forge-std");
-    let forge_std_mod = git_mod.join("forge-std");
+    let spark_std = libs.join("forge-std");
+    let spark_std_mod = git_mod.join("forge-std");
 
     let install = |cmd: &mut TestCommand| {
-        cmd.forge_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
+        cmd.spark_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
         cmd.assert_non_empty_stdout();
-        assert!(forge_std.exists());
-        assert!(forge_std_mod.exists());
+        assert!(spark_std.exists());
+        assert!(spark_std_mod.exists());
 
         let submods = read_string(&git_mod_file);
         assert!(submods.contains("https://github.com/bchainhub/forge-std"));
     };
 
     install(&mut cmd);
-    fs::remove_dir_all(forge_std.clone()).expect("Failed to remove forge-std");
+    fs::remove_dir_all(spark_std.clone()).expect("Failed to remove forge-std");
 
     // install again
     install(&mut cmd);
 });
 
 // test that we can repeatedly install the same dependency without changes
-forgetest!(can_install_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_install_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
-    cmd.forge_fuse().args(["install", "bchainhub/forge-std"]);
+    cmd.spark_fuse().args(["install", "bchainhub/forge-std"]);
     for _ in 0..3 {
         cmd.assert_success();
     }
@@ -948,9 +949,9 @@ forgetest!(can_install_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
 
 // test that by default we install the latest semver release tag
 // <https://github.com/openzeppelin/openzeppelin-contracts>
-forgetest!(can_install_latest_release_tag, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_install_latest_release_tag, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
-    cmd.forge_fuse().args(["install", "openzeppelin/openzeppelin-contracts"]);
+    cmd.spark_fuse().args(["install", "openzeppelin/openzeppelin-contracts"]);
     cmd.assert_success();
 
     let dep = prj.paths().libraries[0].join("openzeppelin-contracts");
@@ -965,9 +966,9 @@ forgetest!(can_install_latest_release_tag, |prj: TestProject, mut cmd: TestComma
     assert!(current >= version);
 });
 
-// Tests that forge update doesn't break a working dependency by recursively updating nested
+// Tests that spark update doesn't break a working dependency by recursively updating nested
 // dependencies
-forgetest!(
+sparktest!(
     #[ignore]
     can_update_library_with_outdated_nested_dependency,
     |prj: TestProject, mut cmd: TestCommand| {
@@ -981,17 +982,17 @@ forgetest!(
         let package_mod = git_mod.join("issue-2264-repro");
 
         let install = |cmd: &mut TestCommand| {
-            cmd.forge_fuse().args(["install", "foundry-rs/issue-2264-repro", "--no-commit"]);
+            cmd.spark_fuse().args(["install", "orbitalis-rs/issue-2264-repro", "--no-commit"]);
             cmd.assert_non_empty_stdout();
             assert!(package.exists());
             assert!(package_mod.exists());
 
             let submods = read_string(&git_mod_file);
-            assert!(submods.contains("https://github.com/foundry-rs/issue-2264-repro"));
+            assert!(submods.contains("https://github.com/orbitalis-rs/issue-2264-repro"));
         };
 
         install(&mut cmd);
-        cmd.forge_fuse().args(["update", "lib/issue-2264-repro"]);
+        cmd.spark_fuse().args(["update", "lib/issue-2264-repro"]);
         cmd.stdout_lossy();
 
         prj.inner()
@@ -1007,14 +1008,14 @@ contract MyTokenCopy is MyToken {
             )
             .unwrap();
 
-        cmd.forge_fuse().args(["build"]);
+        cmd.spark_fuse().args(["build"]);
         let output = cmd.stdout_lossy();
 
         assert!(output.contains("Compiler run successful",));
     }
 );
 
-forgetest!(gas_report_all_contracts, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(gas_report_all_contracts, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
     prj.inner()
         .add_source(
@@ -1113,26 +1114,26 @@ contract ContractThreeTest is DSTest {
         energy_reports_ignore: (vec![]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let first_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(first_out.contains("foo") && first_out.contains("bar") && first_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     prj.write_config(Config { energy_reports: (vec![]), ..Default::default() });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let second_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(second_out.contains("foo") && second_out.contains("bar") && second_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     prj.write_config(Config { energy_reports: (vec!["*".to_string()]), ..Default::default() });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let third_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(third_out.contains("foo") && third_out.contains("bar") && third_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     prj.write_config(Config {
         energy_reports: (vec![
             "ContractOne".to_string(),
@@ -1141,13 +1142,13 @@ contract ContractThreeTest is DSTest {
         ]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let fourth_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(fourth_out.contains("foo") && fourth_out.contains("bar") && fourth_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 });
 
-forgetest!(gas_report_some_contracts, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(gas_report_some_contracts, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
     prj.inner()
         .add_source(
@@ -1246,18 +1247,18 @@ contract ContractThreeTest is DSTest {
         energy_reports_ignore: (vec![]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let first_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(first_out.contains("foo") && !first_out.contains("bar") && !first_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 
     // report for Two
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     prj.write_config(Config {
         energy_reports: (vec!["ContractTwo".to_string()]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let second_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(
         !second_out.contains("foo") && second_out.contains("bar") && !second_out.contains("baz")
@@ -1265,18 +1266,18 @@ contract ContractThreeTest is DSTest {
     // cmd.arg("test").arg("--gas-report").print_output();
 
     // report for Three
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     prj.write_config(Config {
         energy_reports: (vec!["ContractThree".to_string()]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let third_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(!third_out.contains("foo") && !third_out.contains("bar") && third_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 });
 
-forgetest!(gas_ignore_some_contracts, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(gas_ignore_some_contracts, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
     prj.inner()
         .add_source(
@@ -1375,19 +1376,19 @@ contract ContractThreeTest is DSTest {
         energy_reports_ignore: (vec!["ContractOne".to_string()]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let first_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(!first_out.contains("foo") && first_out.contains("bar") && first_out.contains("baz"));
     // cmd.arg("test").arg("--gas-report").print_output();
 
     // ignore ContractTwo
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     prj.write_config(Config {
         energy_reports: (vec![]),
         energy_reports_ignore: (vec!["ContractTwo".to_string()]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let second_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(
         second_out.contains("foo") && !second_out.contains("bar") && second_out.contains("baz")
@@ -1395,7 +1396,7 @@ contract ContractThreeTest is DSTest {
     // cmd.arg("test").arg("--gas-report").print_output();
 
     // ignore ContractThree
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     prj.write_config(Config {
         energy_reports: (vec![
             "ContractOne".to_string(),
@@ -1405,12 +1406,12 @@ contract ContractThreeTest is DSTest {
         energy_reports_ignore: (vec!["ContractThree".to_string()]),
         ..Default::default()
     });
-    cmd.forge_fuse();
+    cmd.spark_fuse();
     let third_out = cmd.arg("test").arg("--gas-report").stdout();
     assert!(third_out.contains("foo") && third_out.contains("bar") && third_out.contains("baz"));
 });
 
-forgetest_init!(
+sparktest_init!(
     // todo:error2215 - we do not support remapping for now :(
     #[ignore]
     can_use_absolute_imports,
@@ -1468,8 +1469,8 @@ forgetest_init!(
     }
 );
 
-// <https://github.com/foundry-rs/foundry/issues/3440>
-forgetest_init!(
+// <https://github.com/orbitalis-rs/orbitalis/issues/3440>
+sparktest_init!(
     can_use_absolute_imports_from_test_and_script,
     |prj: TestProject, mut cmd: TestCommand| {
         prj.inner()
@@ -1524,23 +1525,23 @@ forgetest_init!(
     }
 );
 
-// checks `forge inspect <contract> irOptimized works
-forgetest_init!(can_inspect_ir_optimized, |_prj: TestProject, mut cmd: TestCommand| {
+// checks `spark inspect <contract> irOptimized works
+sparktest_init!(can_inspect_ir_optimized, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.args(["inspect", TEMPLATE_CONTRACT, "irOptimized"]);
     cmd.assert_success();
 });
 
-// checks forge bind works correctly on the default project
-forgetest_init!(can_bind, |_prj: TestProject, mut cmd: TestCommand| {
+// checks spark bind works correctly on the default project
+sparktest_init!(can_bind, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.arg("bind");
     cmd.assert_non_empty_stdout();
 });
 
 // checks missing dependencies are auto installed
-forgetest_init!(can_install_missing_deps_test, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_install_missing_deps_test, |prj: TestProject, mut cmd: TestCommand| {
     // wipe forge-std
-    let forge_std_dir = prj.root().join("lib/forge-std");
-    pretty_err(&forge_std_dir, fs::remove_dir_all(&forge_std_dir));
+    let spark_std_dir = prj.root().join("lib/forge-std");
+    pretty_err(&spark_std_dir, fs::remove_dir_all(&spark_std_dir));
 
     cmd.arg("test");
 
@@ -1550,10 +1551,10 @@ forgetest_init!(can_install_missing_deps_test, |prj: TestProject, mut cmd: TestC
 });
 
 // checks missing dependencies are auto installed
-forgetest_init!(can_install_missing_deps_build, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_install_missing_deps_build, |prj: TestProject, mut cmd: TestCommand| {
     // wipe forge-std
-    let forge_std_dir = prj.root().join("lib/forge-std");
-    pretty_err(&forge_std_dir, fs::remove_dir_all(&forge_std_dir));
+    let spark_std_dir = prj.root().join("lib/forge-std");
+    pretty_err(&spark_std_dir, fs::remove_dir_all(&spark_std_dir));
 
     cmd.arg("build");
 
@@ -1563,7 +1564,7 @@ forgetest_init!(can_install_missing_deps_build, |prj: TestProject, mut cmd: Test
 });
 
 // checks that extra output works
-forgetest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 1.1.0 for consistent output
     let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
@@ -1582,7 +1583,7 @@ forgetest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestComman
     assert!(out.trim().contains("No files changed, compilation skipped"), "{}", out);
 });
 
-forgetest_init!(can_build_skip_glob, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_build_skip_glob, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 1.1.0 for consistent output
     let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
     prj.write_config(config);
@@ -1606,7 +1607,7 @@ function test_run() external {}
 });
 
 // checks that build --sizes includes all contracts even if unchanged
-forgetest_init!(can_build_sizes_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_build_sizes_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.args(["build", "--sizes"]);
     let out = cmd.stdout();
 
@@ -1621,7 +1622,7 @@ forgetest_init!(can_build_sizes_repeatedly, |_prj: TestProject, mut cmd: TestCom
 });
 
 // checks that build --names includes all contracts even if unchanged
-forgetest_init!(can_build_names_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_build_names_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.args(["build", "--names"]);
     let out = cmd.stdout();
 

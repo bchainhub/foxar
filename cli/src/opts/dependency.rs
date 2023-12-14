@@ -77,7 +77,7 @@ impl FromStr for Dependency {
             // GitHub repository name, then we assume this is the alias.
             //
             // This is to allow for conveniently removing aliased dependencies
-            // using `forge remove <alias>`
+            // using `spark remove <alias>`
             if GH_REPO_REGEX.is_match(dependency) {
                 Some(format!("https://{GITHUB}/{dependency}"))
             } else {
@@ -319,7 +319,7 @@ mod tests {
         assert_eq!(dep.alias, None);
     }
 
-    // <https://github.com/foundry-rs/foundry/pull/3130>
+    // <https://github.com/orbitalis-rs/orbitalis/pull/3130>
     #[test]
     fn can_parse_oz_with_alias() {
         let dep =

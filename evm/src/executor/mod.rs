@@ -23,8 +23,8 @@ use corebc::{
     signers::LocalWallet,
     types::Log,
 };
-use foundry_common::{abi::IntoFunction, evm::Breakpoints};
 use hashbrown::HashMap;
+use orbitalis_common::{abi::IntoFunction, evm::Breakpoints};
 use revm::primitives::hex_literal::hex;
 /// Reexport commonly used revm types
 pub use revm::primitives::{Env, SpecId};
@@ -752,8 +752,8 @@ pub struct RawCallResult {
     pub cheatcodes: Option<Cheatcodes>,
     /// The raw output of the execution
     pub out: Option<Output>,
-    /// The chisel state
-    pub chisel_state: Option<(Stack, Memory, InstructionResult)>,
+    /// The pilot state
+    pub pilot_state: Option<(Stack, Memory, InstructionResult)>,
 }
 
 impl Default for RawCallResult {
@@ -776,7 +776,7 @@ impl Default for RawCallResult {
             env: Default::default(),
             cheatcodes: Default::default(),
             out: None,
-            chisel_state: None,
+            pilot_state: None,
         }
     }
 }
@@ -822,7 +822,7 @@ fn convert_executed_result(
         debug,
         cheatcodes,
         script_wallets,
-        chisel_state,
+        pilot_state,
     } = inspector.collect_inspector_states();
 
     let energy_refunded = energy.unwrap_or(energy_refunded);
@@ -851,7 +851,7 @@ fn convert_executed_result(
         env,
         cheatcodes,
         out,
-        chisel_state,
+        pilot_state,
     })
 }
 

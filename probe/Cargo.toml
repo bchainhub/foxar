@@ -1,0 +1,45 @@
+[package]
+name = "probe"
+version = "0.2.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/orbitalis-rs/orbitalis"
+keywords = ["ethereum", "web3"]
+
+[dependencies]
+orbitalis-utils = { path = "../utils" }
+orbitalis-evm = { path = "./../evm" }
+orbitalis-config = { path = "./../config" }
+orbitalis-common = { path = "./../common" }
+
+corebc-blockindex = { workspace = true}
+corebc-contract = { workspace = true, features = ["abigen"]}
+corebc-core = { workspace = true}
+corebc-providers = { workspace = true}
+corebc-signers = { workspace = true}
+futures = "0.3"
+eyre = "0.6"
+rustc-hex = "2"
+serde = "1"
+serde_json = "1"
+chrono = "0.4"
+hex = "0.4"
+num_cpus = "1"
+rayon = "1"
+
+# aws
+rusoto_core = { version = "0.48", default-features = false, optional = true }
+rusoto_kms = { version = "0.48", default-features = false, optional = true }
+evm-disassembler = "0.2"
+
+[dev-dependencies]
+async-trait = "0.1"
+tokio = "1"
+thiserror = "1"
+
+[features]
+default = ["ledger", "trezor", "aws"]
+ledger = ["corebc-signers/ledger"]
+trezor = ["corebc-signers/trezor"]
+aws = ["corebc-signers/aws", "rusoto_core/rustls", "rusoto_kms/rustls"]

@@ -13,7 +13,7 @@ use crate::Config;
 
 pub const INLINE_CONFIG_FUZZ_KEY: &str = "fuzz";
 pub const INLINE_CONFIG_INVARIANT_KEY: &str = "invariant";
-const INLINE_CONFIG_PREFIX: &str = "forge-config";
+const INLINE_CONFIG_PREFIX: &str = "spark-config";
 
 static INLINE_CONFIG_PREFIX_SELECTED_PROFILE: Lazy<String> = Lazy::new(|| {
     let selected_profile = Config::selected_profile().to_string();

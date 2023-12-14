@@ -1,13 +1,13 @@
 [workspace]
 members = [
-    "anvil",
-    "anvil/core",
-    "anvil/rpc",
-    "anvil/server",
+    "shuttle",
+    "shuttle/core",
+    "shuttle/rpc",
+    "shuttle/server",
     "abi",
     "binder",
-    "cast",
-    "chisel",
+    "probe",
+    "pilot",
     "cli",
     "cli/test-utils",
     "common",
@@ -15,7 +15,7 @@ members = [
     "doc",
     "evm",
     "fmt",
-    "forge",
+    "spark",
     "macros",
     "macros/impl",
     "ui",
@@ -35,7 +35,7 @@ opt-level = 3
 [profile.dev.package.revm]
 opt-level = 3
 
-# These speed up all forge script related integration tests
+# These speed up all spark script related integration tests
 [profile.test.package.axum]
 opt-level = 3
 

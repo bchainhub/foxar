@@ -40,11 +40,11 @@ pub fn find_git_root_path(relative_to: impl AsRef<Path>) -> eyre::Result<PathBuf
 
 /// Returns the root path to set for the project root
 ///
-/// traverse the dir tree up and look for a `foundry.toml` file starting at the cwd, but only until
-/// the root dir of the current repo so that
+/// traverse the dir tree up and look for a `orbitalis.toml` file starting at the cwd, but only
+/// until the root dir of the current repo so that
 ///
 /// ```text
-/// -- foundry.toml
+/// -- orbitalis.toml
 ///
 /// -- repo
 ///   |__ .git
@@ -71,7 +71,7 @@ pub fn find_project_root_path() -> std::io::Result<PathBuf> {
             break
         }
     }
-    // no foundry.toml found
+    // no orbitalis.toml found
     Ok(boundary)
 }
 
@@ -80,7 +80,7 @@ pub fn find_project_root_path() -> std::io::Result<PathBuf> {
 /// # Example
 ///
 /// ```
-/// use foundry_config::remappings_from_newline;
+/// use orbitalis_config::remappings_from_newline;
 /// let remappings: Result<Vec<_>, _> = remappings_from_newline(
 ///     r#"
 ///              file-ds-test/=lib/ds-test/
@@ -123,15 +123,16 @@ pub fn to_array_value(val: &str) -> Result<Value, figment::Error> {
     Ok(value)
 }
 
-/// Returns a list of _unique_ paths to all folders under `root` that contain a `foundry.toml` file
+/// Returns a list of _unique_ paths to all folders under `root` that contain a `orbitalis.toml`
+/// file
 ///
 /// This will also resolve symlinks
 ///
 /// # Example
 ///
 /// ```no_run
-/// use foundry_config::utils;
-/// let dirs = utils::foundry_toml_dirs("./lib");
+/// use orbitalis_config::utils;
+/// let dirs = utils::orbitalis_toml_dirs("./lib");
 /// ```
 ///
 /// for following layout this will return
@@ -140,11 +141,11 @@ pub fn to_array_value(val: &str) -> Result<Value, figment::Error> {
 /// ```text
 /// lib
 /// └── dep1
-/// │   ├── foundry.toml
+/// │   ├── orbitalis.toml
 /// └── dep2
-///     ├── foundry.toml
+///     ├── orbitalis.toml
 /// ```
-pub fn foundry_toml_dirs(root: impl AsRef<Path>) -> Vec<PathBuf> {
+pub fn orbitalis_toml_dirs(root: impl AsRef<Path>) -> Vec<PathBuf> {
     walkdir::WalkDir::new(root)
         .max_depth(1)
         .into_iter()
@@ -260,7 +261,7 @@ mod tests {
     fn get_profiles_from_toml() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "foundry.toml",
+                "orbitalis.toml",
                 r#"
                 [foo.baz]
                 libs = ['node_modules', 'lib']
@@ -276,7 +277,7 @@ mod tests {
             "#,
             )?;
 
-            let path = Path::new("./foundry.toml");
+            let path = Path::new("./orbitalis.toml");
             let profiles = get_available_profiles(path).unwrap();
 
             assert_eq!(

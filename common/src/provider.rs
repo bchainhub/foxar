@@ -25,7 +25,7 @@ pub type RpcUrl = String;
 /// # Example
 ///
 /// ```
-/// use foundry_common::get_http_provider;
+/// use orbitalis_common::get_http_provider;
 /// # fn f() {
 ///  let retry_provider = get_http_provider("http://localhost:8545");
 /// # }
@@ -34,8 +34,8 @@ pub fn get_http_provider(builder: impl Into<ProviderBuilder>) -> RetryProvider {
     try_get_http_provider(builder).unwrap()
 }
 
-/// Gives out a provider with a `100ms` interval poll if it's a localhost URL (most likely an anvil
-/// or other dev node) and with the default, `7s` if otherwise.
+/// Gives out a provider with a `100ms` interval poll if it's a localhost URL (most likely an
+/// shuttle or other dev node) and with the default, `7s` if otherwise.
 pub fn try_get_http_provider(builder: impl Into<ProviderBuilder>) -> eyre::Result<RetryProvider> {
     builder.into().build()
 }

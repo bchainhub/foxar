@@ -53,11 +53,11 @@ impl fmt::Display for Warning {
         match self {
             Self::UnknownSection { unknown_section, source } => {
                 let source = source.as_ref().map(|src| format!(" in {src}")).unwrap_or_default();
-                f.write_fmt(format_args!("Unknown section [{unknown_section}] found{source}. This notation for profiles has been deprecated and may result in the profile not being registered in future versions. Please use [profile.{unknown_section}] instead or run `forge config --fix`."))
+                f.write_fmt(format_args!("Unknown section [{unknown_section}] found{source}. This notation for profiles has been deprecated and may result in the profile not being registered in future versions. Please use [profile.{unknown_section}] instead or run `spark config --fix`."))
             }
             Self::NoLocalToml(tried) => {
                 let path = tried.display();
-                f.write_fmt(format_args!("No local TOML found to fix at {path}. Change the current directory to a project path or set the foundry.toml path with the FOUNDRY_CONFIG environment variable"))
+                f.write_fmt(format_args!("No local TOML found to fix at {path}. Change the current directory to a project path or set the orbitalis.toml path with the ORBITALIS_CONFIG environment variable"))
             }
             Self::CouldNotReadToml { path, err } => {
                 f.write_fmt(format_args!("Could not read TOML at {}: {err}", path.display()))

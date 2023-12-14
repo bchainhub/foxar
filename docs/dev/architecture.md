@@ -1,10 +1,10 @@
 # Architecture
 
-This document describes the high-level architecture of foundry.
+This document describes the high-level architecture of orbitalis.
 
 ### `evm/`
 
-foundry's evm tooling. This is built around [`revm`](https://github.com/bluealloy/revm) and has additional
+orbitalis's evm tooling. This is built around [`revm`](https://github.com/bluealloy/revm) and has additional
 implementation of
 
 -   [cheatcodes](./cheatcodes.md) a set of solidity calls dedicated to testing which can manipulate the environment in
@@ -12,8 +12,8 @@ implementation of
 
 ### `config/`
 
-Includes all of foundry's settings and how to get them
+Includes all of orbitalis's settings and how to get them
 
 ### `cli/`
 
-The core `forge` and `cast` cli implementation. Includes all subcommands.
+The core `spark` and `probe` cli implementation. Includes all subcommands.

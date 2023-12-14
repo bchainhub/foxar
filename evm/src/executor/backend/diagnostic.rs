@@ -2,7 +2,7 @@ use crate::{
     executor::{backend::LocalForkId, inspector::Cheatcodes},
     Address,
 };
-use foundry_common::fmt::UIfmt;
+use orbitalis_common::fmt::UIfmt;
 
 /// Represents possible diagnostic cases on revert
 #[derive(Debug, Clone)]

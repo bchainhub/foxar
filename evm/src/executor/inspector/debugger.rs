@@ -10,7 +10,7 @@ use crate::{
 };
 use bytes::Bytes;
 use corebc::types::{Address, Network};
-use foundry_utils::error::SolError;
+use orbitalis_utils::error::SolError;
 use revm::{
     inspectors::EnergyInspector,
     interpreter::{

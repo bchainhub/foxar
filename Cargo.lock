@@ -164,104 +164,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anvil"
-version = "0.1.0"
-dependencies = [
- "anvil-core",
- "anvil-rpc",
- "anvil-server",
- "async-trait",
- "auto_impl",
- "axum",
- "bytes",
- "chrono",
- "clap 4.4.8",
- "clap_complete",
- "clap_complete_fig",
- "corebc",
- "corebc-ylem",
- "crc 3.0.1",
- "ctrlc",
- "ethereum-forkid",
- "fdlimit",
- "flate2",
- "forge",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "foundry-utils",
- "futures",
- "hash-db",
- "hyper",
- "memory-db",
- "parking_lot",
- "pretty_assertions",
- "revm",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "tokio",
- "tower",
- "tower-http 0.4.4",
- "tracing",
- "tracing-subscriber",
- "trie-db",
- "vergen",
- "yansi 0.5.1",
-]
-
-[[package]]
-name = "anvil-core"
-version = "0.1.0"
-dependencies = [
- "bytes",
- "corebc-core",
- "foundry-evm",
- "foundry-utils",
- "hash-db",
- "hash256-std-hasher",
- "keccak-hasher",
- "open-fastrlp",
- "reference-trie",
- "revm",
- "serde",
- "serde_json",
- "triehash",
-]
-
-[[package]]
-name = "anvil-rpc"
-version = "0.1.0"
-dependencies = [
- "rand 0.8.5",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "anvil-server"
-version = "0.1.0"
-dependencies = [
- "anvil-rpc",
- "async-trait",
- "axum",
- "bytes",
- "clap 4.4.8",
- "futures",
- "hyper",
- "parity-tokio-ipc",
- "parking_lot",
- "pin-project",
- "serde",
- "serde_json",
- "thiserror",
- "tokio-util",
- "tower-http 0.4.4",
- "tracing",
-]
-
-[[package]]
 name = "anyhow"
 version = "1.0.75"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -791,36 +693,6 @@ checksum = "df8670b8c7b9dae1793364eafadf7239c40d669904660c5960d74cfd80b46a53"
 
 [[package]]
 name = "cast"
-version = "0.2.0"
-dependencies = [
- "async-trait",
- "chrono",
- "corebc-blockindex",
- "corebc-contract",
- "corebc-core",
- "corebc-providers",
- "corebc-signers",
- "evm-disassembler",
- "eyre",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "foundry-utils",
- "futures",
- "hex",
- "num_cpus",
- "rayon",
- "rusoto_core",
- "rusoto_kms",
- "rustc-hex",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
-]
-
-[[package]]
-name = "cast"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
@@ -840,40 +712,6 @@ name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
-
-[[package]]
-name = "chisel"
-version = "0.1.1"
-dependencies = [
- "bytes",
- "clap 4.4.8",
- "corebc",
- "corebc-ylem",
- "criterion",
- "dirs 5.0.1",
- "eyre",
- "forge",
- "forge-fmt",
- "foundry-cli",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "once_cell",
- "regex",
- "reqwest",
- "revm",
- "rustyline",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "serial_test",
- "solang-parser 0.3.0",
- "strum 0.25.0",
- "time",
- "tokio",
- "vergen",
- "yansi 0.5.1",
-]
 
 [[package]]
 name = "chrono"
@@ -1551,7 +1389,7 @@ checksum = "e7c76e09c1aae2bc52b3d2f29e13c6572553b30c4aa1b8a49fd70de6412654cb"
 dependencies = [
  "anes",
  "atty",
- "cast 0.3.0",
+ "cast",
  "ciborium",
  "clap 3.2.25",
  "criterion-plot",
@@ -1577,7 +1415,7 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6b50826342786a51a89e2da3a28f1c32b06e387201bc2d19791f622c673706b1"
 dependencies = [
- "cast 0.3.0",
+ "cast",
  "itertools",
 ]
 
@@ -2367,349 +2205,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 
 [[package]]
-name = "forge"
-version = "0.2.0"
-dependencies = [
- "comfy-table",
- "corebc",
- "eyre",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "foundry-utils",
- "glob",
- "hex",
- "once_cell",
- "parking_lot",
- "proptest",
- "rayon",
- "regex",
- "rlp 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "yansi 0.5.1",
-]
-
-[[package]]
-name = "forge-doc"
-version = "0.1.0"
-dependencies = [
- "auto_impl",
- "clap 4.4.8",
- "corebc-core",
- "corebc-ylem",
- "derive_more",
- "eyre",
- "forge-fmt",
- "foundry-common",
- "foundry-config",
- "foundry-utils",
- "futures-util",
- "itertools",
- "mdbook",
- "once_cell",
- "rayon",
- "serde",
- "serde_json",
- "solang-parser 0.3.0",
- "thiserror",
- "tokio",
- "toml 0.7.8",
- "tracing",
- "warp",
-]
-
-[[package]]
-name = "forge-fmt"
-version = "0.2.0"
-dependencies = [
- "ariadne",
- "corebc-core",
- "foundry-config",
- "itertools",
- "pretty_assertions",
- "semver 1.0.20",
- "solang-parser 0.3.0",
- "thiserror",
- "toml 0.7.8",
- "tracing",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "form_urlencoded"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a62bc1cf6f830c2ec14a513a9fb124d0a213a629668a4186f329db21fe045652"
 dependencies = [
  "percent-encoding",
-]
-
-[[package]]
-name = "foundry-abi"
-version = "0.1.0"
-dependencies = [
- "corebc-contract",
- "corebc-contract-abigen",
- "corebc-core",
- "corebc-providers",
- "eyre",
- "foundry-macros",
- "syn 2.0.39",
-]
-
-[[package]]
-name = "foundry-binder"
-version = "0.1.0"
-dependencies = [
- "corebc-contract",
- "corebc-ylem",
- "curl",
- "eyre",
- "foundry-config",
- "git2",
- "tempfile",
- "tracing",
- "url",
-]
-
-[[package]]
-name = "foundry-cli"
-version = "0.2.0"
-dependencies = [
- "anvil",
- "async-trait",
- "bytes",
- "cast 0.2.0",
- "clap 4.4.8",
- "clap_complete",
- "clap_complete_fig",
- "color-eyre",
- "comfy-table",
- "console",
- "corebc",
- "criterion",
- "dialoguer",
- "dotenvy",
- "dunce",
- "eyre",
- "forge",
- "forge-doc",
- "forge-fmt",
- "foundry-cli-test-utils",
- "foundry-common",
- "foundry-config",
- "foundry-evm",
- "foundry-utils",
- "futures",
- "globset",
- "hex",
- "indicatif",
- "is-terminal",
- "itertools",
- "once_cell",
- "parking_lot",
- "path-slash",
- "pretty_assertions",
- "proptest",
- "rayon",
- "regex",
- "reqwest",
- "rpassword",
- "rustc-hex",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "serial_test",
- "similar",
- "solang-parser 0.3.0",
- "strsim",
- "strum 0.25.0",
- "tempfile",
- "thiserror",
- "tokio",
- "toml 0.7.8",
- "tracing",
- "tracing-error",
- "tracing-subscriber",
- "ui",
- "vergen",
- "walkdir",
- "watchexec",
- "watchexec-events",
- "watchexec-signals",
- "yansi 0.5.1",
- "yvm-rs",
-]
-
-[[package]]
-name = "foundry-cli-test-utils"
-version = "0.1.0"
-dependencies = [
- "corebc",
- "corebc-addressbook",
- "corebc-ylem",
- "eyre",
- "foundry-common",
- "foundry-config",
- "is-terminal",
- "once_cell",
- "parking_lot",
- "pretty_assertions",
- "regex",
- "serde_json",
- "tempfile",
- "walkdir",
-]
-
-[[package]]
-name = "foundry-common"
-version = "0.1.0"
-dependencies = [
- "auto_impl",
- "clap 4.4.8",
- "comfy-table",
- "corebc-blockindex",
- "corebc-core",
- "corebc-providers",
- "corebc-ylem",
- "dunce",
- "eyre",
- "foundry-config",
- "foundry-macros",
- "globset",
- "is-terminal",
- "once_cell",
- "regex",
- "reqwest",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "tokio",
- "tracing",
- "walkdir",
- "yansi 0.5.1",
-]
-
-[[package]]
-name = "foundry-config"
-version = "0.2.0"
-dependencies = [
- "Inflector",
- "corebc-blockindex",
- "corebc-core",
- "corebc-ylem",
- "dirs-next",
- "eyre",
- "figment",
- "globset",
- "number_prefix",
- "once_cell",
- "path-slash",
- "pretty_assertions",
- "regex",
- "reqwest",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "serde_regex",
- "tempfile",
- "thiserror",
- "toml 0.7.8",
- "toml_edit 0.19.15",
- "tracing",
- "walkdir",
-]
-
-[[package]]
-name = "foundry-evm"
-version = "0.2.0"
-dependencies = [
- "auto_impl",
- "bytes",
- "corebc",
- "eyre",
- "foundry-abi",
- "foundry-common",
- "foundry-config",
- "foundry-macros",
- "foundry-utils",
- "futures",
- "hashbrown 0.13.2",
- "hex",
- "itertools",
- "jsonpath_lib",
- "libgoldilocks 0.1.0 (git+https://github.com/todesstille/ed448-rs.git)",
- "once_cell",
- "ordered-float",
- "parking_lot",
- "proptest",
- "revm",
- "semver 1.0.20",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "tokio",
- "tracing",
- "url",
- "walkdir",
- "yansi 0.5.1",
-]
-
-[[package]]
-name = "foundry-macros"
-version = "0.1.0"
-dependencies = [
- "corebc-core",
- "foundry-macros-impl",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "foundry-macros-impl"
-version = "0.0.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.39",
-]
-
-[[package]]
-name = "foundry-utils"
-version = "0.2.0"
-dependencies = [
- "corebc",
- "corebc-addressbook",
- "corebc-blockindex",
- "corebc-contract",
- "corebc-core",
- "corebc-providers",
- "corebc-ylem",
- "eyre",
- "forge-fmt",
- "foundry-common",
- "futures",
- "glob",
- "hex",
- "once_cell",
- "pretty_assertions",
- "rand 0.8.5",
- "reqwest",
- "revm",
- "rlp 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-hex",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
 ]
 
 [[package]]
@@ -4534,6 +4035,269 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
 
 [[package]]
+name = "orbitalis-abi"
+version = "0.1.0"
+dependencies = [
+ "corebc-contract",
+ "corebc-contract-abigen",
+ "corebc-core",
+ "corebc-providers",
+ "eyre",
+ "orbitalis-macros",
+ "syn 2.0.39",
+]
+
+[[package]]
+name = "orbitalis-binder"
+version = "0.1.0"
+dependencies = [
+ "corebc-contract",
+ "corebc-ylem",
+ "curl",
+ "eyre",
+ "git2",
+ "orbitalis-config",
+ "tempfile",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "orbitalis-cli"
+version = "0.2.0"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "clap 4.4.8",
+ "clap_complete",
+ "clap_complete_fig",
+ "color-eyre",
+ "comfy-table",
+ "console",
+ "corebc",
+ "criterion",
+ "dialoguer",
+ "dotenvy",
+ "dunce",
+ "eyre",
+ "futures",
+ "globset",
+ "hex",
+ "indicatif",
+ "is-terminal",
+ "itertools",
+ "once_cell",
+ "orbitalis-cli-test-utils",
+ "orbitalis-common",
+ "orbitalis-config",
+ "orbitalis-evm",
+ "orbitalis-utils",
+ "parking_lot",
+ "path-slash",
+ "pretty_assertions",
+ "probe",
+ "proptest",
+ "rayon",
+ "regex",
+ "reqwest",
+ "rpassword",
+ "rustc-hex",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "serial_test",
+ "shuttle",
+ "similar",
+ "solang-parser 0.3.0",
+ "spark",
+ "spark-doc",
+ "spark-fmt",
+ "strsim",
+ "strum 0.25.0",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "toml 0.7.8",
+ "tracing",
+ "tracing-error",
+ "tracing-subscriber",
+ "ui",
+ "vergen",
+ "walkdir",
+ "watchexec",
+ "watchexec-events",
+ "watchexec-signals",
+ "yansi 0.5.1",
+ "yvm-rs",
+]
+
+[[package]]
+name = "orbitalis-cli-test-utils"
+version = "0.1.0"
+dependencies = [
+ "corebc",
+ "corebc-addressbook",
+ "corebc-ylem",
+ "eyre",
+ "is-terminal",
+ "once_cell",
+ "orbitalis-common",
+ "orbitalis-config",
+ "parking_lot",
+ "pretty_assertions",
+ "regex",
+ "serde_json",
+ "tempfile",
+ "walkdir",
+]
+
+[[package]]
+name = "orbitalis-common"
+version = "0.1.0"
+dependencies = [
+ "auto_impl",
+ "clap 4.4.8",
+ "comfy-table",
+ "corebc-blockindex",
+ "corebc-core",
+ "corebc-providers",
+ "corebc-ylem",
+ "dunce",
+ "eyre",
+ "globset",
+ "is-terminal",
+ "once_cell",
+ "orbitalis-config",
+ "orbitalis-macros",
+ "regex",
+ "reqwest",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "walkdir",
+ "yansi 0.5.1",
+]
+
+[[package]]
+name = "orbitalis-config"
+version = "0.2.0"
+dependencies = [
+ "Inflector",
+ "corebc-blockindex",
+ "corebc-core",
+ "corebc-ylem",
+ "dirs-next",
+ "eyre",
+ "figment",
+ "globset",
+ "number_prefix",
+ "once_cell",
+ "path-slash",
+ "pretty_assertions",
+ "regex",
+ "reqwest",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "serde_regex",
+ "tempfile",
+ "thiserror",
+ "toml 0.7.8",
+ "toml_edit 0.19.15",
+ "tracing",
+ "walkdir",
+]
+
+[[package]]
+name = "orbitalis-evm"
+version = "0.2.0"
+dependencies = [
+ "auto_impl",
+ "bytes",
+ "corebc",
+ "eyre",
+ "futures",
+ "hashbrown 0.13.2",
+ "hex",
+ "itertools",
+ "jsonpath_lib",
+ "libgoldilocks 0.1.0 (git+https://github.com/todesstille/ed448-rs.git)",
+ "once_cell",
+ "orbitalis-abi",
+ "orbitalis-common",
+ "orbitalis-config",
+ "orbitalis-macros",
+ "orbitalis-utils",
+ "ordered-float",
+ "parking_lot",
+ "proptest",
+ "revm",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "url",
+ "walkdir",
+ "yansi 0.5.1",
+]
+
+[[package]]
+name = "orbitalis-macros"
+version = "0.1.0"
+dependencies = [
+ "corebc-core",
+ "orbitalis-macros-impl",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "orbitalis-macros-impl"
+version = "0.0.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.39",
+]
+
+[[package]]
+name = "orbitalis-utils"
+version = "0.2.0"
+dependencies = [
+ "corebc",
+ "corebc-addressbook",
+ "corebc-blockindex",
+ "corebc-contract",
+ "corebc-core",
+ "corebc-providers",
+ "corebc-ylem",
+ "eyre",
+ "futures",
+ "glob",
+ "hex",
+ "once_cell",
+ "orbitalis-common",
+ "pretty_assertions",
+ "rand 0.8.5",
+ "reqwest",
+ "revm",
+ "rlp 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-hex",
+ "serde",
+ "serde_json",
+ "spark-fmt",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "ordered-float"
 version = "3.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4878,6 +4642,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "pilot"
+version = "0.1.1"
+dependencies = [
+ "bytes",
+ "clap 4.4.8",
+ "corebc",
+ "corebc-ylem",
+ "criterion",
+ "dirs 5.0.1",
+ "eyre",
+ "once_cell",
+ "orbitalis-cli",
+ "orbitalis-common",
+ "orbitalis-config",
+ "orbitalis-evm",
+ "regex",
+ "reqwest",
+ "revm",
+ "rustyline",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "serial_test",
+ "solang-parser 0.3.0",
+ "spark",
+ "spark-fmt",
+ "strum 0.25.0",
+ "time",
+ "tokio",
+ "vergen",
+ "yansi 0.5.1",
+]
+
+[[package]]
 name = "pin-project"
 version = "1.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5019,6 +4817,36 @@ dependencies = [
  "fixed-hash 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "impl-codec 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "uint 0.9.5 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "probe"
+version = "0.2.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "corebc-blockindex",
+ "corebc-contract",
+ "corebc-core",
+ "corebc-providers",
+ "corebc-signers",
+ "evm-disassembler",
+ "eyre",
+ "futures",
+ "hex",
+ "num_cpus",
+ "orbitalis-common",
+ "orbitalis-config",
+ "orbitalis-evm",
+ "orbitalis-utils",
+ "rayon",
+ "rusoto_core",
+ "rusoto_kms",
+ "rustc-hex",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
 ]
 
 [[package]]
@@ -6171,6 +5999,104 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7cee0529a6d40f580e7a5e6c495c8fbfe21b7b52795ed4bb5e62cdf92bc6380"
 
 [[package]]
+name = "shuttle"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "auto_impl",
+ "axum",
+ "bytes",
+ "chrono",
+ "clap 4.4.8",
+ "clap_complete",
+ "clap_complete_fig",
+ "corebc",
+ "corebc-ylem",
+ "crc 3.0.1",
+ "ctrlc",
+ "ethereum-forkid",
+ "fdlimit",
+ "flate2",
+ "futures",
+ "hash-db",
+ "hyper",
+ "memory-db",
+ "orbitalis-common",
+ "orbitalis-config",
+ "orbitalis-evm",
+ "orbitalis-utils",
+ "parking_lot",
+ "pretty_assertions",
+ "revm",
+ "serde",
+ "serde_json",
+ "shuttle-core",
+ "shuttle-rpc",
+ "shuttle-server",
+ "spark",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "tower",
+ "tower-http 0.4.4",
+ "tracing",
+ "tracing-subscriber",
+ "trie-db",
+ "vergen",
+ "yansi 0.5.1",
+]
+
+[[package]]
+name = "shuttle-core"
+version = "0.1.0"
+dependencies = [
+ "bytes",
+ "corebc-core",
+ "hash-db",
+ "hash256-std-hasher",
+ "keccak-hasher",
+ "open-fastrlp",
+ "orbitalis-evm",
+ "orbitalis-utils",
+ "reference-trie",
+ "revm",
+ "serde",
+ "serde_json",
+ "triehash",
+]
+
+[[package]]
+name = "shuttle-rpc"
+version = "0.1.0"
+dependencies = [
+ "rand 0.8.5",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "shuttle-server"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "bytes",
+ "clap 4.4.8",
+ "futures",
+ "hyper",
+ "parity-tokio-ipc",
+ "parking_lot",
+ "pin-project",
+ "serde",
+ "serde_json",
+ "shuttle-rpc",
+ "thiserror",
+ "tokio-util",
+ "tower-http 0.4.4",
+ "tracing",
+]
+
+[[package]]
 name = "signal-hook"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6302,6 +6228,80 @@ dependencies = [
  "phf 0.11.2",
  "thiserror",
  "unicode-xid",
+]
+
+[[package]]
+name = "spark"
+version = "0.2.0"
+dependencies = [
+ "comfy-table",
+ "corebc",
+ "eyre",
+ "glob",
+ "hex",
+ "once_cell",
+ "orbitalis-common",
+ "orbitalis-config",
+ "orbitalis-evm",
+ "orbitalis-utils",
+ "parking_lot",
+ "proptest",
+ "rayon",
+ "regex",
+ "rlp 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "semver 1.0.20",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "yansi 0.5.1",
+]
+
+[[package]]
+name = "spark-doc"
+version = "0.1.0"
+dependencies = [
+ "auto_impl",
+ "clap 4.4.8",
+ "corebc-core",
+ "corebc-ylem",
+ "derive_more",
+ "eyre",
+ "futures-util",
+ "itertools",
+ "mdbook",
+ "once_cell",
+ "orbitalis-common",
+ "orbitalis-config",
+ "orbitalis-utils",
+ "rayon",
+ "serde",
+ "serde_json",
+ "solang-parser 0.3.0",
+ "spark-fmt",
+ "thiserror",
+ "tokio",
+ "toml 0.7.8",
+ "tracing",
+ "warp",
+]
+
+[[package]]
+name = "spark-fmt"
+version = "0.2.0"
+dependencies = [
+ "ariadne",
+ "corebc-core",
+ "itertools",
+ "orbitalis-config",
+ "pretty_assertions",
+ "semver 1.0.20",
+ "solang-parser 0.3.0",
+ "thiserror",
+ "toml 0.7.8",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -7164,10 +7164,10 @@ dependencies = [
  "corebc",
  "crossterm 0.26.1",
  "eyre",
- "forge",
- "foundry-common",
  "hex",
+ "orbitalis-common",
  "revm",
+ "spark",
  "tui",
 ]
 

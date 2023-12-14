@@ -1,6 +1,6 @@
 use super::{ContractId, CoverageItem, CoverageItemKind, SourceLocation};
 use corebc::ylem::artifacts::ast::{self, Ast, Node, NodeType};
-use foundry_common::TestFunctionExt;
+use orbitalis_common::TestFunctionExt;
 use semver::Version;
 use std::collections::{HashMap, HashSet};
 

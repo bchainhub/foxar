@@ -121,17 +121,17 @@ TODO: update ^
 
 ### Disable Line
 
-The formatter can be disabled on specific lines by adding a comment `// forgefmt: disable-next-line`, like this:
+The formatter can be disabled on specific lines by adding a comment `// sparkfmt: disable-next-line`, like this:
 
 ```solidity
-// forgefmt: disable-next-line
+// sparkfmt: disable-next-line
 uint x = 100;
 ```
 
 Alternatively, the comment can also be placed at the end of the line. In this case, you'd have to use `disable-line` instead:
 
 ```solidity
-uint x = 100; // forgefmt: disable-line
+uint x = 100; // sparkfmt: disable-line
 ```
 
 ### Testing
@@ -154,9 +154,9 @@ The `test_directory` macro is used to specify a new folder with source files for
 
 ## Contributing
 
-Check out the [foundry contribution guide](https://github.com/foundry-rs/foundry/blob/master/CONTRIBUTING.md).
+Check out the [orbitalis contribution guide](https://github.com/orbitalis-rs/orbitalis/blob/master/CONTRIBUTING.md).
 
-Guidelines for contributing to `forge fmt`:
+Guidelines for contributing to `spark fmt`:
 
 ### Opening an issue
 
@@ -172,10 +172,10 @@ Guidelines for contributing to `forge fmt`:
         Forge fmt postfix comment misplaced
         Forge fmt does not inline short yul blocks
         ```
-2. Fill in the issue template fields that include foundry version, platform & component info.
+2. Fill in the issue template fields that include orbitalis version, platform & component info.
 3. Provide the code snippets showing the current & expected behaviors.
 4. If it's a feature request, specify why this feature is needed.
-5. Besides the default label (`T-Bug` for bugs or `T-feature` for features), add `C-forge` and `Cmd-forge-fmt` labels.
+5. Besides the default label (`T-Bug` for bugs or `T-feature` for features), add `C-spark` and `Cmd-spark-fmt` labels.
 
 ### Fixing A Bug
 

@@ -7,9 +7,9 @@ use crate::{
     CommentTag, Comments, CommentsRef, Document, Markdown, PreprocessorOutput,
     CONTRACT_INHERITANCE_ID, DEPLOYMENTS_ID, GIT_SOURCE_ID, INHERITDOC_ID,
 };
-use forge_fmt::solang_ext::SafeUnwrap;
 use itertools::Itertools;
 use solang_parser::pt::Base;
+use spark_fmt::solang_ext::SafeUnwrap;
 
 /// The result of [Asdoc::as_doc] method.
 pub type AsDocResult = Result<String, std::fmt::Error>;

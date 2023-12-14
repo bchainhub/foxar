@@ -22,7 +22,7 @@ use corebc::{
     types::{transaction::eip2718::TypedTransaction, NameOrAddress, H256, U256},
     utils,
 };
-use foundry_common::{fmt::*, RpcUrl};
+use orbitalis_common::{fmt::*, RpcUrl};
 use revm::{
     interpreter::CreateInputs,
     primitives::{Account, TransactTo},
@@ -38,7 +38,7 @@ pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
     149, 108,
 ]);
 
-pub const MAGIC_SKIP_BYTES: &[u8] = b"FOUNDRY::SKIP";
+pub const MAGIC_SKIP_BYTES: &[u8] = b"ORBITALIS::SKIP";
 
 /// Helps collecting transactions from different forks.
 #[derive(Debug, Clone, Default)]
@@ -421,7 +421,7 @@ pub fn check_if_fixed_energy_limit<DB: DatabaseExt>(
     // generating it in the compilation or evm simulation process)
     U256::from(data.env.tx.energy_limit) > ru256_to_u256(data.env.block.energy_limit) &&
         U256::from(call_energy_limit) <= ru256_to_u256(data.env.block.energy_limit)
-        // Transfers in forge scripts seem to be estimated at 2300 by revm leading to "Intrinsic
+        // Transfers in spark scripts seem to be estimated at 2300 by revm leading to "Intrinsic
         // energy too low" failure when simulated on chain
         && call_energy_limit > 2300
 }

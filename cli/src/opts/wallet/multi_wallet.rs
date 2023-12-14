@@ -7,9 +7,9 @@ use corebc::{
     types::{Address, Network},
 };
 use eyre::{ContextCompat, Result};
-use foundry_common::RetryProvider;
-use foundry_config::Config;
 use itertools::izip;
+use orbitalis_common::RetryProvider;
+use orbitalis_config::Config;
 use serde::Serialize;
 use std::{
     collections::{HashMap, HashSet},
@@ -99,7 +99,7 @@ pub struct MultiWallet {
         long,
         help_heading = "Wallet options - raw",
         value_name = "RAW_PRIVATE_KEYS",
-        value_parser = foundry_common::clap_helpers::strip_0x_prefix,
+        value_parser = orbitalis_common::clap_helpers::strip_0x_prefix,
     )]
     pub private_keys: Option<Vec<String>>,
 
@@ -109,7 +109,7 @@ pub struct MultiWallet {
         help_heading = "Wallet options - raw",
         conflicts_with = "private_keys",
         value_name = "RAW_PRIVATE_KEY",
-        value_parser = foundry_common::clap_helpers::strip_0x_prefix,
+        value_parser = orbitalis_common::clap_helpers::strip_0x_prefix,
     )]
     pub private_key: Option<String>,
 
@@ -251,7 +251,7 @@ impl MultiWallet {
 
         // This is an actual used address
         if addresses.contains(&Config::DEFAULT_SENDER) {
-            error_msg += "\nYou seem to be using Foundry's default sender. Be sure to set your own --sender.\n";
+            error_msg += "\nYou seem to be using Orbitalis's default sender. Be sure to set your own --sender.\n";
         }
 
         unused_wallets.extend(local_wallets.into_keys());
@@ -423,11 +423,11 @@ mod tests {
     #[test]
     fn parse_keystore_args() {
         let args: MultiWallet =
-            MultiWallet::parse_from(["foundry-cli", "--keystores", "my/keystore/path"]);
+            MultiWallet::parse_from(["orbitalis-cli", "--keystores", "my/keystore/path"]);
         assert_eq!(args.keystore_paths, Some(vec!["my/keystore/path".to_string()]));
 
         std::env::set_var("ETH_KEYSTORE", "MY_KEYSTORE");
-        let args: MultiWallet = MultiWallet::parse_from(["foundry-cli"]);
+        let args: MultiWallet = MultiWallet::parse_from(["orbitalis-cli"]);
         assert_eq!(args.keystore_paths, Some(vec!["MY_KEYSTORE".to_string()]));
 
         std::env::remove_var("ETH_KEYSTORE");
@@ -445,7 +445,7 @@ mod tests {
             .into_os_string();
 
         let args: MultiWallet = MultiWallet::parse_from([
-            "foundry-cli",
+            "orbitalis-cli",
             "--keystores",
             keystore_file.to_str().unwrap(),
             "--password-file",

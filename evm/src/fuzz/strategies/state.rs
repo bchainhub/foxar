@@ -9,9 +9,9 @@ use corebc::{
     abi::Function,
     types::{Address, Log, Network, H256, U256},
 };
-use foundry_common::contracts::{ContractsByAddress, ContractsByArtifact};
-use foundry_config::FuzzDictionaryConfig;
 use hashbrown::HashSet;
+use orbitalis_common::contracts::{ContractsByAddress, ContractsByArtifact};
+use orbitalis_config::FuzzDictionaryConfig;
 use parking_lot::RwLock;
 use proptest::prelude::{BoxedStrategy, Strategy};
 use revm::{
@@ -75,7 +75,7 @@ pub fn fuzz_calldata_from_state(
                 .unwrap_or_else(|_| {
                     panic!(
                         r#"Fuzzer generated invalid tokens {:?} for function `{}` inputs {:?}
-This is a bug, please open an issue: https://github.com/foundry-rs/foundry/issues"#,
+This is a bug, please open an issue: https://github.com/orbitalis-rs/orbitalis/issues"#,
                         tokens, func.name, func.inputs
                     )
                 })

@@ -2,7 +2,7 @@
 
 use crate::utils::{GitReference, GitRemote};
 use corebc_contract::MultiAbigen;
-pub use foundry_config::Config;
+pub use orbitalis_config::Config;
 use std::{
     path::{Path, PathBuf},
     process::{Command, Stdio},
@@ -25,7 +25,7 @@ pub struct Binder {
     keep_artifacts: Option<PathBuf>,
     /// additional commands to run in the repo
     commands: Vec<Vec<String>>,
-    /// The foundry config to use in order to compile the project
+    /// The orbitalis config to use in order to compile the project
     config: Option<Config>,
     /// Path to where the contract artifacts are stored
     bindings: Option<PathBuf>,
@@ -41,7 +41,7 @@ impl Binder {
     /// ## Local repository
     ///
     /// ```
-    /// # use foundry_binder::Binder;
+    /// # use orbitalis_binder::Binder;
     /// # fn new() {
     ///  let binder = Binder::new("./aave-v3-core");
     /// # }
@@ -51,7 +51,7 @@ impl Binder {
     ///
     /// ```
     /// # use url::Url;
-    /// use foundry_binder::Binder;
+    /// use orbitalis_binder::Binder;
     /// # fn new() {
     ///  let binder = Binder::new(Url::parse("https://github.com/aave/aave-v3-core").unwrap());
     /// # }
@@ -75,7 +75,7 @@ impl Binder {
     ///
     /// ```
     /// # use url::Url;
-    /// use foundry_binder::{Binder, RepositoryBuilder};
+    /// use orbitalis_binder::{Binder, RepositoryBuilder};
     /// # fn new() {
     /// let binder = Binder::new(
     ///     RepositoryBuilder::new(Url::parse("https://github.com/aave/aave-v3-core").unwrap())
@@ -121,7 +121,7 @@ impl Binder {
     ///
     /// ```
     /// # use url::Url;
-    /// use foundry_binder::{Binder, Config, RepositoryBuilder};
+    /// use orbitalis_binder::{Binder, Config, RepositoryBuilder};
     /// # fn new() {
     /// let binder = Binder::new(
     ///     RepositoryBuilder::new(Url::parse("https://github.com/aave/aave-v3-core").unwrap())
@@ -149,7 +149,7 @@ impl Binder {
             config.__root = project.into();
             config
         } else {
-            foundry_config::load_config_with_root(Some(project))
+            orbitalis_config::load_config_with_root(Some(project))
         };
 
         // run all commands

@@ -1,13 +1,13 @@
 use super::{Wallet, WalletSigner};
 use clap::Parser;
 use eyre::Result;
-use foundry_config::{
+use orbitalis_config::{
     figment::{
         self,
         value::{Dict, Map, Value},
         Metadata, Profile,
     },
-    impl_figment_convert_cast, Config,
+    impl_figment_convert_probe, Config,
 };
 use serde::Serialize;
 use std::borrow::Cow;
@@ -25,7 +25,7 @@ pub struct RpcOpts {
     pub flashbots: bool,
 }
 
-impl_figment_convert_cast!(RpcOpts);
+impl_figment_convert_probe!(RpcOpts);
 
 impl figment::Provider for RpcOpts {
     fn metadata(&self) -> Metadata {
@@ -71,7 +71,7 @@ pub struct EtherscanOpts {
     // pub network: Option<Network>,
 }
 
-impl_figment_convert_cast!(EtherscanOpts);
+impl_figment_convert_probe!(EtherscanOpts);
 
 impl figment::Provider for EtherscanOpts {
     fn metadata(&self) -> Metadata {
@@ -111,7 +111,7 @@ pub struct EthereumOpts {
     pub wallet: Wallet,
 }
 
-impl_figment_convert_cast!(EthereumOpts);
+impl_figment_convert_probe!(EthereumOpts);
 
 impl EthereumOpts {
     pub async fn signer(&self) -> Result<WalletSigner> {

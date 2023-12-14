@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity >= 1.1.0;
+pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "./Cheats.sol";
@@ -15,7 +15,8 @@ contract ReadCallersTest is DSTest {
         address expectedSender = msg.sender;
         address expectedTxOrigin = tx.origin;
 
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.None));
         assertEq(newSender, expectedSender);
@@ -27,24 +28,31 @@ contract ReadCallersTest is DSTest {
         cheats.prank(sender);
         address expectedTxOrigin = tx.origin;
 
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.Prank));
         assertEq(newSender, sender);
         assertEq(newOrigin, expectedTxOrigin);
     }
 
-    function testReadCallersWithActivePrankForMsgSenderAndTxOrigin(address sender, address origin) public {
+    function testReadCallersWithActivePrankForMsgSenderAndTxOrigin(
+        address sender,
+        address origin
+    ) public {
         cheats.prank(sender, origin);
 
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.Prank));
         assertEq(newSender, sender);
         assertEq(newOrigin, origin);
     }
 
-    function testReadCallersAfterConsumingMsgSenderPrank(address sender) public {
+    function testReadCallersAfterConsumingMsgSenderPrank(
+        address sender
+    ) public {
         Target target = new Target();
         address expectedSender = msg.sender;
         address expectedTxOrigin = tx.origin;
@@ -52,14 +60,18 @@ contract ReadCallersTest is DSTest {
         cheats.prank(sender);
 
         target.consumeNewCaller();
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.None));
         assertEq(newSender, expectedSender);
         assertEq(newOrigin, expectedTxOrigin);
     }
 
-    function testReadCallersAfterConsumingMsgSenderAndTxOriginPrank(address sender, address origin) public {
+    function testReadCallersAfterConsumingMsgSenderAndTxOriginPrank(
+        address sender,
+        address origin
+    ) public {
         Target target = new Target();
         address expectedSender = msg.sender;
         address expectedTxOrigin = tx.origin;
@@ -67,21 +79,28 @@ contract ReadCallersTest is DSTest {
         cheats.prank(sender, origin);
 
         target.consumeNewCaller();
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.None));
         assertEq(newSender, expectedSender);
         assertEq(newOrigin, expectedTxOrigin);
     }
 
-    function testReadCallersWithActiveRecurrentMsgSenderPrank(address sender) public {
+    function testReadCallersWithActiveRecurrentMsgSenderPrank(
+        address sender
+    ) public {
         address expectedTxOrigin = tx.origin;
         Target target = new Target();
         cheats.startPrank(sender);
 
         for (uint256 i = 0; i < 5; i++) {
             target.consumeNewCaller();
-            (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+            (
+                Cheats.CallerMode mode,
+                address newSender,
+                address newOrigin
+            ) = cheats.readCallers();
 
             assertEq(uint256(mode), uint256(Cheats.CallerMode.RecurrentPrank));
             assertEq(newSender, sender);
@@ -89,13 +108,20 @@ contract ReadCallersTest is DSTest {
         }
     }
 
-    function testReadCallersWithActiveRecurrentMsgSenderAndTxOriginPrank(address sender, address origin) public {
+    function testReadCallersWithActiveRecurrentMsgSenderAndTxOriginPrank(
+        address sender,
+        address origin
+    ) public {
         Target target = new Target();
         cheats.startPrank(sender, origin);
 
         for (uint256 i = 0; i < 5; i++) {
             target.consumeNewCaller();
-            (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+            (
+                Cheats.CallerMode mode,
+                address newSender,
+                address newOrigin
+            ) = cheats.readCallers();
 
             assertEq(uint256(mode), uint256(Cheats.CallerMode.RecurrentPrank));
             assertEq(newSender, sender);
@@ -103,28 +129,35 @@ contract ReadCallersTest is DSTest {
         }
     }
 
-    function testReadCallersAfterStoppingRecurrentMsgSenderPrank(address sender) public {
+    function testReadCallersAfterStoppingRecurrentMsgSenderPrank(
+        address sender
+    ) public {
         address expectedSender = msg.sender;
         address expectedTxOrigin = tx.origin;
         cheats.startPrank(sender);
 
         cheats.stopPrank();
 
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.None));
         assertEq(newSender, expectedSender);
         assertEq(newOrigin, expectedTxOrigin);
     }
 
-    function testReadCallersAfterStoppingRecurrentMsgSenderAndTxOriginPrank(address sender, address origin) public {
+    function testReadCallersAfterStoppingRecurrentMsgSenderAndTxOriginPrank(
+        address sender,
+        address origin
+    ) public {
         address expectedSender = msg.sender;
         address expectedTxOrigin = tx.origin;
         cheats.startPrank(sender, origin);
 
         cheats.stopPrank();
 
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.None));
         assertEq(newSender, expectedSender);
@@ -135,7 +168,8 @@ contract ReadCallersTest is DSTest {
     function testReadCallersWithActiveBroadcast(address sender) public {
         cheats.broadcast(sender);
 
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.Broadcast));
         assertEq(newSender, sender);
@@ -150,35 +184,48 @@ contract ReadCallersTest is DSTest {
         cheats.broadcast(sender);
 
         target.consumeNewCaller();
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.None));
         assertEq(newSender, expectedSender);
         assertEq(newOrigin, expectedTxOrigin);
     }
 
-    function testReadCallersWithActiveRecurrentBroadcast(address sender) public {
+    function testReadCallersWithActiveRecurrentBroadcast(
+        address sender
+    ) public {
         Target target = new Target();
         cheats.startBroadcast(sender);
 
         for (uint256 i = 0; i < 5; i++) {
             target.consumeNewCaller();
-            (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+            (
+                Cheats.CallerMode mode,
+                address newSender,
+                address newOrigin
+            ) = cheats.readCallers();
 
-            assertEq(uint256(mode), uint256(Cheats.CallerMode.RecurrentBroadcast));
+            assertEq(
+                uint256(mode),
+                uint256(Cheats.CallerMode.RecurrentBroadcast)
+            );
             assertEq(newSender, sender);
             assertEq(newOrigin, sender);
         }
     }
 
-    function testReadCallersAfterStoppingRecurrentBroadcast(address sender) public {
+    function testReadCallersAfterStoppingRecurrentBroadcast(
+        address sender
+    ) public {
         address expectedSender = msg.sender;
         address expectedTxOrigin = tx.origin;
         cheats.startBroadcast(sender);
 
         cheats.stopBroadcast();
 
-        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats.readCallers();
+        (Cheats.CallerMode mode, address newSender, address newOrigin) = cheats
+            .readCallers();
 
         assertEq(uint256(mode), uint256(Cheats.CallerMode.None));
         assertEq(newSender, expectedSender);

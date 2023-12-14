@@ -12,14 +12,14 @@ use corebc::{
     providers::{Http, Provider, RetryClient},
     types::{BlockId, BlockNumber},
 };
-use foundry_common::ProviderBuilder;
-use foundry_config::Config;
 use futures::{
     channel::mpsc::{channel, Receiver, Sender},
     stream::{Fuse, Stream},
     task::{Context, Poll},
     Future, FutureExt, StreamExt,
 };
+use orbitalis_common::ProviderBuilder;
+use orbitalis_config::Config;
 use revm::primitives::Env;
 use std::{
     collections::HashMap,
@@ -498,7 +498,7 @@ async fn create_fork(
 
     // determine the cache path if caching is enabled
     let cache_path = if fork.enable_caching {
-        Config::foundry_block_cache_dir(meta.cfg_env.network_id, number)
+        Config::orbitalis_block_cache_dir(meta.cfg_env.network_id, number)
     } else {
         None
     };

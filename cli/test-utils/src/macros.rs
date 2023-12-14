@@ -1,20 +1,20 @@
 /// A macro to generate a new integration test case
 ///
-/// The `forgetest!` macro's first argument is the name of the test, the second argument is a
+/// The `sparktest!` macro's first argument is the name of the test, the second argument is a
 /// closure to configure and execute the test. The `TestProject` provides utility functions to setup
-/// the project's workspace. The `TestCommand` is a wrapper around the actual `forge` executable
+/// the project's workspace. The `TestCommand` is a wrapper around the actual `spark` executable
 /// that this then executed with the configured command arguments.
 ///
 /// # Example
 ///
-/// run `forge init`
+/// run `spark init`
 ///
 /// ```no_run
-/// use foundry_cli_test_utils::*;
-/// forgetest!(my_test, |prj: TestProject, mut cmd: TestCommand| {
-///     // adds `init` to forge's command arguments
+/// use orbitalis_cli_test_utils::*;
+/// sparktest!(my_test, |prj: TestProject, mut cmd: TestCommand| {
+///     // adds `init` to spark's command arguments
 ///     cmd.arg("init");
-///     // executes forge <args> and panics if the command failed or output is empty
+///     // executes spark <args> and panics if the command failed or output is empty
 ///     cmd.assert_non_empty_stdout();
 /// });
 /// ```
@@ -22,9 +22,9 @@
 /// Configure a hardhat project layout by adding a `PathStyle::HardHat` argument
 ///
 /// ```no_run
-/// use foundry_cli_test_utils::*;
-/// use foundry_cli_test_utils::corebc_ylem::PathStyle;
-/// forgetest!(can_clean_hardhat, PathStyle::HardHat, |prj: TestProject, mut cmd: TestCommand| {
+/// use orbitalis_cli_test_utils::*;
+/// use orbitalis_cli_test_utils::corebc_ylem::PathStyle;
+/// sparktest!(can_clean_hardhat, PathStyle::HardHat, |prj: TestProject, mut cmd: TestCommand| {
 ///     prj.assert_create_dirs_exists();
 ///     prj.assert_style_paths_exist(PathStyle::HardHat);
 ///     cmd.arg("clean");
@@ -32,15 +32,15 @@
 ///     prj.assert_cleaned();
 /// });
 #[macro_export]
-macro_rules! forgetest {
+macro_rules! sparktest {
     ($(#[$meta:meta])* $test:ident, $fun:expr) => {
-        $crate::forgetest!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
+        $crate::sparktest!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
     };
     ($(#[$meta:meta])* $test:ident, $style:expr, $fun:expr) => {
         #[test]
         $(#[$meta])*
         fn $test() {
-            let (prj, cmd) = $crate::util::setup_forge(stringify!($test), $style);
+            let (prj, cmd) = $crate::util::setup_spark(stringify!($test), $style);
             let f = $fun;
             f(prj, cmd);
         }
@@ -48,15 +48,15 @@ macro_rules! forgetest {
 }
 
 #[macro_export]
-macro_rules! forgetest_async {
+macro_rules! sparktest_async {
     ($(#[$meta:meta])* $test:ident, $fun:expr) => {
-        $crate::forgetest_async!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
+        $crate::sparktest_async!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
     };
     ($(#[$meta:meta])* $test:ident, $style:expr, $fun:expr) => {
         #[tokio::test(flavor = "multi_thread")]
         $(#[$meta])*
         async fn $test() {
-            let (prj, cmd) = $crate::util::setup_forge(stringify!($test), $style);
+            let (prj, cmd) = $crate::util::setup_spark(stringify!($test), $style);
             let f = $fun;
             f(prj, cmd).await;
         }
@@ -64,32 +64,32 @@ macro_rules! forgetest_async {
 }
 
 #[macro_export]
-macro_rules! casttest {
+macro_rules! probetest {
     ($(#[$meta:meta])* $test:ident, $fun:expr) => {
-        $crate::casttest!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
+        $crate::probetest!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
     };
     ($(#[$meta:meta])* $test:ident, $style:expr, $fun:expr) => {
         #[test]
         $(#[$meta])*
         fn $test() {
-            let (prj, cmd) = $crate::util::setup_cast(stringify!($test), $style);
+            let (prj, cmd) = $crate::util::setup_probe(stringify!($test), $style);
             let f = $fun;
             f(prj, cmd);
         }
     };
 }
 
-/// Same as `forgetest` but returns an already initialized project workspace (`forge init`)
+/// Same as `sparktest` but returns an already initialized project workspace (`spark init`)
 #[macro_export]
-macro_rules! forgetest_init {
+macro_rules! sparktest_init {
     ($(#[$meta:meta])* $test:ident, $fun:expr) => {
-        $crate::forgetest_init!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
+        $crate::sparktest_init!($(#[$meta])* $test, $crate::corebc_ylem::PathStyle::Dapptools, $fun);
     };
     ($(#[$meta:meta])* $test:ident, $style:expr, $fun:expr) => {
         #[test]
         $(#[$meta])*
         fn $test() {
-            let (prj, cmd) = $crate::util::setup_forge(stringify!($test), $style);
+            let (prj, cmd) = $crate::util::setup_spark(stringify!($test), $style);
             $crate::util::initialize(prj.root());
             let f = $fun;
             f(prj, cmd);
@@ -101,14 +101,14 @@ macro_rules! forgetest_init {
 /// Can optionally enable fork mode as well if a fork block is passed.
 /// The fork block needs to be greater than 0.
 #[macro_export]
-macro_rules! forgetest_external {
-    // forgetest_external!(test_name, "owner/repo");
+macro_rules! sparktest_external {
+    // sparktest_external!(test_name, "owner/repo");
     ($(#[$meta:meta])* $test:ident, $repo:literal) => {
-        $crate::forgetest_external!($(#[$meta])* $test, $repo, 0, Vec::<String>::new());
+        $crate::sparktest_external!($(#[$meta])* $test, $repo, 0, Vec::<String>::new());
     };
-    // forgetest_external!(test_name, "owner/repo", 1234);
+    // sparktest_external!(test_name, "owner/repo", 1234);
     ($(#[$meta:meta])* $test:ident, $repo:literal, $fork_block:literal) => {
-        $crate::forgetest_external!(
+        $crate::sparktest_external!(
             $(#[$meta])*
             $test,
             $repo,
@@ -117,23 +117,23 @@ macro_rules! forgetest_external {
             Vec::<String>::new()
         );
     };
-    // forgetest_external!(test_name, "owner/repo", &["--extra-opt", "val"]);
-    ($(#[$meta:meta])* $test:ident, $repo:literal, $forge_opts:expr) => {
-        $crate::forgetest_external!($(#[$meta])* $test, $repo, 0, $forge_opts);
+    // sparktest_external!(test_name, "owner/repo", &["--extra-opt", "val"]);
+    ($(#[$meta:meta])* $test:ident, $repo:literal, $spark_opts:expr) => {
+        $crate::sparktest_external!($(#[$meta])* $test, $repo, 0, $spark_opts);
     };
-    // forgetest_external!(test_name, "owner/repo", 1234, &["--extra-opt", "val"]);
-    ($(#[$meta:meta])* $test:ident, $repo:literal, $fork_block:literal, $forge_opts:expr) => {
-        $crate::forgetest_external!(
+    // sparktest_external!(test_name, "owner/repo", 1234, &["--extra-opt", "val"]);
+    ($(#[$meta:meta])* $test:ident, $repo:literal, $fork_block:literal, $spark_opts:expr) => {
+        $crate::sparktest_external!(
             $(#[$meta])*
             $test,
             $repo,
             $crate::corebc_ylem::PathStyle::Dapptools,
             $fork_block,
-            $forge_opts
+            $spark_opts
         );
     };
-    // forgetest_external!(test_name, "owner/repo", PathStyle::Dapptools, 123);
-    ($(#[$meta:meta])* $test:ident, $repo:literal, $style:expr, $fork_block:literal, $forge_opts:expr) => {
+    // sparktest_external!(test_name, "owner/repo", PathStyle::Dapptools, 123);
+    ($(#[$meta:meta])* $test:ident, $repo:literal, $style:expr, $fork_block:literal, $spark_opts:expr) => {
         #[test]
         $(#[$meta])*
         fn $test() {
@@ -146,7 +146,7 @@ macro_rules! forgetest_external {
                 return
             };
 
-            let (prj, mut cmd) = $crate::util::setup_forge(stringify!($test), $style);
+            let (prj, mut cmd) = $crate::util::setup_spark(stringify!($test), $style);
 
             // Wipe the default structure
             prj.wipe();
@@ -172,18 +172,18 @@ macro_rules! forgetest_external {
                 .status();
 
             // Run the tests
-            cmd.arg("test").args($forge_opts).args([
+            cmd.arg("test").args($spark_opts).args([
                 "--optimize",
                 "--optimizer-runs",
                 "20000",
                 "--ffi",
             ]);
-            cmd.set_env("FOUNDRY_FUZZ_RUNS", "1");
+            cmd.set_env("ORBITALIS_FUZZ_RUNS", "1");
 
-            let next_eth_rpc_url = foundry_utils::rpc::next_http_archive_rpc_endpoint(corebc_addressbook::Network::Mainnet);
+            let next_eth_rpc_url = orbitalis_utils::rpc::next_http_archive_rpc_endpoint(corebc_addressbook::Network::Mainnet);
             if $fork_block > 0 {
-                cmd.set_env("FOUNDRY_ETH_RPC_URL", next_eth_rpc_url);
-                cmd.set_env("FOUNDRY_FORK_BLOCK_NUMBER", stringify!($fork_block));
+                cmd.set_env("ORBITALIS_ETH_RPC_URL", next_eth_rpc_url);
+                cmd.set_env("ORBITALIS_FORK_BLOCK_NUMBER", stringify!($fork_block));
             }
             cmd.assert_non_empty_stdout();
         }

@@ -13,8 +13,8 @@ use corebc::{
     abi::{Abi, Address, Event, Function, Param, ParamType, Token},
     types::{H176, H256},
 };
-use foundry_common::{abi::get_indexed_event, SELECTOR_LEN};
 use hashbrown::HashSet;
+use orbitalis_common::{abi::get_indexed_event, SELECTOR_LEN};
 use std::collections::{BTreeMap, HashMap};
 
 /// Build a new [CallTraceDecoder].

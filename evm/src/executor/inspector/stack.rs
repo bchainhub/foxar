@@ -43,7 +43,7 @@ pub struct InspectorData {
     pub energy: Option<u64>,
     pub cheatcodes: Option<Cheatcodes>,
     pub script_wallets: Vec<LocalWallet>,
-    pub chisel_state: Option<(Stack, Memory, InstructionResult)>,
+    pub pilot_state: Option<(Stack, Memory, InstructionResult)>,
 }
 
 /// An inspector that calls multiple inspectors in sequence.
@@ -60,7 +60,7 @@ pub struct InspectorStack {
     pub fuzzer: Option<Fuzzer>,
     pub coverage: Option<CoverageCollector>,
     pub printer: Option<TracePrinter>,
-    pub chisel_state: Option<ChiselState>,
+    pub pilot_state: Option<ChiselState>,
 }
 
 impl InspectorStack {
@@ -82,7 +82,7 @@ impl InspectorStack {
                 .map(|cheatcodes| cheatcodes.script_wallets.clone())
                 .unwrap_or_default(),
             cheatcodes: self.cheatcodes,
-            chisel_state: self.chisel_state.unwrap_or_default().state,
+            pilot_state: self.pilot_state.unwrap_or_default().state,
         }
     }
 
@@ -228,7 +228,7 @@ where
                 &mut self.logs,
                 &mut self.cheatcodes,
                 &mut self.printer,
-                &mut self.chisel_state
+                &mut self.pilot_state
             ],
             {
                 let status = inspector.step_end(interpreter, data, is_static, status);
@@ -374,7 +374,7 @@ where
                 &mut self.logs,
                 &mut self.cheatcodes,
                 &mut self.printer,
-                &mut self.chisel_state
+                &mut self.pilot_state
             ],
             {
                 Inspector::<DB>::selfdestruct(inspector, contract, target);

@@ -9,10 +9,10 @@ use corebc::{
     prelude::U256,
     types::Log,
 };
-use foundry_common::{abi::format_token, SELECTOR_LEN};
-use foundry_utils::error::ERROR_PREFIX;
 use itertools::Itertools;
 use once_cell::sync::Lazy;
+use orbitalis_common::{abi::format_token, SELECTOR_LEN};
+use orbitalis_utils::error::ERROR_PREFIX;
 use revm::interpreter::{return_ok, InstructionResult};
 
 /// Decode a set of logs, only returning logs from DSTest logging events and Hardhat's `console.log`
@@ -175,7 +175,7 @@ pub fn decode_revert(
                         if let Ok(decoded) = abi_error.decode(&err[SELECTOR_LEN..]) {
                             let inputs = decoded
                                 .iter()
-                                .map(foundry_common::abi::format_token)
+                                .map(orbitalis_common::abi::format_token)
                                 .collect::<Vec<_>>()
                                 .join(", ");
                             return Ok(format!("{}({inputs})", abi_error.name))

@@ -4,8 +4,8 @@ use corebc_ylem::{
     ArtifactOutput, ConfigurableArtifacts, PathStyle, ProjectPathsConfig, Ylem,
 };
 use eyre::WrapErr;
-use foundry_config::Config;
 use once_cell::sync::Lazy;
+use orbitalis_config::Config;
 use parking_lot::Mutex;
 use regex::Regex;
 use std::{
@@ -26,7 +26,7 @@ use std::{
 static CURRENT_DIR_LOCK: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
 
 /// A lock used for pre-installing commonly used solc versions once.
-/// Pre-installing is useful, because if two forge test require a missing solc at the same time, one
+/// Pre-installing is useful, because if two spark test require a missing solc at the same time, one
 /// can encounter an OS error 26 textfile busy if it tries to write the freshly downloaded solc to
 /// the right location while the other test already did that and is currently executing this solc
 /// binary.
@@ -35,9 +35,9 @@ static PRE_INSTALL_SOLC_LOCK: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false)
 // This stores `true` if the current terminal is a tty
 pub static IS_TTY: Lazy<bool> = Lazy::new(|| is_terminal::is_terminal(std::io::stdout()));
 
-/// Contains a `forge init` initialized project
+/// Contains a `spark init` initialized project
 pub static FORGE_INITIALIZED: Lazy<TestProject> = Lazy::new(|| {
-    let (prj, mut cmd) = setup_forge("init-template", PathStyle::Dapptools);
+    let (prj, mut cmd) = setup_spark("init-template", PathStyle::Dapptools);
     cmd.args(["init", "--force"]);
     cmd.assert_non_empty_stdout();
     prj
@@ -68,22 +68,22 @@ pub fn clone_remote(
         .output()
 }
 
-/// Setup an empty test project and return a command pointing to the forge
+/// Setup an empty test project and return a command pointing to the spark
 /// executable whose CWD is set to the project's root.
 ///
 /// The name given will be used to create the directory. Generally, it should
 /// correspond to the test name.
 #[track_caller]
-pub fn setup_forge(name: &str, style: PathStyle) -> (TestProject, TestCommand) {
-    setup_forge_project(TestProject::new(name, style))
+pub fn setup_spark(name: &str, style: PathStyle) -> (TestProject, TestCommand) {
+    setup_spark_project(TestProject::new(name, style))
 }
 
-pub fn setup_forge_project(test: TestProject) -> (TestProject, TestCommand) {
+pub fn setup_spark_project(test: TestProject) -> (TestProject, TestCommand) {
     // preinstall commonly used solc once, we execute this here because this is the shared
-    // entrypoint used by all `forgetest!` macros
+    // entrypoint used by all `sparktest!` macros
     install_commonly_used_solc();
 
-    let cmd = test.forge_command();
+    let cmd = test.spark_command();
     (test, cmd)
 }
 
@@ -106,7 +106,7 @@ impl RemoteProject {
         }
     }
 
-    /// Whether to run `forge build`
+    /// Whether to run `spark build`
     pub fn set_build(mut self, run_build: bool) -> Self {
         self.run_build = run_build;
         self
@@ -131,22 +131,22 @@ impl<T: Into<String>> From<T> for RemoteProject {
     }
 }
 
-/// Setups a new local forge project by cloning and initializing the `RemoteProject`
+/// Setups a new local spark project by cloning and initializing the `RemoteProject`
 ///
 /// This will
 ///   1. clone the prj, like "transmissions1/solmate"
-///   2. run `forge build`, if configured
+///   2. run `spark build`, if configured
 ///   3. run additional commands
 ///
 /// # Panics
 ///
 /// If anything goes wrong during, checkout, build, or other commands are unsuccessful
-pub fn setup_forge_remote(prj: impl Into<RemoteProject>) -> (TestProject, TestCommand) {
-    try_setup_forge_remote(prj).unwrap()
+pub fn setup_spark_remote(prj: impl Into<RemoteProject>) -> (TestProject, TestCommand) {
+    try_setup_spark_remote(prj).unwrap()
 }
 
-/// Same as `setup_forge_remote` but not panicing
-pub fn try_setup_forge_remote(
+/// Same as `setup_spark_remote` but not panicing
+pub fn try_setup_spark_remote(
     config: impl Into<RemoteProject>,
 ) -> eyre::Result<(TestProject, TestCommand)> {
     let config = config.into();
@@ -155,9 +155,9 @@ pub fn try_setup_forge_remote(
 
     let prj = TestProject::with_project(tmp);
     if config.run_build {
-        let mut cmd = prj.forge_command();
+        let mut cmd = prj.spark_command();
         cmd.arg("build");
-        cmd.ensure_execute_success().wrap_err("`forge build` unsuccessful")?;
+        cmd.ensure_execute_success().wrap_err("`spark build` unsuccessful")?;
     }
     for addon in config.run_commands {
         debug_assert!(!addon.is_empty());
@@ -174,16 +174,16 @@ pub fn try_setup_forge_remote(
         eyre::ensure!(status.success(), "Failed to execute command {:?}", addon);
     }
 
-    let cmd = prj.forge_command();
+    let cmd = prj.spark_command();
     Ok((prj, cmd))
 }
 
-pub fn setup_cast(name: &str, style: PathStyle) -> (TestProject, TestCommand) {
-    setup_cast_project(TestProject::new(name, style))
+pub fn setup_probe(name: &str, style: PathStyle) -> (TestProject, TestCommand) {
+    setup_probe_project(TestProject::new(name, style))
 }
 
-pub fn setup_cast_project(test: TestProject) -> (TestProject, TestCommand) {
-    let cmd = test.cast_command();
+pub fn setup_probe_project(test: TestProject) -> (TestProject, TestCommand) {
+    let cmd = test.probe_command();
     (test, cmd)
 }
 
@@ -250,7 +250,7 @@ impl TestProject {
         self.inner().paths()
     }
 
-    /// Returns the path to the project's `foundry.toml` file
+    /// Returns the path to the project's `orbitalis.toml` file
     pub fn config_path(&self) -> PathBuf {
         self.root().join(Config::FILE_NAME)
     }
@@ -260,13 +260,13 @@ impl TestProject {
         &self.paths().cache
     }
 
-    /// Writes the given config as toml to `foundry.toml`
+    /// Writes the given config as toml to `orbitalis.toml`
     pub fn write_config(&self, config: Config) {
         let file = self.config_path();
         pretty_err(&file, fs::write(&file, config.to_string_pretty().unwrap()));
     }
 
-    /// Asserts that the `<root>/foundry.toml` file exits
+    /// Asserts that the `<root>/orbitalis.toml` file exits
     pub fn assert_config_exists(&self) {
         assert!(self.config_path().exists());
     }
@@ -348,10 +348,10 @@ impl TestProject {
         assert!(!paths.artifacts.exists());
     }
 
-    /// Creates a new command that is set to use the forge executable for this project
+    /// Creates a new command that is set to use the spark executable for this project
     #[track_caller]
-    pub fn forge_command(&self) -> TestCommand {
-        let cmd = self.forge_bin();
+    pub fn spark_command(&self) -> TestCommand {
+        let cmd = self.spark_bin();
         let _lock = CURRENT_DIR_LOCK.lock();
         TestCommand {
             project: self.clone(),
@@ -362,9 +362,9 @@ impl TestProject {
         }
     }
 
-    /// Creates a new command that is set to use the cast executable for this project
-    pub fn cast_command(&self) -> TestCommand {
-        let mut cmd = self.cast_bin();
+    /// Creates a new command that is set to use the probe executable for this project
+    pub fn probe_command(&self) -> TestCommand {
+        let mut cmd = self.probe_bin();
         cmd.current_dir(self.inner.root());
         let _lock = CURRENT_DIR_LOCK.lock();
         TestCommand {
@@ -376,30 +376,30 @@ impl TestProject {
         }
     }
 
-    /// Returns the path to the forge executable.
-    pub fn forge_bin(&self) -> process::Command {
-        let forge = self.root.join(format!("../forge{}", env::consts::EXE_SUFFIX));
-        let mut cmd = process::Command::new(forge);
+    /// Returns the path to the spark executable.
+    pub fn spark_bin(&self) -> process::Command {
+        let spark = self.root.join(format!("../spark{}", env::consts::EXE_SUFFIX));
+        let mut cmd = process::Command::new(spark);
         cmd.current_dir(self.inner.root());
         cmd.env("NO_COLOR", "1");
         cmd
     }
 
-    /// Returns the path to the cast executable.
-    pub fn cast_bin(&self) -> process::Command {
-        let cast = self.root.join(format!("../cast{}", env::consts::EXE_SUFFIX));
-        let mut cmd = process::Command::new(cast);
+    /// Returns the path to the probe executable.
+    pub fn probe_bin(&self) -> process::Command {
+        let probe = self.root.join(format!("../probe{}", env::consts::EXE_SUFFIX));
+        let mut cmd = process::Command::new(probe);
         cmd.env("NO_COLOR", "1");
         cmd
     }
 
-    /// Returns the `Config` as spit out by `forge config`
+    /// Returns the `Config` as spit out by `spark config`
     pub fn config_from_output<I, A>(&self, args: I) -> Config
     where
         I: IntoIterator<Item = A>,
         A: AsRef<OsStr>,
     {
-        let mut cmd = self.forge_bin();
+        let mut cmd = self.spark_bin();
         cmd.arg("config").arg("--root").arg(self.root()).args(args).arg("--json");
         let output = cmd.output().unwrap();
         let c = String::from_utf8_lossy(&output.stdout);
@@ -481,12 +481,12 @@ impl TestCommand {
     }
 
     /// Resets the command
-    pub fn forge_fuse(&mut self) -> &mut TestCommand {
-        self.set_cmd(self.project.forge_bin())
+    pub fn spark_fuse(&mut self) -> &mut TestCommand {
+        self.set_cmd(self.project.spark_bin())
     }
 
-    pub fn cast_fuse(&mut self) -> &mut TestCommand {
-        self.set_cmd(self.project.cast_bin())
+    pub fn probe_fuse(&mut self) -> &mut TestCommand {
+        self.set_cmd(self.project.probe_bin())
     }
 
     /// Sets the current working directory
@@ -545,13 +545,13 @@ impl TestCommand {
         self
     }
 
-    /// Returns the `Config` as spit out by `forge config`
+    /// Returns the `Config` as spit out by `spark config`
     pub fn config(&mut self) -> Config {
         self.cmd.args(["config", "--json"]);
         let output = self.output();
         let c = String::from_utf8_lossy(&output.stdout);
         let config = serde_json::from_str(c.as_ref()).unwrap();
-        self.forge_fuse();
+        self.spark_fuse();
         config
     }
 
@@ -736,7 +736,7 @@ impl TestCommand {
     pub fn ensure_success(&self, out: process::Output) -> eyre::Result<process::Output> {
         if !out.status.success() {
             let suggest = if out.stderr.is_empty() {
-                "\n\nDid your forge command end up with no output?".to_string()
+                "\n\nDid your spark command end up with no output?".to_string()
             } else {
                 "".to_string()
             };
@@ -765,7 +765,7 @@ impl TestCommand {
 /// Extension trait for `std::process::Output`
 ///
 /// These function will read the path's content and assert that the process' output matches the
-/// fixture. Since `forge` commands may emit colorized output depending on whether the current
+/// fixture. Since `spark` commands may emit colorized output depending on whether the current
 /// terminal is tty, the path argument can be wrapped in [tty_fixture_path()]
 pub trait OutputExt {
     /// Ensure the command wrote the expected data to `stdout`.

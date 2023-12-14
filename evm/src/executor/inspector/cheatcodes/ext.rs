@@ -5,9 +5,9 @@ use corebc::{
     prelude::artifacts::CompactContractBytecode,
     types::*,
 };
-use foundry_common::{fmt::*, fs, get_artifact_path};
-use foundry_config::fs_permissions::FsAccessKind;
 use hex::FromHex;
+use orbitalis_common::{fmt::*, fs, get_artifact_path};
+use orbitalis_config::fs_permissions::FsAccessKind;
 use serde::Deserialize;
 use serde_json::Value;
 use std::{collections::BTreeMap, env, path::Path, process::Command, str::FromStr};
@@ -168,7 +168,7 @@ fn value_to_token(value: &Value) -> Result<Token> {
             Ok(Token::Array(values))
         }
         value @ Value::Object(_) => {
-            // See: [#3647](https://github.com/foundry-rs/foundry/pull/3647)
+            // See: [#3647](https://github.com/orbitalis-rs/orbitalis/pull/3647)
             let ordered_object: BTreeMap<String, Value> =
                 serde_json::from_value(value.clone()).unwrap();
             let values = ordered_object.values().map(value_to_token).collect::<Result<Vec<_>>>()?;

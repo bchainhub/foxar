@@ -1,15 +1,15 @@
-//! Contains various tests for checking `forge test`
+//! Contains various tests for checking `spark test`
 use corebc::types::Network;
-use foundry_cli_test_utils::{
-    forgetest, forgetest_init,
+use orbitalis_cli_test_utils::{
+    sparktest, sparktest_init,
     util::{OutputExt, TestCommand, TestProject},
 };
-use foundry_config::Config;
-use foundry_utils::rpc;
+use orbitalis_config::Config;
+use orbitalis_utils::rpc;
 use std::{path::PathBuf, str::FromStr};
 
 // tests that test filters are handled correctly
-forgetest!(can_set_filter_values, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_set_filter_values, |prj: TestProject, mut cmd: TestCommand| {
     let patt = regex::Regex::new("test*").unwrap();
     let glob = globset::Glob::from_str("foo/bar/baz*").unwrap();
 
@@ -36,7 +36,7 @@ forgetest!(can_set_filter_values, |prj: TestProject, mut cmd: TestCommand| {
 });
 
 // tests that warning is displayed when there are no tests in project
-forgetest!(warn_no_tests, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(warn_no_tests, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "dummy",
@@ -58,7 +58,7 @@ contract Dummy {}
 });
 
 // tests that warning is displayed with pattern when no tests match
-forgetest!(warn_no_tests_match, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(warn_no_tests_match, |prj: TestProject, mut cmd: TestCommand| {
     prj.inner()
         .add_source(
             "dummy",
@@ -83,7 +83,7 @@ contract Dummy {}
 });
 
 // tests that suggestion is provided with pattern when no tests match
-forgetest!(suggest_when_no_tests_match, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(suggest_when_no_tests_match, |prj: TestProject, mut cmd: TestCommand| {
     // set up project
     prj.inner()
         .add_source(
@@ -113,7 +113,7 @@ contract TestC {
 });
 
 // tests that direct import paths are handled correctly
-forgetest!(can_fuzz_array_params, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_fuzz_array_params, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
 
     prj.inner()
@@ -137,7 +137,7 @@ contract ATest is DSTest {
 });
 
 // tests that `bytecode_hash` will be sanitized
-forgetest!(can_test_pre_bytecode_hash, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_test_pre_bytecode_hash, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
 
     prj.inner()
@@ -162,7 +162,7 @@ contract ATest is DSTest {
 });
 
 // tests that using the --match-path option only runs files matching the path
-forgetest!(can_test_with_match_path, |prj: TestProject, mut cmd: TestCommand| {
+sparktest!(can_test_with_match_path, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
 
     prj.inner()
@@ -201,19 +201,19 @@ contract FailTest is DSTest {
     cmd.stdout().contains("[PASS]") && !cmd.stdout().contains("[FAIL]")
 });
 
-// tests that `forge test` will pick up tests that are stored in the `test = <path>` config value
-forgetest!(can_run_test_in_custom_test_folder, |prj: TestProject, mut cmd: TestCommand| {
+// tests that `spark test` will pick up tests that are stored in the `test = <path>` config value
+sparktest!(can_run_test_in_custom_test_folder, |prj: TestProject, mut cmd: TestCommand| {
     prj.insert_ds_test();
 
     // explicitly set the test folder
-    let config = Config { test: "nested/forge-tests".into(), ..Default::default() };
+    let config = Config { test: "nested/spark-tests".into(), ..Default::default() };
     prj.write_config(config);
     let config = cmd.config();
-    assert_eq!(config.test, PathBuf::from("nested/forge-tests"));
+    assert_eq!(config.test, PathBuf::from("nested/spark-tests"));
 
     prj.inner()
         .add_source(
-            "nested/forge-tests/MyTest.t.sol",
+            "nested/spark-tests/MyTest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 1.1.0;
@@ -234,8 +234,8 @@ contract MyTest is DSTest {
     );
 });
 
-// checks that forge test repeatedly produces the same output
-forgetest_init!(can_test_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
+// checks that spark test repeatedly produces the same output
+sparktest_init!(can_test_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.arg("test");
     cmd.assert_non_empty_stdout();
 
@@ -247,8 +247,8 @@ forgetest_init!(can_test_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
     }
 });
 
-// tests that `forge test` will run a test only once after changing the version
-forgetest!(
+// tests that `spark test` will run a test only once after changing the version
+sparktest!(
     //Todo:error2215 - we have only one version of ylem for now so  test is unvalid
     #[ignore]
     runs_tests_exactly_once_with_changed_versions,
@@ -294,18 +294,18 @@ contract ContractTest is DSTest {
     }
 );
 
-// checks that we can test forge std successfully
-// `forgetest_init!` will install with `forge-std` under `lib/forge-std`
+// checks that we can test spark std successfully
+// `sparktest_init!` will install with `forge-std` under `lib/forge-std`
 
-forgetest_init!(
+sparktest_init!(
     #[serial_test::serial]
     // todo:error2215 - fix tests in forge-std repo
     #[ignore]
-    can_test_forge_std,
+    can_test_spark_std,
     |prj: TestProject, mut cmd: TestCommand| {
-        let forge_std_dir = prj.root().join("lib/forge-std");
+        let spark_std_dir = prj.root().join("lib/forge-std");
         // execute in subdir
-        cmd.cmd().current_dir(forge_std_dir);
+        cmd.cmd().current_dir(spark_std_dir);
         cmd.args(["test", "--root", "."]);
         let stdout = cmd.stdout();
         assert!(stdout.contains("[PASS]"), "No tests passed:\n{stdout}");
@@ -314,7 +314,7 @@ forgetest_init!(
 );
 
 // tests that libraries are handled correctly in multiforking mode
-forgetest_init!(can_use_libs_in_multi_fork, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(can_use_libs_in_multi_fork, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe_contracts();
     prj.inner()
         .add_source(
@@ -386,7 +386,7 @@ contract FailingTest is Test {
 }
 "#;
 
-forgetest_init!(exit_code_error_on_fail_fast, |prj: TestProject, mut cmd: TestCommand| {
+sparktest_init!(exit_code_error_on_fail_fast, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe_contracts();
     prj.inner().add_source("failing_test", FAILING_TEST).unwrap();
 
@@ -397,7 +397,7 @@ forgetest_init!(exit_code_error_on_fail_fast, |prj: TestProject, mut cmd: TestCo
     cmd.assert_err();
 });
 
-forgetest_init!(
+sparktest_init!(
     exit_code_error_on_fail_fast_with_json,
     |prj: TestProject, mut cmd: TestCommand| {
         prj.wipe_contracts();

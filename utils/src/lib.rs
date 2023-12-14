@@ -123,7 +123,7 @@ impl AllArtifactsBySlug {
 /// Instead, you must deduplicate *and* preserve the deployment order by pushing the dependencies to
 /// a `Vec` iff it has not been seen before.
 ///
-/// For an example of this, see [here](https://github.com/foundry-rs/foundry/blob/2308972dbc3a89c03488a05aceb3c428bb3e08c0/cli/src/cmd/forge/script/build.rs#L130-L151C9).
+/// For an example of this, see [here](https://github.com/orbitalis-rs/orbitalis/blob/2308972dbc3a89c03488a05aceb3c428bb3e08c0/cli/src/cmd/spark/script/build.rs#L130-L151C9).
 #[allow(clippy::too_many_arguments)]
 pub fn link_with_nonce_or_address<T, U>(
     contracts: ArtifactContracts,
@@ -190,7 +190,7 @@ pub fn link_with_nonce_or_address<T, U>(
 
             match bytecode.object {
                 BytecodeObject::Unlinked(_) => {
-                    trace!(target : "forge::link", target=id.slug(), version=?id.version, "unlinked contract");
+                    trace!(target : "spark::link", target=id.slug(), version=?id.version, "unlinked contract");
 
                     // link needed
                     recurse_link(
@@ -259,13 +259,13 @@ fn recurse_link<'a>(
 ) {
     // check if we have dependencies
     if let Some(dependencies) = dependency_tree.get(&target) {
-        trace!(target : "forge::link", ?target, "linking contract");
+        trace!(target : "spark::link", ?target, "linking contract");
 
         // for each dependency, try to link
         dependencies.dependencies.iter().for_each(|dep| {
             let ArtifactDependency { file_name: next_target, file, key } = dep;
             // get the dependency
-            trace!(target : "forge::link", dependency = next_target, file, key, version=?dependencies.artifact_id.version,  "get dependency");
+            trace!(target : "spark::link", dependency = next_target, file, key, version=?dependencies.artifact_id.version,  "get dependency");
             let (next_identifier, artifact) = artifacts
                 .find_code(&dependencies.artifact_id, next_target, key)
                 .unwrap_or_else(|| panic!("No target contract named {next_target}"))
@@ -458,7 +458,7 @@ mod tests {
         types::{Address, Bytes},
         ylem::{Project, ProjectPathsConfig},
     };
-    use foundry_common::ContractsByArtifact;
+    use orbitalis_common::ContractsByArtifact;
 
     #[test]
     fn test_linking() {

@@ -12,13 +12,13 @@ use corebc::{
     types::{Address, Block, BlockId, Bytes, Transaction, H256, U256},
     utils::sha3,
 };
-use foundry_common::NON_ARCHIVE_NODE_WARNING;
 use futures::{
     channel::mpsc::{channel, Receiver, Sender},
     stream::Stream,
     task::{Context, Poll},
     Future, FutureExt,
 };
+use orbitalis_common::NON_ARCHIVE_NODE_WARNING;
 use revm::{
     db::DatabaseRef,
     primitives::{AccountInfo, Bytecode, B176, B256, SHA3_EMPTY, U256 as rU256},
@@ -701,8 +701,8 @@ mod tests {
         Backend,
     };
     use corebc::types::Network;
-    use foundry_common::get_http_provider;
-    use foundry_config::Config;
+    use orbitalis_common::get_http_provider;
+    use orbitalis_config::Config;
     use std::{collections::BTreeSet, path::PathBuf, sync::Arc};
     const ENDPOINT: &str = "https://mainnet.infura.io/v3/40bee2d557ed4b52908c3e62345a3d8b";
 
@@ -798,7 +798,7 @@ mod tests {
 
         let db = BlockchainDb::new(
             meta,
-            Some(Config::foundry_block_cache_dir(Network::Mainnet, block_num).unwrap()),
+            Some(Config::orbitalis_block_cache_dir(Network::Mainnet, block_num).unwrap()),
         );
         assert!(db.accounts().read().contains_key(&address));
         assert!(db.storage().read().contains_key(&address));

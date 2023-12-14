@@ -2,9 +2,9 @@ use crate::executor::backend::{error::NoCheatcodeAccessError, DatabaseError};
 use corebc::{
     abi::AbiEncode, prelude::k256::ecdsa::signature::Error as SignatureError, types::Bytes,
 };
-use foundry_common::errors::FsPathError;
-use foundry_config::UnresolvedEnvVarError;
-use foundry_utils::error::{encode_error, SolError};
+use orbitalis_common::errors::FsPathError;
+use orbitalis_config::UnresolvedEnvVarError;
+use orbitalis_utils::error::{encode_error, SolError};
 use std::{borrow::Cow, fmt::Arguments};
 
 /// Type alias with a default Ok type of [`Bytes`], and default Err type of [`Error`].

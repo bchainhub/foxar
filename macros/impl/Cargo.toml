@@ -1,9 +1,9 @@
 [package]
-name = "foundry-macros-impl"
+name = "orbitalis-macros-impl"
 version = "0.0.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/foundry-rs/foundry"
+repository = "https://github.com/orbitalis-rs/orbitalis"
 publish = false
 
 [lib]

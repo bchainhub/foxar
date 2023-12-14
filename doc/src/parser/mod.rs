@@ -1,6 +1,5 @@
 //! The parser module.
 
-use forge_fmt::{FormatterConfig, Visitable, Visitor};
 use itertools::Itertools;
 use solang_parser::{
     doccomment::{parse_doccomments, DocComment},
@@ -10,6 +9,7 @@ use solang_parser::{
         TypeDefinition, VariableDefinition,
     },
 };
+use spark_fmt::{FormatterConfig, Visitable, Visitor};
 
 /// Parser error.
 pub mod error;

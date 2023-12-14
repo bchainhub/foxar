@@ -112,7 +112,7 @@ mod tests {
 
     #[test]
     fn unrecognized_property() {
-        let configs = &["forge-config: default.fuzz.unknownprop = 200".to_string()];
+        let configs = &["spark-config: default.fuzz.unknownprop = 200".to_string()];
         let base_config = FuzzConfig::default();
         if let Err(e) = base_config.try_merge(configs) {
             assert_eq!(e.to_string(), "'unknownprop' is an invalid config property");
@@ -124,8 +124,8 @@ mod tests {
     #[test]
     fn successful_merge() {
         let configs = &[
-            "forge-config: default.fuzz.runs = 42424242".to_string(),
-            "forge-config: default.fuzz.dictionary-weight = 42".to_string(),
+            "spark-config: default.fuzz.runs = 42424242".to_string(),
+            "spark-config: default.fuzz.dictionary-weight = 42".to_string(),
         ];
         let base_config = FuzzConfig::default();
         let merged: FuzzConfig = base_config.try_merge(configs).expect("No errors").unwrap();
@@ -143,7 +143,7 @@ mod tests {
 
     #[test]
     fn merge_is_none_unrelated_property() {
-        let unrelated_configs = &["forge-config: default.invariant.runs = 2".to_string()];
+        let unrelated_configs = &["spark-config: default.invariant.runs = 2".to_string()];
         let base_config = FuzzConfig::default();
         let merged = base_config.try_merge(unrelated_configs).expect("No errors");
         assert!(merged.is_none());
@@ -152,10 +152,10 @@ mod tests {
     #[test]
     fn override_detection() {
         let configs = &[
-            "forge-config: default.fuzz.runs = 42424242".to_string(),
-            "forge-config: ci.fuzz.runs = 666666".to_string(),
-            "forge-config: default.invariant.runs = 2".to_string(),
-            "forge-config: default.fuzz.dictionary-weight = 42".to_string(),
+            "spark-config: default.fuzz.runs = 42424242".to_string(),
+            "spark-config: ci.fuzz.runs = 666666".to_string(),
+            "spark-config: default.invariant.runs = 2".to_string(),
+            "spark-config: default.fuzz.dictionary-weight = 42".to_string(),
         ];
         let variables = FuzzConfig::get_config_overrides(configs);
         assert_eq!(

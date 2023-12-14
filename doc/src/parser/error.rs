@@ -1,4 +1,4 @@
-use forge_fmt::FormatterError;
+use spark_fmt::FormatterError;
 use thiserror::Error;
 
 /// The parser error.

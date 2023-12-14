@@ -101,10 +101,10 @@ impl ExecutorBuilder {
         self
     }
 
-    /// Enable the chisel state inspector
+    /// Enable the pilot state inspector
     #[must_use]
-    pub fn with_chisel_state(mut self, final_pc: usize) -> Self {
-        self.inspector_config.chisel_state = Some(final_pc);
+    pub fn with_pilot_state(mut self, final_pc: usize) -> Self {
+        self.inspector_config.pilot_state = Some(final_pc);
         self
     }
 

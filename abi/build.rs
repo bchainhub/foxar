@@ -24,7 +24,7 @@ fn main() -> eyre::Result<()> {
     ])?;
 
     // Add the ConsoleFmt derive to the HardhatConsole contract
-    multi[0].derives_mut().push(syn::parse_str("foundry_macros::ConsoleFmt")?);
+    multi[0].derives_mut().push(syn::parse_str("orbitalis_macros::ConsoleFmt")?);
 
     // Generate and write to the bindings module
     let bindings = multi.build()?;

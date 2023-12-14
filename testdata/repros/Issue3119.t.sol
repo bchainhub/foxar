@@ -4,7 +4,7 @@ pragma solidity 1.1.0;
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
-// https://github.com/foundry-rs/foundry/issues/3119
+// https://github.com/orbitalis-rs/orbitalis/issues/3119
 contract Issue3119Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 

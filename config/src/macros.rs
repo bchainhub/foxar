@@ -14,10 +14,10 @@
 /// ```rust
 /// use std::path::PathBuf;
 /// use serde::Serialize;
-/// use foundry_config::{Config, impl_figment_convert};
-/// use foundry_config::figment::*;
-/// use foundry_config::figment::error::Kind::InvalidType;
-/// use foundry_config::figment::value::*;
+/// use orbitalis_config::{Config, impl_figment_convert};
+/// use orbitalis_config::figment::*;
+/// use orbitalis_config::figment::error::Kind::InvalidType;
+/// use orbitalis_config::figment::value::*;
 /// #[derive(Default, Serialize)]
 /// struct MyArgs {
 ///     #[serde(skip_serializing_if = "Option::is_none")]
@@ -122,9 +122,9 @@ macro_rules! impl_figment_convert {
 ///
 /// ```rust
 /// use std::path::PathBuf;
-/// use foundry_config::{Config, merge_impl_figment_convert, impl_figment_convert};
-/// use foundry_config::figment::*;
-/// use foundry_config::figment::value::*;
+/// use orbitalis_config::{Config, merge_impl_figment_convert, impl_figment_convert};
+/// use orbitalis_config::figment::*;
+/// use orbitalis_config::figment::value::*;
 ///
 /// #[derive(Default)]
 /// struct MyArgs {
@@ -186,7 +186,7 @@ macro_rules! merge_impl_figment_convert {
 
 /// A macro to implement converters from a type to [`Config`] and [`figment::Figment`]
 #[macro_export]
-macro_rules! impl_figment_convert_cast {
+macro_rules! impl_figment_convert_probe {
     ($name:ty) => {
         impl<'a> From<&'a $name> for $crate::figment::Figment {
             fn from(args: &'a $name) -> Self {

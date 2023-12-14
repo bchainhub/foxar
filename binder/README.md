@@ -1,18 +1,18 @@
-# foundry-binder
+# orbitalis-binder
 
 Utilities for generating bindings for solidity projects in one step.
 
-First add `foundry-binder` to your cargo build-dependencies.
+First add `orbitalis-binder` to your cargo build-dependencies.
 
 ```toml
 [build-dependencies]
-foundry-binder = { git = "https://github.com/foundry-rs/foundry" }
+orbitalis-binder = { git = "https://github.com/orbitalis-rs/orbitalis" }
 # required in order to enable ssh support in [libgit2](https://github.com/rust-lang/git2-rs)
 git2 = "0.16.1"
 ```
 
 ```rust
-use foundry_binder::{Binder, RepositoryBuilder, Url};
+use orbitalis_binder::{Binder, RepositoryBuilder, Url};
 
 // github repository url
 const REPO_URL: &str = "<the-url-of-the-project>";

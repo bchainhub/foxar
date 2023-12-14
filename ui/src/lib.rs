@@ -8,13 +8,13 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use eyre::Result;
-use forge::{
+use orbitalis_common::evm::Breakpoints;
+use revm::{interpreter::opcode, primitives::SpecId};
+use spark::{
     debug::{DebugStep, Instruction},
     utils::{build_pc_ic_map, PCICMap},
     CallKind,
 };
-use foundry_common::evm::Breakpoints;
-use revm::{interpreter::opcode, primitives::SpecId};
 use std::{
     cmp::{max, min},
     collections::{BTreeMap, HashMap, VecDeque},

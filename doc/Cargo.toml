@@ -1,19 +1,19 @@
 [package]
-name = "forge-doc"
+name = "spark-doc"
 version = "0.1.0"
 edition = "2021"
 description = """
-Foundry's solidity doc parsing
+Orbitalis's solidity doc parsing
 """
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 
 [dependencies]
-# foundry internal
-foundry-common = { path = "../common" }
-forge-fmt = { path = "../fmt" }
-foundry-config = { path = "../config" }
-foundry-utils = { path = "../utils" }
+# orbitalis internal
+orbitalis-common = { path = "../common" }
+spark-fmt = { path = "../fmt" }
+orbitalis-config = { path = "../config" }
+orbitalis-utils = { path = "../utils" }
 
 # corebc
 corebc-ylem = { workspace = true, features = ["async"]}

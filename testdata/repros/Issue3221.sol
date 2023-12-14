@@ -4,15 +4,21 @@ pragma solidity 1.1.0;
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
-// https://github.com/foundry-rs/foundry/issues/3221
+// https://github.com/orbitalis-rs/orbitalis/issues/3221
 contract Issue3221Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
     uint256 fork1;
     uint256 fork2;
 
     function setUp() public {
-        fork1 = vm.createFork("https://goerli.infura.io/v3/b1d3925804e74152b316ca7da97060d3", 7475589);
-        fork2 = vm.createFork("https://api.avax-test.network/ext/bc/C/rpc", 12880747);
+        fork1 = vm.createFork(
+            "https://goerli.infura.io/v3/b1d3925804e74152b316ca7da97060d3",
+            7475589
+        );
+        fork2 = vm.createFork(
+            "https://api.avax-test.network/ext/bc/C/rpc",
+            12880747
+        );
     }
 
     function testForkNonce() public {

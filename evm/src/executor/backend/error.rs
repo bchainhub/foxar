@@ -1,6 +1,6 @@
 use corebc::types::{Address, BlockId, H256, U256};
-use foundry_utils::error::SolError;
 use futures::channel::mpsc::{SendError, TrySendError};
+use orbitalis_utils::error::SolError;
 use std::{
     convert::Infallible,
     fmt,

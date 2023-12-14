@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 import "../logs/console.sol";
 
-// https://github.com/foundry-rs/foundry/issues/3685
+// https://github.com/orbitalis-rs/orbitalis/issues/3685
 contract Issue3685Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
     Actor a;
@@ -25,6 +25,7 @@ contract Issue3685Test is DSTest {
         console.log("should still be 1 ether ", address(a).balance);
         a.spendSuccess(b); // panics here if back_and_forth() is called before
     }
+
     // panics
 
     function test_panic() public {

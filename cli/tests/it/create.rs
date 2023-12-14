@@ -1,19 +1,19 @@
-//! Contains various tests for checking the `forge create` subcommand
+//! Contains various tests for checking the `spark create` subcommand
 
 use crate::{
     constants::*,
     utils::{self, EnvExternalities},
 };
-use anvil::{spawn, NodeConfig};
 use corebc::{
     types::Address,
     ylem::{artifacts::BytecodeHash, remappings::Remapping},
 };
-use foundry_cli_test_utils::{
-    forgetest, forgetest_async,
+use orbitalis_cli_test_utils::{
+    sparktest, sparktest_async,
     util::{OutputExt, TestCommand, TestProject},
 };
-use foundry_config::Config;
+use orbitalis_config::Config;
+use shuttle::{spawn, NodeConfig};
 use std::{path::PathBuf, str::FromStr};
 
 /// This will insert _dummy_ contract that uses a library
@@ -110,7 +110,7 @@ library ChainlinkTWAP {
     "src/Contract.sol:Contract".to_string()
 }
 
-/// configures the `TestProject` with the given closure and calls the `forge create` command
+/// configures the `TestProject` with the given closure and calls the `spark create` command
 fn create_on_chain<F>(
     info: Option<EnvExternalities>,
     mut prj: TestProject,
@@ -130,18 +130,18 @@ fn create_on_chain<F>(
     }
 }
 
-// tests `forge` create on devin if correct env vars are set
-forgetest!(can_create_simple_on_goerli, |prj: TestProject, cmd: TestCommand| {
+// tests `spark` create on devin if correct env vars are set
+sparktest!(can_create_simple_on_goerli, |prj: TestProject, cmd: TestCommand| {
     create_on_chain(EnvExternalities::devin(), prj, cmd, setup_with_simple_remapping);
 });
 
-// tests `forge` create on devin if correct env vars are set
-forgetest!(can_create_oracle_on_goerli, |prj: TestProject, cmd: TestCommand| {
+// tests `spark` create on devin if correct env vars are set
+sparktest!(can_create_oracle_on_goerli, |prj: TestProject, cmd: TestCommand| {
     create_on_chain(EnvExternalities::devin(), prj, cmd, setup_oracle);
 });
 
 // tests that we can deploy the template contract
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     can_create_template_contract,
     |prj: TestProject, mut cmd: TestCommand| async move {
@@ -156,7 +156,7 @@ forgetest_async!(
         let config = Config { bytecode_hash: BytecodeHash::None, ..Default::default() };
         prj.write_config(config);
 
-        cmd.forge_fuse().args([
+        cmd.spark_fuse().args([
             "create",
             format!("./src/{TEMPLATE_CONTRACT}.sol:{TEMPLATE_CONTRACT}").as_str(),
             "--use",
@@ -180,7 +180,7 @@ forgetest_async!(
 );
 
 // tests that we can deploy the template contract
-forgetest_async!(
+sparktest_async!(
     #[serial_test::serial]
     can_create_using_unlocked,
     |prj: TestProject, mut cmd: TestCommand| async move {
@@ -194,7 +194,7 @@ forgetest_async!(
         let config = Config { bytecode_hash: BytecodeHash::None, ..Default::default() };
         prj.write_config(config);
 
-        cmd.forge_fuse().args([
+        cmd.spark_fuse().args([
             "create",
             format!("./src/{TEMPLATE_CONTRACT}.sol:{TEMPLATE_CONTRACT}").as_str(),
             "--use",

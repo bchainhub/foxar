@@ -144,7 +144,7 @@ pub fn fuzz_param_from_state(
 mod tests {
     use crate::fuzz::strategies::{build_initial_state, fuzz_calldata, fuzz_calldata_from_state};
     use corebc::abi::HumanReadableParser;
-    use foundry_config::FuzzDictionaryConfig;
+    use orbitalis_config::FuzzDictionaryConfig;
     use revm::db::{CacheDB, EmptyDB};
 
     #[test]

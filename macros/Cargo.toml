@@ -1,13 +1,13 @@
 [package]
-name = "foundry-macros"
+name = "orbitalis-macros"
 version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/foundry-rs/foundry"
+repository = "https://github.com/orbitalis-rs/orbitalis"
 
 [dependencies]
-foundry-macros-impl = { path = "./impl" }
+orbitalis-macros-impl = { path = "./impl" }
 
 corebc-core = { workspace = true}
 serde = "1.0"

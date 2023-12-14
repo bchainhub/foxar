@@ -1,5 +1,5 @@
 use clap::{builder::RangedU64ValueParser, Parser};
-use foundry_utils::Retry;
+use orbitalis_utils::Retry;
 
 /// Retry config used when waiting for verification
 // pub const RETRY_CHECK_ON_VERIFY: RetryArgs = RetryArgs { retries: 8, delay: 15 };
@@ -46,15 +46,15 @@ mod tests {
 
     #[test]
     fn test_cli() {
-        let args = RetryArgs::parse_from(["foundry-cli", "--retries", "10"]);
+        let args = RetryArgs::parse_from(["orbitalis-cli", "--retries", "10"]);
         assert_eq!(args.retries, 10);
         assert_eq!(args.delay, 5);
 
-        let args = RetryArgs::parse_from(["foundry-cli", "--delay", "10"]);
+        let args = RetryArgs::parse_from(["orbitalis-cli", "--delay", "10"]);
         assert_eq!(args.retries, 5);
         assert_eq!(args.delay, 10);
 
-        let args = RetryArgs::parse_from(["foundry-cli", "--retries", "10", "--delay", "10"]);
+        let args = RetryArgs::parse_from(["orbitalis-cli", "--retries", "10", "--delay", "10"]);
         assert_eq!(args.retries, 10);
         assert_eq!(args.delay, 10);
     }

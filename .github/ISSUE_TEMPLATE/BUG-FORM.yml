@@ -17,7 +17,7 @@ body:
               - Forge
               - Cast
               - Anvil
-              - Foundryup
+              - Orbitalisup
               - Chisel
               - Other (please describe)
       validations:
@@ -26,17 +26,17 @@ body:
       attributes:
           label: Have you ensured that all of these are up to date?
           options:
-              - label: Foundry
-              - label: Foundryup
+              - label: Orbitalis
+              - label: Orbitalisup
     - type: input
       attributes:
-          label: What version of Foundry are you on?
-          placeholder: "Run forge --version and paste the output here"
+          label: What version of Orbitalis are you on?
+          placeholder: "Run spark --version and paste the output here"
     - type: input
       attributes:
           label: What command(s) is the bug in?
           description: Leave empty if not relevant
-          placeholder: "For example: forge test"
+          placeholder: "For example: spark test"
     - type: dropdown
       attributes:
           label: Operating System

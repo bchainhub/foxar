@@ -4,7 +4,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::{collections::HashSet, error::Error, fmt, str::FromStr};
 
 /// The message shown upon panic if the config could not be extracted from the figment
-pub const FAILED_TO_EXTRACT_CONFIG_PANIC_MSG: &str = "failed to extract foundry config:";
+pub const FAILED_TO_EXTRACT_CONFIG_PANIC_MSG: &str = "failed to extract orbitalis config:";
 
 /// Represents a failed attempt to extract `Config` from a `Figment`
 #[derive(Clone, Debug, PartialEq)]
@@ -31,9 +31,9 @@ impl fmt::Display for ExtractConfigError {
                 .map(|meta| meta.name.contains(Toml::NAME))
                 .unwrap_or_default()
             {
-                FoundryConfigError::Toml(err)
+                OrbitalisConfigError::Toml(err)
             } else {
-                FoundryConfigError::Other(err)
+                OrbitalisConfigError::Other(err)
             };
 
             if unique.insert(err.to_string()) {
@@ -56,14 +56,14 @@ impl Error for ExtractConfigError {
 
 /// Represents an error that can occur when constructing the `Config`
 #[derive(Debug, Clone, PartialEq)]
-pub enum FoundryConfigError {
+pub enum OrbitalisConfigError {
     /// An error thrown during toml parsing
     Toml(figment::Error),
     /// Any other error thrown when constructing the config's figment
     Other(figment::Error),
 }
 
-impl fmt::Display for FoundryConfigError {
+impl fmt::Display for OrbitalisConfigError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let fmt_err = |err: &figment::Error, f: &mut fmt::Formatter<'_>| {
             write!(f, "{err}")?;
@@ -75,22 +75,22 @@ impl fmt::Display for FoundryConfigError {
         };
 
         match self {
-            FoundryConfigError::Toml(err) => {
-                f.write_str("foundry.toml error: ")?;
+            OrbitalisConfigError::Toml(err) => {
+                f.write_str("orbitalis.toml error: ")?;
                 fmt_err(err, f)
             }
-            FoundryConfigError::Other(err) => {
-                f.write_str("foundry config error: ")?;
+            OrbitalisConfigError::Other(err) => {
+                f.write_str("orbitalis config error: ")?;
                 fmt_err(err, f)
             }
         }
     }
 }
 
-impl Error for FoundryConfigError {
+impl Error for OrbitalisConfigError {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
-            FoundryConfigError::Other(error) | FoundryConfigError::Toml(error) => {
+            OrbitalisConfigError::Other(error) | OrbitalisConfigError::Toml(error) => {
                 Error::source(error)
             }
         }

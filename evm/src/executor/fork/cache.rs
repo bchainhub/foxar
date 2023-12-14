@@ -54,7 +54,7 @@ impl BlockchainDb {
     }
 
     fn new_db(meta: BlockchainDbMeta, cache_path: Option<PathBuf>, skip_check: bool) -> Self {
-        trace!(target : "forge::cache", cache=?cache_path, "initialising blockchain db");
+        trace!(target : "spark::cache", cache=?cache_path, "initialising blockchain db");
         // read cache and check if metadata matches
         let cache = cache_path
             .as_ref()

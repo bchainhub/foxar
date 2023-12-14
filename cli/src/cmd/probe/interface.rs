@@ -1,0 +1,69 @@
+use crate::opts::EtherscanOpts;
+use clap::Parser;
+use orbitalis_common::fs;
+use orbitalis_config::Config;
+use probe::{AbiPath, SimpleCast};
+use std::path::{Path, PathBuf};
+
+/// CLI arguments for `probe interface`.
+#[derive(Debug, Clone, Parser)]
+pub struct InterfaceArgs {
+    /// The contract address, or the path to an ABI file.
+    ///
+    /// If an address is specified, then the ABI is fetched from Etherscan.
+    path_or_address: String,
+
+    /// The name to use for the generated interface.
+    #[clap(long, short)]
+    name: Option<String>,
+
+    /// Solidity pragma version.
+    #[clap(long, short, default_value = "^1.1.0", value_name = "VERSION")]
+    pragma: String,
+
+    /// The path to the output file.
+    ///
+    /// If not specified, the interface will be output to stdout.
+    #[clap(
+        short,
+        long,
+        value_hint = clap::ValueHint::FilePath,
+        value_name = "PATH",
+    )]
+    output: Option<PathBuf>,
+
+    #[clap(flatten)]
+    etherscan: EtherscanOpts,
+}
+
+impl InterfaceArgs {
+    pub async fn run(self) -> eyre::Result<()> {
+        let InterfaceArgs { path_or_address, name, pragma, output: output_location, etherscan } =
+            self;
+        let config = Config::from(&etherscan);
+        let network = config.network_id.unwrap_or_default();
+        let source = if Path::new(&path_or_address).exists() {
+            AbiPath::Local { path: path_or_address, name }
+        } else {
+            // let api_key = config.get_etherscan_api_key(Some(network)).unwrap_or_default();
+            AbiPath::Etherscan { network, /* api_key , */ address: path_or_address.parse()? }
+        };
+        let interfaces = SimpleCast::generate_interface(source).await?;
+
+        // put it all together
+        let pragma = format!("pragma solidity {pragma};");
+        let interfaces =
+            interfaces.iter().map(|iface| iface.source.to_string()).collect::<Vec<_>>().join("\n");
+        let res = format!("{pragma}\n\n{interfaces}");
+
+        // print or write to file
+        if let Some(loc) = output_location {
+            fs::create_dir_all(loc.parent().unwrap())?;
+            fs::write(&loc, res)?;
+            println!("Saved interface at {}", loc.display());
+        } else {
+            println!("{res}");
+        }
+        Ok(())
+    }
+}

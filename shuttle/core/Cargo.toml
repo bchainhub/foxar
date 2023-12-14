@@ -1,0 +1,33 @@
+[package]
+name = "shuttle-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+# orbitalis internal
+orbitalis-evm = { path = "../../evm" }
+orbitalis-utils = { path = "../../utils" }
+revm = { workspace = true, default-features = false, features = ["std", "serde", "memory_limit"] }
+
+corebc-core = { workspace = true}
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = "1"
+bytes = { version = "1.4" }
+open-fastrlp = { git = "https://github.com/Kuly14/open-fastrlp", optional = true }
+
+# trie
+hash-db = { version = "0.15", default-features = false }
+hash256-std-hasher = { version = "0.15", default-features = false }
+triehash = { version = "0.8", default-features = false }
+reference-trie = { version = "0.25" }
+keccak-hasher = { version = "0.15" }
+
+[dev-dependencies]
+serde = { version = "1.0", features = ["derive"] }
+
+[features]
+default = []
+impersonated-tx = []
+fastrlp = ["dep:open-fastrlp"]
+serde = ["dep:serde"]

@@ -1,8 +1,6 @@
 #[cfg(not(feature = "external-integration-tests"))]
 mod cache;
 #[cfg(not(feature = "external-integration-tests"))]
-mod cast;
-#[cfg(not(feature = "external-integration-tests"))]
 mod cmd;
 #[cfg(not(feature = "external-integration-tests"))]
 mod config;
@@ -13,6 +11,8 @@ mod doc;
 #[cfg(not(feature = "external-integration-tests"))]
 mod multi_script;
 #[cfg(not(feature = "external-integration-tests"))]
+mod probe;
+#[cfg(not(feature = "external-integration-tests"))]
 mod script;
 #[cfg(not(feature = "external-integration-tests"))]
 mod test_cmd;
@@ -22,10 +22,10 @@ mod utils;
 mod verify;
 mod yvm;
 
-// import forge utils as mod
+// import spark utils as mod
 #[allow(unused)]
 #[path = "../../src/utils.rs"]
-pub(crate) mod forge_utils;
+pub(crate) mod spark_utils;
 
 #[cfg(feature = "external-integration-tests")]
 mod integration;
