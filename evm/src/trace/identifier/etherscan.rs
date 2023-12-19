@@ -101,7 +101,8 @@ impl TraceIdentifier for EtherscanIdentifier {
         addresses: Vec<(&Address, Option<&[u8]>)>,
     ) -> Vec<AddressIdentity> {
         trace!(target: "etherscanidentifier", "identify {} addresses", addresses.len());
-
+        //todo:error2215 we do not support identifying addresses with etherscan
+        return Vec::new();
         let Some(client) = self.client.clone() else {
             // no client was configured
             return Vec::new()
