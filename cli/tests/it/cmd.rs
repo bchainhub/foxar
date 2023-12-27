@@ -384,10 +384,10 @@ sparktest!(can_init_vscode, |prj: TestProject, mut cmd: TestCommand| {
 // checks that spark can init with template
 sparktest!(can_init_template, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
-    cmd.args(["init", "--template", "orbitalis-rs/spark-template"]).arg(prj.root());
+    cmd.args(["init", "--template", "foundry-rs/forge-template"]).arg(prj.root());
     cmd.assert_non_empty_stdout();
     assert!(prj.root().join(".git").exists());
-    assert!(prj.root().join("orbitalis.toml").exists());
+    assert!(prj.root().join("foundry.toml").exists());
     assert!(prj.root().join("lib/forge-std").exists());
     assert!(prj.root().join("src").exists());
     assert!(prj.root().join("test").exists());
