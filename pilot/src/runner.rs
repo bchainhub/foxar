@@ -1,6 +1,6 @@
-//! ChiselRunner
+//! PilotRunner
 //!
-//! This module contains the `ChiselRunner` struct, which assists with deploying
+//! This module contains the `PilotRunner` struct, which assists with deploying
 //! and calling the REPL contract on a in-memory REVM instance.
 
 use corebc::{
@@ -18,12 +18,12 @@ use std::collections::BTreeMap;
 /// The function selector of the REPL contract's entrypoint, the `run()` function.
 static RUN_SELECTOR: [u8; 4] = [0x3b, 0x21, 0xbc, 0x14];
 
-/// The Chisel Runner
+/// The Pilot Runner
 ///
 /// Based off of orbitalis's spark cli runner for scripting.
 /// See: [runner](cli::cmd::spark::script::runner.rs)
 #[derive(Debug)]
-pub struct ChiselRunner {
+pub struct PilotRunner {
     /// The Executor
     pub executor: Executor,
     /// An initial balance
@@ -34,9 +34,9 @@ pub struct ChiselRunner {
     pub input: Option<Vec<u8>>,
 }
 
-/// Represents the result of a Chisel REPL run
+/// Represents the result of a Pilot REPL run
 #[derive(Debug, Default)]
-pub struct ChiselResult {
+pub struct PilotResult {
     /// Was the run a success?
     pub success: bool,
     /// Transaction logs
@@ -59,9 +59,9 @@ pub struct ChiselResult {
     )>,
 }
 
-/// ChiselRunner implementation
-impl ChiselRunner {
-    /// Create a new [ChiselRunner]
+/// PilotRunner implementation
+impl PilotRunner {
+    /// Create a new [PilotRunner]
     ///
     /// ### Takes
     ///
@@ -69,7 +69,7 @@ impl ChiselRunner {
     ///
     /// ### Returns
     ///
-    /// A new [ChiselRunner]
+    /// A new [PilotRunner]
     pub fn new(
         executor: Executor,
         initial_balance: U256,
@@ -88,9 +88,9 @@ impl ChiselRunner {
     /// ### Returns
     ///
     /// Optionally, a tuple containing the deployed address of the bytecode as well as a
-    /// [ChiselResult] containing information about the result of the call to the deployed REPL
+    /// [PilotResult] containing information about the result of the call to the deployed REPL
     /// contract.
-    pub fn run(&mut self, bytecode: Bytes) -> Result<(Address, ChiselResult)> {
+    pub fn run(&mut self, bytecode: Bytes) -> Result<(Address, PilotResult)> {
         // Set the sender's balance to [U256::MAX] for deployment of the REPL contract.
         self.executor.set_balance(self.sender, U256::MAX)?;
 
@@ -131,7 +131,7 @@ impl ChiselRunner {
         calldata: Bytes,
         value: U256,
         commit: bool,
-    ) -> eyre::Result<ChiselResult> {
+    ) -> eyre::Result<PilotResult> {
         let fs_commit_changed =
             if let Some(ref mut cheatcodes) = self.executor.inspector_config_mut().cheatcodes {
                 let original_fs_commit = cheatcodes.fs_commit;
@@ -159,9 +159,9 @@ impl ChiselRunner {
                 self.executor.env_mut().tx.energy_limit = mid_energy_limit;
                 let res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
                 match res.exit_reason {
-                    InstructionResult::Revert |
-                    InstructionResult::OutOfEnergy |
-                    InstructionResult::OutOfFund => {
+                    InstructionResult::Revert
+                    | InstructionResult::OutOfEnergy
+                    | InstructionResult::OutOfFund => {
                         lowest_energy_limit = mid_energy_limit;
                     }
                     _ => {
@@ -169,13 +169,13 @@ impl ChiselRunner {
                         // if last two successful estimations only vary by 10%, we consider this to
                         // sufficiently accurate
                         const ACCURACY: u64 = 10;
-                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY /
-                            last_highest_energy_limit <
-                            1
+                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY
+                            / last_highest_energy_limit
+                            < 1
                         {
                             // update the energy
                             energy_used = highest_energy_limit;
-                            break
+                            break;
                         }
                         last_highest_energy_limit = highest_energy_limit;
                     }
@@ -202,7 +202,7 @@ impl ChiselRunner {
 
         let RawCallResult { result, reverted, logs, traces, labels, pilot_state, .. } = res;
 
-        Ok(ChiselResult {
+        Ok(PilotResult {
             returned: result,
             success: !reverted,
             energy_used,

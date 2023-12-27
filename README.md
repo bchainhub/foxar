@@ -53,7 +53,7 @@ Orbitalis consists of:
 -   [**Forge**](./spark): Ethereum testing framework (like Truffle, Hardhat and DappTools).
 -   [**Cast**](./probe): Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
 -   [**Anvil**](./shuttle): Local Ethereum node, akin to Ganache, Hardhat Network.
--   [**Chisel**](./pilot): Fast, utilitarian, and verbose solidity REPL.
+-   [**Pilot**](./pilot): Fast, utilitarian, and verbose solidity REPL.
 
 **Need help getting started with Orbitalis? Read the [📖 Orbitalis Book][orbitalis-book] (WIP)!**
 

@@ -1,11 +1,11 @@
 //! SolidityHelper
 //!
 //! This module contains the `SolidityHelper`, a [rustyline::Helper] implementation for
-//! usage in Chisel. It is ported from [soli](https://github.com/jpopesculian/soli/blob/master/src/main.rs).
+//! usage in Pilot. It is ported from [soli](https://github.com/jpopesculian/soli/blob/master/src/main.rs).
 
 use crate::{
     dispatcher::PROMPT_ARROW,
-    prelude::{ChiselCommand, COMMAND_LEADER},
+    prelude::{PilotCommand, COMMAND_LEADER},
 };
 use rustyline::{
     completion::Completer,
@@ -67,10 +67,10 @@ impl SolidityHelper {
         // highlight comments too
         let comments_iter = comments.into_iter().map(|comment| {
             let loc = match comment {
-                pt::Comment::Line(loc, _) |
-                pt::Comment::Block(loc, _) |
-                pt::Comment::DocLine(loc, _) |
-                pt::Comment::DocBlock(loc, _) => loc,
+                pt::Comment::Line(loc, _)
+                | pt::Comment::Block(loc, _)
+                | pt::Comment::DocLine(loc, _)
+                | pt::Comment::DocBlock(loc, _) => loc,
             };
             (loc.start(), Style::default().dimmed(), loc.end())
         });
@@ -104,7 +104,7 @@ impl SolidityHelper {
     /// Highlights a solidity source string
     pub fn highlight(input: &str) -> Cow<str> {
         if !Paint::is_enabled() {
-            return Cow::Borrowed(input)
+            return Cow::Borrowed(input);
         }
 
         // Highlight commands separately
@@ -119,7 +119,7 @@ impl SolidityHelper {
 
             // cmd
             out.push(COMMAND_LEADER);
-            let cmd_res = ChiselCommand::from_str(cmd);
+            let cmd_res = PilotCommand::from_str(cmd);
             let style = Style::new(if cmd_res.is_ok() { Color::Green } else { Color::Red });
             Self::paint_unchecked(cmd, style, &mut out);
 
@@ -159,9 +159,9 @@ impl SolidityHelper {
         for res in Lexer::new(input, 0, &mut comments, &mut errors) {
             match res {
                 Err(err) => match err {
-                    LexicalError::EndOfFileInComment(_) |
-                    LexicalError::EndofFileInHex(_) |
-                    LexicalError::EndOfFileInString(_) => return ValidationResult::Incomplete,
+                    LexicalError::EndOfFileInComment(_)
+                    | LexicalError::EndofFileInHex(_)
+                    | LexicalError::EndOfFileInString(_) => return ValidationResult::Incomplete,
                     _ => return ValidationResult::Valid(None),
                 },
                 Ok((_, token, _)) => match token {
@@ -230,7 +230,7 @@ impl Highlighter for SolidityHelper {
         _default: bool,
     ) -> Cow<'b, str> {
         if !Paint::is_enabled() {
-            return Cow::Borrowed(prompt)
+            return Cow::Borrowed(prompt);
         }
 
         let mut out = prompt.to_string();
@@ -289,27 +289,27 @@ impl<'a> TokenStyle for Token<'a> {
         match self {
             StringLiteral(_, _) => Color::Green.style(),
 
-            AddressLiteral(_) |
-            HexLiteral(_) |
-            Number(_, _) |
-            RationalNumber(_, _, _) |
-            HexNumber(_) |
-            True |
-            False => Color::Yellow.style(),
+            AddressLiteral(_)
+            | HexLiteral(_)
+            | Number(_, _)
+            | RationalNumber(_, _, _)
+            | HexNumber(_)
+            | True
+            | False => Color::Yellow.style(),
 
-            Memory | Storage | Calldata | Public | Private | Internal | External | Constant |
-            Pure | View | Payable | Anonymous | Indexed | Abstract | Virtual | Override |
-            Modifier | Immutable | Unchecked => Color::Cyan.style(),
+            Memory | Storage | Calldata | Public | Private | Internal | External | Constant
+            | Pure | View | Payable | Anonymous | Indexed | Abstract | Virtual | Override
+            | Modifier | Immutable | Unchecked => Color::Cyan.style(),
 
-            Contract | Library | Interface | Function | Pragma | Import | Struct | Event |
-            Enum | Type | Constructor | As | Is | Using | New | Delete | Do | Continue |
-            Break | Throw | Emit | Return | Returns | Revert | For | While | If | Else | Try |
-            Catch | Assembly | Let | Leave | Switch | Case | Default | YulArrow | Arrow => {
+            Contract | Library | Interface | Function | Pragma | Import | Struct | Event | Enum
+            | Type | Constructor | As | Is | Using | New | Delete | Do | Continue | Break
+            | Throw | Emit | Return | Returns | Revert | For | While | If | Else | Try | Catch
+            | Assembly | Let | Leave | Switch | Case | Default | YulArrow | Arrow => {
                 Color::Magenta.style()
             }
 
-            Uint(_) | Int(_) | Bytes(_) | Byte | DynamicBytes | Bool | Address | String |
-            Mapping => Color::Blue.style(),
+            Uint(_) | Int(_) | Bytes(_) | Byte | DynamicBytes | Bool | Address | String
+            | Mapping => Color::Blue.style(),
 
             Identifier(_) => Style::default(),
 

@@ -3,7 +3,7 @@
 //! This module contains the execution logic for the [SessionSource].
 
 use crate::prelude::{
-    ChiselDispatcher, ChiselResult, ChiselRunner, IntermediateOutput, SessionSource,
+    IntermediateOutput, PilotDispatcher, PilotResult, PilotRunner, SessionSource,
 };
 use core::fmt::Debug;
 use corebc::{
@@ -25,13 +25,13 @@ const USIZE_MAX_AS_U256: U256 = U256([usize::MAX as u64, 0, 0, 0]);
 
 /// Executor implementation for [SessionSource]
 impl SessionSource {
-    /// Runs the source with the [ChiselRunner]
+    /// Runs the source with the [PilotRunner]
     ///
     /// ### Returns
     ///
     /// Optionally, a tuple containing the [Address] of the deployed REPL contract as well as
-    /// the [ChiselResult].
-    pub async fn execute(&mut self) -> Result<(Address, ChiselResult)> {
+    /// the [PilotResult].
+    pub async fn execute(&mut self) -> Result<(Address, PilotResult)> {
         // Recompile the project and ensure no errors occurred.
         let compiled = self.build()?;
         if let Some((_, contract)) =
@@ -107,11 +107,11 @@ impl SessionSource {
                 // Create a new runner
                 let mut runner = self.prepare_runner(final_pc).await;
 
-                // Return [ChiselResult] or bubble up error
+                // Return [PilotResult] or bubble up error
                 runner.run(bytecode.into_owned())
             } else {
                 // Return a default result if no statements are present.
-                Ok((Address::zero(), ChiselResult::default()))
+                Ok((Address::zero(), PilotResult::default()))
             }
         } else {
             eyre::bail!("Failed to find REPL contract!")
@@ -143,14 +143,14 @@ impl SessionSource {
                 if self.config.orbitalis_config.verbosity >= 3 {
                     eprintln!("Could not inspect: {e}");
                 }
-                return Ok((true, None))
+                return Ok((true, None));
             }
         };
 
         let Some((stack, memory, _)) = &res.state else {
             // Show traces and logs, if there are any, and return an error
-            if let Ok(decoder) = ChiselDispatcher::decode_traces(&source.config, &mut res) {
-                ChiselDispatcher::show_traces(&decoder, &mut res).await?;
+            if let Ok(decoder) = PilotDispatcher::decode_traces(&source.config, &mut res) {
+                PilotDispatcher::show_traces(&decoder, &mut res).await?;
             }
             let decoded_logs = decode_console_logs(&res.logs);
             if !decoded_logs.is_empty() {
@@ -160,7 +160,7 @@ impl SessionSource {
                 }
             }
 
-            return Err(eyre::eyre!("Failed to inspect expression"))
+            return Err(eyre::eyre!("Failed to inspect expression"));
         };
 
         let generated_output = source
@@ -226,16 +226,16 @@ impl SessionSource {
         }
     }
 
-    /// Prepare a runner for the Chisel REPL environment
+    /// Prepare a runner for the Pilot REPL environment
     ///
     /// ### Takes
     ///
-    /// The final statement's program counter for the [ChiselInspector]
+    /// The final statement's program counter for the [PilotInspector]
     ///
     /// ### Returns
     ///
-    /// A configured [ChiselRunner]
-    async fn prepare_runner(&mut self, final_pc: usize) -> ChiselRunner {
+    /// A configured [PilotRunner]
+    async fn prepare_runner(&mut self, final_pc: usize) -> PilotRunner {
         let env = self.config.evm_opts.evm_env().await;
 
         // Create an in-memory backend
@@ -264,9 +264,9 @@ impl SessionSource {
             ))
             .build(backend);
 
-        // Create a [ChiselRunner] with a default balance of [U256::MAX] and
+        // Create a [PilotRunner] with a default balance of [U256::MAX] and
         // the sender [Address::zero].
-        ChiselRunner::new(executor, U256::MAX, Address::zero(), self.config.calldata.clone())
+        PilotRunner::new(executor, U256::MAX, Address::zero(), self.config.calldata.clone())
     }
 }
 
@@ -624,7 +624,7 @@ impl Type {
     /// Handle special expressions like [global variables](https://docs.soliditylang.org/en/latest/cheatsheet.html#global-variables)
     fn map_special(self) -> Self {
         if !matches!(self, Self::Function(_, _, _) | Self::Access(_, _) | Self::Custom(_)) {
-            return self
+            return self;
         }
 
         let mut types = Vec::with_capacity(5);
@@ -633,7 +633,7 @@ impl Type {
 
         let len = types.len();
         if len == 0 {
-            return self
+            return self;
         }
 
         // Type members, like array, bytes etc
@@ -671,8 +671,8 @@ impl Type {
                     match name {
                         "block" => match access {
                             "coinbase" => Some(ParamType::Address),
-                            "basefee" | "chainid" | "difficulty" | "gaslimit" | "number" |
-                            "timestamp" => Some(ParamType::Uint(256)),
+                            "basefee" | "chainid" | "difficulty" | "gaslimit" | "number"
+                            | "timestamp" => Some(ParamType::Uint(256)),
                             _ => None,
                         },
                         "msg" => match access {
@@ -791,7 +791,7 @@ impl Type {
             custom_type.pop();
         }
         if custom_type.is_empty() {
-            return Ok(None)
+            return Ok(None);
         }
 
         // If a contract exists with the given name, check its definitions for a match.
@@ -806,7 +806,7 @@ impl Type {
             if let Some(func) = intermediate_contract.function_definitions.get(cur_type) {
                 // Check if the custom type is a function pointer member access
                 if let res @ Some(_) = func_members(func, custom_type) {
-                    return Ok(res)
+                    return Ok(res);
                 }
 
                 // Because tuple types cannot be passed to `abi.encode`, we will only be
@@ -827,7 +827,7 @@ impl Type {
                 // struct, array, etc.
                 if let pt::Expression::Variable(ident) = return_ty {
                     custom_type.push(ident.name.clone());
-                    return Self::infer_custom_type(intermediate, custom_type, Some(contract_name))
+                    return Self::infer_custom_type(intermediate, custom_type, Some(contract_name));
                 }
 
                 // Check if our final function call alters the state. If it does, we bail so that it
@@ -866,7 +866,7 @@ impl Type {
             // anything. If it is, we can stop here.
             if let Ok(res) = Self::infer_custom_type(intermediate, custom_type, Some("REPL".into()))
             {
-                return Ok(res)
+                return Ok(res);
             }
 
             // Check if the first element of the custom type is a known contract. If it is, begin
@@ -875,13 +875,13 @@ impl Type {
             let contract = intermediate.intermediate_contracts.get(name);
             if contract.is_some() {
                 let contract_name = custom_type.pop();
-                return Self::infer_custom_type(intermediate, custom_type, contract_name)
+                return Self::infer_custom_type(intermediate, custom_type, contract_name);
             }
 
             // See [`Type::infer_var_expr`]
             let name = custom_type.last().unwrap();
             if let Some(expr) = intermediate.repl_contract_expressions.get(name) {
-                return Self::infer_var_expr(expr, Some(intermediate), custom_type)
+                return Self::infer_var_expr(expr, Some(intermediate), custom_type);
             }
 
             // The first element of our custom type was neither a variable or a function within the
@@ -1037,10 +1037,10 @@ impl Type {
     fn is_array(&self) -> bool {
         matches!(
             self,
-            Self::Array(_) |
-                Self::FixedArray(_, _) |
-                Self::Builtin(ParamType::Array(_)) |
-                Self::Builtin(ParamType::FixedArray(_, _))
+            Self::Array(_)
+                | Self::FixedArray(_, _)
+                | Self::Builtin(ParamType::Array(_))
+                | Self::Builtin(ParamType::FixedArray(_, _))
         )
     }
 
@@ -1057,7 +1057,7 @@ impl Type {
 #[inline]
 fn func_members(func: &pt::FunctionDefinition, custom_type: &[String]) -> Option<ParamType> {
     if !matches!(func.ty, pt::FunctionTy::Function) {
-        return None
+        return None;
     }
 
     let vis = func.attributes.iter().find_map(|attr| match attr {
@@ -1499,11 +1499,11 @@ mod tests {
                     let ylem = Ylem::blocking_install(&"1.1.0".parse().unwrap());
                     if ylem.map_err(YlemError::from).and_then(|ylem| ylem.version()).is_ok() {
                         *is_preinstalled = true;
-                        break
+                        break;
                     }
                 } else {
                     // successfully installed
-                    break
+                    break;
                 }
             }
         }

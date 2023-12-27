@@ -1,4 +1,4 @@
-use super::{Cheatcodes, ChiselState, Debugger, Fuzzer, LogCollector, TracePrinter, Tracer};
+use super::{Cheatcodes, Debugger, Fuzzer, LogCollector, PilotState, TracePrinter, Tracer};
 use crate::{
     coverage::HitMaps,
     debug::DebugArena,
@@ -60,7 +60,7 @@ pub struct InspectorStack {
     pub fuzzer: Option<Fuzzer>,
     pub coverage: Option<CoverageCollector>,
     pub printer: Option<TracePrinter>,
-    pub pilot_state: Option<ChiselState>,
+    pub pilot_state: Option<PilotState>,
 }
 
 impl InspectorStack {
@@ -119,10 +119,10 @@ impl InspectorStack {
 
                 // If the inspector returns a different status or a revert with a non-empty message,
                 // we assume it wants to tell us something
-                if new_status != status ||
-                    (new_status == InstructionResult::Revert && new_retdata != retdata)
+                if new_status != status
+                    || (new_status == InstructionResult::Revert && new_retdata != retdata)
                 {
-                    return (new_status, new_energy, new_retdata)
+                    return (new_status, new_energy, new_retdata);
                 }
             }
         );
@@ -157,7 +157,7 @@ where
 
                 // Allow inspectors to exit early
                 if status != InstructionResult::Continue {
-                    return status
+                    return status;
                 }
             }
         );
@@ -188,7 +188,7 @@ where
 
                 // Allow inspectors to exit early
                 if status != InstructionResult::Continue {
-                    return status
+                    return status;
                 }
             }
         );
@@ -235,7 +235,7 @@ where
 
                 // Allow inspectors to exit early
                 if status != InstructionResult::Continue {
-                    return status
+                    return status;
                 }
             }
         );
@@ -266,7 +266,7 @@ where
 
                 // Allow inspectors to exit early
                 if status != InstructionResult::Continue {
-                    return (status, energy, retdata)
+                    return (status, energy, retdata);
                 }
             }
         );
@@ -318,7 +318,7 @@ where
 
                 // Allow inspectors to exit early
                 if status != InstructionResult::Continue {
-                    return (status, addr, energy, retdata)
+                    return (status, addr, energy, retdata);
                 }
             }
         );
@@ -357,7 +357,7 @@ where
                 );
 
                 if new_status != status {
-                    return (new_status, new_address, new_energy, new_retdata)
+                    return (new_status, new_address, new_energy, new_retdata);
                 }
             }
         );

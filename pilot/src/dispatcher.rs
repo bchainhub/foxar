@@ -1,10 +1,10 @@
 //! Dispatcher
 //!
-//! This module contains the `ChiselDispatcher` struct, which handles the dispatching
+//! This module contains the `PilotDispatcher` struct, which handles the dispatching
 //! of both builtin commands and Solidity snippets.
 
 use crate::prelude::{
-    ChiselCommand, ChiselResult, ChiselSession, CmdCategory, CmdDescriptor, SessionSourceConfig,
+    CmdCategory, CmdDescriptor, PilotCommand, PilotResult, PilotSession, SessionSourceConfig,
     SolidityHelper,
 };
 use corebc::{contract::Lazy, utils::hex};
@@ -29,32 +29,32 @@ static DEFAULT_PROMPT: &str = "➜ ";
 
 /// Command leader character
 pub static COMMAND_LEADER: char = '!';
-/// Chisel character
-pub static CHISEL_CHAR: &str = "⚒️";
+/// Pilot character
+pub static Pilot_CHAR: &str = "⚒️";
 
 /// Matches Ylem comments
 static COMMENT_RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^\s*(?://.*\s*$)|(/*[\s\S]*?\*/\s*$)").unwrap());
 
-/// Chisel input dispatcher
+/// Pilot input dispatcher
 #[derive(Debug)]
-pub struct ChiselDispatcher {
+pub struct PilotDispatcher {
     /// The status of the previous dispatch
     pub errored: bool,
-    /// A Chisel Session
-    pub session: ChiselSession,
+    /// A Pilot Session
+    pub session: PilotSession,
 }
 
-/// Chisel dispatch result variants
+/// Pilot dispatch result variants
 #[derive(Debug)]
 pub enum DispatchResult {
     /// A Generic Dispatch Success
     Success(Option<String>),
     /// A Generic Failure
     Failure(Option<String>),
-    /// A successful ChiselCommand Execution
+    /// A successful PilotCommand Execution
     CommandSuccess(Option<String>),
-    /// A failure to parse a Chisel Command
+    /// A failure to parse a Pilot Command
     UnrecognizedCommand(Box<dyn Error>),
     /// The solang parser failed
     SolangParserFailed(Vec<Diagnostic>),
@@ -113,10 +113,10 @@ pub fn format_source(source: &str, config: FormatterConfig) -> eyre::Result<Stri
     }
 }
 
-impl ChiselDispatcher {
+impl PilotDispatcher {
     /// Associated public function to create a new Dispatcher instance
     pub fn new(config: SessionSourceConfig) -> eyre::Result<Self> {
-        ChiselSession::new(config).map(|session| Self { errored: false, session })
+        PilotSession::new(config).map(|session| Self { errored: false, session })
     }
 
     /// Returns the prompt based on the current status of the Dispatcher
@@ -136,24 +136,24 @@ impl ChiselDispatcher {
         }
     }
 
-    /// Dispatches a [ChiselCommand]
+    /// Dispatches a [PilotCommand]
     ///
     /// ### Takes
     ///
-    /// - A [ChiselCommand]
+    /// - A [PilotCommand]
     /// - An array of arguments
     ///
     /// ### Returns
     ///
     /// A [DispatchResult] containing feedback on the dispatch's execution.
-    pub async fn dispatch_command(&mut self, cmd: ChiselCommand, args: &[&str]) -> DispatchResult {
+    pub async fn dispatch_command(&mut self, cmd: PilotCommand, args: &[&str]) -> DispatchResult {
         match cmd {
-            ChiselCommand::Help => {
+            PilotCommand::Help => {
                 let all_descriptors =
-                    ChiselCommand::iter().map(CmdDescriptor::from).collect::<Vec<CmdDescriptor>>();
+                    PilotCommand::iter().map(CmdDescriptor::from).collect::<Vec<CmdDescriptor>>();
                 DispatchResult::CommandSuccess(Some(format!(
                     "{}\n{}",
-                    Paint::cyan(format!("{CHISEL_CHAR} Chisel help\n=============")),
+                    Paint::cyan(format!("{Pilot_CHAR} Pilot help\n=============")),
                     CmdCategory::iter()
                         .map(|cat| {
                             // Get commands in the current category
@@ -186,11 +186,11 @@ impl ChiselDispatcher {
                         .join("\n")
                 )))
             }
-            ChiselCommand::Quit => {
+            PilotCommand::Quit => {
                 // Exit the process with status code `0` for success.
                 std::process::exit(0);
             }
-            ChiselCommand::Clear => {
+            PilotCommand::Clear => {
                 if let Some(session_source) = self.session.session_source.as_mut() {
                     // Drain all source sections
                     session_source.drain_run();
@@ -204,7 +204,7 @@ impl ChiselDispatcher {
                     )
                 }
             }
-            ChiselCommand::Save => {
+            PilotCommand::Save => {
                 if args.len() <= 1 {
                     // If a new name was supplied, overwrite the ID of the current session.
                     if args.len() == 1 {
@@ -214,7 +214,7 @@ impl ChiselDispatcher {
                     }
 
                     if let Err(e) = self.session.write() {
-                        return DispatchResult::FileIoError(e.into())
+                        return DispatchResult::FileIoError(e.into());
                     }
                     DispatchResult::CommandSuccess(Some(format!(
                         "Saved session to cache with ID = {}",
@@ -224,12 +224,12 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Too many arguments supplied!"))
                 }
             }
-            ChiselCommand::Load => {
+            PilotCommand::Load => {
                 if args.len() != 1 {
                     // Must supply a session ID as the argument.
                     return DispatchResult::CommandFailed(Self::make_error(
                         "Must supply a session ID as the argument.",
-                    ))
+                    ));
                 }
 
                 // Use args as the name
@@ -239,15 +239,15 @@ impl ChiselDispatcher {
                     // Don't save an empty session
                     if !session_source.run_code.is_empty() {
                         if let Err(e) = self.session.write() {
-                            return DispatchResult::FileIoError(e.into())
+                            return DispatchResult::FileIoError(e.into());
                         }
                         println!("{}", Paint::green("Saved current session!"));
                     }
                 }
                 // Parse the arguments
                 let new_session = match name {
-                    "latest" => ChiselSession::latest(),
-                    _ => ChiselSession::load(name),
+                    "latest" => PilotSession::latest(),
+                    _ => PilotSession::load(name),
                 };
 
                 // WARNING: Overwrites the current session
@@ -261,17 +261,17 @@ impl ChiselDispatcher {
 
                     self.session = new_session;
                     DispatchResult::CommandSuccess(Some(format!(
-                        "Loaded Chisel session! (ID = {})",
+                        "Loaded Pilot session! (ID = {})",
                         self.session.id.as_ref().unwrap()
                     )))
                 } else {
                     DispatchResult::CommandFailed(Self::make_error("Failed to load session!"))
                 }
             }
-            ChiselCommand::ListSessions => match ChiselSession::list_sessions() {
+            PilotCommand::ListSessions => match PilotSession::list_sessions() {
                 Ok(sessions) => DispatchResult::CommandSuccess(Some(format!(
                     "{}\n{}",
-                    Paint::cyan(format!("{CHISEL_CHAR} Chisel Sessions")),
+                    Paint::cyan(format!("{Pilot_CHAR} Pilot Sessions")),
                     sessions
                         .iter()
                         .map(|(time, name)| {
@@ -284,7 +284,7 @@ impl ChiselDispatcher {
                     "No sessions found. Use the `!save` command to save a session.",
                 )),
             },
-            ChiselCommand::Source => {
+            PilotCommand::Source => {
                 if let Some(session_source) = self.session.session_source.as_ref() {
                     match format_source(
                         &session_source.to_repl_source(),
@@ -301,25 +301,25 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Session not present."))
                 }
             }
-            ChiselCommand::ClearCache => match ChiselSession::clear_cache() {
+            PilotCommand::ClearCache => match PilotSession::clear_cache() {
                 Ok(_) => {
                     self.session.id = None;
                     DispatchResult::CommandSuccess(Some(String::from("Cleared pilot cache!")))
                 }
                 Err(_) => DispatchResult::CommandFailed(Self::make_error("Failed to clear cache!")),
             },
-            ChiselCommand::Fork => {
+            PilotCommand::Fork => {
                 if let Some(session_source) = self.session.session_source.as_mut() {
                     if args.is_empty() || args[0].trim().is_empty() {
                         session_source.config.evm_opts.fork_url = None;
                         return DispatchResult::CommandSuccess(Some(
                             "Now using local environment.".to_string(),
-                        ))
+                        ));
                     }
                     if args.len() != 1 {
                         return DispatchResult::CommandFailed(Self::make_error(
                             "Must supply a session ID as the argument.",
-                        ))
+                        ));
                     }
                     let arg = *args.first().unwrap();
 
@@ -345,7 +345,7 @@ impl ChiselDispatcher {
 
                     // Check validity of URL
                     if Url::parse(&fork_url).is_err() {
-                        return DispatchResult::CommandFailed(Self::make_error("Invalid fork URL!"))
+                        return DispatchResult::CommandFailed(Self::make_error("Invalid fork URL!"));
                     }
 
                     // Create success message before moving the fork_url
@@ -364,7 +364,7 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Session not present."))
                 }
             }
-            ChiselCommand::Traces => {
+            PilotCommand::Traces => {
                 if let Some(session_source) = self.session.session_source.as_mut() {
                     session_source.config.traces = !session_source.config.traces;
                     DispatchResult::CommandSuccess(Some(format!(
@@ -375,7 +375,7 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Session not present."))
                 }
             }
-            ChiselCommand::Calldata => {
+            PilotCommand::Calldata => {
                 if let Some(session_source) = self.session.session_source.as_mut() {
                     // remove empty space, double quotes, and 0x prefix
                     let arg = args
@@ -388,7 +388,9 @@ impl ChiselDispatcher {
 
                     if arg.is_empty() {
                         session_source.config.calldata = None;
-                        return DispatchResult::CommandSuccess(Some("Calldata cleared.".to_string()))
+                        return DispatchResult::CommandSuccess(Some(
+                            "Calldata cleared.".to_string(),
+                        ));
                     }
 
                     let calldata = hex::decode(arg);
@@ -409,12 +411,12 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Session not present."))
                 }
             }
-            ChiselCommand::MemDump | ChiselCommand::StackDump => {
+            PilotCommand::MemDump | PilotCommand::StackDump => {
                 if let Some(session_source) = self.session.session_source.as_mut() {
                     match session_source.execute().await {
                         Ok((_, res)) => {
                             if let Some((stack, mem, _)) = res.state.as_ref() {
-                                if matches!(cmd, ChiselCommand::MemDump) {
+                                if matches!(cmd, PilotCommand::MemDump) {
                                     // Print memory by word
                                     (0..mem.len()).step_by(32).for_each(|i| {
                                         println!(
@@ -453,7 +455,7 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Session not present."))
                 }
             }
-            ChiselCommand::Export => {
+            PilotCommand::Export => {
                 // Check if the current session inherits `Script.sol` before exporting
                 if let Some(session_source) = self.session.session_source.as_ref() {
                     // Check if the pwd is a orbitalis project
@@ -463,7 +465,7 @@ impl ChiselDispatcher {
                             if let Err(e) = std::fs::create_dir_all("script") {
                                 return DispatchResult::CommandFailed(Self::make_error(
                                     e.to_string(),
-                                ))
+                                ));
                             }
                         }
 
@@ -479,7 +481,7 @@ impl ChiselDispatcher {
                                 ) {
                                     return DispatchResult::CommandFailed(Self::make_error(
                                         e.to_string(),
-                                    ))
+                                    ));
                                 }
 
                                 DispatchResult::CommandSuccess(Some(String::from(
@@ -500,7 +502,7 @@ impl ChiselDispatcher {
                 }
             }
             //todo:error2215 commented out (waiting for blockindex implementation)
-            // ChiselCommand::Fetch => {
+            // PilotCommand::Fetch => {
             //     if args.len() != 2 {
             //         return DispatchResult::CommandFailed(Self::make_error(
             //             "Incorrect number of arguments supplied. Expected: <address> <name>",
@@ -639,9 +641,9 @@ impl ChiselDispatcher {
             //         ))),
             //     }
             // }
-            ChiselCommand::Exec => {
+            PilotCommand::Exec => {
                 if args.is_empty() {
-                    return DispatchResult::CommandFailed(Self::make_error("No command supplied!"))
+                    return DispatchResult::CommandFailed(Self::make_error("No command supplied!"));
                 }
 
                 let mut cmd = Command::new(args[0]);
@@ -658,7 +660,7 @@ impl ChiselDispatcher {
                     Err(e) => DispatchResult::CommandFailed(e.to_string()),
                 }
             }
-            ChiselCommand::Edit => {
+            PilotCommand::Edit => {
                 if let Some(session_source) = self.session.session_source.as_mut() {
                     // create a temp file with the content of the run code
                     let mut temp_file_path = std::env::temp_dir();
@@ -668,7 +670,7 @@ impl ChiselDispatcher {
                     if let Err(e) = result {
                         return DispatchResult::CommandFailed(format!(
                             "Could not write to a temporary file: {e}"
-                        ))
+                        ));
                     }
 
                     // open the temp file with the editor
@@ -682,11 +684,11 @@ impl ChiselDispatcher {
                                 if let Some(status_code) = status.code() {
                                     return DispatchResult::CommandFailed(format!(
                                         "Editor exited with status {status_code}"
-                                    ))
+                                    ));
                                 } else {
                                     return DispatchResult::CommandFailed(
                                         "Editor exited without a status code".to_string(),
-                                    )
+                                    );
                                 }
                             }
                         }
@@ -704,7 +706,7 @@ impl ChiselDispatcher {
                     } else {
                         return DispatchResult::CommandFailed(
                             "Could not read the edited file".to_string(),
-                        )
+                        );
                     }
 
                     // if the editor exited successfully, try to compile the new code
@@ -717,7 +719,7 @@ impl ChiselDispatcher {
                                 {
                                     if let Err(e) = Self::show_traces(&decoder, &mut res).await {
                                         self.errored = true;
-                                        return DispatchResult::CommandFailed(e.to_string())
+                                        return DispatchResult::CommandFailed(e.to_string());
                                     };
 
                                     // Show console logs, if there are any
@@ -752,14 +754,14 @@ impl ChiselDispatcher {
                     DispatchResult::CommandFailed(Self::make_error("Session not present."))
                 }
             }
-            ChiselCommand::RawStack => {
+            PilotCommand::RawStack => {
                 let len = args.len();
                 if len != 1 {
                     let msg = match len {
                         0 => "No variable supplied!",
                         _ => "!rawstack only takes one argument.",
                     };
-                    return DispatchResult::CommandFailed(Self::make_error(msg))
+                    return DispatchResult::CommandFailed(Self::make_error(msg));
                 }
 
                 // Store the variable that we want to inspect
@@ -801,7 +803,7 @@ impl ChiselDispatcher {
             let split: Vec<&str> = input.split_whitespace().collect();
             let raw_cmd = &split[0][1..];
 
-            return match raw_cmd.parse::<ChiselCommand>() {
+            return match raw_cmd.parse::<PilotCommand>() {
                 Ok(cmd) => {
                     let command_dispatch = self.dispatch_command(cmd, &split[1..]).await;
                     self.errored = !matches!(command_dispatch, DispatchResult::CommandSuccess(_));
@@ -811,10 +813,10 @@ impl ChiselDispatcher {
                     self.errored = true;
                     DispatchResult::UnrecognizedCommand(e)
                 }
-            }
+            };
         }
         if input.trim().is_empty() {
-            return DispatchResult::Success(None)
+            return DispatchResult::Success(None);
         }
 
         // Get a mutable reference to the session source
@@ -823,14 +825,14 @@ impl ChiselDispatcher {
             Ok(project) => project,
             Err(e) => {
                 self.errored = true;
-                return e
+                return e;
             }
         };
 
         // If the input is a comment, add it to the run code so we avoid running with empty input
         if COMMENT_RE.is_match(input) {
             source.with_run_code(input);
-            return DispatchResult::Success(None)
+            return DispatchResult::Success(None);
         }
 
         // Create new source with exact input appended and parse
@@ -840,7 +842,7 @@ impl ChiselDispatcher {
                 self.errored = true;
                 return DispatchResult::CommandFailed(Self::make_error(format!(
                     "Failed to parse input! {e}"
-                )))
+                )));
             }
         };
 
@@ -856,7 +858,7 @@ impl ChiselDispatcher {
             // Return with the error
             Err(e) => {
                 self.errored = true;
-                return DispatchResult::CommandFailed(Self::make_error(e))
+                return DispatchResult::CommandFailed(Self::make_error(e));
             }
         }
 
@@ -871,7 +873,7 @@ impl ChiselDispatcher {
                         if let Ok(decoder) = Self::decode_traces(&new_source.config, &mut res) {
                             if let Err(e) = Self::show_traces(&decoder, &mut res).await {
                                 self.errored = true;
-                                return DispatchResult::CommandFailed(e.to_string())
+                                return DispatchResult::CommandFailed(e.to_string());
                             };
 
                             // Show console logs, if there are any
@@ -889,7 +891,7 @@ impl ChiselDispatcher {
                                 self.errored = true;
                                 return DispatchResult::Failure(Some(Self::make_error(
                                     "Failed to execute REPL contract!",
-                                )))
+                                )));
                             }
                         }
                     }
@@ -921,20 +923,20 @@ impl ChiselDispatcher {
         }
     }
 
-    /// Decodes traces in the [ChiselResult]
+    /// Decodes traces in the [PilotResult]
     /// TODO: Add `known_contracts` back in.
     ///
     /// ### Takes
     ///
     /// - A reference to a [SessionSourceConfig]
-    /// - A mutable reference to a [ChiselResult]
+    /// - A mutable reference to a [PilotResult]
     ///
     /// ### Returns
     ///
     /// Optionally, a [CallTraceDecoder]
     pub fn decode_traces(
         session_config: &SessionSourceConfig,
-        result: &mut ChiselResult,
+        result: &mut PilotResult,
         // known_contracts: &ContractsByArtifact,
     ) -> eyre::Result<CallTraceDecoder> {
         //todo:error2215 commented out (waiting for blockindex implementation)
@@ -964,14 +966,14 @@ impl ChiselDispatcher {
     /// ### Takes
     ///
     /// - A reference to a [CallTraceDecoder]
-    /// - A mutable reference to a [ChiselResult]
+    /// - A mutable reference to a [PilotResult]
     ///
     /// ### Returns
     ///
     /// Optionally, a unit type signifying a successful result.
     pub async fn show_traces(
         decoder: &CallTraceDecoder,
-        result: &mut ChiselResult,
+        result: &mut PilotResult,
     ) -> eyre::Result<()> {
         if result.traces.is_empty() {
             eyre::bail!("Unexpected error: No traces gathered. Please report this as a bug: https://github.com/orbitalis-rs/orbitalis/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
@@ -999,7 +1001,7 @@ impl ChiselDispatcher {
     ///
     /// A formatted error [String].
     pub fn make_error<T: std::fmt::Display>(msg: T) -> String {
-        format!("{} {}", Paint::red(format!("{CHISEL_CHAR} Chisel Error:")), Paint::red(msg))
+        format!("{} {}", Paint::red(format!("{Pilot_CHAR} Pilot Error:")), Paint::red(msg))
     }
 }
 

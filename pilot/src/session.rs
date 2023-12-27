@@ -1,6 +1,6 @@
-//! ChiselSession
+//! PilotSession
 //!
-//! This module contains the `ChiselSession` struct, which is the top-level
+//! This module contains the `PilotSession` struct, which is the top-level
 //! wrapper for a serializable REPL session.
 
 use crate::prelude::{SessionSource, SessionSourceConfig};
@@ -11,18 +11,18 @@ use serde::{Deserialize, Serialize};
 use std::path::Path;
 use time::{format_description, OffsetDateTime};
 
-/// A Chisel REPL Session
+/// A Pilot REPL Session
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ChiselSession {
+pub struct PilotSession {
     /// The `SessionSource` object that houses the REPL session.
     pub session_source: Option<SessionSource>,
     /// The current session's identifier
     pub id: Option<String>,
 }
 
-// ChiselSession Common Associated Functions
-impl ChiselSession {
-    /// Create a new `ChiselSession` with a specified `ylem` version and configuration.
+// PilotSession Common Associated Functions
+impl PilotSession {
+    /// Create a new `PilotSession` with a specified `ylem` version and configuration.
     ///
     /// ### Takes
     ///
@@ -30,11 +30,11 @@ impl ChiselSession {
     ///
     /// ### Returns
     ///
-    /// A new instance of [ChiselSession]
+    /// A new instance of [PilotSession]
     pub fn new(config: SessionSourceConfig) -> Result<Self> {
         let ylem = config.ylem()?;
 
-        // Return initialized ChiselSession with set ylem version
+        // Return initialized PilotSession with set ylem version
         Ok(Self { session_source: Some(SessionSource::new(ylem, config)), id: None })
     }
 
@@ -76,7 +76,7 @@ impl ChiselSession {
         Ok(())
     }
 
-    /// Writes the ChiselSession to a file by serializing it to a JSON string
+    /// Writes the PilotSession to a file by serializing it to a JSON string
     ///
     /// ### Returns
     ///
@@ -101,7 +101,7 @@ impl ChiselSession {
             }
         };
 
-        // Write the current ChiselSession to that file
+        // Write the current PilotSession to that file
         let serialized_contents = serde_json::to_string_pretty(self)?;
         std::fs::write(&cache_file_name, serialized_contents)?;
 
@@ -123,7 +123,7 @@ impl ChiselSession {
         let mut latest = if let Some(e) = entries.next() {
             e?
         } else {
-            return Ok((String::from("0"), format!("{cache_dir}pilot-0.json")))
+            return Ok((String::from("0"), format!("{cache_dir}pilot-0.json")));
         };
 
         let mut session_num = 1;
@@ -141,7 +141,7 @@ impl ChiselSession {
         Ok((format!("{session_num}"), format!("{cache_dir}pilot-{session_num}.json")))
     }
 
-    /// The Chisel Cache Directory
+    /// The Pilot Cache Directory
     ///
     /// ### Returns
     ///
@@ -200,7 +200,7 @@ impl ChiselSession {
         }
     }
 
-    /// Loads a specific ChiselSession from the specified cache file
+    /// Loads a specific PilotSession from the specified cache file
     ///
     /// ### Takes
     ///
@@ -210,9 +210,9 @@ impl ChiselSession {
     ///
     /// Optionally, an owned instance of the loaded pilot session.
     pub fn load(id: &str) -> Result<Self> {
-        let cache_dir = ChiselSession::cache_dir()?;
+        let cache_dir = PilotSession::cache_dir()?;
         let contents = std::fs::read_to_string(Path::new(&format!("{cache_dir}pilot-{id}.json")))?;
-        let pilot_env: ChiselSession = serde_json::from_str(&contents)?;
+        let pilot_env: PilotSession = serde_json::from_str(&contents)?;
         Ok(pilot_env)
     }
 
@@ -234,7 +234,7 @@ impl ChiselSession {
         Ok(latest.path().to_str().ok_or(eyre::eyre!("Failed to get session path!"))?.to_string())
     }
 
-    /// Loads the latest ChiselSession from the cache file
+    /// Loads the latest PilotSession from the cache file
     ///
     /// ### Returns
     ///
@@ -242,7 +242,7 @@ impl ChiselSession {
     pub fn latest() -> Result<Self> {
         let last_session = Self::latest_cached_session()?;
         let last_session_contents = std::fs::read_to_string(Path::new(&last_session))?;
-        let pilot_env: ChiselSession = serde_json::from_str(&last_session_contents)?;
+        let pilot_env: PilotSession = serde_json::from_str(&last_session_contents)?;
         Ok(pilot_env)
     }
 }

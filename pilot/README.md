@@ -1,6 +1,6 @@
 # `pilot`
 
-Chisel is a fast, utilitarian, and verbose solidity REPL. It is heavily inspired by the incredible work done in [soli](https://github.com/jpopesculian/soli) and [solidity-shell](https://github.com/tintinweb/solidity-shell)!
+Pilot is a fast, utilitarian, and verbose solidity REPL. It is heavily inspired by the incredible work done in [soli](https://github.com/jpopesculian/soli) and [solidity-shell](https://github.com/tintinweb/solidity-shell)!
 
 ![preview](./assets/preview.gif)
 
@@ -10,11 +10,11 @@ Ever wanted to quickly test a small feature in solidity?
 
 Perhaps to test how custom errors work, or how to write inline assembly?
 
-Chisel is a fully-functional Solidity REPL, allowing you to write, execute, and debug Solidity directly in the command line.
+Pilot is a fully-functional Solidity REPL, allowing you to write, execute, and debug Solidity directly in the command line.
 
-Once you finish testing, Chisel even lets you export your code to a new solidity file!
+Once you finish testing, Pilot even lets you export your code to a new solidity file!
 
-In this sense, Chisel even serves as a Orbitalis script generator.
+In this sense, Pilot even serves as a Orbitalis script generator.
 
 ## Feature Completion
 
@@ -26,7 +26,7 @@ In this sense, Chisel even serves as a Orbitalis script generator.
 - Forking remote chains
 - Session caching
 
-Chisel aims to improve upon existing Solidity REPLs by integrating with orbitalis as well as offering additional functionality:
+Pilot aims to improve upon existing Solidity REPLs by integrating with orbitalis as well as offering additional functionality:
 
 - More verbose variable / state inspection
 - Improved error messages
@@ -37,7 +37,7 @@ Chisel aims to improve upon existing Solidity REPLs by integrating with orbitali
 ### Migrating from [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell)
 
 Migration from existing Solidity REPLs such as [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell) is as
-simple as installing Chisel via `orbitalisup`. For information on features, usage, and configuration, see the [Usage](#usage) section as well as the pilot manpage (`man pilot` or `pilot --help`).
+simple as installing Pilot via `orbitalisup`. For information on features, usage, and configuration, see the [Usage](#usage) section as well as the pilot manpage (`man pilot` or `pilot --help`).
 
 ## Installation
 
@@ -50,7 +50,7 @@ If you do not have `orbitalisup` installed, reference the Orbitalis [installatio
 ### REPL Commands
 
 ```text
-⚒️ Chisel help
+⚒️ Pilot help
 =============
 General
         !help | !h - Display all commands
@@ -91,7 +91,7 @@ Saved session to cache with ID = 0.
 
 ### Loading a Previous Session
 
-Chisel allows you to load a previous session from your history.
+Pilot allows you to load a previous session from your history.
 
 To view your history, you can run `pilot list` or `!list`. This will print a list of your previous sessions, identifiable by their index.
 
@@ -101,7 +101,7 @@ To load a session, run `pilot load <id>` or use the `!load <id>` where `<id>` is
 
 ```text
 $ pilot list
-⚒️ Chisel Sessions
+⚒️ Pilot Sessions
 "2022-10-27 14:46:29" - pilot-0.json
 "2022-10-27 14:46:29" - pilot-1.json
 $ pilot view 1
@@ -121,7 +121,7 @@ $ pilot load 1
 
 ### Clearing the Cache
 
-To clear Chisel's cache (stored in `~/.orbitalis/cache/pilot`), use the `pilot clear-cache` or `!clearcache` command.
+To clear Pilot's cache (stored in `~/.orbitalis/cache/pilot`), use the `pilot clear-cache` or `!clearcache` command.
 
 ```text
 ➜ !clearcache
@@ -181,7 +181,7 @@ Added 0xcb37c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2's interface to source as `I
 
 ### Executing a Shell Command
 
-Shell commands can be executed within Chisel with the `!exec` / `!e` command.
+Shell commands can be executed within Pilot with the `!exec` / `!e` command.
 
 ```text
 ➜ !e ls

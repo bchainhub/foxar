@@ -7,15 +7,15 @@
 /// REPL input dispatcher module
 pub mod dispatcher;
 
-/// Builtin Chisel commands
+/// Builtin Pilot commands
 pub mod cmd;
 
 pub mod history;
 
-/// Chisel Environment Module
+/// Pilot Environment Module
 pub mod session;
 
-/// Chisel Session Source wrapper
+/// Pilot Session Source wrapper
 pub mod session_source;
 
 /// REPL contract runner
