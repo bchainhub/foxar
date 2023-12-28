@@ -25,7 +25,7 @@ pub mod cheatcodes;
 pub use cheatcodes::{Cheatcodes, CheatsConfig, DEFAULT_CREATE2_DEPLOYER};
 
 mod pilot_state;
-pub use pilot_state::ChiselState;
+pub use pilot_state::PilotState;
 
 use corebc::types::U256;
 
@@ -102,7 +102,7 @@ impl InspectorStackConfig {
         }
 
         if let Some(final_pc) = self.pilot_state {
-            stack.pilot_state = Some(ChiselState::new(final_pc));
+            stack.pilot_state = Some(PilotState::new(final_pc));
         }
         stack
     }

@@ -3,22 +3,22 @@ use revm::{
     Database, Inspector,
 };
 
-/// An inspector for Chisel
+/// An inspector for Pilot
 #[derive(Default)]
-pub struct ChiselState {
+pub struct PilotState {
     /// The PC of the final instruction
     pub final_pc: usize,
     /// The final state of the REPL contract call
     pub state: Option<(Stack, Memory, InstructionResult)>,
 }
 
-impl ChiselState {
+impl PilotState {
     pub fn new(final_pc: usize) -> Self {
         Self { final_pc, state: None }
     }
 }
 
-impl<DB> Inspector<DB> for ChiselState
+impl<DB> Inspector<DB> for PilotState
 where
     DB: Database,
 {

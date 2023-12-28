@@ -1,15 +1,15 @@
-//! ChiselCommand
+//! PilotCommand
 //!
-//! This module holds the [ChiselCommand] enum, which contains all builtin commands that
+//! This module holds the [PilotCommand] enum, which contains all builtin commands that
 //! can be executed within the REPL.
 
-use crate::prelude::ChiselDispatcher;
+use crate::prelude::PilotDispatcher;
 use std::{error::Error, str::FromStr};
 use strum::EnumIter;
 
 /// Builtin pilot command variants
 #[derive(Debug, EnumIter)]
-pub enum ChiselCommand {
+pub enum PilotCommand {
     /// Print helpful information about pilot
     Help,
     /// Quit the REPL
@@ -56,32 +56,32 @@ pub enum ChiselCommand {
     Edit,
 }
 
-/// Attempt to convert a string slice to a `ChiselCommand`
-impl FromStr for ChiselCommand {
+/// Attempt to convert a string slice to a `PilotCommand`
+impl FromStr for PilotCommand {
     type Err = Box<dyn Error>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_ref() {
-            "help" | "h" => Ok(ChiselCommand::Help),
-            "quit" | "q" => Ok(ChiselCommand::Quit),
-            "clear" | "c" => Ok(ChiselCommand::Clear),
-            "source" | "so" => Ok(ChiselCommand::Source),
-            "save" | "s" => Ok(ChiselCommand::Save),
-            "list" | "ls" => Ok(ChiselCommand::ListSessions),
-            "load" | "l" => Ok(ChiselCommand::Load),
-            "clearcache" | "cc" => Ok(ChiselCommand::ClearCache),
-            "fork" | "f" => Ok(ChiselCommand::Fork),
-            "traces" | "t" => Ok(ChiselCommand::Traces),
-            "calldata" | "cd" => Ok(ChiselCommand::Calldata),
-            "memdump" | "md" => Ok(ChiselCommand::MemDump),
-            "stackdump" | "sd" => Ok(ChiselCommand::StackDump),
-            "export" | "ex" => Ok(ChiselCommand::Export),
+            "help" | "h" => Ok(PilotCommand::Help),
+            "quit" | "q" => Ok(PilotCommand::Quit),
+            "clear" | "c" => Ok(PilotCommand::Clear),
+            "source" | "so" => Ok(PilotCommand::Source),
+            "save" | "s" => Ok(PilotCommand::Save),
+            "list" | "ls" => Ok(PilotCommand::ListSessions),
+            "load" | "l" => Ok(PilotCommand::Load),
+            "clearcache" | "cc" => Ok(PilotCommand::ClearCache),
+            "fork" | "f" => Ok(PilotCommand::Fork),
+            "traces" | "t" => Ok(PilotCommand::Traces),
+            "calldata" | "cd" => Ok(PilotCommand::Calldata),
+            "memdump" | "md" => Ok(PilotCommand::MemDump),
+            "stackdump" | "sd" => Ok(PilotCommand::StackDump),
+            "export" | "ex" => Ok(PilotCommand::Export),
             //todo:error2215 commented out (waiting for blockindex implementation)
-            // "fetch" | "fe" => Ok(ChiselCommand::Fetch),
-            "exec" | "e" => Ok(ChiselCommand::Exec),
-            "rawstack" | "rs" => Ok(ChiselCommand::RawStack),
-            "edit" => Ok(ChiselCommand::Edit),
-            _ => Err(ChiselDispatcher::make_error(format!(
+            // "fetch" | "fe" => Ok(PilotCommand::Fetch),
+            "exec" | "e" => Ok(PilotCommand::Exec),
+            "rawstack" | "rs" => Ok(PilotCommand::RawStack),
+            "edit" => Ok(PilotCommand::Edit),
+            _ => Err(PilotDispatcher::make_error(format!(
                 "Unknown command \"{s}\"! See available commands with `!help`.",
             ))
             .into()),
@@ -89,7 +89,7 @@ impl FromStr for ChiselCommand {
     }
 }
 
-/// A category for [ChiselCommand]s
+/// A category for [PilotCommand]s
 #[derive(Debug, EnumIter)]
 pub enum CmdCategory {
     /// General category
@@ -117,33 +117,33 @@ impl core::fmt::Display for CmdCategory {
 /// A command descriptor type
 pub type CmdDescriptor = (&'static [&'static str], &'static str, CmdCategory);
 
-/// Convert a `ChiselCommand` into a `CmdDescriptor` tuple
-impl From<ChiselCommand> for CmdDescriptor {
-    fn from(cmd: ChiselCommand) -> Self {
+/// Convert a `PilotCommand` into a `CmdDescriptor` tuple
+impl From<PilotCommand> for CmdDescriptor {
+    fn from(cmd: PilotCommand) -> Self {
         match cmd {
             // General
-            ChiselCommand::Help => (&["help", "h"], "Display all commands", CmdCategory::General),
-            ChiselCommand::Quit => (&["quit", "q"], "Quit Chisel", CmdCategory::General),
-            ChiselCommand::Exec => (&["exec <command> [args]", "e <command> [args]"], "Execute a shell command and print the output", CmdCategory::General),
+            PilotCommand::Help => (&["help", "h"], "Display all commands", CmdCategory::General),
+            PilotCommand::Quit => (&["quit", "q"], "Quit Pilot", CmdCategory::General),
+            PilotCommand::Exec => (&["exec <command> [args]", "e <command> [args]"], "Execute a shell command and print the output", CmdCategory::General),
             // Session
-            ChiselCommand::Clear => (&["clear", "c"], "Clear current session source", CmdCategory::Session),
-            ChiselCommand::Source => (&["source", "so"], "Display the source code of the current session", CmdCategory::Session),
-            ChiselCommand::Save => (&["save [id]", "s [id]"], "Save the current session to cache", CmdCategory::Session),
-            ChiselCommand::Load => (&["load <id>", "l <id>"], "Load a previous session ID from cache", CmdCategory::Session),
-            ChiselCommand::ListSessions => (&["list", "ls"], "List all cached sessions", CmdCategory::Session),
-            ChiselCommand::ClearCache => (&["clearcache", "cc"], "Clear the pilot cache of all stored sessions", CmdCategory::Session),
-            ChiselCommand::Export => (&["export", "ex"], "Export the current session source to a script file", CmdCategory::Session),
+            PilotCommand::Clear => (&["clear", "c"], "Clear current session source", CmdCategory::Session),
+            PilotCommand::Source => (&["source", "so"], "Display the source code of the current session", CmdCategory::Session),
+            PilotCommand::Save => (&["save [id]", "s [id]"], "Save the current session to cache", CmdCategory::Session),
+            PilotCommand::Load => (&["load <id>", "l <id>"], "Load a previous session ID from cache", CmdCategory::Session),
+            PilotCommand::ListSessions => (&["list", "ls"], "List all cached sessions", CmdCategory::Session),
+            PilotCommand::ClearCache => (&["clearcache", "cc"], "Clear the pilot cache of all stored sessions", CmdCategory::Session),
+            PilotCommand::Export => (&["export", "ex"], "Export the current session source to a script file", CmdCategory::Session),
             //todo:error2215 commented out (waiting for blockindex implementation)
-            // ChiselCommand::Fetch => (&["fetch <addr> <name>", "fe <addr> <name>"], "Fetch the interface of a verified contract on Etherscan", CmdCategory::Session),
+            // PilotCommand::Fetch => (&["fetch <addr> <name>", "fe <addr> <name>"], "Fetch the interface of a verified contract on Etherscan", CmdCategory::Session),
             // Environment
-            ChiselCommand::Fork => (&["fork <url>", "f <url>"], "Fork an RPC for the current session. Supply 0 arguments to return to a local network", CmdCategory::Env),
-            ChiselCommand::Traces => (&["traces", "t"], "Enable / disable traces for the current session", CmdCategory::Env),
-            ChiselCommand::Calldata => (&["calldata [data]", "cd [data]"], "Set calldata (`msg.data`) for the current session (appended after function selector). Clears it if no argument provided.", CmdCategory::Env),
+            PilotCommand::Fork => (&["fork <url>", "f <url>"], "Fork an RPC for the current session. Supply 0 arguments to return to a local network", CmdCategory::Env),
+            PilotCommand::Traces => (&["traces", "t"], "Enable / disable traces for the current session", CmdCategory::Env),
+            PilotCommand::Calldata => (&["calldata [data]", "cd [data]"], "Set calldata (`msg.data`) for the current session (appended after function selector). Clears it if no argument provided.", CmdCategory::Env),
             // Debug
-            ChiselCommand::MemDump => (&["memdump", "md"], "Dump the raw memory of the current state", CmdCategory::Debug),
-            ChiselCommand::StackDump => (&["stackdump", "sd"], "Dump the raw stack of the current state", CmdCategory::Debug),
-            ChiselCommand::Edit => (&["edit"], "Open the current session in an editor", CmdCategory::Session),
-            ChiselCommand::RawStack => (&["rawstack <var>", "rs <var>"], "Display the raw value of a variable's stack allocation. For variables that are > 32 bytes in length, this will display their memory pointer.", CmdCategory::Debug),
+            PilotCommand::MemDump => (&["memdump", "md"], "Dump the raw memory of the current state", CmdCategory::Debug),
+            PilotCommand::StackDump => (&["stackdump", "sd"], "Dump the raw stack of the current state", CmdCategory::Debug),
+            PilotCommand::Edit => (&["edit"], "Open the current session in an editor", CmdCategory::Session),
+            PilotCommand::RawStack => (&["rawstack <var>", "rs <var>"], "Display the raw value of a variable's stack allocation. For variables that are > 32 bytes in length, this will display their memory pointer.", CmdCategory::Debug),
         }
     }
 }

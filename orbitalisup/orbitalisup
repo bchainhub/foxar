@@ -71,10 +71,10 @@ main() {
     exit 0
   fi
 
-  ORBITALISUP_REPO=${ORBITALISUP_REPO:-orbitalis-rs/orbitalis}
+  ORBITALISUP_REPO=${ORBITALISUP_REPO:-bchainhub/foundry}
 
   # Install by downloading binaries
-  if [[ "$ORBITALISUP_REPO" == "orbitalis-rs/orbitalis" && -z "$ORBITALISUP_BRANCH" && -z "$ORBITALISUP_COMMIT" ]]; then
+  if [[ "$ORBITALISUP_REPO" == "bchainhub/foundry" && -z "$ORBITALISUP_BRANCH" && -z "$ORBITALISUP_COMMIT" ]]; then
     ORBITALISUP_VERSION=${ORBITALISUP_VERSION:-nightly}
     ORBITALISUP_TAG=$ORBITALISUP_VERSION
 
