@@ -71,6 +71,6 @@ corebc-signers = { git = "https://github.com/core-coin/corebc-rs.git", default-f
 corebc-middleware = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "development" }
 corebc-blockindex = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "development" }
 corebc-ylem = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "development" }
-revm = { git = "https://github.com/core-coin/cvm.git", default-features = false }
+revm = { git = "https://github.com/core-coin/cvm.git", default-features = false, branch = "david/fix-ecrecover-different-approach" }
 solang-parser = "=0.3.0"
 
