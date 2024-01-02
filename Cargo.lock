@@ -5218,7 +5218,7 @@ dependencies = [
 [[package]]
 name = "revm"
 version = "3.0.0"
-source = "git+https://github.com/core-coin/cvm.git?branch=david/fix-ecrecover-different-approach#5f42c239254ac8a3b179e269a5139e69267bc0fc"
+source = "git+https://github.com/core-coin/cvm.git#bff3ac8e57bd588dad5e2ae47daca2e57db5fdca"
 dependencies = [
  "auto_impl",
  "revm-interpreter",
@@ -5230,7 +5230,7 @@ dependencies = [
 [[package]]
 name = "revm-interpreter"
 version = "1.0.0"
-source = "git+https://github.com/core-coin/cvm.git?branch=david/fix-ecrecover-different-approach#5f42c239254ac8a3b179e269a5139e69267bc0fc"
+source = "git+https://github.com/core-coin/cvm.git#bff3ac8e57bd588dad5e2ae47daca2e57db5fdca"
 dependencies = [
  "derive_more",
  "enumn",
@@ -5242,7 +5242,7 @@ dependencies = [
 [[package]]
 name = "revm-precompile"
 version = "2.0.0"
-source = "git+https://github.com/core-coin/cvm.git?branch=david/fix-ecrecover-different-approach#5f42c239254ac8a3b179e269a5139e69267bc0fc"
+source = "git+https://github.com/core-coin/cvm.git#bff3ac8e57bd588dad5e2ae47daca2e57db5fdca"
 dependencies = [
  "k256 0.11.6",
  "libgoldilocks 0.1.0 (git+https://github.com/core-coin/ed448-rs.git)",
@@ -5258,7 +5258,7 @@ dependencies = [
 [[package]]
 name = "revm-primitives"
 version = "1.0.0"
-source = "git+https://github.com/core-coin/cvm.git?branch=david/fix-ecrecover-different-approach#5f42c239254ac8a3b179e269a5139e69267bc0fc"
+source = "git+https://github.com/core-coin/cvm.git#bff3ac8e57bd588dad5e2ae47daca2e57db5fdca"
 dependencies = [
  "auto_impl",
  "bitvec",
