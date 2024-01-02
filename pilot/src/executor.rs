@@ -671,8 +671,8 @@ impl Type {
                     match name {
                         "block" => match access {
                             "coinbase" => Some(ParamType::Address),
-                            "basefee" | "chainid" | "difficulty" | "gaslimit" | "number"
-                            | "timestamp" => Some(ParamType::Uint(256)),
+                            "basefee" | "chainid" | "difficulty" | "gaslimit" | "number" |
+                            "timestamp" => Some(ParamType::Uint(256)),
                             _ => None,
                         },
                         "msg" => match access {
@@ -1037,10 +1037,10 @@ impl Type {
     fn is_array(&self) -> bool {
         matches!(
             self,
-            Self::Array(_)
-                | Self::FixedArray(_, _)
-                | Self::Builtin(ParamType::Array(_))
-                | Self::Builtin(ParamType::FixedArray(_, _))
+            Self::Array(_) |
+                Self::FixedArray(_, _) |
+                Self::Builtin(ParamType::Array(_)) |
+                Self::Builtin(ParamType::FixedArray(_, _))
         )
     }
 
@@ -1447,7 +1447,7 @@ mod tests {
                 ("keccak256(bytes)", FixedBytes(32)),
                 ("sha256(bytes)", FixedBytes(32)),
                 ("ripemd160(bytes)", FixedBytes(20)),
-                ("ecrecover(bytes32, uint8, bytes32, bytes32)", Address),
+                ("ecrecover(bytes32, bytes)", Address),
                 ("addmod(uint, uint, uint)", Uint(256)),
                 ("mulmod(uint, uint, uint)", Uint(256)),
                 //

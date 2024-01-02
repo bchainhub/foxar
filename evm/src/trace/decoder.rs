@@ -120,7 +120,7 @@ impl CallTraceDecoder {
             // TODO: These are the Ethereum precompiles. We should add a way to support precompiles
             // for other networks, too.
             precompiles: precompiles!(
-                0x01: ecrecover(hash: FixedBytes(32), v: Uint(256), r: Uint(256), s: Uint(256)) -> (publicAddress: Address),
+                0x01: ecrecover(hash: FixedBytes(32), sig: Uint(1368)) -> (publicAddress: Address),
                 0x02: sha256(data: Bytes) -> (hash: FixedBytes(32)),
                 0x03: ripemd(data: Bytes) -> (hash: FixedBytes(32)),
                 0x04: identity(data: Bytes) -> (data: Bytes),
