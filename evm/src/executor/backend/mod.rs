@@ -20,8 +20,8 @@ use revm::{
     db::{CacheDB, DatabaseRef},
     precompile::{Precompiles, SpecId},
     primitives::{
-        Account, AccountInfo, Bytecode, CreateScheme, Env, Log, ResultAndState, TransactTo, B176,
-        B256, SHA3_EMPTY, U256 as rU256,
+        Account, AccountInfo, Bytecode, CreateScheme, Env, Log, Network, ResultAndState,
+        TransactTo, B176, B256, SHA3_EMPTY, U256 as rU256,
     },
     Database, DatabaseCommit, Inspector, JournaledState, EVM,
 };
@@ -703,16 +703,18 @@ impl Backend {
 
         let test_contract = match env.tx.transact_to {
             TransactTo::Call(to) => to,
-            TransactTo::Create(CreateScheme::Create) => {
-                revm::primitives::create_address(env.tx.caller, env.tx.nonce.unwrap_or_default())
-            }
+            TransactTo::Create(CreateScheme::Create) => revm::primitives::create_address(
+                env.tx.caller,
+                env.tx.nonce.unwrap_or_default(),
+                Network::from(env.cfg.network_id),
+            ),
             TransactTo::Create(CreateScheme::Create2 { salt }) => {
                 let code_hash = H256::from_slice(sha3(&env.tx.data).as_slice());
                 revm::primitives::create2_address(
                     env.tx.caller,
                     h256_to_b256(code_hash),
                     salt,
-                    env.cfg.network_id,
+                    Network::from(env.cfg.network_id),
                 )
             }
         };
