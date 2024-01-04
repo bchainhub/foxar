@@ -94,8 +94,8 @@ impl Cmd for FmtArgs {
         for input in self.inputs(&config) {
             match input {
                 Input::Path(p) => {
-                    if (p.is_absolute() && !ignored.contains(&p))
-                        || !ignored.contains(&cwd.join(&p))
+                    if (p.is_absolute() && !ignored.contains(&p)) ||
+                        !ignored.contains(&cwd.join(&p))
                     {
                         inputs.push(Input::Path(p));
                     }

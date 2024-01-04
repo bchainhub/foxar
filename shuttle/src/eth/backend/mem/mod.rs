@@ -962,9 +962,7 @@ impl Backend {
         let result_and_state = match evm.inspect_ref(&mut inspector) {
             Ok(result_and_state) => result_and_state,
             Err(_) => {
-                return Err(BlockchainError::InvalidTransaction(
-                    InvalidTransactionError::GasTooHigh,
-                ))
+                return Err(BlockchainError::InvalidTransaction(InvalidTransactionError::GasTooHigh))
             }
         };
         let state = result_and_state.state;
@@ -1968,8 +1966,8 @@ impl TransactionValidator for Backend {
         if chain_id != network_id.into() {
             if let Some(legacy) = tx.as_legacy() {
                 // <https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md>
-                if env.cfg.spec_id >= SpecId::SPURIOUS_DRAGON
-                    && !legacy.meets_eip155(chain_id.as_u64())
+                if env.cfg.spec_id >= SpecId::SPURIOUS_DRAGON &&
+                    !legacy.meets_eip155(chain_id.as_u64())
                 {
                     warn!(target: "backend", ?chain_id, ?network_id, "incompatible EIP155-based V");
                     return Err(InvalidTransactionError::IncompatibleEIP155);

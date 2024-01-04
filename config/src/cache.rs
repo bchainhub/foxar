@@ -182,8 +182,8 @@ impl fmt::Display for Cache {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         for network in &self.networks {
             match NumberPrefix::decimal(
-                network.block_explorer as f32
-                    + network.blocks.iter().map(|x| x.1).sum::<u64>() as f32,
+                network.block_explorer as f32 +
+                    network.blocks.iter().map(|x| x.1).sum::<u64>() as f32,
             ) {
                 NumberPrefix::Standalone(size) => {
                     writeln!(f, "-️ {} ({size:.1} B)", network.name)?;

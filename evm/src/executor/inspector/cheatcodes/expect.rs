@@ -74,8 +74,8 @@ pub fn handle_expect_revert(
     }
 
     let mut actual_revert = retdata;
-    if actual_revert.len() >= 4
-        && matches!(actual_revert[..4].try_into(), Ok(ERROR_PREFIX | REVERT_PREFIX))
+    if actual_revert.len() >= 4 &&
+        matches!(actual_revert[..4].try_into(), Ok(ERROR_PREFIX | REVERT_PREFIX))
     {
         if let Ok(bytes) = Bytes::decode(&actual_revert[4..]) {
             actual_revert = bytes;

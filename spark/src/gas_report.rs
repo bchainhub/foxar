@@ -64,10 +64,10 @@ impl GasReport {
                     contract_name
                 );
             }
-            let report_contract = (!self.ignore.contains(&contract_name)
-                && self.report_for.contains(&"*".to_string()))
-                || (!self.ignore.contains(&contract_name) && self.report_for.is_empty())
-                || (self.report_for.contains(&contract_name));
+            let report_contract = (!self.ignore.contains(&contract_name) &&
+                self.report_for.contains(&"*".to_string())) ||
+                (!self.ignore.contains(&contract_name) && self.report_for.is_empty()) ||
+                (self.report_for.contains(&contract_name));
             if report_contract {
                 let contract_report = self.contracts.entry(name.to_string()).or_default();
 

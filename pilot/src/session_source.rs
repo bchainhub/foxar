@@ -509,9 +509,9 @@ contract {} {{
                 .into_iter()
                 .filter_map(|sup| match sup {
                     pt::SourceUnitPart::ImportDirective(i) => match i {
-                        pt::Import::Plain(s, _)
-                        | pt::Import::Rename(s, _, _)
-                        | pt::Import::GlobalSymbol(s, _, _) => {
+                        pt::Import::Plain(s, _) |
+                        pt::Import::Rename(s, _, _) |
+                        pt::Import::GlobalSymbol(s, _, _) => {
                             let path = PathBuf::from(s.string);
 
                             match fs::read_to_string(path) {

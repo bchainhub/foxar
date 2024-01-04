@@ -597,8 +597,8 @@ impl ScriptArgs {
             }
         }
 
-        if prompt_user
-            && !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
+        if prompt_user &&
+            !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
         {
             eyre::bail!("User canceled the script.");
         }

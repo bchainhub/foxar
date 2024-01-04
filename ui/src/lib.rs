@@ -456,8 +456,8 @@ impl Tui {
                                     let mut before = source[..std::cmp::min(offset, max)]
                                         .split_inclusive('\n')
                                         .collect::<Vec<&str>>();
-                                    let actual = source[std::cmp::min(offset, max)
-                                        ..std::cmp::min(offset + len, max)]
+                                    let actual = source[std::cmp::min(offset, max)..
+                                        std::cmp::min(offset + len, max)]
                                         .split_inclusive('\n')
                                         .map(|s| s.to_string())
                                         .collect::<Vec<String>>();
@@ -1105,9 +1105,9 @@ impl Ui for Tui {
                                     let max_mem = (debug_call[draw_memory.inner_call_index].1
                                         [self.current_step]
                                         .memory
-                                        .len()
-                                        / 32)
-                                        .saturating_sub(1);
+                                        .len() /
+                                        32)
+                                    .saturating_sub(1);
                                     if draw_memory.current_mem_startline < max_mem {
                                         draw_memory.current_mem_startline += 1;
                                     }
@@ -1224,8 +1224,8 @@ impl Ui for Tui {
                                     .find_map(|(i, op)| {
                                         if i > 0 {
                                             match (
-                                                prev_ops[i - 1].contains("JUMP")
-                                                    && prev_ops[i - 1] != "JUMPDEST",
+                                                prev_ops[i - 1].contains("JUMP") &&
+                                                    prev_ops[i - 1] != "JUMPDEST",
                                                 &**op,
                                             ) {
                                                 (true, "JUMPDEST") => Some(i - 1),

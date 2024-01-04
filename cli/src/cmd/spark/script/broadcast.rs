@@ -562,8 +562,8 @@ impl ScriptArgs {
         tx.set_energy(
             provider.estimate_energy(tx, None).await.wrap_err_with(|| {
                 format!("Failed to estimate energy for tx: {:?}", tx.sighash())
-            })? * self.energy_estimate_multiplier
-                / 100,
+            })? * self.energy_estimate_multiplier /
+                100,
         );
         Ok(())
     }

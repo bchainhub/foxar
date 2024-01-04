@@ -689,9 +689,9 @@ impl Config {
 
     /// Whether caching should be enabled for the given network id
     pub fn enable_caching(&self, endpoint: &str, network_id: impl Into<u64>) -> bool {
-        !self.no_storage_caching
-            && self.rpc_storage_caching.enable_for_network_id(network_id.into())
-            && self.rpc_storage_caching.enable_for_endpoint(endpoint)
+        !self.no_storage_caching &&
+            self.rpc_storage_caching.enable_for_network_id(network_id.into()) &&
+            self.rpc_storage_caching.enable_for_endpoint(endpoint)
     }
 
     /// Returns the `ProjectPathsConfig`  sub set of the config.
@@ -754,7 +754,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -779,7 +779,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -799,7 +799,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -822,7 +822,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -843,7 +843,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -2113,10 +2113,9 @@ impl Provider for DappEnvCompatProvider {
             // Activate Solidity optimizer (0 or 1)
             let val = val.parse::<u8>().map_err(figment::Error::custom)?;
             if val > 1 {
-                return Err(format!(
-                    "Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1"
-                )
-                .into());
+                return Err(
+                    format!("Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1").into()
+                );
             }
             dict.insert("optimizer".to_string(), (val == 1).into());
         }
