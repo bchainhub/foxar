@@ -1,5 +1,5 @@
 use corebc::{abi::Address, types::H176};
-use orbitalis_evm::revm::precompile::Precompiles;
+use foxar_evm::revm::precompile::Precompiles;
 use spark::revm::primitives::SpecId;
 use std::fmt;
 
@@ -61,12 +61,12 @@ impl<'a> fmt::Debug for HexDisplay<'a> {
 
 pub fn to_precompile_id(spec_id: SpecId) -> spark::revm::precompile::SpecId {
     match spec_id {
-        SpecId::FRONTIER |
-        SpecId::FRONTIER_THAWING |
-        SpecId::HOMESTEAD |
-        SpecId::DAO_FORK |
-        SpecId::TANGERINE |
-        SpecId::SPURIOUS_DRAGON => spark::revm::precompile::SpecId::HOMESTEAD,
+        SpecId::FRONTIER
+        | SpecId::FRONTIER_THAWING
+        | SpecId::HOMESTEAD
+        | SpecId::DAO_FORK
+        | SpecId::TANGERINE
+        | SpecId::SPURIOUS_DRAGON => spark::revm::precompile::SpecId::HOMESTEAD,
         SpecId::BYZANTIUM | SpecId::CONSTANTINOPLE | SpecId::PETERSBURG => {
             spark::revm::precompile::SpecId::BYZANTIUM
         }

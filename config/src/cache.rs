@@ -24,7 +24,7 @@ impl StorageCachingConfig {
     pub fn enable_for_network_id(&self, network_id: u64) -> bool {
         // ignore dev networks
         if [99, 1337, 31337].contains(&network_id) {
-            return false
+            return false;
         }
         self.networks.is_match(network_id)
     }
@@ -171,7 +171,7 @@ impl Serialize for CachedEndpoints {
     }
 }
 
-/// Content of the orbitalis cache folder
+/// Content of the foxar cache folder
 #[derive(Debug, Default)]
 pub struct Cache {
     /// The list of networks in the cache
@@ -182,8 +182,8 @@ impl fmt::Display for Cache {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         for network in &self.networks {
             match NumberPrefix::decimal(
-                network.block_explorer as f32 +
-                    network.blocks.iter().map(|x| x.1).sum::<u64>() as f32,
+                network.block_explorer as f32
+                    + network.blocks.iter().map(|x| x.1).sum::<u64>() as f32,
             ) {
                 NumberPrefix::Standalone(size) => {
                     writeln!(f, "-️ {} ({size:.1} B)", network.name)?;
@@ -215,7 +215,7 @@ impl fmt::Display for Cache {
     }
 }
 
-/// A representation of data for a given network in the orbitalis cache
+/// A representation of data for a given network in the foxar cache
 #[derive(Debug)]
 pub struct NetworkCache {
     /// The name of the network

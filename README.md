@@ -12,17 +12,17 @@ For now the best way to install foundry is:
 git clone https://github.com/bchainhub/foundry.git
 ```
 
-2. Go to `foundry/orbitalisup/
+2. Go to `foundry/foxarup/
 ```bash
-cd foundry/orbitalisup/
+cd foundry/foxarup/
 ```
 
-3. Run orbitalisup
+3. Run foxarup
 ```bash
-./orbitalisup --path ../
+./foxarup --path ../
 ```
 
-This will compile the entire project and will install all your binaries to ~/.orbitalis.
+This will compile the entire project and will install all your binaries to ~/.foxar.
 Now just restart your terminal and you can use one of the binaries. For reference here are the changed names:
 
 forge: spark

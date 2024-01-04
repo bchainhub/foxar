@@ -2,10 +2,10 @@
 
 use crate::{
     cmd::spark::{build::BuildArgs, snapshot::SnapshotArgs, test::TestArgs},
-    utils::{self, OrbitalisPathExt},
+    utils::{self, FoxarPathExt},
 };
 use clap::Parser;
-use orbitalis_config::Config;
+use foxar_config::Config;
 use std::{collections::HashSet, convert::Infallible, path::PathBuf, sync::Arc};
 use tracing::trace;
 use watchexec::{
@@ -135,10 +135,10 @@ pub async fn watch_test(args: TestArgs) -> eyre::Result<()> {
     let filter = args.filter(&config);
 
     // marker to check whether to override the command
-    let no_reconfigure = filter.args().test_pattern.is_some() ||
-        filter.args().path_pattern.is_some() ||
-        filter.args().contract_pattern.is_some() ||
-        args.watch.run_all;
+    let no_reconfigure = filter.args().test_pattern.is_some()
+        || filter.args().path_pattern.is_some()
+        || filter.args().contract_pattern.is_some()
+        || args.watch.run_all;
 
     let state = WatchTestState {
         project_root: config.__root.0,
@@ -173,7 +173,7 @@ fn on_test(action: OnActionState<WatchTestState>) {
 
     if no_reconfigure {
         // nothing to reconfigure
-        return
+        return;
     }
 
     let mut cmd = cmd.clone();
@@ -193,8 +193,8 @@ fn on_test(action: OnActionState<WatchTestState>) {
         cmd.drain(pos..=(pos + 1));
     }
 
-    if changed_sol_test_files.len() > 1 ||
-        (changed_sol_test_files.is_empty() && last_test_files.is_empty())
+    if changed_sol_test_files.len() > 1
+        || (changed_sol_test_files.is_empty() && last_test_files.is_empty())
     {
         // this could happen if multiple files were changed at once, for example `spark fmt` was
         // run, or if no test files were changed and no previous test files were modified in which
@@ -214,7 +214,7 @@ fn on_test(action: OnActionState<WatchTestState>) {
             },
             on_test,
         );
-        return
+        return;
     }
 
     if changed_sol_test_files.is_empty() {
@@ -323,7 +323,7 @@ fn on_action<F, T>(
 
         if signals.contains(&MainSignal::Terminate) || signals.contains(&MainSignal::Interrupt) {
             action.outcome(Outcome::both(Outcome::Stop, Outcome::Exit));
-            return fut
+            return fut;
         }
 
         if !has_paths {
@@ -334,7 +334,7 @@ fn on_action<F, T>(
                 }
 
                 action.outcome(out);
-                return fut
+                return fut;
             }
 
             let completion = action.events.iter().flat_map(|e| e.completions()).next();
@@ -358,7 +358,7 @@ fn on_action<F, T>(
                 };
 
                 action.outcome(Outcome::DoNothing);
-                return fut
+                return fut;
             }
         }
 

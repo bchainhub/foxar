@@ -6,15 +6,15 @@ use corebc::{
     ylem::{contracts::ArtifactContracts, Artifact, ProjectCompileOutput},
 };
 use eyre::Result;
-use orbitalis_common::{ContractsByArtifact, TestFunctionExt};
-use orbitalis_evm::{
+use foxar_common::{ContractsByArtifact, TestFunctionExt};
+use foxar_evm::{
     executor::{
         backend::Backend, fork::CreateFork, inspector::CheatsConfig, opts::EvmOpts, Executor,
         ExecutorBuilder,
     },
     revm,
 };
-use orbitalis_utils::PostLinkInput;
+use foxar_utils::PostLinkInput;
 use rayon::prelude::*;
 use revm::primitives::SpecId;
 use std::{collections::BTreeMap, path::Path, sync::mpsc::Sender};
@@ -57,8 +57,8 @@ impl MultiContractRunner {
         self.contracts
             .iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .flat_map(|(_, (abi, _, _))| {
                 abi.functions().filter(|func| filter.matches_test(func.signature()))
@@ -71,8 +71,8 @@ impl MultiContractRunner {
         self.contracts
             .iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .flat_map(|(_, (abi, _, _))| abi.functions().map(|func| func.name.clone()))
             .filter(|sig| sig.is_test())
@@ -87,8 +87,8 @@ impl MultiContractRunner {
         self.contracts
             .iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .filter(|(_, (abi, _, _))| abi.functions().any(|func| filter.matches_test(&func.name)))
             .map(|(id, (abi, _, _))| {
@@ -130,8 +130,8 @@ impl MultiContractRunner {
         self.contracts
             .par_iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .filter(|(_, (abi, _, _))| abi.functions().any(|func| filter.matches_test(&func.name)))
             .map_with(stream_result, |stream_result, (id, (abi, deploy_code, libs))| {
@@ -242,7 +242,7 @@ impl MultiContractRunnerBuilder {
         // create a mapping of name => (abi, deployment code, Vec<library deployment code>)
         let mut deployable_contracts = DeployableContracts::default();
 
-        orbitalis_utils::link_with_nonce_or_address(
+        foxar_utils::link_with_nonce_or_address(
             ArtifactContracts::from_iter(contracts),
             &mut known_contracts,
             Default::default(),
@@ -269,8 +269,9 @@ impl MultiContractRunnerBuilder {
 
                 let abi = contract.abi.expect("We should have an abi by now");
                 // if it's a test, add it to deployable contracts
-                if abi.constructor.as_ref().map(|c| c.inputs.is_empty()).unwrap_or(true) &&
-                    abi.functions()
+                if abi.constructor.as_ref().map(|c| c.inputs.is_empty()).unwrap_or(true)
+                    && abi
+                        .functions()
                         .any(|func| func.name.is_test() || func.name.is_invariant_test())
                 {
                     deployable_contracts.insert(

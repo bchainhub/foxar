@@ -20,7 +20,7 @@ static RUN_SELECTOR: [u8; 4] = [0x3b, 0x21, 0xbc, 0x14];
 
 /// The Pilot Runner
 ///
-/// Based off of orbitalis's spark cli runner for scripting.
+/// Based off of foxar's spark cli runner for scripting.
 /// See: [runner](cli::cmd::spark::script::runner.rs)
 #[derive(Debug)]
 pub struct PilotRunner {
@@ -123,7 +123,7 @@ impl PilotRunner {
     /// This will return _estimated_ energy instead of the precise energy the call would consume, so
     /// it can be used as `energy_limit`.
     ///
-    /// Taken from [Forge's Script Runner](https://github.com/orbitalis-rs/orbitalis/blob/master/cli/src/cmd/spark/script/runner.rs)
+    /// Taken from [Forge's Script Runner](https://github.com/foxar-rs/foxar/blob/master/cli/src/cmd/spark/script/runner.rs)
     fn call(
         &mut self,
         from: Address,
@@ -159,9 +159,9 @@ impl PilotRunner {
                 self.executor.env_mut().tx.energy_limit = mid_energy_limit;
                 let res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
                 match res.exit_reason {
-                    InstructionResult::Revert |
-                    InstructionResult::OutOfEnergy |
-                    InstructionResult::OutOfFund => {
+                    InstructionResult::Revert
+                    | InstructionResult::OutOfEnergy
+                    | InstructionResult::OutOfFund => {
                         lowest_energy_limit = mid_energy_limit;
                     }
                     _ => {
@@ -169,9 +169,9 @@ impl PilotRunner {
                         // if last two successful estimations only vary by 10%, we consider this to
                         // sufficiently accurate
                         const ACCURACY: u64 = 10;
-                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY /
-                            last_highest_energy_limit <
-                            1
+                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY
+                            / last_highest_energy_limit
+                            < 1
                         {
                             // update the energy
                             energy_used = highest_energy_limit;

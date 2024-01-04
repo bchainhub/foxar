@@ -4,7 +4,7 @@ use crate::{
 };
 use comfy_table::{presets::ASCII_MARKDOWN, *};
 use corebc::types::U256;
-use orbitalis_common::{calc, TestFunctionExt};
+use foxar_common::{calc, TestFunctionExt};
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, fmt::Display};
 
@@ -52,7 +52,7 @@ impl GasReport {
 
         if let Some(name) = &trace.contract {
             let contract_name = name.rsplit(':').next().unwrap_or(name.as_str()).to_string();
-            // If the user listed the contract in 'gas_reports' (the orbitalis.toml field) a
+            // If the user listed the contract in 'gas_reports' (the foxar.toml field) a
             // report for the contract is generated even if it's listed in the ignore
             // list. This is addressed this way because getting a report you don't expect is
             // preferable than not getting one you expect. A warning is printed to stderr
@@ -64,10 +64,10 @@ impl GasReport {
                     contract_name
                 );
             }
-            let report_contract = (!self.ignore.contains(&contract_name) &&
-                self.report_for.contains(&"*".to_string())) ||
-                (!self.ignore.contains(&contract_name) && self.report_for.is_empty()) ||
-                (self.report_for.contains(&contract_name));
+            let report_contract = (!self.ignore.contains(&contract_name)
+                && self.report_for.contains(&"*".to_string()))
+                || (!self.ignore.contains(&contract_name) && self.report_for.is_empty())
+                || (self.report_for.contains(&contract_name));
             if report_contract {
                 let contract_report = self.contracts.entry(name.to_string()).or_default();
 

@@ -1,7 +1,7 @@
 //! scan a file for unsafe usage
 
 use crate::cmd::spark::geiger::{error::ScanFileError, visitor::CheatcodeVisitor};
-use orbitalis_common::fs;
+use foxar_common::fs;
 use solang_parser::{diagnostics::Diagnostic, pt::Loc};
 use spark_fmt::{offset_to_line_column, parse, Visitable};
 use std::{
@@ -119,15 +119,15 @@ impl UnsafeCheatcodes {
 
     /// The total number of unsafe calls.
     pub fn len(&self) -> usize {
-        self.ffi.len() +
-            self.read_file.len() +
-            self.read_line.len() +
-            self.write_file.len() +
-            self.write_line.len() +
-            self.close_file.len() +
-            self.set_env.len() +
-            self.derive_key.len() +
-            self.remove_file.len()
+        self.ffi.len()
+            + self.read_file.len()
+            + self.read_line.len()
+            + self.write_file.len()
+            + self.write_line.len()
+            + self.close_file.len()
+            + self.set_env.len()
+            + self.derive_key.len()
+            + self.remove_file.len()
     }
 }
 

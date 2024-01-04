@@ -1,11 +1,11 @@
 use crate::{
     cmd::spark::build::{CoreBuildArgs, ProjectPathsArgs},
     opts::spark::CompilerArgs,
-    utils::OrbitalisPathExt,
+    utils::FoxarPathExt,
 };
 use clap::Parser;
 use corebc::prelude::artifacts::output_selection::ContractOutputSelection;
-use orbitalis_common::{
+use foxar_common::{
     compile,
     selectors::{import_selectors, SelectorImportData},
     shell,
@@ -71,11 +71,11 @@ impl UploadSelectorsArgs {
         let mut artifacts = artifacts.into_iter().peekable();
         while let Some((contract, artifact)) = artifacts.next() {
             let abi = artifact.abi.ok_or(eyre::eyre!("Unable to fetch abi"))?;
-            if abi.abi.functions.is_empty() &&
-                abi.abi.events.is_empty() &&
-                abi.abi.errors.is_empty()
+            if abi.abi.functions.is_empty()
+                && abi.abi.events.is_empty()
+                && abi.abi.errors.is_empty()
             {
-                continue
+                continue;
             }
 
             println!("Uploading selectors for {contract}...");
