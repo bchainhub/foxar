@@ -275,7 +275,7 @@ async fn print_traces(
     verbose: bool,
 ) -> eyre::Result<()> {
     if result.traces.is_empty() {
-        eyre::bail!("Unexpected error: No traces. Please report this as a bug: https://github.com/foxar-rs/foxar/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
+        eyre::bail!("Unexpected error: No traces. Please report this as a bug: https://github.com/bchainhub/foxar/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
     }
 
     println!("Traces:");

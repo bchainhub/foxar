@@ -87,6 +87,6 @@ This process consists of 4 steps:
 
 1. add the function signature to the `abigen!` macro so a new `HEVMCalls` variant is generated
 2. implement the cheat code handler
-3. add a Solidity test for the cheatcode under [`testdata/cheats`](https://github.com/foxar-rs/foxar/tree/master/testdata/cheats)
+3. add a Solidity test for the cheatcode under [`testdata/cheats`](https://github.com/bchainhub/foxar/tree/master/testdata/cheats)
 4. add the function signature
-   to [forge-std Vm interface](https://github.com/foxar-rs/forge-std/blob/master/src/Vm.sol)
+   to [forge-std Vm interface](https://github.com/bchainhub/forge-std/blob/master/src/Vm.sol)

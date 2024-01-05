@@ -57,11 +57,11 @@ pub fn install() -> eyre::Result<()> {
     } else {
         let (panic_hook, _) = color_eyre::config::HookBuilder::default()
             .panic_section(
-                "This is a bug. Consider reporting it at https://github.com/foxar-rs/foxar",
+                "This is a bug. Consider reporting it at https://github.com/bchainhub/foxar",
             )
             .into_hooks();
         panic_hook.install();
-        // see <https://github.com/foxar-rs/foxar/issues/3050>
+        // see <https://github.com/bchainhub/foxar/issues/3050>
         if cfg!(windows) {
             if let Err(err) = eyre::set_hook(Box::new(move |_| Box::new(Handler))) {
                 error!(?err, "failed to install panic hook");

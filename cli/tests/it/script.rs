@@ -814,7 +814,6 @@ struct Transaction {
     arguments: Vec<String>,
 }
 
-// test we output arguments <https://github.com/foxar-rs/foxar/issues/3053>
 sparktest_async!(
     can_execute_script_with_arguments,
     |prj: TestProject, mut cmd: TestCommand| async move {

@@ -5,7 +5,7 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 description = "Foxar's Solidity ABI bindings"
-repository = "https://github.com/foxar-rs/foxar"
+repository = "https://github.com/bchainhub/foxar"
 exclude = ["abi", "build.rs"]
 
 [build-dependencies]

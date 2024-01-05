@@ -168,7 +168,6 @@ fn value_to_token(value: &Value) -> Result<Token> {
             Ok(Token::Array(values))
         }
         value @ Value::Object(_) => {
-            // See: [#3647](https://github.com/foxar-rs/foxar/pull/3647)
             let ordered_object: BTreeMap<String, Value> =
                 serde_json::from_value(value.clone()).unwrap();
             let values = ordered_object.values().map(value_to_token).collect::<Result<Vec<_>>>()?;

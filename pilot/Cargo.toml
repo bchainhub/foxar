@@ -7,7 +7,7 @@ authors = [
   "asnared <https://github.com/abigger87>",
 ]
 description = "Solidity REPL"
-repository = "https://github.com/foxar-rs/foxar/tree/main/pilot"
+repository = "https://github.com/bchainhub/foxar/tree/main/pilot"
 license = "MIT"
 keywords = [
   "Rust",

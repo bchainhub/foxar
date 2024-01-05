@@ -19,7 +19,7 @@ cd foxar/foxarup/
 
 3. Run foxarup
 ```bash
-./foxarup --path ../
+./foxarup --path 
 ```
 
 This will compile the entire project and will install all your binaries to ~/.foxar.

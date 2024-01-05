@@ -425,7 +425,7 @@ Then, you can track files with `git add ...` and then commit them with `git comm
 ignore them in the `.gitignore` file, or run this command again with the `--no-commit` flag.
 
 If none of the previous steps worked, please open an issue at:
-https://github.com/foxar-rs/foxar/issues/new/choose"
+https://github.com/bchainhub/foxar/issues/new/choose"
             ))
         }
     }

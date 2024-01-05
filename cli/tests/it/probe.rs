@@ -318,7 +318,6 @@ probetest!(calldata_array, |_: TestProject, mut cmd: TestCommand| {
     );
 });
 
-// <https://github.com/foxar-rs/foxar/issues/2705>
 probetest!(
     //todo:error2215 need an archive node
     #[ignore]

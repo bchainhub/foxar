@@ -164,7 +164,6 @@ impl SignEthClient {
         }
 
         // using samczsun signature database over 4byte
-        // see https://github.com/foxar-rs/foxar/issues/1672
         let url = match selector_type {
             SelectorType::Function => format!("{SELECTOR_DATABASE_URL}?function={selector}"),
             SelectorType::Event => format!("{SELECTOR_DATABASE_URL}?event={selector}"),
@@ -242,7 +241,7 @@ impl SignEthClient {
     /// Pretty print calldata and if available, fetch possible function signatures
     ///
     /// ```no_run
-    /// 
+    ///
     /// use foxar_common::selectors::SignEthClient;
     ///
     /// # async fn foo() -> eyre::Result<()> {
@@ -378,7 +377,7 @@ pub async fn decode_event_topic(topic: &str) -> eyre::Result<Vec<String>> {
 /// Pretty print calldata and if available, fetch possible function signatures
 ///
 /// ```no_run
-/// 
+///
 /// use foxar_common::selectors::pretty_calldata;
 ///
 /// # async fn foo() -> eyre::Result<()> {

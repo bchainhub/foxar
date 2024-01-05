@@ -980,13 +980,13 @@ sparktest!(
         let package_mod = git_mod.join("issue-2264-repro");
 
         let install = |cmd: &mut TestCommand| {
-            cmd.spark_fuse().args(["install", "foxar-rs/issue-2264-repro", "--no-commit"]);
+            cmd.spark_fuse().args(["install", "bchainhub/issue-2264-repro", "--no-commit"]);
             cmd.assert_non_empty_stdout();
             assert!(package.exists());
             assert!(package_mod.exists());
 
             let submods = read_string(&git_mod_file);
-            assert!(submods.contains("https://github.com/foxar-rs/issue-2264-repro"));
+            assert!(submods.contains("https://github.com/bchainhub/issue-2264-repro"));
         };
 
         install(&mut cmd);
@@ -1467,7 +1467,7 @@ sparktest_init!(
     }
 );
 
-// <https://github.com/foxar-rs/foxar/issues/3440>
+// <https://github.com/bchainhub/foxar/issues/3440>
 sparktest_init!(
     can_use_absolute_imports_from_test_and_script,
     |prj: TestProject, mut cmd: TestCommand| {

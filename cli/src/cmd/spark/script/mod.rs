@@ -279,7 +279,7 @@ impl ScriptArgs {
 
         if !result.success || verbosity > 3 {
             if result.traces.is_empty() {
-                eyre::bail!("Unexpected error: No traces despite verbosity level. Please report this as a bug: https://github.com/foxar-rs/foxar/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
+                eyre::bail!("Unexpected error: No traces despite verbosity level. Please report this as a bug: https://github.com/bchainhub/foxar/issues/new?assignees=&labels=T-bug&template=BUG-FORM.yml");
             }
 
             shell::println("Traces:")?;
@@ -597,8 +597,8 @@ impl ScriptArgs {
             }
         }
 
-        if prompt_user &&
-            !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
+        if prompt_user
+            && !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
         {
             eyre::bail!("User canceled the script.");
         }

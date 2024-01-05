@@ -154,7 +154,7 @@ The `test_directory` macro is used to specify a new folder with source files for
 
 ## Contributing
 
-Check out the [foxar contribution guide](https://github.com/foxar-rs/foxar/blob/master/CONTRIBUTING.md).
+Check out the [foxar contribution guide](https://github.com/bchainhub/foxar/blob/master/CONTRIBUTING.md).
 
 Guidelines for contributing to `spark fmt`:
 
