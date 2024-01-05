@@ -71,10 +71,10 @@ main() {
     exit 0
   fi
 
-  FOXARUP_REPO=${FOXARUP_REPO:-bchainhub/foundry}
+  FOXARUP_REPO=${FOXARUP_REPO:-bchainhub/foxar}
 
   # Install by downloading binaries
-  if [[ "$FOXARUP_REPO" == "bchainhub/foundry" && -z "$FOXARUP_BRANCH" && -z "$FOXARUP_COMMIT" ]]; then
+  if [[ "$FOXARUP_REPO" == "bchainhub/foxar" && -z "$FOXARUP_BRANCH" && -z "$FOXARUP_COMMIT" ]]; then
     FOXARUP_VERSION=${FOXARUP_VERSION:-nightly}
     FOXARUP_TAG=$FOXARUP_VERSION
 

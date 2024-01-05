@@ -8,7 +8,7 @@ FOXAR_DIR=${FOXAR_DIR-"$BASE_DIR/.foxar"}
 FOXAR_BIN_DIR="$FOXAR_DIR/bin"
 FOXAR_MAN_DIR="$FOXAR_DIR/share/man/man1"
 
-BIN_URL="https://raw.githubusercontent.com/bchainhub/foundry/master/foxarup/foxarup"
+BIN_URL="https://raw.githubusercontent.com/bchainhub/foxar/master/foxarup/foxarup"
 BIN_PATH="$FOXAR_BIN_DIR/foxarup"
 
 
