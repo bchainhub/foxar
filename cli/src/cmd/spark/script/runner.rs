@@ -274,7 +274,7 @@ impl ScriptRunner {
         // something. This happens during the onchain simulation stage, where we commit each
         // collected transactions.
         //
-        // Otherwise don't re-execute, or some usecases might be broken: https://github.com/orbitalis-rs/orbitalis/issues/3921
+        // Otherwise don't re-execute, or some usecases might be broken: https://github.com/foxar-rs/foxar/issues/3921
         if commit {
             energy_used = self.search_optimal_energy_usage(&res, from, to, &calldata, value)?;
             res = self.executor.call_raw_committing(from, to, calldata.0, value)?;

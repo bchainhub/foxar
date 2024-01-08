@@ -1,4 +1,4 @@
-//! orbitalis configuration.
+//! foxar configuration.
 #![deny(missing_docs, unsafe_code, unused_crate_dependencies)]
 
 use crate::cache::StorageCachingConfig;
@@ -95,7 +95,7 @@ use providers::remappings::RemappingsProvider;
 mod inline;
 pub use inline::{validate_profiles, InlineConfig, InlineConfigError, InlineConfigParser, NatSpec};
 
-/// Orbitalis configuration
+/// Foxar configuration
 ///
 /// # Defaults
 ///
@@ -116,7 +116,7 @@ pub use inline::{validate_profiles, InlineConfig, InlineConfigError, InlineConfi
 ///
 ///   * **Metadata**
 ///
-///     This provider is named `Orbitalis Config`. It does not specify a
+///     This provider is named `Foxar Config`. It does not specify a
 ///     [`Source`](figment::Source) and uses default interpolation.
 ///
 ///   * **Data**
@@ -357,7 +357,7 @@ pub struct Config {
     /// _always_ be done using a public constructor or update syntax:
     ///
     /// ```rust
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     ///
     /// let config = Config {
     ///     src: "other".into(),
@@ -394,10 +394,10 @@ impl Config {
         &["rpc_endpoints", "etherscan", "fmt", "doc", "fuzz", "invariant"];
 
     /// File name of config toml file
-    pub const FILE_NAME: &'static str = "orbitalis.toml";
+    pub const FILE_NAME: &'static str = "foxar.toml";
 
-    /// The name of the directory orbitalis reserves for itself under the user's home directory: `~`
-    pub const ORBITALIS_DIR_NAME: &'static str = ".orbitalis";
+    /// The name of the directory foxar reserves for itself under the user's home directory: `~`
+    pub const FOXAR_DIR_NAME: &'static str = ".foxar";
 
     /// Default address for tx.origin
     /// Depending on network has different prefix and checksum
@@ -437,10 +437,10 @@ impl Config {
     /// # Example
     ///
     /// ```no_run
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// use figment::providers::{Toml, Format, Env};
     ///
-    /// // Use orbitalis's default `Figment`, but allow values from `other.toml`
+    /// // Use foxar's default `Figment`, but allow values from `other.toml`
     /// // to supersede its values.
     /// let figment = Config::figment()
     ///     .merge(Toml::file("other.toml").nested());
@@ -458,10 +458,10 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// use figment::providers::{Toml, Format, Env};
     ///
-    /// // Use orbitalis's default `Figment`, but allow values from `other.toml`
+    /// // Use foxar's default `Figment`, but allow values from `other.toml`
     /// // to supersede its values.
     /// let figment = Config::figment()
     ///     .merge(Toml::file("other.toml").nested());
@@ -597,7 +597,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// let config = Config::load_with_root(".").sanitized();
     /// let project = config.project();
     /// ```
@@ -709,7 +709,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// let config = Config::load_with_root(".").sanitized();
     /// let paths = config.project_paths();
     /// ```
@@ -762,7 +762,7 @@ impl Config {
     ///
     /// ```
     ///
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
     ///     let rpc_url = config.get_rpc_url().unwrap().unwrap();
@@ -787,7 +787,7 @@ impl Config {
     ///
     /// ```
     ///
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
     ///     let rpc_url = config.get_rpc_url_with_alias("mainnet").unwrap().unwrap();
@@ -807,7 +807,7 @@ impl Config {
     ///
     /// ```
     ///
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
     ///     let rpc_url = config.get_rpc_url_or("http://localhost:8545").unwrap();
@@ -830,7 +830,7 @@ impl Config {
     ///
     /// ```
     ///
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
     ///     let rpc_url = config.get_rpc_url_or_localhost_http().unwrap();
@@ -851,7 +851,7 @@ impl Config {
     ///
     /// ```
     ///
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
     ///     let etherscan_config = config.get_etherscan_config().unwrap().unwrap();
@@ -968,8 +968,8 @@ impl Config {
         // Sourcify verification requires ylem metadata output. Since, it doesn't
         // affect the UX & performance of the compiler, output the metadata files
         // by default.
-        // For more info see: <https://github.com/orbitalis-rs/orbitalis/issues/2795>
-        // Metadata is not emitted as separate file because this breaks typenetwork support: <https://github.com/orbitalis-rs/orbitalis/issues/2969>
+        // For more info see: <https://github.com/foxar-rs/foxar/issues/2795>
+        // Metadata is not emitted as separate file because this breaks typenetwork support: <https://github.com/foxar-rs/foxar/issues/2969>
         if !extra_output.contains(&ContractOutputSelection::Metadata) {
             extra_output.push(ContractOutputSelection::Metadata);
         }
@@ -1033,16 +1033,16 @@ impl Config {
     /// priority order:
     ///
     ///   1. [`Config::default()`] (see [defaults](#defaults))
-    ///   2. `orbitalis.toml` _or_ filename in `ORBITALIS_CONFIG` environment variable
-    ///   3. `ORBITALIS_` prefixed environment variables
+    ///   2. `foxar.toml` _or_ filename in `FOXAR_CONFIG` environment variable
+    ///   3. `FOXAR_` prefixed environment variables
     ///
-    /// The profile selected is the value set in the `ORBITALIS_PROFILE`
+    /// The profile selected is the value set in the `FOXAR_PROFILE`
     /// environment variable. If it is not set, it defaults to `default`.
     ///
     /// # Example
     ///
     /// ```rust
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// use serde::Deserialize;
     ///
     /// let my_config = Config::figment().extract::<Config>();
@@ -1057,7 +1057,7 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// use serde::Deserialize;
     ///
     /// let my_config = Config::figment_with_root(".").extract::<Config>();
@@ -1071,7 +1071,7 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// let my_config = Config::with_root(".");
     /// ```
     pub fn with_root(root: impl Into<PathBuf>) -> Self {
@@ -1119,7 +1119,7 @@ impl Config {
     /// # Example
     ///
     /// ```rust
-    /// use orbitalis_config::Config;
+    /// use foxar_config::Config;
     /// let my_config = Config::with_root(".").into_basic();
     /// ```
     pub fn into_basic(self) -> BasicConfig {
@@ -1132,9 +1132,9 @@ impl Config {
         }
     }
 
-    /// Updates the `orbitalis.toml` file for the given `root` based on the provided closure.
+    /// Updates the `foxar.toml` file for the given `root` based on the provided closure.
     ///
-    /// **Note:** the closure will only be invoked if the `orbitalis.toml` file exists, See
+    /// **Note:** the closure will only be invoked if the `foxar.toml` file exists, See
     /// [Self::get_config_path()] and if the closure returns `true`.
     pub fn update_at<F>(root: impl Into<PathBuf>, f: F) -> eyre::Result<()>
     where
@@ -1144,9 +1144,9 @@ impl Config {
         config.update(|doc| f(&config, doc))
     }
 
-    /// Updates the `orbitalis.toml` file this `Config` ias based on with the provided closure.
+    /// Updates the `foxar.toml` file this `Config` ias based on with the provided closure.
     ///
-    /// **Note:** the closure will only be invoked if the `orbitalis.toml` file exists, See
+    /// **Note:** the closure will only be invoked if the `foxar.toml` file exists, See
     /// [Self::get_config_path()] and if the closure returns `true`
     pub fn update<F>(&self, f: F) -> eyre::Result<()>
     where
@@ -1164,11 +1164,11 @@ impl Config {
         Ok(())
     }
 
-    /// Sets the `libs` entry inside a `orbitalis.toml` file but only if it exists
+    /// Sets the `libs` entry inside a `foxar.toml` file but only if it exists
     ///
     /// # Errors
     ///
-    /// An error if the `orbitalis.toml` could not be parsed.
+    /// An error if the `foxar.toml` could not be parsed.
     pub fn update_libs(&self) -> eyre::Result<()> {
         self.update(|doc| {
             let profile = self.profile.as_str().as_str();
@@ -1227,94 +1227,85 @@ impl Config {
         toml::to_string_pretty(&toml::Value::Table(wrapping_table))
     }
 
-    /// Returns the path to the `orbitalis.toml`  of this `Config`
+    /// Returns the path to the `foxar.toml`  of this `Config`
     pub fn get_config_path(&self) -> PathBuf {
         self.__root.0.join(Config::FILE_NAME)
     }
 
     /// Returns the selected profile
     ///
-    /// If the `ORBITALIS_PROFILE` env variable is not set, this returns the `DEFAULT_PROFILE`
+    /// If the `FOXAR_PROFILE` env variable is not set, this returns the `DEFAULT_PROFILE`
     pub fn selected_profile() -> Profile {
-        Profile::from_env_or("ORBITALIS_PROFILE", Config::DEFAULT_PROFILE)
+        Profile::from_env_or("FOXAR_PROFILE", Config::DEFAULT_PROFILE)
     }
 
-    /// Returns the path to orbitalis's global toml file that's stored at
-    /// `~/.orbitalis/orbitalis.toml`
-    pub fn orbitalis_dir_toml() -> Option<PathBuf> {
-        Self::orbitalis_dir().map(|p| p.join(Config::FILE_NAME))
+    /// Returns the path to foxar's global toml file that's stored at
+    /// `~/.foxar/foxar.toml`
+    pub fn foxar_dir_toml() -> Option<PathBuf> {
+        Self::foxar_dir().map(|p| p.join(Config::FILE_NAME))
     }
 
-    /// Returns the path to orbitalis's config dir `~/.orbitalis/`
-    pub fn orbitalis_dir() -> Option<PathBuf> {
-        dirs_next::home_dir().map(|p| p.join(Config::ORBITALIS_DIR_NAME))
+    /// Returns the path to foxar's config dir `~/.foxar/`
+    pub fn foxar_dir() -> Option<PathBuf> {
+        dirs_next::home_dir().map(|p| p.join(Config::FOXAR_DIR_NAME))
     }
 
-    /// Returns the path to orbitalis's cache dir `~/.orbitalis/cache`
-    pub fn orbitalis_cache_dir() -> Option<PathBuf> {
-        Self::orbitalis_dir().map(|p| p.join("cache"))
+    /// Returns the path to foxar's cache dir `~/.foxar/cache`
+    pub fn foxar_cache_dir() -> Option<PathBuf> {
+        Self::foxar_dir().map(|p| p.join("cache"))
     }
 
-    /// Returns the path to orbitalis rpc cache dir `~/.orbitalis/cache/rpc`
-    pub fn orbitalis_rpc_cache_dir() -> Option<PathBuf> {
-        Some(Self::orbitalis_cache_dir()?.join("rpc"))
+    /// Returns the path to foxar rpc cache dir `~/.foxar/cache/rpc`
+    pub fn foxar_rpc_cache_dir() -> Option<PathBuf> {
+        Some(Self::foxar_cache_dir()?.join("rpc"))
     }
-    /// Returns the path to orbitalis network's cache dir `~/.orbitalis/cache/rpc/<network>`
-    pub fn orbitalis_network_cache_dir(network_id: impl Into<Network>) -> Option<PathBuf> {
-        Some(Self::orbitalis_rpc_cache_dir()?.join(network_id.into().to_string()))
-    }
-
-    /// Returns the path to orbitalis's etherscan cache dir `~/.orbitalis/cache/etherscan`
-    pub fn orbitalis_etherscan_cache_dir() -> Option<PathBuf> {
-        Some(Self::orbitalis_cache_dir()?.join("etherscan"))
+    /// Returns the path to foxar network's cache dir `~/.foxar/cache/rpc/<network>`
+    pub fn foxar_network_cache_dir(network_id: impl Into<Network>) -> Option<PathBuf> {
+        Some(Self::foxar_rpc_cache_dir()?.join(network_id.into().to_string()))
     }
 
-    /// Returns the path to orbitalis's etherscan cache dir for `network_id`
-    /// `~/.orbitalis/cache/etherscan/<network>`
-    pub fn orbitalis_etherscan_network_cache_dir(
-        network_id: impl Into<Network>,
-    ) -> Option<PathBuf> {
-        Some(Self::orbitalis_etherscan_cache_dir()?.join(network_id.into().to_string()))
+    /// Returns the path to foxar's etherscan cache dir `~/.foxar/cache/etherscan`
+    pub fn foxar_etherscan_cache_dir() -> Option<PathBuf> {
+        Some(Self::foxar_cache_dir()?.join("etherscan"))
+    }
+
+    /// Returns the path to foxar's etherscan cache dir for `network_id`
+    /// `~/.foxar/cache/etherscan/<network>`
+    pub fn foxar_etherscan_network_cache_dir(network_id: impl Into<Network>) -> Option<PathBuf> {
+        Some(Self::foxar_etherscan_cache_dir()?.join(network_id.into().to_string()))
     }
 
     /// Returns the path to the cache dir of the `block` on the `network`
-    /// `~/.orbitalis/cache/rpc/<network>/<block>
-    pub fn orbitalis_block_cache_dir(
-        network_id: impl Into<Network>,
-        block: u64,
-    ) -> Option<PathBuf> {
-        Some(Self::orbitalis_network_cache_dir(network_id)?.join(format!("{block}")))
+    /// `~/.foxar/cache/rpc/<network>/<block>
+    pub fn foxar_block_cache_dir(network_id: impl Into<Network>, block: u64) -> Option<PathBuf> {
+        Some(Self::foxar_network_cache_dir(network_id)?.join(format!("{block}")))
     }
 
     /// Returns the path to the cache file of the `block` on the `network`
-    /// `~/.orbitalis/cache/rpc/<network>/<block>/storage.json`
-    pub fn orbitalis_block_cache_file(
-        network_id: impl Into<Network>,
-        block: u64,
-    ) -> Option<PathBuf> {
-        Some(Self::orbitalis_block_cache_dir(network_id, block)?.join("storage.json"))
+    /// `~/.foxar/cache/rpc/<network>/<block>/storage.json`
+    pub fn foxar_block_cache_file(network_id: impl Into<Network>, block: u64) -> Option<PathBuf> {
+        Some(Self::foxar_block_cache_dir(network_id, block)?.join("storage.json"))
     }
 
-    #[doc = r#"Returns the path to `orbitalis`'s data directory inside the user's data directory
+    #[doc = r#"Returns the path to `foxar`'s data directory inside the user's data directory
     |Platform | Value                                 | Example                          |
     | ------- | ------------------------------------- | -------------------------------- |
-    | Linux   | `$XDG_CONFIG_HOME` or `$HOME`/.config/orbitalis | /home/alice/.config/orbitalis|
-    | macOS   | `$HOME`/Library/Application Support/orbitalis   | /Users/Alice/Library/Application Support/orbitalis |
-    | Windows | `{FOLDERID_RoamingAppData}/orbitalis`           | C:\Users\Alice\AppData\Roaming/orbitalis   |
+    | Linux   | `$XDG_CONFIG_HOME` or `$HOME`/.config/foxar | /home/alice/.config/foxar|
+    | macOS   | `$HOME`/Library/Application Support/foxar   | /Users/Alice/Library/Application Support/foxar |
+    | Windows | `{FOLDERID_RoamingAppData}/foxar`           | C:\Users\Alice\AppData\Roaming/foxar   |
     "#]
     pub fn data_dir() -> eyre::Result<PathBuf> {
-        let path =
-            dirs_next::data_dir().wrap_err("Failed to find data directory")?.join("orbitalis");
+        let path = dirs_next::data_dir().wrap_err("Failed to find data directory")?.join("foxar");
         std::fs::create_dir_all(&path).wrap_err("Failed to create module directory")?;
         Ok(path)
     }
 
-    /// Returns the path to the `orbitalis.toml` file, the file is searched for in
+    /// Returns the path to the `foxar.toml` file, the file is searched for in
     /// the current working directory and all parent directories until the root,
     /// and the first hit is used.
     ///
-    /// If this search comes up empty, then it checks if a global `orbitalis.toml` exists at
-    /// `~/.orbitalis/orbitalis.tol`, see [`Self::orbitalis_dir_toml()`]
+    /// If this search comes up empty, then it checks if a global `foxar.toml` exists at
+    /// `~/.foxar/foxar.tol`, see [`Self::foxar_dir_toml()`]
     pub fn find_config_file() -> Option<PathBuf> {
         fn find(path: &Path) -> Option<PathBuf> {
             if path.is_absolute() {
@@ -1333,73 +1324,73 @@ impl Config {
                 cwd = cwd.parent()?;
             }
         }
-        find(Env::var_or("ORBITALIS_CONFIG", Config::FILE_NAME).as_ref())
-            .or_else(|| Self::orbitalis_dir_toml().filter(|p| p.exists()))
+        find(Env::var_or("FOXAR_CONFIG", Config::FILE_NAME).as_ref())
+            .or_else(|| Self::foxar_dir_toml().filter(|p| p.exists()))
     }
 
-    /// Clears the orbitalis cache
-    pub fn clean_orbitalis_cache() -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::orbitalis_cache_dir() {
+    /// Clears the foxar cache
+    pub fn clean_foxar_cache() -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foxar_cache_dir() {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
-            eyre::bail!("failed to get orbitalis_cache_dir");
+            eyre::bail!("failed to get foxar_cache_dir");
         }
 
         Ok(())
     }
 
-    /// Clears the orbitalis cache for `network`
-    pub fn clean_orbitalis_network_cache(network: Network) -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::orbitalis_network_cache_dir(network) {
+    /// Clears the foxar cache for `network`
+    pub fn clean_foxar_network_cache(network: Network) -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foxar_network_cache_dir(network) {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
-            eyre::bail!("failed to get orbitalis_network_cache_dir");
+            eyre::bail!("failed to get foxar_network_cache_dir");
         }
 
         Ok(())
     }
 
-    /// Clears the orbitalis cache for `network` and `block`
-    pub fn clean_orbitalis_block_cache(network: Network, block: u64) -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::orbitalis_block_cache_dir(network, block) {
+    /// Clears the foxar cache for `network` and `block`
+    pub fn clean_foxar_block_cache(network: Network, block: u64) -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foxar_block_cache_dir(network, block) {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
-            eyre::bail!("failed to get orbitalis_block_cache_dir");
+            eyre::bail!("failed to get foxar_block_cache_dir");
         }
 
         Ok(())
     }
 
-    /// Clears the orbitalis etherscan cache
-    pub fn clean_orbitalis_etherscan_cache() -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::orbitalis_etherscan_cache_dir() {
+    /// Clears the foxar etherscan cache
+    pub fn clean_foxar_etherscan_cache() -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foxar_etherscan_cache_dir() {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
-            eyre::bail!("failed to get orbitalis_etherscan_cache_dir");
+            eyre::bail!("failed to get foxar_etherscan_cache_dir");
         }
 
         Ok(())
     }
 
-    /// Clears the orbitalis etherscan cache for `network`
-    pub fn clean_orbitalis_etherscan_network_cache(network: Network) -> eyre::Result<()> {
-        if let Some(cache_dir) = Config::orbitalis_etherscan_network_cache_dir(network) {
+    /// Clears the foxar etherscan cache for `network`
+    pub fn clean_foxar_etherscan_network_cache(network: Network) -> eyre::Result<()> {
+        if let Some(cache_dir) = Config::foxar_etherscan_network_cache_dir(network) {
             let path = cache_dir.as_path();
             let _ = fs::remove_dir_all(path);
         } else {
-            eyre::bail!("failed to get orbitalis_etherscan_cache_dir for network: {}", network);
+            eyre::bail!("failed to get foxar_etherscan_cache_dir for network: {}", network);
         }
 
         Ok(())
     }
 
-    /// List the data in the orbitalis cache
-    pub fn list_orbitalis_cache() -> eyre::Result<Cache> {
-        if let Some(cache_dir) = Config::orbitalis_rpc_cache_dir() {
+    /// List the data in the foxar cache
+    pub fn list_foxar_cache() -> eyre::Result<Cache> {
+        if let Some(cache_dir) = Config::foxar_rpc_cache_dir() {
             let mut cache = Cache { networks: vec![] };
             if !cache_dir.exists() {
                 return Ok(cache);
@@ -1408,32 +1399,31 @@ impl Config {
                 for entry in entries.flatten().filter(|x| x.path().is_dir()) {
                     match Network::from_str(&entry.file_name().to_string_lossy()) {
                         Ok(network) => {
-                            cache.networks.push(Self::list_orbitalis_network_cache(network)?)
+                            cache.networks.push(Self::list_foxar_network_cache(network)?)
                         }
                         Err(_) => continue,
                     }
                 }
                 Ok(cache)
             } else {
-                eyre::bail!("failed to access orbitalis_cache_dir");
+                eyre::bail!("failed to access foxar_cache_dir");
             }
         } else {
-            eyre::bail!("failed to get orbitalis_cache_dir");
+            eyre::bail!("failed to get foxar_cache_dir");
         }
     }
 
     /// List the cached data for `network`
-    pub fn list_orbitalis_network_cache(network: Network) -> eyre::Result<NetworkCache> {
-        let block_explorer_data_size = match Config::orbitalis_etherscan_network_cache_dir(network)
-        {
+    pub fn list_foxar_network_cache(network: Network) -> eyre::Result<NetworkCache> {
+        let block_explorer_data_size = match Config::foxar_etherscan_network_cache_dir(network) {
             Some(cache_dir) => Self::get_cached_block_explorer_data(&cache_dir)?,
             None => {
-                warn!("failed to access orbitalis_etherscan_network_cache_dir");
+                warn!("failed to access foxar_etherscan_network_cache_dir");
                 0
             }
         };
 
-        if let Some(cache_dir) = Config::orbitalis_network_cache_dir(network) {
+        if let Some(cache_dir) = Config::foxar_network_cache_dir(network) {
             let blocks = Self::get_cached_blocks(&cache_dir)?;
             Ok(NetworkCache {
                 name: network.to_string(),
@@ -1441,7 +1431,7 @@ impl Config {
                 block_explorer: block_explorer_data_size,
             })
         } else {
-            eyre::bail!("failed to get orbitalis_network_cache_dir");
+            eyre::bail!("failed to get foxar_network_cache_dir");
         }
     }
 
@@ -1532,18 +1522,18 @@ impl From<Config> for Figment {
         let profile = Config::selected_profile();
         let mut figment = Figment::default().merge(DappHardhatDirProvider(&c.__root.0));
 
-        // merge global orbitalis.toml file
-        if let Some(global_toml) = Config::orbitalis_dir_toml().filter(|p| p.exists()) {
+        // merge global foxar.toml file
+        if let Some(global_toml) = Config::foxar_dir_toml().filter(|p| p.exists()) {
             figment = Config::merge_toml_provider(
                 figment,
                 TomlFileProvider::new(None, global_toml).cached(),
                 profile.clone(),
             );
         }
-        // merge local orbitalis.toml file
+        // merge local foxar.toml file
         figment = Config::merge_toml_provider(
             figment,
-            TomlFileProvider::new(Some("ORBITALIS_CONFIG"), c.__root.0.join(Config::FILE_NAME))
+            TomlFileProvider::new(Some("FOXAR_CONFIG"), c.__root.0.join(Config::FILE_NAME))
                 .cached(),
             profile.clone(),
         );
@@ -1563,7 +1553,7 @@ impl From<Config> for Figment {
             .merge(DappEnvCompatProvider)
             .merge(Env::raw().only(&["ETHERSCAN_API_KEY"]))
             .merge(
-                Env::prefixed("ORBITALIS_")
+                Env::prefixed("FOXAR_")
                     .ignore(&["PROFILE", "REMAPPINGS", "LIBRARIES", "FFI", "FS_PERMISSIONS"])
                     .map(|key| {
                         let key = key.as_str();
@@ -1709,7 +1699,7 @@ pub fn parse_with_profile<T: serde::de::DeserializeOwned>(
 
 impl Provider for Config {
     fn metadata(&self) -> Metadata {
-        Metadata::named("Orbitalis Config")
+        Metadata::named("Foxar Config")
     }
 
     #[track_caller]
@@ -2016,7 +2006,7 @@ impl<P: Provider> Provider for BackwardsCompatTomlProvider<P> {
 
     fn data(&self) -> Result<Map<Profile, Dict>, Error> {
         let mut map = Map::new();
-        let ylem_env = std::env::var("ORBITALIS_YLEM_VERSION")
+        let ylem_env = std::env::var("FOXAR_YLEM_VERSION")
             .or_else(|_| std::env::var("DAPP_YLEM_VERSION"))
             .map(Value::from)
             .ok();
@@ -2081,7 +2071,7 @@ impl<'a> Provider for DappHardhatDirProvider<'a> {
     }
 }
 
-/// A provider that checks for DAPP_ env vars that are named differently than ORBITALIS_
+/// A provider that checks for DAPP_ env vars that are named differently than FOXAR_
 struct DappEnvCompatProvider;
 
 impl Provider for DappEnvCompatProvider {
@@ -2139,7 +2129,7 @@ impl Provider for DappEnvCompatProvider {
         }
 
         // libraries in env vars either as `[..]` or single string separated by comma
-        if let Ok(val) = env::var("DAPP_LIBRARIES").or_else(|_| env::var("ORBITALIS_LIBRARIES")) {
+        if let Ok(val) = env::var("DAPP_LIBRARIES").or_else(|_| env::var("FOXAR_LIBRARIES")) {
             dict.insert("libraries".to_string(), utils::to_array_value(&val)?);
         }
 
@@ -2412,13 +2402,13 @@ trait ProviderExt: Provider {
 }
 impl<P: Provider> ProviderExt for P {}
 
-/// A subset of the orbitalis `Config`
-/// used to initialize a `orbitalis.toml` file
+/// A subset of the foxar `Config`
+/// used to initialize a `foxar.toml` file
 ///
 /// # Example
 ///
 /// ```rust
-/// use orbitalis_config::{Config, BasicConfig};
+/// use foxar_config::{Config, BasicConfig};
 /// use serde::Deserialize;
 ///
 /// let my_config = Config::figment().extract::<BasicConfig>();
@@ -2449,7 +2439,7 @@ impl BasicConfig {
             "\
 [profile.{}]
 {s}
-# See more config options https://github.com/orbitalis-rs/orbitalis/tree/master/config\n",
+# See more config options https://github.com/foxar-rs/foxar/tree/master/config\n",
             self.profile
         ))
     }
@@ -2541,7 +2531,7 @@ mod tests {
             let config = Config::load();
             assert_eq!(config.install_lib_dir(), PathBuf::from("lib"));
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 libs = ['node_modules', 'lib']
@@ -2551,7 +2541,7 @@ mod tests {
             assert_eq!(config.install_lib_dir(), PathBuf::from("lib"));
 
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 libs = ['custom', 'node_modules', 'lib']
@@ -2590,7 +2580,7 @@ mod tests {
     #[test]
     fn ffi_env_disallowed() {
         figment::Jail::expect_with(|jail| {
-            jail.set_env("ORBITALIS_FFI", "true");
+            jail.set_env("FOXAR_FFI", "true");
             jail.set_env("FFI", "true");
             jail.set_env("DAPP_FFI", "true");
             let config = Config::load();
@@ -2603,16 +2593,16 @@ mod tests {
     #[test]
     fn test_profile_env() {
         figment::Jail::expect_with(|jail| {
-            jail.set_env("ORBITALIS_PROFILE", "default");
+            jail.set_env("FOXAR_PROFILE", "default");
             let figment = Config::figment();
             assert_eq!(figment.profile(), "default");
 
-            jail.set_env("ORBITALIS_PROFILE", "hardhat");
+            jail.set_env("FOXAR_PROFILE", "hardhat");
             let figment: Figment = Config::hardhat().into();
             assert_eq!(figment.profile(), "hardhat");
 
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 libs = ['lib']
@@ -2620,7 +2610,7 @@ mod tests {
                 libs = ['modules']
             "#,
             )?;
-            jail.set_env("ORBITALIS_PROFILE", "local");
+            jail.set_env("FOXAR_PROFILE", "local");
             let config = Config::load();
             assert_eq!(config.libs, vec![PathBuf::from("modules")]);
 
@@ -2660,7 +2650,7 @@ mod tests {
     fn test_inheritance_from_default_test_path() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 test = "defaulttest"
@@ -2676,7 +2666,7 @@ mod tests {
             assert_eq!(config.src, PathBuf::from("defaultsrc"));
             assert_eq!(config.libs, vec![PathBuf::from("lib"), PathBuf::from("node_modules")]);
 
-            jail.set_env("ORBITALIS_PROFILE", "custom");
+            jail.set_env("FOXAR_PROFILE", "custom");
             let config = Config::load();
 
             assert_eq!(config.src, PathBuf::from("customsrc"));
@@ -2691,7 +2681,7 @@ mod tests {
     fn test_custom_test_path() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 test = "mytest"
@@ -2709,7 +2699,7 @@ mod tests {
     fn test_remappings() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 src = "some-source"
@@ -2761,7 +2751,7 @@ mod tests {
     fn test_remappings_override() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 src = "some-source"
@@ -2823,7 +2813,7 @@ mod tests {
     fn test_can_update_libs() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 libs = ["node_modules"]
@@ -2845,7 +2835,7 @@ mod tests {
         figment::Jail::expect_with(|jail| {
             let energy = u64::MAX;
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 &format!(
                     r#"
                 [profile.default]
@@ -2866,7 +2856,7 @@ mod tests {
     fn test_toml_file_parse_failure() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 eth_rpc_url = "https://example.com/
@@ -2883,7 +2873,7 @@ mod tests {
     #[should_panic]
     fn test_toml_file_non_existing_config_var_failure() {
         figment::Jail::expect_with(|jail| {
-            jail.set_env("ORBITALIS_CONFIG", "this config does not exist");
+            jail.set_env("FOXAR_CONFIG", "this config does not exist");
 
             let _config = Config::load();
 
@@ -2897,7 +2887,7 @@ mod tests {
             let env_key = "__DEVIN_ETHERSCAN_API_KEY";
             let env_value = "env value";
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
 
@@ -2944,7 +2934,7 @@ mod tests {
     fn test_resolve_rpc_url() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 [rpc_endpoints]
@@ -2974,7 +2964,7 @@ mod tests {
     fn test_resolve_rpc_url_if_etherscan_set() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 etherscan_api_key = "dummy"
@@ -2994,7 +2984,7 @@ mod tests {
     fn test_resolve_rpc_url_alias() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 [rpc_endpoints]
@@ -3022,7 +3012,7 @@ mod tests {
     fn test_resolve_endpoints() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 eth_rpc_url = "optimism"
@@ -3078,7 +3068,7 @@ mod tests {
     fn test_extract_etherscan_config() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 etherscan_api_key = "mainnet"
@@ -3107,7 +3097,7 @@ mod tests {
     fn test_extract_etherscan_config_by_network() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
 
@@ -3132,7 +3122,7 @@ mod tests {
     fn test_extract_etherscan_config_by_network_with_url() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
 
@@ -3158,7 +3148,7 @@ mod tests {
     fn test_extract_etherscan_config_by_network_and_alias() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 eth_rpc_url = "devin"
@@ -3187,7 +3177,7 @@ mod tests {
     fn test_toml_file() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 src = "some-source"
@@ -3267,7 +3257,7 @@ mod tests {
     fn test_load_remappings() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 remappings = ['nested/=lib/nested/']
@@ -3288,7 +3278,7 @@ mod tests {
     fn test_load_full_toml() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 auto_detect_ylem = true
@@ -3383,7 +3373,7 @@ mod tests {
     fn test_ylem_req() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 ylem_version = "0.8.12"
@@ -3394,7 +3384,7 @@ mod tests {
             assert_eq!(config.ylem, Some(YlemReq::Version("0.8.12".parse().unwrap())));
 
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 ylem = "0.8.12"
@@ -3405,7 +3395,7 @@ mod tests {
             assert_eq!(config.ylem, Some(YlemReq::Version("0.8.12".parse().unwrap())));
 
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 ylem = "path/to/local/ylem"
@@ -3415,7 +3405,7 @@ mod tests {
             let config = Config::load();
             assert_eq!(config.ylem, Some(YlemReq::Local("path/to/local/ylem".into())));
 
-            jail.set_env("ORBITALIS_YLEM_VERSION", "0.6.6");
+            jail.set_env("FOXAR_YLEM_VERSION", "0.6.6");
             let config = Config::load();
             assert_eq!(config.ylem, Some(YlemReq::Version("0.6.6".parse().unwrap())));
             Ok(())
@@ -3426,7 +3416,7 @@ mod tests {
     fn test_toml_casing_file() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 src = "some-source"
@@ -3460,7 +3450,7 @@ mod tests {
     fn test_output_selection() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 extra_output = ["metadata", "ir-optimized"]
@@ -3484,7 +3474,7 @@ mod tests {
     fn test_precedence() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 src = "mysrc"
@@ -3504,7 +3494,7 @@ mod tests {
                 }
             );
 
-            jail.set_env("ORBITALIS_SRC", r#"other-src"#);
+            jail.set_env("FOXAR_SRC", r#"other-src"#);
             let config = Config::load();
             assert_eq!(
                 config,
@@ -3516,7 +3506,7 @@ mod tests {
                 }
             );
 
-            jail.set_env("ORBITALIS_PROFILE", "foo");
+            jail.set_env("FOXAR_PROFILE", "foo");
             let val: Result<String, _> = Config::figment().extract_inner("profile");
             assert!(val.is_err());
 
@@ -3528,7 +3518,7 @@ mod tests {
     fn test_extract_basic() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 src = "mysrc"
@@ -3554,7 +3544,7 @@ mod tests {
                     remappings: default.remappings.clone(),
                 }
             );
-            jail.set_env("ORBITALIS_PROFILE", r#"other"#);
+            jail.set_env("FOXAR_PROFILE", r#"other"#);
             let base = Config::figment().extract::<BasicConfig>().unwrap();
             assert_eq!(
                 base,
@@ -3575,7 +3565,7 @@ mod tests {
     fn test_parse_invalid_fuzz_weight() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [fuzz]
                 dictionary_weight = 101
@@ -3590,7 +3580,7 @@ mod tests {
     fn test_fallback_provider() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [fuzz]
                 runs = 1
@@ -3632,7 +3622,7 @@ mod tests {
                 config.fuzz.dictionary.dictionary_weight
             );
 
-            jail.set_env("ORBITALIS_PROFILE", "ci");
+            jail.set_env("FOXAR_PROFILE", "ci");
             let ci_config = Config::load();
             assert_eq!(ci_config.fuzz.runs, 1);
             assert_eq!(ci_config.invariant.runs, 400);
@@ -3650,7 +3640,7 @@ mod tests {
     fn test_standalone_profile_sections() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [fuzz]
                 runs = 100
@@ -3670,7 +3660,7 @@ mod tests {
             assert_eq!(config.fuzz.runs, 100);
             assert_eq!(config.invariant.runs, 120);
 
-            jail.set_env("ORBITALIS_PROFILE", "ci");
+            jail.set_env("FOXAR_PROFILE", "ci");
             let config = Config::load();
             assert_eq!(config.fuzz.runs, 420);
             assert_eq!(config.invariant.runs, 500);
@@ -3753,7 +3743,7 @@ mod tests {
     fn test_parse_many_libraries() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                libraries= [
@@ -3817,7 +3807,7 @@ mod tests {
         figment::Jail::expect_with(|jail| {
             let default = Config::default();
             let basic = default.clone().into_basic();
-            jail.create_file("orbitalis.toml", &basic.to_string_pretty().unwrap())?;
+            jail.create_file("foxar.toml", &basic.to_string_pretty().unwrap())?;
 
             let mut other = Config::load();
             clear_warning(&mut other);
@@ -3826,7 +3816,7 @@ mod tests {
             let other = other.into_basic();
             assert_eq!(basic, other);
 
-            jail.create_file("orbitalis.toml", &default.to_string_pretty().unwrap())?;
+            jail.create_file("foxar.toml", &default.to_string_pretty().unwrap())?;
             let mut other = Config::load();
             clear_warning(&mut other);
             assert_eq!(default, other);
@@ -3839,7 +3829,7 @@ mod tests {
     fn test_fs_permissions() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 fs_permissions = [{ access = "read-write", path = "./"}]
@@ -3853,7 +3843,7 @@ mod tests {
             );
 
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 fs_permissions = [{ access = "none", path = "./"}]
@@ -3870,7 +3860,7 @@ mod tests {
     fn test_optimizer_settings_basic() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
                 optimizer = true
@@ -3897,7 +3887,7 @@ mod tests {
             );
 
             let s = loaded.to_string_pretty().unwrap();
-            jail.create_file("orbitalis.toml", &s)?;
+            jail.create_file("foxar.toml", &s)?;
 
             let mut reloaded = Config::load();
             clear_warning(&mut reloaded);
@@ -3911,7 +3901,7 @@ mod tests {
     fn test_model_checker_settings_basic() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
 
@@ -3948,7 +3938,7 @@ mod tests {
             );
 
             let s = loaded.to_string_pretty().unwrap();
-            jail.create_file("orbitalis.toml", &s)?;
+            jail.create_file("foxar.toml", &s)?;
 
             let mut reloaded = Config::load();
             clear_warning(&mut reloaded);
@@ -3962,7 +3952,7 @@ mod tests {
     fn test_model_checker_settings_relative_paths() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [profile.default]
 
@@ -4018,7 +4008,7 @@ mod tests {
     fn test_fmt_config() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [fmt]
                 line_length = 100
@@ -4045,7 +4035,7 @@ mod tests {
     fn test_invariant_config() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [invariant]
                 runs = 512
@@ -4067,7 +4057,7 @@ mod tests {
     fn test_standalone_sections_env() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [fuzz]
                 runs = 100
@@ -4077,9 +4067,9 @@ mod tests {
             "#,
             )?;
 
-            jail.set_env("ORBITALIS_FMT_LINE_LENGTH", "95");
-            jail.set_env("ORBITALIS_FUZZ_DICTIONARY_WEIGHT", "99");
-            jail.set_env("ORBITALIS_INVARIANT_DEPTH", "5");
+            jail.set_env("FOXAR_FMT_LINE_LENGTH", "95");
+            jail.set_env("FOXAR_FUZZ_DICTIONARY_WEIGHT", "99");
+            jail.set_env("FOXAR_INVARIANT_DEPTH", "5");
 
             let config = Config::load();
             assert_eq!(config.fmt.line_length, 95);
@@ -4092,16 +4082,16 @@ mod tests {
 
     #[test]
     fn test_parse_with_profile() {
-        let orbitalis_str = r#"
+        let foxar_str = r#"
             [profile.default]
             src = 'src'
             out = 'out'
             libs = ['lib']
 
-            # See more config options https://github.com/orbitalis-rs/orbitalis/tree/master/config
+            # See more config options https://github.com/foxar-rs/foxar/tree/master/config
         "#;
         assert_eq!(
-            parse_with_profile::<BasicConfig>(orbitalis_str).unwrap().unwrap(),
+            parse_with_profile::<BasicConfig>(foxar_str).unwrap().unwrap(),
             (
                 Config::DEFAULT_PROFILE,
                 BasicConfig {
@@ -4119,7 +4109,7 @@ mod tests {
     fn test_implicit_profile_loads() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [default]
                 src = 'my-src'
@@ -4133,7 +4123,7 @@ mod tests {
                 loaded.__warnings,
                 vec![Warning::UnknownSection {
                     unknown_section: Profile::new("default"),
-                    source: Some("orbitalis.toml".into())
+                    source: Some("foxar.toml".into())
                 }]
             );
 
@@ -4270,7 +4260,7 @@ mod tests {
     fn test_parse_error_codes() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [default]
                 ignored_error_codes = ["license", "unreachable", 1337]
@@ -4295,7 +4285,7 @@ mod tests {
     fn test_parse_optimizer_settings() {
         figment::Jail::expect_with(|jail| {
             jail.create_file(
-                "orbitalis.toml",
+                "foxar.toml",
                 r#"
                 [default]
                [profile.default.optimizer_details]
