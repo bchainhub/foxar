@@ -2,7 +2,10 @@
 #![deny(missing_docs, unsafe_code, unused_crate_dependencies)]
 
 use crate::cache::StorageCachingConfig;
-use corebc_core::types::{Address, Network, H176, U256};
+use corebc_core::{
+    types::{Address, Network, H160, H176, U256},
+    utils::to_ican,
+};
 pub use corebc_ylem::artifacts::OptimizerDetails;
 use corebc_ylem::{
     artifacts::{
@@ -397,12 +400,16 @@ impl Config {
     pub const ORBITALIS_DIR_NAME: &'static str = ".orbitalis";
 
     /// Default address for tx.origin
-    ///
-    /// `0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38`
-    pub const DEFAULT_SENDER: H176 = H176([
-        0xcb, 0x68, 0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83,
-        0xF3, 0x3E, 0x07, 0x30, 0x9D, 0x1F, 0x38,
-    ]);
+    /// Depending on network has different prefix and checksum
+    pub fn default_sender(network: &Network) -> H176 {
+        /// `0x1804c8ab1f12e6bbf3894d4083f33e07309d1f38`
+        const DEFAULT_SENDER: &H160 = &H160([
+            0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83, 0xF3,
+            0x3E, 0x07, 0x30, 0x9D, 0x1F, 0x38,
+        ]);
+
+        to_ican(DEFAULT_SENDER, network)
+    }
 
     /// Returns the current `Config`
     ///
@@ -653,7 +660,7 @@ impl Config {
                         if self.offline {
                             return Err(YlemError::msg(format!(
                                 "can't install missing ylem {version} in offline mode"
-                            )))
+                            )));
                         }
                         Ylem::blocking_install(version)?;
                         ylem = Ylem::find_yvm_installed_version(&v)?;
@@ -665,12 +672,12 @@ impl Config {
                         return Err(YlemError::msg(format!(
                             "`ylem` {} does not exist",
                             ylem.display()
-                        )))
+                        )));
                     }
                     Some(Ylem::new(ylem))
                 }
             };
-            return Ok(ylem)
+            return Ok(ylem);
         }
 
         Ok(None)
@@ -682,16 +689,16 @@ impl Config {
     /// `auto_detect_ylem`
     pub fn is_auto_detect(&self) -> bool {
         if self.ylem.is_some() {
-            return false
+            return false;
         }
         self.auto_detect_ylem
     }
 
     /// Whether caching should be enabled for the given network id
     pub fn enable_caching(&self, endpoint: &str, network_id: impl Into<u64>) -> bool {
-        !self.no_storage_caching &&
-            self.rpc_storage_caching.enable_for_network_id(network_id.into()) &&
-            self.rpc_storage_caching.enable_for_endpoint(endpoint)
+        !self.no_storage_caching
+            && self.rpc_storage_caching.enable_for_network_id(network_id.into())
+            && self.rpc_storage_caching.enable_for_endpoint(endpoint)
     }
 
     /// Returns the `ProjectPathsConfig`  sub set of the config.
@@ -754,7 +761,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use orbitalis_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -779,7 +786,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use orbitalis_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -799,7 +806,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use orbitalis_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -822,7 +829,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use orbitalis_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -843,7 +850,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use orbitalis_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -858,7 +865,7 @@ impl Config {
         if self.etherscan.contains_key(maybe_alias) {
             // etherscan points to an alias in the `etherscan` table, so we try to resolve that
             let mut resolved = self.etherscan.clone().resolved();
-            return resolved.remove(maybe_alias)
+            return resolved.remove(maybe_alias);
         }
 
         // we treat the `etherscan_api_key` as actual API key
@@ -881,7 +888,7 @@ impl Config {
         let network = network.map(Into::into);
         if let Some(maybe_alias) = self.etherscan_api_key.as_ref().or(self.eth_rpc_url.as_ref()) {
             if self.etherscan.contains_key(maybe_alias) {
-                return self.etherscan.clone().resolved().remove(maybe_alias).transpose()
+                return self.etherscan.clone().resolved().remove(maybe_alias).transpose();
             }
         }
 
@@ -894,7 +901,7 @@ impl Config {
                     // we update the key, because if an etherscan_api_key is set, it should take
                     // precedence over the entry, since this is usually set via env var or CLI args.
                     config.key = key.clone();
-                    return Ok(Some(config))
+                    return Ok(Some(config));
                 }
                 (Ok(config), None) => return Ok(Some(config)),
                 (Err(err), None) => return Err(err),
@@ -907,7 +914,7 @@ impl Config {
         // etherscan fallback via API key
         if let Some(key) = self.etherscan_api_key.as_ref() {
             let network = network.or(self.network_id).unwrap_or_default();
-            return Ok(ResolvedEtherscanConfig::create(key, network))
+            return Ok(ResolvedEtherscanConfig::create(key, network));
         }
 
         Ok(None)
@@ -1147,7 +1154,7 @@ impl Config {
     {
         let file_path = self.get_config_path();
         if !file_path.exists() {
-            return Ok(())
+            return Ok(());
         }
         let contents = fs::read_to_string(&file_path)?;
         let mut doc = contents.parse::<toml_edit::Document>()?;
@@ -1314,14 +1321,14 @@ impl Config {
                 return match path.is_file() {
                     true => Some(path.to_path_buf()),
                     false => None,
-                }
+                };
             }
             let cwd = std::env::current_dir().ok()?;
             let mut cwd = cwd.as_path();
             loop {
                 let file_path = cwd.join(path);
                 if file_path.is_file() {
-                    return Some(file_path)
+                    return Some(file_path);
                 }
                 cwd = cwd.parent()?;
             }
@@ -1395,7 +1402,7 @@ impl Config {
         if let Some(cache_dir) = Config::orbitalis_rpc_cache_dir() {
             let mut cache = Cache { networks: vec![] };
             if !cache_dir.exists() {
-                return Ok(cache)
+                return Ok(cache);
             }
             if let Ok(entries) = cache_dir.as_path().read_dir() {
                 for entry in entries.flatten().filter(|x| x.path().is_dir()) {
@@ -1442,7 +1449,7 @@ impl Config {
     fn get_cached_blocks(network_path: &Path) -> eyre::Result<Vec<(String, u64)>> {
         let mut blocks = vec![];
         if !network_path.exists() {
-            return Ok(blocks)
+            return Ok(blocks);
         }
         for block in network_path.read_dir()?.flatten().filter(|x| x.file_type().unwrap().is_dir())
         {
@@ -1458,7 +1465,7 @@ impl Config {
     //The path provided to this function should point to the etherscan cache for a network
     fn get_cached_block_explorer_data(network_path: &Path) -> eyre::Result<u64> {
         if !network_path.exists() {
-            return Ok(0)
+            return Ok(0);
         }
 
         fn dir_size_recursive(mut dir: fs::ReadDir) -> eyre::Result<u64> {
@@ -1646,7 +1653,7 @@ pub(crate) mod from_opt_glob {
     {
         let s: Option<String> = Option::deserialize(deserializer)?;
         if let Some(s) = s {
-            return Ok(Some(globset::Glob::new(&s).map_err(serde::de::Error::custom)?))
+            return Ok(Some(globset::Glob::new(&s).map_err(serde::de::Error::custom)?));
         }
         Ok(None)
     }
@@ -1759,8 +1766,8 @@ impl Default for Config {
             fuzz: Default::default(),
             invariant: Default::default(),
             ffi: false,
-            sender: Config::DEFAULT_SENDER,
-            tx_origin: Config::DEFAULT_SENDER,
+            sender: Config::default_sender(&Network::Mainnet),
+            tx_origin: Config::default_sender(&Network::Mainnet),
             initial_balance: U256::from(0xffffffffffffffffffffffffu128),
             block_number: 1,
             fork_block_number: None,
@@ -1927,7 +1934,7 @@ impl TomlFileProvider {
         if let Some(file) = self.env_val() {
             let path = Path::new(&file);
             if !path.exists() {
-                return true
+                return true;
             }
         }
         false
@@ -1947,7 +1954,7 @@ impl TomlFileProvider {
                     "Config file `{}` set in env var `{}` does not exist",
                     file,
                     self.env_var.unwrap()
-                )))
+                )));
             }
             Toml::file(file)
         } else {
@@ -1991,7 +1998,7 @@ impl<P: Provider> Provider for ForcedSnakeCaseData<P> {
             if Config::STANDALONE_SECTIONS.contains(&profile.as_ref()) {
                 // don't force snake case for keys in standalone sections
                 map.insert(profile, dict);
-                continue
+                continue;
             }
             map.insert(profile, dict.into_iter().map(|(k, v)| (k.to_snake_case(), v)).collect());
         }
@@ -2123,9 +2130,10 @@ impl Provider for DappEnvCompatProvider {
             // Activate Solidity optimizer (0 or 1)
             let val = val.parse::<u8>().map_err(figment::Error::custom)?;
             if val > 1 {
-                return Err(
-                    format!("Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1").into()
+                return Err(format!(
+                    "Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1"
                 )
+                .into());
             }
             dict.insert("optimizer".to_string(), (val == 1).into());
         }
@@ -2191,7 +2199,7 @@ impl<P: Provider> Provider for RenameProfileProvider<P> {
     fn data(&self) -> Result<Map<Profile, Dict>, Error> {
         let mut data = self.provider.data()?;
         if let Some(data) = data.remove(&self.from) {
-            return Ok(Map::from([(self.to.clone(), data)]))
+            return Ok(Map::from([(self.to.clone(), data)]));
         }
         Ok(Default::default())
     }
@@ -2237,7 +2245,7 @@ impl<P: Provider> Provider for UnwrapProfileProvider<P> {
                 for (profile_str, profile_val) in profiles {
                     let profile = Profile::new(&profile_str);
                     if profile != self.profile {
-                        continue
+                        continue;
                     }
                     match profile_val {
                         Value::Dict(_, dict) => return Ok(profile.collect(dict)),
@@ -2248,7 +2256,7 @@ impl<P: Provider> Provider for UnwrapProfileProvider<P> {
                             ));
                             err.metadata = Some(self.provider.metadata());
                             err.profile = Some(self.profile.clone());
-                            return Err(err)
+                            return Err(err);
                         }
                     }
                 }
@@ -2360,7 +2368,7 @@ impl<P: Provider> Provider for OptionalStrictProfileProvider<P> {
             // provider and can't map the metadata to the error. Therefor we return the root error
             // if this error originated in the provider's data.
             if let Err(root_err) = self.provider.data() {
-                return root_err
+                return root_err;
             }
             err
         })
@@ -2498,8 +2506,18 @@ mod tests {
     #[test]
     fn default_sender() {
         assert_eq!(
-            Config::DEFAULT_SENDER,
+            Config::default_sender(&Network::Mainnet),
             "cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
+        );
+
+        assert_eq!(
+            Config::default_sender(&Network::Devin),
+            "ab861804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
+        );
+
+        assert_eq!(
+            Config::default_sender(&Network::Private(5)),
+            "ce591804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
     }
 

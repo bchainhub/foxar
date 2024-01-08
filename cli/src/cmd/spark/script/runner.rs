@@ -1,5 +1,5 @@
 use super::*;
-use corebc::types::{Address, Bytes, NameOrAddress, U256};
+use corebc::types::{Address, Bytes, NameOrAddress, Network, U256};
 use spark::{
     executor::{CallResult, DeployResult, EvmError, ExecutionErr, Executor, RawCallResult},
     revm::interpreter::{return_ok, InstructionResult},
@@ -40,7 +40,9 @@ impl ScriptRunner {
         trace!(target: "script", "executing setUP()");
 
         if !is_broadcast {
-            if self.sender == Config::DEFAULT_SENDER {
+            if self.sender
+                == Config::default_sender(&Network::from(self.executor.env().cfg.network_id))
+            {
                 // We max out their balance so that they can deploy and make calls.
                 self.executor.set_balance(self.sender, U256::MAX)?;
             }
@@ -338,9 +340,9 @@ impl ScriptRunner {
                 self.executor.env_mut().tx.energy_limit = mid_energy_limit;
                 let res = self.executor.call_raw(from, to, calldata.0.clone(), value)?;
                 match res.exit_reason {
-                    InstructionResult::Revert |
-                    InstructionResult::OutOfEnergy |
-                    InstructionResult::OutOfFund => {
+                    InstructionResult::Revert
+                    | InstructionResult::OutOfEnergy
+                    | InstructionResult::OutOfFund => {
                         lowest_energy_limit = mid_energy_limit;
                     }
                     _ => {
@@ -348,13 +350,13 @@ impl ScriptRunner {
                         // if last two successful estimations only vary by 10%, we consider this to
                         // sufficiently accurate
                         const ACCURACY: u64 = 10;
-                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY /
-                            last_highest_energy_limit <
-                            1
+                        if (last_highest_energy_limit - highest_energy_limit) * ACCURACY
+                            / last_highest_energy_limit
+                            < 1
                         {
                             // update the energy
                             energy_used = highest_energy_limit;
-                            break
+                            break;
                         }
                         last_highest_energy_limit = highest_energy_limit;
                     }

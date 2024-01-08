@@ -3,7 +3,7 @@
 use super::*;
 use corebc::{
     prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, YlemConfig},
-    types::{Address, U256},
+    types::{Address, Network, U256},
     ylem::{artifacts::Libraries, Project, ProjectPathsConfig},
 };
 use orbitalis_config::Config;
@@ -64,14 +64,14 @@ pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         energy_limit: 18446744073709551615,
         network_id: Some(corebc::types::Network::Mainnet),
-        tx_origin: Config::DEFAULT_SENDER,
+        tx_origin: Config::default_sender(&Network::Mainnet),
         block_number: 1,
         block_timestamp: 1,
         block_coinbase: Address::from_str("0xcb540000000000000000000000000000000000000000")
             .unwrap(),
         ..Default::default()
     },
-    sender: Config::DEFAULT_SENDER,
+    sender: Config::default_sender(&Network::Mainnet),
     initial_balance: U256::MAX,
     ffi: true,
     memory_limit: 2u64.pow(24),
