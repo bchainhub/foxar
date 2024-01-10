@@ -6,7 +6,7 @@ use crate::{
 };
 use clap::Parser;
 use core::fmt;
-use corebc::{core::types::Network, utils::WEI_IN_CORE};
+use corebc::{core::types::Network, utils::ORE_IN_CORE};
 use foxar_config::Config;
 use futures::FutureExt;
 use shuttle_server::ServerConfig;
@@ -159,7 +159,7 @@ const DEFAULT_DUMP_INTERVAL: Duration = Duration::from_secs(60);
 
 impl NodeArgs {
     pub fn into_node_config(self) -> NodeConfig {
-        let genesis_balance = WEI_IN_CORE.saturating_mul(self.balance.into());
+        let genesis_balance = ORE_IN_CORE.saturating_mul(self.balance.into());
         let compute_units_per_second = if self.evm_opts.no_rate_limit {
             Some(u64::MAX)
         } else {

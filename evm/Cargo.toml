@@ -26,7 +26,7 @@ jsonpath_lib = "0.3"
 eyre = "0.6"
 thiserror = "1"
 
-libgoldilocks = { git = "https://github.com/todesstille/ed448-rs.git" }
+libgoldilocks = { git = "https://github.com/core-coin/ed448-rs.git" }
 
 # Logging
 tracing = "0.1"

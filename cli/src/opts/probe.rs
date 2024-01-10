@@ -210,35 +210,35 @@ pub enum Subcommands {
         value: Option<String>,
 
         /// The unit to convert to (ether, gwei, wei).
-        #[clap(default_value = "wei")]
+        #[clap(default_value = "ore")]
         unit: String,
     },
 
     /// Convert an ETH amount to wei.
     ///
     /// Consider using --to-unit.
-    #[clap(visible_aliases = &["--to-wei", "tw", "2w"])]
+    #[clap(visible_aliases = &["--to-ore", "tw", "2w"])]
     ToWei {
         /// The value to convert.
         #[clap(allow_hyphen_values = true)]
         value: Option<String>,
 
         /// The unit to convert from (ether, gwei, wei).
-        #[clap(default_value = "eth")]
+        #[clap(default_value = "core")]
         unit: String,
     },
 
     /// Convert wei into an ETH amount.
     ///
     /// Consider using --to-unit.
-    #[clap(visible_aliases = &["--from-wei", "fw"])]
+    #[clap(visible_aliases = &["--from-ore", "fw"])]
     FromWei {
         /// The value to convert.
         #[clap(allow_hyphen_values = true)]
         value: Option<String>,
 
         /// The unit to convert from (ether, gwei, wei).
-        #[clap(default_value = "eth")]
+        #[clap(default_value = "core")]
         unit: String,
     },
 
