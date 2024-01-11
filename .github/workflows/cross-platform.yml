@@ -1,6 +1,4 @@
-on:
-    workflow_dispatch:
-    workflow_call:
+on: push
 
 name: cross-platform
 
