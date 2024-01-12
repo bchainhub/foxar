@@ -109,6 +109,10 @@ setNonceUnsafe(address,uint64)
 chainId(uint256)
 txGasPrice(uint256)
 
+computeCreateAddress(address,uint256)
+computeCreate2Address(bytes32,bytes32,address)
+computeCreate2Address(bytes32,bytes32)
+
 broadcast()
 broadcast(address)
 broadcast(string)

@@ -20,7 +20,7 @@ use corebc::{
         MnemonicBuilder,
     },
     types::{transaction::eip2718::TypedTransaction, NameOrAddress, H256, U256},
-    utils,
+    utils::{self, get_contract_address, get_create2_address},
 };
 use foxar_common::{fmt::*, RpcUrl};
 use revm::{
@@ -224,6 +224,34 @@ pub fn apply<DB: Database>(
             state.labels.insert(inner.0, inner.1.clone());
             Ok(Default::default())
         }
+        HEVMCalls::ComputeCreate2Address0(inner) => {
+            let salt = inner.0;
+            let code_hash = inner.1;
+            let network = Network::from(data.env.cfg.network_id);
+
+            let result = get_create2_address(DEFAULT_CREATE2_DEPLOYER, salt, code_hash, network);
+
+            Ok(corebc::abi::encode(&[Token::Address(result)]).into())
+        }
+        HEVMCalls::ComputeCreate2Address1(inner) => {
+            let salt = inner.0;
+            let code_hash = inner.1;
+            let addr = inner.2;
+            let network = Network::from(data.env.cfg.network_id);
+
+            let result = get_create2_address(addr, salt, code_hash, network);
+
+            Ok(corebc::abi::encode(&[Token::Address(result)]).into())
+        }
+        HEVMCalls::ComputeCreateAddress(inner) => {
+            let address = inner.0;
+            let nonce = inner.1;
+            let network = Network::from(data.env.cfg.network_id);
+
+            let result = get_contract_address(address, nonce, &network);
+
+            Ok(corebc::abi::encode(&[Token::Address(result)]).into())
+        }
         HEVMCalls::GetLabel(inner) => {
             let label = state
                 .labels
@@ -391,7 +419,10 @@ pub fn parse_private_key_from_str(private_key: &str) -> Result<SigningKey> {
     ensure!(private_key.len() == 114, "Wrong private key length");
 
     let private_key = H456::from_str(&private_key);
-    ensure!(private_key.is_ok(), "Couldn't parse private key, private key can only contain hex digits");
+    ensure!(
+        private_key.is_ok(),
+        "Couldn't parse private key, private key can only contain hex digits"
+    );
     let private_key = private_key.unwrap();
 
     SigningKey::from_bytes(private_key.as_bytes()).map_err(|e| Error::CorebcSignature(e.into()))
