@@ -391,7 +391,10 @@ pub fn parse_private_key_from_str(private_key: &str) -> Result<SigningKey> {
     ensure!(private_key.len() == 114, "Wrong private key length");
 
     let private_key = H456::from_str(&private_key);
-    ensure!(private_key.is_ok(), "Couldn't parse private key, private key can only contain hex digits");
+    ensure!(
+        private_key.is_ok(),
+        "Couldn't parse private key, private key can only contain hex digits"
+    );
     let private_key = private_key.unwrap();
 
     SigningKey::from_bytes(private_key.as_bytes()).map_err(|e| Error::CorebcSignature(e.into()))
