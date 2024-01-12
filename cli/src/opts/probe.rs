@@ -218,7 +218,7 @@ pub enum Subcommands {
     ///
     /// Consider using --to-unit.
     #[clap(visible_aliases = &["--to-ore", "tw", "2w"])]
-    ToWei {
+    ToOre {
         /// The value to convert.
         #[clap(allow_hyphen_values = true)]
         value: Option<String>,
@@ -232,7 +232,7 @@ pub enum Subcommands {
     ///
     /// Consider using --to-unit.
     #[clap(visible_aliases = &["--from-ore", "fw"])]
-    FromWei {
+    FromOre {
         /// The value to convert.
         #[clap(allow_hyphen_values = true)]
         value: Option<String>,
