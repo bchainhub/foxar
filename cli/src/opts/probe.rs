@@ -196,25 +196,25 @@ pub enum Subcommands {
         base_out: String,
     },
 
-    /// Convert an ETH amount into another unit (ether, gwei or wei).
+    /// Convert an XCB amount into another unit (ether, nucle or ore).
     ///
     /// Examples:
-    /// - 1ether wei
-    /// - "1 ether" wei
+    /// - 1ether ore
+    /// - "1 ether" ore
     /// - 1ether
-    /// - 1 gwei
-    /// - 1gwei ether
+    /// - 1 nucle
+    /// - 1nucle ether
     #[clap(visible_aliases = &["--to-unit", "tun", "2un"])]
     ToUnit {
         /// The value to convert.
         value: Option<String>,
 
-        /// The unit to convert to (ether, gwei, wei).
+        /// The unit to convert to (ether, nucle, ore).
         #[clap(default_value = "ore")]
         unit: String,
     },
 
-    /// Convert an ETH amount to wei.
+    /// Convert an XCB amount to ore.
     ///
     /// Consider using --to-unit.
     #[clap(visible_aliases = &["--to-ore", "tw", "2w"])]
@@ -223,12 +223,12 @@ pub enum Subcommands {
         #[clap(allow_hyphen_values = true)]
         value: Option<String>,
 
-        /// The unit to convert from (ether, gwei, wei).
+        /// The unit to convert from (ether, nucle, ore).
         #[clap(default_value = "core")]
         unit: String,
     },
 
-    /// Convert wei into an ETH amount.
+    /// Convert ore into an XCB amount.
     ///
     /// Consider using --to-unit.
     #[clap(visible_aliases = &["--from-ore", "fw"])]
@@ -237,7 +237,7 @@ pub enum Subcommands {
         #[clap(allow_hyphen_values = true)]
         value: Option<String>,
 
-        /// The unit to convert from (ether, gwei, wei).
+        /// The unit to convert from (ether, nucle, ore).
         #[clap(default_value = "core")]
         unit: String,
     },
@@ -596,7 +596,7 @@ pub enum Subcommands {
         rpc: RpcOpts,
     },
 
-    /// Get the balance of an account in wei.
+    /// Get the balance of an account in ore.
     #[clap(visible_alias = "b")]
     Balance {
         /// The block height to query at.
