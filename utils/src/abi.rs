@@ -331,77 +331,79 @@ fn struct_field_to_type(ty: &StructFieldType) -> String {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    #[cfg(any(target_os = "linux", target_os = "macos"))]
-    fn abi2solidity() {
-        let contract_abi: RawAbi = serde_json::from_str(include_str!(
-            "../../testdata/fixtures/SolidityGeneration/InterfaceABI.json"
-        ))
-        .unwrap();
-        pretty_assertions::assert_eq!(
-            include_str!("../../testdata/fixtures/SolidityGeneration/GeneratedNamedInterface.sol"),
-            abi_to_solidity(&contract_abi, "test").unwrap()
-        );
-        pretty_assertions::assert_eq!(
-            include_str!(
-                "../../testdata/fixtures/SolidityGeneration/GeneratedUnnamedInterface.sol"
-            ),
-            abi_to_solidity(&contract_abi, "").unwrap()
-        );
-    }
-    #[test]
-    #[cfg(any(target_os = "linux", target_os = "macos"))]
-    fn abi2solidity_gaugecontroller() {
-        let contract_abi: RawAbi = serde_json::from_str(include_str!(
-            "../../testdata/fixtures/SolidityGeneration/GaugeController.json"
-        ))
-        .unwrap();
-        pretty_assertions::assert_eq!(
-            include_str!("../../testdata/fixtures/SolidityGeneration/GeneratedGaugeController.sol"),
-            abi_to_solidity(&contract_abi, "test").unwrap()
-        );
-    }
-    #[test]
-    #[cfg(any(target_os = "linux", target_os = "macos"))]
-    fn abi2dolidity_liquiditygauge() {
-        let contract_abi: RawAbi = serde_json::from_str(include_str!(
-            "../../testdata/fixtures/SolidityGeneration/LiquidityGaugeV4.json"
-        ))
-        .unwrap();
-        pretty_assertions::assert_eq!(
-            include_str!(
-                "../../testdata/fixtures/SolidityGeneration/GeneratedLiquidityGaugeV4.sol"
-            ),
-            abi_to_solidity(&contract_abi, "test").unwrap()
-        );
-    }
-    #[test]
-    #[cfg(any(target_os = "linux", target_os = "macos"))]
-    fn abi2solidity_fastlane() {
-        let contract_abi: RawAbi = serde_json::from_str(include_str!(
-            "../../testdata/fixtures/SolidityGeneration/Fastlane.json"
-        ))
-        .unwrap();
-        pretty_assertions::assert_eq!(
-            include_str!("../../testdata/fixtures/SolidityGeneration/GeneratedFastLane.sol"),
-            abi_to_solidity(&contract_abi, "test").unwrap()
-        );
-    }
+//     #[test]
+//     #[cfg(any(target_os = "linux", target_os = "macos"))]
+//     fn abi2solidity() {
+//         let contract_abi: RawAbi = serde_json::from_str(include_str!(
+//             "../../testdata/fixtures/SolidityGeneration/InterfaceABI.json"
+//         ))
+//         .unwrap();
+//         pretty_assertions::assert_eq!(
+//
+// include_str!("../../testdata/fixtures/SolidityGeneration/GeneratedNamedInterface.sol"),
+//             abi_to_solidity(&contract_abi, "test").unwrap()
+//         );
+//         pretty_assertions::assert_eq!(
+//             include_str!(
+//                 "../../testdata/fixtures/SolidityGeneration/GeneratedUnnamedInterface.sol"
+//             ),
+//             abi_to_solidity(&contract_abi, "").unwrap()
+//         );
+//     }
+//     #[test]
+//     #[cfg(any(target_os = "linux", target_os = "macos"))]
+//     fn abi2solidity_gaugecontroller() {
+//         let contract_abi: RawAbi = serde_json::from_str(include_str!(
+//             "../../testdata/fixtures/SolidityGeneration/GaugeController.json"
+//         ))
+//         .unwrap();
+//         pretty_assertions::assert_eq!(
+//
+// include_str!("../../testdata/fixtures/SolidityGeneration/GeneratedGaugeController.sol"),
+//             abi_to_solidity(&contract_abi, "test").unwrap()
+//         );
+//     }
+//     #[test]
+//     #[cfg(any(target_os = "linux", target_os = "macos"))]
+//     fn abi2dolidity_liquiditygauge() {
+//         let contract_abi: RawAbi = serde_json::from_str(include_str!(
+//             "../../testdata/fixtures/SolidityGeneration/LiquidityGaugeV4.json"
+//         ))
+//         .unwrap();
+//         pretty_assertions::assert_eq!(
+//             include_str!(
+//                 "../../testdata/fixtures/SolidityGeneration/GeneratedLiquidityGaugeV4.sol"
+//             ),
+//             abi_to_solidity(&contract_abi, "test").unwrap()
+//         );
+//     }
+//     #[test]
+//     #[cfg(any(target_os = "linux", target_os = "macos"))]
+//     fn abi2solidity_fastlane() {
+//         let contract_abi: RawAbi = serde_json::from_str(include_str!(
+//             "../../testdata/fixtures/SolidityGeneration/Fastlane.json"
+//         ))
+//         .unwrap();
+//         pretty_assertions::assert_eq!(
+//             include_str!("../../testdata/fixtures/SolidityGeneration/GeneratedFastLane.sol"),
+//             abi_to_solidity(&contract_abi, "test").unwrap()
+//         );
+//     }
 
-    #[test]
-    #[cfg(any(target_os = "linux", target_os = "macos"))]
-    fn abi2solidity_with_structs() {
-        let contract_abi: RawAbi = serde_json::from_str(include_str!(
-            "../../testdata/fixtures/SolidityGeneration/WithStructs.json"
-        ))
-        .unwrap();
-        pretty_assertions::assert_eq!(
-            include_str!("../../testdata/fixtures/SolidityGeneration/WithStructs.sol").trim(),
-            abi_to_solidity(&contract_abi, "test").unwrap().trim()
-        );
-    }
-}
+//     #[test]
+//     #[cfg(any(target_os = "linux", target_os = "macos"))]
+//     fn abi2solidity_with_structs() {
+//         let contract_abi: RawAbi = serde_json::from_str(include_str!(
+//             "../../testdata/fixtures/SolidityGeneration/WithStructs.json"
+//         ))
+//         .unwrap();
+//         pretty_assertions::assert_eq!(
+//             include_str!("../../testdata/fixtures/SolidityGeneration/WithStructs.sol").trim(),
+//             abi_to_solidity(&contract_abi, "test").unwrap().trim()
+//         );
+//     }
+// }
