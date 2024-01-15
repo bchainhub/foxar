@@ -20,7 +20,7 @@ use corebc::{
         MnemonicBuilder,
     },
     types::{transaction::eip2718::TypedTransaction, NameOrAddress, H256, U256},
-    utils,
+    utils::{self, get_contract_address, get_create2_address},
 };
 use foxar_common::{fmt::*, RpcUrl};
 use revm::{
@@ -222,6 +222,34 @@ pub fn apply<DB: Database>(
         HEVMCalls::Label(inner) => {
             state.labels.insert(inner.0, inner.1.clone());
             Ok(Default::default())
+        }
+        HEVMCalls::ComputeCreate2Address0(inner) => {
+            let salt = inner.0;
+            let code_hash = inner.1;
+            let network = Network::from(data.env.cfg.network_id);
+
+            let result = get_create2_address(DEFAULT_CREATE2_DEPLOYER, salt, code_hash, network);
+
+            Ok(corebc::abi::encode(&[Token::Address(result)]).into())
+        }
+        HEVMCalls::ComputeCreate2Address1(inner) => {
+            let salt = inner.0;
+            let code_hash = inner.1;
+            let addr = inner.2;
+            let network = Network::from(data.env.cfg.network_id);
+
+            let result = get_create2_address(addr, salt, code_hash, network);
+
+            Ok(corebc::abi::encode(&[Token::Address(result)]).into())
+        }
+        HEVMCalls::ComputeCreateAddress(inner) => {
+            let address = inner.0;
+            let nonce = inner.1;
+            let network = Network::from(data.env.cfg.network_id);
+
+            let result = get_contract_address(address, nonce, &network);
+
+            Ok(corebc::abi::encode(&[Token::Address(result)]).into())
         }
         HEVMCalls::GetLabel(inner) => {
             let label = state

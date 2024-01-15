@@ -180,6 +180,37 @@ pub mod hevm {
                 .method_hash([83, 165, 198, 222], p0)
                 .expect("method not found (this should never happen)")
         }
+        ///Calls the contract's `computeCreate2Address` (0x447f5ae9) function
+        pub fn compute_create_2_address_1(
+            &self,
+            p0: [u8; 32],
+            p1: [u8; 32],
+            p2: ::corebc_core::types::Address,
+        ) -> ::corebc_contract::builders::ContractCall<M, ()> {
+            self.0
+                .method_hash([68, 127, 90, 233], (p0, p1, p2))
+                .expect("method not found (this should never happen)")
+        }
+        ///Calls the contract's `computeCreate2Address` (0xf27a5040) function
+        pub fn compute_create_2_address_0(
+            &self,
+            p0: [u8; 32],
+            p1: [u8; 32],
+        ) -> ::corebc_contract::builders::ContractCall<M, ()> {
+            self.0
+                .method_hash([242, 122, 80, 64], (p0, p1))
+                .expect("method not found (this should never happen)")
+        }
+        ///Calls the contract's `computeCreateAddress` (0x7486025d) function
+        pub fn compute_create_address(
+            &self,
+            p0: ::corebc_core::types::Address,
+            p1: ::corebc_core::types::U256,
+        ) -> ::corebc_contract::builders::ContractCall<M, ()> {
+            self.0
+                .method_hash([116, 134, 2, 93], (p0, p1))
+                .expect("method not found (this should never happen)")
+        }
         ///Calls the contract's `createDir` (0x8b295957) function
         pub fn create_dir(
             &self,
@@ -2176,6 +2207,61 @@ pub mod hevm {
     )]
     #[ethcall(name = "coinbase", abi = "coinbase(address)")]
     pub struct CoinbaseCall(pub ::corebc_core::types::Address);
+    ///Container type for all input parameters for the `computeCreate2Address` function with signature `computeCreate2Address(bytes32,bytes32,address)` and selector `0x447f5ae9`
+    #[derive(
+        Clone,
+        ::corebc_contract::EthCall,
+        ::corebc_contract::EthDisplay,
+        Default,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash
+    )]
+    #[ethcall(
+        name = "computeCreate2Address",
+        abi = "computeCreate2Address(bytes32,bytes32,address)"
+    )]
+    pub struct ComputeCreate2Address1Call(
+        pub [u8; 32],
+        pub [u8; 32],
+        pub ::corebc_core::types::Address,
+    );
+    ///Container type for all input parameters for the `computeCreate2Address` function with signature `computeCreate2Address(bytes32,bytes32)` and selector `0xf27a5040`
+    #[derive(
+        Clone,
+        ::corebc_contract::EthCall,
+        ::corebc_contract::EthDisplay,
+        Default,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash
+    )]
+    #[ethcall(
+        name = "computeCreate2Address",
+        abi = "computeCreate2Address(bytes32,bytes32)"
+    )]
+    pub struct ComputeCreate2Address0Call(pub [u8; 32], pub [u8; 32]);
+    ///Container type for all input parameters for the `computeCreateAddress` function with signature `computeCreateAddress(address,uint256)` and selector `0x7486025d`
+    #[derive(
+        Clone,
+        ::corebc_contract::EthCall,
+        ::corebc_contract::EthDisplay,
+        Default,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash
+    )]
+    #[ethcall(
+        name = "computeCreateAddress",
+        abi = "computeCreateAddress(address,uint256)"
+    )]
+    pub struct ComputeCreateAddressCall(
+        pub ::corebc_core::types::Address,
+        pub ::corebc_core::types::U256,
+    );
     ///Container type for all input parameters for the `createDir` function with signature `createDir(string,bool)` and selector `0x8b295957`
     #[derive(
         Clone,
@@ -4725,6 +4811,9 @@ pub mod hevm {
         ClearMockedCalls(ClearMockedCallsCall),
         CloseFile(CloseFileCall),
         Coinbase(CoinbaseCall),
+        ComputeCreate2Address1(ComputeCreate2Address1Call),
+        ComputeCreate2Address0(ComputeCreate2Address0Call),
+        ComputeCreateAddress(ComputeCreateAddressCall),
         CreateDir(CreateDirCall),
         CreateFork1(CreateFork1Call),
         CreateFork2(CreateFork2Call),
@@ -4975,6 +5064,21 @@ pub mod hevm {
                 data,
             ) {
                 return Ok(Self::Coinbase(decoded));
+            }
+            if let Ok(decoded) = <ComputeCreate2Address1Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
+                return Ok(Self::ComputeCreate2Address1(decoded));
+            }
+            if let Ok(decoded) = <ComputeCreate2Address0Call as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
+                return Ok(Self::ComputeCreate2Address0(decoded));
+            }
+            if let Ok(decoded) = <ComputeCreateAddressCall as ::corebc_core::abi::AbiDecode>::decode(
+                data,
+            ) {
+                return Ok(Self::ComputeCreateAddress(decoded));
             }
             if let Ok(decoded) = <CreateDirCall as ::corebc_core::abi::AbiDecode>::decode(
                 data,
@@ -5889,6 +5993,15 @@ pub mod hevm {
                     ::corebc_core::abi::AbiEncode::encode(element)
                 }
                 Self::Coinbase(element) => ::corebc_core::abi::AbiEncode::encode(element),
+                Self::ComputeCreate2Address1(element) => {
+                    ::corebc_core::abi::AbiEncode::encode(element)
+                }
+                Self::ComputeCreate2Address0(element) => {
+                    ::corebc_core::abi::AbiEncode::encode(element)
+                }
+                Self::ComputeCreateAddress(element) => {
+                    ::corebc_core::abi::AbiEncode::encode(element)
+                }
                 Self::CreateDir(element) => {
                     ::corebc_core::abi::AbiEncode::encode(element)
                 }
@@ -6332,6 +6445,15 @@ pub mod hevm {
                 Self::ClearMockedCalls(element) => ::core::fmt::Display::fmt(element, f),
                 Self::CloseFile(element) => ::core::fmt::Display::fmt(element, f),
                 Self::Coinbase(element) => ::core::fmt::Display::fmt(element, f),
+                Self::ComputeCreate2Address1(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
+                Self::ComputeCreate2Address0(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
+                Self::ComputeCreateAddress(element) => {
+                    ::core::fmt::Display::fmt(element, f)
+                }
                 Self::CreateDir(element) => ::core::fmt::Display::fmt(element, f),
                 Self::CreateFork1(element) => ::core::fmt::Display::fmt(element, f),
                 Self::CreateFork2(element) => ::core::fmt::Display::fmt(element, f),
@@ -6592,6 +6714,21 @@ pub mod hevm {
     impl ::core::convert::From<CoinbaseCall> for HEVMCalls {
         fn from(value: CoinbaseCall) -> Self {
             Self::Coinbase(value)
+        }
+    }
+    impl ::core::convert::From<ComputeCreate2Address1Call> for HEVMCalls {
+        fn from(value: ComputeCreate2Address1Call) -> Self {
+            Self::ComputeCreate2Address1(value)
+        }
+    }
+    impl ::core::convert::From<ComputeCreate2Address0Call> for HEVMCalls {
+        fn from(value: ComputeCreate2Address0Call) -> Self {
+            Self::ComputeCreate2Address0(value)
+        }
+    }
+    impl ::core::convert::From<ComputeCreateAddressCall> for HEVMCalls {
+        fn from(value: ComputeCreateAddressCall) -> Self {
+            Self::ComputeCreateAddress(value)
         }
     }
     impl ::core::convert::From<CreateDirCall> for HEVMCalls {
