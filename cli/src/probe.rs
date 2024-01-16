@@ -117,13 +117,13 @@ async fn main() -> eyre::Result<()> {
             let value = stdin::unwrap_line(value)?;
             println!("{}", SimpleCast::to_unit(&value, &unit)?);
         }
-        Subcommands::FromWei { value, unit } => {
+        Subcommands::FromOre { value, unit } => {
             let value = stdin::unwrap_line(value)?;
-            println!("{}", SimpleCast::from_wei(&value, &unit)?);
+            println!("{}", SimpleCast::from_ore(&value, &unit)?);
         }
-        Subcommands::ToWei { value, unit } => {
+        Subcommands::ToOre { value, unit } => {
             let value = stdin::unwrap_line(value)?;
-            println!("{}", SimpleCast::to_wei(&value, &unit)?);
+            println!("{}", SimpleCast::to_ore(&value, &unit)?);
         }
         Subcommands::FromRlp { value } => {
             let value = stdin::unwrap_line(value)?;
@@ -214,7 +214,7 @@ async fn main() -> eyre::Result<()> {
             let provider = utils::get_provider(&config)?;
             let value = Cast::new(provider).balance(who, block).await?;
             if ether {
-                println!("{}", SimpleCast::from_wei(&value.to_string(), "eth")?);
+                println!("{}", SimpleCast::from_ore(&value.to_string(), "eth")?);
             } else {
                 println!("{value}");
             }

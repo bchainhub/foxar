@@ -1042,10 +1042,15 @@ impl SimpleCast {
     /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
-    ///     assert_eq!(Cast::to_unit("1 wei", "wei")?, "1");
-    ///     assert_eq!(Cast::to_unit("1", "wei")?, "1");
-    ///     assert_eq!(Cast::to_unit("1ether", "wei")?, "1000000000000000000");
-    ///     assert_eq!(Cast::to_unit("100 gwei", "gwei")?, "100");
+    ///     println!("0");
+    ///     assert_eq!(Cast::to_unit("1 ore", "ore")?, "1");
+    ///     println!("1");
+    ///     assert_eq!(Cast::to_unit("1", "ore")?, "1");
+    ///     println!("2");
+    ///     assert_eq!(Cast::to_unit("1core", "ore")?, "1000000000000000000");
+    ///     println!("3");
+    ///     assert_eq!(Cast::to_unit("100 nucle", "nucle")?, "100");
+    ///     println!("4");
     ///
     ///     Ok(())
     /// }
@@ -1054,13 +1059,13 @@ impl SimpleCast {
         let value = U256::from(LenientTokenizer::tokenize_uint(value)?);
 
         Ok(match unit {
-            "eth" | "ether" => corebc_core::utils::format_units(value, 18)?
+            "xcb" | "core" => corebc_core::utils::format_units(value, 18)?
                 .trim_end_matches(".000000000000000000")
                 .to_string(),
-            "gwei" | "nano" | "nanoether" => corebc_core::utils::format_units(value, 9)?
+            "nucle" => corebc_core::utils::format_units(value, 9)?
                 .trim_end_matches(".000000000")
                 .to_string(),
-            "wei" => corebc_core::utils::format_units(value, 0)?.trim_end_matches(".0").to_string(),
+            "ore" => corebc_core::utils::format_units(value, 0)?.trim_end_matches(".0").to_string(),
             _ => eyre::bail!("invalid unit: \"{}\"", unit),
         })
     }
@@ -1073,20 +1078,20 @@ impl SimpleCast {
     /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
-    ///     assert_eq!(Cast::from_wei("1", "gwei")?, "0.000000001");
-    ///     assert_eq!(Cast::from_wei("12340000005", "gwei")?, "12.340000005");
-    ///     assert_eq!(Cast::from_wei("10", "ether")?, "0.000000000000000010");
-    ///     assert_eq!(Cast::from_wei("100", "eth")?, "0.000000000000000100");
-    ///     assert_eq!(Cast::from_wei("17", "")?, "0.000000000000000017");
+    ///     assert_eq!(Cast::from_ore("1", "nucle")?, "0.000000001");
+    ///     assert_eq!(Cast::from_ore("12340000005", "nucle")?, "12.340000005");
+    ///     assert_eq!(Cast::from_ore("10", "core")?, "0.000000000000000010");
+    ///     assert_eq!(Cast::from_ore("100", "xcb")?, "0.000000000000000100");
+    ///     assert_eq!(Cast::from_ore("17", "")?, "0.000000000000000017");
     ///
     ///     Ok(())
     /// }
     /// ```
-    pub fn from_wei(value: &str, unit: &str) -> Result<String> {
+    pub fn from_ore(value: &str, unit: &str) -> Result<String> {
         let value = NumberWithBase::parse_int(value, None)?.number();
 
         Ok(match unit {
-            "gwei" => format_units(value, 9),
+            "nucle" => format_units(value, 9),
             _ => format_units(value, 18),
         }?)
     }
@@ -1099,20 +1104,20 @@ impl SimpleCast {
     /// use probe::SimpleCast as Cast;
     ///
     /// fn main() -> eyre::Result<()> {
-    ///     assert_eq!(Cast::to_wei("1", "")?, "1000000000000000000");
-    ///     assert_eq!(Cast::to_wei("100", "gwei")?, "100000000000");
-    ///     assert_eq!(Cast::to_wei("100", "eth")?, "100000000000000000000");
-    ///     assert_eq!(Cast::to_wei("1000", "ether")?, "1000000000000000000000");
+    ///     assert_eq!(Cast::to_ore("1", "")?, "1000000000000000000");
+    ///     assert_eq!(Cast::to_ore("100", "nucle")?, "100000000000");
+    ///     assert_eq!(Cast::to_ore("100", "xcb")?, "100000000000000000000");
+    ///     assert_eq!(Cast::to_ore("1000", "core")?, "1000000000000000000000");
     ///
     ///     Ok(())
     /// }
     /// ```
-    pub fn to_wei(value: &str, unit: &str) -> Result<String> {
-        let wei = match unit {
-            "gwei" => parse_units(value, 9),
+    pub fn to_ore(value: &str, unit: &str) -> Result<String> {
+        let ore = match unit {
+            "nucle" => parse_units(value, 9),
             _ => parse_units(value, 18),
         }?;
-        Ok(wei.to_string())
+        Ok(ore.to_string())
     }
 
     /// Decodes rlp encoded list with hex data
