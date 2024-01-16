@@ -187,7 +187,7 @@ impl ScriptArgs {
             format_units(total_energy_price / deployment_sequence.receipts.len(), 9)
                 .unwrap_or_else(|_| "N/A".to_string());
         shell::println(format!(
-            "Total Paid: {} ETH ({} energy * avg {} gwei)",
+            "Total Paid: {} XCB ({} energy * avg {} nucle)",
             paid.trim_end_matches('0'),
             total_energy,
             avg_energy_price.trim_end_matches('0').trim_end_matches('.')
@@ -503,7 +503,7 @@ impl ScriptArgs {
                 shell::println(format!("\nChain {}", provider_info.network))?;
 
                 shell::println(format!(
-                    "\nEstimated energy price: {} gwei",
+                    "\nEstimated energy price: {} nucle",
                     format_units(per_energy, 9)
                         .unwrap_or_else(|_| "[Could not calculate]".to_string())
                         .trim_end_matches('0')
@@ -513,7 +513,7 @@ impl ScriptArgs {
                     "\nEstimated total energy used for script: {total_energy}"
                 ))?;
                 shell::println(format!(
-                    "\nEstimated amount required: {} ETH",
+                    "\nEstimated amount required: {} XCB",
                     format_units(total_energy.saturating_mul(per_energy), 18)
                         .unwrap_or_else(|_| "[Could not calculate]".to_string())
                         .trim_end_matches('0')

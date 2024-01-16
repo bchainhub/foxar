@@ -3,7 +3,7 @@ use corebc::{
     contract::{ContractFactory, ContractInstance},
     middleware::SignerMiddleware,
     types::U256,
-    utils::WEI_IN_ETHER,
+    utils::ORE_IN_ETHER,
 };
 use corebc_ylem::{project_util::TempProject, Artifact};
 use shuttle::{spawn, NodeConfig};
