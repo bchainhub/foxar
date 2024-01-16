@@ -98,9 +98,10 @@ fn sign(private_key: &str, digest: H256, network_id: U256) -> Result {
 
     assert_eq!(recovered, wallet.address());
 
-    let sig_bytes = sig.sig.to_fixed_bytes();
+    let sig_bytes: corebc::abi::Bytes = sig.sig.0.to_vec().into();
+    let encoded_sig_bytes: corebc::abi::Bytes = sig_bytes.encode().into();
 
-    Ok(sig_bytes.encode().into())
+    Ok(encoded_sig_bytes)
 }
 
 enum WordlistLang {
@@ -204,9 +205,7 @@ pub fn apply<DB: Database>(
 ) -> Option<Result> {
     Some(match call {
         HEVMCalls::Addr(inner) => addr(&inner.0, &Network::from(data.env.cfg.network_id)),
-        HEVMCalls::Sign(inner) => {
-            sign(&inner.0, inner.1.into(), U256::from(data.env.cfg.network_id))
-        }
+        HEVMCalls::Sign(inner) => sign(&inner.0, inner.1.into(), data.env.cfg.network_id.into()),
         HEVMCalls::DeriveKey0(inner) => {
             derive_key::<English>(&inner.0, DEFAULT_DERIVATION_PATH_PREFIX, inner.1)
         }
@@ -482,6 +481,16 @@ mod tests {
         let parsed = parse("1337", &ParamType::Uint(256)).unwrap();
         let decoded = U256::decode(&parsed).unwrap();
         assert_eq!(U256::from(1337u64), decoded);
+    }
+
+    #[test]
+    fn test_sign() {
+        let key = "69bb68c3a00a0cd9cbf2cab316476228c758329bbfe0b1759e8634694a9497afea05bcbf24e2aa0627eac4240484bb71de646a9296872a3c0e";
+        let digest =
+            H256::from_str("76d3bc41c9f588f7fcd0d5bf4718f8f84b1c41b20882703100b9eb9413807c01")
+                .unwrap();
+        let res = sign(key, digest, 1.into()).unwrap();
+        assert_eq!(res.to_string(), "0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000ab9db1a4fd159ec8449cc970e3c1e1848445997fb988f0c3aa1edf91ddb84dd873eb8c43bf052e0a56b49911d9981892811a9e28f02fd7472680388dd2f617f46c67501aea757c5fca981b749f4c6f08b2d480f66c44eaf1df9c7d02b934d45e31ffa8a6c07a54773f5dc1c0e2975b98792200315484db568379ce94f9c894e3e6e4c7ee216676b713ca892d9b26746ae902a772e217a6a8bb493ce2bb313cf0cb66e76765d4c45ec6b68600000000000000000000000000000000000000000000")
     }
 
     #[test]
