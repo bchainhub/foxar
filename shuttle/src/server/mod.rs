@@ -38,7 +38,7 @@ pub fn try_spawn_ipc(
     let mut incoming = ipc.incoming()?;
 
     let task = tokio::task::spawn(async move {
-        while let Some(stream) = incoming.next().await {
+        while let Some(stream) = Box::pin(incoming.next()).await {
             trace!(target: "ipc", "new ipc connection");
             tokio::task::spawn(stream);
         }
