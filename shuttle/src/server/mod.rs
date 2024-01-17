@@ -1,8 +1,8 @@
 //! Contains the code to launch an ethereum RPC-Server
 use crate::EthApi;
+use shuttle_server::{ipc::IpcEndpoint, AnvilServer, ServerConfig};
 use futures::StreamExt;
 use handler::{HttpEthRpcHandler, PubSubEthRpcHandler};
-use shuttle_server::{ipc::IpcEndpoint, AnvilServer, ServerConfig};
 use std::net::SocketAddr;
 use tokio::{io, task::JoinHandle};
 use tracing::trace;
@@ -35,10 +35,11 @@ pub fn try_spawn_ipc(
     let path = path.into();
     let handler = PubSubEthRpcHandler::new(api);
     let ipc = IpcEndpoint::new(handler, path);
-    let mut incoming = ipc.incoming()?;
+    let incoming = ipc.incoming()?;
 
     let task = tokio::task::spawn(async move {
-        while let Some(stream) = Box::pin(incoming.next()).await {
+        tokio::pin!(incoming);
+        while let Some(stream) = incoming.next().await {
             trace!(target: "ipc", "new ipc connection");
             tokio::task::spawn(stream);
         }
