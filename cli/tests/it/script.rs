@@ -629,7 +629,7 @@ sparktest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| a
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
     // Prepare CREATE2 Deployer
-    let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
+    let addr = Address::from_str("cb063edadf999cb7b8b3ebc71f5e97783176d289d640").unwrap();
     let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
     api.shuttle_set_code(addr, code).await.unwrap();
 
@@ -715,7 +715,7 @@ sparktest_async!(
         let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
         // Prepare CREATE2 Deployer
-        let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
+        let addr = Address::from_str("cb063edadf999cb7b8b3ebc71f5e97783176d289d640").unwrap();
         let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
         api.shuttle_set_code(addr, code).await.unwrap();
 

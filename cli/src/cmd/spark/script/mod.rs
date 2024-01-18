@@ -730,7 +730,7 @@ mod tests {
             "foxar-cli",
             "Contract.sol",
             "--sender",
-            "cb914e59b44847b379578588920ca78fbf26c0b4956c",
+            "cb063edadf999cb7b8b3ebc71f5e97783176d289d640",
             "--unlocked",
         ]);
         assert!(args.unlocked);
@@ -740,7 +740,7 @@ mod tests {
             "foxar-cli",
             "Contract.sol",
             "--sender",
-            "cb914e59b44847b379578588920ca78fbf26c0b4956c",
+            "cb063edadf999cb7b8b3ebc71f5e97783176d289d640",
             "--unlocked",
             "--private-key",
             key.to_string().as_str(),
