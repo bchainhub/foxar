@@ -4,7 +4,6 @@ jobs:
   tests:
     name: unit tests ${{ matrix.job.target }} (${{ matrix.job.os }})
     runs-on: ${{ matrix.job.os }}
-    needs: build-tests
     timeout-minutes: 60
     strategy:
       matrix:
