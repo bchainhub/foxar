@@ -25,4 +25,4 @@ jobs:
           targets: ${{ matrix.job.target }}
       - name: cargo test
         shell: bash
-        run: test --all --all-features 
+        run: cargo test --all --all-features 
