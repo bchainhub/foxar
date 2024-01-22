@@ -1,41 +1,29 @@
 on: push
-
-name: cross-platform
-
-env:
-    CARGO_TERM_COLOR: always
-
+name: foxar pipeline
 jobs:
-    unit:
-        name: unit tests ${{ matrix.job.target }} (${{ matrix.job.os }}) / ${{ matrix.archive.name }} / ${{ matrix.nextest.name }}
-        runs-on: ${{ matrix.job.os }}
-        needs: build-tests
-        timeout-minutes: 60
-        strategy:
-            matrix:
-                job:
-                    # The OS is used for the runner
-                    # The target is used by Cargo
-                    - os: ubuntu-latest
-                      target: x86_64-unknown-linux-gnu
-                    - os: ubuntu-latest
-                      target: aarch64-unknown-linux-gnu
-                    - os: macos-latest
-                      target: x86_64-apple-darwin
-                    - os: macos-latest
-                      target: aarch64-apple-darwin
-                    - os: windows-latest
-                      target: x86_64-pc-windows-msvc
-                nextest:
-                    - name: non-forking
-                      filter: "!test(~fork) & !test(~live) & !test(~spark_std) & !test(~deploy_and_simulate)"
-        env:
-            ETH_RPC_URL: https://eth-mainnet.alchemyapi.io/v2/C3JEvfW6VgtqZQa-Qp1E-2srEiIc02sD
-        steps:
-            - uses: actions/checkout@v3
-            - uses: dtolnay/rust-toolchain@stable
-              with:
-                  targets: ${{ matrix.job.target }}
-            - name: cargo test
-              shell: bash
-              run: test --all --all-features 
+  tests:
+    name: unit tests ${{ matrix.job.target }} (${{ matrix.job.os }})
+    runs-on: ${{ matrix.job.os }}
+    needs: build-tests
+      timeout-minutes: 60
+      strategy:
+        matrix:
+          job:
+            - os: ubuntu-latest
+              target: x86_64-unknown-linux-gnu
+            - os: ubuntu-latest
+              target: aarch64-unknown-linux-gnu
+            - os: macos-latest
+              target: x86_64-apple-darwin
+            - os: macos-latest
+              target: aarch64-apple-darwin
+            - os: windows-latest
+              target: x86_64-pc-windows-msvc
+      steps:
+        - uses: actions/checkout@v3
+        - uses: dtolnay/rust-toolchain@stable
+          with:
+           targets: ${{ matrix.job.target }}
+        - name: cargo test
+          shell: bash
+          run: test --all --all-features 
