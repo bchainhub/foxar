@@ -1,6 +1,5 @@
 //! spark tests for cheat codes
 
-/* todo:error2215 fix tests after forking will be implemented for core blockchain
 use crate::{
     config::*,
     test_helpers::{filter::Filter, RE_PATH_SEPARATOR},
@@ -45,7 +44,7 @@ async fn test_cheats_fork() {
 /// Tests that we can launch in forking mode
 #[tokio::test(flavor = "multi_thread")]
 async fn test_launch_fork() {
-    let rpc_url = foxar_utils::rpc::next_http_archive_rpc_endpoint();
+    let rpc_url = foxar_utils::rpc::next_http_archive_rpc_endpoint(corebc::types::Network::Mainnet);
     let runner = forked_runner(&rpc_url).await;
     let filter = Filter::new(".*", ".*", &format!(".*fork{RE_PATH_SEPARATOR}Launch"));
     TestConfig::with_filter(runner, filter).run().await;
@@ -64,4 +63,3 @@ async fn test_create_same_fork() {
     let filter = Filter::new(".*", ".*", &format!(".*fork{RE_PATH_SEPARATOR}ForkSame"));
     TestConfig::filter(filter).await.run().await;
 }
-*/

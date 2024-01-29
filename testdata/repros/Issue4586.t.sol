@@ -8,7 +8,7 @@ import "../cheats/Cheats.sol";
 contract Issue4586Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
-    uint256 constant initialBlock = 16730733;
+    uint256 constant initialBlock = 7627734;
 
     InvariantHandler handler;
 

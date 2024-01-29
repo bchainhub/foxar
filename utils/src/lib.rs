@@ -570,24 +570,16 @@ mod tests {
     fn test_resolve_addr() {
         use std::str::FromStr;
 
-        // DAI:mainnet exists in corebc-addressbook (0x00006b175474e89094c44da98b954eedeac495271d0f)
+        // CTN:mainnet exists in corebc-addressbook (0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c)
         assert_eq!(
-            resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Mainnet)).ok(),
+            resolve_addr(NameOrAddress::Name("ctn".to_string()), Some(Network::Mainnet)).ok(),
             Some(NameOrAddress::Address(
-                Address::from_str("0x00006b175474e89094c44da98b954eedeac495271d0f").unwrap()
-            ))
-        );
-
-        // weth:devin exists in corebc-adddressbook (0x0000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48)
-        assert_eq!(
-            resolve_addr(NameOrAddress::Name("weth".to_string()), Some(Network::Devin)).ok(),
-            Some(NameOrAddress::Address(
-                Address::from_str("0x0000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48").unwrap()
+                Address::from_str("0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c").unwrap()
             ))
         );
 
         // DAI:devin does not exist in addressbook
-        assert!(resolve_addr(NameOrAddress::Name("dai".to_string()), Some(Network::Devin)).is_err());
+        assert!(resolve_addr(NameOrAddress::Name("ctn".to_string()), Some(Network::Devin)).is_err());
 
         // If not present in addressbook, gets resolved to an ENS name.
         assert_eq!(

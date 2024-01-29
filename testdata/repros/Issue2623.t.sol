@@ -13,11 +13,11 @@ contract Issue2623Test is DSTest {
         vm.selectFork(fork);
 
         assertEq(block.number, 10);
-        assertEq(block.timestamp, 1438270128);
+        assertEq(block.timestamp, 1651904491);
 
         vm.rollFork(11);
 
         assertEq(block.number, 11);
-        assertEq(block.timestamp, 1438270136);
+        assertEq(block.timestamp, 1651904492);
     }
 }

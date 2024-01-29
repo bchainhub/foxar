@@ -60,122 +60,121 @@ macro_rules! run_test_repro {
     }};
 }
 
-// /* todo:error2215 fix tests after forking will be implemented for core blockchain
-// // <https://github.com/foxar-rs/foxar/issues/2623>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_2623() {
-//     test_repro!("Issue2623");
-// }
+// <https://github.com/foxar-rs/foxar/issues/2623>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_2623() {
+    test_repro!("Issue2623");
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/2629>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_2629() {
-//     test_repro!("Issue2629");
-// }
+// <https://github.com/foxar-rs/foxar/issues/2629>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_2629() {
+    test_repro!("Issue2629");
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/2723>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_2723() {
-//     test_repro!("Issue2723");
-// }
-// */
+// <https://github.com/foxar-rs/foxar/issues/2723>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_2723() {
+    test_repro!("Issue2723");
+}
+
 // <https://github.com/foxar-rs/foxar/issues/2898>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_2898() {
     test_repro!("Issue2898");
 }
 
-// /* todo:error2215 fix tests after forking will be implemented for core blockchain
-// // <https://github.com/foxar-rs/foxar/issues/2956>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_2956() {
-//     test_repro!("Issue2956");
-// }
+// <https://github.com/foxar-rs/foxar/issues/2956>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_2956() {
+    test_repro!("Issue2956");
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/2984>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_2984() {
-//     test_repro!("Issue2984");
-// }
+// <https://github.com/foxar-rs/foxar/issues/2984>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_2984() {
+    test_repro!("Issue2984");
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/4640>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_4640() {
-//     test_repro!("Issue4640");
-// }
+/* todo:error2215 test is testing Arbitrum L1 block number
+// <https://github.com/foxar-rs/foxar/issues/4640>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_4640() {
+    test_repro!("Issue4640");
+}
+*/
 
-// // <https://github.com/foxar-rs/foxar/issues/3077>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3077() {
-//     test_repro!("Issue3077");
-// }
-// */
+// <https://github.com/foxar-rs/foxar/issues/3077>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3077() {
+    test_repro!("Issue3077");
+}
+
 // <https://github.com/foxar-rs/foxar/issues/3055>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3055() {
     test_repro_fail!("Issue3055");
 }
 
-// /* todo:error2215 fix tests after forking will be implemented for core blockchain
-// // <https://github.com/foxar-rs/foxar/issues/3192>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3192() {
-//     test_repro!("Issue3192");
-// }
+// <https://github.com/foxar-rs/foxar/issues/3192>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3192() {
+    test_repro!("Issue3192");
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/3110>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3110() {
-//     test_repro!("Issue3110");
-// }
-// */
+// <https://github.com/foxar-rs/foxar/issues/3110>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3110() {
+    test_repro!("Issue3110");
+}
+
 // <https://github.com/foxar-rs/foxar/issues/3189>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3189() {
     test_repro_fail!("Issue3189");
 }
 
-// /* todo:error2215 fix tests after forking will be implemented for core blockchain
-// // <https://github.com/foxar-rs/foxar/issues/3119>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3119() {
-//     test_repro!("Issue3119");
-// }
-// */
+// <https://github.com/foxar-rs/foxar/issues/3119>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3119() {
+    test_repro!("Issue3119");
+}
+
 // <https://github.com/foxar-rs/foxar/issues/3190>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3190() {
     test_repro!("Issue3190");
 }
 
-// /* todo:error2215 fix tests after forking will be implemented for core blockchain
+/* todo:error2215 test is checking deployed code on CREATE2_DEPLOYER address in mainnet but we do not have it deployed there
 // // <https://github.com/foxar-rs/foxar/issues/3221>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3221() {
-//     test_repro!("Issue3221");
-// }
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3221() {
+    test_repro!("Issue3221");
+}
+*/
 
-// // <https://github.com/foxar-rs/foxar/issues/3708>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3708() {
-//     test_repro!("Issue3708");
-// }
+// <https://github.com/foxar-rs/foxar/issues/3708>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3708() {
+    test_repro!("Issue3708");
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/3221>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3223() {
-//     test_repro_with_sender!(
-//         "Issue3223",
-//         Address::from_str("0xF0959944122fb1ed4CfaBA645eA06EED30427BAA").unwrap()
-//     );
-// }
+// <https://github.com/foxar-rs/foxar/issues/3221>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3223() {
+    test_repro_with_sender!(
+        "Issue3223",
+        Address::from_str("cb1958b39698a44bdae37f881e68dce073823a48a631").unwrap()
+    );
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/3220>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3220() {
-//     test_repro!("Issue3220");
-// }
-// */
+// <https://github.com/foxar-rs/foxar/issues/3220>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3220() {
+    test_repro!("Issue3220");
+}
+
 // <https://github.com/foxar-rs/foxar/issues/3347>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3347() {
@@ -210,13 +209,13 @@ async fn test_issue_3347() {
 async fn test_issue_3685() {
     test_repro!("Issue3685");
 }
-// /* todo:error2215 fix tests after forking will be implemented for core blockchain
-// // <https://github.com/foxar-rs/foxar/issues/3653>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3653() {
-//     test_repro!("Issue3653");
-// }
-// */
+
+//` <https://github.com/foxar-rs/foxar/issues/3653>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3653() {
+    test_repro!("Issue3653");
+}
+
 // <https://github.com/foxar-rs/foxar/issues/3596>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3596() {
@@ -229,22 +228,23 @@ async fn test_issue_3661() {
     test_repro!("Issue3661");
 }
 
-// /* todo:error2215 fix tests after forking will be implemented for core blockchain
-// // <https://github.com/foxar-rs/foxar/issues/3674>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3674() {
-//     test_repro_with_sender!(
-//         "Issue3674",
-//         Address::from_str("0xF0959944122fb1ed4CfaBA645eA06EED30427BAA").unwrap()
-//     );
-// }
+// <https://github.com/foxar-rs/foxar/issues/3674>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3674() {
+    test_repro_with_sender!(
+        "Issue3674",
+        Address::from_str("cb1958b39698a44bdae37f881e68dce073823a48a631").unwrap()
+    );
+}
 
-// // <https://github.com/foxar-rs/foxar/issues/3703>
-// #[tokio::test(flavor = "multi_thread")]
-// async fn test_issue_3703() {
-//     test_repro!("Issue3703");
-// }
-// */
+/* todo:error2215 test is using IUniswapV3Pool, we do not support it for now
+// <https://github.com/foxar-rs/foxar/issues/3703>
+#[tokio::test(flavor = "multi_thread")]
+async fn test_issue_3703() {
+    test_repro!("Issue3703");
+}
+*/
+
 // <https://github.com/foxar-rs/foxar/issues/3753>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3753() {
@@ -257,13 +257,12 @@ async fn test_issue_4630() {
     test_repro!("Issue4630");
 }
 
-/* todo:error2215 fix tests after forking will be implemented for core blockchain
 // <https://github.com/foxar-rs/foxar/issues/4586>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_4586() {
     test_repro!("Issue4586");
 }
-*/
+
 // <https://github.com/foxar-rs/foxar/issues/5038>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_5038() {

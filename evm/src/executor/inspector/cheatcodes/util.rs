@@ -79,7 +79,6 @@ where
     let account = journaled_state.state.get_mut(&addr).expect("account loaded;");
     Ok(f(account))
 }
-//TODO:error2215 change crypto
 fn addr(private_key: &str, network: &Network) -> Result {
     let key = parse_private_key_from_str(private_key)?;
     let addr = utils::secret_key_to_address(&key, network);

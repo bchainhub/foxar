@@ -359,7 +359,7 @@ async fn test_timestamp_interval() {
 }
 
 // <https://github.com/foxar-rs/foxar/issues/2341>
-#[ignore = "Forking is disabled"]
+#[ignore = "We do not support BSC"]
 #[tokio::test(flavor = "multi_thread")]
 async fn test_can_set_storage_bsc_fork() {
     let (api, handle) =
