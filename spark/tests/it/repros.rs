@@ -146,19 +146,19 @@ async fn test_issue_3190() {
     test_repro!("Issue3190");
 }
 
-/* todo:error2215 test is checking deployed code on CREATE2_DEPLOYER address in mainnet but we do not have it deployed there
 // // <https://github.com/foxar-rs/foxar/issues/3221>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3221() {
     test_repro!("Issue3221");
 }
-*/
 
+/* todo:error2215 test is checking deployed code on CREATE2_DEPLOYER address in mainnet but we do not have it deployed there
 // <https://github.com/foxar-rs/foxar/issues/3708>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_3708() {
     test_repro!("Issue3708");
 }
+*/
 
 // <https://github.com/foxar-rs/foxar/issues/3221>
 #[tokio::test(flavor = "multi_thread")]
