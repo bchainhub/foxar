@@ -52,7 +52,7 @@ async fn test_parity_suicide_trace() {
     prj.add_source(
         "Contract",
         r#"
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Contract {
     address payable private owner;
     constructor() public {
@@ -99,7 +99,7 @@ async fn test_transfer_debug_trace_call() {
     prj.add_source(
         "Contract",
         r#"
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Contract {
     address payable private owner;
     constructor() public {

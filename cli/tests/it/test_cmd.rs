@@ -90,7 +90,7 @@ sparktest!(suggest_when_no_tests_match, |prj: TestProject, mut cmd: TestCommand|
             "TestE.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 contract TestC {
     function test1() public {
@@ -121,7 +121,7 @@ sparktest!(can_fuzz_array_params, |prj: TestProject, mut cmd: TestCommand| {
             "ATest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract ATest is DSTest {
     function testArray(uint64[2] calldata values) external {
@@ -146,7 +146,7 @@ sparktest!(can_test_pre_bytecode_hash, |prj: TestProject, mut cmd: TestCommand| 
             r#"
 // SPDX-License-Identifier: UNLICENSED
 // pre bytecode hash version, was introduced in 0.6.0
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract ATest is DSTest {
     function testArray(uint64[2] calldata values) external {
@@ -170,7 +170,7 @@ sparktest!(can_test_with_match_path, |prj: TestProject, mut cmd: TestCommand| {
             "ATest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract ATest is DSTest {
     function testArray(uint64[2] calldata values) external {
@@ -186,7 +186,7 @@ contract ATest is DSTest {
             "FailTest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract FailTest is DSTest {
     function testNothing() external {
@@ -216,7 +216,7 @@ sparktest!(can_run_test_in_custom_test_folder, |prj: TestProject, mut cmd: TestC
             "nested/spark-tests/MyTest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "../../test.sol";
 contract MyTest is DSTest {
     function testTrue() public {

@@ -55,7 +55,7 @@ sparktest!(can_execute_script_command2, |prj: TestProject, mut cmd: TestCommand|
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external {
@@ -81,7 +81,7 @@ sparktest!(can_execute_script_command_fqn, |prj: TestProject, mut cmd: TestComma
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external {
@@ -107,7 +107,7 @@ sparktest!(can_execute_script_command_with_sig, |prj: TestProject, mut cmd: Test
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function myFunction() external {
@@ -136,7 +136,7 @@ sparktest_async!(
                 "Foo",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 
 contract GasWaster {
@@ -198,7 +198,7 @@ sparktest_async!(
                 "Foo",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 
 contract GasWaster {
@@ -257,7 +257,7 @@ sparktest!(can_execute_script_command_with_args, |prj: TestProject, mut cmd: Tes
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     event log_uint(uint);
@@ -292,7 +292,7 @@ sparktest!(can_execute_script_command_with_returned, |prj: TestProject, mut cmd:
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external returns (uint256 result, uint8) {
@@ -320,7 +320,7 @@ sparktest_async!(
                 "DeployScript",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 
 contract HashChecker {
@@ -386,7 +386,7 @@ contract DeployScript is Script {
 
         let run_code = r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 import { HashChecker } from "./DeployScript.sol";
 
@@ -1007,7 +1007,7 @@ sparktest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cm
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external returns (uint256 result, uint8) {

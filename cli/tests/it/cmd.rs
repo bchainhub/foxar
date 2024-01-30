@@ -540,7 +540,7 @@ sparktest!(can_handle_direct_imports_into_src, |prj: TestProject, mut cmd: TestC
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import {FooLib} from "src/FooLib.sol";
 struct Bar {
     uint8 x;
@@ -564,7 +564,7 @@ contract Foo {
             "FooLib",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import {Foo, Bar} from "src/Foo.sol";
 library FooLib {
     function check(Bar memory b) public {}
@@ -595,7 +595,7 @@ sparktest!(can_execute_inspect_command, |prj: TestProject, mut cmd: TestCommand|
             contract_name,
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Foo {
     event log_string(string);
     function run() external {
@@ -637,7 +637,7 @@ sparktest!(
                 "ATest.t.sol",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract ATest is DSTest {
     function testExample() public {
@@ -671,7 +671,7 @@ sparktest!(can_compile_without_warnings, |prj: TestProject, mut cmd: TestCommand
         .add_source(
             "A",
             r#"
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract A {
     function testExample() public {}
 }
@@ -707,7 +707,7 @@ sparktest!(can_fail_compile_with_warnings, |prj: TestProject, mut cmd: TestComma
         .add_source(
             "A",
             r#"
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract A {
     function testExample() public {}
 }
@@ -779,7 +779,7 @@ sparktest!(can_build_after_failure, |prj: TestProject, mut cmd: TestCommand| {
             "ATest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract ATest is DSTest {
     function testExample() public {
@@ -794,7 +794,7 @@ contract ATest is DSTest {
             "BTest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract BTest is DSTest {
     function testExample() public {
@@ -812,7 +812,7 @@ contract BTest is DSTest {
 
     let syntax_err = r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract CTest is DSTest {
     function testExample() public {
@@ -842,7 +842,7 @@ contract CTest is DSTest {
             "CTest.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "./test.sol";
 contract CTest is DSTest {
     function testExample() public {
@@ -1590,7 +1590,7 @@ sparktest_init!(can_build_skip_glob, |prj: TestProject, mut cmd: TestCommand| {
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract TestDemo {
 function test_run() external {}
 }"#,
