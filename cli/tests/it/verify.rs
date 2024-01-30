@@ -35,7 +35,7 @@ fn add_verify_target(prj: &TestProject) {
             "Verify.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =1.1.0;
+pragma solidity >=1.1.0;
 import {Unique} from "./unique.sol";
 contract Verify is Unique {
 function doStuff() external {}

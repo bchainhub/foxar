@@ -42,7 +42,7 @@ sparktest!(warn_no_tests, |prj: TestProject, mut cmd: TestCommand| {
             "dummy",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =1.1.0;
+pragma solidity >=1.1.0;
 
 contract Dummy {}
 "#,
@@ -64,7 +64,7 @@ sparktest!(warn_no_tests_match, |prj: TestProject, mut cmd: TestCommand| {
             "dummy",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =1.1.0;
+pragma solidity >=1.1.0;
 
 contract Dummy {}
 "#,
@@ -321,7 +321,7 @@ sparktest_init!(can_use_libs_in_multi_fork, |prj: TestProject, mut cmd: TestComm
             "Contract.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =1.1.0;
+pragma solidity >=1.1.0;
 
 library Library {
     function f(uint256 a, uint256 b) public pure returns (uint256) {
@@ -347,7 +347,7 @@ contract Contract {
             "Contract.t.sol",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity =1.1.0;
+pragma solidity >=1.1.0;
 
 import "forge-std/Test.sol";
 import "src/Contract.sol";
