@@ -998,7 +998,7 @@ contract Script0 is Script {
 // checks that skipping build
 sparktest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 1.1.0 for consistent output
-    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+    let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
     prj.write_config(config);
 
     let script = prj

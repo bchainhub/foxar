@@ -1564,7 +1564,7 @@ sparktest_init!(can_install_missing_deps_build, |prj: TestProject, mut cmd: Test
 // checks that extra output works
 sparktest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 1.1.0 for consistent output
-    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+    let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
     prj.write_config(config);
 
     // only builds the single template contract `src/*`
@@ -1583,7 +1583,7 @@ sparktest_init!(can_build_skip_contracts, |prj: TestProject, mut cmd: TestComman
 
 sparktest_init!(can_build_skip_glob, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 1.1.0 for consistent output
-    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+    let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
     prj.write_config(config);
     prj.inner()
         .add_test(

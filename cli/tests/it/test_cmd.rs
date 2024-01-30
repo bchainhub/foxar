@@ -274,7 +274,7 @@ contract ContractTest is DSTest {
             .unwrap();
 
         // pin version
-        let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+        let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
         prj.write_config(config);
 
         cmd.arg("test");
@@ -284,7 +284,7 @@ contract ContractTest is DSTest {
         );
 
         // pin version
-        let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+        let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
         prj.write_config(config);
 
         cmd.unchecked_output().stdout_matches_path(
