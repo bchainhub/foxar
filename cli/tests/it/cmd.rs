@@ -502,8 +502,8 @@ contract Greeter {
         )
         .unwrap();
 
-    // explicitly set to run with 1.1.0
-    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+    // explicitly set to run with 1.1.2
+    let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
     prj.write_config(config);
 
     cmd.arg("build");
