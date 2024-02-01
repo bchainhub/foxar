@@ -375,6 +375,15 @@ interface Cheats {
     // Gets the _deployed_ bytecode from an artifact file. Takes in the relative path to the json file
     function getDeployedCode(string calldata) external returns (bytes memory);
 
+    // Compute the address a contract will be deployed at for a given deployer address and nonce.
+    function computeCreateAddress(address deployer, uint256 nonce) external pure returns (address);
+
+    // Compute the address of a contract created with CREATE2 using the given CREATE2 deployer.
+    function computeCreate2Address(bytes32 salt, bytes32 initCodeHash, address deployer) external pure returns (address);
+
+    // Compute the address of a contract created with CREATE2 using the default CREATE2 deployer.
+    function computeCreate2Address(bytes32 salt, bytes32 initCodeHash) external pure returns (address);
+
     // Labels an address in call traces
     function label(address, string calldata) external;
 
@@ -802,4 +811,19 @@ interface Cheats {
 
     // Resumes gas metering from where it left off
     function resumeGasMetering() external;
+
+    // Starts recording all map SSTOREs for later retrieval.
+    function startMappingRecording() external;
+
+    // Stops recording all map SSTOREs for later retrieval and clears the recorded data.
+    function stopMappingRecording() external;
+
+    // Gets the length of a mapping at a given slot, for a given address.
+    function getMappingLength(address target, bytes32 slot) external returns (uint256);
+
+    // Gets the element at index idx of a mapping at a given slot, for a given address.
+    function getMappingSlotAt(address target, bytes32 slot, uint256 idx) external returns (bytes32);
+
+    // Gets the map key and parent of a mapping at a given slot, for a given address.
+    function getMappingKeyAndParentOf(address target, bytes32 slot) external returns (bool, bytes32, bytes32);
 }

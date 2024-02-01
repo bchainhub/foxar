@@ -24,7 +24,7 @@ use corebc::{
         Signer,
     },
     types::BlockNumber,
-    utils::{format_core, hex, to_checksum, WEI_IN_CORE},
+    utils::{format_core, hex, to_checksum, ORE_IN_CORE},
 };
 use foxar_common::{
     ProviderBuilder, ALCHEMY_FREE_TIER_CUPS, NON_ARCHIVE_NODE_WARNING, REQUEST_TIMEOUT,
@@ -341,7 +341,7 @@ impl Default for NodeConfig {
             genesis_timestamp: None,
             genesis_accounts,
             // 100ETH default balance
-            genesis_balance: WEI_IN_CORE.saturating_mul(100u64.into()),
+            genesis_balance: ORE_IN_CORE.saturating_mul(100u64.into()),
             block_time: None,
             no_mining: false,
             port: NODE_PORT,
