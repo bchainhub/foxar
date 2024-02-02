@@ -4,10 +4,16 @@ use crate::{config::*, test_helpers::filter::Filter};
 use corebc::types::U256;
 use spark::fuzz::CounterExample;
 use std::collections::BTreeMap;
-use tracing_test::traced_test;
+use tracing::level_filters::LevelFilter;
+use tracing_subscriber::EnvFilter;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_invariant() {
+    let filter =
+        EnvFilter::builder().with_default_directive(LevelFilter::TRACE.into()).from_env().unwrap();
+
+    tracing_subscriber::fmt().with_env_filter(filter).compact().init();
+
     let mut runner = runner().await;
 
     let results = runner
@@ -111,7 +117,6 @@ async fn test_invariant_override() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
-#[traced_test]
 async fn test_invariant_storage() {
     let mut runner = runner().await;
 
