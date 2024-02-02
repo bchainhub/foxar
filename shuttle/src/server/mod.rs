@@ -1,8 +1,8 @@
 //! Contains the code to launch an ethereum RPC-Server
 use crate::EthApi;
-use shuttle_server::{ipc::IpcEndpoint, AnvilServer, ServerConfig};
 use futures::StreamExt;
 use handler::{HttpEthRpcHandler, PubSubEthRpcHandler};
+use shuttle_server::{ipc::IpcEndpoint, AnvilServer, ServerConfig};
 use std::net::SocketAddr;
 use tokio::{io, task::JoinHandle};
 use tracing::trace;
