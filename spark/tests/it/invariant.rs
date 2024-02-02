@@ -4,6 +4,7 @@ use crate::{config::*, test_helpers::filter::Filter};
 use corebc::types::U256;
 use spark::fuzz::CounterExample;
 use std::collections::BTreeMap;
+use tracing_test::traced_test;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_invariant() {
@@ -110,6 +111,7 @@ async fn test_invariant_override() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+#[traced_test]
 async fn test_invariant_storage() {
     let mut runner = runner().await;
 
