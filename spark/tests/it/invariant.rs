@@ -113,10 +113,10 @@ async fn test_invariant_override() {
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_invariant_storage() {
-    let filter =
-        EnvFilter::builder().with_default_directive(LevelFilter::TRACE.into()).from_env().unwrap();
+    // let filter =
+    //     EnvFilter::builder().with_default_directive(LevelFilter::TRACE.into()).from_env().unwrap();
 
-    tracing_subscriber::fmt().with_env_filter(filter).compact().init();
+    // tracing_subscriber::fmt().with_env_filter(filter).compact().init();
 
     let mut runner = runner().await;
 
