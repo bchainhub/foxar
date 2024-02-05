@@ -2,9 +2,8 @@ on: push
 name: foxar pipeline
 jobs:
   tests:
-    name: unit tests ${{ matrix.job.target }} (${{ matrix.job.os }})
+    name: build ${{ matrix.job.target }} (${{ matrix.job.os }})
     runs-on: ${{ matrix.job.os }}
-    timeout-minutes: 60
     strategy:
       matrix:
         job:
@@ -50,4 +49,6 @@ jobs:
       - name: Cache
         uses: Swatinem/rust-cache@v2
       - name: Test
-        run: cargo test --all --all-features 
+        run: cargo test --all --all-features
+      - name: Build
+        run: cargo build
