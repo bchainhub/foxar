@@ -258,8 +258,8 @@ impl Cheatcodes {
         let created_address =
             get_create_address(inputs, old_nonce, &Network::from(data.env.cfg.network_id));
 
-        if data.journaled_state.depth > 1
-            && !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))
+        if data.journaled_state.depth > 1 &&
+            !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))
         {
             // we only grant cheat code access for new contracts if the caller also has
             // cheatcode access and the new contract is created in top most call
@@ -632,10 +632,9 @@ where
                         mock_retdata.data.clone().0,
                     );
                 } else if let Some((_, mock_retdata)) = mocks.iter().find(|(mock, _)| {
-                    mock.calldata.len() <= call.input.len()
-                        && *mock.calldata == call.input[..mock.calldata.len()]
-                        && mock
-                            .value
+                    mock.calldata.len() <= call.input.len() &&
+                        *mock.calldata == call.input[..mock.calldata.len()] &&
+                        mock.value
                             .map_or(true, |value| value == ru256_to_u256(call.transfer.value))
                 }) {
                     return (
@@ -648,8 +647,8 @@ where
 
             // Apply our prank
             if let Some(prank) = &self.prank {
-                if data.journaled_state.depth() >= prank.depth
-                    && call.context.caller == h176_to_b176(prank.prank_caller)
+                if data.journaled_state.depth() >= prank.depth &&
+                    call.context.caller == h176_to_b176(prank.prank_caller)
                 {
                     let mut prank_applied = false;
                     // At the target depth we set `msg.sender`
@@ -680,8 +679,8 @@ where
                 //
                 // We do this because any subsequent contract calls *must* exist on chain and
                 // we only want to grab *this* call, not internal ones
-                if data.journaled_state.depth() == broadcast.depth
-                    && call.context.caller == h176_to_b176(broadcast.original_caller)
+                if data.journaled_state.depth() == broadcast.depth &&
+                    call.context.caller == h176_to_b176(broadcast.original_caller)
                 {
                     // At the target depth we set `msg.sender` & tx.origin.
                     // We are simulating the caller as being an EOA, so *both* must be set to the
@@ -762,8 +761,8 @@ where
         retdata: bytes::Bytes,
         _: bool,
     ) -> (InstructionResult, Energy, bytes::Bytes) {
-        if call.contract == h176_to_b176(CHEATCODE_ADDRESS)
-            || call.contract == h176_to_b176(HARDHAT_CONSOLE_ADDRESS)
+        if call.contract == h176_to_b176(CHEATCODE_ADDRESS) ||
+            call.contract == h176_to_b176(HARDHAT_CONSOLE_ADDRESS)
         {
             return (status, remaining_energy, retdata);
         }
@@ -972,8 +971,8 @@ where
 
         // Apply our prank
         if let Some(prank) = &self.prank {
-            if data.journaled_state.depth() >= prank.depth
-                && call.caller == h176_to_b176(prank.prank_caller)
+            if data.journaled_state.depth() >= prank.depth &&
+                call.caller == h176_to_b176(prank.prank_caller)
             {
                 // At the target depth we set `msg.sender`
                 if data.journaled_state.depth() == prank.depth {
@@ -989,8 +988,8 @@ where
 
         // Apply our broadcast
         if let Some(broadcast) = &self.broadcast {
-            if data.journaled_state.depth() >= broadcast.depth
-                && call.caller == h176_to_b176(broadcast.original_caller)
+            if data.journaled_state.depth() >= broadcast.depth &&
+                call.caller == h176_to_b176(broadcast.original_caller)
             {
                 if let Err(err) =
                     data.journaled_state.load_account(h176_to_b176(broadcast.new_origin), data.db)

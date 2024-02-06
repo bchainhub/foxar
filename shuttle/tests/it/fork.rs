@@ -847,7 +847,6 @@ async fn can_override_fork_chain_id() {
             .with_fork_block_number(Some(145555u64))
             .with_chain_id(Some(chain_id_override))
             .with_eth_rpc_url(Some(rpc::next_http_archive_rpc_endpoint(Network::Devin))),
-
     )
     .await;
     let provider = handle.http_provider();

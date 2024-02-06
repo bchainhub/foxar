@@ -5,7 +5,5 @@ use corebc::{
 
 /// Returns a set of various contract addresses
 pub fn contract_addresses(chain: Network) -> Vec<Address> {
-    vec![
-        contract("ctn").unwrap().address(chain).unwrap(),
-    ]
+    vec![contract("ctn").unwrap().address(chain).unwrap()]
 }
