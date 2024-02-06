@@ -113,7 +113,7 @@ pub fn test_opts() -> TestOptions {
             },
         },
         invariant: InvariantConfig {
-            runs: 256,
+            runs: 512,
             depth: 15,
             fail_on_revert: false,
             call_override: false,

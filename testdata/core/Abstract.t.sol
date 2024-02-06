@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 contract TestFixture {
     function something() public pure returns (string memory) {

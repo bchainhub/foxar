@@ -1490,10 +1490,10 @@ mod tests {
             let mut is_preinstalled = PRE_INSTALL_YLEM_LOCK.lock().unwrap();
             if !*is_preinstalled {
                 let ylem =
-                    Ylem::find_or_install_yvm_version("1.1.0").and_then(|ylem| ylem.version());
+                    Ylem::find_or_install_yvm_version("1.1.2").and_then(|ylem| ylem.version());
                 if ylem.is_err() {
                     // try reinstalling
-                    let ylem = Ylem::blocking_install(&"1.1.0".parse().unwrap());
+                    let ylem = Ylem::blocking_install(&"1.1.2".parse().unwrap());
                     if ylem.map_err(YlemError::from).and_then(|ylem| ylem.version()).is_ok() {
                         *is_preinstalled = true;
                         break;
@@ -1505,7 +1505,7 @@ mod tests {
             }
         }
 
-        let ylem = Ylem::find_or_install_yvm_version("1.1.0").expect("could not install ylem");
+        let ylem = Ylem::find_or_install_yvm_version("1.1.2").expect("could not install ylem");
         SessionSource::new(ylem, Default::default())
     }
 
