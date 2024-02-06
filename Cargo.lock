@@ -3657,7 +3657,7 @@ dependencies = [
 [[package]]
 name = "libgoldilocks"
 version = "0.1.0"
-source = "git+https://github.com/core-coin/ed448-rs.git#69b5e001446a6e25b6bbeb97f67f07c2168f87d1"
+source = "git+https://github.com/core-coin/ed448-rs.git#6129268b09c674065d5c5c43f1b945f80c54ed28"
 dependencies = [
  "hex",
  "rand 0.8.5",
