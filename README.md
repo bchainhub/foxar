@@ -2,24 +2,30 @@
 Before installing please make sure you have the latest rustc installed along with cargo, and you are running the latest stable release.
 
 If you are not sure, you can just run:
-```bash
+```console
 rustup default stable
 ```
 
 For now the best way to install foxar is:
 1. Clone the repo
-```bash
+```console
 git clone https://github.com/bchainhub/foxar.git
 ```
 
 2. Go to `foxar/foxarup/
-```bash
+```console
 cd foxar/foxarup/
 ```
 
-3. Run foxarup
-```bash
-./foxarup --path ../
+3. Install foxarup
+```console
+./install
+```
+
+4. Run foxarup
+
+```console
+foxarup --path ../
 ```
 
 This will compile the entire project and will install all your binaries to ~/.foxar.
