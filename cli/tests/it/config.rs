@@ -266,8 +266,8 @@ contract Greeter {}
         )
         .unwrap();
 
-    // explicitly set to run with 1.1.0
-    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+    // explicitly set to run with 1.1.2
+    let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
     prj.write_config(config);
 
     cmd.arg("build");
@@ -292,12 +292,12 @@ contract Foo {}
         )
         .unwrap();
 
-    cmd.args(["build", "--use", "1.1.0"]);
+    cmd.args(["build", "--use", "1.1.2"]);
 
     let stdout = cmd.stdout_lossy();
     assert!(stdout.contains("Compiler run successful"));
 
-    cmd.spark_fuse().args(["build", "--force", "--use", "ylem:1.1.0"]).root_arg();
+    cmd.spark_fuse().args(["build", "--force", "--use", "ylem:1.1.2"]).root_arg();
 
     assert!(stdout.contains("Compiler run successful"));
 
@@ -306,9 +306,9 @@ contract Foo {}
     assert!(cmd.stderr_lossy().contains("this/ylem/does/not/exist does not exist"));
 
     // 0.7.1 was installed in previous step, so we can use the path to this directly
-    let local_ylem = corebc::ylem::Ylem::find_yvm_installed_version("1.1.0")
+    let local_ylem = corebc::ylem::Ylem::find_yvm_installed_version("1.1.2")
         .unwrap()
-        .expect("ylem 1.1.0 is installed");
+        .expect("ylem 1.1.2 is installed");
     cmd.spark_fuse().args(["build", "--force", "--use"]).arg(local_ylem.ylem).root_arg();
     assert!(stdout.contains("Compiler run successful"));
 });

@@ -11,7 +11,7 @@ use yvm::{self, Platform};
 ///     2. yvm updated with all build info
 ///     3. yvm bumped in ethers-rs
 ///     4. ethers bumped in foxar + update the `LATEST_SOLC`
-const LATEST_SOLC: Version = Version::new(1, 1, 0);
+const LATEST_SOLC: Version = Version::new(1, 1, 2);
 
 macro_rules! ensure_yvm_releases {
     ($($test:ident => $platform:ident),*) => {
@@ -37,8 +37,7 @@ async fn ensure_latest_release(platform: Platform) {
 ensure_yvm_releases!(
     test_yvm_releases_linux_amd64 => LinuxAmd64,
     test_yvm_releases_linux_aarch64 => LinuxAarch64,
-    // todo:error2215 add support for macos amd64
-    // test_yvm_releases_macos_amd64 => MacOsAmd64,
+    test_yvm_releases_macos_amd64 => MacOsAmd64,
     test_yvm_releases_macos_aarch64 => MacOsAarch64,
     test_yvm_releases_windows_amd64 => WindowsAmd64
 );

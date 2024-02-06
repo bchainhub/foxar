@@ -7,7 +7,7 @@ use spark::executor::opts::EvmOpts;
 use std::hint::black_box;
 use tokio::runtime::Runtime;
 
-static YLEM: Lazy<Ylem> = Lazy::new(|| Ylem::find_or_install_yvm_version("1.1.0").unwrap());
+static YLEM: Lazy<Ylem> = Lazy::new(|| Ylem::find_or_install_yvm_version("1.1.2").unwrap());
 
 /// Benchmark for the `clone_with_new_line` function in [SessionSource]
 fn clone_with_new_line(c: &mut Criterion) {
