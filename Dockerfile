@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.4
 
-FROM alpine:3.16 as build-environment
+FROM alpine:latest as build-environment
 
 ARG TARGETARCH
 WORKDIR /opt
@@ -46,7 +46,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.description="Foxar" \
     org.label-schema.url="https://getfoxar.sh" \
     org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.vcs-url="https://github.com/foxar-rs/foxar.git" \
+    org.label-schema.vcs-url="https://github.com/bchainhub/foxar.git" \
     org.label-schema.vendor="Foxar-rs" \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0"

@@ -7810,7 +7810,7 @@ checksum = "1367295b8f788d371ce2dbc842c7b709c73ee1364d30351dd300ec2203b12377"
 [[package]]
 name = "yvm-rs"
 version = "0.3.0"
-source = "git+https://github.com/core-coin/yvm-rs.git#b5251d1b1de8dfe6a35071d4887af44942939071"
+source = "git+https://github.com/core-coin/yvm-rs.git#5cc860059ef04436af71f8e8fd8d965483bb21a8"
 dependencies = [
  "dirs 5.0.1",
  "fs2",
@@ -7829,7 +7829,7 @@ dependencies = [
 [[package]]
 name = "yvm-rs-builds"
 version = "0.2.0"
-source = "git+https://github.com/core-coin/yvm-rs.git#b5251d1b1de8dfe6a35071d4887af44942939071"
+source = "git+https://github.com/core-coin/yvm-rs.git#5cc860059ef04436af71f8e8fd8d965483bb21a8"
 dependencies = [
  "build_const",
  "hex",

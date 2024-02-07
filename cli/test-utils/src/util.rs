@@ -191,7 +191,7 @@ pub fn setup_probe_project(test: TestProject) -> (TestProject, TestCommand) {
 fn install_commonly_used_solc() {
     let mut is_preinstalled = PRE_INSTALL_SOLC_LOCK.lock();
     if !*is_preinstalled {
-        let v0_8_18 = std::thread::spawn(|| Ylem::blocking_install(&"1.1.0".parse().unwrap()));
+        let v0_8_18 = std::thread::spawn(|| Ylem::blocking_install(&"1.1.2".parse().unwrap()));
 
         let wait = |res: std::thread::JoinHandle<_>| -> Result<(), ()> {
             if let Err(err) = res.join().unwrap() {
