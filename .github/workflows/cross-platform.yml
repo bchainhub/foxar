@@ -2,7 +2,7 @@ on: push
 name: foxar pipeline
 jobs:
   tests:
-    name: build ${{ matrix.job.name }})
+    name: build ${{ matrix.job.name }}
     runs-on: ${{ matrix.job.os }}
     strategy:
       matrix:
