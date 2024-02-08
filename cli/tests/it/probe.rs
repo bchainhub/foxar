@@ -319,25 +319,20 @@ probetest!(calldata_array, |_: TestProject, mut cmd: TestCommand| {
 });
 
 // <https://github.com/foxar-rs/foxar/issues/2705>
-probetest!(
-    //todo:error2215 need an archive node
-    #[ignore]
-    probe_run_succeeds,
-    |_: TestProject, mut cmd: TestCommand| {
-        let rpc = http_rpc_endpoint();
-        cmd.args([
-            "run",
-            "-v",
-            "0xcedb08f67df469cbb947390a4aef71b950d192d98c68005abb23f0ce8652c37d",
-            "--quick",
-            "--rpc-url",
-            rpc.as_str(),
-        ]);
-        let output = cmd.stdout_lossy();
-        assert!(output.contains("Transaction successfully executed"));
-        assert!(!output.contains("Revert"));
-    }
-);
+probetest!(probe_run_succeeds, |_: TestProject, mut cmd: TestCommand| {
+    let rpc = http_rpc_endpoint();
+    cmd.args([
+        "run",
+        "-v",
+        "0xcedb08f67df469cbb947390a4aef71b950d192d98c68005abb23f0ce8652c37d",
+        "--quick",
+        "--rpc-url",
+        rpc.as_str(),
+    ]);
+    let output = cmd.stdout_lossy();
+    assert!(output.contains("Transaction successfully executed"));
+    assert!(!output.contains("Revert"));
+});
 
 // tests that `probe --to-base` commands are working correctly.
 probetest!(probe_to_base, |_: TestProject, mut cmd: TestCommand| {
@@ -381,17 +376,16 @@ probetest!(probe_receipt_revert_reason, |_: TestProject, mut cmd: TestCommand| {
     let output = cmd.stdout_lossy();
     assert!(!output.contains("revertReason"));
 
-    //TODO:error2215 - find some tx with revert reason
-    // <https://etherscan.io/tx/0x0e07d8b53ed3d91314c80e53cf25bcde02084939395845cbb625b029d568135c>
-    // cmd.probe_fuse().args([
-    //     "receipt",
-    //     "0x5ebf392a2804570f5eff84de3f476c1052dc2e189fcd4276cd4a525d90fb8db3",
-    //     "--rpc-url",
-    //     rpc.as_str(),
-    // ]);
-    // let output = cmd.stdout_lossy();
-    // assert!(output.contains("revertReason"));
-    // assert!(output.contains("Transaction too old"));
+    // <https://etherscan.io/tx/0x04320fba789c9bb170f0f483deed635acf2f8e623b89e4043fa41f7907749c7b>
+    cmd.probe_fuse().args([
+        "receipt",
+        "0x04320fba789c9bb170f0f483deed635acf2f8e623b89e4043fa41f7907749c7b",
+        "--rpc-url",
+        rpc.as_str(),
+    ]);
+    let output = cmd.stdout_lossy();
+    assert!(output.contains("revertReason"));
+    assert!(output.contains("AccessControl: role is not granted"));
 });
 
 // tests that `probe --parse-bytes32-address` command is working correctly.

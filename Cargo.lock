@@ -1057,7 +1057,6 @@ checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
 
 [[package]]
 name = "corebc"
-version = "2.0.3"
 source = "git+https://github.com/core-coin/corebc-rs.git#4395f3758517c1e40fbcd4fbe5b0359416180f14"
 dependencies = [
  "corebc-addressbook",

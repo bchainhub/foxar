@@ -704,10 +704,10 @@ mod tests {
     use foxar_common::get_http_provider;
     use foxar_config::Config;
     use std::{collections::BTreeSet, path::PathBuf, sync::Arc};
-    const ENDPOINT: &str = "https://mainnet.infura.io/v3/40bee2d557ed4b52908c3e62345a3d8b";
+    const ENDPOINT: &str = "http://127.0.0.1:8545/";
 
     #[tokio::test(flavor = "multi_thread")]
-    #[ignore = "For some reason it is refusing to connect to our endpoint, this is only necessary for forking which we don't yet support, fix once we will"]
+    #[ignore = "It doesn't work with our archive RPC node because it has https but not http. But with local node and http it works"]
     async fn shared_backend() {
         let provider = get_http_provider(ENDPOINT);
         let meta = BlockchainDbMeta {
@@ -720,7 +720,7 @@ mod tests {
         let backend = SharedBackend::spawn_backend(Arc::new(provider), db.clone(), None).await;
 
         // some rng contract from etherscan
-        let address: B176 = "000063091244180ae240c87d1f528f5f269134cb07b3".parse().unwrap();
+        let address: B176 = "0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c".parse().unwrap();
 
         let idx = rU256::from(0u64);
         let value = backend.storage(address, idx).unwrap();
@@ -758,7 +758,7 @@ mod tests {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-    #[ignore = "For some reason it is refusing to connect to our endpoint, this is only necessary for forking which we don't yet support, fix once we will"]
+    #[ignore = "It doesn't work with our archive RPC node because it has https but not http. But with local node and http it works"]
     async fn can_read_write_cache() {
         let provider = get_http_provider(ENDPOINT);
 
@@ -780,7 +780,7 @@ mod tests {
         let backend = Backend::spawn(Some(fork)).await;
 
         // some rng contract from etherscan
-        let address: B176 = "000063091244180ae240c87d1f528f5f269134cb07b3".parse().unwrap();
+        let address: B176 = "0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c".parse().unwrap();
 
         let idx = rU256::from(0u64);
         let _value = backend.storage(address, idx);

@@ -60,7 +60,7 @@ codegen-units = 1
 corebc = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
 corebc-addressbook = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
 corebc-core = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
-corebc-contract = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-contract = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false } 
 corebc-contract-abigen = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
 corebc-providers = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
 corebc-signers = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
@@ -68,4 +68,3 @@ corebc-blockindex = { git = "https://github.com/core-coin/corebc-rs.git", defaul
 corebc-ylem = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
 revm = { git = "https://github.com/core-coin/cvm.git", default-features = false }
 solang-parser = "=0.3.0"
-

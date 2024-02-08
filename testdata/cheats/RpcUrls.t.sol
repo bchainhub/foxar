@@ -10,7 +10,7 @@ contract RpcUrlTest is DSTest {
     // returns the correct url
     function testCanGetRpcUrl() public {
         string memory url = cheats.rpcUrl("rpcAlias"); // note: this alias is pre-configured in the test runner
-        assertEq(url, "https://eth-mainnet.alchemyapi.io/v2/Lc7oIGYeL_QvInzI0Wiu_pOZZDEKBrdf");
+        assertEq(url, "https://xcbapi-arch-mainnet.coreblockchain.net/");
     }
 
     // returns an error if env alias does not exist

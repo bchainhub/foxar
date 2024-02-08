@@ -9,16 +9,16 @@ contract Issue2723Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
     function testRollFork() public {
-        address coinbase = 0xcb740193d941b50d91be6567c7ee1c0fe7af498b4137;
+        address coinbase = 0xcb580851379288d0c6b251af9f49988ccca9d6502948;
 
-        vm.createSelectFork("rpcAlias", 9);
+        vm.createSelectFork("rpcAlias", 7628371);
 
-        assertEq(block.number, 9);
-        assertEq(coinbase.balance, 11250000000000000000);
+        assertEq(block.number, 7628371);
+        assertEq(coinbase.balance, 58668399788681000075776);
 
-        vm.rollFork(10);
+        vm.rollFork(7628372);
 
-        assertEq(block.number, 10);
-        assertEq(coinbase.balance, 16250000000000000000);
+        assertEq(block.number, 7628372);
+        assertEq(coinbase.balance, 58423096881681000079872);
     }
 }
