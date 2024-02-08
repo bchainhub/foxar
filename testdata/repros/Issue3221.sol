@@ -12,28 +12,28 @@ contract Issue3221Test is DSTest {
 
     function setUp() public {
         fork1 = vm.createFork(
-            "https://goerli.infura.io/v3/b1d3925804e74152b316ca7da97060d3",
-            7475589
+            "rpcAlias",
+            7306987
         );
         fork2 = vm.createFork(
-            "https://api.avax-test.network/ext/bc/C/rpc",
-            12880747
+            "rpcAlias",
+            7654413
         );
     }
 
     function testForkNonce() public {
-        address user = address(0xF0959944122fb1ed4CfaBA645eA06EED30427BAA);
+        address user = address(0xcb1958b39698a44bdae37f881e68dce073823a48a631);
 
         // Loads but doesn't touch
         assertEq(vm.getNonce(user), 0);
 
         vm.selectFork(fork2);
-        assertEq(vm.getNonce(user), 3);
+        assertEq(vm.getNonce(user), 23940);
         vm.prank(user);
         new Counter();
 
         vm.selectFork(fork1);
-        assertEq(vm.getNonce(user), 3);
+        assertEq(vm.getNonce(user), 10090);
         vm.prank(user);
         new Counter();
     }

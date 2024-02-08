@@ -11,8 +11,8 @@ contract Issue3192Test is DSTest {
     uint256 fork2;
 
     function setUp() public {
-        fork1 = vm.createFork("rpcAlias", 7475589);
-        fork2 = vm.createFork("rpcAlias", 12880747);
+        fork1 = vm.createFork("rpcAlias", 3813881);
+        fork2 = vm.createFork("rpcAlias", 7627763);
         vm.selectFork(fork1);
     }
 

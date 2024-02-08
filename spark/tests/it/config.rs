@@ -195,9 +195,7 @@ pub fn rpc_endpoints() -> RpcEndpoints {
     RpcEndpoints::new([
         (
             "rpcAlias",
-            RpcEndpoint::Url(
-                "https://eth-mainnet.alchemyapi.io/v2/Lc7oIGYeL_QvInzI0Wiu_pOZZDEKBrdf".to_string(),
-            ),
+            RpcEndpoint::Url("https://xcbapi-arch-mainnet.coreblockchain.net/".to_string()),
         ),
         ("rpcEnvAlias", RpcEndpoint::Env("${RPC_ENV_ALIAS}".to_string())),
     ])

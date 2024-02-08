@@ -299,8 +299,6 @@ contract ContractTest is DSTest {
 
 sparktest_init!(
     #[serial_test::serial]
-    // todo:error2215 - fix tests in forge-std repo
-    #[ignore]
     can_test_spark_std,
     |prj: TestProject, mut cmd: TestCommand| {
         let spark_std_dir = prj.root().join("lib/forge-std");

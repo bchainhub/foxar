@@ -27,8 +27,7 @@ pub static PROJECT: Lazy<Project> = Lazy::new(|| {
 pub static LIBS_PROJECT: Lazy<Project> = Lazy::new(|| {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../testdata");
     let paths = ProjectPathsConfig::builder().root(root.clone()).sources(root).build().unwrap();
-    let libs =
-        ["fork/Fork.t.sol:DssExecLib:0xfD88CeE74f7D78697775aBDAE53f9Da1559728E4".to_string()];
+    let libs = [];
 
     let settings = Settings { libraries: Libraries::parse(&libs).unwrap(), ..Default::default() };
 
