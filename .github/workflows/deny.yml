@@ -19,7 +19,7 @@ jobs:
             - uses: actions/checkout@v3
             - uses: EmbarkStudios/cargo-deny-action@v1
               with:
-                  command: check all
+                  command: check advisories bans sources
                   # Clear out arguments to not pass `--all-features` to `cargo deny`.
                   # `foxar-cli` has an `openssl` feature which enables banned dependencies
                   arguments: ""
