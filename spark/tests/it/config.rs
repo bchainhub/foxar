@@ -77,8 +77,8 @@ impl TestConfig {
         }
         for (_, SuiteResult { test_results, .. }) in suite_result {
             for (test_name, result) in test_results {
-                if self.should_fail && (result.status == TestStatus::Success) ||
-                    !self.should_fail && (result.status == TestStatus::Failure)
+                if self.should_fail && (result.status == TestStatus::Success)
+                    || !self.should_fail && (result.status == TestStatus::Failure)
                 {
                     let logs = decode_console_logs(&result.logs);
                     let outcome = if self.should_fail { "fail" } else { "pass" };
@@ -101,7 +101,7 @@ impl TestConfig {
 pub fn test_opts() -> TestOptions {
     TestOptions {
         fuzz: FuzzConfig {
-            runs: 256,
+            runs: 512,
             max_test_rejects: 65536,
             seed: None,
             dictionary: FuzzDictionaryConfig {
