@@ -598,7 +598,13 @@ async fn test_reset_fork_on_new_blocks() {
     let mut stream = provider.watch_blocks().await.unwrap();
     // the http watcher may fetch multiple blocks at once, so we set a timeout here to offset edge
     // cases where the stream immediately returns a block
-    tokio::time::sleep(Network::Mainnet.average_blocktime_hint().unwrap()).await;
+    tokio::time::sleep(
+        Network::Mainnet
+            .average_blocktime_hint()
+            .unwrap()
+            .saturating_add(Network::Mainnet.average_blocktime_hint().unwrap()),
+    )
+    .await;
     stream.next().await.unwrap();
     stream.next().await.unwrap();
 
