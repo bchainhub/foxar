@@ -4,6 +4,8 @@ on:
       - '*'
     tags-ignore:
       - '*'
+env:
+  CARGO_TERM_COLOR: always
 name: build and test
 jobs:
   tests:
