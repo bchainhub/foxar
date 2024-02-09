@@ -20,8 +20,8 @@ jobs:
             - name: Compute release name and tag
               id: release_info
               run:
-                  echo "::set-output name=tag_name::${GITHUB_REF_NAME}"
-                  echo "::set-output name=release_name::${GITHUB_REF_NAME}"
+                  echo "tag_name=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+                  echo "release_name=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
             - name: Build changelog
               id: build_changelog
               uses: mikepenz/release-changelog-builder-action@v2
