@@ -1,8 +1,15 @@
-on: push
-name: foxar pipeline
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+env:
+  CARGO_TERM_COLOR: always
+name: build and test
 jobs:
   tests:
-    name: build ${{ matrix.job.name }}
+    name: build and test ${{ matrix.job.name }}
     runs-on: ${{ matrix.job.os }}
     strategy:
       matrix:

@@ -1,4 +1,4 @@
-name: Release
+name: release
 on:
     push:
         tags:
@@ -10,29 +10,21 @@ jobs:
         name: Prepare release
         runs-on: ubuntu-latest
         outputs:
-            tag_name: ${{ steps.release_info.outputs.tag_name }}
-            release_name: ${{ steps.release_info.outputs.release_name }}
+            tag_name: ${{ github.ref_name }}
+            release_name: ${{ github.ref_name }}
             changelog: ${{ steps.build_changelog.outputs.changelog }}
         steps:
             - uses: actions/checkout@v3
               with:
                   fetch-depth: 0
-            - name: Compute release name and tag
-              id: release_info
-              run:
-                  echo "tag_name=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-                  echo "release_name=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
             - name: Build changelog
               id: build_changelog
               uses: mikepenz/release-changelog-builder-action@v2
               with:
                   configuration: "./.github/changelog.json"
-                  toTag: ${{ steps.release_info.outputs.tag_name }}
+                  toTag: ${{ github.ref_name }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    release-docker:
-        name: Release Docker
-        uses: ./.github/workflows/docker-publish.yml
     release:
         name: ${{ matrix.job.target }} (${{ matrix.job.os }})
         runs-on: ${{ matrix.job.os }}
