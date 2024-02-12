@@ -1,5 +1,5 @@
 //! Fuzzing support abstracted over the [`Evm`](crate::Evm) used
-use crate::{fuzz::*, CALLER};
+use crate::{default_caller, fuzz::*};
 mod error;
 pub use error::InvariantFuzzError;
 mod filters;
@@ -10,7 +10,7 @@ mod executor;
 use crate::executor::Executor;
 use corebc::{
     abi::{Abi, Function},
-    types::{Address, Bytes, U256},
+    types::{Address, Bytes, Network, U256},
 };
 pub use executor::{InvariantExecutor, InvariantFailures};
 use parking_lot::Mutex;
@@ -56,7 +56,7 @@ pub fn assert_invariants(
     for func in &invariant_contract.invariant_functions {
         let mut call_result = executor
             .call_raw(
-                CALLER,
+                default_caller(&Network::Mainnet),
                 invariant_contract.address,
                 func.encode_input(&[]).expect("invariant should have no inputs").into(),
                 U256::zero(),

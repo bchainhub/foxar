@@ -8,13 +8,13 @@ use corebc::{
 };
 use foxar_config::Config;
 use foxar_evm::{
+    default_caller,
     executor::{
         backend::Backend,
         opts::{Env, EvmOpts},
         DatabaseRef, Executor, ExecutorBuilder,
     },
     fuzz::FuzzedExecutor,
-    CALLER,
 };
 use std::{path::PathBuf, str::FromStr};
 
@@ -84,7 +84,7 @@ pub fn fuzz_executor<DB: DatabaseRef>(executor: &Executor) -> FuzzedExecutor {
     FuzzedExecutor::new(
         executor,
         proptest::test_runner::TestRunner::new(cfg),
-        CALLER,
+        default_caller(&Network::Mainnet),
         config::test_opts().fuzz,
     )
 }

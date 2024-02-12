@@ -3,13 +3,12 @@ use self::inspector::{
 };
 use crate::{
     debug::DebugArena,
-    decode,
+    decode, default_caller,
     trace::CallTraceArena,
     utils::{
         b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result,
         ru256_to_u256, u256_to_ru256,
     },
-    CALLER,
 };
 pub use abi::{
     patch_hardhat_console_selector, HardhatConsoleCalls, CHEATCODE_ADDRESS, CONSOLE_ABI,
@@ -21,7 +20,7 @@ use corebc::{
     abi::{Abi, Contract, Detokenize, Function, Tokenize},
     prelude::{decode_function_data, encode_function_data, Address, U256},
     signers::LocalWallet,
-    types::Log,
+    types::{Log, Network},
 };
 use foxar_common::{abi::IntoFunction, evm::Breakpoints};
 use hashbrown::HashMap;
@@ -231,7 +230,7 @@ impl Executor {
     ) -> Result<CallResult<()>, EvmError> {
         trace!(?from, ?to, "setting up contract");
 
-        let from = from.unwrap_or(CALLER);
+        let from = from.unwrap_or(default_caller(&Network::Mainnet));
         self.backend_mut().set_test_contract(to).set_caller(from);
         let res = self.call_committing::<(), _, _>(from, to, "setUp()", (), 0.into(), None)?;
 
@@ -575,8 +574,14 @@ impl Executor {
         let mut success = !reverted;
         if success {
             // Check if a DSTest assertion failed
-            let call =
-                executor.call::<bool, _, _>(CALLER, address, "failed()(bool)", (), 0.into(), None);
+            let call = executor.call::<bool, _, _>(
+                default_caller(&Network::Mainnet),
+                address,
+                "failed()(bool)",
+                (),
+                0.into(),
+                None,
+            );
 
             if let Ok(CallResult { result: failed, .. }) = call {
                 success = !failed;

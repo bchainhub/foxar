@@ -4,14 +4,14 @@ use super::{
 };
 use crate::{
     abi::{CHEATCODE_ADDRESS, CONSOLE_ABI, HARDHAT_CONSOLE_ABI, HARDHAT_CONSOLE_ADDRESS, HEVM_ABI},
-    decode,
+    decode, default_caller,
     executor::inspector::DEFAULT_CREATE2_DEPLOYER,
     trace::{node::CallTraceNode, utils},
-    CALLER, TEST_CONTRACT_ADDRESS,
+    TEST_CONTRACT_ADDRESS,
 };
 use corebc::{
     abi::{Abi, Address, Event, Function, Param, ParamType, Token},
-    types::{H176, H256},
+    types::{Network, H176, H256},
 };
 use foxar_common::{abi::get_indexed_event, SELECTOR_LEN};
 use hashbrown::HashSet;
@@ -137,7 +137,7 @@ impl CallTraceDecoder {
                 (CHEATCODE_ADDRESS, "VM".to_string()),
                 (HARDHAT_CONSOLE_ADDRESS, "console".to_string()),
                 (DEFAULT_CREATE2_DEPLOYER, "Create2Deployer".to_string()),
-                (CALLER, "DefaultSender".to_string()),
+                (default_caller(&Network::Mainnet), "DefaultSender".to_string()),
                 (TEST_CONTRACT_ADDRESS, "DefaultTestContract".to_string()),
             ]
             .into(),

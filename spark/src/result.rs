@@ -1,7 +1,7 @@
 //! test outcomes
 
-use crate::Address;
 use corebc::prelude::Log;
+use corebc::types::Address;
 use foxar_common::evm::Breakpoints;
 use foxar_evm::{
     coverage::HitMaps,

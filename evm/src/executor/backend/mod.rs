@@ -1,5 +1,6 @@
 use crate::{
     abi::CHEATCODE_ADDRESS,
+    default_caller,
     executor::{
         backend::snapshot::BackendSnapshot,
         fork::{CreateFork, ForkId, MultiFork, SharedBackend},
@@ -7,11 +8,11 @@ use crate::{
         snapshot::Snapshots,
     },
     utils::{b176_to_h176, h176_to_b176, h256_to_b256, ru256_to_u256, u256_to_ru256},
-    CALLER, TEST_CONTRACT_ADDRESS,
+    TEST_CONTRACT_ADDRESS,
 };
 use corebc::{
     prelude::{Block, H176, H256, U256},
-    types::{Address, BlockNumber, Transaction, U64},
+    types::{Address, BlockNumber, Network as NetworkCore, Transaction, U64},
     utils::sha3,
 };
 use hashbrown::HashMap as Map;
@@ -25,6 +26,7 @@ use revm::{
     },
     Database, DatabaseCommit, Inspector, JournaledState, EVM,
 };
+use std::hash::RandomState;
 use std::{
     collections::{HashMap, HashSet},
     sync::{
@@ -62,8 +64,11 @@ pub type LocalForkId = U256;
 type ForkLookupIndex = usize;
 
 /// All accounts that will have persistent storage across fork swaps. See also [`clone_data()`]
-const DEFAULT_PERSISTENT_ACCOUNTS: [H176; 3] =
-    [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, CALLER];
+fn get_default_persistent_accounts() -> HashSet<H176, RandomState> {
+    let default_persistent_accounts =
+        [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, default_caller(&NetworkCore::Mainnet)];
+    return HashSet::from(default_persistent_accounts);
+}
 
 /// An extension trait that allows us to easily extend the `revm::Inspector` capabilities
 #[auto_impl::auto_impl(&mut, Box)]
@@ -403,7 +408,7 @@ impl Backend {
         trace!(target: "backend", forking_mode=?fork.is_some(), "creating executor backend");
         // Note: this will take of registering the `fork`
         let inner = BackendInner {
-            persistent_accounts: HashSet::from(DEFAULT_PERSISTENT_ACCOUNTS),
+            persistent_accounts: get_default_persistent_accounts(),
             ..Default::default()
         };
 
@@ -533,8 +538,9 @@ impl Backend {
     /// Checks if the test contract associated with this backend failed, See
     /// [Self::is_failed_test_contract]
     pub fn is_failed(&self) -> bool {
-        self.has_snapshot_failure() ||
-            self.test_contract_address()
+        self.has_snapshot_failure()
+            || self
+                .test_contract_address()
                 .map(|addr| self.is_failed_test_contract(addr))
                 .unwrap_or_default()
     }
@@ -1650,7 +1656,7 @@ impl Default for BackendInner {
             cheatcode_access_accounts: HashSet::from([
                 CHEATCODE_ADDRESS,
                 TEST_CONTRACT_ADDRESS,
-                CALLER,
+                default_caller(&NetworkCore::Mainnet),
             ]),
         }
     }

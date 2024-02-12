@@ -4,7 +4,7 @@ use crate::{
 };
 use corebc::{
     abi::{Abi, Function},
-    types::{Address, Bytes, U256},
+    types::{Address, Bytes, Network, U256},
 };
 use eyre::Result;
 use foxar_common::{
@@ -14,6 +14,7 @@ use foxar_common::{
 use foxar_config::{FuzzConfig, InvariantConfig};
 use foxar_evm::{
     decode::decode_console_logs,
+    default_caller,
     executor::{CallResult, EvmError, ExecutionErr, Executor},
     fuzz::{
         invariant::{
@@ -22,7 +23,6 @@ use foxar_evm::{
         FuzzedExecutor,
     },
     trace::{load_contracts, TraceKind},
-    CALLER,
 };
 use proptest::test_runner::{TestError, TestRunner};
 use rayon::prelude::*;
@@ -92,7 +92,7 @@ impl<'a> ContractRunner<'a> {
 
         // We max out their balance so that they can deploy and make calls.
         self.executor.set_balance(self.sender, U256::MAX)?;
-        self.executor.set_balance(CALLER, U256::MAX)?;
+        self.executor.set_balance(default_caller(&Network::Mainnet), U256::MAX)?;
 
         // We set the nonce of the deployer accounts to 1 to get the same addresses as DappTools
         self.executor.set_nonce(self.sender, 1)?;
@@ -133,7 +133,7 @@ impl<'a> ContractRunner<'a> {
         // balance to the initial balance we want
         self.executor.set_balance(address, self.initial_balance)?;
         self.executor.set_balance(self.sender, self.initial_balance)?;
-        self.executor.set_balance(CALLER, self.initial_balance)?;
+        self.executor.set_balance(default_caller(&Network::Mainnet), self.initial_balance)?;
 
         self.executor.deploy_create2_deployer()?;
 

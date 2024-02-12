@@ -17,7 +17,8 @@ pub mod coverage;
 /// Forge test execution backends
 pub mod executor;
 
-use corebc::types::{ActionType, CallType, H176};
+use corebc::types::{ActionType, Address, CallType, Network, H160, H176};
+use corebc::utils::to_ican;
 pub use executor::abi;
 
 /// Fuzzing wrapper for executors
@@ -27,7 +28,6 @@ pub mod fuzz;
 pub mod utils;
 
 // Re-exports
-pub use corebc::types::Address;
 pub use hashbrown::{self, HashMap};
 pub use revm;
 use revm::interpreter::{CallScheme, CreateScheme};
@@ -40,10 +40,17 @@ use serde::{Deserialize, Serialize};
 ///
 /// The address was derived from `address(uint160(uint256(sha3("foxar default caller"))))`
 /// and is equal to cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38.
-pub const CALLER: Address = H176([
-    0xcb, 0x68, 0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83, 0xF3,
-    0x3E, 0x07, 0x30, 0x9D, 0x1F, 0x38,
-]);
+
+/// Depending on network has different prefix and checksum
+pub fn default_caller(network: &Network) -> H176 {
+    /// `0x1804c8ab1f12e6bbf3894d4083f33e07309d1f38`
+    const CALLER: &H160 = &H160([
+        0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83, 0xF3, 0x3E,
+        0x07, 0x30, 0x9D, 0x1F, 0x38,
+    ]);
+
+    to_ican(CALLER, network)
+}
 
 /// Stores the default test contract address: cb04b4c79dab8f259c7aee6e5b2aa729821864227e84
 pub const TEST_CONTRACT_ADDRESS: Address = H176([
