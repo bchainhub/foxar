@@ -126,6 +126,7 @@ impl InvariantFuzzError {
             ided_contracts.extend(load_contracts(
                 vec![(TraceKind::Execution, call_result.traces.clone().unwrap())],
                 known_contracts,
+                &Network::from(executor.env().cfg.network_id),
             ));
 
             counterexample_sequence.push(
@@ -143,7 +144,7 @@ impl InvariantFuzzError {
             if let Some(func) = &self.func {
                 let error_call_result = executor
                     .call_raw(
-                        default_caller(&Network::Mainnet),
+                        default_caller(&Network::from(executor.env().cfg.network_id)),
                         self.addr,
                         func.0.clone(),
                         U256::zero(),
@@ -189,7 +190,7 @@ impl InvariantFuzzError {
             if let Some(func) = &self.func {
                 let error_call_result = executor
                     .call_raw(
-                        default_caller(&Network::Mainnet),
+                        default_caller(&Network::from(executor.env().cfg.network_id)),
                         self.addr,
                         func.0.clone(),
                         0.into(),

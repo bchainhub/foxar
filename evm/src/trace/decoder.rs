@@ -24,8 +24,8 @@ pub struct CallTraceDecoderBuilder {
 }
 
 impl CallTraceDecoderBuilder {
-    pub fn new() -> Self {
-        Self { decoder: CallTraceDecoder::new() }
+    pub fn new(network: &Network) -> Self {
+        Self { decoder: CallTraceDecoder::new(network) }
     }
 
     /// Add known labels to the decoder.
@@ -115,7 +115,7 @@ impl CallTraceDecoder {
     ///
     /// The call trace decoder always knows how to decode calls to the cheatcode address, as well
     /// as DSTest-style logs.
-    pub fn new() -> Self {
+    pub fn new(network: &Network) -> Self {
         Self {
             // TODO: These are the Ethereum precompiles. We should add a way to support precompiles
             // for other networks, too.
@@ -137,7 +137,7 @@ impl CallTraceDecoder {
                 (CHEATCODE_ADDRESS, "VM".to_string()),
                 (HARDHAT_CONSOLE_ADDRESS, "console".to_string()),
                 (DEFAULT_CREATE2_DEPLOYER, "Create2Deployer".to_string()),
-                (default_caller(&Network::Mainnet), "DefaultSender".to_string()),
+                (default_caller(network), "DefaultSender".to_string()),
                 (TEST_CONTRACT_ADDRESS, "DefaultTestContract".to_string()),
             ]
             .into(),

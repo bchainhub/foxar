@@ -56,7 +56,7 @@ pub fn assert_invariants(
     for func in &invariant_contract.invariant_functions {
         let mut call_result = executor
             .call_raw(
-                default_caller(&Network::Mainnet),
+                default_caller(&Network::from(executor.env().cfg.network_id)),
                 invariant_contract.address,
                 func.encode_input(&[]).expect("invariant should have no inputs").into(),
                 U256::zero(),

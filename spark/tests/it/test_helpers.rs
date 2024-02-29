@@ -84,7 +84,7 @@ pub fn fuzz_executor<DB: DatabaseRef>(executor: &Executor) -> FuzzedExecutor {
     FuzzedExecutor::new(
         executor,
         proptest::test_runner::TestRunner::new(cfg),
-        default_caller(&Network::Mainnet),
+        default_caller(&Network::from(executor.env().cfg.network_id)),
         config::test_opts().fuzz,
     )
 }

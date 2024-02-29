@@ -221,7 +221,7 @@ impl Executor {
     ///
     /// This will commit any state changes to the underlying database.
     ///
-    /// Ayn changes made during the setup call to env's block environment are persistent, for
+    /// Any changes made during the setup call to env's block environment are persistent, for
     /// example `vm.chainId()` will change the `block.chainId` for all subsequent test calls.
     pub fn setup(
         &mut self,
@@ -230,7 +230,7 @@ impl Executor {
     ) -> Result<CallResult<()>, EvmError> {
         trace!(?from, ?to, "setting up contract");
 
-        let from = from.unwrap_or(default_caller(&Network::Mainnet));
+        let from = from.unwrap_or(default_caller(&Network::from(self.env().cfg.network_id)));
         self.backend_mut().set_test_contract(to).set_caller(from);
         let res = self.call_committing::<(), _, _>(from, to, "setUp()", (), 0.into(), None)?;
 
@@ -575,7 +575,7 @@ impl Executor {
         if success {
             // Check if a DSTest assertion failed
             let call = executor.call::<bool, _, _>(
-                default_caller(&Network::Mainnet),
+                default_caller(&Network::from(self.env().cfg.network_id)),
                 address,
                 "failed()(bool)",
                 (),

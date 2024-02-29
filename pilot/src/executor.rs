@@ -8,7 +8,7 @@ use crate::prelude::{
 use core::fmt::Debug;
 use corebc::{
     abi::{ethabi, Address, ParamType, Token},
-    types::{I256, U256},
+    types::{Network, I256, U256},
     utils::hex,
 };
 use corebc_ylem::Artifact;
@@ -244,6 +244,7 @@ impl SessionSource {
             None => {
                 let backend = Backend::spawn(
                     self.config.evm_opts.get_fork(&self.config.foxar_config, env.clone()),
+                    &Network::from(env.cfg.network_id),
                 )
                 .await;
                 self.config.backend = Some(backend.clone());
@@ -668,8 +669,8 @@ impl Type {
                     match name {
                         "block" => match access {
                             "coinbase" => Some(ParamType::Address),
-                            "basefee" | "chainid" | "difficulty" | "gaslimit" | "number" |
-                            "timestamp" => Some(ParamType::Uint(256)),
+                            "basefee" | "chainid" | "difficulty" | "gaslimit" | "number"
+                            | "timestamp" => Some(ParamType::Uint(256)),
                             _ => None,
                         },
                         "msg" => match access {
@@ -1034,10 +1035,10 @@ impl Type {
     fn is_array(&self) -> bool {
         matches!(
             self,
-            Self::Array(_) |
-                Self::FixedArray(_, _) |
-                Self::Builtin(ParamType::Array(_)) |
-                Self::Builtin(ParamType::FixedArray(_, _))
+            Self::Array(_)
+                | Self::FixedArray(_, _)
+                | Self::Builtin(ParamType::Array(_))
+                | Self::Builtin(ParamType::FixedArray(_, _))
         )
     }
 

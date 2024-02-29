@@ -64,9 +64,9 @@ pub type LocalForkId = U256;
 type ForkLookupIndex = usize;
 
 /// All accounts that will have persistent storage across fork swaps. See also [`clone_data()`]
-fn get_default_persistent_accounts() -> HashSet<H176, RandomState> {
+fn get_default_persistent_accounts(network: &NetworkCore) -> HashSet<H176, RandomState> {
     let default_persistent_accounts =
-        [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, default_caller(&NetworkCore::Mainnet)];
+        [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, default_caller(network)];
     return HashSet::from(default_persistent_accounts);
 }
 
@@ -396,19 +396,19 @@ pub struct Backend {
 
 impl Backend {
     /// Creates a new Backend with a spawned multi fork thread.
-    pub async fn spawn(fork: Option<CreateFork>) -> Self {
-        Self::new(MultiFork::spawn().await, fork)
+    pub async fn spawn(fork: Option<CreateFork>, network: &NetworkCore) -> Self {
+        Self::new(MultiFork::spawn().await, fork, network)
     }
 
     /// Creates a new instance of `Backend`
     ///
     /// if `fork` is `Some` this will launch with a `fork` database, otherwise with an in-memory
     /// database
-    pub fn new(forks: MultiFork, fork: Option<CreateFork>) -> Self {
+    pub fn new(forks: MultiFork, fork: Option<CreateFork>, network: &NetworkCore) -> Self {
         trace!(target: "backend", forking_mode=?fork.is_some(), "creating executor backend");
         // Note: this will take of registering the `fork`
         let inner = BackendInner {
-            persistent_accounts: get_default_persistent_accounts(),
+            persistent_accounts: get_default_persistent_accounts(network),
             ..Default::default()
         };
 
@@ -444,8 +444,9 @@ impl Backend {
         id: &ForkId,
         fork: Fork,
         journaled_state: JournaledState,
+        network: &NetworkCore,
     ) -> Self {
-        let mut backend = Self::spawn(None).await;
+        let mut backend = Self::spawn(None, network).await;
         let fork_ids = backend.inner.insert_new_fork(id.clone(), fork.db, journaled_state);
         backend.inner.launched_with_fork = Some((id.clone(), fork_ids.0, fork_ids.1));
         backend.active_fork_ids = Some(fork_ids);
@@ -1766,8 +1767,15 @@ fn commit_transaction(
 
         let fork = fork.clone();
         let journaled_state = journaled_state.clone();
-        let db = crate::utils::RuntimeOrHandle::new()
-            .block_on(async move { Backend::new_with_fork(fork_id, fork, journaled_state).await });
+        let db = crate::utils::RuntimeOrHandle::new().block_on(async move {
+            Backend::new_with_fork(
+                fork_id,
+                fork,
+                journaled_state,
+                &NetworkCore::from(evm.env.cfg.network_id),
+            )
+            .await
+        });
         evm.database(db);
 
         if let Some(inspector) = cheatcodes_inspector {

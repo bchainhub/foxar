@@ -7,7 +7,7 @@ use crate::{
     suggestions, utils,
 };
 use clap::Parser;
-use corebc::types::U256;
+use corebc::types::{Network, U256};
 use foxar_common::{
     compile::{self, ProjectCompiler},
     evm::EvmArgs,
@@ -140,8 +140,8 @@ impl TestArgs {
         let mut project = config.project()?;
 
         // install missing dependencies
-        if install::install_missing_dependencies(&mut config, self.build_args().silent) &&
-            config.auto_detect_remappings
+        if install::install_missing_dependencies(&mut config, self.build_args().silent)
+            && config.auto_detect_remappings
         {
             // need to re-configure here to also catch additional remappings
             config = self.load_config();
@@ -596,11 +596,13 @@ async fn test(
 
                 if !result.traces.is_empty() {
                     // Identify addresses in each trace
-                    let mut decoder = CallTraceDecoderBuilder::new()
-                        .with_labels(result.labeled_addresses.clone())
-                        .with_events(local_identifier.events().cloned())
-                        .with_verbosity(verbosity)
-                        .build();
+                    let mut decoder = CallTraceDecoderBuilder::new(
+                        &config.network_id.unwrap_or(Network::Mainnet),
+                    )
+                    .with_labels(result.labeled_addresses.clone())
+                    .with_events(local_identifier.events().cloned())
+                    .with_verbosity(verbosity)
+                    .build();
 
                     // Signatures are of no value for gas reports
                     if !gas_reporting {
@@ -619,12 +621,12 @@ async fn test(
                             // tests At verbosity level 5, we display
                             // all traces for all tests
                             TraceKind::Setup => {
-                                (verbosity >= 5) ||
-                                    (verbosity == 4 && result.status == TestStatus::Failure)
+                                (verbosity >= 5)
+                                    || (verbosity == 4 && result.status == TestStatus::Failure)
                             }
                             TraceKind::Execution => {
-                                verbosity > 3 ||
-                                    (verbosity == 3 && result.status == TestStatus::Failure)
+                                verbosity > 3
+                                    || (verbosity == 3 && result.status == TestStatus::Failure)
                             }
                             _ => false,
                         };

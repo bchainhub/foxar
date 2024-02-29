@@ -499,7 +499,7 @@ impl<'a> InvariantExecutor<'a> {
     {
         if let Some(func) = abi.functions().find(|func| func.name == method_name) {
             if let Ok(call_result) = self.executor.call::<Vec<T>, _, _>(
-                default_caller(&Network::Mainnet),
+                default_caller(&Network::from(self.executor.env().cfg.network_id)),
                 address,
                 func.clone(),
                 (),
