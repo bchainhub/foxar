@@ -7,7 +7,7 @@ use crate::prelude::{
     CmdCategory, CmdDescriptor, PilotCommand, PilotResult, PilotSession, SessionSourceConfig,
     SolidityHelper,
 };
-use corebc::{contract::Lazy, utils::hex};
+use corebc::{contract::Lazy, types::Network, utils::hex};
 use foxar_config::{Config, RpcEndpoint};
 use regex::Regex;
 use reqwest::Url;
@@ -345,7 +345,9 @@ impl PilotDispatcher {
 
                     // Check validity of URL
                     if Url::parse(&fork_url).is_err() {
-                        return DispatchResult::CommandFailed(Self::make_error("Invalid fork URL!"));
+                        return DispatchResult::CommandFailed(Self::make_error(
+                            "Invalid fork URL!",
+                        ));
                     }
 
                     // Create success message before moving the fork_url
@@ -945,8 +947,11 @@ impl PilotDispatcher {
         //     session_config.evm_opts.get_remote_chain_id(),
         // )?;
 
-        let mut decoder =
-            CallTraceDecoderBuilder::new().with_labels(result.labeled_addresses.clone()).build();
+        let mut decoder = CallTraceDecoderBuilder::new(
+            &session_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Mainnet),
+        )
+        .with_labels(result.labeled_addresses.clone())
+        .build();
 
         decoder.add_signature_identifier(SignaturesIdentifier::new(
             Config::foxar_cache_dir(),

@@ -57,8 +57,8 @@ impl MultiContractRunner {
         self.contracts
             .iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .flat_map(|(_, (abi, _, _))| {
                 abi.functions().filter(|func| filter.matches_test(func.signature()))
@@ -71,8 +71,8 @@ impl MultiContractRunner {
         self.contracts
             .iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .flat_map(|(_, (abi, _, _))| abi.functions().map(|func| func.name.clone()))
             .filter(|sig| sig.is_test())
@@ -87,8 +87,8 @@ impl MultiContractRunner {
         self.contracts
             .iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .filter(|(_, (abi, _, _))| abi.functions().any(|func| filter.matches_test(&func.name)))
             .map(|(id, (abi, _, _))| {
@@ -124,14 +124,14 @@ impl MultiContractRunner {
         trace!("running all tests");
 
         // the db backend that serves all the data, each contract gets its own instance
-        let db = Backend::spawn(self.fork.take()).await;
+        let db = Backend::spawn(self.fork.take(), &Network::from(self.env.cfg.network_id)).await;
         let filter = &filter;
 
         self.contracts
             .par_iter()
             .filter(|(id, _)| {
-                filter.matches_path(id.source.to_string_lossy()) &&
-                    filter.matches_contract(&id.name)
+                filter.matches_path(id.source.to_string_lossy())
+                    && filter.matches_contract(&id.name)
             })
             .filter(|(_, (abi, _, _))| abi.functions().any(|func| filter.matches_test(&func.name)))
             .map_with(stream_result, |stream_result, (id, (abi, deploy_code, libs))| {
@@ -269,8 +269,9 @@ impl MultiContractRunnerBuilder {
 
                 let abi = contract.abi.expect("We should have an abi by now");
                 // if it's a test, add it to deployable contracts
-                if abi.constructor.as_ref().map(|c| c.inputs.is_empty()).unwrap_or(true) &&
-                    abi.functions()
+                if abi.constructor.as_ref().map(|c| c.inputs.is_empty()).unwrap_or(true)
+                    && abi
+                        .functions()
                         .any(|func| func.name.is_test() || func.name.is_invariant_test())
                 {
                     deployable_contracts.insert(

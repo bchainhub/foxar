@@ -3,7 +3,7 @@ use clap::Parser;
 use corebc::{
     abi::Address,
     prelude::{artifacts::ContractBytecodeSome, ArtifactId, Middleware},
-    types::H176,
+    types::{Network, H176},
 };
 use eyre::WrapErr;
 use foxar_config::{find_project_root_path, Config};
@@ -95,7 +95,11 @@ impl RunArgs {
 
         // Set up the execution environment
         let env = evm_opts.evm_env().await;
-        let db = Backend::spawn(evm_opts.get_fork(&config, env.clone())).await;
+        let db = Backend::spawn(
+            evm_opts.get_fork(&config, env.clone()),
+            &Network::from(env.cfg.network_id),
+        )
+        .await;
 
         // configures a bare version of the evm executor: no cheatcode inspector is enabled,
         // tracing will be enabled only for the targeted transaction
@@ -220,7 +224,10 @@ impl RunArgs {
             None
         });
 
-        let mut decoder = CallTraceDecoderBuilder::new().with_labels(labeled_addresses).build();
+        let mut decoder =
+            CallTraceDecoderBuilder::new(&Network::from(executor.env().cfg.network_id))
+                .with_labels(labeled_addresses)
+                .build();
 
         decoder.add_signature_identifier(SignaturesIdentifier::new(
             Config::foxar_cache_dir(),

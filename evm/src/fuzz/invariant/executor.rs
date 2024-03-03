@@ -5,6 +5,7 @@ use super::{
     InvariantFuzzTestResult, RandomCallGenerator, TargetedContracts,
 };
 use crate::{
+    default_caller,
     executor::{
         inspector::Fuzzer, Executor, RawCallResult, CHEATCODE_ADDRESS, HARDHAT_CONSOLE_ADDRESS,
     },
@@ -16,7 +17,6 @@ use crate::{
         FuzzCase, FuzzedCases,
     },
     utils::{get_function, h176_to_b176},
-    CALLER,
 };
 use corebc::{
     abi::{Abi, Address, Detokenize, FixedBytes, Function, Tokenizable, TokenizableItem},
@@ -123,8 +123,8 @@ impl<'a> InvariantExecutor<'a> {
                         return Err(TestCaseError::fail("Revert occurred."));
                     }
 
-                    if failures.borrow().broken_invariants_count ==
-                        invariant_contract.invariant_functions.len()
+                    if failures.borrow().broken_invariants_count
+                        == invariant_contract.invariant_functions.len()
                     {
                         return Err(TestCaseError::fail("All invariants have been broken."));
                     }
@@ -349,9 +349,9 @@ impl<'a> InvariantExecutor<'a> {
                         corebc::abi::StateMutability::Pure | corebc::abi::StateMutability::View
                     )
                 })
-                .count() ==
-                0 &&
-                !self.artifact_filters.excluded.contains(&artifact.identifier())
+                .count()
+                == 0
+                && !self.artifact_filters.excluded.contains(&artifact.identifier())
             {
                 self.artifact_filters.excluded.push(artifact.identifier());
             }
@@ -362,8 +362,8 @@ impl<'a> InvariantExecutor<'a> {
         for contract in selected_abi {
             let identifier = self.validate_selected_contract(contract, &[])?;
 
-            if !self.artifact_filters.targeted.contains_key(&identifier) &&
-                !self.artifact_filters.excluded.contains(&identifier)
+            if !self.artifact_filters.targeted.contains_key(&identifier)
+                && !self.artifact_filters.excluded.contains(&identifier)
             {
                 self.artifact_filters.targeted.insert(identifier, vec![]);
             }
@@ -410,15 +410,15 @@ impl<'a> InvariantExecutor<'a> {
             .clone()
             .into_iter()
             .filter(|(addr, (identifier, _))| {
-                *addr != invariant_address &&
-                    *addr != CHEATCODE_ADDRESS &&
-                    *addr != HARDHAT_CONSOLE_ADDRESS &&
-                    (selected.is_empty() || selected.contains(addr)) &&
-                    (self.artifact_filters.targeted.is_empty() ||
-                        self.artifact_filters.targeted.contains_key(identifier)) &&
-                    (excluded.is_empty() || !excluded.contains(addr)) &&
-                    (self.artifact_filters.excluded.is_empty() ||
-                        !self.artifact_filters.excluded.contains(identifier))
+                *addr != invariant_address
+                    && *addr != CHEATCODE_ADDRESS
+                    && *addr != HARDHAT_CONSOLE_ADDRESS
+                    && (selected.is_empty() || selected.contains(addr))
+                    && (self.artifact_filters.targeted.is_empty()
+                        || self.artifact_filters.targeted.contains_key(identifier))
+                    && (excluded.is_empty() || !excluded.contains(addr))
+                    && (self.artifact_filters.excluded.is_empty()
+                        || !self.artifact_filters.excluded.contains(identifier))
             })
             .map(|(addr, (identifier, abi))| (addr, (identifier, abi, vec![])))
             .collect();
@@ -499,7 +499,7 @@ impl<'a> InvariantExecutor<'a> {
     {
         if let Some(func) = abi.functions().find(|func| func.name == method_name) {
             if let Ok(call_result) = self.executor.call::<Vec<T>, _, _>(
-                CALLER,
+                default_caller(&Network::from(self.executor.env().cfg.network_id)),
                 address,
                 func.clone(),
                 (),

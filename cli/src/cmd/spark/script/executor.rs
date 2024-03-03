@@ -288,6 +288,7 @@ impl ScriptArgs {
                 None => {
                     let backend = Backend::spawn(
                         script_config.evm_opts.get_fork(&script_config.config, env.clone()),
+                        &Network::from(env.cfg.network_id),
                     )
                     .await;
                     script_config.backends.insert(url.clone(), backend);
@@ -298,8 +299,11 @@ impl ScriptArgs {
                 // It's only really `None`, when we don't pass any `--fork-url`. And if so, there is
                 // no need to cache it, since there won't be any onchain simulation that we'd need
                 // to cache the backend for.
-                Backend::spawn(script_config.evm_opts.get_fork(&script_config.config, env.clone()))
-                    .await
+                Backend::spawn(
+                    script_config.evm_opts.get_fork(&script_config.config, env.clone()),
+                    &Network::from(env.cfg.network_id),
+                )
+                .await
             }
         };
 

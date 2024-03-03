@@ -1,10 +1,10 @@
 use super::{BasicTxDetails, InvariantContract};
 use crate::{
     decode::decode_revert,
+    default_caller,
     executor::{Executor, RawCallResult},
     fuzz::{invariant::set_up_inner_replay, *},
     trace::{load_contracts, TraceKind, Traces},
-    CALLER,
 };
 use corebc::{
     abi::Function,
@@ -126,6 +126,7 @@ impl InvariantFuzzError {
             ided_contracts.extend(load_contracts(
                 vec![(TraceKind::Execution, call_result.traces.clone().unwrap())],
                 known_contracts,
+                &Network::from(executor.env().cfg.network_id),
             ));
 
             counterexample_sequence.push(
@@ -142,7 +143,12 @@ impl InvariantFuzzError {
             // Checks the invariant.
             if let Some(func) = &self.func {
                 let error_call_result = executor
-                    .call_raw(CALLER, self.addr, func.0.clone(), U256::zero())
+                    .call_raw(
+                        default_caller(&Network::from(executor.env().cfg.network_id)),
+                        self.addr,
+                        func.0.clone(),
+                        U256::zero(),
+                    )
                     .expect("bad call to evm");
 
                 if error_call_result.reverted {
@@ -183,7 +189,12 @@ impl InvariantFuzzError {
             // Checks the invariant. If we exit before the last call, all the better.
             if let Some(func) = &self.func {
                 let error_call_result = executor
-                    .call_raw(CALLER, self.addr, func.0.clone(), 0.into())
+                    .call_raw(
+                        default_caller(&Network::from(executor.env().cfg.network_id)),
+                        self.addr,
+                        func.0.clone(),
+                        0.into(),
+                    )
                     .expect("bad call to evm");
 
                 if error_call_result.reverted {
