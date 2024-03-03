@@ -345,9 +345,7 @@ impl PilotDispatcher {
 
                     // Check validity of URL
                     if Url::parse(&fork_url).is_err() {
-                        return DispatchResult::CommandFailed(Self::make_error(
-                            "Invalid fork URL!",
-                        ));
+                        return DispatchResult::CommandFailed(Self::make_error("Invalid fork URL!"));
                     }
 
                     // Create success message before moving the fork_url

@@ -17,8 +17,10 @@ pub mod coverage;
 /// Forge test execution backends
 pub mod executor;
 
-use corebc::types::{ActionType, Address, CallType, Network, H160, H176};
-use corebc::utils::to_ican;
+use corebc::{
+    types::{ActionType, Address, CallType, Network, H160, H176},
+    utils::to_ican,
+};
 pub use executor::abi;
 
 /// Fuzzing wrapper for executors

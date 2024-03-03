@@ -5,11 +5,6 @@
 #[macro_use]
 extern crate tracing;
 
-use shuttle_rpc::{
-    error::RpcError,
-    request::RpcMethodCall,
-    response::{ResponseResult, RpcResponse},
-};
 use axum::{
     http::{header, HeaderValue, Method},
     routing::{post, IntoMakeService},
@@ -17,6 +12,11 @@ use axum::{
 };
 use hyper::server::conn::AddrIncoming;
 use serde::de::DeserializeOwned;
+use shuttle_rpc::{
+    error::RpcError,
+    request::RpcMethodCall,
+    response::{ResponseResult, RpcResponse},
+};
 use std::{fmt, net::SocketAddr};
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 

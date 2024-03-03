@@ -1,14 +1,14 @@
 use crate::RpcHandler;
-use shuttle_rpc::{
-    error::RpcError,
-    request::{Request, RpcCall},
-    response::{Response, RpcResponse},
-};
 use axum::{
     extract::{rejection::JsonRejection, State},
     Json,
 };
 use futures::{future, FutureExt};
+use shuttle_rpc::{
+    error::RpcError,
+    request::{Request, RpcCall},
+    response::{Response, RpcResponse},
+};
 
 /// Handles incoming JSON-RPC Request.
 // NOTE: `handler` must come first because the `request` extractor consumes the request body.

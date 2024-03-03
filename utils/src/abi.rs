@@ -222,10 +222,10 @@ fn format_function_output_param(
 fn format_param(param: &Param, kind: String) -> String {
     // add `memory` if required (not needed for events, only for functions)
     let is_memory = match param.kind {
-        ParamType::Array(_)
-        | ParamType::Bytes
-        | ParamType::String
-        | ParamType::FixedArray(_, _) => true,
+        ParamType::Array(_) |
+        ParamType::Bytes |
+        ParamType::String |
+        ParamType::FixedArray(_, _) => true,
         ParamType::Tuple(_) => param.internal_type.is_some(),
         _ => false,
     };

@@ -17,7 +17,7 @@ use crate::{
 use corebc::{
     abi::{self, AbiEncode, RawLog, Token, Tokenizable, Tokenize},
     signers::{LocalWallet, Signer},
-    types::{Address, Bytes, U256, Network},
+    types::{Address, Bytes, Network, U256},
 };
 use foxar_config::Config;
 use revm::{
@@ -502,7 +502,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
-                data.env.cfg.network_id
+                data.env.cfg.network_id,
             )?;
 
             // TODO:  this is probably not a good long-term solution since it might mess up the
@@ -528,7 +528,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
-                data.env.cfg.network_id
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -545,7 +545,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
-                data.env.cfg.network_id
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -562,7 +562,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
-                data.env.cfg.network_id
+                data.env.cfg.network_id,
             )?;
             broadcast_key(
                 state,
@@ -580,7 +580,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
-                data.env.cfg.network_id
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -597,7 +597,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
-                data.env.cfg.network_id
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -614,7 +614,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
-                data.env.cfg.network_id
+                data.env.cfg.network_id,
             )?;
             broadcast_key(
                 state,

@@ -2,7 +2,7 @@
 use crate::EthApi;
 use futures::StreamExt;
 use handler::{HttpEthRpcHandler, PubSubEthRpcHandler};
-use shuttle_server::{ipc::IpcEndpoint, ShuttleServer, ServerConfig};
+use shuttle_server::{ipc::IpcEndpoint, ServerConfig, ShuttleServer};
 use std::net::SocketAddr;
 use tokio::{io, task::JoinHandle};
 use tracing::trace;
