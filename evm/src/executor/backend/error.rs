@@ -38,7 +38,7 @@ pub enum DatabaseError {
     #[error("Transaction {0:?} not found")]
     TransactionNotFound(H256),
     #[error(
-        "CREATE2 Deployer not present on this chain. [cb914e59b44847b379578588920ca78fbf26c0b4956c]"
+        "CREATE2 Deployer not present on this chain. [cb063edadf999cb7b8b3ebc71f5e97783176d289d640]"
     )]
     MissingCreate2Deployer,
     #[error(transparent)]

@@ -1,4 +1,8 @@
-use super::{ensure, fmt_err, Cheatcodes, Result};
+use super::{
+    ensure, fmt_err,
+    mapping::{get_mapping_key_and_parent, get_mapping_length, get_mapping_slot_at},
+    Cheatcodes, Result,
+};
 use crate::{
     abi::HEVMCalls,
     executor::{
@@ -636,6 +640,23 @@ pub fn apply<DB: DatabaseExt>(
         HEVMCalls::ResumeGasMetering(_) => {
             state.energy_metering = None;
             Bytes::new()
+        }
+        HEVMCalls::StartMappingRecording(_) => {
+            if state.mapping_slots.is_none() {
+                state.mapping_slots = Some(Default::default());
+            }
+            Bytes::new()
+        }
+        HEVMCalls::StopMappingRecording(_) => {
+            state.mapping_slots = None;
+            Bytes::new()
+        }
+        HEVMCalls::GetMappingLength(inner) => get_mapping_length(state, inner.0, inner.1.into()),
+        HEVMCalls::GetMappingSlotAt(inner) => {
+            get_mapping_slot_at(state, inner.0, inner.1.into(), inner.2)
+        }
+        HEVMCalls::GetMappingKeyAndParentOf(inner) => {
+            get_mapping_key_and_parent(state, inner.0, inner.1.into())
         }
         _ => return Ok(None),
     };

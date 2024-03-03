@@ -77,8 +77,8 @@ impl TestConfig {
         }
         for (_, SuiteResult { test_results, .. }) in suite_result {
             for (test_name, result) in test_results {
-                if self.should_fail && (result.status == TestStatus::Success) ||
-                    !self.should_fail && (result.status == TestStatus::Failure)
+                if self.should_fail && (result.status == TestStatus::Success)
+                    || !self.should_fail && (result.status == TestStatus::Failure)
                 {
                     let logs = decode_console_logs(&result.logs);
                     let outcome = if self.should_fail { "fail" } else { "pass" };
@@ -101,7 +101,7 @@ impl TestConfig {
 pub fn test_opts() -> TestOptions {
     TestOptions {
         fuzz: FuzzConfig {
-            runs: 256,
+            runs: 512,
             max_test_rejects: 65536,
             seed: None,
             dictionary: FuzzDictionaryConfig {
@@ -113,7 +113,7 @@ pub fn test_opts() -> TestOptions {
             },
         },
         invariant: InvariantConfig {
-            runs: 256,
+            runs: 512,
             depth: 15,
             fail_on_revert: false,
             call_override: false,
@@ -195,9 +195,7 @@ pub fn rpc_endpoints() -> RpcEndpoints {
     RpcEndpoints::new([
         (
             "rpcAlias",
-            RpcEndpoint::Url(
-                "https://eth-mainnet.alchemyapi.io/v2/Lc7oIGYeL_QvInzI0Wiu_pOZZDEKBrdf".to_string(),
-            ),
+            RpcEndpoint::Url("https://xcbapi-arch-mainnet.coreblockchain.net/".to_string()),
         ),
         ("rpcEnvAlias", RpcEndpoint::Env("${RPC_ENV_ALIAS}".to_string())),
     ])

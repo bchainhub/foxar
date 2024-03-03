@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
@@ -12,8 +12,8 @@ contract Issue2984Test is DSTest {
 
     function setUp() public {
         fork = vm.createSelectFork(
-            "https://api.avax-test.network/ext/bc/C/rpc",
-            12880747
+            "rpcAlias",
+            7627763
         );
         snapshot = vm.snapshot();
     }
@@ -24,8 +24,8 @@ contract Issue2984Test is DSTest {
 
     function testForkSelectSnapshot() public {
         uint256 fork2 = vm.createSelectFork(
-            "https://api.avax-test.network/ext/bc/C/rpc",
-            12880749
+            "rpcAlias",
+            7627765
         );
     }
 }

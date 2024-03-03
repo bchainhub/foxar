@@ -7,7 +7,7 @@ use corebc::{
     prelude::{Middleware, TransactionRequest},
     providers::Provider,
     types::U256,
-    utils::WEI_IN_CORE,
+    utils::ORE_IN_CORE,
 };
 use corebc_ylem::{project_util::TempProject, Artifact};
 use futures::StreamExt;
@@ -62,7 +62,7 @@ async fn test_geth_revert_transaction() {
     let contract =
         Contract::<Provider<_>>::new(resp.contract_address.unwrap(), abi.unwrap(), client);
 
-    let ten = WEI_IN_CORE.saturating_mul(10u64.into());
+    let ten = ORE_IN_CORE.saturating_mul(10u64.into());
     let call = contract.method::<_, ()>("buyRevert", ten).unwrap().value(ten).from(account);
     let resp = call.call().await;
     let err = resp.unwrap_err().to_string();

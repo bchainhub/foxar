@@ -1,23 +1,24 @@
 //! Bootstrap [axum] RPC servers
 
-#![deny(missing_docs, unsafe_code, unused_crate_dependencies)]
+#![warn(missing_docs, unused_crate_dependencies)]
 
+#[macro_use]
+extern crate tracing;
+
+use shuttle_rpc::{
+    error::RpcError,
+    request::RpcMethodCall,
+    response::{ResponseResult, RpcResponse},
+};
 use axum::{
-    extract::Extension,
     http::{header, HeaderValue, Method},
     routing::{post, IntoMakeService},
     Router, Server,
 };
 use hyper::server::conn::AddrIncoming;
 use serde::de::DeserializeOwned;
-use shuttle_rpc::{
-    error::RpcError,
-    request::RpcMethodCall,
-    response::{ResponseResult, RpcResponse},
-};
 use std::{fmt, net::SocketAddr};
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
-use tracing::{error, trace};
 
 mod config;
 
@@ -33,7 +34,7 @@ pub use crate::pubsub::{PubSubContext, PubSubRpcHandler};
 pub use config::ServerConfig;
 
 /// Type alias for the configured axum server
-pub type AnvilServer = Server<AddrIncoming, IntoMakeService<Router>>;
+pub type ShuttleServer = Server<AddrIncoming, IntoMakeService<Router>>;
 
 /// Configures an [axum::Server] that handles RPC-Calls, both HTTP requests and requests via
 /// websocket
@@ -42,7 +43,7 @@ pub fn serve_http_ws<Http, Ws>(
     config: ServerConfig,
     http: Http,
     ws: Ws,
-) -> AnvilServer
+) -> ShuttleServer
 where
     Http: RpcHandler,
     Ws: PubSubRpcHandler,
@@ -50,9 +51,8 @@ where
     let ServerConfig { allow_origin, no_cors } = config;
 
     let svc = Router::new()
-        .route("/", post(handler::handle::<Http>).get(ws::handle_ws::<Ws>))
-        .layer(Extension(http))
-        .layer(Extension(ws))
+        .route("/", post(handler::handle).get(ws::handle_ws))
+        .with_state((http, ws))
         .layer(TraceLayer::new_for_http());
 
     let svc = if no_cors {
@@ -72,15 +72,15 @@ where
 }
 
 /// Configures an [axum::Server] that handles RPC-Calls listing for POST on `/`
-pub fn serve_http<Http>(addr: SocketAddr, config: ServerConfig, http: Http) -> AnvilServer
+pub fn serve_http<Http>(addr: SocketAddr, config: ServerConfig, http: Http) -> ShuttleServer
 where
     Http: RpcHandler,
 {
     let ServerConfig { allow_origin, no_cors } = config;
 
     let svc = Router::new()
-        .route("/", post(handler::handle::<Http>))
-        .layer(Extension(http))
+        .route("/", post(handler::handle))
+        .with_state((http, ()))
         .layer(TraceLayer::new_for_http());
     let svc = if no_cors {
         svc

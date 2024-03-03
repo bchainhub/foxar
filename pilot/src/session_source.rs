@@ -95,7 +95,7 @@ impl SessionSourceConfig {
                 print!("{}", Paint::green("No solidity versions installed! "));
             }
             // use default
-            YlemReq::Version("1.1.0".parse().unwrap())
+            YlemReq::Version("1.1.2".parse().unwrap())
         };
 
         match ylem_req {

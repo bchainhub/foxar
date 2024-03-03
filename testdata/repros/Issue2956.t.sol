@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
@@ -12,29 +12,29 @@ contract Issue2956Test is DSTest {
 
     function setUp() public {
         fork1 = vm.createFork(
-            "https://goerli.infura.io/v3/b9794ad1ddf84dfb8c34d6bb5dca2001",
-            7475589
+            "rpcAlias",
+            3813881
         );
         fork2 = vm.createFork(
-            "https://api.avax-test.network/ext/bc/C/rpc",
-            12880747
+            "rpcAlias",
+            7627763
         );
     }
 
     function testForkNonce() public {
-        address user = address(0xF0959944122fb1ed4CfaBA645eA06EED30427BAA);
+        address user = address(0xcb1958b39698a44bdae37f881e68dce073823a48a631);
 
         assertEq(vm.getNonce(user), 0);
         vm.prank(user);
         new Counter();
 
         vm.selectFork(fork2);
-        assertEq(vm.getNonce(user), 3);
+        assertEq(vm.getNonce(user), 22872);
         vm.prank(user);
         new Counter();
 
         vm.selectFork(fork1);
-        assertEq(vm.getNonce(user), 3);
+        assertEq(vm.getNonce(user), 0);
         vm.prank(user);
         new Counter();
     }

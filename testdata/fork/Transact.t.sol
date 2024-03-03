@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
@@ -14,25 +14,25 @@ interface IERC20 {
 contract TransactOnForkTest is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
-    IERC20 constant USDT = IERC20(0xcb23dac17f958d2ee523a2206206994597c13d831ec7);
+    IERC20 constant USDT = IERC20(0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c);
 
     event Transfer(address indexed from, address indexed to, uint256 value);
 
     function testTransact() public {
-        // A random block https://etherscan.io/block/17134913
-        uint256 fork = vm.createFork("rpcAlias", 17134913);
+        // A random block https://blockindex.net/block/7591477
+        uint256 fork = vm.createFork("rpcAlias", 7591477);
         vm.selectFork(fork);
-        // a random transfer transaction in the next block: https://etherscan.io/tx/0xaf6201d435b216a858c580e20512a16136916d894aa33260650e164e3238c771
-        bytes32 tx = 0xaf6201d435b216a858c580e20512a16136916d894aa33260650e164e3238c771;
+        // a random transfer transaction in the next block: https://blockindex.net/tx/0x43f35862462e01cfe10f849bb7ed05a492a8283b43ec86e574c00714d283c29f
+        bytes32 tx = 0x43f35862462e01cfe10f849bb7ed05a492a8283b43ec86e574c00714d283c29f;
 
-        address sender = address(0x9B315A70FEe05a70A9F2c832E93a7095FEb32Bfe);
-        address recipient = address(0xDB358B93157Df9b3B1eE9Ea5CDB7D0aE9a1D8110);
+        address sender = address(0xcb423001ff40e3b13d2f6504341d7c9390678b3b0109);
+        address recipient = address(0xcb1857f0c7de7b016b00a777d27f7685e033d52601e0);
 
-        assertEq(sender.balance, 110231651357268209);
-        assertEq(recipient.balance, 892860016357511);
+        assertEq(sender.balance, 74640493951869914049536);
+        assertEq(recipient.balance, 95710415892000000000);
 
-        // transfer amount: 0.015 Ether
-        uint256 transferAmount = 15000000000000000;
+        // transfer amount: 4499.9995 XCB
+        uint256 transferAmount = 4499999500000000000000;
         uint256 expectedRecipientBalance = recipient.balance + transferAmount;
         uint256 expectedSenderBalance = sender.balance - transferAmount;
 
@@ -47,24 +47,24 @@ contract TransactOnForkTest is DSTest {
     }
 
     function testTransactCooperatesWithCheatcodes() public {
-        // A random block https://etherscan.io/block/16260609
-        uint256 fork = vm.createFork("rpcAlias", 16260609);
+        // A random block https://blockindex.net/block/7591437
+        uint256 fork = vm.createFork("rpcAlias", 7591437);
         vm.selectFork(fork);
 
-        // a random ERC20 USDT transfer transaction in the next block: https://etherscan.io/tx/0x33350512fec589e635865cbdb38fa3a20a2aa160c52611f1783d0ba24ad13c8c
-        bytes32 tx = 0x33350512fec589e635865cbdb38fa3a20a2aa160c52611f1783d0ba24ad13c8c;
+        // a random CRC20 CTN transfer transaction in the next block: https://blockindex.net/tx/0x31677254f2d9e82dc01a234befa46daa630a30620bd36682cdfc1d607614165e
+        bytes32 tx = 0x31677254f2d9e82dc01a234befa46daa630a30620bd36682cdfc1d607614165e;
 
-        address sender = address(0x2e09BB78B3D64d98Da44D1C776fa77dcd133ED54);
-        address recipient = address(0x23a6B9711B711b1d404F2AA740bde350c67a6F06);
+        address sender = address(0xcb8882600fca3cde87799f01e2570d7d3d1c1c0d1dd4);
+        address recipient = address(0xcb580851379288d0c6b251af9f49988ccca9d6502948);
 
         uint256 senderBalance = USDT.balanceOf(sender);
         uint256 recipientBalance = USDT.balanceOf(recipient);
 
-        assertEq(senderBalance, 20041000000);
-        assertEq(recipientBalance, 66000000);
+        assertEq(senderBalance, 73622256750103146242167552);
+        assertEq(recipientBalance, 1616556078400002920448);
 
-        // transfer amount: 14000 USDT
-        uint256 transferAmount = 14000000000;
+        // transfer amount: 499 999 CTN
+        uint256 transferAmount = 499999999999999991611392;
         uint256 expectedRecipientBalance = recipientBalance + transferAmount;
         uint256 expectedSenderBalance = senderBalance - transferAmount;
 

@@ -35,10 +35,6 @@ opt-level = 3
 [profile.dev.package.revm]
 opt-level = 3
 
-# These speed up all spark script related integration tests
-[profile.test.package.axum]
-opt-level = 3
-
 # Local "release" mode, more optimized than dev but much faster to compile than release
 [profile.local]
 inherits = "dev"
@@ -61,16 +57,15 @@ panic = "abort"
 codegen-units = 1
 
 [workspace.dependencies]
-corebc = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-addressbook = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-core = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-contract = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-contract-abigen = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-providers = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-signers = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-middleware = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-blockindex = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
-corebc-ylem = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false, branch = "feature/devin_network_support" }
+corebc = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-addressbook = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-core = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-contract = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-contract-abigen = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-providers = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-signers = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-middleware = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-blockindex = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
+corebc-ylem = { git = "https://github.com/core-coin/corebc-rs.git", default-features = false }
 revm = { git = "https://github.com/core-coin/cvm.git", default-features = false }
 solang-parser = "=0.3.0"
-

@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/3708
 contract Issue3708Test is DSTest {
-    // https://optimistic.etherscan.io/address/0xcb914e59b44847b379578588920ca78fbf26c0b4956c#code
+    // https://optimistic.etherscan.io/address/0xcb063edadf999cb7b8b3ebc71f5e97783176d289d640#code
     address constant CREATE2_DEPLOYER =
-        0xcb914e59b44847b379578588920ca78fbf26c0b4956c;
+        0xcb063edadf999cb7b8b3ebc71f5e97783176d289d640;
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
     function setUp() public {
-        string memory RPC_URL = "https://mainnet.optimism.io";
+        string memory RPC_URL = "rpcAlias";
         uint256 forkId = vm.createSelectFork(RPC_URL);
 
         bytes

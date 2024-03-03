@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
@@ -9,7 +9,7 @@ abstract contract ZeroState is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
     // deployer and users
-    address public deployer = vm.addr(1);
+    address public deployer = 0xcb1958b39698a44bdae37f881e68dce073823a48a631;
     Token aaveToken;
     uint256 public mainnetFork;
 

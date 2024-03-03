@@ -40,7 +40,7 @@ pub struct Create2Args {
     #[clap(
         short,
         long,
-        default_value = "cb914e59b44847b379578588920ca78fbf26c0b4956c",
+        default_value = "cb063edadf999cb7b8b3ebc71f5e97783176d289d640",
         value_name = "ADDRESS"
     )]
     deployer: Address,
@@ -176,7 +176,7 @@ mod tests {
 
     use super::*;
 
-    const DEPLOYER: &str = "cb914e59b44847b379578588920ca78fbf26c0b4956c";
+    const DEPLOYER: &str = "cb063edadf999cb7b8b3ebc71f5e97783176d289d640";
 
     #[test]
     fn basic_create2() {

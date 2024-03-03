@@ -55,7 +55,7 @@ sparktest!(can_execute_script_command2, |prj: TestProject, mut cmd: TestCommand|
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external {
@@ -81,7 +81,7 @@ sparktest!(can_execute_script_command_fqn, |prj: TestProject, mut cmd: TestComma
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external {
@@ -107,7 +107,7 @@ sparktest!(can_execute_script_command_with_sig, |prj: TestProject, mut cmd: Test
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function myFunction() external {
@@ -136,7 +136,7 @@ sparktest_async!(
                 "Foo",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 
 contract GasWaster {
@@ -198,7 +198,7 @@ sparktest_async!(
                 "Foo",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 
 contract GasWaster {
@@ -257,7 +257,7 @@ sparktest!(can_execute_script_command_with_args, |prj: TestProject, mut cmd: Tes
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     event log_uint(uint);
@@ -292,7 +292,7 @@ sparktest!(can_execute_script_command_with_returned, |prj: TestProject, mut cmd:
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external returns (uint256 result, uint8) {
@@ -320,7 +320,7 @@ sparktest_async!(
                 "DeployScript",
                 r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 
 contract HashChecker {
@@ -386,7 +386,7 @@ contract DeployScript is Script {
 
         let run_code = r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 import "forge-std/Script.sol";
 import { HashChecker } from "./DeployScript.sol";
 
@@ -629,7 +629,7 @@ sparktest_async!(can_deploy_with_create2, |prj: TestProject, cmd: TestCommand| a
     let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
     // Prepare CREATE2 Deployer
-    let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
+    let addr = Address::from_str("cb063edadf999cb7b8b3ebc71f5e97783176d289d640").unwrap();
     let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
     api.shuttle_set_code(addr, code).await.unwrap();
 
@@ -715,7 +715,7 @@ sparktest_async!(
         let mut tester = ScriptTester::new_broadcast(cmd, &handle.http_endpoint(), prj.root());
 
         // Prepare CREATE2 Deployer
-        let addr = Address::from_str("cb914e59b44847b379578588920ca78fbf26c0b4956c").unwrap();
+        let addr = Address::from_str("cb063edadf999cb7b8b3ebc71f5e97783176d289d640").unwrap();
         let code = hex::decode("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3").expect("Could not decode create2 deployer init_code").into();
         api.shuttle_set_code(addr, code).await.unwrap();
 
@@ -998,7 +998,7 @@ contract Script0 is Script {
 // checks that skipping build
 sparktest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cmd: TestCommand| {
     // explicitly set to run with 1.1.0 for consistent output
-    let config = Config { ylem: Some("1.1.0".into()), ..Default::default() };
+    let config = Config { ylem: Some("1.1.2".into()), ..Default::default() };
     prj.write_config(config);
 
     let script = prj
@@ -1007,7 +1007,7 @@ sparktest_init!(can_execute_script_and_skip_contracts, |prj: TestProject, mut cm
             "Foo",
             r#"
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 contract Demo {
     event log_string(string);
     function run() external returns (uint256 result, uint8) {

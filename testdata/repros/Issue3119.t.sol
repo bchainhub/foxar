@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Unlicense
-pragma solidity 1.1.0;
+pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
@@ -8,8 +8,8 @@ import "../cheats/Cheats.sol";
 contract Issue3119Test is DSTest {
     Cheats constant vm = Cheats(HEVM_ADDRESS);
 
-    address public owner = vm.addr(1);
-    address public alice = vm.addr(2);
+    address public owner = 0xcb1958b39698a44bdae37f881e68dce073823a48a631;
+    address public alice = 0xcb675ffbdbb79c60f695c9f5b9df2ec16fb8171ee13d;
 
     function testRollFork() public {
         uint256 fork = vm.createFork("rpcAlias");

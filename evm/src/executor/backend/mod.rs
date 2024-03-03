@@ -229,7 +229,7 @@ pub trait DatabaseExt: Database<Error = DatabaseError> {
     ///    // this will succeed
     ///    dummy.hello();
     ///
-    ///    cheats.selectFork(optimismFork);
+    ///    cheats.selectFork(devinFork);
     ///
     ///    cheats.expectRevert();
     ///    // this will revert since `dummy` contract only exists on `mainnetFork`
