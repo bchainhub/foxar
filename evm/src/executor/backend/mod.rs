@@ -26,9 +26,8 @@ use revm::{
     },
     Database, DatabaseCommit, Inspector, JournaledState, EVM,
 };
-use std::hash::RandomState;
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{hash_map::RandomState, HashMap, HashSet},
     sync::{
         atomic::{AtomicBool, Ordering},
         Arc,
