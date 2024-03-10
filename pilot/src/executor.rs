@@ -8,7 +8,7 @@ use crate::prelude::{
 use core::fmt::Debug;
 use corebc::{
     abi::{ethabi, Address, ParamType, Token},
-    types::{I256, U256},
+    types::{Network, I256, U256},
     utils::hex,
 };
 use corebc_ylem::Artifact;
@@ -244,6 +244,7 @@ impl SessionSource {
             None => {
                 let backend = Backend::spawn(
                     self.config.evm_opts.get_fork(&self.config.foxar_config, env.clone()),
+                    &Network::from(env.cfg.network_id),
                 )
                 .await;
                 self.config.backend = Some(backend.clone());

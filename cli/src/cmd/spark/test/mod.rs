@@ -7,7 +7,7 @@ use crate::{
     suggestions, utils,
 };
 use clap::Parser;
-use corebc::types::U256;
+use corebc::types::{Network, U256};
 use foxar_common::{
     compile::{self, ProjectCompiler},
     evm::EvmArgs,
@@ -596,11 +596,13 @@ async fn test(
 
                 if !result.traces.is_empty() {
                     // Identify addresses in each trace
-                    let mut decoder = CallTraceDecoderBuilder::new()
-                        .with_labels(result.labeled_addresses.clone())
-                        .with_events(local_identifier.events().cloned())
-                        .with_verbosity(verbosity)
-                        .build();
+                    let mut decoder = CallTraceDecoderBuilder::new(
+                        &config.network_id.unwrap_or(Network::Mainnet),
+                    )
+                    .with_labels(result.labeled_addresses.clone())
+                    .with_events(local_identifier.events().cloned())
+                    .with_verbosity(verbosity)
+                    .build();
 
                     // Signatures are of no value for gas reports
                     if !gas_reporting {

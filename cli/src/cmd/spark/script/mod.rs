@@ -10,8 +10,8 @@ use corebc::{
     providers::Middleware,
     signers::LocalWallet,
     types::{
-        transaction::eip2718::TypedTransaction, Address, Log, NameOrAddress, TransactionRequest,
-        U256,
+        transaction::eip2718::TypedTransaction, Address, Log, NameOrAddress, Network,
+        TransactionRequest, U256,
     },
     ylem::contracts::ArtifactContracts,
 };
@@ -208,10 +208,12 @@ impl ScriptArgs {
         )?;
 
         let mut local_identifier = LocalTraceIdentifier::new(known_contracts);
-        let mut decoder = CallTraceDecoderBuilder::new()
-            .with_labels(result.labeled_addresses.clone())
-            .with_verbosity(verbosity)
-            .build();
+        let mut decoder = CallTraceDecoderBuilder::new(
+            &script_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Mainnet),
+        )
+        .with_labels(result.labeled_addresses.clone())
+        .with_verbosity(verbosity)
+        .build();
 
         decoder.add_signature_identifier(SignaturesIdentifier::new(
             Config::foxar_cache_dir(),

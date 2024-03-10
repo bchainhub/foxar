@@ -2,7 +2,10 @@
 #![deny(missing_docs, unsafe_code, unused_crate_dependencies)]
 
 use crate::cache::StorageCachingConfig;
-use corebc_core::types::{Address, Network, H176, U256};
+use corebc_core::{
+    types::{Address, Network, H160, H176, U256},
+    utils::to_ican,
+};
 pub use corebc_ylem::artifacts::OptimizerDetails;
 use corebc_ylem::{
     artifacts::{
@@ -397,12 +400,16 @@ impl Config {
     pub const FOXAR_DIR_NAME: &'static str = ".foxar";
 
     /// Default address for tx.origin
-    ///
-    /// `0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38`
-    pub const DEFAULT_SENDER: H176 = H176([
-        0xcb, 0x68, 0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83,
-        0xF3, 0x3E, 0x07, 0x30, 0x9D, 0x1F, 0x38,
-    ]);
+    /// Depending on network has different prefix and checksum
+    pub fn default_sender(network: &Network) -> H176 {
+        /// `0x1804c8ab1f12e6bbf3894d4083f33e07309d1f38`
+        const DEFAULT_SENDER: &H160 = &H160([
+            0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83, 0xF3,
+            0x3E, 0x07, 0x30, 0x9D, 0x1F, 0x38,
+        ]);
+
+        to_ican(DEFAULT_SENDER, network)
+    }
 
     /// Returns the current `Config`
     ///
@@ -1749,8 +1756,8 @@ impl Default for Config {
             fuzz: Default::default(),
             invariant: Default::default(),
             ffi: false,
-            sender: Config::DEFAULT_SENDER,
-            tx_origin: Config::DEFAULT_SENDER,
+            sender: Config::default_sender(&Network::Mainnet),
+            tx_origin: Config::default_sender(&Network::Mainnet),
             initial_balance: U256::from(0xffffffffffffffffffffffffu128),
             block_number: 1,
             fork_block_number: None,
@@ -2488,8 +2495,18 @@ mod tests {
     #[test]
     fn default_sender() {
         assert_eq!(
-            Config::DEFAULT_SENDER,
+            Config::default_sender(&Network::Mainnet),
             "cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
+        );
+
+        assert_eq!(
+            Config::default_sender(&Network::Devin),
+            "ab861804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
+        );
+
+        assert_eq!(
+            Config::default_sender(&Network::Private(5)),
+            "ce591804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
     }
 

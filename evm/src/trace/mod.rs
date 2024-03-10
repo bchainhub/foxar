@@ -4,7 +4,7 @@ use crate::{
 };
 use corebc::{
     abi::{ethereum_types::BigEndianHash, Address, RawLog},
-    types::{Bytes, DefaultFrame, GoCoreDebugTracingOptions, StructLog, H256, U256},
+    types::{Bytes, DefaultFrame, GoCoreDebugTracingOptions, Network, StructLog, H256, U256},
 };
 pub use decoder::{CallTraceDecoder, CallTraceDecoderBuilder};
 use foxar_common::contracts::{ContractsByAddress, ContractsByArtifact};
@@ -581,10 +581,11 @@ fn trace_color(trace: &CallTrace) -> Color {
 pub fn load_contracts(
     traces: Traces,
     known_contracts: Option<&ContractsByArtifact>,
+    network: &Network,
 ) -> ContractsByAddress {
     if let Some(contracts) = known_contracts {
         let mut local_identifier = LocalTraceIdentifier::new(contracts);
-        let mut decoder = CallTraceDecoderBuilder::new().build();
+        let mut decoder = CallTraceDecoderBuilder::new(network).build();
         for (_, trace) in &traces {
             decoder.identify(trace, &mut local_identifier);
         }

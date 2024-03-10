@@ -250,7 +250,8 @@ impl MultiWallet {
         let mut error_msg = String::new();
 
         // This is an actual used address
-        if addresses.contains(&Config::DEFAULT_SENDER) {
+        if addresses.contains(&Config::default_sender(&self.network().unwrap_or(Network::Mainnet)))
+        {
             error_msg += "\nYou seem to be using Foxar's default sender. Be sure to set your own --sender.\n";
         }
 

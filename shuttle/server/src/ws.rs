@@ -1,5 +1,4 @@
 use crate::{error::RequestError, pubsub::PubSubConnection, PubSubRpcHandler};
-use shuttle_rpc::request::Request;
 use axum::{
     extract::{
         ws::{Message, WebSocket},
@@ -8,6 +7,7 @@ use axum::{
     response::Response,
 };
 use futures::{ready, Sink, Stream};
+use shuttle_rpc::request::Request;
 use std::{
     pin::Pin,
     task::{Context, Poll},

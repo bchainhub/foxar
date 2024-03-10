@@ -92,7 +92,7 @@ During the first execution stage on `spark script`, foxar has to adjust the nonc
 
 Making sure that `msg.sender` is our signer when calling `setUp()` and `run()` and that its nonce is correct (decreased by one on each call) when calling `vm.broadcast` to create a contract.
 
-We skip this, if the user hasn't set a sender and they're using the `Config::DEFAULT_SENDER`.
+We skip this, if the user hasn't set a sender and they're using the `Config::default_sender({network})`.
 
 
 ```mermaid

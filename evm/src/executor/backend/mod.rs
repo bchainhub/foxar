@@ -1,5 +1,6 @@
 use crate::{
     abi::CHEATCODE_ADDRESS,
+    default_caller,
     executor::{
         backend::snapshot::BackendSnapshot,
         fork::{CreateFork, ForkId, MultiFork, SharedBackend},
@@ -7,11 +8,11 @@ use crate::{
         snapshot::Snapshots,
     },
     utils::{b176_to_h176, h176_to_b176, h256_to_b256, ru256_to_u256, u256_to_ru256},
-    CALLER, TEST_CONTRACT_ADDRESS,
+    TEST_CONTRACT_ADDRESS,
 };
 use corebc::{
     prelude::{Block, H176, H256, U256},
-    types::{Address, BlockNumber, Transaction, U64},
+    types::{Address, BlockNumber, Network as NetworkCore, Transaction, U64},
     utils::sha3,
 };
 use hashbrown::HashMap as Map;
@@ -26,7 +27,7 @@ use revm::{
     Database, DatabaseCommit, Inspector, JournaledState, EVM,
 };
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{hash_map::RandomState, HashMap, HashSet},
     sync::{
         atomic::{AtomicBool, Ordering},
         Arc,
@@ -62,8 +63,11 @@ pub type LocalForkId = U256;
 type ForkLookupIndex = usize;
 
 /// All accounts that will have persistent storage across fork swaps. See also [`clone_data()`]
-const DEFAULT_PERSISTENT_ACCOUNTS: [H176; 3] =
-    [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, CALLER];
+fn get_default_persistent_accounts(network: &NetworkCore) -> HashSet<H176, RandomState> {
+    let default_persistent_accounts =
+        [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, default_caller(network)];
+    return HashSet::from(default_persistent_accounts);
+}
 
 /// An extension trait that allows us to easily extend the `revm::Inspector` capabilities
 #[auto_impl::auto_impl(&mut, Box)]
@@ -391,19 +395,19 @@ pub struct Backend {
 
 impl Backend {
     /// Creates a new Backend with a spawned multi fork thread.
-    pub async fn spawn(fork: Option<CreateFork>) -> Self {
-        Self::new(MultiFork::spawn().await, fork)
+    pub async fn spawn(fork: Option<CreateFork>, network: &NetworkCore) -> Self {
+        Self::new(MultiFork::spawn().await, fork, network)
     }
 
     /// Creates a new instance of `Backend`
     ///
     /// if `fork` is `Some` this will launch with a `fork` database, otherwise with an in-memory
     /// database
-    pub fn new(forks: MultiFork, fork: Option<CreateFork>) -> Self {
+    pub fn new(forks: MultiFork, fork: Option<CreateFork>, network: &NetworkCore) -> Self {
         trace!(target: "backend", forking_mode=?fork.is_some(), "creating executor backend");
         // Note: this will take of registering the `fork`
         let inner = BackendInner {
-            persistent_accounts: HashSet::from(DEFAULT_PERSISTENT_ACCOUNTS),
+            persistent_accounts: get_default_persistent_accounts(network),
             ..Default::default()
         };
 
@@ -439,8 +443,9 @@ impl Backend {
         id: &ForkId,
         fork: Fork,
         journaled_state: JournaledState,
+        network: &NetworkCore,
     ) -> Self {
-        let mut backend = Self::spawn(None).await;
+        let mut backend = Self::spawn(None, network).await;
         let fork_ids = backend.inner.insert_new_fork(id.clone(), fork.db, journaled_state);
         backend.inner.launched_with_fork = Some((id.clone(), fork_ids.0, fork_ids.1));
         backend.active_fork_ids = Some(fork_ids);
@@ -1650,7 +1655,7 @@ impl Default for BackendInner {
             cheatcode_access_accounts: HashSet::from([
                 CHEATCODE_ADDRESS,
                 TEST_CONTRACT_ADDRESS,
-                CALLER,
+                default_caller(&NetworkCore::Mainnet),
             ]),
         }
     }
@@ -1760,8 +1765,15 @@ fn commit_transaction(
 
         let fork = fork.clone();
         let journaled_state = journaled_state.clone();
-        let db = crate::utils::RuntimeOrHandle::new()
-            .block_on(async move { Backend::new_with_fork(fork_id, fork, journaled_state).await });
+        let db = crate::utils::RuntimeOrHandle::new().block_on(async move {
+            Backend::new_with_fork(
+                fork_id,
+                fork,
+                journaled_state,
+                &NetworkCore::from(evm.env.cfg.network_id),
+            )
+            .await
+        });
         evm.database(db);
 
         if let Some(inspector) = cheatcodes_inspector {

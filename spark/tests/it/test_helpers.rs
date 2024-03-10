@@ -3,18 +3,18 @@
 use super::*;
 use corebc::{
     prelude::{artifacts::Settings, Lazy, ProjectCompileOutput, YlemConfig},
-    types::{Address, U256},
+    types::{Address, Network, U256},
     ylem::{artifacts::Libraries, Project, ProjectPathsConfig},
 };
 use foxar_config::Config;
 use foxar_evm::{
+    default_caller,
     executor::{
         backend::Backend,
         opts::{Env, EvmOpts},
         DatabaseRef, Executor, ExecutorBuilder,
     },
     fuzz::FuzzedExecutor,
-    CALLER,
 };
 use std::{path::PathBuf, str::FromStr};
 
@@ -63,14 +63,14 @@ pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         energy_limit: 18446744073709551615,
         network_id: Some(corebc::types::Network::Mainnet),
-        tx_origin: Config::DEFAULT_SENDER,
+        tx_origin: Config::default_sender(&Network::Mainnet),
         block_number: 1,
         block_timestamp: 1,
         block_coinbase: Address::from_str("0xcb540000000000000000000000000000000000000000")
             .unwrap(),
         ..Default::default()
     },
-    sender: Config::DEFAULT_SENDER,
+    sender: Config::default_sender(&Network::Mainnet),
     initial_balance: U256::MAX,
     ffi: true,
     memory_limit: 2u64.pow(24),
@@ -83,7 +83,7 @@ pub fn fuzz_executor<DB: DatabaseRef>(executor: &Executor) -> FuzzedExecutor {
     FuzzedExecutor::new(
         executor,
         proptest::test_runner::TestRunner::new(cfg),
-        CALLER,
+        default_caller(&Network::from(executor.env().cfg.network_id)),
         config::test_opts().fuzz,
     )
 }

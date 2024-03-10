@@ -17,7 +17,7 @@ use crate::{
 use corebc::{
     abi::{self, AbiEncode, RawLog, Token, Tokenizable, Tokenize},
     signers::{LocalWallet, Signer},
-    types::{Address, Bytes, U256},
+    types::{Address, Bytes, Network, U256},
 };
 use foxar_config::Config;
 use revm::{
@@ -502,6 +502,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
+                data.env.cfg.network_id,
             )?;
 
             // TODO:  this is probably not a good long-term solution since it might mess up the
@@ -527,6 +528,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -543,6 +545,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -559,6 +562,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
+                data.env.cfg.network_id,
             )?;
             broadcast_key(
                 state,
@@ -576,6 +580,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -592,6 +597,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
+                data.env.cfg.network_id,
             )?;
             broadcast(
                 state,
@@ -608,6 +614,7 @@ pub fn apply<DB: DatabaseExt>(
                 &mut data.journaled_state,
                 &mut data.db,
                 state,
+                data.env.cfg.network_id,
             )?;
             broadcast_key(
                 state,
@@ -664,8 +671,9 @@ fn correct_sender_nonce<DB: Database>(
     journaled_state: &mut revm::JournaledState,
     db: &mut DB,
     state: &mut Cheatcodes,
+    network: u64,
 ) -> Result<(), DB::Error> {
-    if !state.corrected_nonce && sender != Config::DEFAULT_SENDER {
+    if !state.corrected_nonce && sender != Config::default_sender(&Network::from(network)) {
         with_journaled_account(journaled_state, db, sender, |account| {
             account.info.nonce = account.info.nonce.saturating_sub(1);
             state.corrected_nonce = true;

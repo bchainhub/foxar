@@ -265,14 +265,18 @@ pub trait WalletTrait {
     fn get_from_interactive(&self) -> Result<LocalWallet> {
         let private_key = rpassword::prompt_password("Enter private key: ")?;
         let private_key = private_key.strip_prefix("0x").unwrap_or(&private_key);
-        Ok(LocalWallet::from_str(private_key)?)
+
+        let mut wallet = LocalWallet::from_str(private_key)?;
+        wallet = wallet.with_network_id(self.network().unwrap_or(Network::Mainnet));
+
+        Ok(wallet)
     }
 
     #[track_caller]
     fn get_from_private_key(&self, private_key: &str) -> Result<LocalWallet> {
         let privk = private_key.trim().strip_prefix("0x").unwrap_or(private_key);
         match LocalWallet::from_str(privk) {
-            Ok(pk) => Ok(pk),
+            Ok(pk) => Ok(pk.with_network_id(self.network().unwrap_or(Network::Mainnet))),
             Err(err) => {
                 // helper closure to check if pk was meant to be an env var, this usually happens if
                 // `$` is missing

@@ -5,6 +5,7 @@ use super::{
     InvariantFuzzTestResult, RandomCallGenerator, TargetedContracts,
 };
 use crate::{
+    default_caller,
     executor::{
         inspector::Fuzzer, Executor, RawCallResult, CHEATCODE_ADDRESS, HARDHAT_CONSOLE_ADDRESS,
     },
@@ -16,7 +17,6 @@ use crate::{
         FuzzCase, FuzzedCases,
     },
     utils::{get_function, h176_to_b176},
-    CALLER,
 };
 use corebc::{
     abi::{Abi, Address, Detokenize, FixedBytes, Function, Tokenizable, TokenizableItem},
@@ -499,7 +499,7 @@ impl<'a> InvariantExecutor<'a> {
     {
         if let Some(func) = abi.functions().find(|func| func.name == method_name) {
             if let Ok(call_result) = self.executor.call::<Vec<T>, _, _>(
-                CALLER,
+                default_caller(&Network::from(self.executor.env().cfg.network_id)),
                 address,
                 func.clone(),
                 (),

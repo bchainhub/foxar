@@ -1,10 +1,10 @@
 use super::*;
-use corebc::types::{Address, Bytes, NameOrAddress, U256};
+use corebc::types::{Address, Bytes, NameOrAddress, Network, U256};
 use spark::{
+    default_caller,
     executor::{CallResult, DeployResult, EvmError, ExecutionErr, Executor, RawCallResult},
     revm::interpreter::{return_ok, InstructionResult},
     trace::{TraceKind, Traces},
-    CALLER,
 };
 use tracing::log::trace;
 
@@ -40,7 +40,9 @@ impl ScriptRunner {
         trace!(target: "script", "executing setUP()");
 
         if !is_broadcast {
-            if self.sender == Config::DEFAULT_SENDER {
+            if self.sender ==
+                Config::default_sender(&Network::from(self.executor.env().cfg.network_id))
+            {
                 // We max out their balance so that they can deploy and make calls.
                 self.executor.set_balance(self.sender, U256::MAX)?;
             }
@@ -53,7 +55,10 @@ impl ScriptRunner {
         self.executor.set_nonce(self.sender, sender_nonce.as_u64())?;
 
         // We max out their balance so that they can deploy and make calls.
-        self.executor.set_balance(CALLER, U256::MAX)?;
+        self.executor.set_balance(
+            default_caller(&Network::from(self.executor.env().cfg.network_id)),
+            U256::MAX,
+        )?;
 
         // Deploy libraries
         let mut traces: Traces = libraries
@@ -78,7 +83,12 @@ impl ScriptRunner {
             ..
         } = self
             .executor
-            .deploy(CALLER, code.0, 0u32.into(), None)
+            .deploy(
+                default_caller(&Network::from(self.executor.env().cfg.network_id)),
+                code.0,
+                0u32.into(),
+                None,
+            )
             .map_err(|err| eyre::eyre!("Failed to deploy script:\n{}", err))?;
 
         traces.extend(constructor_traces.map(|traces| (TraceKind::Deployment, traces)));
