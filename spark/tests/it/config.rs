@@ -77,8 +77,8 @@ impl TestConfig {
         }
         for (_, SuiteResult { test_results, .. }) in suite_result {
             for (test_name, result) in test_results {
-                if self.should_fail && (result.status == TestStatus::Success) ||
-                    !self.should_fail && (result.status == TestStatus::Failure)
+                if self.should_fail && (result.status == TestStatus::Success)
+                    || !self.should_fail && (result.status == TestStatus::Failure)
                 {
                     let logs = decode_console_logs(&result.logs);
                     let outcome = if self.should_fail { "fail" } else { "pass" };
@@ -143,7 +143,7 @@ pub fn manifest_root() -> PathBuf {
 
 /// Builds a base runner
 pub fn base_runner() -> MultiContractRunnerBuilder {
-    MultiContractRunnerBuilder::default().sender(EVM_OPTS.sender)
+    MultiContractRunnerBuilder::default().sender(EVM_OPTS.sender())
 }
 
 /// Builds a non-tracing runner
@@ -160,7 +160,7 @@ pub async fn runner_with_config(mut config: Config) -> MultiContractRunner {
 
     base_runner()
         .with_cheats_config(CheatsConfig::new(&config, &EVM_OPTS))
-        .sender(config.sender)
+        .sender(config.sender())
         .build(&PROJECT.paths.root, (*COMPILED).clone(), EVM_OPTS.evm_env().await, EVM_OPTS.clone())
         .unwrap()
 }

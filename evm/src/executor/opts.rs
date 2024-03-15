@@ -5,6 +5,7 @@ use crate::{
 use corebc::{
     providers::{Middleware, Provider},
     types::{Address, Block, Network, TxHash, U256},
+    utils::to_ican,
 };
 use eyre::WrapErr;
 use foxar_common::{self, ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
@@ -83,7 +84,7 @@ impl EvmOpts {
             self.env.energy_price,
             self.env.network_id.map(u64::from),
             self.fork_block_number,
-            self.sender,
+            self.sender(),
         )
         .await
         .wrap_err_with(|| {
@@ -96,7 +97,7 @@ impl EvmOpts {
         revm::primitives::Env {
             block: BlockEnv {
                 number: rU256::from(self.env.block_number),
-                coinbase: h176_to_b176(self.env.block_coinbase),
+                coinbase: h176_to_b176(self.block_coinbase()),
                 timestamp: rU256::from(self.env.block_timestamp),
                 difficulty: rU256::from(self.env.block_difficulty),
                 energy_limit: u256_to_ru256(self.energy_limit()),
@@ -113,7 +114,7 @@ impl EvmOpts {
             tx: TxEnv {
                 energy_price: rU256::from(self.env.energy_price.unwrap_or_default()),
                 energy_limit: self.energy_limit().as_u64(),
-                caller: h176_to_b176(self.sender),
+                caller: h176_to_b176(self.sender()),
                 ..Default::default()
             },
         }
@@ -186,6 +187,28 @@ impl EvmOpts {
         }
 
         None
+    }
+
+    /// Returns sender address
+    /// Depending on network has different prefix and checksum
+    pub fn sender(&self) -> Address {
+        if self.sender == Config::default_sender(None)
+            && self.env.network_id != Some(Network::Mainnet)
+        {
+            return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
+        }
+        self.sender
+    }
+
+    /// Returns address for block.coinbase
+    /// Depending on network has different prefix and checksum
+    pub fn block_coinbase(&self) -> Address {
+        if self.env.block_coinbase == Config::default_block_coinbase(None)
+            && self.env.network_id != Some(Network::Mainnet)
+        {
+            return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
+        }
+        self.env.block_coinbase
     }
 }
 

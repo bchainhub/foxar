@@ -56,7 +56,7 @@ impl ScriptArgs {
             project,
             contracts,
             script_config.config.parsed_libraries()?,
-            script_config.evm_opts.sender,
+            script_config.evm_opts.sender(),
             script_config.sender_nonce,
         )?;
 

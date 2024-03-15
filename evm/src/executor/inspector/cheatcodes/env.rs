@@ -673,7 +673,7 @@ fn correct_sender_nonce<DB: Database>(
     state: &mut Cheatcodes,
     network: u64,
 ) -> Result<(), DB::Error> {
-    if !state.corrected_nonce && sender != Config::default_sender(&Network::from(network)) {
+    if !state.corrected_nonce && sender != state.config.evm_opts.sender() {
         with_journaled_account(journaled_state, db, sender, |account| {
             account.info.nonce = account.info.nonce.saturating_sub(1);
             state.corrected_nonce = true;

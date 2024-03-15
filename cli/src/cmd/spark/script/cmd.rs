@@ -33,7 +33,7 @@ impl ScriptArgs {
         if let Some(ref fork_url) = script_config.evm_opts.fork_url {
             // when forking, override the sender's nonce to the onchain value
             script_config.sender_nonce =
-                foxar_utils::next_nonce(script_config.evm_opts.sender, fork_url, None).await?
+                foxar_utils::next_nonce(script_config.evm_opts.sender(), fork_url, None).await?
         } else {
             // if not forking, then ignore any pre-deployed library addresses
             script_config.config.libraries = Default::default();
@@ -61,7 +61,7 @@ impl ScriptArgs {
         } = build_output;
 
         // Execute once with default sender.
-        let sender = script_config.evm_opts.sender;
+        let sender = script_config.evm_opts.sender();
 
         // We need to execute the script even if just resuming, in case we need to collect private
         // keys from the execution.
@@ -167,7 +167,7 @@ impl ScriptArgs {
 
         // Add predeploy libraries to the list of broadcastable transactions.
         let mut lib_deploy = self.create_deploy_transactions(
-            script_config.evm_opts.sender,
+            script_config.evm_opts.sender(),
             script_config.sender_nonce,
             &predeploy_libraries,
             &script_config.evm_opts.fork_url,
@@ -280,7 +280,7 @@ impl ScriptArgs {
                 project,
                 default_known_contracts,
                 Libraries::parse(&deployment_sequence.libraries)?,
-                script_config.config.sender, // irrelevant, since we're not creating any
+                script_config.config.sender(), // irrelevant, since we're not creating any
                 U256::zero(),                // irrelevant, since we're not creating any
             )?;
 

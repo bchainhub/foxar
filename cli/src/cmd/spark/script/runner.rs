@@ -41,7 +41,7 @@ impl ScriptRunner {
 
         if !is_broadcast {
             if self.sender ==
-                Config::default_sender(&Network::from(self.executor.env().cfg.network_id))
+                Config::default_sender(Some(&Network::from(self.executor.env().cfg.network_id)))
             {
                 // We max out their balance so that they can deploy and make calls.
                 self.executor.set_balance(self.sender, U256::MAX)?;

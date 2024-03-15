@@ -35,7 +35,7 @@ pub use revm;
 use revm::interpreter::{CallScheme, CreateScheme};
 use serde::{Deserialize, Serialize};
 
-//TODO:error2215 change addresses for each network
+
 /// Stores the caller address to be used as _sender_ account for:
 ///     - deploying Test contracts
 ///     - deploying Script contracts
