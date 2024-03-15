@@ -413,7 +413,7 @@ impl Config {
 
     /// Default address for tx.origin
     pub fn default_sender(mut network: Option<&Network>) -> H176 {
-        if network == None {
+        if let None = network {
             network = Some(&Network::Mainnet)
         }
         to_ican(&Self::DEFAULT_SENDER, network.unwrap())
