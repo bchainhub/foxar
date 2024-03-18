@@ -401,7 +401,7 @@ impl MinedTransaction {
     }
 }
 
-/// Intermediary Anvil representation of a receipt
+/// Intermediary Shuttle representation of a receipt
 #[derive(Debug, Clone)]
 pub struct MinedTransactionReceipt {
     /// The actual json rpc receipt object

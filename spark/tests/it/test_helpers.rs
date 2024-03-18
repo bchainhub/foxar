@@ -63,14 +63,14 @@ pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         energy_limit: 18446744073709551615,
         network_id: Some(corebc::types::Network::Mainnet),
-        tx_origin: Config::default_sender(&Network::Mainnet),
+        tx_origin: Config::default_sender(None),
         block_number: 1,
         block_timestamp: 1,
         block_coinbase: Address::from_str("0xcb540000000000000000000000000000000000000000")
             .unwrap(),
         ..Default::default()
     },
-    sender: Config::default_sender(&Network::Mainnet),
+    sender: Config::default_sender(None),
     initial_balance: U256::MAX,
     ffi: true,
     memory_limit: 2u64.pow(24),

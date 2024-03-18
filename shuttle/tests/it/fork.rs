@@ -195,7 +195,7 @@ async fn test_fork_eth_get_nonce() {
         assert_eq!(api_nonce, provider_nonce);
     }
 
-    let addr = Config::default_sender(&Network::Mainnet);
+    let addr = Config::default_sender(Some(&Network::Mainnet));
     let api_nonce = api.transaction_count(addr, None).await.unwrap();
     let provider_nonce = provider.get_transaction_count(addr, None).await.unwrap();
     assert_eq!(api_nonce, provider_nonce);

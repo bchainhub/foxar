@@ -248,7 +248,7 @@ impl ScriptArgs {
         &self,
         script_config: &mut ScriptConfig,
     ) -> HashMap<RpcUrl, ScriptRunner> {
-        let sender = script_config.evm_opts.sender;
+        let sender = script_config.evm_opts.sender();
 
         if !shell::verbosity().is_silent() {
             eprintln!("\n## Setting up ({}) EVMs.", script_config.total_rpcs.len());

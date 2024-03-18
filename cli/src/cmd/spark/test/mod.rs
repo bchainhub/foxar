@@ -184,7 +184,7 @@ impl TestArgs {
         let mut runner = MultiContractRunnerBuilder::default()
             .initial_balance(evm_opts.initial_balance)
             .evm_spec(evm_spec)
-            .sender(evm_opts.sender)
+            .sender(evm_opts.sender())
             .with_fork(evm_opts.get_fork(&config, env.clone()))
             .with_cheats_config(CheatsConfig::new(&config, &evm_opts))
             .with_test_options(test_options.clone())

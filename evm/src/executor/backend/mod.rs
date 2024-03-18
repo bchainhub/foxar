@@ -66,7 +66,7 @@ type ForkLookupIndex = usize;
 fn get_default_persistent_accounts(network: &NetworkCore) -> HashSet<H176, RandomState> {
     let default_persistent_accounts =
         [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, default_caller(network)];
-    return HashSet::from(default_persistent_accounts);
+    HashSet::from(default_persistent_accounts)
 }
 
 /// An extension trait that allows us to easily extend the `revm::Inspector` capabilities
@@ -538,8 +538,9 @@ impl Backend {
     /// Checks if the test contract associated with this backend failed, See
     /// [Self::is_failed_test_contract]
     pub fn is_failed(&self) -> bool {
-        self.has_snapshot_failure() ||
-            self.test_contract_address()
+        self.has_snapshot_failure()
+            || self
+                .test_contract_address()
                 .map(|addr| self.is_failed_test_contract(addr))
                 .unwrap_or_default()
     }

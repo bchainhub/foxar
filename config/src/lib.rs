@@ -399,16 +399,51 @@ impl Config {
     /// The name of the directory foxar reserves for itself under the user's home directory: `~`
     pub const FOXAR_DIR_NAME: &'static str = ".foxar";
 
-    /// Default address for tx.origin
-    /// Depending on network has different prefix and checksum
-    pub fn default_sender(network: &Network) -> H176 {
-        /// `0x1804c8ab1f12e6bbf3894d4083f33e07309d1f38`
-        const DEFAULT_SENDER: &H160 = &H160([
-            0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83, 0xF3,
-            0x3E, 0x07, 0x30, 0x9D, 0x1F, 0x38,
-        ]);
+    /// 0x1804c8ab1f12e6bbf3894d4083f33e07309d1f38
+    pub const DEFAULT_SENDER: H160 = H160([
+        0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83, 0xF3, 0x3E,
+        0x07, 0x30, 0x9D, 0x1F, 0x38,
+    ]);
 
-        to_ican(DEFAULT_SENDER, network)
+    /// 0x0000000000000000000000000000000000000000
+    pub const DEFAULT_COINBASE: H160 = H160([
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00,
+    ]);
+
+    /// Default address for tx.origin
+    pub fn default_sender(mut network: Option<&Network>) -> H176 {
+        if network.is_none() {
+            network = Some(&Network::Mainnet)
+        }
+        to_ican(&Self::DEFAULT_SENDER, network.unwrap())
+    }
+
+    /// Returns address for tx.origin
+    /// Depending on network has different prefix and checksum
+    pub fn sender(&self) -> H176 {
+        if self.sender == Self::default_sender(None) && self.network_id != Some(Network::Mainnet) {
+            return to_ican(&Self::DEFAULT_SENDER, &self.network_id.unwrap());
+        }
+        self.sender
+    }
+
+    /// Default address for block.coinbase
+    pub fn default_block_coinbase(mut network: Option<&Network>) -> H176 {
+        if network.is_none() {
+            network = Some(&Network::Mainnet)
+        }
+        to_ican(&Self::DEFAULT_COINBASE, network.unwrap())
+    }
+    /// Returns address for block.coinbase
+    /// Depending on network has different prefix and checksum
+    pub fn block_coinbase(&self) -> H176 {
+        if self.block_coinbase == Self::default_block_coinbase(None)
+            && self.network_id != Some(Network::Mainnet)
+        {
+            return to_ican(&Self::DEFAULT_COINBASE, &self.network_id.unwrap());
+        }
+        self.block_coinbase
     }
 
     /// Returns the current `Config`
@@ -696,9 +731,9 @@ impl Config {
 
     /// Whether caching should be enabled for the given network id
     pub fn enable_caching(&self, endpoint: &str, network_id: impl Into<u64>) -> bool {
-        !self.no_storage_caching &&
-            self.rpc_storage_caching.enable_for_network_id(network_id.into()) &&
-            self.rpc_storage_caching.enable_for_endpoint(endpoint)
+        !self.no_storage_caching
+            && self.rpc_storage_caching.enable_for_network_id(network_id.into())
+            && self.rpc_storage_caching.enable_for_endpoint(endpoint)
     }
 
     /// Returns the `ProjectPathsConfig`  sub set of the config.
@@ -761,7 +796,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -786,7 +821,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -806,7 +841,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -829,7 +864,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -850,7 +885,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    /// 
+    ///
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -1756,8 +1791,8 @@ impl Default for Config {
             fuzz: Default::default(),
             invariant: Default::default(),
             ffi: false,
-            sender: Config::default_sender(&Network::Mainnet),
-            tx_origin: Config::default_sender(&Network::Mainnet),
+            sender: Config::default_sender(None),
+            tx_origin: Config::default_sender(None),
             initial_balance: U256::from(0xffffffffffffffffffffffffu128),
             block_number: 1,
             fork_block_number: None,
@@ -1765,8 +1800,7 @@ impl Default for Config {
             energy_limit: i64::MAX.into(),
             code_size_limit: None,
             energy_price: None,
-            block_coinbase: Address::from_str("cb540000000000000000000000000000000000000000")
-                .unwrap(),
+            block_coinbase: Config::default_block_coinbase(None),
             block_timestamp: 1,
             block_difficulty: 0,
             block_energy_limit: None,
@@ -2120,9 +2154,10 @@ impl Provider for DappEnvCompatProvider {
             // Activate Solidity optimizer (0 or 1)
             let val = val.parse::<u8>().map_err(figment::Error::custom)?;
             if val > 1 {
-                return Err(
-                    format!("Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1").into()
-                );
+                return Err(format!(
+                    "Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1"
+                )
+                .into());
             }
             dict.insert("optimizer".to_string(), (val == 1).into());
         }
@@ -2495,17 +2530,20 @@ mod tests {
     #[test]
     fn default_sender() {
         assert_eq!(
-            Config::default_sender(&Network::Mainnet),
+            Config::default_sender(None),
             "cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
 
+        let mut config = Config::default();
+        config.network_id = Some(Network::Devin);
         assert_eq!(
-            Config::default_sender(&Network::Devin),
+            config.sender(),
             "ab861804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
 
+        config.network_id = Some(Network::Private(5));
         assert_eq!(
-            Config::default_sender(&Network::Private(5)),
+            config.sender(),
             "ce591804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
     }

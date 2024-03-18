@@ -2,13 +2,13 @@
 use crate::spark_utils;
 use corebc::{
     prelude::artifacts::YulDetails,
-    types::{Address, H256, U256},
+    types::{Address, U256},
     ylem::{artifacts::RevertStrings, CvmVersion},
 };
 use foxar_cli_test_utils::{
-    corebc_ylem::{remappings::Remapping, YlemVersion},
+    corebc_ylem::{remappings::Remapping},
     pretty_eq, sparktest, sparktest_init,
-    util::{pretty_err, OutputExt, TestCommand, TestProject},
+    util::{pretty_err, TestCommand, TestProject},
 };
 use foxar_config::{
     cache::{CachedEndpoints, CachedNetworks, StorageCachingConfig},

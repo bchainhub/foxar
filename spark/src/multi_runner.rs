@@ -246,7 +246,7 @@ impl MultiContractRunnerBuilder {
             ArtifactContracts::from_iter(contracts),
             &mut known_contracts,
             Default::default(),
-            evm_opts.sender,
+            evm_opts.sender(),
             U256::one(),
             &mut deployable_contracts,
             |file, key| (format!("{key}.json:{key}"), file, key),

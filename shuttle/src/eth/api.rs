@@ -1344,7 +1344,7 @@ impl EthApi {
         self.backend.load_state(buf).await
     }
 
-    /// Retrieves the Anvil node configuration params.
+    /// Retrieves the Shuttle node configuration params.
     ///
     /// Handler for RPC call: `shuttle_nodeInfo`
     pub async fn shuttle_node_info(&self) -> Result<NodeInfo> {
@@ -1900,9 +1900,9 @@ impl EthApi {
                     // lowest energy limit at the current midpoint, as spending any
                     // less energy would make no sense (as the TX would still revert due to lack of
                     // energy).
-                    InstructionResult::Revert |
-                    InstructionResult::OutOfEnergy |
-                    InstructionResult::OutOfFund => {
+                    InstructionResult::Revert
+                    | InstructionResult::OutOfEnergy
+                    | InstructionResult::OutOfFund => {
                         lowest_energy_limit = mid_energy_limit;
                     }
                     // The tx failed for some other reason.

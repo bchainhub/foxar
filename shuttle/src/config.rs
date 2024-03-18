@@ -572,7 +572,7 @@ impl NodeConfig {
         self
     }
 
-    /// Sets the file path to write the Anvil node's config info to.
+    /// Sets the file path to write the Shuttle node's config info to.
     #[must_use]
     pub fn set_config_out(mut self, config_out: Option<String>) -> Self {
         self.config_out = config_out;

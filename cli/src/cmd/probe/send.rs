@@ -133,12 +133,12 @@ impl SendTxArgs {
             }
 
             if resend {
-                tx.nonce = Some(provider.get_transaction_count(config.sender, None).await?);
+                tx.nonce = Some(provider.get_transaction_count(config.sender(), None).await?);
             }
 
             probe_send(
                 provider,
-                config.sender,
+                config.sender(),
                 to,
                 code,
                 (sig, args),

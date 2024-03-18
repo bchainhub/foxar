@@ -453,7 +453,7 @@ pub enum EthRequest {
     )]
     LoadState(Bytes),
 
-    /// Retrieves the Anvil node configuration params
+    /// Retrieves the Shuttle node configuration params
     #[cfg_attr(feature = "serde", serde(rename = "shuttle_nodeInfo", with = "empty_params"))]
     NodeInfo(()),
 

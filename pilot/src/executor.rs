@@ -1210,7 +1210,7 @@ impl<'a> Iterator for InstructionIter<'a> {
 mod tests {
     use super::*;
     use corebc_ylem::{
-        error::{YlemError, YlemIoError},
+        error::{YlemError},
         Ylem,
     };
     use once_cell::sync::Lazy;

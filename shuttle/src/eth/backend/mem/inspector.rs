@@ -1,4 +1,4 @@
-//! Anvil specific [`revm::Inspector`] implementation
+//! Shuttle specific [`revm::Inspector`] implementation
 
 use crate::{eth::macros::node_info, revm::Database};
 use bytes::Bytes;

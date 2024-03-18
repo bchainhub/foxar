@@ -1,7 +1,7 @@
 use corebc::{
     prelude::{Middleware, SignerMiddleware},
     signers::Signer,
-    types::{transaction::cip712::TypedData, Address, Network, TransactionRequest},
+    types::{transaction::cip712::TypedData, Address, TransactionRequest},
 };
 use shuttle::{spawn, NodeConfig};
 
