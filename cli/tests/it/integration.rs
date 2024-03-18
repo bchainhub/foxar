@@ -1,4 +1,4 @@
-use foxar_cli_test_utils::{sparktest_external, util::setup_spark_remote};
+use foxar_cli_test_utils::{/* sparktest_external ,  */ util::setup_spark_remote};
 
 // sparktest_external!(solmate, "transmissions11/solmate");
 // sparktest_external!(prb_math, "PaulRBerg/prb-math");
