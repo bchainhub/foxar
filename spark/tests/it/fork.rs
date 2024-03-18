@@ -26,7 +26,10 @@ async fn test_cheats_fork_revert() {
     for (_, SuiteResult { test_results, .. }) in suite_result {
         for (_, result) in test_results {
             //CORETODO: check diagnostics error once we update ylem
-            assert_eq!(result.reason.unwrap(), "EvmError: Revert");
+            assert_eq!(
+                result.reason.unwrap(),
+                "Contract cb73a7f8ca25d95c21655c170b365c7a8df17b888add does not exist on active fork with id `1`\n        But exists on non active forks: `[0]`"
+            );
         }
     }
 }

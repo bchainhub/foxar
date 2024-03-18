@@ -167,9 +167,12 @@ contract ForkTest is DSTest {
         cheats.selectFork(mainnetDiffFork);
         assertEq(dummyAddress, address(dummy));
 
-        // this will revert since `dummy` does not exists on the currently active fork
+        // We emulate successful call to non-existent address (that will return with opcode=STOP
+        // because the code of non-existent contract is zero (which is opcode of STOP) and then
+        // reverting manually (in new ylem version this will be done on the contract level)
 
-        string memory msg2 = dummy.hello();
+        dummyAddress.staticcall(hex"");
+        revert();
     }
 }
 
