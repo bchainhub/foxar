@@ -1,7 +1,6 @@
 use super::*;
 use corebc::types::{Address, Bytes, NameOrAddress, Network, U256};
 use spark::{
-    default_caller,
     executor::{CallResult, DeployResult, EvmError, ExecutionErr, Executor, RawCallResult},
     revm::interpreter::{return_ok, InstructionResult},
     trace::{TraceKind, Traces},
@@ -56,7 +55,7 @@ impl ScriptRunner {
 
         // We max out their balance so that they can deploy and make calls.
         self.executor.set_balance(
-            default_caller(&Network::from(self.executor.env().cfg.network_id)),
+            Config::default_sender(Some(&Network::from(self.executor.env().cfg.network_id))),
             U256::MAX,
         )?;
 
@@ -84,7 +83,7 @@ impl ScriptRunner {
         } = self
             .executor
             .deploy(
-                default_caller(&Network::from(self.executor.env().cfg.network_id)),
+                Config::default_sender(Some(&Network::from(self.executor.env().cfg.network_id))),
                 code.0,
                 0u32.into(),
                 None,

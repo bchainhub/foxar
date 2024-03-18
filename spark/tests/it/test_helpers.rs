@@ -8,7 +8,6 @@ use corebc::{
 };
 use foxar_config::Config;
 use foxar_evm::{
-    default_caller,
     executor::{
         backend::Backend,
         opts::{Env, EvmOpts},
@@ -83,7 +82,7 @@ pub fn fuzz_executor<DB: DatabaseRef>(executor: &Executor) -> FuzzedExecutor {
     FuzzedExecutor::new(
         executor,
         proptest::test_runner::TestRunner::new(cfg),
-        default_caller(&Network::from(executor.env().cfg.network_id)),
+        Config::default_sender(Some(&Network::from(executor.env().cfg.network_id))),
         config::test_opts().fuzz,
     )
 }

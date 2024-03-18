@@ -1,4 +1,7 @@
-use corebc::types::{Address, Selector, H176};
+use corebc::{
+    types::{Network, Selector, H160, H176},
+    utils::to_ican,
+};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -13,19 +16,34 @@ pub use foxar_abi::{
 /// This is the same address as the one used in DappTools's HEVM.
 /// `address(bytes20(uint160(uint256(sha3('hevm cheat code')))))`
 /// cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8 CORETODO: Change this
-pub const CHEATCODE_ADDRESS: Address = H176([
-    0xcb, 0x69, 0xfc, 0x06, 0xa1, 0x2b, 0x7a, 0x6f, 0x30, 0xe2, 0xa3, 0xc1, 0x6a, 0x3b, 0x5d, 0x50,
-    0x2c, 0xd7, 0x1c, 0x20, 0xf2, 0xf8,
+pub const CHEATCODE_ADDRESS: H160 = H160([
+    0xfc, 0x06, 0xa1, 0x2b, 0x7a, 0x6f, 0x30, 0xe2, 0xa3, 0xc1, 0x6a, 0x3b, 0x5d, 0x50, 0x2c, 0xd7,
+    0x1c, 0x20, 0xf2, 0xf8,
 ]);
+
+/// Default cheatcode address
+pub fn default_cheatcode_address(mut network: Option<Network>) -> H176 {
+    if network.is_none() {
+        network = Some(Network::Mainnet) //todo:error2215 change to ce address
+    }
+    to_ican(&CHEATCODE_ADDRESS, &network.unwrap())
+}
 
 /// The Hardhat console address (0xcb82000000000000000000636f6e736f6c652e6c6f67).
 ///
 /// See: https://github.com/nomiclabs/hardhat/blob/master/packages/hardhat-core/console.sol
-pub const HARDHAT_CONSOLE_ADDRESS: Address = H176([
-    0xcb, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x6f, 0x6e, 0x73, 0x6f,
-    0x6c, 0x65, 0x2e, 0x6c, 0x6f, 0x67,
+pub const HARDHAT_CONSOLE_ADDRESS: H160 = H160([
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x65,
+    0x2e, 0x6c, 0x6f, 0x67,
 ]);
 
+/// Default hardhat console address
+pub fn default_hardhat_address(mut network: Option<Network>) -> H176 {
+    if network.is_none() {
+        network = Some(Network::Mainnet) //todo:error2215 change to ce address
+    }
+    to_ican(&HARDHAT_CONSOLE_ADDRESS, &network.unwrap())
+}
 /// If the input starts with a known `hardhat/console.log` `uint` selector, then this will replace
 /// it with the selector `abigen!` bindings expect.
 pub fn patch_hardhat_console_selector(input: &mut [u8]) {

@@ -648,7 +648,7 @@ async fn test(
                     }
 
                     if gas_reporting {
-                        gas_report.analyze(&result.traces);
+                        gas_report.analyze(&result.traces, config.network_id);
                     }
                 }
             }

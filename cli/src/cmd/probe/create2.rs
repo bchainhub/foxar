@@ -40,7 +40,7 @@ pub struct Create2Args {
     #[clap(
         short,
         long,
-        default_value = "cb063edadf999cb7b8b3ebc71f5e97783176d289d640",
+        default_value = "cb063edadf999cb7b8b3ebc71f5e97783176d289d640", //todo:error2215 change to ce address
         value_name = "ADDRESS"
     )]
     deployer: Address,

@@ -20,7 +20,7 @@ use corebc::{
         MnemonicBuilder,
     },
     types::{transaction::eip2718::TypedTransaction, NameOrAddress, H256, U256},
-    utils::{self, get_contract_address, get_create2_address},
+    utils::{self, get_contract_address, get_create2_address, to_ican},
 };
 use foxar_common::{fmt::*, RpcUrl};
 use revm::{
@@ -33,10 +33,18 @@ use std::{collections::VecDeque, str::FromStr};
 const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/60'/0'/0/";
 
 /// Address of the default CREATE2 deployer cb063edadf999cb7b8b3ebc71f5e97783176d289d640
-pub const DEFAULT_CREATE2_DEPLOYER: H176 = H176([
-    0xcb, 0x06, 0x3e, 0xda, 0xdf, 0x99, 0x9c, 0xb7, 0xb8, 0xb3, 0xeb, 0xc7, 0x1f, 0x5e, 0x97, 0x78,
-    0x31, 0x76, 0xd2, 0x89, 0xd6, 0x40,
+pub const DEFAULT_CREATE2_DEPLOYER: H160 = H160([
+    0x3e, 0xda, 0xdf, 0x99, 0x9c, 0xb7, 0xb8, 0xb3, 0xeb, 0xc7, 0x1f, 0x5e, 0x97, 0x78, 0x31, 0x76,
+    0xd2, 0x89, 0xd6, 0x40,
 ]);
+
+/// Default CREATE2 deployer address
+pub fn default_create2_address(mut network: Option<Network>) -> H176 {
+    if network.is_none() {
+        network = Some(Network::Mainnet) //todo:error2215 change to ce address
+    }
+    to_ican(&DEFAULT_CREATE2_DEPLOYER, &network.unwrap())
+}
 
 pub const MAGIC_SKIP_BYTES: &[u8] = b"FOXAR::SKIP";
 
@@ -227,7 +235,12 @@ pub fn apply<DB: Database>(
             let code_hash = inner.1;
             let network = Network::from(data.env.cfg.network_id);
 
-            let result = get_create2_address(DEFAULT_CREATE2_DEPLOYER, salt, code_hash, network);
+            let result = get_create2_address(
+                default_create2_address(Some(network)),
+                salt,
+                code_hash,
+                network,
+            );
 
             Ok(corebc::abi::encode(&[Token::Address(result)]).into())
         }
@@ -305,26 +318,29 @@ where
         }
         revm::primitives::CreateScheme::Create2 { salt } => {
             // Sanity checks for our CREATE2 deployer
-            data.journaled_state.load_account(h176_to_b176(DEFAULT_CREATE2_DEPLOYER), data.db)?;
+            let network = Some(Network::from(data.env.cfg.network_id));
+            data.journaled_state
+                .load_account(h176_to_b176(default_create2_address(network)), data.db)?;
 
-            let info = &data.journaled_state.account(h176_to_b176(DEFAULT_CREATE2_DEPLOYER)).info;
+            let info =
+                &data.journaled_state.account(h176_to_b176(default_create2_address(network))).info;
             match &info.code {
                 Some(code) => {
                     if code.is_empty() {
-                        trace!(create2=?DEFAULT_CREATE2_DEPLOYER, "Empty Create 2 deployer code");
+                        trace!(create2=?default_create2_address(network), "Empty Create 2 deployer code");
                         return Err(DatabaseError::MissingCreate2Deployer);
                     }
                 }
                 None => {
                     // forked db
-                    trace!(create2=?DEFAULT_CREATE2_DEPLOYER, "Missing Create 2 deployer code");
+                    trace!(create2=?default_create2_address(network), "Missing Create 2 deployer code");
                     if data.db.code_by_hash(info.code_hash)?.is_empty() {
                         return Err(DatabaseError::MissingCreate2Deployer);
                     }
                 }
             }
 
-            call.caller = h176_to_b176(DEFAULT_CREATE2_DEPLOYER);
+            call.caller = h176_to_b176(default_create2_address(network));
 
             // We have to increment the nonce of the user address, since this create2 will be done
             // by the create2_deployer
@@ -340,7 +356,11 @@ where
             calldata.put_slice(&salt_bytes);
             calldata.put(bytecode);
 
-            Ok((calldata.freeze(), Some(NameOrAddress::Address(DEFAULT_CREATE2_DEPLOYER)), nonce))
+            Ok((
+                calldata.freeze(),
+                Some(NameOrAddress::Address(default_create2_address(network))),
+                nonce,
+            ))
         }
     }
 }
