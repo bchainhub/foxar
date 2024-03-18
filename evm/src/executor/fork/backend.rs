@@ -9,7 +9,7 @@ use crate::{
 use corebc::{
     core::abi::ethereum_types::BigEndianHash,
     providers::Middleware,
-    types::{Address, Block, BlockId, Bytes, Network as NetworkCore, Transaction, H256, U256},
+    types::{Address, Block, BlockId, Bytes, Network, Transaction, H256, U256},
     utils::sha3,
 };
 use foxar_common::NON_ARCHIVE_NODE_WARNING;
@@ -777,7 +777,7 @@ mod tests {
             evm_opts,
         };
 
-        let backend = Backend::spawn(Some(fork), &NetworkCore::from(env.cfg.network_id)).await;
+        let backend = Backend::spawn(Some(fork), &Network::from(env.cfg.network_id)).await;
 
         // some rng contract from etherscan
         let address: B176 = "0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c".parse().unwrap();
