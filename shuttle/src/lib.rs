@@ -191,7 +191,7 @@ pub struct NodeHandle {
     address: SocketAddr,
     /// Join handle for the Node Service
     pub node_service: JoinHandle<Result<(), NodeError>>,
-    /// Join handle for the Anvil server
+    /// Join handle for the Shuttle server
     pub server: JoinHandle<Result<(), NodeError>>,
     // The future that joins the ipc server, if any
     ipc_task: Option<IpcTask>,

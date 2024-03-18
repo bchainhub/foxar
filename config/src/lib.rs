@@ -413,7 +413,7 @@ impl Config {
 
     /// Default address for tx.origin
     pub fn default_sender(mut network: Option<&Network>) -> H176 {
-        if let None = network {
+        if network.is_none() {
             network = Some(&Network::Mainnet)
         }
         to_ican(&Self::DEFAULT_SENDER, network.unwrap())
@@ -430,7 +430,7 @@ impl Config {
 
     /// Default address for block.coinbase
     pub fn default_block_coinbase(mut network: Option<&Network>) -> H176 {
-        if network == None {
+        if network.is_none() {
             network = Some(&Network::Mainnet)
         }
         to_ican(&Self::DEFAULT_COINBASE, network.unwrap())

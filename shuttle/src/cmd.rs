@@ -29,7 +29,7 @@ use tracing::{error, trace};
 #[derive(Clone, Debug, Parser)]
 pub struct NodeArgs {
     #[clap(flatten)]
-    pub evm_opts: AnvilEvmArgs,
+    pub evm_opts: ShuttleEvmArgs,
 
     /// Port number to listen on.
     #[clap(long, short, default_value = "8545", value_name = "NUM")]
@@ -84,7 +84,7 @@ pub struct NodeArgs {
     pub no_mining: bool,
 
     /// The host the server will listen on.
-    #[clap(long, value_name = "IP_ADDR", env = "ANVIL_IP_ADDR", help_heading = "Server options")]
+    #[clap(long, value_name = "IP_ADDR", env = "SHUTTLE_IP_ADDR", help_heading = "Server options")]
     pub host: Option<IpAddr>,
 
     /// How transactions are sorted in the mempool.
@@ -298,10 +298,10 @@ impl NodeArgs {
     }
 }
 
-/// Anvil's EVM related arguments.
+/// Shuttle's EVM related arguments.
 #[derive(Debug, Clone, Parser)]
 #[clap(next_help_heading = "EVM options")]
-pub struct AnvilEvmArgs {
+pub struct ShuttleEvmArgs {
     /// Fetch state over a remote endpoint instead of starting from an empty state.
     ///
     /// If you want to fetch state from a specific block number, add a block number like `http://localhost:8545@1400000` or use the `--fork-block-number` argument.
@@ -445,7 +445,7 @@ pub struct AnvilEvmArgs {
 /// Resolves an alias passed as fork-url to the matching url defined in the rpc_endpoints section
 /// of the project configuration file.
 /// Does nothing if the fork-url is not a configured alias.
-impl AnvilEvmArgs {
+impl ShuttleEvmArgs {
     pub fn resolve_rpc_alias(&mut self) {
         if let Some(fork_url) = &self.fork_url {
             let config = Config::load();
