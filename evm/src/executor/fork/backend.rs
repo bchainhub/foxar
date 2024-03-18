@@ -9,7 +9,7 @@ use crate::{
 use corebc::{
     core::abi::ethereum_types::BigEndianHash,
     providers::Middleware,
-    types::{Address, Block, BlockId, Bytes, Network, Transaction, H256, U256},
+    types::{Address, Block, BlockId, Bytes, Transaction, H256, U256},
     utils::sha3,
 };
 use foxar_common::NON_ARCHIVE_NODE_WARNING;

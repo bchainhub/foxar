@@ -17,9 +17,9 @@ use crate::{
 use corebc::{
     abi::{self, AbiEncode, RawLog, Token, Tokenizable, Tokenize},
     signers::{LocalWallet, Signer},
-    types::{Address, Bytes, Network, U256},
+    types::{Address, Bytes, U256},
 };
-use foxar_config::Config;
+
 use revm::{
     primitives::{Bytecode, SHA3_EMPTY},
     Database, EVMData,
@@ -671,7 +671,7 @@ fn correct_sender_nonce<DB: Database>(
     journaled_state: &mut revm::JournaledState,
     db: &mut DB,
     state: &mut Cheatcodes,
-    network: u64,
+    _network: u64,
 ) -> Result<(), DB::Error> {
     if !state.corrected_nonce && sender != state.config.evm_opts.sender() {
         with_journaled_account(journaled_state, db, sender, |account| {

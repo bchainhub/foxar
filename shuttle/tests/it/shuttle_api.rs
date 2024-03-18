@@ -1,10 +1,9 @@
 //! tests for custom shuttle endpoints
 use crate::abi::*;
 use corebc::{
-    abi::{ethereum_types::BigEndianHash, AbiDecode},
+    abi::{ethereum_types::BigEndianHash},
     prelude::{Middleware, SignerMiddleware},
     types::{Address, BlockNumber, TransactionRequest, H256, U256, U64},
-    utils::hex,
 };
 use shuttle::{spawn, Hardfork, NodeConfig};
 use shuttle_core::{

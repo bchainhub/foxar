@@ -84,9 +84,9 @@ impl<T: Into<BlockNumber>> From<T> for Hardfork {
 
 #[cfg(test)]
 mod tests {
-    use crate::Hardfork;
-    use corebc::utils::hex;
-    use crc::{Crc, CRC_32_ISO_HDLC};
+    
+    
+    
 
     #[test]
     // this test checks that the fork hash assigned to forks accurately map to the fork_id method

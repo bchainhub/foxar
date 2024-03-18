@@ -8,7 +8,7 @@ use foxar_cli_test_utils::{
 };
 use foxar_config::Config;
 use foxar_utils::rpc;
-use probe::SimpleCast;
+
 use regex::Regex;
 use serde_json::Value;
 use shuttle::{spawn, NodeConfig};

@@ -786,7 +786,7 @@ mod tests {
     fn decode_multiple_network_txs() {
         use std::str::FromStr;
 
-        use open_fastrlp::Encodable;
+        
 
         let bytes_first = &mut &hex::decode("f8d802843b9aca00830186a001960000c26ad91f4e7a0cad84c4b9315f420ca9217e315d87038d7ea4c6800080b8abeeb96ca19e8a77102767a41fc85a36afd5c61ccb09911cec5d3e86e193d9c5ae3a456401896b1b6055311536bf00a718568c744d8c1f9df59879e83350220ca188350220ca1850220ca188350220ca1350220ca18835b96ca19e8a77102767a41fc85a36afd5c61ccb09911cec5d3e86e193d9c5ae3a456401896b1b6055311536bf00a718568c744d8c1f9df59879e83350220ca188350220ca1850220ca188350220ca1350220ca18835").unwrap()[..];
         let expected = TypedTransaction::Legacy(LegacyTransaction {
