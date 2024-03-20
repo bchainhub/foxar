@@ -593,17 +593,6 @@ impl Backend {
         false
     }
 
-    // todo:error2215 dead code
-    // /// In addition to the `_failed` variable, `DSTest::fail()` stores a failure
-    // /// in "failed"
-    // /// See <https://github.com/dapphub/ds-test/blob/9310e879db8ba3ea6d5c6489a579118fd264a3f5/src/test.sol#L66-L72>
-    // pub fn is_global_failure(&self) -> bool {
-    //     let index = U256::from(&b"failed"[..]);
-    //     self.storage(h176_to_b176(default_cheatcode_address(sel)), u256_to_ru256(index))
-    //         .map(|value| value == revm::primitives::U256::from(1))
-    //         .unwrap_or_default()
-    // }
-
     /// When creating or switching forks, we update the AccountInfo of the contract
     pub(crate) fn update_fork_db(
         &self,
