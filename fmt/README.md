@@ -1,13 +1,13 @@
 # Formatter (`fmt`)
 
-Solidity formatter that respects (some parts of) the [Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html) and
-is tested on the [Prettier Solidity Plugin](https://github.com/prettier-solidity/prettier-plugin-solidity) cases.
+Ylem formatter that respects (some parts of) the [Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html) and
+is tested on the [Prettier Ylem Plugin](https://github.com/prettier-solidity/prettier-plugin-solidity) cases.
 
 ## Architecture
 
 The formatter works in two steps:
 
-1. Parse Solidity source code with [solang](https://github.com/hyperledger-labs/solang) into the PT (Parse Tree)
+1. Parse Ylem source code with [solang](https://github.com/hyperledger-labs/solang) into the PT (Parse Tree)
    (not the same as Abstract Syntax Tree, [see difference](https://stackoverflow.com/a/9864571)).
 2. Walk the PT and output new source code that's compliant with provided config and rule set.
 
@@ -136,7 +136,7 @@ uint x = 100; // sparkfmt: disable-line
 
 ### Testing
 
-Tests reside under the `fmt/testdata` folder and specify the malformatted & expected Solidity code. The source code file is named `original.sol` and expected file(s) are named in a format `({prefix}.)?fmt.sol`. Multiple expected files are needed for tests covering available configuration options.
+Tests reside under the `fmt/testdata` folder and specify the malformatted & expected Ylem code. The source code file is named `original.sol` and expected file(s) are named in a format `({prefix}.)?fmt.sol`. Multiple expected files are needed for tests covering available configuration options.
 
 The default configuration values can be overridden from within the expected file by adding a comment in the format `// config: {config_entry} = {config_value}`. For example:
 
@@ -158,36 +158,3 @@ Check out the [foxar contribution guide](https://github.com/foxar-rs/foxar/blob/
 
 Guidelines for contributing to `spark fmt`:
 
-### Opening an issue
-
-1. Create a short concise title describing an issue.
-    - Bad Title Examples
-        ```text
-        Forge fmt does not work
-        Forge fmt breaks
-        Forge fmt unexpected behavior
-        ```
-    - Good Title Examples
-        ```text
-        Forge fmt postfix comment misplaced
-        Forge fmt does not inline short yul blocks
-        ```
-2. Fill in the issue template fields that include foxar version, platform & component info.
-3. Provide the code snippets showing the current & expected behaviors.
-4. If it's a feature request, specify why this feature is needed.
-5. Besides the default label (`T-Bug` for bugs or `T-feature` for features), add `C-spark` and `Cmd-spark-fmt` labels.
-
-### Fixing A Bug
-
-1. Specify an issue that is being addressed in the PR description.
-2. Add a note on the solution in the PR description.
-3. Make sure the PR includes the acceptance test(s).
-
-### Developing A Feature
-
-1. Specify an issue that is being addressed in the PR description.
-2. Add a note on the solution in the PR description.
-3. Provide the test coverage for the new feature. These should include:
-    - Adding malformatted & expected solidity code under `fmt/testdata/$dir/`
-    - Testing the behavior of pre and postfix comments
-    - If it's a new config value, tests covering **all** available options

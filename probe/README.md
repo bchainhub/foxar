@@ -1,9 +1,4 @@
 # `probe`
-
-**Need help with Cast? Read the [📖 Foxar Book (Cast Guide)][foxar-book-probe-guide] (WIP)!**
-
-[foxar-book-probe-guide]: https://book.getfoxar.sh/probe/index.html
-
 ## Features
 
 -   [x] `--abi-decode`

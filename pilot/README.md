@@ -10,7 +10,7 @@ Ever wanted to quickly test a small feature in solidity?
 
 Perhaps to test how custom errors work, or how to write inline assembly?
 
-Pilot is a fully-functional Solidity REPL, allowing you to write, execute, and debug Solidity directly in the command line.
+Pilot is a fully-functional Ylem REPL, allowing you to write, execute, and debug Solidity directly in the command line.
 
 Once you finish testing, Pilot even lets you export your code to a new solidity file!
 
@@ -26,7 +26,7 @@ In this sense, Pilot even serves as a Foxar script generator.
 - Forking remote chains
 - Session caching
 
-Pilot aims to improve upon existing Solidity REPLs by integrating with foxar as well as offering additional functionality:
+Pilot aims to improve upon existing Ylem REPLs by integrating with foxar as well as offering additional functionality:
 
 - More verbose variable / state inspection
 - Improved error messages
@@ -36,7 +36,7 @@ Pilot aims to improve upon existing Solidity REPLs by integrating with foxar as 
 
 ### Migrating from [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell)
 
-Migration from existing Solidity REPLs such as [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell) is as
+Migration from existing Ylem REPLs such as [soli](https://github.com/jpopesculian/soli) or [solidity-shell](https://github.com/tintinweb/solidity-shell) is as
 simple as installing Pilot via `foxarup`. For information on features, usage, and configuration, see the [Usage](#usage) section as well as the pilot manpage (`man pilot` or `pilot --help`).
 
 ## Installation
