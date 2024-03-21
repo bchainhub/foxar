@@ -250,9 +250,9 @@ impl MultiWallet {
         let mut error_msg = String::new();
 
         // This is an actual used address
-        if addresses
-            .contains(&Config::default_sender(Some(&self.network().unwrap_or(Network::Mainnet))))
-        {
+        if addresses.contains(&Config::default_sender(Some(
+            &self.network().unwrap_or(Network::Private(1337)),
+        ))) {
             error_msg += "\nYou seem to be using Foxar's default sender. Be sure to set your own --sender.\n";
         }
 
@@ -452,6 +452,39 @@ mod tests {
             keystore_file.to_str().unwrap(),
             "--password-file",
             keystore_password_file.to_str().unwrap(),
+        ]);
+        assert_eq!(
+            args.keystore_password_files,
+            Some(vec![keystore_password_file.to_str().unwrap().to_string()])
+        );
+
+        let wallets = args.keystores().unwrap().unwrap();
+        assert_eq!(wallets.len(), 1);
+        assert_eq!(
+            wallets[0].address(),
+            "ce56e49851f010cd7d81b5b4969f3b0e8325c415359d".parse().unwrap()
+        );
+    }
+
+    #[test]
+    fn parse_keystore_password_file_mainnet() {
+        let keystore = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/keystore");
+        let keystore_file = keystore.join(
+            "UTC--2023-11-17T08-49-29.100000000Z--cb65e49851f010cd7d81b5b4969f3b0e8325c415359d",
+        );
+
+        let keystore_password_file = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/keystore/password-ec554")
+            .into_os_string();
+
+        let args: MultiWallet = MultiWallet::parse_from([
+            "foxar-cli",
+            "--keystores",
+            keystore_file.to_str().unwrap(),
+            "--password-file",
+            keystore_password_file.to_str().unwrap(),
+            "--wallet-network",
+            "1",
         ]);
         assert_eq!(
             args.keystore_password_files,

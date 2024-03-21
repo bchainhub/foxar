@@ -946,7 +946,7 @@ impl PilotDispatcher {
         // )?;
 
         let mut decoder = CallTraceDecoderBuilder::new(
-            &session_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Mainnet),
+            &session_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Private(1337)),
         )
         .with_labels(result.labeled_addresses.clone())
         .build();

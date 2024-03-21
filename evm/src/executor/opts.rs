@@ -153,7 +153,7 @@ impl EvmOpts {
         if let Some(id) = self.env.network_id {
             return u64::from(id);
         }
-        self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), u64::from)
+        self.get_remote_chain_id().map_or(u64::from(Network::Private(1337)), u64::from)
     }
 
     /// Returns the available compute units per second, which will be
@@ -193,7 +193,7 @@ impl EvmOpts {
     /// Depending on network has different prefix and checksum
     pub fn sender(&self) -> Address {
         if self.sender == Config::default_sender(None)
-            && self.env.network_id != Some(Network::Mainnet)
+            && self.env.network_id != Some(Network::Private(1337))
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }
@@ -204,7 +204,7 @@ impl EvmOpts {
     /// Depending on network has different prefix and checksum
     pub fn block_coinbase(&self) -> Address {
         if self.env.block_coinbase == Config::default_block_coinbase(None)
-            && self.env.network_id != Some(Network::Mainnet)
+            && self.env.network_id != Some(Network::Private(1337))
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }

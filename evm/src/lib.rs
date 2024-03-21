@@ -50,7 +50,7 @@ pub const TEST_CONTRACT_ADDRESS: H160 = H160([
 /// Default test contract address
 pub fn default_test_contract_address(mut network: Option<Network>) -> H176 {
     if network.is_none() {
-        network = Some(Network::Mainnet) //todo:error2215 change to ce address
+        network = Some(Network::Private(1337)) //todo:error2215 change to ce address
     }
     to_ican(&TEST_CONTRACT_ADDRESS, &network.unwrap())
 }

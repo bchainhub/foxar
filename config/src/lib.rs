@@ -414,7 +414,7 @@ impl Config {
     /// Default address for tx.origin
     pub fn default_sender(mut network: Option<&Network>) -> H176 {
         if network.is_none() {
-            network = Some(&Network::Mainnet)
+            network = Some(&Network::Private(1337))
         }
         to_ican(&Self::DEFAULT_SENDER, network.unwrap())
     }
@@ -422,7 +422,7 @@ impl Config {
     /// Returns address for tx.origin
     /// Depending on network has different prefix and checksum
     pub fn sender(&self) -> H176 {
-        if self.sender == Self::default_sender(None) && self.network_id != Some(Network::Mainnet) {
+        if self.sender == Self::default_sender(None) && self.network_id != Some(Network::Private(1337)) {
             return to_ican(&Self::DEFAULT_SENDER, &self.network_id.unwrap());
         }
         self.sender
@@ -431,7 +431,7 @@ impl Config {
     /// Default address for block.coinbase
     pub fn default_block_coinbase(mut network: Option<&Network>) -> H176 {
         if network.is_none() {
-            network = Some(&Network::Mainnet)
+            network = Some(&Network::Private(1337))
         }
         to_ican(&Self::DEFAULT_COINBASE, network.unwrap())
     }
@@ -439,7 +439,7 @@ impl Config {
     /// Depending on network has different prefix and checksum
     pub fn block_coinbase(&self) -> H176 {
         if self.block_coinbase == Self::default_block_coinbase(None)
-            && self.network_id != Some(Network::Mainnet)
+            && self.network_id != Some(Network::Private(1337))
         {
             return to_ican(&Self::DEFAULT_COINBASE, &self.network_id.unwrap());
         }
@@ -1796,7 +1796,7 @@ impl Default for Config {
             initial_balance: U256::from(0xffffffffffffffffffffffffu128),
             block_number: 1,
             fork_block_number: None,
-            network_id: Some(Network::Mainnet),
+            network_id: Some(Network::Private(1337)),
             energy_limit: i64::MAX.into(),
             code_size_limit: None,
             energy_price: None,

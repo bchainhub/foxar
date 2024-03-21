@@ -41,7 +41,7 @@ pub const DEFAULT_CREATE2_DEPLOYER: H160 = H160([
 /// Default CREATE2 deployer address
 pub fn default_create2_address(mut network: Option<Network>) -> H176 {
     if network.is_none() {
-        network = Some(Network::Mainnet) //todo:error2215 change to ce address
+        network = Some(Network::Private(1337)) //todo:error2215 change to ce address
     }
     to_ican(&DEFAULT_CREATE2_DEPLOYER, &network.unwrap())
 }

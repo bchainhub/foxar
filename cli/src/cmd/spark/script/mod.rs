@@ -206,7 +206,7 @@ impl ScriptArgs {
 
         let mut local_identifier = LocalTraceIdentifier::new(known_contracts);
         let mut decoder = CallTraceDecoderBuilder::new(
-            &script_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Mainnet),
+            &script_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Private(1337)),
         )
         .with_labels(result.labeled_addresses.clone())
         .with_verbosity(verbosity)

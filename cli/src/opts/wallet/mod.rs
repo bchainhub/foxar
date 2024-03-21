@@ -267,7 +267,7 @@ pub trait WalletTrait {
         let private_key = private_key.strip_prefix("0x").unwrap_or(&private_key);
 
         let mut wallet = LocalWallet::from_str(private_key)?;
-        wallet = wallet.with_network_id(self.network().unwrap_or(Network::Mainnet));
+        wallet = wallet.with_network_id(self.network().unwrap_or(Network::Private(1337)));
 
         Ok(wallet)
     }
@@ -276,7 +276,7 @@ pub trait WalletTrait {
     fn get_from_private_key(&self, private_key: &str) -> Result<LocalWallet> {
         let privk = private_key.trim().strip_prefix("0x").unwrap_or(private_key);
         match LocalWallet::from_str(privk) {
-            Ok(pk) => Ok(pk.with_network_id(self.network().unwrap_or(Network::Mainnet))),
+            Ok(pk) => Ok(pk.with_network_id(self.network().unwrap_or(Network::Private(1337)))),
             Err(err) => {
                 // helper closure to check if pk was meant to be an env var, this usually happens if
                 // `$` is missing
@@ -354,7 +354,7 @@ pub trait WalletTrait {
         keystore_password: Option<&String>,
         keystore_password_file: Option<&String>,
     ) -> Result<Option<LocalWallet>> {
-        let network = self.network().unwrap_or(Network::Mainnet);
+        let network = self.network().unwrap_or(Network::Private(1337));
 
         Ok(match (keystore_path, keystore_password, keystore_password_file) {
             (Some(path), Some(password), _) => {
