@@ -1,6 +1,6 @@
 # Documentation (`doc`)
 
-Solidity documentation generator. It parses the source code and generates an mdbook
+Ylem documentation generator. It parses the source code and generates an mdbook
 based on the parse tree and [NatSpec comments](https://docs.soliditylang.org/en/v0.8.17/natspec-format.html).
 
 ## Architecture
