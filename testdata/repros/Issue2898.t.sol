@@ -20,9 +20,6 @@ contract Issue2898Test is DSTest {
     }
 
     function testDealBalance() public {
-        emit log_address(BRIDGE);
-                emit log_address(BENEFICIARY);
-
         assertEq(BRIDGE.balance, 100);
         assertEq(BENEFICIARY.balance, 99);
     }
