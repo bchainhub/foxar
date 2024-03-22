@@ -27,33 +27,33 @@ contract MyContract {
 }
 
 contract ForkTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     uint256 mainnetFork;
     uint256 mainnetDiffFork;
-    uint256 devinFork;
+    uint256 mainnetDiff2Fork;
 
     // this will create two _different_ forks during setup
     function setUp() public {
         mainnetFork = cheats.createFork("rpcAlias");
         mainnetDiffFork = cheats.createFork("rpcAlias", block.number - 1);
 
-        devinFork = cheats.createFork("https://xcbapi-arch-devin.coreblockchain.net/");
+        mainnetDiff2Fork = cheats.createFork("https://xcbapi-arch-mainnet.coreblockchain.net/", block.number - 5);
     }
 
     // ensures forks use different ids
     function testForkIdDiffer() public {
-        assert(mainnetFork != devinFork);
+        assert(mainnetFork != mainnetDiff2Fork);
     }
 
     // ensures forks use different ids
     function testCanSwitchForks() public {
         cheats.selectFork(mainnetFork);
         assertEq(mainnetFork, cheats.activeFork());
-        cheats.selectFork(devinFork);
-        assertEq(devinFork, cheats.activeFork());
-        cheats.selectFork(devinFork);
-        assertEq(devinFork, cheats.activeFork());
+        cheats.selectFork(mainnetDiff2Fork);
+        assertEq(mainnetDiff2Fork, cheats.activeFork());
+        cheats.selectFork(mainnetDiff2Fork);
+        assertEq(mainnetDiff2Fork, cheats.activeFork());
         cheats.selectFork(mainnetFork);
         assertEq(mainnetFork, cheats.activeFork());
     }
@@ -68,10 +68,10 @@ contract ForkTest is DSTest {
         cheats.selectFork(mainnetFork);
         uint256 num = block.number;
         bytes32 mainHash = blockhash(block.number - 1);
-        cheats.selectFork(devinFork);
+        cheats.selectFork(mainnetDiff2Fork);
         uint256 num2 = block.number;
-        bytes32 devinHash = blockhash(block.number - 1);
-        assert(mainHash != devinHash);
+        bytes32 mainnetDiff2Hash = blockhash(block.number - 1);
+        assert(mainHash != mainnetDiff2Hash);
     }
 
     // test that we can switch between forks, and "roll" blocks
@@ -141,14 +141,14 @@ contract ForkTest is DSTest {
         uint256 expectedValue = 99;
         dummy.set(expectedValue);
 
-        cheats.selectFork(devinFork);
+        cheats.selectFork(mainnetDiff2Fork);
 
         cheats.selectFork(mainnetFork);
         assertEq(dummy.val(), expectedValue);
         cheats.makePersistent(address(dummy));
         assert(cheats.isPersistent(address(dummy)));
 
-        cheats.selectFork(devinFork);
+        cheats.selectFork(mainnetDiff2Fork);
         // the account is now marked as persistent and the contract is persistent across swaps
         dummy.hello();
         assertEq(dummy.val(), expectedValue);

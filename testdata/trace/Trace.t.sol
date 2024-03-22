@@ -52,7 +52,7 @@ contract RecursiveCall {
 }
 
 contract TraceTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats immutable cheats = Cheats(HEVM_ADDRESS);
 
     uint256 nodeId = 0;
     RecursiveCall first;

@@ -308,7 +308,7 @@ async fn test_logs() {
                         None,
                         Some(vec![
                             "constructor".into(),
-                            "cb270000000000000000000000000000000000000001".into(),
+                            "ce180000000000000000000000000000000000000001".into(),
                         ]),
                         None,
                     ),
@@ -623,7 +623,7 @@ async fn test_logs() {
                         None,
                         Some(vec![
                             "constructor".into(),
-                            "cb270000000000000000000000000000000000000001".into(),
+                            "ce180000000000000000000000000000000000000001".into(),
                         ]),
                         None,
                     ),
@@ -647,7 +647,7 @@ async fn test_logs() {
                         None,
                         Some(vec![
                             "constructor".into(),
-                            "formatted log addr=cb270000000000000000000000000000000000000001"
+                            "formatted log addr=ce180000000000000000000000000000000000000001"
                                 .into(),
                         ]),
                         None,

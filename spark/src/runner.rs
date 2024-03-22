@@ -380,7 +380,7 @@ impl<'a> ContractRunner<'a> {
                 }
             }
         };
-
+        println!("{:#?} {:#?}", setup.address, should_fail);
         let success = self.executor.is_success(
             setup.address,
             reverted,

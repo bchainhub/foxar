@@ -15,7 +15,7 @@ contract ForkTest is DSTest {
         0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c;
     uint256 constant mainblock = 7582885;
 
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
     IWETH WETH = IWETH(WETH_TOKEN_ADDR);
 
     uint256 forkA;

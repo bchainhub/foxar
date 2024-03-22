@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract RememberTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function testRememberKey() public {
         string memory mnemonic = "test test test test test test test test test test test junk";
@@ -14,6 +14,6 @@ contract RememberTest is DSTest {
         assertEq(privateKey, 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001);
 
         address thisAddress = cheats.rememberKey(privateKey);
-        assertEq(thisAddress, 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c);
+        assertEq(thisAddress, 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c);
     }
 }

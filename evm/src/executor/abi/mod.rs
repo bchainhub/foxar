@@ -11,7 +11,7 @@ pub use foxar_abi::{
     hevm::{self, HEVMCalls, HEVM_ABI},
 };
 
-/// The cheatcode handler address (0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8).
+/// The cheatcode handler address (0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8).
 ///
 /// This is the same address as the one used in DappTools's HEVM.
 /// `address(bytes20(uint160(uint256(sha3('hevm cheat code')))))`

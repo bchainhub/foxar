@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract FsTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
     bytes constant FOXAR_TOML_ACCESS_ERR =
         "Access to foxar.toml is not allowed.";
     bytes constant FOXAR_READ_ERR =

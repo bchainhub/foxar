@@ -9,7 +9,7 @@ contract Storage {
 }
 
 contract LoadTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
     uint256 slot0 = 20;
     Storage store;
 

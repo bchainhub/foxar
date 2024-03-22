@@ -413,6 +413,12 @@ impl Backend {
         // Note: this will take of registering the `fork`
         let inner = BackendInner {
             persistent_accounts: get_default_persistent_accounts(network),
+            cheatcode_access_accounts: HashSet::from([ 
+                default_cheatcode_address(Some(*network)),
+                default_test_contract_address(Some(*network)),
+                Config::default_sender(Some(&network)),
+            ]),
+            caller: Some(Config::default_sender(Some(&network))),
             ..Default::default()
         };
 
@@ -1649,9 +1655,9 @@ impl Default for BackendInner {
             // grant the cheatcode,default test and caller address access to execute cheatcodes
             // itself
             cheatcode_access_accounts: HashSet::from([
-                default_cheatcode_address(Some(NetworkCore::Mainnet)),
-                default_test_contract_address(Some(NetworkCore::Mainnet)), //todo:error2215 change to ce address
-                Config::default_sender(Some(&NetworkCore::Mainnet)),
+                default_cheatcode_address(Some(NetworkCore::Private(1337))),
+                default_test_contract_address(Some(NetworkCore::Private(1337))),
+                Config::default_sender(Some(&NetworkCore::Private(1337))),
             ]),
         }
     }

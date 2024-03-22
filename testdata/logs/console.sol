@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Unlicense
 pragma solidity >=1.1.0;
 
-library console {
-    address constant CONSOLE_ADDRESS = address(0xcb82000000000000000000636f6e736f6c652e6c6f67);
+import {Checksum} from "ds-test/checksum.sol";
 
+library console {
     function _sendLogPayload(bytes memory payload) private view {
         uint256 payloadLength = payload.length;
-        address consoleAddress = CONSOLE_ADDRESS;
+        address consoleAddress = Checksum.toIcan(uint160(bytes20(hex"000000000000000000636f6e736f6c652e6c6f67")));
         assembly {
             let payloadStart := add(payload, 32)
             let r := staticcall(gas(), consoleAddress, payloadStart, payloadLength, 0, 0)

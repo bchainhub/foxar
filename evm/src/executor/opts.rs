@@ -115,6 +115,7 @@ impl EvmOpts {
                 energy_price: rU256::from(self.env.energy_price.unwrap_or_default()),
                 energy_limit: self.energy_limit().as_u64(),
                 caller: h176_to_b176(self.sender()),
+                transact_to: revm::primitives::TransactTo::Call(h176_to_b176(self.block_coinbase())),
                 ..Default::default()
             },
         }
@@ -194,6 +195,7 @@ impl EvmOpts {
     pub fn sender(&self) -> Address {
         if self.sender == Config::default_sender(None)
             && self.env.network_id != Some(Network::Private(1337))
+            && self.env.network_id != None
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }
@@ -205,6 +207,7 @@ impl EvmOpts {
     pub fn block_coinbase(&self) -> Address {
         if self.env.block_coinbase == Config::default_block_coinbase(None)
             && self.env.network_id != Some(Network::Private(1337))
+            && self.env.network_id != None
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }

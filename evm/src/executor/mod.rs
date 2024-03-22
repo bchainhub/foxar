@@ -24,7 +24,7 @@ use corebc::{
     abi::{Abi, Contract, Detokenize, Function, Tokenize},
     prelude::{decode_function_data, encode_function_data, Address, U256},
     signers::LocalWallet,
-    types::{Log, Network},
+    types::{Log, Network, H160}, utils::to_ican,
 };
 use foxar_common::{abi::IntoFunction, evm::Breakpoints};
 use foxar_config::Config;
@@ -160,7 +160,10 @@ impl Executor {
 
         // if the deployer is not currently deployed, deploy the default one
         if create2_deployer_account.code.map_or(true, |code| code.is_empty()) {
-            let creator = create2_address;
+            let creator: H160 = H160([
+                0x3f, 0xab, 0x18, 0x46, 0x22, 0xdc, 0x19, 0xb6, 0x10, 0x93, 0x49, 0xb9, 0x48, 0x11, 0x49, 0x3b, 0xf2, 0xa4, 0x53, 0x62
+            ]);
+            let creator = to_ican(&creator, &Network::from(self.env.cfg.network_id));
 
             // Probably 0, but just in case.
             let initial_balance = self.get_balance(creator)?;
