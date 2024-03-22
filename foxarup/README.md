@@ -10,16 +10,16 @@ curl -L https://foxar.paradigm.xyz | bash
 
 ## Usage
 
-To install the **nightly** version:
+To install the **latest** version:
 
 ```sh
 foxarup
 ```
 
-To install a specific **version** (in this case the `nightly` version):
+To install a specific **version** (in this case the `v1.0.6` version):
 
 ```sh
-foxarup --version nightly
+foxarup --version v1.0.6
 ```
 
 To install a specific **branch** (in this case the `release/0.1.0` branch's latest commit):
