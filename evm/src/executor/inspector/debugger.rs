@@ -1,9 +1,9 @@
 use crate::{
+    abi::default_cheatcode_address,
     debug::{DebugArena, DebugNode, DebugStep, Instruction},
     executor::{
         backend::DatabaseExt,
         inspector::utils::{energy_used, get_create_address},
-        CHEATCODE_ADDRESS,
     },
     utils::{b176_to_h176, ru256_to_u256},
     CallKind,
@@ -122,7 +122,9 @@ where
             b176_to_h176(call.context.code_address),
             call.context.scheme.into(),
         );
-        if CHEATCODE_ADDRESS == b176_to_h176(call.contract) {
+        if default_cheatcode_address(Some(Network::from(data.env.cfg.network_id)))
+            == b176_to_h176(call.contract)
+        {
             self.arena.arena[self.head].steps.push(DebugStep {
                 memory: Memory::new(),
                 instruction: Instruction::Cheatcode(

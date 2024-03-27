@@ -1,9 +1,14 @@
-use self::inspector::{
-    cheatcodes::util::BroadcastableTransactions, Cheatcodes, InspectorData, InspectorStackConfig,
+use self::{
+    abi::default_cheatcode_address,
+    inspector::{
+        cheatcodes::util::BroadcastableTransactions, Cheatcodes, InspectorData,
+        InspectorStackConfig,
+    },
 };
 use crate::{
     debug::DebugArena,
-    decode, default_caller,
+    decode,
+    executor::inspector::cheatcodes::util::default_create2_address,
     trace::CallTraceArena,
     utils::{
         b176_to_h176, eval_to_instruction_result, h176_to_b176, halt_to_instruction_result,
@@ -11,8 +16,7 @@ use crate::{
     },
 };
 pub use abi::{
-    patch_hardhat_console_selector, HardhatConsoleCalls, CHEATCODE_ADDRESS, CONSOLE_ABI,
-    HARDHAT_CONSOLE_ABI, HARDHAT_CONSOLE_ADDRESS,
+    patch_hardhat_console_selector, HardhatConsoleCalls, CONSOLE_ABI, HARDHAT_CONSOLE_ABI,
 };
 use backend::FuzzBackendWrapper;
 use bytes::Bytes;
@@ -20,9 +24,10 @@ use corebc::{
     abi::{Abi, Contract, Detokenize, Function, Tokenize},
     prelude::{decode_function_data, encode_function_data, Address, U256},
     signers::LocalWallet,
-    types::{Log, Network},
+    types::{Log, Network, H160}, utils::to_ican,
 };
 use foxar_common::{abi::IntoFunction, evm::Breakpoints};
+use foxar_config::Config;
 use hashbrown::HashMap;
 use revm::primitives::hex_literal::hex;
 /// Reexport commonly used revm types
@@ -59,7 +64,7 @@ use crate::{
             error::{DatabaseError, DatabaseResult},
             DatabaseExt,
         },
-        inspector::{InspectorStack, DEFAULT_CREATE2_DEPLOYER},
+        inspector::InspectorStack,
     },
 };
 pub use builder::ExecutorBuilder;
@@ -105,7 +110,7 @@ impl Executor {
         // Need to create a non-empty contract on the cheatcodes address so `extcodesize` checks
         // does not fail
         backend.insert_account_info(
-            CHEATCODE_ADDRESS,
+            default_cheatcode_address(Some(Network::from(env.cfg.network_id))),
             revm::primitives::AccountInfo {
                 code: Some(Bytecode::new_raw(vec![0u8].into()).to_checked()),
                 ..Default::default()
@@ -147,14 +152,18 @@ impl Executor {
     /// Creates the default CREATE2 Contract Deployer for local tests and scripts.
     pub fn deploy_create2_deployer(&mut self) -> eyre::Result<()> {
         trace!("deploying local create2 deployer");
+        let create2_address = default_create2_address(Some(Network::from(self.env.cfg.network_id)));
         let create2_deployer_account = self
             .backend_mut()
-            .basic(h176_to_b176(DEFAULT_CREATE2_DEPLOYER))?
-            .ok_or(DatabaseError::MissingAccount(DEFAULT_CREATE2_DEPLOYER))?;
+            .basic(h176_to_b176(create2_address))?
+            .ok_or(DatabaseError::MissingAccount(create2_address))?;
 
         // if the deployer is not currently deployed, deploy the default one
         if create2_deployer_account.code.map_or(true, |code| code.is_empty()) {
-            let creator = "0xcb583fab184622dc19b6109349b94811493bf2a45362".parse().unwrap();
+            let creator: H160 = H160([
+                0x3f, 0xab, 0x18, 0x46, 0x22, 0xdc, 0x19, 0xb6, 0x10, 0x93, 0x49, 0xb9, 0x48, 0x11, 0x49, 0x3b, 0xf2, 0xa4, 0x53, 0x62
+            ]);
+            let creator = to_ican(&creator, &Network::from(self.env.cfg.network_id));
 
             // Probably 0, but just in case.
             let initial_balance = self.get_balance(creator)?;
@@ -230,7 +239,8 @@ impl Executor {
     ) -> Result<CallResult<()>, EvmError> {
         trace!(?from, ?to, "setting up contract");
 
-        let from = from.unwrap_or(default_caller(&Network::from(self.env().cfg.network_id)));
+        let from =
+            from.unwrap_or(Config::default_sender(Some(&Network::from(self.env().cfg.network_id))));
         self.backend_mut().set_test_contract(to).set_caller(from);
         let res = self.call_committing::<(), _, _>(from, to, "setUp()", (), 0.into(), None)?;
 
@@ -555,7 +565,9 @@ impl Executor {
 
         // we only clone the test contract and cheatcode accounts, that's all we need to evaluate
         // success
-        for addr in [address, CHEATCODE_ADDRESS] {
+        for addr in
+            [address, default_cheatcode_address(Some(Network::from(self.env.cfg.network_id)))]
+        {
             let acc = self.backend().basic(h176_to_b176(addr))?.unwrap_or_default();
             backend.insert_account_info(addr, acc);
         }
@@ -575,7 +587,7 @@ impl Executor {
         if success {
             // Check if a DSTest assertion failed
             let call = executor.call::<bool, _, _>(
-                default_caller(&Network::from(self.env().cfg.network_id)),
+                Config::default_sender(Some(&Network::from(self.env().cfg.network_id))),
                 address,
                 "failed()(bool)",
                 (),

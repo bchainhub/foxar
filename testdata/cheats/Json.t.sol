@@ -6,7 +6,7 @@ import "./Cheats.sol";
 import "../logs/console.sol";
 
 contract ParseJson is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
     string json;
 
     function setUp() public {
@@ -50,18 +50,18 @@ contract ParseJson is DSTest {
     function test_address() public {
         bytes memory data = cheats.parseJson(json, ".address");
         address decodedData = abi.decode(data, (address));
-        assertEq(0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c, decodedData);
+        assertEq(0xce49e5dd06163a480c22d540ec763325a0b5860fb56c, decodedData);
     }
 
     function test_addressArray() public {
         bytes memory data = cheats.parseJson(json, ".addressArray");
         address[] memory decodedData = abi.decode(data, (address[]));
         assertEq(
-            0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c,
+            0xce49e5dd06163a480c22d540ec763325a0b5860fb56c,
             decodedData[0]
         );
         assertEq(
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
             decodedData[1]
         );
     }
@@ -171,7 +171,7 @@ contract ParseJson is DSTest {
 }
 
 contract WriteJson is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS);
 
     string json1;
     string json2;
@@ -282,7 +282,7 @@ contract WriteJson is DSTest {
         assertEq(decodedData.b, "test");
 
         // replace a single value to key b
-        address ex = address(0xcb92000000000000000000000000000000000000beef);
+        address ex = address(0xce83000000000000000000000000000000000000beef);
         vm.writeJson(vm.toString(ex), path, ".b");
         json = vm.readFile(path);
         data = vm.parseJson(json, ".b");

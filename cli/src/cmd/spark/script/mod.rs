@@ -25,10 +25,7 @@ use foxar_common::{
 use foxar_config::{figment, Config};
 use probe::{
     decode,
-    executor::inspector::{
-        cheatcodes::{util::BroadcastableTransactions, BroadcastableTransaction},
-        DEFAULT_CREATE2_DEPLOYER,
-    },
+    executor::inspector::cheatcodes::{util::{default_create2_address, BroadcastableTransactions}, BroadcastableTransaction},
 };
 use spark::{
     debug::DebugArena,
@@ -209,7 +206,7 @@ impl ScriptArgs {
 
         let mut local_identifier = LocalTraceIdentifier::new(known_contracts);
         let mut decoder = CallTraceDecoderBuilder::new(
-            &script_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Mainnet),
+            &script_config.evm_opts.get_remote_chain_id().unwrap_or(Network::Private(1337)),
         )
         .with_labels(result.labeled_addresses.clone())
         .with_verbosity(verbosity)
@@ -573,7 +570,7 @@ impl ScriptArgs {
 
             // Find if it's a CREATE or CREATE2. Otherwise, skip transaction.
             if let Some(NameOrAddress::Address(to)) = to {
-                if *to == DEFAULT_CREATE2_DEPLOYER {
+                if *to == default_create2_address(self.evm_opts.env.network_id) {
                     // Size of the salt prefix.
                     offset = 32;
                 }
@@ -599,8 +596,8 @@ impl ScriptArgs {
             }
         }
 
-        if prompt_user &&
-            !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
+        if prompt_user
+            && !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
         {
             eyre::bail!("User canceled the script.");
         }

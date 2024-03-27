@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
 contract DefaultAccessTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
     bytes constant FOXAR_WRITE_ERR =
         'The path "../testdata/fixtures/File/write_file.txt" is not allowed to be accessed for write operations.';
 

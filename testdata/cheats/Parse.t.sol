@@ -5,12 +5,12 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract ParseTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function testParseBytes() public {
         bytes memory testBytes = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
 
-        string memory stringBytes = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        string memory stringBytes = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
         assertEq(testBytes, cheats.parseBytes(stringBytes));
 
         stringBytes = "7109709ECfa91a80626fF3989D68f67F5b1DD12D";
@@ -23,9 +23,9 @@ contract ParseTest is DSTest {
     }
 
     function testParseAddress() public {
-        address testAddress = 0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
+        address testAddress = 0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
 
-        string memory stringAddress = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        string memory stringAddress = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
         assertEq(testAddress, cheats.parseAddress(stringAddress));
 
         stringAddress = "7109709ECfa91a80626fF3989D68f67F5b1DD12D";

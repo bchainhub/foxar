@@ -5,12 +5,12 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract ToStringTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function testAddressToString() public {
-        address testAddress = 0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
+        address testAddress = 0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
         string memory stringAddress = cheats.toString(testAddress);
-        assertEq("0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", stringAddress);
+        assertEq("0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8", stringAddress);
     }
 
     function testBytes32ToString() public {

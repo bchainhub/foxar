@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
 
 contract DisabledTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
     bytes constant FOXAR_READ_ERR =
         'The path "../testdata/fixtures/File/read.txt" is not allowed to be accessed for read operations.';
     bytes constant FOXAR_WRITE_ERR =

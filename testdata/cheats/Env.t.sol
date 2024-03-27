@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract EnvTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function testSetEnv() public {
         string memory key = "_foxarCheatcodeSetEnvTestKey";
@@ -86,12 +86,12 @@ contract EnvTest is DSTest {
     function testEnvAddress() public {
         string memory key = "_foxarCheatcodeEnvAddressTestKey";
         string[numEnvAddressTests] memory values = [
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
-            "0xcb540000000000000000000000000000000000000000"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
+            "0xce450000000000000000000000000000000000000000"
         ];
         address[numEnvAddressTests] memory expected = [
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
-            0xcb540000000000000000000000000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            0xce450000000000000000000000000000000000000000
         ];
         for (uint256 i = 0; i < numEnvAddressTests; ++i) {
             cheats.setEnv(key, values[i]);
@@ -105,12 +105,12 @@ contract EnvTest is DSTest {
     function testEnvBytes32() public {
         string memory key = "_foxarCheatcodeEnvBytes32TestKey";
         string[numEnvBytes32Tests] memory values = [
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
             "0x00"
         ];
         bytes32[numEnvBytes32Tests] memory expected = [
             bytes32(
-                0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+                0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
             ),
             bytes32(
                 0x0000000000000000000000000000000000000000000000000000000000000000
@@ -129,11 +129,11 @@ contract EnvTest is DSTest {
         string memory key = "_foxarCheatcodeEnvStringTestKey";
         string[numEnvStringTests] memory values = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
         string[numEnvStringTests] memory expected = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
         for (uint256 i = 0; i < numEnvStringTests; ++i) {
             cheats.setEnv(key, values[i]);
@@ -147,7 +147,7 @@ contract EnvTest is DSTest {
     function testEnvBytes() public {
         string memory key = "_foxarCheatcodeEnvBytesTestKey";
         string[numEnvBytesTests] memory values = [
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
             "0x00"
         ];
         bytes[] memory expected = new bytes[](numEnvBytesTests);
@@ -227,11 +227,11 @@ contract EnvTest is DSTest {
 
     function testEnvAddressArr() public {
         string memory key = "_foxarCheatcodeEnvAddressArrTestKey";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
-        "0xcb540000000000000000000000000000000000000000";
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        "0xce450000000000000000000000000000000000000000";
         address[2] memory expected = [
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
-            0xcb540000000000000000000000000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            0xce450000000000000000000000000000000000000000
         ];
 
         cheats.setEnv(key, value);
@@ -246,11 +246,11 @@ contract EnvTest is DSTest {
 
     function testEnvBytes32Arr() public {
         string memory key = "_foxarCheatcodeEnvBytes32ArrTestKey";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
         "0x00";
         bytes32[2] memory expected = [
             bytes32(
-                0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+                0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
             ),
             bytes32(
                 0x0000000000000000000000000000000000000000000000000000000000000000
@@ -270,10 +270,10 @@ contract EnvTest is DSTest {
     function testEnvStringArr() public {
         string memory key = "_foxarCheatcodeEnvStringArrTestKey";
         string memory value = "hello, world!|"
-        "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
         string[2] memory expected = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
 
         cheats.setEnv(key, value);
@@ -290,7 +290,7 @@ contract EnvTest is DSTest {
 
     function testEnvBytesArr() public {
         string memory key = "_foxarCheatcodeEnvBytesArrTestKey";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
         "0x00";
         bytes[] memory expected = new bytes[](numEnvBytesTests);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
@@ -521,12 +521,12 @@ contract EnvTest is DSTest {
     function testEnvOrAddressKey() public {
         string memory key = "_foxarCheatcodeEnvOrAddressTestKey";
         string[numEnvAddressTests] memory values = [
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
-            "0xcb540000000000000000000000000000000000000000"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
+            "0xce450000000000000000000000000000000000000000"
         ];
         address[numEnvAddressTests] memory expected = [
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
-            0xcb540000000000000000000000000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            0xce450000000000000000000000000000000000000000
         ];
         for (uint256 i = 0; i < numEnvAddressTests; ++i) {
             cheats.setEnv(key, values[i]);
@@ -538,8 +538,8 @@ contract EnvTest is DSTest {
     function testEnvOrAddressDefault() public {
         string memory key = "_foxarCheatcodeEnvOrAddressTestDefault";
         address[numEnvAddressTests] memory expected = [
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
-            0xcb540000000000000000000000000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            0xce450000000000000000000000000000000000000000
         ];
         for (uint256 i = 0; i < numEnvAddressTests; ++i) {
             address output = cheats.envOr(key, expected[i]);
@@ -550,12 +550,12 @@ contract EnvTest is DSTest {
     function testEnvOrBytes32Key() public {
         string memory key = "_foxarCheatcodeEnvOrBytes32TestKey";
         string[numEnvBytes32Tests] memory values = [
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
             "0x00"
         ];
         bytes32[numEnvBytes32Tests] memory expected = [
             bytes32(
-                0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+                0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
             ),
             bytes32(
                 0x0000000000000000000000000000000000000000000000000000000000000000
@@ -572,7 +572,7 @@ contract EnvTest is DSTest {
         string memory key = "_foxarCheatcodeEnvOrBytes32TestDefault";
         bytes32[numEnvBytes32Tests] memory expected = [
             bytes32(
-                0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+                0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
             ),
             bytes32(
                 0x0000000000000000000000000000000000000000000000000000000000000000
@@ -588,11 +588,11 @@ contract EnvTest is DSTest {
         string memory key = "_foxarCheatcodeEnvOrStringTestKey";
         string[numEnvStringTests] memory values = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
         string[numEnvStringTests] memory expected = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
         for (uint256 i = 0; i < numEnvStringTests; ++i) {
             cheats.setEnv(key, values[i]);
@@ -605,7 +605,7 @@ contract EnvTest is DSTest {
         string memory key = "_foxarCheatcodeEnvOrStringTestDefault";
         string[numEnvStringTests] memory expected = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
         for (uint256 i = 0; i < numEnvStringTests; ++i) {
             string memory output = cheats.envOr(key, expected[i]);
@@ -616,7 +616,7 @@ contract EnvTest is DSTest {
     function testEnvOrBytesKey() public {
         string memory key = "_foxarCheatcodeEnvOrBytesTestKey";
         string[numEnvBytesTests] memory values = [
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8",
             "0x00"
         ];
         bytes[] memory expected = new bytes[](numEnvBytesTests);
@@ -800,15 +800,15 @@ contract EnvTest is DSTest {
 
     function testEnvOrAddressArrKey() public {
         string memory key = "_foxarCheatcodeEnvOrAddressArrTestKey";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
-        "0xcb540000000000000000000000000000000000000000";
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        "0xce450000000000000000000000000000000000000000";
         address[2] memory expected = [
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
-            0xcb540000000000000000000000000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            0xce450000000000000000000000000000000000000000
         ];
         address[] memory defaultValues = new address[](2);
-        defaultValues[0] = 0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
-        defaultValues[1] = 0xcb540000000000000000000000000000000000000000;
+        defaultValues[0] = 0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
+        defaultValues[1] = 0xce450000000000000000000000000000000000000000;
 
         cheats.setEnv(key, value);
         string memory delimiter = ",";
@@ -822,15 +822,15 @@ contract EnvTest is DSTest {
 
     function testEnvOrAddressArrDefault() public {
         string memory key = "_foxarCheatcodeEnvOrAddressArrTestDefault";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
-        "0xcb540000000000000000000000000000000000000000";
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        "0xce450000000000000000000000000000000000000000";
         address[2] memory expected = [
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
-            0xcb540000000000000000000000000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,
+            0xce450000000000000000000000000000000000000000
         ];
         address[] memory defaultValues = new address[](2);
-        defaultValues[0] = 0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
-        defaultValues[1] = 0xcb540000000000000000000000000000000000000000;
+        defaultValues[0] = 0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;
+        defaultValues[1] = 0xce450000000000000000000000000000000000000000;
 
         string memory delimiter = ",";
         address[] memory output = cheats.envOr(key, delimiter, defaultValues);
@@ -843,11 +843,11 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytes32ArrKey() public {
         string memory key = "_foxarCheatcodeEnvOrBytes32ArrTestKey";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
         "0x00";
         bytes32[2] memory expected = [
             bytes32(
-                0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+                0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
             ),
             bytes32(
                 0x0000000000000000000000000000000000000000000000000000000000000000
@@ -855,7 +855,7 @@ contract EnvTest is DSTest {
         ];
         bytes32[] memory defaultValues = new bytes32[](2);
         defaultValues[0] = bytes32(
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
         );
         defaultValues[1] = bytes32(
             0x0000000000000000000000000000000000000000000000000000000000000000
@@ -873,11 +873,11 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytes32ArrDefault() public {
         string memory key = "_foxarCheatcodeEnvOrBytes32ArrTestDefault";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
         "0x00";
         bytes32[2] memory expected = [
             bytes32(
-                0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+                0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
             ),
             bytes32(
                 0x0000000000000000000000000000000000000000000000000000000000000000
@@ -885,7 +885,7 @@ contract EnvTest is DSTest {
         ];
         bytes32[] memory defaultValues = new bytes32[](2);
         defaultValues[0] = bytes32(
-            0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
+            0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f800000000000000000000
         );
         defaultValues[1] = bytes32(
             0x0000000000000000000000000000000000000000000000000000000000000000
@@ -903,14 +903,14 @@ contract EnvTest is DSTest {
     function testEnvOrStringArrKey() public {
         string memory key = "_foxarCheatcodeEnvOrStringArrTestKey";
         string memory value = "hello, world!|"
-        "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
         string[2] memory expected = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
         string[] memory defaultValues = new string[](2);
         defaultValues[0] = "hello, world!";
-        defaultValues[1] = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        defaultValues[1] = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
 
         cheats.setEnv(key, value);
         string memory delimiter = "|";
@@ -927,14 +927,14 @@ contract EnvTest is DSTest {
     function testEnvOrStringArrDefault() public {
         string memory key = "_foxarCheatcodeEnvOrStringArrTestDefault";
         string memory value = "hello, world!|"
-        "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
         string[2] memory expected = [
             "hello, world!",
-            "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
+            "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8"
         ];
         string[] memory defaultValues = new string[](2);
         defaultValues[0] = "hello, world!";
-        defaultValues[1] = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
+        defaultValues[1] = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8";
 
         string memory delimiter = "|";
         string[] memory output = cheats.envOr(key, delimiter, defaultValues);
@@ -949,7 +949,7 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytesArrKey() public {
         string memory key = "_foxarCheatcodeEnvOrBytesArrTestKey";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
         "0x00";
         bytes[] memory expected = new bytes[](2);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";
@@ -969,7 +969,7 @@ contract EnvTest is DSTest {
 
     function testEnvOrBytesArrDefault() public {
         string memory key = "_foxarCheatcodeEnvOrBytesArrTestDefault";
-        string memory value = "0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
+        string memory value = "0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8,"
         "0x00";
         bytes[] memory expected = new bytes[](2);
         expected[0] = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";

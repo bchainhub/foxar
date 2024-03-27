@@ -15,6 +15,8 @@
 
 pragma solidity >=1.1.0;
 
+import {Checksum} from "./checksum.sol";
+
 contract DSTest {
     event log(string);
     event logs(bytes);
@@ -38,7 +40,7 @@ contract DSTest {
     bool public IS_TEST = true;
     bool public _failed;
 
-    address constant HEVM_ADDRESS = address(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
+    address HEVM_ADDRESS = Checksum.toIcan(uint160(bytes20(hex"fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8")));
 
     modifier mayRevert() {
         _;
@@ -78,10 +80,11 @@ contract DSTest {
         _failed = true;
     }
 
-    function hasHEVMContext() internal view returns (bool) {
+    function hasHEVMContext() internal returns (bool) {
         uint256 hevmCodeSize = 0;
+        address hevm = Checksum.toIcan(uint160(bytes20(hex"fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8")));
         assembly {
-            hevmCodeSize := extcodesize(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8)
+            hevmCodeSize := extcodesize(hevm)
         }
         return hevmCodeSize > 0;
     }

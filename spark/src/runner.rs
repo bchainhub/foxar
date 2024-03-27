@@ -11,10 +11,9 @@ use foxar_common::{
     contracts::{ContractsByAddress, ContractsByArtifact},
     TestFunctionExt,
 };
-use foxar_config::{FuzzConfig, InvariantConfig};
+use foxar_config::{Config, FuzzConfig, InvariantConfig};
 use foxar_evm::{
     decode::decode_console_logs,
-    default_caller,
     executor::{CallResult, EvmError, ExecutionErr, Executor},
     fuzz::{
         invariant::{
@@ -93,7 +92,7 @@ impl<'a> ContractRunner<'a> {
         // We max out their balance so that they can deploy and make calls.
         self.executor.set_balance(self.sender, U256::MAX)?;
         self.executor.set_balance(
-            default_caller(&Network::from(self.executor.env().cfg.network_id)),
+            Config::default_sender(Some(&Network::from(self.executor.env().cfg.network_id))),
             U256::MAX,
         )?;
 
@@ -137,7 +136,7 @@ impl<'a> ContractRunner<'a> {
         self.executor.set_balance(address, self.initial_balance)?;
         self.executor.set_balance(self.sender, self.initial_balance)?;
         self.executor.set_balance(
-            default_caller(&Network::from(self.executor.env().cfg.network_id)),
+            Config::default_sender(Some(&Network::from(self.executor.env().cfg.network_id))),
             self.initial_balance,
         )?;
 
@@ -381,7 +380,6 @@ impl<'a> ContractRunner<'a> {
                 }
             }
         };
-
         let success = self.executor.is_success(
             setup.address,
             reverted,

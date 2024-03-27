@@ -127,12 +127,12 @@ impl CallTraceArena {
                 Instruction::OpCode(opc) => {
                     match opc {
                         // If yes, descend into a child trace
-                        opcode::CREATE |
-                        opcode::CREATE2 |
-                        opcode::DELEGATECALL |
-                        opcode::CALL |
-                        opcode::STATICCALL |
-                        opcode::CALLCODE => {
+                        opcode::CREATE
+                        | opcode::CREATE2
+                        | opcode::DELEGATECALL
+                        | opcode::CALL
+                        | opcode::STATICCALL
+                        | opcode::CALLCODE => {
                             self.add_to_geth_trace(
                                 storage,
                                 &self.arena[trace_node.children[child_id]],
@@ -568,7 +568,7 @@ pub enum TraceKind {
 
 /// Chooses the color of the trace depending on the destination address and status of the call.
 fn trace_color(trace: &CallTrace) -> Color {
-    if trace.address == CHEATCODE_ADDRESS {
+    if trace.address[16..] == CHEATCODE_ADDRESS[..] { // we cannot get a network there but we still can compare 20 bytes of address 
         Color::Blue
     } else if trace.success {
         Color::Green

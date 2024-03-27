@@ -19,7 +19,7 @@ contract RecordMapping {
 }
 
 contract RecordMappingTest is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS);
 
     function testRecordMapping() public {
         RecordMapping target = new RecordMapping();

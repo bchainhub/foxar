@@ -1,10 +1,8 @@
-use crate::{
-    executor::{CHEATCODE_ADDRESS, HARDHAT_CONSOLE_ADDRESS},
-    trace::{CallTraceArena, RawOrDecodedCall, TraceKind},
-};
+use crate::trace::{CallTraceArena, RawOrDecodedCall, TraceKind};
 use comfy_table::{presets::ASCII_MARKDOWN, *};
-use corebc::types::U256;
+use corebc::types::{Network, U256};
 use foxar_common::{calc, TestFunctionExt};
+use foxar_evm::abi::{default_cheatcode_address, default_hardhat_address};
 use serde::{Deserialize, Serialize};
 use std::{collections::BTreeMap, fmt::Display};
 
@@ -36,17 +34,24 @@ impl GasReport {
         Self { report_for, ignore, ..Default::default() }
     }
 
-    pub fn analyze(&mut self, traces: &[(TraceKind, CallTraceArena)]) {
+    pub fn analyze(&mut self, traces: &[(TraceKind, CallTraceArena)], network: Option<Network>) {
         traces.iter().for_each(|(_, trace)| {
-            self.analyze_node(0, trace);
+            self.analyze_node(0, trace, network);
         });
     }
 
-    fn analyze_node(&mut self, node_index: usize, arena: &CallTraceArena) {
+    fn analyze_node(
+        &mut self,
+        node_index: usize,
+        arena: &CallTraceArena,
+        network: Option<Network>,
+    ) {
         let node = &arena.arena[node_index];
         let trace = &node.trace;
 
-        if trace.address == CHEATCODE_ADDRESS || trace.address == HARDHAT_CONSOLE_ADDRESS {
+        if trace.address == default_cheatcode_address(network)
+            || trace.address == default_hardhat_address(network)
+        {
             return;
         }
 
@@ -64,10 +69,10 @@ impl GasReport {
                     contract_name
                 );
             }
-            let report_contract = (!self.ignore.contains(&contract_name) &&
-                self.report_for.contains(&"*".to_string())) ||
-                (!self.ignore.contains(&contract_name) && self.report_for.is_empty()) ||
-                (self.report_for.contains(&contract_name));
+            let report_contract = (!self.ignore.contains(&contract_name)
+                && self.report_for.contains(&"*".to_string()))
+                || (!self.ignore.contains(&contract_name) && self.report_for.is_empty())
+                || (self.report_for.contains(&contract_name));
             if report_contract {
                 let contract_report = self.contracts.entry(name.to_string()).or_default();
 
@@ -94,7 +99,7 @@ impl GasReport {
         }
 
         node.children.iter().for_each(|index| {
-            self.analyze_node(*index, arena);
+            self.analyze_node(*index, arena, network);
         });
     }
 

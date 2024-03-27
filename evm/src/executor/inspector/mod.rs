@@ -22,7 +22,7 @@ mod stack;
 pub use stack::{InspectorData, InspectorStack};
 
 pub mod cheatcodes;
-pub use cheatcodes::{Cheatcodes, CheatsConfig, DEFAULT_CREATE2_DEPLOYER};
+pub use cheatcodes::{Cheatcodes, CheatsConfig};
 
 mod pilot_state;
 pub use pilot_state::PilotState;

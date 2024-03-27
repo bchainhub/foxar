@@ -68,7 +68,7 @@ contract Dummy {
 }
 
 contract ExpectRevertTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function testExpectRevertString() public {
         Reverter reverter = new Reverter();

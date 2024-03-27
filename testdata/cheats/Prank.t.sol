@@ -53,7 +53,7 @@ contract NestedVictim {
 }
 
 contract NestedPranker {
-    Cheats constant cheats = Cheats(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
+    Cheats immutable cheats = Cheats(0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
 
     address newSender;
     address newOrigin;
@@ -86,7 +86,7 @@ contract NestedPranker {
 }
 
 contract PrankTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function testPrankSender(address sender) public {
         // Perform the prank

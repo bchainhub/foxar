@@ -8,7 +8,10 @@ use corebc::{
 };
 use eyre::{ContextCompat, WrapErr};
 use foxar_common::{abi::format_token_raw, RpcUrl, SELECTOR_LEN};
-use probe::{executor::inspector::DEFAULT_CREATE2_DEPLOYER, trace::CallTraceDecoder, CallKind};
+use probe::{
+    executor::inspector::cheatcodes::util::default_create2_address, trace::CallTraceDecoder,
+    CallKind,
+};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use tracing::error;
@@ -77,7 +80,7 @@ impl TransactionWithMetadata {
 
         // Specify if any contract was directly created with this transaction
         if let Some(NameOrAddress::Address(to)) = metadata.transaction.to().cloned() {
-            if to == DEFAULT_CREATE2_DEPLOYER {
+            if to == default_create2_address(Some(*network)) {
                 let address = to_ican(&H160::from_slice(&result.returned), network);
                 metadata.set_create(true, address, local_contracts, decoder)?;
             } else {

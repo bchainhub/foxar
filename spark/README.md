@@ -116,7 +116,7 @@ _The below is modified from
 [Dapp's README](https://github.com/dapphub/dapptools/blob/master/src/hevm/README.md#cheat-codes)_
 
 We allow modifying blockchain state with "cheat codes". These can be accessed by
-calling into a contract at address `0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8`,
+calling into a contract at address `0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8`,
 which implements the following methods:
 
 -   `function warp(uint x) public` Sets the block timestamp to `x`.
@@ -197,7 +197,7 @@ contract Foo {
 }
 
 contract MyTest {
-    Vm vm = Vm(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
+    Vm vm = Vm(0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
 
     function testWarp() public {
         vm.warp(100);

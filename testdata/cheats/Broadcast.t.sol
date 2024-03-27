@@ -38,12 +38,12 @@ library F {
 }
 
 contract BroadcastTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     // 1st shuttle account
-    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
+    address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
     // 2nd shuttle account
-    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
+    address public ACCOUNT_B = 0xce642536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deploy() public {
         cheats.broadcast(ACCOUNT_A);
@@ -86,7 +86,7 @@ contract BroadcastTest is DSTest {
         );
 
         address thisAddress = cheats.rememberKey(privateKey);
-        assertEq(thisAddress, 0xcb6690f79bf6eb2c4f870365e785982e1f101e93b906);
+        assertEq(thisAddress, 0xce5790f79bf6eb2c4f870365e785982e1f101e93b906);
 
         cheats.broadcast(thisAddress);
         Test test = new Test();
@@ -194,13 +194,13 @@ interface INoLink {
 }
 
 contract BroadcastTestNoLinking is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
+    address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
+    address public ACCOUNT_B = 0xce642536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deployDoesntPanic() public {
         cheats.broadcast(address(ACCOUNT_A));
@@ -243,13 +243,13 @@ contract BroadcastTestNoLinking is DSTest {
 }
 
 contract BroadcastMix is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
+    address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
+    address public ACCOUNT_B = 0xce642536ad1a311f40a2f2cd1871246685d572afe700;
 
     function more() internal {
         cheats.broadcast();
@@ -258,7 +258,7 @@ contract BroadcastMix is DSTest {
 
     function deployMix() public {
         address user = msg.sender;
-        assert(user == address(0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c));
+        assert(user == address(0xce49e5dd06163a480c22d540ec763325a0b5860fb56c));
 
         NoLink no = new NoLink();
 
@@ -301,7 +301,7 @@ contract BroadcastMix is DSTest {
 }
 
 contract BroadcastTestSetup is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function setUp() public {
         // It predeployed a library first
@@ -327,7 +327,7 @@ contract BroadcastTestSetup is DSTest {
 }
 
 contract BroadcastTestLog is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function run() public {
         uint256[] memory arr = new uint256[](2);
@@ -350,13 +350,13 @@ contract BroadcastTestLog is DSTest {
 }
 
 contract TestInitialBalance is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function runCustomSender() public {
         // Make sure we're testing a different caller than the default one.
         assert(
             msg.sender !=
-                address(0xcb5400a329c0648769a73afac7f9381e08fb43dbea72)
+                address(0xce4500a329c0648769a73afac7f9381e08fb43dbea72)
         );
 
         // NodeConfig::test() sets the balance of the address used in this test to 100 ether.
@@ -370,7 +370,7 @@ contract TestInitialBalance is DSTest {
         // Make sure we're testing with the default caller.
         assert(
             msg.sender ==
-                address(0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38)
+                address(0xce591804c8ab1f12e6bbf3894d4083f33e07309d1f38)
         );
 
         assert(msg.sender.balance == type(uint256).max);
@@ -381,13 +381,13 @@ contract TestInitialBalance is DSTest {
 }
 
 contract MultiChainBroadcastNoLink is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
+    address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
+    address public ACCOUNT_B = 0xce642536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deploy(string memory sforkA, string memory sforkB) public {
         uint256 forkA = cheats.createFork(sforkA);
@@ -426,13 +426,13 @@ contract MultiChainBroadcastNoLink is DSTest {
 }
 
 contract MultiChainBroadcastLink is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     // ganache-cli -d 1st
-    address public ACCOUNT_A = 0xcb58e5dd06163a480c22d540ec763325a0b5860fb56c;
+    address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
 
     // ganache-cli -d 2nd
-    address public ACCOUNT_B = 0xcb732536ad1a311f40a2f2cd1871246685d572afe700;
+    address public ACCOUNT_B = 0xce642536ad1a311f40a2f2cd1871246685d572afe700;
 
     function deploy(string memory sforkA, string memory sforkB) public {
         uint256 forkA = cheats.createFork(sforkA);
@@ -449,7 +449,7 @@ contract MultiChainBroadcastLink is DSTest {
 }
 
 contract BroadcastEmptySetUp is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function setUp() public {}
 
@@ -490,14 +490,14 @@ contract ContractB {
 }
 
 contract CheckOverrides is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS);
 
     function run() external {
         // `script_caller` can be set by `--private-key ...` or `--sender ...`
-        // Otherwise it will take the default value of 0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38
+        // Otherwise it will take the default value of 0xce591804c8ab1f12e6bbf3894d4083f33e07309d1f38
         address script_caller = msg.sender;
         require(
-            script_caller == 0xcb681804c8ab1f12e6bbf3894d4083f33e07309d1f38
+            script_caller == 0xce591804c8ab1f12e6bbf3894d4083f33e07309d1f38
         );
         require(tx.origin == script_caller);
 

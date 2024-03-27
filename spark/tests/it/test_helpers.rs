@@ -8,7 +8,6 @@ use corebc::{
 };
 use foxar_config::Config;
 use foxar_evm::{
-    default_caller,
     executor::{
         backend::Backend,
         opts::{Env, EvmOpts},
@@ -62,12 +61,11 @@ pub static COMPILED_WITH_LIBS: Lazy<ProjectCompileOutput> = Lazy::new(|| {
 pub static EVM_OPTS: Lazy<EvmOpts> = Lazy::new(|| EvmOpts {
     env: Env {
         energy_limit: 18446744073709551615,
-        network_id: Some(corebc::types::Network::Mainnet),
+        network_id: Some(corebc::types::Network::Private(1337)),
         tx_origin: Config::default_sender(None),
         block_number: 1,
         block_timestamp: 1,
-        block_coinbase: Address::from_str("0xcb540000000000000000000000000000000000000000")
-            .unwrap(),
+        block_coinbase: Config::default_block_coinbase(None),
         ..Default::default()
     },
     sender: Config::default_sender(None),
@@ -83,7 +81,7 @@ pub fn fuzz_executor<DB: DatabaseRef>(executor: &Executor) -> FuzzedExecutor {
     FuzzedExecutor::new(
         executor,
         proptest::test_runner::TestRunner::new(cfg),
-        default_caller(&Network::from(executor.env().cfg.network_id)),
+        Config::default_sender(Some(&Network::from(executor.env().cfg.network_id))),
         config::test_opts().fuzz,
     )
 }
