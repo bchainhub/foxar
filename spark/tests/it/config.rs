@@ -3,6 +3,7 @@
 use crate::test_helpers::{
     filter::Filter, COMPILED, COMPILED_WITH_LIBS, EVM_OPTS, LIBS_PROJECT, PROJECT,
 };
+use corebc::types::H176;
 use foxar_config::{
     fs_permissions::PathPermission, Config, FsPermissions, FuzzConfig, FuzzDictionaryConfig,
     InvariantConfig, RpcEndpoint, RpcEndpoints,
@@ -165,6 +166,34 @@ pub async fn runner_with_config(mut config: Config) -> MultiContractRunner {
         .unwrap()
 }
 
+/// Builds a non-tracing runner
+pub async fn repros_runner(mut config: Config, sender: Option<H176>) -> MultiContractRunner {
+    let mut opts = EVM_OPTS.clone();
+
+    opts.env.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+    opts.env.block_coinbase = Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
+    opts.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+    opts.env.network_id = Some(corebc::types::Network::Mainnet);
+
+
+    config.rpc_endpoints = rpc_endpoints();
+    config.allow_paths.push(manifest_root());
+    config.block_coinbase = Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
+    config.network_id = Some(corebc::types::Network::Mainnet);
+    if let Some(sender) = sender {
+        config.sender = sender;
+    } else { 
+        config.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+    }
+    config.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+
+    base_runner()
+        .with_cheats_config(CheatsConfig::new(&config, &opts))
+        .sender(config.sender())
+        .build(&PROJECT.paths.root, (*COMPILED).clone(), opts.evm_env().await, opts.clone())
+        .unwrap()
+}
+
 /// Builds a tracing runner
 pub async fn tracing_runner() -> MultiContractRunner {
     let mut opts = EVM_OPTS.clone();
@@ -178,14 +207,27 @@ pub async fn tracing_runner() -> MultiContractRunner {
 pub async fn forked_runner(rpc: &str) -> MultiContractRunner {
     let mut opts = EVM_OPTS.clone();
 
-    opts.env.network_id = None; // clear chain id so the correct one gets fetched from the RPC
+    opts.env.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+    opts.env.block_coinbase = Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
+    opts.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+    opts.env.network_id = Some(corebc::types::Network::Mainnet);
     opts.fork_url = Some(rpc.to_string());
 
     let env = opts.evm_env().await;
     let fork = opts.get_fork(&Default::default(), env.clone());
 
+    let mut cheats_config = Config::default();
+    cheats_config.block_coinbase = Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
+    cheats_config.network_id = Some(corebc::types::Network::Mainnet);
+    cheats_config.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+    cheats_config.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));
+    cheats_config.rpc_endpoints = rpc_endpoints();
+    cheats_config.allow_paths.push(manifest_root());
+
     base_runner()
         .with_fork(fork)
+        .sender(opts.sender())
+        .with_cheats_config(CheatsConfig::new(&cheats_config, &opts))
         .build(&LIBS_PROJECT.paths.root, (*COMPILED_WITH_LIBS).clone(), env, opts)
         .unwrap()
 }

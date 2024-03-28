@@ -3,10 +3,11 @@ pragma solidity >=1.1.0;
 
 import "ds-test/test.sol";
 import "../cheats/Cheats.sol";
+import {Checksum} from "ds-test/checksum.sol";
 
 // https://github.com/foxar-rs/foxar/issues/4586
 contract Issue4586Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     uint256 constant initialBlock = 7627734;
 
@@ -31,9 +32,8 @@ contract Issue4586Test is DSTest {
 }
 
 contract InvariantHandler {
-    address constant HEVM_ADDRESS =
-        address(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    address HEVM_ADDRESS = Checksum.toIcan(uint160(bytes20(hex"fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8")));
+    Cheats vm = Cheats(HEVM_ADDRESS);
 
     uint256 public calledRollFork;
 

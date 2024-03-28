@@ -7,11 +7,8 @@ use self::{
     },
 };
 use crate::{
-    abi::HEVMCalls,
-    executor::{
-        backend::DatabaseExt, inspector::cheatcodes::env::RecordedLogs, CHEATCODE_ADDRESS,
-        HARDHAT_CONSOLE_ADDRESS,
-    },
+    abi::{default_cheatcode_address, default_hardhat_address, HEVMCalls},
+    executor::{backend::DatabaseExt, inspector::cheatcodes::env::RecordedLogs},
     utils::{b176_to_h176, b256_to_h256, h176_to_b176, ru256_to_u256, u256_to_ru256},
 };
 use corebc::{
@@ -63,7 +60,7 @@ mod mapping;
 mod snapshot;
 /// Utility cheatcodes (`sign` etc.)
 pub mod util;
-pub use util::{BroadcastableTransaction, DEFAULT_CREATE2_DEPLOYER};
+pub use util::BroadcastableTransaction;
 
 mod config;
 use crate::executor::{backend::RevertDiagnostic, inspector::utils::get_create_address};
@@ -258,8 +255,8 @@ impl Cheatcodes {
         let created_address =
             get_create_address(inputs, old_nonce, &Network::from(data.env.cfg.network_id));
 
-        if data.journaled_state.depth > 1 &&
-            !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))
+        if data.journaled_state.depth > 1
+            && !data.db.has_cheatcode_access(b176_to_h176(inputs.caller))
         {
             // we only grant cheat code access for new contracts if the caller also has
             // cheatcode access and the new contract is created in top most call
@@ -585,13 +582,17 @@ where
         call: &mut CallInputs,
         is_static: bool,
     ) -> (InstructionResult, Energy, bytes::Bytes) {
-        if call.contract == h176_to_b176(CHEATCODE_ADDRESS) {
+        if call.contract
+            == h176_to_b176(default_cheatcode_address(self.config.evm_opts.env.network_id))
+        {
             let energy = Energy::new(call.energy_limit);
             match self.apply_cheatcode(data, b176_to_h176(call.context.caller), call) {
                 Ok(retdata) => (InstructionResult::Return, energy, retdata.0),
                 Err(err) => (InstructionResult::Revert, energy, err.encode_error().0),
             }
-        } else if call.contract != h176_to_b176(HARDHAT_CONSOLE_ADDRESS) {
+        } else if call.contract
+            != h176_to_b176(default_hardhat_address(self.config.evm_opts.env.network_id))
+        {
             // Handle expected calls
 
             // Grab the different calldatas expected.
@@ -632,9 +633,10 @@ where
                         mock_retdata.data.clone().0,
                     );
                 } else if let Some((_, mock_retdata)) = mocks.iter().find(|(mock, _)| {
-                    mock.calldata.len() <= call.input.len() &&
-                        *mock.calldata == call.input[..mock.calldata.len()] &&
-                        mock.value
+                    mock.calldata.len() <= call.input.len()
+                        && *mock.calldata == call.input[..mock.calldata.len()]
+                        && mock
+                            .value
                             .map_or(true, |value| value == ru256_to_u256(call.transfer.value))
                 }) {
                     return (
@@ -647,8 +649,8 @@ where
 
             // Apply our prank
             if let Some(prank) = &self.prank {
-                if data.journaled_state.depth() >= prank.depth &&
-                    call.context.caller == h176_to_b176(prank.prank_caller)
+                if data.journaled_state.depth() >= prank.depth
+                    && call.context.caller == h176_to_b176(prank.prank_caller)
                 {
                     let mut prank_applied = false;
                     // At the target depth we set `msg.sender`
@@ -679,8 +681,8 @@ where
                 //
                 // We do this because any subsequent contract calls *must* exist on chain and
                 // we only want to grab *this* call, not internal ones
-                if data.journaled_state.depth() == broadcast.depth &&
-                    call.context.caller == h176_to_b176(broadcast.original_caller)
+                if data.journaled_state.depth() == broadcast.depth
+                    && call.context.caller == h176_to_b176(broadcast.original_caller)
                 {
                     // At the target depth we set `msg.sender` & tx.origin.
                     // We are simulating the caller as being an EOA, so *both* must be set to the
@@ -761,8 +763,10 @@ where
         retdata: bytes::Bytes,
         _: bool,
     ) -> (InstructionResult, Energy, bytes::Bytes) {
-        if call.contract == h176_to_b176(CHEATCODE_ADDRESS) ||
-            call.contract == h176_to_b176(HARDHAT_CONSOLE_ADDRESS)
+        if call.contract
+            == h176_to_b176(default_cheatcode_address(self.config.evm_opts.env.network_id))
+            || call.contract
+                == h176_to_b176(default_hardhat_address(self.config.evm_opts.env.network_id))
         {
             return (status, remaining_energy, retdata);
         }
@@ -949,9 +953,9 @@ where
         if let TransactTo::Call(test_contract) = data.env.tx.transact_to {
             // if a call to a different contract than the original test contract returned with
             // `Stop` we check if the contract actually exists on the active fork
-            if data.db.is_forked_mode() &&
-                status == InstructionResult::Stop &&
-                call.contract != test_contract
+            if data.db.is_forked_mode()
+                && status == InstructionResult::Stop
+                && call.contract != test_contract
             {
                 self.fork_revert_diagnostic =
                     data.db.diagnose_revert(b176_to_h176(call.contract), &data.journaled_state);
@@ -971,8 +975,8 @@ where
 
         // Apply our prank
         if let Some(prank) = &self.prank {
-            if data.journaled_state.depth() >= prank.depth &&
-                call.caller == h176_to_b176(prank.prank_caller)
+            if data.journaled_state.depth() >= prank.depth
+                && call.caller == h176_to_b176(prank.prank_caller)
             {
                 // At the target depth we set `msg.sender`
                 if data.journaled_state.depth() == prank.depth {
@@ -988,8 +992,8 @@ where
 
         // Apply our broadcast
         if let Some(broadcast) = &self.broadcast {
-            if data.journaled_state.depth() >= broadcast.depth &&
-                call.caller == h176_to_b176(broadcast.original_caller)
+            if data.journaled_state.depth() >= broadcast.depth
+                && call.caller == h176_to_b176(broadcast.original_caller)
             {
                 if let Err(err) =
                     data.journaled_state.load_account(h176_to_b176(broadcast.new_origin), data.db)

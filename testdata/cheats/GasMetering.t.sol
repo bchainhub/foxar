@@ -11,7 +11,7 @@ contract B {
 }
 
 contract GasMeteringTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testGasMetering() public {
         uint256 gas_start = gasleft();

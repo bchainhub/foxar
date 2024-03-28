@@ -21,7 +21,7 @@ contract HardhatLogsTest {
         testInt = -31337;
         testUint = 1;
         testBool = false;
-        testAddr = address(0xcb270000000000000000000000000000000000000001);
+        testAddr = address(0xce180000000000000000000000000000000000000001);
         testBytes = "a";
         testBytes1 = "a";
     }

@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract RpcUrlTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     // returns the correct url
     function testCanGetRpcUrl() public {

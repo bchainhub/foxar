@@ -414,7 +414,7 @@ impl Config {
     /// Default address for tx.origin
     pub fn default_sender(mut network: Option<&Network>) -> H176 {
         if network.is_none() {
-            network = Some(&Network::Mainnet)
+            network = Some(&Network::Private(1337))
         }
         to_ican(&Self::DEFAULT_SENDER, network.unwrap())
     }
@@ -422,7 +422,7 @@ impl Config {
     /// Returns address for tx.origin
     /// Depending on network has different prefix and checksum
     pub fn sender(&self) -> H176 {
-        if self.sender == Self::default_sender(None) && self.network_id != Some(Network::Mainnet) {
+        if self.sender == Self::default_sender(None) && self.network_id != Some(Network::Private(1337)) && self.network_id != None {
             return to_ican(&Self::DEFAULT_SENDER, &self.network_id.unwrap());
         }
         self.sender
@@ -431,7 +431,7 @@ impl Config {
     /// Default address for block.coinbase
     pub fn default_block_coinbase(mut network: Option<&Network>) -> H176 {
         if network.is_none() {
-            network = Some(&Network::Mainnet)
+            network = Some(&Network::Private(1337))
         }
         to_ican(&Self::DEFAULT_COINBASE, network.unwrap())
     }
@@ -439,7 +439,7 @@ impl Config {
     /// Depending on network has different prefix and checksum
     pub fn block_coinbase(&self) -> H176 {
         if self.block_coinbase == Self::default_block_coinbase(None)
-            && self.network_id != Some(Network::Mainnet)
+            && self.network_id != Some(Network::Private(1337)) && self.network_id != None
         {
             return to_ican(&Self::DEFAULT_COINBASE, &self.network_id.unwrap());
         }
@@ -1796,11 +1796,11 @@ impl Default for Config {
             initial_balance: U256::from(0xffffffffffffffffffffffffu128),
             block_number: 1,
             fork_block_number: None,
-            network_id: Some(Network::Mainnet),
+            network_id: Some(Network::Private(1337)),
             energy_limit: i64::MAX.into(),
             code_size_limit: None,
             energy_price: None,
-            block_coinbase: Config::default_block_coinbase(None),
+            block_coinbase: Config::default_block_coinbase(None),  //todo:error2215 change to ce address
             block_timestamp: 1,
             block_difficulty: 0,
             block_energy_limit: None,
@@ -2531,7 +2531,7 @@ mod tests {
     fn default_sender() {
         assert_eq!(
             Config::default_sender(None),
-            "cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
+            "ce591804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
 
         let mut config = Config::default();
@@ -2541,10 +2541,10 @@ mod tests {
             "ab861804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
 
-        config.network_id = Some(Network::Private(5));
+        config.network_id = Some(Network::Mainnet);
         assert_eq!(
             config.sender(),
-            "ce591804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
+            "cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38".parse().unwrap()
         );
     }
 

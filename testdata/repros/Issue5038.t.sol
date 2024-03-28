@@ -10,7 +10,7 @@ struct Value {
 
 // https://github.com/foxar-rs/foxar/issues/5038
 contract Issue5038Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function testParseMaxUint64() public {
         string memory json = '{"value": 18446744073709551615}';

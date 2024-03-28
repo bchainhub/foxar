@@ -1,20 +1,20 @@
 use crate::{
-    abi::CHEATCODE_ADDRESS,
-    default_caller,
+    abi::default_cheatcode_address,
+    default_test_contract_address,
     executor::{
         backend::snapshot::BackendSnapshot,
         fork::{CreateFork, ForkId, MultiFork, SharedBackend},
-        inspector::{cheatcodes::Cheatcodes, DEFAULT_CREATE2_DEPLOYER},
+        inspector::cheatcodes::Cheatcodes,
         snapshot::Snapshots,
     },
     utils::{b176_to_h176, h176_to_b176, h256_to_b256, ru256_to_u256, u256_to_ru256},
-    TEST_CONTRACT_ADDRESS,
 };
 use corebc::{
     prelude::{Block, H176, H256, U256},
     types::{Address, BlockNumber, Network as NetworkCore, Transaction, U64},
     utils::sha3,
 };
+use foxar_config::Config;
 use hashbrown::HashMap as Map;
 pub use in_memory_db::MemDb;
 use revm::{
@@ -48,6 +48,8 @@ use crate::executor::{
 };
 pub use error::{DatabaseError, DatabaseResult};
 
+use super::inspector::cheatcodes::util::default_create2_address;
+
 mod in_memory_db;
 
 // A `revm::Database` that is used in forking mode
@@ -64,8 +66,11 @@ type ForkLookupIndex = usize;
 
 /// All accounts that will have persistent storage across fork swaps. See also [`clone_data()`]
 fn get_default_persistent_accounts(network: &NetworkCore) -> HashSet<H176, RandomState> {
-    let default_persistent_accounts =
-        [CHEATCODE_ADDRESS, DEFAULT_CREATE2_DEPLOYER, default_caller(network)];
+    let default_persistent_accounts = [
+        default_cheatcode_address(Some(*network)),
+        default_create2_address(Some(*network)),
+        Config::default_sender(Some(network)),
+    ];
     HashSet::from(default_persistent_accounts)
 }
 
@@ -408,6 +413,12 @@ impl Backend {
         // Note: this will take of registering the `fork`
         let inner = BackendInner {
             persistent_accounts: get_default_persistent_accounts(network),
+            cheatcode_access_accounts: HashSet::from([ 
+                default_cheatcode_address(Some(*network)),
+                default_test_contract_address(Some(*network)),
+                Config::default_sender(Some(&network)),
+            ]),
+            caller: Some(Config::default_sender(Some(&network))),
             ..Default::default()
         };
 
@@ -586,16 +597,6 @@ impl Backend {
         }
 
         false
-    }
-
-    /// In addition to the `_failed` variable, `DSTest::fail()` stores a failure
-    /// in "failed"
-    /// See <https://github.com/dapphub/ds-test/blob/9310e879db8ba3ea6d5c6489a579118fd264a3f5/src/test.sol#L66-L72>
-    pub fn is_global_failure(&self) -> bool {
-        let index = U256::from(&b"failed"[..]);
-        self.storage(h176_to_b176(CHEATCODE_ADDRESS), u256_to_ru256(index))
-            .map(|value| value == revm::primitives::U256::from(1))
-            .unwrap_or_default()
     }
 
     /// When creating or switching forks, we update the AccountInfo of the contract
@@ -1654,9 +1655,9 @@ impl Default for BackendInner {
             // grant the cheatcode,default test and caller address access to execute cheatcodes
             // itself
             cheatcode_access_accounts: HashSet::from([
-                CHEATCODE_ADDRESS,
-                TEST_CONTRACT_ADDRESS,
-                default_caller(&NetworkCore::Mainnet),
+                default_cheatcode_address(Some(NetworkCore::Private(1337))),
+                default_test_contract_address(Some(NetworkCore::Private(1337))),
+                Config::default_sender(Some(&NetworkCore::Private(1337))),
             ]),
         }
     }

@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/3119
 contract Issue3119Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     address public owner = 0xcb1958b39698a44bdae37f881e68dce073823a48a631;
     address public alice = 0xcb675ffbdbb79c60f695c9f5b9df2ec16fb8171ee13d;

@@ -11,7 +11,7 @@ contract Victim {
 }
 
 contract CheatsSetupTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     Victim victim;
 
     function setUp() public {

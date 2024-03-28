@@ -115,6 +115,7 @@ impl EvmOpts {
                 energy_price: rU256::from(self.env.energy_price.unwrap_or_default()),
                 energy_limit: self.energy_limit().as_u64(),
                 caller: h176_to_b176(self.sender()),
+                transact_to: revm::primitives::TransactTo::Call(h176_to_b176(self.block_coinbase())),
                 ..Default::default()
             },
         }
@@ -153,7 +154,7 @@ impl EvmOpts {
         if let Some(id) = self.env.network_id {
             return u64::from(id);
         }
-        self.get_remote_chain_id().map_or(u64::from(Network::Mainnet), u64::from)
+        self.get_remote_chain_id().map_or(u64::from(Network::Private(1337)), u64::from)
     }
 
     /// Returns the available compute units per second, which will be
@@ -193,7 +194,8 @@ impl EvmOpts {
     /// Depending on network has different prefix and checksum
     pub fn sender(&self) -> Address {
         if self.sender == Config::default_sender(None)
-            && self.env.network_id != Some(Network::Mainnet)
+            && self.env.network_id != Some(Network::Private(1337))
+            && self.env.network_id != None
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }
@@ -204,7 +206,8 @@ impl EvmOpts {
     /// Depending on network has different prefix and checksum
     pub fn block_coinbase(&self) -> Address {
         if self.env.block_coinbase == Config::default_block_coinbase(None)
-            && self.env.network_id != Some(Network::Mainnet)
+            && self.env.network_id != Some(Network::Private(1337))
+            && self.env.network_id != None
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }

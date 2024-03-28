@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/4640
 contract Issue4640Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function testArbitrumBlockNumber() public {
         // <https://arbiscan.io/block/75219831>

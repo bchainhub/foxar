@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/3055
 contract Issue3055Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function test_snapshot() external {
         uint256 snapId = vm.snapshot();

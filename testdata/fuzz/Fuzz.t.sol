@@ -27,7 +27,7 @@ contract FuzzTest is DSTest {
     }
 
     function testToStringFuzz(bytes32 data) public {
-        Cheats cheats = Cheats(HEVM_ADDRESS);
+        Cheats cheats = Cheats(HEVM_ADDRESS());
         cheats.toString(data);
     }
 }

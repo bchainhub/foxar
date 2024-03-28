@@ -1,11 +1,12 @@
 //! Fuzzing support abstracted over the [`Evm`](crate::Evm) used
-use crate::{default_caller, fuzz::*};
+use crate::fuzz::*;
 mod error;
 pub use error::InvariantFuzzError;
 mod filters;
 pub use filters::{ArtifactFilters, SenderFilters};
 mod call_override;
 pub use call_override::{set_up_inner_replay, RandomCallGenerator};
+use foxar_config::Config;
 mod executor;
 use crate::executor::Executor;
 use corebc::{
@@ -56,7 +57,7 @@ pub fn assert_invariants(
     for func in &invariant_contract.invariant_functions {
         let mut call_result = executor
             .call_raw(
-                default_caller(&Network::from(executor.env().cfg.network_id)),
+                Config::default_sender(Some(&Network::from(executor.env().cfg.network_id))),
                 invariant_contract.address,
                 func.encode_input(&[]).expect("invariant should have no inputs").into(),
                 U256::zero(),
