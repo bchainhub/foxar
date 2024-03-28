@@ -43,7 +43,7 @@ contract NestedMock {
 }
 
 contract MockCallTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testMockGetters() public {
         Mock target = new Mock();
@@ -158,7 +158,7 @@ contract MockCallTest is DSTest {
 }
 
 contract MockCallRevertTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     error TestError(bytes msg);
 

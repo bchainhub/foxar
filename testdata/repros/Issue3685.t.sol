@@ -7,7 +7,7 @@ import "../logs/console.sol";
 
 // https://github.com/foxar-rs/foxar/issues/3685
 contract Issue3685Test is DSTest {
-    Cheats vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
     Actor a;
     Actor b;
 

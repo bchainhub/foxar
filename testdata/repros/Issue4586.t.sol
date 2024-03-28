@@ -7,7 +7,7 @@ import {Checksum} from "ds-test/checksum.sol";
 
 // https://github.com/foxar-rs/foxar/issues/4586
 contract Issue4586Test is DSTest {
-    Cheats vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     uint256 constant initialBlock = 7627734;
 

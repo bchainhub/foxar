@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract CoinbaseTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testCoinbase() public {
         cheats.coinbase(0xce86ea674fdde714fd979de3edf0f56aa9716b898ec8);

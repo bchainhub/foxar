@@ -10,7 +10,7 @@ struct Storage {
 }
 
 contract SnapshotTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     Storage store;
 

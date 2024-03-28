@@ -49,7 +49,7 @@ contract Emitterv2 {
 }
 
 contract RecordLogsTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     Emitter emitter;
     bytes32 internal seedTestData = keccak256(abi.encodePacked("Some data"));
 

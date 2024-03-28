@@ -42,7 +42,7 @@ interface Cheats {
 }
 
 contract SampleContractTest is DSTest {
-    Cheats hevm = Cheats(HEVM_ADDRESS);
+    Cheats hevm = Cheats(HEVM_ADDRESS());
 
     event Incremented(uint256 counter);
 

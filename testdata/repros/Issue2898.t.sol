@@ -10,7 +10,7 @@ import {Checksum} from "ds-test/checksum.sol";
 contract Issue2898Test is DSTest {
     address private BRIDGE = Checksum.toIcan(uint160(bytes20(hex"0000000000000000000000000000000000000010")));
     address private BENEFICIARY = Checksum.toIcan(uint160(bytes20(hex"0000000000000000000000000000000000000011")));
-    Cheats vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function setUp() public {
         vm.deal(BRIDGE, 100);

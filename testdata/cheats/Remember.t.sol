@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract RememberTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testRememberKey() public {
         string memory mnemonic = "test test test test test test test test test test test junk";

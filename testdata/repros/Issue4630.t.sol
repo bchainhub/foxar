@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/4630
 contract Issue4630Test is DSTest {
-    Cheats vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function testExistingValue() public {
         string memory path = "../testdata/fixtures/Json/Issue4630.json";

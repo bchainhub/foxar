@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 contract ForkTest is DSTest {
     address constant WETH_TOKEN_ADDR = 0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c;
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     uint256 forkA;
 
     // this will create two _different_ forks during setup

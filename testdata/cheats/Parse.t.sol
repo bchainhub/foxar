@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract ParseTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testParseBytes() public {
         bytes memory testBytes = hex"7109709ECfa91a80626fF3989D68f67F5b1DD12D";

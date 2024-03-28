@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/3110
 abstract contract ZeroState is DSTest {
-    Cheats vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     // deployer and users
     address public deployer = 0xcb1958b39698a44bdae37f881e68dce073823a48a631;

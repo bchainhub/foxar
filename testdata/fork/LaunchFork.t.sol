@@ -33,7 +33,7 @@ contract ForkTest is DSTest {
 
     // checks that we can retrieve the fork we launched with
     function testActiveFork() public {
-        Cheats cheatvm = Cheats(HEVM_ADDRESS);
+        Cheats cheatvm = Cheats(HEVM_ADDRESS());
         uint256 activeFork = cheatvm.activeFork();
         // launch fork has id `0`
         assertEq(activeFork, 0);
@@ -67,7 +67,7 @@ contract ForkTest is DSTest {
         );
     }
     function testCheatcode() public {
-        Cheats cheatvm = Cheats(HEVM_ADDRESS);
+        Cheats cheatvm = Cheats(HEVM_ADDRESS());
         IWETH WETH = IWETH(WETH_TOKEN_ADDR);
         bytes32 value = bytes32(uint256(1));
         // "0xdfb571817f852d91cbe632c0bb6413b44f376a24fe4b9a2fe0b9e8135565aa65" is the slot storing the balance of zero address for the weth contract

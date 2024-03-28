@@ -11,7 +11,7 @@ contract Foo {
 }
 
 contract ResetNonce is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     Foo public fooContract;
     address barEOA;
 

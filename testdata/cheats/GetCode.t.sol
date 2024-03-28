@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract GetCodeTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testGetCode() public {
         bytes memory fullPath = cheats.getCode("../testdata/fixtures/GetCode/WorkingContract.json");

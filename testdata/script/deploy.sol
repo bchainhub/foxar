@@ -23,7 +23,7 @@ contract Greeter {
 }
 
 contract Deploy is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     Greeter greeter;
     string greeting;

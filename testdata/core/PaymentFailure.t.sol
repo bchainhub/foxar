@@ -9,7 +9,7 @@ contract Payable {
 }
 
 contract PaymentFailureTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testCantPay() public {
         Payable target = new Payable();

@@ -27,7 +27,7 @@ contract MyContract {
 }
 
 contract ForkTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     uint256 mainnetFork;
     uint256 mainnetDiffFork;

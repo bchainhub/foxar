@@ -6,7 +6,7 @@ import "./Cheats.sol";
 import "../logs/console.sol";
 
 contract ParseJson is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     string json;
 
     function setUp() public {
@@ -171,7 +171,7 @@ contract ParseJson is DSTest {
 }
 
 contract WriteJson is DSTest {
-    Cheats vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     string json1;
     string json2;

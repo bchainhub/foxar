@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract ToStringTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testAddressToString() public {
         address testAddress = 0xce60fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8;

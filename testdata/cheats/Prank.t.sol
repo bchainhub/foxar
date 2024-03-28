@@ -86,7 +86,7 @@ contract NestedPranker {
 }
 
 contract PrankTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testPrankSender(address sender) public {
         // Perform the prank

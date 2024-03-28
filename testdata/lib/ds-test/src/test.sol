@@ -40,7 +40,9 @@ contract DSTest {
     bool public IS_TEST = true;
     bool public _failed;
 
-    address HEVM_ADDRESS = Checksum.toIcan(uint160(bytes20(hex"fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8")));
+    function HEVM_ADDRESS() public returns (address) {
+        return Checksum.toIcan(uint160(bytes20(hex"fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8")));
+    }
 
     modifier mayRevert() {
         _;
@@ -56,9 +58,9 @@ contract DSTest {
         } else {
             bool globalFailed = false;
             if (hasHEVMContext()) {
-                (, bytes memory retdata) = HEVM_ADDRESS.call(
+                (, bytes memory retdata) = HEVM_ADDRESS().call(
                     abi.encodePacked(
-                        bytes4(keccak256("load(address,bytes32)")), abi.encode(HEVM_ADDRESS, bytes32("failed"))
+                        bytes4(keccak256("load(address,bytes32)")), abi.encode(HEVM_ADDRESS(), bytes32("failed"))
                     )
                 );
                 globalFailed = abi.decode(retdata, (bool));
@@ -69,10 +71,10 @@ contract DSTest {
 
     function fail() internal {
         if (hasHEVMContext()) {
-            (bool status,) = HEVM_ADDRESS.call(
+            (bool status,) = HEVM_ADDRESS().call(
                 abi.encodePacked(
                     bytes4(keccak256("store(address,bytes32,bytes32)")),
-                    abi.encode(HEVM_ADDRESS, bytes32("failed"), bytes32(uint256(0x01)))
+                    abi.encode(HEVM_ADDRESS(), bytes32("failed"), bytes32(uint256(0x01)))
                 )
             );
             status; // Silence compiler warnings

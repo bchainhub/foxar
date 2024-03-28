@@ -26,7 +26,7 @@ contract NestedRecordAccess {
 }
 
 contract RecordTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testRecordAccess() public {
         RecordAccess target = new RecordAccess();

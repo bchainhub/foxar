@@ -10,7 +10,7 @@ contract Storage {
 }
 
 contract StoreTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     Storage store;
 
     function setUp() public {

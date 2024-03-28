@@ -38,7 +38,7 @@ library F {
 }
 
 contract BroadcastTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     // 1st shuttle account
     address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
@@ -194,7 +194,7 @@ interface INoLink {
 }
 
 contract BroadcastTestNoLinking is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     // ganache-cli -d 1st
     address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
@@ -243,7 +243,7 @@ contract BroadcastTestNoLinking is DSTest {
 }
 
 contract BroadcastMix is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     // ganache-cli -d 1st
     address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
@@ -301,7 +301,7 @@ contract BroadcastMix is DSTest {
 }
 
 contract BroadcastTestSetup is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function setUp() public {
         // It predeployed a library first
@@ -327,7 +327,7 @@ contract BroadcastTestSetup is DSTest {
 }
 
 contract BroadcastTestLog is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function run() public {
         uint256[] memory arr = new uint256[](2);
@@ -350,7 +350,7 @@ contract BroadcastTestLog is DSTest {
 }
 
 contract TestInitialBalance is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function runCustomSender() public {
         // Make sure we're testing a different caller than the default one.
@@ -381,7 +381,7 @@ contract TestInitialBalance is DSTest {
 }
 
 contract MultiChainBroadcastNoLink is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     // ganache-cli -d 1st
     address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
@@ -426,7 +426,7 @@ contract MultiChainBroadcastNoLink is DSTest {
 }
 
 contract MultiChainBroadcastLink is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     // ganache-cli -d 1st
     address public ACCOUNT_A = 0xce49e5dd06163a480c22d540ec763325a0b5860fb56c;
@@ -449,7 +449,7 @@ contract MultiChainBroadcastLink is DSTest {
 }
 
 contract BroadcastEmptySetUp is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function setUp() public {}
 
@@ -490,7 +490,7 @@ contract ContractB {
 }
 
 contract CheckOverrides is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function run() external {
         // `script_caller` can be set by `--private-key ...` or `--sender ...`

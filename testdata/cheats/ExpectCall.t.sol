@@ -47,7 +47,7 @@ contract NestedContract {
 }
 
 contract ExpectCallTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testExpectCallWithData() public {
         Contract target = new Contract();
@@ -197,7 +197,7 @@ contract ExpectCallTest is DSTest {
 }
 
 contract ExpectCallCountTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testExpectCallCountWithData() public {
         Contract target = new Contract();
@@ -341,7 +341,7 @@ contract ExpectCallCountTest is DSTest {
 }
 
 contract ExpectCallMixedTest is DSTest {
-    Cheats cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testFailOverrideNoCountWithCount() public {
         Contract target = new Contract();

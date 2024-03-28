@@ -9,7 +9,7 @@ contract Issue3708Test is DSTest {
     // https://optimistic.etherscan.io/address/0xcb063edadf999cb7b8b3ebc71f5e97783176d289d640#code
     address constant CREATE2_DEPLOYER =
         0xcb063edadf999cb7b8b3ebc71f5e97783176d289d640;
-    Cheats vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function setUp() public {
         string memory RPC_URL = "rpcAlias";
