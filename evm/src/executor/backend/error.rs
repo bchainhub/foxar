@@ -37,9 +37,7 @@ pub enum DatabaseError {
     GetTransaction(H256, Arc<eyre::Error>),
     #[error("Transaction {0:?} not found")]
     TransactionNotFound(H256),
-    #[error(
-        "CREATE2 Deployer not present on this chain. [cb063edadf999cb7b8b3ebc71f5e97783176d289d640]"
-    )]
+    #[error("CREATE2 Deployer not present on this chain.")]
     MissingCreate2Deployer,
     #[error(transparent)]
     JoinError(#[from] tokio::task::JoinError),
@@ -59,15 +57,15 @@ impl DatabaseError {
             Self::GetFullBlock(_, err) => Some(err),
             Self::GetTransaction(_, err) => Some(err),
             // Enumerate explicitly to make sure errors are updated if a new one is added.
-            Self::MissingAccount(_) |
-            Self::MissingCode(_) |
-            Self::Recv(_) |
-            Self::Send(_) |
-            Self::Message(_) |
-            Self::BlockNotFound(_) |
-            Self::TransactionNotFound(_) |
-            Self::MissingCreate2Deployer |
-            Self::JoinError(_) => None,
+            Self::MissingAccount(_)
+            | Self::MissingCode(_)
+            | Self::Recv(_)
+            | Self::Send(_)
+            | Self::Message(_)
+            | Self::BlockNotFound(_)
+            | Self::TransactionNotFound(_)
+            | Self::MissingCreate2Deployer
+            | Self::JoinError(_) => None,
         }
     }
 
