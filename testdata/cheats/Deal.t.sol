@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract DealTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testDeal(uint256 amount) public {
         address target = address(10);

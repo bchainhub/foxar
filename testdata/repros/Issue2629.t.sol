@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/2629
 contract Issue2629Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function testSelectFork() public {
         address coinbase = 0xcb580851379288d0c6b251af9f49988ccca9d6502948;

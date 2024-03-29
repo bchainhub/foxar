@@ -12,7 +12,7 @@ interface IERC20 {
 }
 
 contract TransactOnForkTest is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     IERC20 constant USDT = IERC20(0xcb19c7acc4c292d2943ba23c2eaa5d9c5a6652a8710c);
 

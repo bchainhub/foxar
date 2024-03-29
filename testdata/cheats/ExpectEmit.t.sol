@@ -76,7 +76,7 @@ contract LowLevelCaller {
 }
 
 contract ExpectEmitTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     Emitter emitter;
 
     event Something(uint256 indexed topic1, uint256 indexed topic2, uint256 indexed topic3, uint256 data);

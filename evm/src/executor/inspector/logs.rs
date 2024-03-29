@@ -1,11 +1,12 @@
 use crate::{
-    executor::{patch_hardhat_console_selector, HardhatConsoleCalls, HARDHAT_CONSOLE_ADDRESS},
+    abi::default_hardhat_address,
+    executor::{patch_hardhat_console_selector, HardhatConsoleCalls},
     utils::{b176_to_h176, b256_to_h256, h176_to_b176},
 };
 use bytes::Bytes;
 use corebc::{
     abi::{AbiDecode, Token},
-    types::{Log, H256},
+    types::{Log, Network, H256},
 };
 use foxar_macros::ConsoleFmt;
 use revm::{
@@ -58,11 +59,13 @@ where
 
     fn call(
         &mut self,
-        _: &mut EVMData<'_, DB>,
+        evm: &mut EVMData<'_, DB>,
         call: &mut CallInputs,
         _: bool,
     ) -> (InstructionResult, Energy, Bytes) {
-        if call.contract == h176_to_b176(HARDHAT_CONSOLE_ADDRESS) {
+        if call.contract
+            == h176_to_b176(default_hardhat_address(Some(Network::from(evm.env.cfg.network_id))))
+        {
             let (status, reason) = self.hardhat_log(call.input.to_vec());
             (status, Energy::new(call.energy_limit), reason)
         } else {

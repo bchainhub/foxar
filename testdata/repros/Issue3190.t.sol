@@ -7,7 +7,7 @@ import "../logs/console.sol";
 
 // https://github.com/foxar-rs/foxar/issues/3190
 contract Issue3190Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function setUp() public {
         vm.chainId(99);

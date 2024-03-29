@@ -6,7 +6,7 @@ import "../cheats/Cheats.sol";
 
 // https://github.com/foxar-rs/foxar/issues/3596
 contract Issue3596Test is DSTest {
-    Cheats constant vm = Cheats(HEVM_ADDRESS);
+    Cheats vm = Cheats(HEVM_ADDRESS());
 
     function testDealTransfer() public {
         address addr = vm.addr(1337);

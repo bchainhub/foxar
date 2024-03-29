@@ -7,7 +7,7 @@ import "./Cheats.sol";
 contract Foo {}
 
 contract GetNonceTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testGetNonce() public {
         uint64 nonce1 = cheats.getNonce(address(this));

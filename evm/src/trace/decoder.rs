@@ -3,17 +3,20 @@ use super::{
     CallTraceArena, RawOrDecodedCall, RawOrDecodedLog, RawOrDecodedReturnData,
 };
 use crate::{
-    abi::{CHEATCODE_ADDRESS, CONSOLE_ABI, HARDHAT_CONSOLE_ABI, HARDHAT_CONSOLE_ADDRESS, HEVM_ABI},
-    decode, default_caller,
-    executor::inspector::DEFAULT_CREATE2_DEPLOYER,
+    abi::{
+        default_cheatcode_address, default_hardhat_address, CONSOLE_ABI, HARDHAT_CONSOLE_ABI,
+        HEVM_ABI,
+    },
+    decode, default_test_contract_address,
+    executor::inspector::cheatcodes::util::{default_create2_address, DEFAULT_CREATE2_DEPLOYER},
     trace::{node::CallTraceNode, utils},
-    TEST_CONTRACT_ADDRESS,
 };
 use corebc::{
     abi::{Abi, Address, Event, Function, Param, ParamType, Token},
     types::{Network, H176, H256},
 };
 use foxar_common::{abi::get_indexed_event, SELECTOR_LEN};
+use foxar_config::Config;
 use hashbrown::HashSet;
 use std::collections::{BTreeMap, HashMap};
 
@@ -134,11 +137,11 @@ impl CallTraceDecoder {
             contracts: Default::default(),
 
             labels: [
-                (CHEATCODE_ADDRESS, "VM".to_string()),
-                (HARDHAT_CONSOLE_ADDRESS, "console".to_string()),
-                (DEFAULT_CREATE2_DEPLOYER, "Create2Deployer".to_string()),
-                (default_caller(network), "DefaultSender".to_string()),
-                (TEST_CONTRACT_ADDRESS, "DefaultTestContract".to_string()),
+                (default_cheatcode_address(Some(*network)), "VM".to_string()),
+                (default_hardhat_address(Some(*network)), "console".to_string()),
+                (default_create2_address(Some(*network)), "Create2Deployer".to_string()),
+                (Config::default_sender(Some(network)), "DefaultSender".to_string()),
+                (default_test_contract_address(Some(*network)), "DefaultTestContract".to_string()),
             ]
             .into(),
 
@@ -230,7 +233,8 @@ impl CallTraceDecoder {
                 if bytes.len() >= 4 {
                     if let Some(funcs) = self.functions.get(&bytes[..SELECTOR_LEN]) {
                         node.decode_function(funcs, &self.labels, &self.errors, self.verbosity);
-                    } else if node.trace.address == DEFAULT_CREATE2_DEPLOYER {
+                        // we cannot have network have but still can compare 20 bytes
+                    } else if node.trace.address[16..] == DEFAULT_CREATE2_DEPLOYER[..] {
                         node.trace.data =
                             RawOrDecodedCall::Decoded("create2".to_string(), String::new(), vec![]);
                     } else if let Some(identifier) = &self.signature_identifier {

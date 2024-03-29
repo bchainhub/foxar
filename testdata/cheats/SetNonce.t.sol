@@ -11,7 +11,7 @@ contract Foo {
 }
 
 contract SetNonceTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
     Foo public foo;
 
     function setUp() public {

@@ -9,7 +9,7 @@ contract Target {
 }
 
 contract ReadCallersTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testReadCallersWithNoActivePrankOrBroadcast() public {
         address expectedSender = msg.sender;

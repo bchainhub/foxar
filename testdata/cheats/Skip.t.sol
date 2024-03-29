@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract SkipTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testSkip() public {
         cheats.skip(true);

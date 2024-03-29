@@ -4,6 +4,7 @@
 //! the REPL contract's source code. It provides simple compilation, parsing, and
 //! execution helpers.
 
+use corebc::types::Network;
 use corebc_ylem::{
     artifacts::{Source, Sources},
     CompilerInput, CompilerOutput, Ylem,
@@ -13,7 +14,10 @@ use foxar_config::{Config, YlemReq};
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use solang_parser::pt;
-use spark::executor::{opts::EvmOpts, Backend};
+use spark::{
+    abi::default_cheatcode_address,
+    executor::{opts::EvmOpts, Backend},
+};
 use spark_fmt::solang_ext::SafeUnwrap;
 use std::{collections::HashMap, fs, path::PathBuf};
 use yansi::Paint;
@@ -472,6 +476,7 @@ contract {} is Script {{
         let Version { major, minor, patch, .. } = self.ylem.version().unwrap();
         //TODO:error2215 - find a way to build ican address here -
         // Cheats(address(uint176(uint256(sha3("hevm cheat code")))));
+        let cheatcode_address = default_cheatcode_address(self.config.evm_opts.env.network_id);
         format!(
             r#"
 // SPDX-License-Identifier: UNLICENSED
@@ -481,7 +486,7 @@ import {{Cheats}} from "forge-std/Vm.sol";
 {}
 
 contract {} {{
-    Cheats internal constant vm = Cheats(0xcb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);
+    Cheats internal constant vm = Cheats({cheatcode_address}); 
     {}
   
     /// @notice REPL contract entry point
@@ -509,9 +514,9 @@ contract {} {{
                 .into_iter()
                 .filter_map(|sup| match sup {
                     pt::SourceUnitPart::ImportDirective(i) => match i {
-                        pt::Import::Plain(s, _) |
-                        pt::Import::Rename(s, _, _) |
-                        pt::Import::GlobalSymbol(s, _, _) => {
+                        pt::Import::Plain(s, _)
+                        | pt::Import::Rename(s, _, _)
+                        | pt::Import::GlobalSymbol(s, _, _) => {
                             let path = PathBuf::from(s.string);
 
                             match fs::read_to_string(path) {

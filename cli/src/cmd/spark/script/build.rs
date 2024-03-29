@@ -16,7 +16,7 @@ use eyre::{Context, ContextCompat};
 use foxar_common::compile;
 use foxar_utils::PostLinkInput;
 use std::{collections::BTreeMap, fs, str::FromStr};
-use tracing::{trace, warn};
+use tracing::{info, trace, warn};
 
 impl ScriptArgs {
     /// Compiles the file or project and the verify metadata.
@@ -110,11 +110,12 @@ impl ScriptArgs {
             }
         }
 
-        if self.evm_opts.env.network_id.is_none() {
-            eyre::bail!("Network is not provided. Please specify the network with `--network {{network_id}}`")
+        let mut network = Network::Private(1337);
+        if self.evm_opts.env.network_id.is_some() {
+            network = self.evm_opts.env.network_id.unwrap();
+        } else {
+            info!("Running script in simulation mode with network id 1337");
         };
-        let network_config = self.evm_opts.env.network_id.unwrap();
-        let network = network_config;
 
         foxar_utils::link_with_nonce_or_address(
             contracts.clone(),

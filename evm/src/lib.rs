@@ -35,7 +35,6 @@ pub use revm;
 use revm::interpreter::{CallScheme, CreateScheme};
 use serde::{Deserialize, Serialize};
 
-
 /// Stores the caller address to be used as _sender_ account for:
 ///     - deploying Test contracts
 ///     - deploying Script contracts
@@ -43,22 +42,18 @@ use serde::{Deserialize, Serialize};
 /// The address was derived from `address(uint160(uint256(sha3("foxar default caller"))))`
 /// and is equal to cb681804c8ab1f12e6bbf3894d4083f33e07309d1f38.
 
-/// Depending on network has different prefix and checksum
-pub fn default_caller(network: &Network) -> H176 {
-    /// `0x1804c8ab1f12e6bbf3894d4083f33e07309d1f38`
-    const CALLER: &H160 = &H160([
-        0x18, 0x04, 0xc8, 0xAB, 0x1F, 0x12, 0xE6, 0xbb, 0xF3, 0x89, 0x4D, 0x40, 0x83, 0xF3, 0x3E,
-        0x07, 0x30, 0x9D, 0x1F, 0x38,
-    ]);
-
-    to_ican(CALLER, network)
-}
-
 /// Stores the default test contract address: cb04b4c79dab8f259c7aee6e5b2aa729821864227e84
-pub const TEST_CONTRACT_ADDRESS: Address = H176([
-    203, 4, 180, 199, 157, 171, 143, 37, 156, 122, 238, 110, 91, 42, 167, 41, 130, 24, 100, 34,
-    126, 132,
+pub const TEST_CONTRACT_ADDRESS: H160 = H160([
+    180, 199, 157, 171, 143, 37, 156, 122, 238, 110, 91, 42, 167, 41, 130, 24, 100, 34, 126, 132,
 ]);
+
+/// Default test contract address
+pub fn default_test_contract_address(mut network: Option<Network>) -> H176 {
+    if network.is_none() {
+        network = Some(Network::Private(1337)) //todo:error2215 change to ce address
+    }
+    to_ican(&TEST_CONTRACT_ADDRESS, &network.unwrap())
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "UPPERCASE")]

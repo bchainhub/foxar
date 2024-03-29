@@ -561,7 +561,7 @@ mod tests {
                 }
                 Ok(())
             },
-            Network::Mainnet,
+            Network::Private(1337),
         )
         .unwrap();
     }

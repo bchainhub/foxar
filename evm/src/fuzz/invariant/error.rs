@@ -1,7 +1,6 @@
 use super::{BasicTxDetails, InvariantContract};
 use crate::{
     decode::decode_revert,
-    default_caller,
     executor::{Executor, RawCallResult},
     fuzz::{invariant::set_up_inner_replay, *},
     trace::{load_contracts, TraceKind, Traces},
@@ -12,6 +11,7 @@ use corebc::{
 };
 use eyre::{Result, WrapErr};
 use foxar_common::contracts::{ContractsByAddress, ContractsByArtifact};
+use foxar_config::Config;
 use proptest::test_runner::TestError;
 
 #[derive(Debug, Clone)]
@@ -144,7 +144,7 @@ impl InvariantFuzzError {
             if let Some(func) = &self.func {
                 let error_call_result = executor
                     .call_raw(
-                        default_caller(&Network::from(executor.env().cfg.network_id)),
+                        Config::default_sender(Some(&Network::from(executor.env().cfg.network_id))),
                         self.addr,
                         func.0.clone(),
                         U256::zero(),
@@ -190,7 +190,7 @@ impl InvariantFuzzError {
             if let Some(func) = &self.func {
                 let error_call_result = executor
                     .call_raw(
-                        default_caller(&Network::from(executor.env().cfg.network_id)),
+                        Config::default_sender(Some(&Network::from(executor.env().cfg.network_id))),
                         self.addr,
                         func.0.clone(),
                         0.into(),

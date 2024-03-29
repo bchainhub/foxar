@@ -5,7 +5,7 @@ import "ds-test/test.sol";
 import "./Cheats.sol";
 
 contract AssumeTest is DSTest {
-    Cheats constant cheats = Cheats(HEVM_ADDRESS);
+    Cheats cheats = Cheats(HEVM_ADDRESS());
 
     function testAssume(uint8 x) public {
         cheats.assume(x < 2 ** 7);
