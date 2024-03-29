@@ -216,6 +216,8 @@ mod tests {
             init_code,
             "--network",
             "1",
+            "--deployer",
+            "cb063edadf999cb7b8b3ebc71f5e97783176d289d640"
         ]);
         let create2_out = args.run().unwrap();
         let address = create2_out.address;
@@ -238,6 +240,8 @@ mod tests {
             init_code_hash,
             "--network",
             "1",
+            "--deployer",
+            "cb063edadf999cb7b8b3ebc71f5e97783176d289d640"
         ]);
         let create2_out = args.run().unwrap();
         let address = create2_out.address;
