@@ -1,4 +1,5 @@
 //! Smart caching and deduplication of requests when using a forking provider
+#![allow(clippy::blocks_in_conditions)]
 use crate::{
     executor::{
         backend::error::{DatabaseError, DatabaseResult},

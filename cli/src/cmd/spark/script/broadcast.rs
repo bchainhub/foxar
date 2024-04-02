@@ -1,21 +1,19 @@
 use super::{multi::MultiChainSequence, providers::ProvidersManager, sequence::ScriptSequence, *};
 use crate::{
-    cmd::spark::script::{
-        receipts::clear_pendings, transaction::TransactionWithMetadata, verify::VerifyBundle,
-    },
+    cmd::spark::script::{receipts::clear_pendings, verify::VerifyBundle},
     init_progress,
     opts::WalletSigner,
     update_progress,
 };
 use corebc::{
     prelude::{Provider, Signer, TxHash},
-    providers::{JsonRpcClient, Middleware},
+    providers::JsonRpcClient,
     utils::format_units,
 };
-use eyre::{bail, ContextCompat, Result, WrapErr};
-use foxar_common::{shell, try_get_http_provider, RetryProvider};
+use eyre::{bail, Result};
+use foxar_common::{try_get_http_provider, RetryProvider};
 use futures::StreamExt;
-use std::{cmp::min, collections::HashSet, ops::Mul, sync::Arc};
+use std::{cmp::min, ops::Mul, sync::Arc};
 use tracing::trace;
 
 impl ScriptArgs {

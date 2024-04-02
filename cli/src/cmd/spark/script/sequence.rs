@@ -141,7 +141,7 @@ impl ScriptSequence {
             .transactions
             .iter_mut()
             .enumerate()
-            .for_each(|(i, tx)| tx.rpc = sensitive_script_sequence.transactions[i].rpc.clone());
+            .for_each(|(i, tx)| tx.rpc.clone_from(&sensitive_script_sequence.transactions[i].rpc));
 
         script_sequence.path = path;
         script_sequence.sensitive_path = sensitive_path;

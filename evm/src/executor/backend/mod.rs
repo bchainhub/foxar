@@ -413,12 +413,12 @@ impl Backend {
         // Note: this will take of registering the `fork`
         let inner = BackendInner {
             persistent_accounts: get_default_persistent_accounts(network),
-            cheatcode_access_accounts: HashSet::from([ 
+            cheatcode_access_accounts: HashSet::from([
                 default_cheatcode_address(Some(*network)),
                 default_test_contract_address(Some(*network)),
-                Config::default_sender(Some(&network)),
+                Config::default_sender(Some(network)),
             ]),
-            caller: Some(Config::default_sender(Some(&network))),
+            caller: Some(Config::default_sender(Some(network))),
             ..Default::default()
         };
 
@@ -549,9 +549,8 @@ impl Backend {
     /// Checks if the test contract associated with this backend failed, See
     /// [Self::is_failed_test_contract]
     pub fn is_failed(&self) -> bool {
-        self.has_snapshot_failure()
-            || self
-                .test_contract_address()
+        self.has_snapshot_failure() ||
+            self.test_contract_address()
                 .map(|addr| self.is_failed_test_contract(addr))
                 .unwrap_or_default()
     }

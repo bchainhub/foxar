@@ -297,7 +297,7 @@ impl CallTraceDecoder {
 
             let mut events = vec![];
             if let Some(evs) = self.events.get(&(raw_log.topics[0], raw_log.topics.len() - 1)) {
-                events = evs.clone();
+                events.clone_from(evs);
             } else if let Some(identifier) = &self.signature_identifier {
                 if let Some(event) =
                     identifier.write().await.identify_event(&raw_log.topics[0].0).await

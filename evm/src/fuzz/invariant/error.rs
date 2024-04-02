@@ -1,18 +1,13 @@
 use super::{BasicTxDetails, InvariantContract};
 use crate::{
     decode::decode_revert,
-    executor::{Executor, RawCallResult},
     fuzz::{invariant::set_up_inner_replay, *},
     trace::{load_contracts, TraceKind, Traces},
 };
-use corebc::{
-    abi::Function,
-    types::{Address, U256},
-};
-use eyre::{Result, WrapErr};
-use foxar_common::contracts::{ContractsByAddress, ContractsByArtifact};
+use corebc::types::U256;
+use eyre::WrapErr;
+use foxar_common::contracts::ContractsByArtifact;
 use foxar_config::Config;
-use proptest::test_runner::TestError;
 
 #[derive(Debug, Clone)]
 pub struct InvariantFuzzError {

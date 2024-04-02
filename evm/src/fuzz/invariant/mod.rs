@@ -8,15 +8,11 @@ mod call_override;
 pub use call_override::{set_up_inner_replay, RandomCallGenerator};
 use foxar_config::Config;
 mod executor;
-use crate::executor::Executor;
-use corebc::{
-    abi::{Abi, Function},
-    types::{Address, Bytes, Network, U256},
-};
+use corebc::types::U256;
 pub use executor::{InvariantExecutor, InvariantFailures};
 use parking_lot::Mutex;
 pub use proptest::test_runner::Config as FuzzConfig;
-use std::{collections::BTreeMap, sync::Arc};
+use std::sync::Arc;
 
 pub type TargetedContracts = BTreeMap<Address, (String, Abi, Vec<Function>)>;
 pub type FuzzRunIdentifiedContracts = Arc<Mutex<TargetedContracts>>;

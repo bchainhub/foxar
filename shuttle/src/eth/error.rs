@@ -14,7 +14,7 @@ use shuttle_rpc::{
     error::{ErrorCode, RpcError},
     response::ResponseResult,
 };
-use spark::revm::{self, primitives::EVMError};
+use spark::revm::primitives::EVMError;
 use tracing::error;
 
 pub(crate) type Result<T> = std::result::Result<T, BlockchainError>;

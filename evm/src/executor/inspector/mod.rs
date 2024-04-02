@@ -91,7 +91,7 @@ impl InspectorStackConfig {
             stack.energy = Some(energy_inspector.clone());
             stack.debugger = Some(Debugger::new(energy_inspector));
         }
-        stack.fuzzer = self.fuzzer.clone();
+        stack.fuzzer.clone_from(&self.fuzzer);
 
         if self.coverage {
             stack.coverage = Some(CoverageCollector::default());

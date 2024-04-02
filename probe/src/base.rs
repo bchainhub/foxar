@@ -5,9 +5,8 @@ use corebc_core::{
 };
 use eyre::Result;
 use std::{
-    convert::{Infallible, TryFrom, TryInto},
+    convert::Infallible,
     fmt::{Binary, Debug, Display, Formatter, LowerHex, Octal, Result as FmtResult, UpperHex},
-    iter::FromIterator,
     num::IntErrorKind,
     str::FromStr,
 };

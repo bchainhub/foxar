@@ -3,7 +3,7 @@
 // Adapted from https://github.com/rust-lang/cargo/blob/f51e799636fcba6aeb98dc2ca7e440ecd9afe909/src/cargo/sources/git/utils.rs
 
 use eyre::Context;
-use git2::{self, ErrorClass, ObjectType};
+use git2::{ErrorClass, ObjectType};
 use std::{
     env,
     fmt::Write,

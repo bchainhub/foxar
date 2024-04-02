@@ -2,29 +2,18 @@ use super::*;
 use crate::cmd::{
     ensure_clean_constructor, needs_setup,
     spark::script::{
-        artifacts::ArtifactInfo,
-        runner::SimulationStage,
-        transaction::{AdditionalContract, TransactionWithMetadata},
+        artifacts::ArtifactInfo, runner::SimulationStage, transaction::AdditionalContract,
     },
 };
-use corebc::{
-    types::{transaction::eip2718::TypedTransaction, Address, U256},
-    ylem::artifacts::CompactContractBytecode,
-};
-use foxar_common::{shell, RpcUrl};
+use corebc::ylem::artifacts::CompactContractBytecode;
 use foxar_evm::utils::evm_spec;
 use futures::future::join_all;
 use parking_lot::RwLock;
 use spark::{
-    executor::{
-        inspector::{cheatcodes::util::BroadcastableTransactions, CheatsConfig},
-        Backend, ExecutorBuilder,
-    },
+    executor::{inspector::CheatsConfig, ExecutorBuilder},
     revm::primitives::U256 as rU256,
-    trace::{CallTraceDecoder, Traces},
-    CallKind,
 };
-use std::{collections::VecDeque, sync::Arc};
+use std::sync::Arc;
 use tracing::trace;
 
 /// Helper alias type for the processed result of a runner onchain simulation.

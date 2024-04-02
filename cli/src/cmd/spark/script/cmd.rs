@@ -3,10 +3,7 @@ use crate::cmd::{
     spark::script::{multi::MultiChainSequence, verify::VerifyBundle},
     LoadConfig,
 };
-use corebc::{
-    prelude::Signer,
-    types::{transaction::eip2718::TypedTransaction, Network, U256},
-};
+use corebc::prelude::Signer;
 use foxar_common::{contracts::flatten_contracts, try_get_http_provider};
 use std::sync::Arc;
 use tracing::trace;
@@ -281,7 +278,7 @@ impl ScriptArgs {
                 default_known_contracts,
                 Libraries::parse(&deployment_sequence.libraries)?,
                 script_config.config.sender(), // irrelevant, since we're not creating any
-                U256::zero(),                // irrelevant, since we're not creating any
+                U256::zero(),                  // irrelevant, since we're not creating any
             )?;
 
             verify.known_contracts = flatten_contracts(&highlevel_known_contracts, false);
