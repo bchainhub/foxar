@@ -24,7 +24,7 @@ pub const CHEATCODE_ADDRESS: H160 = H160([
 /// Default cheatcode address
 pub fn default_cheatcode_address(mut network: Option<Network>) -> H176 {
     if network.is_none() {
-        network = Some(Network::Private(1337)) //todo:error2215 change to ce address
+        network = Some(Network::Private(1337))
     }
     to_ican(&CHEATCODE_ADDRESS, &network.unwrap())
 }
@@ -40,7 +40,7 @@ pub const HARDHAT_CONSOLE_ADDRESS: H160 = H160([
 /// Default hardhat console address
 pub fn default_hardhat_address(mut network: Option<Network>) -> H176 {
     if network.is_none() {
-        network = Some(Network::Private(1337)) //todo:error2215 change to ce address
+        network = Some(Network::Private(1337))
     }
     to_ican(&HARDHAT_CONSOLE_ADDRESS, &network.unwrap())
 }

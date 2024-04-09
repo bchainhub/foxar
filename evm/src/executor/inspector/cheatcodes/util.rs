@@ -29,18 +29,25 @@ use std::{collections::VecDeque, str::FromStr};
 
 const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/60'/0'/0/";
 
-/// Address of the default CREATE2 deployer cb063edadf999cb7b8b3ebc71f5e97783176d289d640
+/// Address of the default CREATE2 deployer ce8147e798c3a0d867f70f8785334da06c3418e18ba9
 pub const DEFAULT_CREATE2_DEPLOYER: H160 = H160([
     0x3e, 0xda, 0xdf, 0x99, 0x9c, 0xb7, 0xb8, 0xb3, 0xeb, 0xc7, 0x1f, 0x5e, 0x97, 0x78, 0x31, 0x76,
     0xd2, 0x89, 0xd6, 0x40,
 ]);
 
 /// Default CREATE2 deployer address
-pub fn default_create2_address(mut network: Option<Network>) -> H176 {
-    if network.is_none() {
-        network = Some(Network::Private(1337)) //todo:error2215 change to ce address
+pub fn default_create2_address(network: Option<Network>) -> H176 {
+    match network {
+        Some(Network::Mainnet) => {
+            return H176::from_str("cb063edadf999cb7b8b3ebc71f5e97783176d289d640").unwrap();
+        }
+        Some(Network::Devin) => {
+            return H176::from_str("ab800ee5e10bfbd37bc647e01d94489b4e244817b07f").unwrap();
+        }
+        _ => {
+            return H176::from_str("ce8147e798c3a0d867f70f8785334da06c3418e18ba9").unwrap();
+        }
     }
-    to_ican(&DEFAULT_CREATE2_DEPLOYER, &network.unwrap())
 }
 
 pub const MAGIC_SKIP_BYTES: &[u8] = b"FOXAR::SKIP";

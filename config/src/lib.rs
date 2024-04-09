@@ -1806,6 +1806,7 @@ impl Default for Config {
             energy_price: None,
             block_coinbase: Config::default_block_coinbase(None), /* todo:error2215 change to ce
                                                                    * address */
+            block_coinbase: Config::default_block_coinbase(None),
             block_timestamp: 1,
             block_difficulty: 0,
             block_energy_limit: None,
