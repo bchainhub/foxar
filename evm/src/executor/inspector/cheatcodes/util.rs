@@ -20,7 +20,7 @@ use corebc::{
         MnemonicBuilder,
     },
     types::{transaction::eip2718::TypedTransaction, NameOrAddress, H256, U256},
-    utils::{self, get_contract_address, get_create2_address, to_ican},
+    utils::{self, get_contract_address, get_create2_address},
 };
 use foxar_common::{fmt::*, RpcUrl};
 use revm::{

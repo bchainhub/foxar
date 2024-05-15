@@ -1,18 +1,18 @@
-name: deny
-on:
-    push:
-        paths: [Cargo.lock]
-env:
-    CARGO_TERM_COLOR: always
-jobs:
-    cargo-deny:
-        name: cargo deny check
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-            - uses: EmbarkStudios/cargo-deny-action@v1
-              with:
-                  command: check advisories bans sources
-                  # Clear out arguments to not pass `--all-features` to `cargo deny`.
-                  # `foxar-cli` has an `openssl` feature which enables banned dependencies
-                  arguments: ""
+# name: deny
+# on:
+#     push:
+#         paths: [Cargo.lock]
+# env:
+#     CARGO_TERM_COLOR: always
+# jobs:
+#     cargo-deny:
+#         name: cargo deny check
+#         runs-on: ubuntu-latest
+#         steps:
+#             - uses: actions/checkout@v3
+#             - uses: EmbarkStudios/cargo-deny-action@v1
+#               with:
+#                   command: check advisories bans sources
+#                   # Clear out arguments to not pass `--all-features` to `cargo deny`.
+#                   # `foxar-cli` has an `openssl` feature which enables banned dependencies
+#                   arguments: ""

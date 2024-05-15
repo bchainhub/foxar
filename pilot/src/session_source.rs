@@ -3,8 +3,6 @@
 //! This module contains the `SessionSource` struct, which is a minimal wrapper around
 //! the REPL contract's source code. It provides simple compilation, parsing, and
 //! execution helpers.
-
-use corebc::types::Network;
 use corebc_ylem::{
     artifacts::{Source, Sources},
     CompilerInput, CompilerOutput, Ylem,
