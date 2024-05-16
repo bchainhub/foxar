@@ -8,7 +8,7 @@ See [Installation](../README.md#Installation).
 
 ## Usage
 
-Read the [📖 Foxar Book][foxar-book]
+Read the [📖 Foxar Docs](https://foxar.dev)
 
 ## Debugging
 
@@ -19,4 +19,4 @@ verbosity level via the
 environment variable, on a per package level,
 e.g.:`RUST_LOG=spark,foxar_evm spark test`
 
-[foxar-book]: https://book.getfoxar.sh
+[foxar-docs]: https://book.getfoxar.sh

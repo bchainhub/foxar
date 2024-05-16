@@ -1,3 +1,3 @@
 # foxar-utils
 
-Helper methods for interacting with EVM ABIs
+Helper methods for interacting with CVM ABIs

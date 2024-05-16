@@ -1,6 +1,6 @@
 # foxar-binder
 
-Utilities for generating bindings for solidity projects in one step.
+Utilities for generating bindings for ylem projects in one step.
 
 First add `foxar-binder` to your cargo build-dependencies.
 

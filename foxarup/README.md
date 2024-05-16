@@ -5,7 +5,7 @@ Update or revert to a specific Foxar branch with ease.
 ## Installing
 
 ```sh
-curl -L https://raw.githubusercontent.com/bchainhub/foxar/master/foxarup/install | bash
+curl -L up.foxar.dev | bash
 ```
 
 ## Usage
