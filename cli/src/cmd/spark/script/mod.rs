@@ -25,7 +25,10 @@ use foxar_common::{
 use foxar_config::{figment, Config};
 use probe::{
     decode,
-    executor::inspector::cheatcodes::{util::{default_create2_address, BroadcastableTransactions}, BroadcastableTransaction},
+    executor::inspector::cheatcodes::{
+        util::{default_create2_address, BroadcastableTransactions},
+        BroadcastableTransaction,
+    },
 };
 use spark::{
     debug::DebugArena,
@@ -596,8 +599,8 @@ impl ScriptArgs {
             }
         }
 
-        if prompt_user
-            && !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
+        if prompt_user &&
+            !Confirm::new().with_prompt("Do you wish to continue?".to_string()).interact()?
         {
             eyre::bail!("User canceled the script.");
         }

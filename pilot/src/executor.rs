@@ -1209,10 +1209,7 @@ impl<'a> Iterator for InstructionIter<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use corebc_ylem::{
-        error::{YlemError},
-        Ylem,
-    };
+    use corebc_ylem::{error::YlemError, Ylem};
     use once_cell::sync::Lazy;
     use std::sync::Mutex;
 

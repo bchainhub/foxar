@@ -13,7 +13,6 @@ use corebc::{
 };
 use foxar_evm::{
     executor::backend::DatabaseError,
-    revm,
     revm::{
         interpreter::InstructionResult,
         primitives::{BlockEnv, CfgEnv, Env, Output},

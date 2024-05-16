@@ -422,7 +422,10 @@ impl Config {
     /// Returns address for tx.origin
     /// Depending on network has different prefix and checksum
     pub fn sender(&self) -> H176 {
-        if self.sender == Self::default_sender(None) && self.network_id != Some(Network::Private(1337)) && self.network_id != None {
+        if self.sender == Self::default_sender(None) &&
+            self.network_id != Some(Network::Private(1337)) &&
+            self.network_id.is_some()
+        {
             return to_ican(&Self::DEFAULT_SENDER, &self.network_id.unwrap());
         }
         self.sender
@@ -438,8 +441,9 @@ impl Config {
     /// Returns address for block.coinbase
     /// Depending on network has different prefix and checksum
     pub fn block_coinbase(&self) -> H176 {
-        if self.block_coinbase == Self::default_block_coinbase(None)
-            && self.network_id != Some(Network::Private(1337)) && self.network_id != None
+        if self.block_coinbase == Self::default_block_coinbase(None) &&
+            self.network_id != Some(Network::Private(1337)) &&
+            self.network_id.is_some()
         {
             return to_ican(&Self::DEFAULT_COINBASE, &self.network_id.unwrap());
         }
@@ -731,9 +735,9 @@ impl Config {
 
     /// Whether caching should be enabled for the given network id
     pub fn enable_caching(&self, endpoint: &str, network_id: impl Into<u64>) -> bool {
-        !self.no_storage_caching
-            && self.rpc_storage_caching.enable_for_network_id(network_id.into())
-            && self.rpc_storage_caching.enable_for_endpoint(endpoint)
+        !self.no_storage_caching &&
+            self.rpc_storage_caching.enable_for_network_id(network_id.into()) &&
+            self.rpc_storage_caching.enable_for_endpoint(endpoint)
     }
 
     /// Returns the `ProjectPathsConfig`  sub set of the config.
@@ -796,7 +800,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -821,7 +825,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -841,7 +845,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -864,7 +868,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -885,7 +889,7 @@ impl Config {
     /// # Example
     ///
     /// ```
-    ///
+    /// 
     /// use foxar_config::Config;
     /// # fn t() {
     ///     let config = Config::with_root("./");
@@ -935,7 +939,7 @@ impl Config {
                 (Ok(mut config), Some(key)) => {
                     // we update the key, because if an etherscan_api_key is set, it should take
                     // precedence over the entry, since this is usually set via env var or CLI args.
-                    config.key = key.clone();
+                    config.key.clone_from(key);
                     return Ok(Some(config));
                 }
                 (Ok(config), None) => return Ok(Some(config)),
@@ -1800,7 +1804,8 @@ impl Default for Config {
             energy_limit: i64::MAX.into(),
             code_size_limit: None,
             energy_price: None,
-            block_coinbase: Config::default_block_coinbase(None),
+            block_coinbase: Config::default_block_coinbase(None), /* todo:error2215 change to ce
+                                                                   * address */
             block_timestamp: 1,
             block_difficulty: 0,
             block_energy_limit: None,
@@ -2154,10 +2159,9 @@ impl Provider for DappEnvCompatProvider {
             // Activate Solidity optimizer (0 or 1)
             let val = val.parse::<u8>().map_err(figment::Error::custom)?;
             if val > 1 {
-                return Err(format!(
-                    "Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1"
-                )
-                .into());
+                return Err(
+                    format!("Invalid $DAPP_BUILD_OPTIMIZE value `{val}`,  expected 0 or 1").into()
+                );
             }
             dict.insert("optimizer".to_string(), (val == 1).into());
         }

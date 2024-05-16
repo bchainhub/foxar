@@ -63,8 +63,8 @@ where
         call: &mut CallInputs,
         _: bool,
     ) -> (InstructionResult, Energy, Bytes) {
-        if call.contract
-            == h176_to_b176(default_hardhat_address(Some(Network::from(evm.env.cfg.network_id))))
+        if call.contract ==
+            h176_to_b176(default_hardhat_address(Some(Network::from(evm.env.cfg.network_id))))
         {
             let (status, reason) = self.hardhat_log(call.input.to_vec());
             (status, Energy::new(call.energy_limit), reason)

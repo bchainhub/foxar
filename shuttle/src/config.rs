@@ -32,7 +32,6 @@ use foxar_common::{
 use foxar_config::Config;
 use foxar_evm::{
     executor::fork::{BlockchainDb, BlockchainDbMeta, SharedBackend},
-    revm,
     revm::primitives::{BlockEnv, CfgEnv, TxEnv, U256 as rU256},
 };
 use foxar_utils::types::ToRuint;

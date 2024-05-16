@@ -1,9 +1,7 @@
 use super::*;
-use corebc::types::{Address, Bytes, NameOrAddress, Network, U256};
 use spark::{
     executor::{CallResult, DeployResult, EvmError, ExecutionErr, Executor, RawCallResult},
     revm::interpreter::{return_ok, InstructionResult},
-    trace::{TraceKind, Traces},
 };
 use tracing::log::trace;
 

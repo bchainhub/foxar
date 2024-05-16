@@ -5,10 +5,7 @@ use crate::{
 };
 use clap::Parser;
 use comfy_table::{presets::ASCII_MARKDOWN, Table};
-use corebc::{
-    abi::ethabi::ethereum_types::BigEndianHash, blockindex::Client, prelude::*,
-    ylem::artifacts::StorageLayout,
-};
+use corebc::{prelude::*, ylem::artifacts::StorageLayout};
 use eyre::Result;
 use foxar_common::{
     abi::find_source,

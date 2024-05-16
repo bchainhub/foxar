@@ -20,8 +20,7 @@ macro_rules! test_repro {
         let mut config = Config::with_root(PROJECT.root());
         config.fs_permissions = FsPermissions::new(vec![PathPermission::read("./fixtures")]);
         let runner = repros_runner(config, $sender).await;
-        let mut config = TestConfig::with_filter(runner, filter)
-            .set_should_fail($should_fail);
+        let mut config = TestConfig::with_filter(runner, filter).set_should_fail($should_fail);
         config.run().await;
     };
 }

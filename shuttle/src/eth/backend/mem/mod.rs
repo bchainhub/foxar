@@ -42,7 +42,6 @@ use foxar_evm::{
     decode::{decode_custom_error_args, decode_revert},
     executor::backend::{DatabaseError, DatabaseResult},
     revm::{
-        self,
         db::CacheDB,
         interpreter::InstructionResult,
         primitives::{Account, CreateScheme, Env, Output, SpecId, TransactTo, TxEnv, SHA3_EMPTY},

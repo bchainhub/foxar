@@ -8,7 +8,7 @@ use corebc::{
     utils::to_ican,
 };
 use eyre::WrapErr;
-use foxar_common::{self, ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
+use foxar_common::{ProviderBuilder, RpcUrl, ALCHEMY_FREE_TIER_CUPS};
 use foxar_config::Config;
 use revm::primitives::{BlockEnv, CfgEnv, SpecId, TxEnv, U256 as rU256};
 use serde::{Deserialize, Deserializer, Serialize};
@@ -115,7 +115,9 @@ impl EvmOpts {
                 energy_price: rU256::from(self.env.energy_price.unwrap_or_default()),
                 energy_limit: self.energy_limit().as_u64(),
                 caller: h176_to_b176(self.sender()),
-                transact_to: revm::primitives::TransactTo::Call(h176_to_b176(self.block_coinbase())),
+                transact_to: revm::primitives::TransactTo::Call(h176_to_b176(
+                    self.block_coinbase(),
+                )),
                 ..Default::default()
             },
         }
@@ -193,9 +195,9 @@ impl EvmOpts {
     /// Returns sender address
     /// Depending on network has different prefix and checksum
     pub fn sender(&self) -> Address {
-        if self.sender == Config::default_sender(None)
-            && self.env.network_id != Some(Network::Private(1337))
-            && self.env.network_id != None
+        if self.sender == Config::default_sender(None) &&
+            self.env.network_id != Some(Network::Private(1337)) &&
+            self.env.network_id.is_some()
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }
@@ -205,9 +207,9 @@ impl EvmOpts {
     /// Returns address for block.coinbase
     /// Depending on network has different prefix and checksum
     pub fn block_coinbase(&self) -> Address {
-        if self.env.block_coinbase == Config::default_block_coinbase(None)
-            && self.env.network_id != Some(Network::Private(1337))
-            && self.env.network_id != None
+        if self.env.block_coinbase == Config::default_block_coinbase(None) &&
+            self.env.network_id != Some(Network::Private(1337)) &&
+            self.env.network_id.is_some()
         {
             return to_ican(&Config::DEFAULT_SENDER, &self.env.network_id.unwrap());
         }

@@ -168,11 +168,7 @@ mod tests {
     #[cfg(feature = "fastrlp")]
     // Test vector from: https://eips.ethereum.org/EIPS/eip-2481
     fn encode_legacy_receipt() {
-        
-
-        use corebc_core::{
-            utils::hex,
-        };
+        use corebc_core::utils::hex;
         use open_fastrlp::Encodable;
 
         use crate::eth::receipt::{EIP658Receipt, TypedReceipt};
@@ -197,11 +193,7 @@ mod tests {
     #[cfg(feature = "fastrlp")]
     // Test vector from: https://eips.ethereum.org/EIPS/eip-2481
     fn decode_legacy_receipt() {
-        
-
-        use corebc_core::{
-            utils::hex,
-        };
+        use corebc_core::utils::hex;
         use open_fastrlp::Decodable;
 
         use crate::eth::receipt::{EIP658Receipt, TypedReceipt};

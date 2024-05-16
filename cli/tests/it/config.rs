@@ -6,7 +6,7 @@ use corebc::{
     ylem::{artifacts::RevertStrings, CvmVersion},
 };
 use foxar_cli_test_utils::{
-    corebc_ylem::{remappings::Remapping},
+    corebc_ylem::remappings::Remapping,
     pretty_eq, sparktest, sparktest_init,
     util::{pretty_err, TestCommand, TestProject},
 };

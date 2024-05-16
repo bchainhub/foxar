@@ -7,7 +7,6 @@ use foxar_evm::{
     call_inspectors,
     decode::decode_console_logs,
     executor::inspector::{LogCollector, Tracer},
-    revm,
     revm::{
         inspectors::EnergyInspector,
         interpreter::{CallInputs, CreateInputs, Energy, InstructionResult, Interpreter},

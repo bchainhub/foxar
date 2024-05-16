@@ -78,8 +78,8 @@ impl TestConfig {
         }
         for (_, SuiteResult { test_results, .. }) in suite_result {
             for (test_name, result) in test_results {
-                if self.should_fail && (result.status == TestStatus::Success)
-                    || !self.should_fail && (result.status == TestStatus::Failure)
+                if self.should_fail && (result.status == TestStatus::Success) ||
+                    !self.should_fail && (result.status == TestStatus::Failure)
                 {
                     let logs = decode_console_logs(&result.logs);
                     let outcome = if self.should_fail { "fail" } else { "pass" };
@@ -171,10 +171,10 @@ pub async fn repros_runner(mut config: Config, sender: Option<H176>) -> MultiCon
     let mut opts = EVM_OPTS.clone();
 
     opts.env.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));
-    opts.env.block_coinbase = Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
+    opts.env.block_coinbase =
+        Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
     opts.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
     opts.env.network_id = Some(corebc::types::Network::Mainnet);
-
 
     config.rpc_endpoints = rpc_endpoints();
     config.allow_paths.push(manifest_root());
@@ -182,7 +182,7 @@ pub async fn repros_runner(mut config: Config, sender: Option<H176>) -> MultiCon
     config.network_id = Some(corebc::types::Network::Mainnet);
     if let Some(sender) = sender {
         config.sender = sender;
-    } else { 
+    } else {
         config.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
     }
     config.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));
@@ -208,7 +208,8 @@ pub async fn forked_runner(rpc: &str) -> MultiContractRunner {
     let mut opts = EVM_OPTS.clone();
 
     opts.env.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));
-    opts.env.block_coinbase = Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
+    opts.env.block_coinbase =
+        Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
     opts.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
     opts.env.network_id = Some(corebc::types::Network::Mainnet);
     opts.fork_url = Some(rpc.to_string());
@@ -217,7 +218,8 @@ pub async fn forked_runner(rpc: &str) -> MultiContractRunner {
     let fork = opts.get_fork(&Default::default(), env.clone());
 
     let mut cheats_config = Config::default();
-    cheats_config.block_coinbase = Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
+    cheats_config.block_coinbase =
+        Config::default_block_coinbase(Some(&corebc::types::Network::Mainnet));
     cheats_config.network_id = Some(corebc::types::Network::Mainnet);
     cheats_config.sender = Config::default_sender(Some(&corebc::types::Network::Mainnet));
     cheats_config.tx_origin = Config::default_sender(Some(&corebc::types::Network::Mainnet));

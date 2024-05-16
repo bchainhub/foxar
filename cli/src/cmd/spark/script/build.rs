@@ -1,21 +1,16 @@
 use super::*;
 use crate::cmd::get_cached_entry_by_name;
 use corebc::{
-    prelude::{
-        artifacts::Libraries, cache::SolFilesCache, ArtifactId, Graph, Project,
-        ProjectCompileOutput,
-    },
-    types::{Address, U256},
+    prelude::{cache::SolFilesCache, Graph, ProjectCompileOutput},
     ylem::{
-        artifacts::{CompactContractBytecode, ContractBytecode, ContractBytecodeSome},
-        contracts::ArtifactContracts,
+        artifacts::{CompactContractBytecode, ContractBytecode},
         info::ContractInfo,
     },
 };
-use eyre::{Context, ContextCompat};
+use eyre::Context;
 use foxar_common::compile;
 use foxar_utils::PostLinkInput;
-use std::{collections::BTreeMap, fs, str::FromStr};
+use std::{fs, str::FromStr};
 use tracing::{info, trace, warn};
 
 impl ScriptArgs {
