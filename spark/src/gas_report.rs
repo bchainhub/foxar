@@ -49,8 +49,8 @@ impl GasReport {
         let node = &arena.arena[node_index];
         let trace = &node.trace;
 
-        if trace.address == default_cheatcode_address(network)
-            || trace.address == default_hardhat_address(network)
+        if trace.address == default_cheatcode_address(network) ||
+            trace.address == default_hardhat_address(network)
         {
             return;
         }
@@ -69,10 +69,10 @@ impl GasReport {
                     contract_name
                 );
             }
-            let report_contract = (!self.ignore.contains(&contract_name)
-                && self.report_for.contains(&"*".to_string()))
-                || (!self.ignore.contains(&contract_name) && self.report_for.is_empty())
-                || (self.report_for.contains(&contract_name));
+            let report_contract = (!self.ignore.contains(&contract_name) &&
+                self.report_for.contains(&"*".to_string())) ||
+                (!self.ignore.contains(&contract_name) && self.report_for.is_empty()) ||
+                (self.report_for.contains(&contract_name));
             if report_contract {
                 let contract_report = self.contracts.entry(name.to_string()).or_default();
 

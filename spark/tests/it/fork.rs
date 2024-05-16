@@ -9,7 +9,8 @@ use spark::result::SuiteResult;
 /// Executes reverting fork test
 #[tokio::test(flavor = "multi_thread")]
 async fn test_cheats_fork_revert() {
-    let rpc_url: String = foxar_utils::rpc::next_http_archive_rpc_endpoint(corebc::types::Network::Mainnet);
+    let rpc_url: String =
+        foxar_utils::rpc::next_http_archive_rpc_endpoint(corebc::types::Network::Mainnet);
     let mut runner = forked_runner(&rpc_url).await;
     let suite_result = runner
         .test(

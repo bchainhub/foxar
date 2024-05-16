@@ -84,9 +84,6 @@ impl<T: Into<BlockNumber>> From<T> for Hardfork {
 
 #[cfg(test)]
 mod tests {
-    
-    
-    
 
     #[test]
     // this test checks that the fork hash assigned to forks accurately map to the fork_id method

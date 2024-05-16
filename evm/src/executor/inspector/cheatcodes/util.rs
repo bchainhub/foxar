@@ -17,7 +17,7 @@ use corebc::{
         Portuguese, Spanish, Wordlist,
     },
     types::transaction::eip2718::TypedTransaction,
-    utils::{self, get_contract_address, get_create2_address, to_ican},
+    utils::{self, get_contract_address, get_create2_address},
 };
 use foxar_common::{fmt::*, RpcUrl};
 use revm::{

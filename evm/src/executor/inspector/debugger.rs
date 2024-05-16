@@ -122,8 +122,8 @@ where
             b176_to_h176(call.context.code_address),
             call.context.scheme.into(),
         );
-        if default_cheatcode_address(Some(Network::from(data.env.cfg.network_id)))
-            == b176_to_h176(call.contract)
+        if default_cheatcode_address(Some(Network::from(data.env.cfg.network_id))) ==
+            b176_to_h176(call.contract)
         {
             self.arena.arena[self.head].steps.push(DebugStep {
                 memory: Memory::new(),

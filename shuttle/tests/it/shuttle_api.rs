@@ -1,7 +1,7 @@
 //! tests for custom shuttle endpoints
 use crate::abi::*;
 use corebc::{
-    abi::{ethereum_types::BigEndianHash},
+    abi::ethereum_types::BigEndianHash,
     prelude::{Middleware, SignerMiddleware},
     types::{Address, BlockNumber, TransactionRequest, H256, U256, U64},
 };

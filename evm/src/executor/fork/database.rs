@@ -264,10 +264,6 @@ impl DatabaseRef for ForkDbSnapshot {
 
 #[cfg(test)]
 mod tests {
-    
-    
-    
-    
 
     /// Demonstrates that `Database::basic` for `ForkedDatabase` will always return the
     /// `AccountInfo`
