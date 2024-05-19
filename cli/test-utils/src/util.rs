@@ -36,7 +36,7 @@ static PRE_INSTALL_SOLC_LOCK: Lazy<Mutex<bool>> = Lazy::new(|| Mutex::new(false)
 pub static IS_TTY: Lazy<bool> = Lazy::new(|| is_terminal::is_terminal(std::io::stdout()));
 
 /// Contains a `spark init` initialized project
-pub static FORGE_INITIALIZED: Lazy<TestProject> = Lazy::new(|| {
+pub static SPARK_INITIALIZED: Lazy<TestProject> = Lazy::new(|| {
     let (prj, mut cmd) = setup_spark("init-template", PathStyle::Dapptools);
     cmd.args(["init", "--force"]);
     cmd.assert_non_empty_stdout();
@@ -48,7 +48,7 @@ static NEXT_ID: AtomicUsize = AtomicUsize::new(0);
 
 /// Copies an initialized project to the given path
 pub fn initialize(target: impl AsRef<Path>) {
-    FORGE_INITIALIZED.copy_to(target)
+    SPARK_INITIALIZED.copy_to(target)
 }
 
 /// Clones a remote repository into the specified directory.

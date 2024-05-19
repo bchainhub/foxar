@@ -41,7 +41,7 @@ In solidity cheat codes are calls to a specific address, the cheat code handler 
 `address(uint160(uint256(keccak256('hevm cheat code'))))`: cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8
 
 which can be initialized like `Cheats immutable cheats = Cheats(cb69fc06a12b7a6f30e2a3c16a3b5d502cd71c20f2f8);`, when
-inheriting from `forge-std/Test.sol` it can be accessed via `vm.<cheatcode>` directly.
+inheriting from `spark-std/Test.sol` it can be accessed via `vm.<cheatcode>` directly.
 
 Since cheat codes are bound to a constant address, the cheat code inspector listens for that address:
 
@@ -89,4 +89,4 @@ This process consists of 4 steps:
 2. implement the cheat code handler
 3. add a Solidity test for the cheatcode under [`testdata/cheats`](https://github.com/foxar-rs/foxar/tree/master/testdata/cheats)
 4. add the function signature
-   to [forge-std Vm interface](https://github.com/foxar-rs/forge-std/blob/master/src/Vm.sol)
+   to [spark-std Vm interface](https://github.com/foxar-rs/spark-std/blob/master/src/Vm.sol)

@@ -1,6 +1,6 @@
 # `spark`
 
-Forge is a fast and flexible Ethereum testing framework, inspired by
+Spark is a fast and flexible Ethereum testing framework, inspired by
 [Dapp](https://github.com/dapphub/dapptools/tree/master/src/dapp).
 
 If you are looking into how to consume the software as an end user, check the
@@ -9,7 +9,7 @@ If you are looking into how to consume the software as an end user, check the
 For more context on how the package works under the hood, look in the
 [code docs](./src/lib.rs).
 
-**Need help with Forge? Read the [📖 Foxar Book (Forge Guide)][foxar-book-spark-guide] (WIP)!**
+**Need help with Spark? Read the [📖 Foxar Book (Spark Guide)][foxar-book-spark-guide] (WIP)!**
 
 [foxar-book-spark-guide]: https://book.getfoxar.sh/spark/
 
@@ -18,7 +18,7 @@ For more context on how the package works under the hood, look in the
 ### Write your tests in Solidity to minimize context switching
 
 Writing tests in Javascript/Typescript while writing your smart contracts in
-Solidity can be confusing. Forge lets you write your tests in Solidity, so you
+Solidity can be confusing. Spark lets you write your tests in Solidity, so you
 can focus on what matters.
 
 ```solidity
@@ -390,7 +390,7 @@ If you are working in a repo with NPM-style imports, like
 import "@openzeppelin/contracts/access/Ownable.sol";
 ```
 
-then you will need to create a `remappings.txt` file at the top level of your project directory, so that Forge knows where to find these dependencies.
+then you will need to create a `remappings.txt` file at the top level of your project directory, so that Spark knows where to find these dependencies.
 
 For example, if you have `@openzeppelin` imports, you would
 

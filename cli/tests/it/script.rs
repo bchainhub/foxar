@@ -27,7 +27,7 @@ sparktest_init!(
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=1.1.0;
 
-import "forge-std/Script.sol";
+import "spark-std/Script.sol";
 
 contract ContractScript is Script {
     function setUp() public {}
@@ -137,7 +137,7 @@ sparktest_async!(
                 r#"
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=1.1.0;
-import "forge-std/Script.sol";
+import "spark-std/Script.sol";
 
 contract GasWaster {
     function wasteGas(uint256 minGas) public {
@@ -199,7 +199,7 @@ sparktest_async!(
                 r#"
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=1.1.0;
-import "forge-std/Script.sol";
+import "spark-std/Script.sol";
 
 contract GasWaster {
     function wasteGas(uint256 minGas) public {
@@ -321,7 +321,7 @@ sparktest_async!(
                 r#"
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=1.1.0;
-import "forge-std/Script.sol";
+import "spark-std/Script.sol";
 
 contract HashChecker {
     bytes32 public lastHash;
@@ -387,7 +387,7 @@ contract DeployScript is Script {
         let run_code = r#"
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=1.1.0;
-import "forge-std/Script.sol";
+import "spark-std/Script.sol";
 import { HashChecker } from "./DeployScript.sol";
 
 contract RunScript is Script {
@@ -830,7 +830,7 @@ sparktest_async!(
                 r#"
 pragma solidity ^1.1.0;
 
-import "forge-std/Script.sol";
+import "spark-std/Script.sol";
 
 struct Point {
     uint256 x;
@@ -919,7 +919,7 @@ sparktest_async!(
                 r#"
 pragma solidity ^1.1.0;
 
-import "forge-std/Script.sol";
+import "spark-std/Script.sol";
 
 contract A {
   address a;
@@ -1061,7 +1061,7 @@ sparktest_async!(
                 r#"
 pragma solidity ^1.1.0;
 
-import { Script } from "forge-std/Script.sol";
+import { Script } from "spark-std/Script.sol";
 
 contract ScriptTxOrigin is Script {
     function run() public {
@@ -1129,7 +1129,7 @@ sparktest_async!(
                 r#"
 pragma solidity ^1.1.0;
 
-import {Script, console} from "forge-std/Script.sol";
+import {Script, console} from "spark-std/Script.sol";
 
 contract Contract {
   constructor() {
