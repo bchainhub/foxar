@@ -163,14 +163,14 @@ Guidelines for contributing to `spark fmt`:
 1. Create a short concise title describing an issue.
     - Bad Title Examples
         ```text
-        Forge fmt does not work
-        Forge fmt breaks
-        Forge fmt unexpected behavior
+        Spark fmt does not work
+        Spark fmt breaks
+        Spark fmt unexpected behavior
         ```
     - Good Title Examples
         ```text
-        Forge fmt postfix comment misplaced
-        Forge fmt does not inline short yul blocks
+        Spark fmt postfix comment misplaced
+        Spark fmt does not inline short yul blocks
         ```
 2. Fill in the issue template fields that include foxar version, platform & component info.
 3. Provide the code snippets showing the current & expected behaviors.

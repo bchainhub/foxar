@@ -208,7 +208,7 @@ impl ScriptArgs {
                 // Identify all contracts created during the call.
                 if traces.is_empty() {
                     eyre::bail!(
-                        "Forge script requires tracing enabled to collect created contracts."
+                        "Spark script requires tracing enabled to collect created contracts."
                     )
                 }
 

@@ -14,7 +14,7 @@ pub mod debug;
 /// Coverage data structures
 pub mod coverage;
 
-/// Forge test execution backends
+/// Spark test execution backends
 pub mod executor;
 
 use corebc::{

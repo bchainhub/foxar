@@ -127,13 +127,13 @@ impl Cmd for InitArgs {
                 init_git_repo(git, no_commit)?;
             }
 
-            // install forge-std
+            // install spark-std
             if !offline {
-                if root.join("lib/forge-std").exists() {
-                    p_println!(!quiet => "\"lib/forge-std\" already exists, skipping install....");
+                if root.join("lib/spark-std").exists() {
+                    p_println!(!quiet => "\"lib/spark-std\" already exists, skipping install....");
                     self.opts.install(&mut config, vec![])?;
                 } else {
-                    let dep = "https://github.com/bchainhub/forge-std".parse()?;
+                    let dep = "https://github.com/bchainhub/spark-std".parse()?;
                     self.opts.install(&mut config, vec![dep])?;
                 }
             }

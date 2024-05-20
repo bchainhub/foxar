@@ -95,7 +95,7 @@ pub enum Subcommands {
     #[clap(visible_alias = "c")]
     Create(CreateArgs),
 
-    /// Create a new Forge project.
+    /// Create a new Spark project.
     Init(InitArgs),
 
     /// Generate shell completions script.

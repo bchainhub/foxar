@@ -46,7 +46,7 @@ fn ffi(state: &Cheatcodes, args: &[String]) -> Result {
     }
 }
 
-/// An enum which unifies the deserialization of Hardhat-style artifacts with Forge-style artifacts
+/// An enum which unifies the deserialization of Hardhat-style artifacts with Spark-style artifacts
 /// to get their bytecode.
 #[derive(Deserialize)]
 #[serde(untagged)]
@@ -54,7 +54,7 @@ fn ffi(state: &Cheatcodes, args: &[String]) -> Result {
 enum ArtifactBytecode {
     Hardhat(HardhatArtifact),
     Solc(JsonAbi),
-    Forge(CompactContractBytecode),
+    Spark(CompactContractBytecode),
     Huff(HuffArtifact),
 }
 
@@ -62,7 +62,7 @@ impl ArtifactBytecode {
     fn into_bytecode(self) -> Option<Bytes> {
         match self {
             ArtifactBytecode::Hardhat(inner) => Some(inner.bytecode),
-            ArtifactBytecode::Forge(inner) => {
+            ArtifactBytecode::Spark(inner) => {
                 inner.bytecode.and_then(|bytecode| bytecode.object.into_bytes())
             }
             ArtifactBytecode::Solc(inner) => inner.bytecode(),
@@ -73,7 +73,7 @@ impl ArtifactBytecode {
     fn into_deployed_bytecode(self) -> Option<Bytes> {
         match self {
             ArtifactBytecode::Hardhat(inner) => Some(inner.deployed_bytecode),
-            ArtifactBytecode::Forge(inner) => inner.deployed_bytecode.and_then(|bytecode| {
+            ArtifactBytecode::Spark(inner) => inner.deployed_bytecode.and_then(|bytecode| {
                 bytecode.bytecode.and_then(|bytecode| bytecode.object.into_bytes())
             }),
             ArtifactBytecode::Solc(inner) => inner.deployed_bytecode(),

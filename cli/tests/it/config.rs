@@ -84,7 +84,7 @@ sparktest!(can_extract_config_values, |prj: TestProject, mut cmd: TestCommand| {
         etherscan_api_key: None,
         etherscan: Default::default(),
         verbosity: 4,
-        remappings: vec![Remapping::from_str("forge-std=lib/forge-std/").unwrap().into()],
+        remappings: vec![Remapping::from_str("spark-std=lib/spark-std/").unwrap().into()],
         libraries: vec![
             "src/DssSpell.sol:DssExecLib:0x8De6DDbCd5053d32292AAA0D2105A32d108484a6".to_string()
         ],
@@ -146,10 +146,10 @@ sparktest_init!(
 
         // ensure remappings contain test
         assert_eq!(profile.remappings.len(), 2);
-        assert_eq!("ds-test/=lib/forge-std/lib/ds-test/src/", profile.remappings[0].to_string());
+        assert_eq!("ds-test/=lib/spark-std/lib/ds-test/src/", profile.remappings[0].to_string());
         // the loaded config has resolved, absolute paths
         assert_eq!(
-            "ds-test/=lib/forge-std/lib/ds-test/src/",
+            "ds-test/=lib/spark-std/lib/ds-test/src/",
             Remapping::from(profile.remappings[0].clone()).to_string()
         );
 
@@ -159,33 +159,33 @@ sparktest_init!(
 
         // remappings work
         let remappings_txt =
-            prj.create_file("remappings.txt", "ds-test/=lib/forge-std/lib/ds-test/from-file/");
+            prj.create_file("remappings.txt", "ds-test/=lib/spark-std/lib/ds-test/from-file/");
         let config = spark_utils::load_config_with_root(Some(prj.root().into()));
         assert_eq!(
             format!(
                 "ds-test/={}/",
-                prj.root().join("lib/forge-std/lib/ds-test/from-file").to_slash_lossy()
+                prj.root().join("lib/spark-std/lib/ds-test/from-file").to_slash_lossy()
             ),
             Remapping::from(config.remappings[0].clone()).to_string()
         );
 
         // env vars work
-        std::env::set_var("DAPP_REMAPPINGS", "ds-test/=lib/forge-std/lib/ds-test/from-env/");
+        std::env::set_var("DAPP_REMAPPINGS", "ds-test/=lib/spark-std/lib/ds-test/from-env/");
         let config = spark_utils::load_config_with_root(Some(prj.root().into()));
         assert_eq!(
             format!(
                 "ds-test/={}/",
-                prj.root().join("lib/forge-std/lib/ds-test/from-env").to_slash_lossy()
+                prj.root().join("lib/spark-std/lib/ds-test/from-env").to_slash_lossy()
             ),
             Remapping::from(config.remappings[0].clone()).to_string()
         );
 
         let config =
-            prj.config_from_output(["--remappings", "ds-test/=lib/forge-std/lib/ds-test/from-cli"]);
+            prj.config_from_output(["--remappings", "ds-test/=lib/spark-std/lib/ds-test/from-cli"]);
         assert_eq!(
             format!(
                 "ds-test/={}/",
-                prj.root().join("lib/forge-std/lib/ds-test/from-cli").to_slash_lossy()
+                prj.root().join("lib/spark-std/lib/ds-test/from-cli").to_slash_lossy()
             ),
             Remapping::from(config.remappings[0].clone()).to_string()
         );
@@ -359,8 +359,8 @@ sparktest_init!(can_detect_lib_foxar_toml, |prj: TestProject, mut cmd: TestComma
     pretty_assertions::assert_eq!(
         remappings,
         vec![
-            "ds-test/=lib/forge-std/lib/ds-test/src/".parse().unwrap(),
-            "forge-std/=lib/forge-std/src/".parse().unwrap(),
+            "ds-test/=lib/spark-std/lib/ds-test/src/".parse().unwrap(),
+            "spark-std/=lib/spark-std/src/".parse().unwrap(),
         ]
     );
     // create a new lib directly in the `lib` folder
@@ -376,8 +376,8 @@ sparktest_init!(can_detect_lib_foxar_toml, |prj: TestProject, mut cmd: TestComma
     pretty_assertions::assert_eq!(
         remappings,
         vec![
-            "ds-test/=lib/forge-std/lib/ds-test/src/".parse().unwrap(),
-            "forge-std/=lib/forge-std/src/".parse().unwrap(),
+            "ds-test/=lib/spark-std/lib/ds-test/src/".parse().unwrap(),
+            "spark-std/=lib/spark-std/src/".parse().unwrap(),
             "nested-lib/=lib/nested-lib/src/".parse().unwrap(),
             "nested/=lib/nested-lib/lib/nested/".parse().unwrap(),
         ]
@@ -398,8 +398,8 @@ sparktest_init!(can_detect_lib_foxar_toml, |prj: TestProject, mut cmd: TestComma
         remappings,
         vec![
             "another-lib/=lib/nested-lib/lib/another-lib/src/".parse().unwrap(),
-            "ds-test/=lib/forge-std/lib/ds-test/src/".parse().unwrap(),
-            "forge-std/=lib/forge-std/src/".parse().unwrap(),
+            "ds-test/=lib/spark-std/lib/ds-test/src/".parse().unwrap(),
+            "spark-std/=lib/spark-std/src/".parse().unwrap(),
             "nested-lib/=lib/nested-lib/src/".parse().unwrap(),
             "nested-twice/=lib/nested-lib/lib/another-lib/lib/nested-twice/".parse().unwrap(),
             "nested/=lib/nested-lib/lib/nested/".parse().unwrap(),
@@ -414,8 +414,8 @@ sparktest_init!(can_detect_lib_foxar_toml, |prj: TestProject, mut cmd: TestComma
         remappings,
         vec![
             "another-lib/=lib/nested-lib/lib/another-lib/custom-source-dir/".parse().unwrap(),
-            "ds-test/=lib/forge-std/lib/ds-test/src/".parse().unwrap(),
-            "forge-std/=lib/forge-std/src/".parse().unwrap(),
+            "ds-test/=lib/spark-std/lib/ds-test/src/".parse().unwrap(),
+            "spark-std/=lib/spark-std/src/".parse().unwrap(),
             "nested-lib/=lib/nested-lib/src/".parse().unwrap(),
             "nested-twice/=lib/nested-lib/lib/another-lib/lib/nested-twice/".parse().unwrap(),
             "nested/=lib/nested-lib/lib/nested/".parse().unwrap(),
@@ -431,10 +431,10 @@ sparktest_init!(
     |prj: TestProject, mut cmd: TestCommand| {
         let config = cmd.config();
 
-        // create a new lib directly in the `lib` folder with conflicting remapping `forge-std/`
+        // create a new lib directly in the `lib` folder with conflicting remapping `spark-std/`
         let mut config = config;
         config.remappings =
-            vec![Remapping::from_str("forge-std/=lib/forge-std/src/").unwrap().into()];
+            vec![Remapping::from_str("spark-std/=lib/spark-std/src/").unwrap().into()];
         let nested = prj.paths().libraries[0].join("dep1");
         pretty_err(&nested, fs::create_dir_all(&nested));
         let toml_file = nested.join("foxar.toml");
@@ -446,8 +446,8 @@ sparktest_init!(
             remappings,
             vec![
                 "dep1/=lib/dep1/src/".parse().unwrap(),
-                "ds-test/=lib/forge-std/lib/ds-test/src/".parse().unwrap(),
-                "forge-std/=lib/forge-std/src/".parse().unwrap()
+                "ds-test/=lib/spark-std/lib/ds-test/src/".parse().unwrap(),
+                "spark-std/=lib/spark-std/src/".parse().unwrap()
             ]
         );
     }
@@ -461,7 +461,7 @@ sparktest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
     let init = Config { libs: vec!["node_modules".into()], ..Default::default() };
     prj.write_config(init);
 
-    cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
+    cmd.args(["install", "bchainhub/spark-std", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let config = cmd.spark_fuse().config();
@@ -482,7 +482,7 @@ sparktest!(can_update_libs_section, |prj: TestProject, mut cmd: TestCommand| {
 sparktest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
-    cmd.args(["install", "bchainhub/forge-std", "--no-commit"]);
+    cmd.args(["install", "bchainhub/spark-std", "--no-commit"]);
     cmd.assert_non_empty_stdout();
 
     let faulty_toml = r#"[default]
@@ -491,7 +491,7 @@ sparktest!(config_emit_warnings, |prj: TestProject, mut cmd: TestCommand| {
     libs = ['lib']"#;
 
     fs::write(prj.root().join("foxar.toml"), faulty_toml).unwrap();
-    fs::write(prj.root().join("lib").join("forge-std").join("foxar.toml"), faulty_toml).unwrap();
+    fs::write(prj.root().join("lib").join("spark-std").join("foxar.toml"), faulty_toml).unwrap();
 
     cmd.spark_fuse().args(["config"]);
     let output = cmd.execute();

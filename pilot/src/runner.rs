@@ -123,7 +123,7 @@ impl PilotRunner {
     /// This will return _estimated_ energy instead of the precise energy the call would consume, so
     /// it can be used as `energy_limit`.
     ///
-    /// Taken from [Forge's Script Runner](https://github.com/foxar-rs/foxar/blob/master/cli/src/cmd/spark/script/runner.rs)
+    /// Taken from [Spark's Script Runner](https://github.com/bchainhub/foxar/blob/master/cli/src/cmd/spark/script/runner.rs)
     fn call(
         &mut self,
         from: Address,

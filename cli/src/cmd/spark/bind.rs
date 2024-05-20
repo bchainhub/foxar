@@ -105,7 +105,7 @@ impl BindArgs {
         if !self.skip.is_empty() {
             return ExcludeContracts::default().extend_regex(self.skip.clone()).into();
         }
-        // This excludes all Test/Script and forge-std contracts
+        // This excludes all Test/Script and spark-std contracts
         ExcludeContracts::default()
             .extend_pattern([
                 ".*Test.*",

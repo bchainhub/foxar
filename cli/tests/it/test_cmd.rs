@@ -295,13 +295,13 @@ contract ContractTest is DSTest {
 );
 
 // checks that we can test spark std successfully
-// `sparktest_init!` will install with `forge-std` under `lib/forge-std`
+// `sparktest_init!` will install with `spark-std` under `lib/spark-std`
 
 sparktest_init!(
     #[serial_test::serial]
     can_test_spark_std,
     |prj: TestProject, mut cmd: TestCommand| {
-        let spark_std_dir = prj.root().join("lib/forge-std");
+        let spark_std_dir = prj.root().join("lib/spark-std");
         // execute in subdir
         cmd.cmd().current_dir(spark_std_dir);
         cmd.args(["test", "--root", "."]);
@@ -347,7 +347,7 @@ contract Contract {
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=1.1.0;
 
-import "forge-std/Test.sol";
+import "spark-std/Test.sol";
 import "src/Contract.sol";
 
 contract ContractTest is Test {
@@ -375,7 +375,7 @@ static FAILING_TEST: &str = r#"
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^1.1.0;
 
-import "forge-std/Test.sol";
+import "spark-std/Test.sol";
 
 contract FailingTest is Test {
     function testShouldFail() public {
