@@ -14,7 +14,7 @@ body:
           description: What component is the feature for?
           multiple: true
           options:
-              - Forge
+              - Spark
               - Cast
               - Anvil
               - Foxarup

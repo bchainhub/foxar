@@ -21,7 +21,7 @@ use spark_fmt::solang_ext::SafeUnwrap;
 use std::{collections::HashMap, fs, path::PathBuf};
 use yansi::Paint;
 
-/// Solidity source for the `Vm` interface in [forge-std](https://github.com/foxar-rs/forge-std)
+/// Solidity source for the `Vm` interface in [spark-std](https://github.com/foxar-rs/spark-std)
 static VM_SOURCE: &str = include_str!("../../testdata/cheats/Cheats.sol");
 
 /// Intermediate output for the compiled [SessionSource]
@@ -309,11 +309,11 @@ impl SessionSource {
     ///
     /// ### Returns
     ///
-    /// A [CompilerInput] object containing forge-std's `Vm` interface as well as the REPL contract
+    /// A [CompilerInput] object containing spark-std's `Vm` interface as well as the REPL contract
     /// source.
     pub fn compiler_input(&self) -> CompilerInput {
         let mut sources = Sources::new();
-        sources.insert(PathBuf::from("forge-std/Vm.sol"), Source::new(VM_SOURCE.to_owned()));
+        sources.insert(PathBuf::from("spark-std/Vm.sol"), Source::new(VM_SOURCE.to_owned()));
         sources.insert(self.file_name.clone(), Source::new(self.to_repl_source()));
         // we only care about the solidity source, so we can safely unwrap
         let mut compiler_input = CompilerInput::with_sources(sources)
@@ -321,7 +321,7 @@ impl SessionSource {
             .next()
             .expect("Solidity source not found");
 
-        // get all remappings from the config so libraries can be found, but remove the forge-std
+        // get all remappings from the config so libraries can be found, but remove the spark-std
         // remapping
         // NOTE(mattsse): perhaps the better solution is to not add the Vm.sol
         // file
@@ -330,7 +330,7 @@ impl SessionSource {
             .foxar_config
             .get_all_remappings()
             .into_iter()
-            .filter(|remapping| !remapping.name.starts_with("forge-std"))
+            .filter(|remapping| !remapping.name.starts_with("spark-std"))
             .collect();
 
         // We also need to enforce the EVM version that the user has specified.
@@ -442,7 +442,7 @@ impl SessionSource {
     ///
     /// ### Returns
     ///
-    /// The [SessionSource] represented as a Forge Script contract.
+    /// The [SessionSource] represented as a Spark Script contract.
     pub fn to_script_source(&self) -> String {
         let Version { major, minor, patch, .. } = self.ylem.version().unwrap();
         format!(
@@ -450,7 +450,7 @@ impl SessionSource {
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^{major}.{minor}.{patch};
 
-import {{Script}} from "forge-std/Script.sol";
+import {{Script}} from "spark-std/Script.sol";
 {}
 
 contract {} is Script {{
@@ -481,7 +481,7 @@ contract {} is Script {{
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^{major}.{minor}.{patch};
 
-import {{Cheats}} from "forge-std/Vm.sol";
+import {{Cheats}} from "spark-std/Vm.sol";
 {}
 
 contract {} {{
@@ -513,9 +513,9 @@ contract {} {{
                 .into_iter()
                 .filter_map(|sup| match sup {
                     pt::SourceUnitPart::ImportDirective(i) => match i {
-                        pt::Import::Plain(s, _) |
-                        pt::Import::Rename(s, _, _) |
-                        pt::Import::GlobalSymbol(s, _, _) => {
+                        pt::Import::Plain(s, _)
+                        | pt::Import::Rename(s, _, _)
+                        | pt::Import::GlobalSymbol(s, _, _) => {
                             let path = PathBuf::from(s.string);
 
                             match fs::read_to_string(path) {

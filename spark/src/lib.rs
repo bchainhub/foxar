@@ -15,11 +15,11 @@ pub mod gas_report;
 /// Coverage reports
 pub mod coverage;
 
-/// The Forge test runner
+/// The Spark test runner
 mod runner;
 pub use runner::ContractRunner;
 
-/// Forge test runners for multiple contracts
+/// Spark test runners for multiple contracts
 mod multi_runner;
 pub use multi_runner::{MultiContractRunner, MultiContractRunnerBuilder};
 
@@ -28,7 +28,7 @@ pub use foxar_common::traits::TestFilter;
 
 pub mod result;
 
-/// The Forge EVM backend
+/// The Spark EVM backend
 pub use foxar_evm::*;
 
 /// Metadata on how to run fuzz/invariant tests

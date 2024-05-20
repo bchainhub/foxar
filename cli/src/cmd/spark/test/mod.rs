@@ -70,11 +70,11 @@ pub struct TestArgs {
     debug: Option<Regex>,
 
     /// Print a gas report.
-    #[clap(long, env = "FORGE_GAS_REPORT")]
+    #[clap(long, env = "SPARK_GAS_REPORT")]
     gas_report: bool,
 
     /// Exit with code 0 even if a test fails.
-    #[clap(long, env = "FORGE_ALLOW_FAILURE")]
+    #[clap(long, env = "SPARK_ALLOW_FAILURE")]
     allow_failure: bool,
 
     /// Output test results in JSON format.
@@ -519,7 +519,7 @@ async fn test(
         let filter_str = filter.to_string();
         if filter_str.is_empty() {
             println!(
-                "\nNo tests found in project! Forge looks for functions that starts with `test`."
+                "\nNo tests found in project! Spark looks for functions that starts with `test`."
             );
         } else {
             println!("\nNo tests match the provided pattern:");

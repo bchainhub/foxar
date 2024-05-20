@@ -22,13 +22,13 @@ jobs:
         with:
           version: nightly
 
-      - name: Run Forge build
+      - name: Run Spark build
         run: |
           spark --version
           spark build --sizes
         id: build
 
-      - name: Run Forge tests
+      - name: Run Spark tests
         run: |
           spark test -vvv
         id: test

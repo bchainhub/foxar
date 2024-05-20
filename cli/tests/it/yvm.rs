@@ -51,7 +51,7 @@ sparktest_init!(can_test_with_latest_solc, |prj: TestProject, mut cmd: TestComma
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity =<VERSION>;
 
-import "forge-std/Test.sol";
+import "spark-std/Test.sol";
 
 contract CounterTest is Test {
 

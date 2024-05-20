@@ -14,7 +14,7 @@ body:
           description: What component is the bug in?
           multiple: true
           options:
-              - Forge
+              - Spark
               - Cast
               - Anvil
               - Foxarup

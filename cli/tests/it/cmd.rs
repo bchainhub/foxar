@@ -268,8 +268,8 @@ sparktest!(can_init_no_git, |prj: TestProject, mut cmd: TestCommand| {
     prj.assert_config_exists();
 
     assert!(!prj.root().join(".git").exists());
-    assert!(prj.root().join("lib/forge-std").exists());
-    assert!(!prj.root().join("lib/forge-std/.git").exists());
+    assert!(prj.root().join("lib/spark-std").exists());
+    assert!(!prj.root().join("lib/spark-std/.git").exists());
 });
 
 // Checks that quiet mode does not print anything
@@ -298,7 +298,7 @@ sparktest!(can_init_non_empty, |prj: TestProject, mut cmd: TestCommand| {
     cmd.arg("--force");
     cmd.assert_non_empty_stdout();
     assert!(prj.root().join(".git").exists());
-    assert!(prj.root().join("lib/forge-std").exists());
+    assert!(prj.root().join("lib/spark-std").exists());
 });
 
 // `spark init --force` works on already initialized git repository
@@ -321,7 +321,7 @@ sparktest!(can_init_in_empty_repo, |prj: TestProject, mut cmd: TestCommand| {
 
     cmd.arg("--force");
     cmd.assert_non_empty_stdout();
-    assert!(root.join("lib/forge-std").exists());
+    assert!(root.join("lib/spark-std").exists());
 });
 
 // `spark init --force` works on already initialized git repository
@@ -347,7 +347,7 @@ sparktest!(can_init_in_non_empty_repo, |prj: TestProject, mut cmd: TestCommand| 
 
     cmd.arg("--force");
     cmd.assert_non_empty_stdout();
-    assert!(root.join("lib/forge-std").exists());
+    assert!(root.join("lib/spark-std").exists());
 
     // not overwritten
     let gitignore = root.join(".gitignore");
@@ -376,17 +376,17 @@ sparktest!(can_init_vscode, |prj: TestProject, mut cmd: TestCommand| {
     let remappings = prj.root().join("remappings.txt");
     assert!(remappings.is_file());
     let content = std::fs::read_to_string(remappings).unwrap();
-    assert_eq!(content, "ds-test/=lib/forge-std/lib/ds-test/src/\nforge-std/=lib/forge-std/src/",);
+    assert_eq!(content, "ds-test/=lib/spark-std/lib/ds-test/src/\nspark-std/=lib/spark-std/src/",);
 });
 
 // checks that spark can init with template
 sparktest!(can_init_template, |prj: TestProject, mut cmd: TestCommand| {
     prj.wipe();
-    cmd.args(["init", "--template", "foundry-rs/forge-template"]).arg(prj.root());
+    cmd.args(["init", "--template", "bchainhub/spark-template"]).arg(prj.root());
     cmd.assert_non_empty_stdout();
     assert!(prj.root().join(".git").exists());
-    assert!(prj.root().join("foundry.toml").exists());
-    assert!(prj.root().join("lib/forge-std").exists());
+    assert!(prj.root().join("foxar.toml").exists());
+    assert!(prj.root().join("lib/spark-std").exists());
     assert!(prj.root().join("src").exists());
     assert!(prj.root().join("test").exists());
 });
@@ -877,17 +877,17 @@ sparktest!(can_install_and_remove, |prj: TestProject, mut cmd: TestCommand| {
     let git_mod = prj.root().join(".git/modules/lib");
     let git_mod_file = prj.root().join(".gitmodules");
 
-    let spark_std = libs.join("forge-std");
-    let spark_std_mod = git_mod.join("forge-std");
+    let spark_std = libs.join("spark-std");
+    let spark_std_mod = git_mod.join("spark-std");
 
     let install = |cmd: &mut TestCommand| {
-        cmd.spark_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
+        cmd.spark_fuse().args(["install", "bchainhub/spark-std", "--no-commit"]);
         cmd.assert_non_empty_stdout();
         assert!(spark_std.exists());
         assert!(spark_std_mod.exists());
 
         let submods = read_string(&git_mod_file);
-        assert!(submods.contains("https://github.com/bchainhub/forge-std"));
+        assert!(submods.contains("https://github.com/bchainhub/spark-std"));
     };
 
     let remove = |cmd: &mut TestCommand, target: &str| {
@@ -896,15 +896,15 @@ sparktest!(can_install_and_remove, |prj: TestProject, mut cmd: TestCommand| {
         assert!(!spark_std.exists());
         assert!(!spark_std_mod.exists());
         let submods = read_string(&git_mod_file);
-        assert!(!submods.contains("https://github.com/bchainhub/forge-std"));
+        assert!(!submods.contains("https://github.com/bchainhub/spark-std"));
     };
 
     install(&mut cmd);
-    remove(&mut cmd, "forge-std");
+    remove(&mut cmd, "spark-std");
 
     // install again and remove via relative path
     install(&mut cmd);
-    remove(&mut cmd, "lib/forge-std");
+    remove(&mut cmd, "lib/spark-std");
 });
 
 // test to check that package can be reinstalled after manually removing the directory
@@ -915,21 +915,21 @@ sparktest!(can_reinstall_after_manual_remove, |prj: TestProject, mut cmd: TestCo
     let git_mod = prj.root().join(".git/modules/lib");
     let git_mod_file = prj.root().join(".gitmodules");
 
-    let spark_std = libs.join("forge-std");
-    let spark_std_mod = git_mod.join("forge-std");
+    let spark_std = libs.join("spark-std");
+    let spark_std_mod = git_mod.join("spark-std");
 
     let install = |cmd: &mut TestCommand| {
-        cmd.spark_fuse().args(["install", "bchainhub/forge-std", "--no-commit"]);
+        cmd.spark_fuse().args(["install", "bchainhub/spark-std", "--no-commit"]);
         cmd.assert_non_empty_stdout();
         assert!(spark_std.exists());
         assert!(spark_std_mod.exists());
 
         let submods = read_string(&git_mod_file);
-        assert!(submods.contains("https://github.com/bchainhub/forge-std"));
+        assert!(submods.contains("https://github.com/bchainhub/spark-std"));
     };
 
     install(&mut cmd);
-    fs::remove_dir_all(spark_std.clone()).expect("Failed to remove forge-std");
+    fs::remove_dir_all(spark_std.clone()).expect("Failed to remove spark-std");
 
     // install again
     install(&mut cmd);
@@ -939,7 +939,7 @@ sparktest!(can_reinstall_after_manual_remove, |prj: TestProject, mut cmd: TestCo
 sparktest!(can_install_repeatedly, |_prj: TestProject, mut cmd: TestCommand| {
     cmd.git_init();
 
-    cmd.spark_fuse().args(["install", "bchainhub/forge-std"]);
+    cmd.spark_fuse().args(["install", "bchainhub/spark-std"]);
     for _ in 0..3 {
         cmd.assert_success();
     }
@@ -1537,8 +1537,8 @@ sparktest_init!(can_bind, |_prj: TestProject, mut cmd: TestCommand| {
 
 // checks missing dependencies are auto installed
 sparktest_init!(can_install_missing_deps_test, |prj: TestProject, mut cmd: TestCommand| {
-    // wipe forge-std
-    let spark_std_dir = prj.root().join("lib/forge-std");
+    // wipe spark-std
+    let spark_std_dir = prj.root().join("lib/spark-std");
     pretty_err(&spark_std_dir, fs::remove_dir_all(&spark_std_dir));
 
     cmd.arg("test");
@@ -1550,8 +1550,8 @@ sparktest_init!(can_install_missing_deps_test, |prj: TestProject, mut cmd: TestC
 
 // checks missing dependencies are auto installed
 sparktest_init!(can_install_missing_deps_build, |prj: TestProject, mut cmd: TestCommand| {
-    // wipe forge-std
-    let spark_std_dir = prj.root().join("lib/forge-std");
+    // wipe spark-std
+    let spark_std_dir = prj.root().join("lib/spark-std");
     pretty_err(&spark_std_dir, fs::remove_dir_all(&spark_std_dir));
 
     cmd.arg("build");
