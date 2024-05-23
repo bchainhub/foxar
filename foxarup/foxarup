@@ -75,7 +75,7 @@ main() {
 
   # Install by downloading binaries
   if [[ "$FOXARUP_REPO" == "bchainhub/foxar" && -z "$FOXARUP_BRANCH" && -z "$FOXARUP_COMMIT" ]]; then
-    FOXARUP_VERSION=$(curl --silent "https://api.github.com/repos/$FOXARUP_REPO/releases/latest" | jq -r .tag_name)
+    FOXARUP_VERSION=$(curl --silent "https://api.github.com/repos/$FOXARUP_REPO/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
     FOXARUP_TAG=$FOXARUP_VERSION
 
     say "installing foxar (version ${FOXARUP_VERSION}, tag ${FOXARUP_TAG})"
