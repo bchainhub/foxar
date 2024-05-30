@@ -5,7 +5,7 @@ Update or revert to a specific Foxar branch with ease.
 ## Installing
 
 ```sh
-curl -L https://foxar.paradigm.xyz | bash
+curl -L https://up.foxar.dev | bash
 ```
 
 ## Usage
@@ -28,16 +28,16 @@ To install a specific **branch** (in this case the `release/0.1.0` branch's late
 foxarup --branch release/0.1.0
 ```
 
-To install a **fork's main branch** (in this case `transmissions11/foxar`'s main branch):
+To install a **fork's main branch** (in this case `user/foxar`'s main branch):
 
 ```sh
-foxarup --repo transmissions11/foxar
+foxarup --repo user/foxar
 ```
 
-To install a **specific branch in a fork** (in this case the `patch-10` branch's latest commit in `transmissions11/foxar`):
+To install a **specific branch in a fork** (in this case the `patch-10` branch's latest commit in `user/foxar`):
 
 ```sh
-foxarup --repo transmissions11/foxar --branch patch-10
+foxarup --repo user/foxar --branch patch-10
 ```
 
 To install from a **specific Pull Request**:
@@ -59,9 +59,3 @@ To install a local directory or repository (e.g. one located at `~/git/foxar`, a
 ```sh
 foxarup --path ./git/foxar
 ```
-
----
-
-**Tip**: All flags have a single character shorthand equivalent! You can use `-v` instead of `--version`, etc.
-
----

@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-description = "Foxar's Solidity ABI bindings"
+description = "Foxar's Ylem ABI bindings"
 repository = "https://github.com/foxar-rs/foxar"
 exclude = ["abi", "build.rs"]
 
