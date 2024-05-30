@@ -1,41 +1,21 @@
 ## Installation
-Before installing please make sure you have the latest rustc installed along with cargo, and you are running the latest stable release.
-
-If you are not sure, you can just run:
+1. Run
 ```console
-rustup default stable
+curl -L https://up.foxar.dev/ | bash
 ```
 
-For now the best way to install foxar is:
-1. Clone the repo
+2. Then just run foxarup
 ```console
-git clone https://github.com/bchainhub/foxar.git
+foxarup
 ```
 
-2. Go to `foxar/foxarup/
-```console
-cd foxar/foxarup/
-```
+Foxarup will download the latest binaries from github. After foxarup finishes you can use all binaries.
 
-3. Install foxarup
-```console
-./install
-```
+For more information and more custom instalation of foxar, check out the README in [foxarup/](https://github.com/bchainhub/foxar/tree/master/foxarup) folder.
 
-4. Run foxarup
 
-```console
-foxarup --path ../
-```
-
-This will compile the entire project and will install all your binaries to ~/.foxar.
-Now just restart your terminal and you can use one of the binaries. For reference here are the changed names:
-
+Here are the references to the original foundry names:
 forge: spark
 anvil: shuttle
 chisel: pilot
 cast: probe
-
-Later we will release binaries to github so the script will be able to just download them, but for now this is the best way.
-
-## Acknowledgements
