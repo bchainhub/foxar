@@ -2,11 +2,11 @@
 name = "spark-fmt"
 version = "0.2.0"
 edition = "2021"
-description = "Foxar's solidity formatting and linting support"
+description = "Foxar's Ylem formatting and linting support"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/foxar-rs/foxar"
-keywords = ["ethereum", "web3", "solidity", "linter"]
+keywords = ["ethereum", "web3", "Ylem", "linter"]
 
 [dependencies]
 # foxar dep

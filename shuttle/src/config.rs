@@ -24,7 +24,7 @@ use corebc::{
         Signer,
     },
     types::BlockNumber,
-    utils::{format_core, hex, to_checksum, ORE_IN_CORE},
+    utils::{format_core, hex, ORE_IN_CORE},
 };
 use foxar_common::{
     ProviderBuilder, ALCHEMY_FREE_TIER_CUPS, NON_ARCHIVE_NODE_WARNING, REQUEST_TIMEOUT,
@@ -70,18 +70,17 @@ pub const VERSION_MESSAGE: &str = concat!(
 );
 
 const BANNER: &str = r"
-                             _   _
-                            (_) | |
-      __ _   _ __   __   __  _  | |
-     / _` | | '_ \  \ \ / / | | | |
-    | (_| | | | | |  \ V /  | | | |
-     \__,_| |_| |_|   \_/   |_| |_|
+    _____ __          __  __  __   
+  / ___// /_  __  __/ /_/ /_/ /__ 
+  \__ \/ __ \/ / / / __/ __/ / _ \
+ ___/ / / / / /_/ / /_/ /_/ /  __/
+/____/_/ /_/\__,_/\__/\__/_/\___/
 ";
 
 /// Configurations of the EVM node
 #[derive(Debug, Clone)]
 pub struct NodeConfig {
-    /// Chain ID of the EVM chain
+    /// Network ID of the EVM chain
     pub chain_id: Option<u64>,
     /// Default energy limit for all txs
     pub energy_limit: U256,
@@ -175,8 +174,9 @@ Available Accounts
         for (idx, wallet) in self.genesis_accounts.iter().enumerate() {
             let _ = write!(
                 config_string,
-                "\n({idx}) {:?} ({balance} ETH)",
-                to_checksum(&wallet.address(), None)
+                "\n({idx}) {:?} ({balance} XCB)",
+                wallet.address().to_string(),
+                // to_checksum(&wallet.address(), None)
             );
         }
 
@@ -194,20 +194,20 @@ Private Keys
             let _ = write!(config_string, "\n({idx}) 0x{hex}");
         }
 
-        if let Some(ref gen) = self.account_generator {
-            let _ = write!(
-                config_string,
-                r#"
-
-Wallet
-==================
-Mnemonic:          {}
-Derivation path:   {}
-"#,
-                gen.phrase,
-                gen.get_derivation_path()
-            );
-        }
+//         if let Some(ref gen) = self.account_generator {
+//             let _ = write!(
+//                 config_string,
+//                 r#"
+//
+// Wallet
+// ==================
+// Mnemonic:          {}
+// Derivation path:   {}
+// "#,
+//                 gen.phrase,
+//                 gen.get_derivation_path()
+//             );
+//         }
 
         if let Some(fork) = fork {
             let _ = write!(
@@ -219,7 +219,7 @@ Fork
 Endpoint:       {}
 Block number:   {}
 Block hash:     {:?}
-Chain ID:       {}
+Network ID:       {}
 "#,
                 fork.eth_rpc_url(),
                 fork.block_number(),
@@ -231,7 +231,7 @@ Chain ID:       {}
                 config_string,
                 r#"
 
-Chain ID
+Network ID
 ==================
 {}
 "#,
@@ -242,7 +242,7 @@ Chain ID
         let _ = write!(
             config_string,
             r#"
-Gas Price
+Energy Price
 ==================
 {}
 "#,
@@ -252,7 +252,7 @@ Gas Price
         let _ = write!(
             config_string,
             r#"
-Gas Limit
+Energy Limit
 ==================
 {}
 "#,
@@ -809,7 +809,7 @@ latest block number: {latest_block}"
                     panic!("Failed to get block for block number: {fork_block_number}")
                 };
 
-                // we only use the energy limit value of the block if it is non-zero, since there are networks where this is not used and is always `0x0` which would inevitably result in `OutOfGas` errors as soon as the evm is about to record energy, See also <https://github.com/foxar-rs/foxar/issues/3247>
+                // we only use the energy limit value of the block if it is non-zero, since there are networks where this is not used and is always `0x0` which would inevitably result in `OutOfEnergy` errors as soon as the evm is about to record energy, See also <https://github.com/foxar-rs/foxar/issues/3247>
 
                 let energy_limit = if block.energy_limit.is_zero() {
                     env.block.energy_limit

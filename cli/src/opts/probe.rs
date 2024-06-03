@@ -24,7 +24,7 @@ pub struct Opts {
 /// Perform Ethereum RPC calls from the comfort of your command line.
 #[derive(Debug, Subcommand)]
 #[clap(
-    after_help = "Find more information in the book: http://book.getfoxar.sh/reference/probe/probe.html",
+    after_help = "Find more information in the book: http://foxar.dev",
     next_display_order = None
 )]
 pub enum Subcommands {

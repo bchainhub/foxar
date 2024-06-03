@@ -1,12 +1,12 @@
 # foxar-binder
 
-Utilities for generating bindings for solidity projects in one step.
+Utilities for generating bindings for ylem projects in one step.
 
 First add `foxar-binder` to your cargo build-dependencies.
 
 ```toml
 [build-dependencies]
-foxar-binder = { git = "https://github.com/foxar-rs/foxar" }
+foxar-binder = { git = "https://github.com/bchainhub/foxar" }
 # required in order to enable ssh support in [libgit2](https://github.com/rust-lang/git2-rs)
 git2 = "0.16.1"
 ```
