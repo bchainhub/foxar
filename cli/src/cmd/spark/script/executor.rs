@@ -124,6 +124,29 @@ impl ScriptArgs {
 
         let mut final_txs = VecDeque::new();
 
+        // Set each sender's nonce to match the first broadcast transaction's nonce.
+        // During the dry run, the script call itself increments the sender's nonce, but the
+        // on-chain simulation replays transactions directly against the forked state where the
+        // sender's nonce hasn't been incremented by the script call.
+        {
+            let mut nonce_set: HashMap<(RpcUrl, Address), bool> = HashMap::new();
+            for tx in transactions.iter() {
+                let rpc = tx.rpc.as_ref().expect("to have been filled already.");
+                let TypedTransaction::Legacy(ref inner) = tx.transaction;
+                if let (Some(from), Some(nonce)) = (inner.from, inner.nonce) {
+                    if nonce_set.insert((rpc.clone(), from), true).is_none() {
+                        if let Some(runner) = runners.get(rpc) {
+                            runner
+                                .write()
+                                .executor
+                                .set_nonce(from, nonce.as_u64())
+                                .expect("could not set sender nonce");
+                        }
+                    }
+                }
+            }
+        }
+
         // Executes all transactions from the different forks concurrently.
         let futs = transactions
             .into_iter()
