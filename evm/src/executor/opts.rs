@@ -256,7 +256,7 @@ pub struct Env {
     )]
     pub block_energy_limit: Option<u64>,
 
-    /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests.
+    /// Contract code size limit in bytes. Useful to increase this because of tests.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub code_size_limit: Option<usize>,
 }

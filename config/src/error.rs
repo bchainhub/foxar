@@ -100,8 +100,7 @@ impl Error for FoxarConfigError {
 pub enum SolidityErrorCode {
     /// Warning that SPDX license identifier not provided in source file
     SpdxLicenseNotProvided,
-    /// Warning that contract code size exceeds 24576 bytes (a limit introduced in Spurious
-    /// Dragon).
+    /// Warning that contract code size exceeds 50000 bytes.
     ContractExceeds24576Bytes,
     /// Warning after shanghai if init code size exceeds 49152 bytes
     ContractInitCodeSizeExceeds49152Bytes,

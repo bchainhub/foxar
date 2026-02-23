@@ -592,7 +592,7 @@ impl ScriptArgs {
                     shell::println(format!(
                         "{}",
                         Paint::red(format!(
-                            "`{name}` is above the EIP-170 contract size limit ({deployment_size} > {CONTRACT_MAX_SIZE})."
+                            "`{name}` is above the contract size limit ({deployment_size} > {CONTRACT_MAX_SIZE})."
                         ))
                     ))?;
                 }
