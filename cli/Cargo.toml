@@ -8,7 +8,7 @@ repository = "https://github.com/foxar-rs/foxar"
 keywords = ["ethereum", "web3"]
 
 [build-dependencies]
-vergen = { version = "8", default-features = false, features = ["build", "git", "git2"] }
+vergen = { version = "8", default-features = false, features = ["build", "git", "gitcl"] }
 
 [dependencies]
 # foxar internal

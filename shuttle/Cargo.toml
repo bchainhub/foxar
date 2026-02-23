@@ -12,7 +12,7 @@ path = "src/shuttle.rs"
 required-features = ["cli"]
 
 [build-dependencies]
-vergen = { version = "8", default-features = false, features = ["build", "git", "git2"] }
+vergen = { version = "8", default-features = false, features = ["build", "git", "gitcl"] }
 
 [dependencies]
 # foxar internal
