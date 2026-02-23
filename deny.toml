@@ -5,6 +5,7 @@
 vulnerability = "deny"
 unmaintained = "warn"
 yanked = "warn"
+notice = "warn"
 ignore = [
     "RUSTSEC-2020-0071", # https://rustsec.org/advisories/RUSTSEC-2020-0071
 ]
@@ -31,7 +32,7 @@ skip = []
 skip-tree = []
 
 [licenses]
-confidence-threshold = 0.8
+unlicensed = "deny"
 # List of explicitly allowed licenses
 # See https://spdx.org/licenses/ for list of possible licenses
 # [possible values: any SPDX 3.7 short identifier (+ optional exception)].
