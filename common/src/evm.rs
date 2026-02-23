@@ -179,8 +179,8 @@ pub struct EnvArgs {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub energy_limit: Option<u64>,
 
-    /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests. By
-    /// default, it is 0x6000 (~25kb).
+    /// Contract code size limit in bytes. Useful to increase this because of tests. By
+    /// default, it is 0xC350 (~50kb).
     #[clap(long, value_name = "CODE_SIZE")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_size_limit: Option<usize>,

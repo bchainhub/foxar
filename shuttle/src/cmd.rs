@@ -415,8 +415,8 @@ pub struct ShuttleEvmArgs {
     )]
     pub disable_block_energy_limit: bool,
 
-    /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests. By
-    /// default, it is 0x6000 (~25kb).
+    /// Contract code size limit in bytes. Useful to increase this because of tests. By
+    /// default, it is 0xC350 (~50kb).
     #[clap(long, value_name = "CODE_SIZE", help_heading = "Environment config")]
     pub code_size_limit: Option<usize>,
 
