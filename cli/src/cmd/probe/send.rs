@@ -122,7 +122,7 @@ impl SendTxArgs {
                 if config_network_id != current_network_id {
                     cli_warn!("Switching to chain {}", config_chain);
                     provider
-                        .request(
+                        .request::<_, ()>(
                             "wallet_switchEthereumChain",
                             [serde_json::json!({
                                 "chainId": format!("0x{:x}", config_network_id),
