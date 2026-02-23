@@ -171,8 +171,8 @@ impl ProjectCompiler {
     }
 }
 
-// https://eips.ethereum.org/EIPS/eip-170
-const CONTRACT_SIZE_LIMIT: usize = 24576;
+// Maximum bytecode to permit for a contract (aligned with go-core MaxCodeSize)
+const CONTRACT_SIZE_LIMIT: usize = 50000;
 
 /// Contracts with info about their size
 pub struct SizeReport {

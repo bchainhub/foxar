@@ -249,7 +249,7 @@ pub struct Config {
     pub network_id: Option<Network>,
     /// Block energy limit
     pub energy_limit: EnergyLimit,
-    /// EIP-170: Contract code size limit in bytes. Useful to increase this because of tests.
+    /// Contract code size limit in bytes. Useful to increase this because of tests.
     pub code_size_limit: Option<usize>,
     /// `tx.energyprice` value during CVM execution"
     ///

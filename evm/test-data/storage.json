@@ -6,7 +6,7 @@
             "perf_all_precompiles_have_balance": false,
             "memory_limit": 4294967295,
             "perf_analyse_created_bytecodes": "Analyse",
-            "limit_contract_code_size": 24576
+            "limit_contract_code_size": 50000
         },
         "block_env": {
             "number": "0xdc42b8",
