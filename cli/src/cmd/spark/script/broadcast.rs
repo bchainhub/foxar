@@ -391,7 +391,12 @@ impl ScriptArgs {
                 tx.transaction.set_energy(1000000);
                 tx.transaction.set_energy_price(1);
 
-                if let (Some(from), Some(rpc)) = (tx.transaction.from().copied(), tx.rpc.clone()) {
+                if let Some(from) = tx.transaction.from().copied() {
+                    let rpc = tx
+                        .rpc
+                        .clone()
+                        .or_else(|| self.evm_opts.fork_url.clone())
+                        .expect("Missing fork url");
                     let key = (rpc.clone(), from);
                     let nonce = match nonce_map.get(&key) {
                         Some(n) => *n,
