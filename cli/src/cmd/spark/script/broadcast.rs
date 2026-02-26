@@ -375,19 +375,39 @@ impl ScriptArgs {
     ) -> Result<VecDeque<TransactionWithMetadata>> {
         let energy_filled_txs = if self.skip_simulation {
             shell::println("\nSKIPPING ON CHAIN SIMULATION.")?;
-            txs.into_iter()
-                .map(|btx| {
-                    let mut tx = TransactionWithMetadata::from_typed_transaction(btx.transaction);
-                    tx.rpc = btx.rpc;
 
-                    //TODO:error2215 without this lines tx has None energy and None energy_price.
-                    // Should we place them manually if no onchain simulation?
-                    tx.transaction.set_energy(1000000);
-                    tx.transaction.set_energy_price(1);
+            // Correct nonces: during the dry run, the script call itself increments the
+            // sender's nonce, but the on-chain nonce hasn't been incremented. We fetch the
+            // actual on-chain nonce for each sender and re-number sequentially.
+            let mut nonce_map: HashMap<(RpcUrl, Address), U256> = HashMap::new();
+            let mut result = VecDeque::new();
 
-                    tx
-                })
-                .collect()
+            for btx in txs.into_iter() {
+                let mut tx = TransactionWithMetadata::from_typed_transaction(btx.transaction);
+                tx.rpc = btx.rpc;
+
+                //TODO:error2215 without this lines tx has None energy and None energy_price.
+                // Should we place them manually if no onchain simulation?
+                tx.transaction.set_energy(1000000);
+                tx.transaction.set_energy_price(1);
+
+                if let (Some(from), Some(rpc)) = (tx.transaction.from().copied(), tx.rpc.clone()) {
+                    let key = (rpc.clone(), from);
+                    let nonce = match nonce_map.get(&key) {
+                        Some(n) => *n,
+                        None => {
+                            foxar_utils::next_nonce(from, &rpc, None)
+                                .await
+                                .map_err(|_| eyre::eyre!("Failed to fetch nonce for sender"))?
+                        }
+                    };
+                    tx.transaction.set_nonce(nonce);
+                    nonce_map.insert(key, nonce + 1);
+                }
+
+                result.push_back(tx);
+            }
+            result
         } else {
             self.onchain_simulation(
                 txs,
