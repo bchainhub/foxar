@@ -265,6 +265,23 @@ impl ScriptArgs {
         receipts::wait_for_pending(provider, &mut deployment_sequence).await?;
 
         if self.resume {
+            // Re-correct nonces for remaining transactions. The sequence loaded from JSON
+            // may have stale nonces if transactions were dropped from the mempool.
+            let already_broadcasted = deployment_sequence.receipts.len();
+            let mut nonce_map: HashMap<Address, U256> = HashMap::new();
+            for tx in deployment_sequence.transactions.iter_mut().skip(already_broadcasted) {
+                if let Some(from) = tx.transaction.from().copied() {
+                    let nonce = match nonce_map.get(&from) {
+                        Some(n) => *n,
+                        None => foxar_utils::next_nonce(from, fork_url, None)
+                            .await
+                            .map_err(|_| eyre::eyre!("Failed to fetch nonce for sender"))?,
+                    };
+                    tx.transaction.set_nonce(nonce);
+                    nonce_map.insert(from, nonce + 1);
+                }
+            }
+
             self.send_transactions(&mut deployment_sequence, fork_url, &result.script_wallets)
                 .await?;
         }

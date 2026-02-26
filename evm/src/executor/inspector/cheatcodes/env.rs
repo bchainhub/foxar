@@ -666,6 +666,8 @@ pub fn apply<DB: DatabaseExt>(
 /// When using `spark script`, the script method is called using the address from `--sender`.
 /// That leads to its nonce being incremented by `call_raw`. In a `broadcast` scenario this is
 /// undesirable. Therefore, we make sure to fix the sender's nonce **once**.
+/// The `corrected_nonce` flag prevents double-correction within a single execution phase,
+/// and `maybe_correct_nonce` in runner.rs resets it between setUp and run().
 fn correct_sender_nonce<DB: Database>(
     sender: Address,
     journaled_state: &mut revm::JournaledState,
@@ -673,7 +675,7 @@ fn correct_sender_nonce<DB: Database>(
     state: &mut Cheatcodes,
     _network: u64,
 ) -> Result<(), DB::Error> {
-    if !state.corrected_nonce && sender != state.config.evm_opts.sender() {
+    if !state.corrected_nonce {
         with_journaled_account(journaled_state, db, sender, |account| {
             account.info.nonce = account.info.nonce.saturating_sub(1);
             state.corrected_nonce = true;
