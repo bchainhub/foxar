@@ -56,6 +56,11 @@ macro_rules! run_test_repro {
     }};
 }
 
+#[tokio::test(flavor = "multi_thread")]
+async fn test_creation_revert() {
+    test_repro!("CreationRevert");
+}
+
 // <https://github.com/foxar-rs/foxar/issues/2623>
 #[tokio::test(flavor = "multi_thread")]
 async fn test_issue_2623() {
