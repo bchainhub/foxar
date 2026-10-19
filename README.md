@@ -23,7 +23,7 @@ cast: probe
 ## Creation revert regression
 
 The workspace pins CVM to
-[`1eda574`](https://github.com/core-coin/cvm/commit/1eda5741bc5ac599d724f42c8c572aefc45f6e58).
+[`cf0f873`](https://github.com/core-coin/cvm/commit/cf0f8737c7139720e390d83ce940b846cc78dd1b).
 The fix journals the previous bytecode and code hash,
 so reverting a parent call removes code deployed by a successful child CREATE
 or CREATE2. The regression tests cover untouched addresses, prefunding via
