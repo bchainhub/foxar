@@ -5142,7 +5142,7 @@ dependencies = [
 [[package]]
 name = "revm"
 version = "3.0.0"
-source = "git+https://github.com/core-coin/cvm.git#32331e93bd5d4d093472f5f609600a28c27e4ac8"
+source = "git+https://github.com/core-coin/cvm.git?rev=cf0f8737c7139720e390d83ce940b846cc78dd1b#cf0f8737c7139720e390d83ce940b846cc78dd1b"
 dependencies = [
  "auto_impl",
  "revm-interpreter",
@@ -5154,7 +5154,7 @@ dependencies = [
 [[package]]
 name = "revm-interpreter"
 version = "1.0.0"
-source = "git+https://github.com/core-coin/cvm.git#32331e93bd5d4d093472f5f609600a28c27e4ac8"
+source = "git+https://github.com/core-coin/cvm.git?rev=cf0f8737c7139720e390d83ce940b846cc78dd1b#cf0f8737c7139720e390d83ce940b846cc78dd1b"
 dependencies = [
  "derive_more",
  "enumn",
@@ -5166,7 +5166,7 @@ dependencies = [
 [[package]]
 name = "revm-precompile"
 version = "2.0.0"
-source = "git+https://github.com/core-coin/cvm.git#32331e93bd5d4d093472f5f609600a28c27e4ac8"
+source = "git+https://github.com/core-coin/cvm.git?rev=cf0f8737c7139720e390d83ce940b846cc78dd1b#cf0f8737c7139720e390d83ce940b846cc78dd1b"
 dependencies = [
  "k256 0.11.6",
  "libgoldilocks",
@@ -5182,7 +5182,7 @@ dependencies = [
 [[package]]
 name = "revm-primitives"
 version = "1.0.0"
-source = "git+https://github.com/core-coin/cvm.git#32331e93bd5d4d093472f5f609600a28c27e4ac8"
+source = "git+https://github.com/core-coin/cvm.git?rev=cf0f8737c7139720e390d83ce940b846cc78dd1b#cf0f8737c7139720e390d83ce940b846cc78dd1b"
 dependencies = [
  "auto_impl",
  "bitvec",
